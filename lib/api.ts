@@ -1,15 +1,77 @@
+import type {
+  LoginCredentials,
+  TokenResponse,
+  User,
+  University,
+  UniversityCreate,
+  UniversityUpdate,
+  UniversityWithCourses,
+  Course,
+  CourseCreate,
+  CourseUpdate,
+  CourseWithDetails,
+  Module,
+  ModuleCreate,
+  ModuleUpdate,
+  ModuleWithDetails,
+  File,
+  FileResponse,
+  Professor,
+  ProfessorCreate,
+  ProfessorUpdate,
+  Student,
+  StudentCreate,
+  StudentUpdate,
+  ModuleToken,
+  ModuleTokenCreate,
+  ModuleTokenUpdate,
+  SuperAdmin,
+  SuperAdminCreate,
+  SystemStats,
+  PaginatedResponse,
+  PaginationParams,
+  CourseFilters,
+  ModuleFilters,
+  ProfessorFilters,
+  StudentFilters,
+  FileFilters,
+  TokenFilters,
+  TutorQuestion,
+  TutorResponse
+} from './types';
+
 export const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
-  timeout: 10000,
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  timeout: 30000,
 } as const;
 
-export class ApiClient {
+class TutoriaAPIClient {
   private baseURL: string;
   private timeout: number;
+  private token: string | null = null;
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
     this.timeout = config.timeout;
+    
+    // Initialize token from localStorage if available
+    if (typeof window !== 'undefined') {
+      this.token = localStorage.getItem('auth-token');
+    }
+  }
+
+  setToken(token: string) {
+    this.token = token;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('auth-token', token);
+    }
+  }
+
+  clearToken() {
+    this.token = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth-token');
+    }
   }
 
   private async request<T>(
@@ -22,6 +84,7 @@ export class ApiClient {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...(this.token && { Authorization: `Bearer ${this.token}` }),
         ...options.headers,
       },
     };
@@ -35,8 +98,18 @@ export class ApiClient {
         signal: controller.signal,
       });
 
+      if (response.status === 401) {
+        // Token expired or invalid
+        this.clearToken();
+        if (typeof window !== 'undefined') {
+          window.location.href = '/login';
+        }
+        throw new Error('Unauthorized');
+      }
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       return await response.json();
@@ -50,14 +123,31 @@ export class ApiClient {
     }
   }
 
-  async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' });
+  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    const searchParams = new URLSearchParams();
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+    }
+    const queryString = searchParams.toString();
+    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
+    
+    return this.request<T>(url, { method: 'GET' });
   }
 
-  async post<T>(endpoint: string, data?: unknown): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
+    const headers: Record<string, string> = {};
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     return this.request<T>(endpoint, {
       method: 'POST',
-      body: data ? JSON.stringify(data) : undefined,
+      headers,
+      body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
     });
   }
 
@@ -71,6 +161,224 @@ export class ApiClient {
   async delete<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
+
+  // Authentication endpoints
+  async login(credentials: LoginCredentials): Promise<TokenResponse> {
+    const response = await this.post<TokenResponse>('/api/v2/auth/login', credentials);
+    if (response.access_token) {
+      this.setToken(response.access_token);
+    }
+    return response;
+  }
+
+  async refreshToken(): Promise<TokenResponse> {
+    const response = await this.post<TokenResponse>('/api/v2/auth/refresh');
+    if (response.access_token) {
+      this.setToken(response.access_token);
+    }
+    return response;
+  }
+
+  async requestPasswordReset(email: string): Promise<{ message: string }> {
+    return this.post('/api/v2/auth/reset-password-request', { email });
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+    return this.post('/api/v2/auth/reset-password', { token, new_password: newPassword });
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
+    return this.put('/api/v2/auth/password', { current_password: currentPassword, new_password: newPassword });
+  }
+
+  // University endpoints
+  async getUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
+    return this.get('/api/v2/universities/', params);
+  }
+
+  async createUniversity(data: UniversityCreate): Promise<University> {
+    return this.post('/api/v2/universities/', data);
+  }
+
+  async getUniversity(id: number): Promise<UniversityWithCourses> {
+    return this.get(`/api/v2/universities/${id}`);
+  }
+
+  async updateUniversity(id: number, data: UniversityUpdate): Promise<University> {
+    return this.put(`/api/v2/universities/${id}`, data);
+  }
+
+  async deleteUniversity(id: number): Promise<void> {
+    return this.delete(`/api/v2/universities/${id}`);
+  }
+
+  // Course endpoints
+  async getCourses(params?: CourseFilters): Promise<PaginatedResponse<Course>> {
+    return this.get('/api/v2/courses/', params);
+  }
+
+  async createCourse(data: CourseCreate): Promise<Course> {
+    return this.post('/api/v2/courses/', data);
+  }
+
+  async getCourse(id: number): Promise<CourseWithDetails> {
+    return this.get(`/api/v2/courses/${id}`);
+  }
+
+  async updateCourse(id: number, data: CourseUpdate): Promise<Course> {
+    return this.put(`/api/v2/courses/${id}`, data);
+  }
+
+  async deleteCourse(id: number): Promise<void> {
+    return this.delete(`/api/v2/courses/${id}`);
+  }
+
+  async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {
+    return this.post(`/api/v2/courses/${courseId}/professors/${professorId}`);
+  }
+
+  async unassignProfessorFromCourse(courseId: number, professorId: number): Promise<void> {
+    return this.delete(`/api/v2/courses/${courseId}/professors/${professorId}`);
+  }
+
+  // Module endpoints
+  async getModules(params?: ModuleFilters): Promise<PaginatedResponse<Module>> {
+    return this.get('/api/v2/modules/', params);
+  }
+
+  async createModule(data: ModuleCreate): Promise<Module> {
+    return this.post('/api/v2/modules/', data);
+  }
+
+  async getModule(id: number): Promise<ModuleWithDetails> {
+    return this.get(`/api/v2/modules/${id}`);
+  }
+
+  async updateModule(id: number, data: ModuleUpdate): Promise<Module> {
+    return this.put(`/api/v2/modules/${id}`, data);
+  }
+
+  async deleteModule(id: number): Promise<void> {
+    return this.delete(`/api/v2/modules/${id}`);
+  }
+
+  // File endpoints
+  async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
+    return this.get('/api/v2/files/', params);
+  }
+
+  async uploadFile(formData: FormData): Promise<FileResponse> {
+    return this.post('/api/v2/files/', formData, true);
+  }
+
+  async getFile(id: number): Promise<FileResponse> {
+    return this.get(`/api/v2/files/${id}`);
+  }
+
+  async updateFile(id: number, data: Partial<File>): Promise<File> {
+    return this.put(`/api/v2/files/${id}`, data);
+  }
+
+  async deleteFile(id: number): Promise<void> {
+    return this.delete(`/api/v2/files/${id}`);
+  }
+
+  async getFileDownloadUrl(id: number): Promise<{ download_url: string }> {
+    return this.get(`/api/v2/files/${id}/download`);
+  }
+
+  // Professor endpoints
+  async getProfessors(params?: ProfessorFilters): Promise<PaginatedResponse<Professor>> {
+    return this.get('/api/v2/professors/', params);
+  }
+
+  async createProfessor(data: ProfessorCreate): Promise<Professor> {
+    return this.post('/api/v2/professors/', data);
+  }
+
+  async getProfessor(id: number): Promise<Professor> {
+    return this.get(`/api/v2/professors/${id}`);
+  }
+
+  async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
+    return this.put(`/api/v2/professors/${id}`, data);
+  }
+
+  async deleteProfessor(id: number): Promise<void> {
+    return this.delete(`/api/v2/professors/${id}`);
+  }
+
+  // Student endpoints
+  async getStudents(params?: StudentFilters): Promise<PaginatedResponse<Student>> {
+    return this.get('/api/v2/students/', params);
+  }
+
+  async createStudent(data: StudentCreate): Promise<Student> {
+    return this.post('/api/v2/students/', data);
+  }
+
+  async getStudent(id: number): Promise<Student> {
+    return this.get(`/api/v2/students/${id}`);
+  }
+
+  async updateStudent(id: number, data: StudentUpdate): Promise<Student> {
+    return this.put(`/api/v2/students/${id}`, data);
+  }
+
+  async deleteStudent(id: number): Promise<void> {
+    return this.delete(`/api/v2/students/${id}`);
+  }
+
+  // Module Token endpoints
+  async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleToken>> {
+    return this.get('/api/v2/module-tokens/', params);
+  }
+
+  async createModuleToken(data: ModuleTokenCreate): Promise<ModuleToken> {
+    return this.post('/api/v2/module-tokens/', data);
+  }
+
+  async getModuleToken(id: number): Promise<ModuleToken> {
+    return this.get(`/api/v2/module-tokens/${id}`);
+  }
+
+  async updateModuleToken(id: number, data: ModuleTokenUpdate): Promise<ModuleToken> {
+    return this.put(`/api/v2/module-tokens/${id}`, data);
+  }
+
+  async deleteModuleToken(id: number): Promise<void> {
+    return this.delete(`/api/v2/module-tokens/${id}`);
+  }
+
+  // Super Admin endpoints
+  async getSystemStats(): Promise<SystemStats> {
+    return this.get('/api/v2/super-admins/stats');
+  }
+
+  async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
+    return this.get('/api/v2/super-admins/super-admins/', params);
+  }
+
+  async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
+    return this.post('/api/v2/super-admins/super-admins/', data);
+  }
+
+  async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
+    return this.put(`/api/v2/super-admins/super-admins/${id}`, data);
+  }
+
+  async getAllUniversities(): Promise<University[]> {
+    return this.get('/api/v2/super-admins/universities/all');
+  }
+
+  async getAllProfessors(): Promise<Professor[]> {
+    return this.get('/api/v2/super-admins/professors/all');
+  }
+
+  // AI Tutor endpoints
+  async askTutor(question: TutorQuestion): Promise<TutorResponse> {
+    return this.post('/api/v2/tutor/ask', question);
+  }
 }
 
-export const apiClient = new ApiClient();
+export const apiClient = new TutoriaAPIClient();
