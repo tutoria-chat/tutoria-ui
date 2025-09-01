@@ -124,7 +124,7 @@ export function LoginForm() {
         </div>
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
-          <p>© 2024 Tutoria. All rights reserved.</p>
+          <p>© 2025 Tutoria. All rights reserved.</p>
         </div>
       </CardContent>
     </Card>

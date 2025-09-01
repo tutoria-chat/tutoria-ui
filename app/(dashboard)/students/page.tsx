@@ -11,12 +11,12 @@ export default function StudentsPage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Student Management"
-          description="Manage students and track their progress"
+          title="Gerenciamento de Estudantes"
+          description="Gerencie estudantes e acompanhe seu progresso"
           actions={
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              Add Student
+              Adicionar Estudante
             </Button>
           }
         />
@@ -26,7 +26,7 @@ export default function StudentsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <GraduationCap className="h-5 w-5" />
-                <span>Total Students</span>
+                <span>Total de Estudantes</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -38,7 +38,7 @@ export default function StudentsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-green-500" />
-                <span>Active This Month</span>
+                <span>Ativos Este Mês</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -50,7 +50,7 @@ export default function StudentsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-500" />
-                <span>New This Week</span>
+                <span>Novos Esta Semana</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -60,23 +60,23 @@ export default function StudentsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Completion Rate</CardTitle>
+              <CardTitle>Taxa de Conclusão</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold">78%</p>
-              <p className="text-sm text-muted-foreground">Average</p>
+              <p className="text-sm text-muted-foreground">Média</p>
             </CardContent>
           </Card>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Students</CardTitle>
-            <CardDescription>Student management interface will be implemented here</CardDescription>
+            <CardTitle>Estudantes</CardTitle>
+            <CardDescription>A interface de gerenciamento de estudantes será implementada aqui</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-center py-12">
-              Student management system coming soon...
+              Sistema de gerenciamento de estudantes em breve...
             </p>
           </CardContent>
         </Card>

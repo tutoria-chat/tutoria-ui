@@ -43,50 +43,50 @@ const recentActivities = [
   {
     id: 1,
     type: 'university_created',
-    message: 'New university "Tech Institute" created',
-    user: 'Super Admin',
+    message: 'Nova universidade "Instituto de Tecnologia" criada',
+    user: 'Super Administrador',
     timestamp: '2024-03-16T14:30:00Z',
     status: 'success'
   },
   {
     id: 2,
     type: 'course_created',
-    message: 'Course "Advanced Machine Learning" created',
-    user: 'Dr. Johnson (Admin Professor)',
+    message: 'Curso "Aprendizado de Máquina Avançado" criado',
+    user: 'Dr. Silva (Professor Administrador)',
     timestamp: '2024-03-16T13:45:00Z',
     status: 'success'
   },
   {
     id: 3,
     type: 'system_alert',
-    message: 'High API usage detected',
-    user: 'System',
+    message: 'Alto uso de API detectado',
+    user: 'Sistema',
     timestamp: '2024-03-16T12:20:00Z',
     status: 'warning'
   },
   {
     id: 4,
     type: 'module_created',
-    message: 'Module "Neural Networks Basics" created',
-    user: 'Prof. Smith',
+    message: 'Módulo "Básicos de Redes Neurais" criado',
+    user: 'Prof. Santos',
     timestamp: '2024-03-16T11:15:00Z',
     status: 'success'
   },
   {
     id: 5,
     type: 'file_uploaded',
-    message: 'Large file upload (450MB) completed',
-    user: 'Prof. Davis',
+    message: 'Upload de arquivo grande (450MB) concluído',
+    user: 'Prof. Oliveira',
     timestamp: '2024-03-16T10:30:00Z',
     status: 'info'
   }
 ];
 
 const systemHealth = {
-  database: { status: 'healthy', response_time: '12ms', uptime: '99.9%' },
-  api: { status: 'healthy', response_time: '45ms', requests_per_minute: 1200 },
-  storage: { status: 'warning', used_percentage: 78, available_gb: 4.2 },
-  ai_service: { status: 'healthy', response_time: '340ms', success_rate: '99.5%' }
+  database: { status: 'saudável', response_time: '12ms', uptime: '99.9%' },
+  api: { status: 'saudável', response_time: '45ms', requests_per_minute: 1200 },
+  storage: { status: 'alerta', used_percentage: 78, available_gb: 4.2 },
+  ai_service: { status: 'saudável', response_time: '340ms', success_rate: '99.5%' }
 };
 
 export default function AdminDashboardPage() {
@@ -94,14 +94,14 @@ export default function AdminDashboardPage() {
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Administration', isCurrentPage: true }
+    { label: 'Administração', isCurrentPage: true }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'text-green-500';
-      case 'warning': return 'text-amber-500';
-      case 'error': return 'text-red-500';
+      case 'saudável': return 'text-green-500';
+      case 'alerta': return 'text-amber-500';
+      case 'erro': return 'text-red-500';
       default: return 'text-muted-foreground';
     }
   };
@@ -126,19 +126,19 @@ export default function AdminDashboardPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="System Administration"
-          description="System overview, statistics, and administrative controls"
+          title="Administração do Sistema"
+          description="Visão geral do sistema, estatísticas e controles administrativos"
           breadcrumbs={breadcrumbs}
           actions={
             <div className="flex items-center space-x-2">
               <Button variant="outline" asChild>
                 <Link href="/admin/super-admins">
-                  Manage Admins
+                  Gerenciar Administradores
                 </Link>
               </Button>
               <Button asChild>
                 <Link href="/universities/create">
-                  Create University
+                  Criar Universidade
                 </Link>
               </Button>
             </div>
@@ -149,52 +149,52 @@ export default function AdminDashboardPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Universities</CardTitle>
+              <CardTitle className="text-sm font-medium">Universidades</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total_universities}</div>
               <p className="text-xs text-muted-foreground">
-                +2 from last month
+                +2 desde o mês passado
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
+              <CardTitle className="text-sm font-medium">Total de Cursos</CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total_courses}</div>
               <p className="text-xs text-muted-foreground">
-                +15 from last week
+                +15 desde a semana passada
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.total_professors + stats.total_students}</div>
               <p className="text-xs text-muted-foreground">
-                {stats.total_professors} professors, {stats.total_students} students
+                {stats.total_professors} professores, {stats.total_students} estudantes
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">API Calls Today</CardTitle>
+              <CardTitle className="text-sm font-medium">Chamadas de API Hoje</CardTitle>
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.api_calls_today.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
-                +12% from yesterday
+                +12% desde ontem
               </p>
             </CardContent>
           </Card>
@@ -205,14 +205,14 @@ export default function AdminDashboardPage() {
           {/* Content Statistics */}
           <Card>
             <CardHeader>
-              <CardTitle>Content Statistics</CardTitle>
-              <CardDescription>Overview of platform content</CardDescription>
+              <CardTitle>Estatísticas de Conteúdo</CardTitle>
+              <CardDescription>Visão geral do conteúdo da plataforma</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <BookOpen className="h-4 w-4 text-blue-500" />
-                  <span className="text-sm">Modules</span>
+                  <span className="text-sm">Módulos</span>
                 </div>
                 <span className="font-bold">{stats.total_modules}</span>
               </div>
@@ -220,7 +220,7 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <FileText className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Files</span>
+                  <span className="text-sm">Arquivos</span>
                 </div>
                 <span className="font-bold">{stats.total_files}</span>
               </div>
@@ -228,7 +228,7 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Key className="h-4 w-4 text-purple-500" />
-                  <span className="text-sm">Active Tokens</span>
+                  <span className="text-sm">Tokens Ativos</span>
                 </div>
                 <span className="font-bold">{stats.total_tokens}</span>
               </div>
@@ -236,7 +236,7 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Database className="h-4 w-4 text-amber-500" />
-                  <span className="text-sm">Storage Used</span>
+                  <span className="text-sm">Armazenamento Usado</span>
                 </div>
                 <span className="font-bold">{formatStorage(stats.storage_used_mb)}</span>
               </div>
@@ -246,17 +246,17 @@ export default function AdminDashboardPage() {
           {/* System Health */}
           <Card>
             <CardHeader>
-              <CardTitle>System Health</CardTitle>
-              <CardDescription>Real-time system status and performance</CardDescription>
+              <CardTitle>Saúde do Sistema</CardTitle>
+              <CardDescription>Status do sistema e desempenho em tempo real</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Database className={`h-4 w-4 ${getStatusColor(systemHealth.database.status)}`} />
-                  <span className="text-sm">Database</span>
+                  <span className="text-sm">Banco de Dados</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Badge variant={systemHealth.database.status === 'healthy' ? 'default' : 'destructive'}>
+                  <Badge variant={systemHealth.database.status === 'saudável' ? 'default' : 'destructive'}>
                     {systemHealth.database.status}
                   </Badge>
                   <span className="text-xs text-muted-foreground">{systemHealth.database.response_time}</span>
@@ -266,10 +266,10 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Server className={`h-4 w-4 ${getStatusColor(systemHealth.api.status)}`} />
-                  <span className="text-sm">API Server</span>
+                  <span className="text-sm">Servidor API</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Badge variant={systemHealth.api.status === 'healthy' ? 'default' : 'destructive'}>
+                  <Badge variant={systemHealth.api.status === 'saudável' ? 'default' : 'destructive'}>
                     {systemHealth.api.status}
                   </Badge>
                   <span className="text-xs text-muted-foreground">{systemHealth.api.response_time}</span>
@@ -279,11 +279,11 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <FileText className={`h-4 w-4 ${getStatusColor(systemHealth.storage.status)}`} />
-                  <span className="text-sm">Storage</span>
+                  <span className="text-sm">Armazenamento</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Badge variant={systemHealth.storage.status === 'healthy' ? 'default' : 'secondary'}>
-                    {systemHealth.storage.used_percentage}% used
+                  <Badge variant={systemHealth.storage.status === 'saudável' ? 'default' : 'secondary'}>
+                    {systemHealth.storage.used_percentage}% usado
                   </Badge>
                 </div>
               </div>
@@ -291,10 +291,10 @@ export default function AdminDashboardPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <Zap className={`h-4 w-4 ${getStatusColor(systemHealth.ai_service.status)}`} />
-                  <span className="text-sm">AI Service</span>
+                  <span className="text-sm">Serviço IA</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Badge variant={systemHealth.ai_service.status === 'healthy' ? 'default' : 'destructive'}>
+                  <Badge variant={systemHealth.ai_service.status === 'saudável' ? 'default' : 'destructive'}>
                     {systemHealth.ai_service.success_rate}
                   </Badge>
                   <span className="text-xs text-muted-foreground">{systemHealth.ai_service.response_time}</span>
@@ -307,8 +307,8 @@ export default function AdminDashboardPage() {
         {/* Recent Activity */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent System Activity</CardTitle>
-            <CardDescription>Latest administrative actions and system events</CardDescription>
+            <CardTitle>Atividade Recente do Sistema</CardTitle>
+            <CardDescription>Ações administrativas e eventos do sistema mais recentes</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -320,7 +320,7 @@ export default function AdminDashboardPage() {
                       {activity.message}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      by {activity.user}
+                      por {activity.user}
                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -338,29 +338,29 @@ export default function AdminDashboardPage() {
         {/* Quick Actions */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common administrative tasks</CardDescription>
+            <CardTitle>Ações Rápidas</CardTitle>
+            <CardDescription>Tarefas administrativas comuns</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
               <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2" asChild>
                 <Link href="/universities/create">
                   <Building2 className="h-6 w-6" />
-                  <span>Create University</span>
+                  <span>Criar Universidade</span>
                 </Link>
               </Button>
 
               <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2" asChild>
                 <Link href="/admin/super-admins/create">
                   <Users className="h-6 w-6" />
-                  <span>Add Super Admin</span>
+                  <span>Adicionar Super Admin</span>
                 </Link>
               </Button>
 
               <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2" asChild>
                 <Link href="/admin/system-stats">
                   <BarChart3 className="h-6 w-6" />
-                  <span>View Analytics</span>
+                  <span>Ver Análises</span>
                 </Link>
               </Button>
             </div>

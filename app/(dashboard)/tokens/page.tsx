@@ -11,12 +11,12 @@ export default function TokensPage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Module Token Management"
-          description="Create and manage access tokens for AI tutoring widgets"
+          title="Gerenciamento de Tokens de Módulo"
+          description="Crie e gerencie tokens de acesso para widgets de tutoria IA"
           actions={
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              Generate Token
+              Gerar Token
             </Button>
           }
         />
@@ -26,7 +26,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Key className="h-5 w-5" />
-                <span>Active Tokens</span>
+                <span>Tokens Ativos</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -38,7 +38,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Activity className="h-5 w-5 text-green-500" />
-                <span>API Calls Today</span>
+                <span>Chamadas de API Hoje</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -50,7 +50,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Shield className="h-5 w-5 text-blue-500" />
-                <span>Secure Tokens</span>
+                <span>Tokens Seguros</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -62,7 +62,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-amber-500" />
-                <span>Expiring Soon</span>
+                <span>Expirando em Breve</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -73,12 +73,12 @@ export default function TokensPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Module Tokens</CardTitle>
-            <CardDescription>Token management interface will be implemented here</CardDescription>
+            <CardTitle>Tokens de Módulo</CardTitle>
+            <CardDescription>A interface de gerenciamento de tokens será implementada aqui</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-center py-12">
-              Module token management system coming soon...
+              Sistema de gerenciamento de tokens de módulo em breve...
             </p>
           </CardContent>
         </Card>

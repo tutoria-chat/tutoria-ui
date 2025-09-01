@@ -14,8 +14,8 @@ import type { University, TableColumn, BreadcrumbItem } from '@/lib/types';
 const mockUniversities: University[] = [
   {
     id: 1,
-    name: "University of Technology",
-    description: "Leading technology university with innovative programs",
+    name: "Universidade de Tecnologia",
+    description: "Universidade líder em tecnologia com programas inovadores",
     created_at: "2024-01-15T08:30:00Z",
     updated_at: "2024-01-15T08:30:00Z",
     courses_count: 45,
@@ -24,8 +24,8 @@ const mockUniversities: University[] = [
   },
   {
     id: 2,
-    name: "State University",
-    description: "Public university offering comprehensive education",
+    name: "Universidade Estadual",
+    description: "Universidade pública oferecendo educação abrangente",
     created_at: "2024-01-20T10:15:00Z",
     updated_at: "2024-01-20T10:15:00Z",
     courses_count: 67,
@@ -34,8 +34,8 @@ const mockUniversities: University[] = [
   },
   {
     id: 3,
-    name: "Business College",
-    description: "Specialized business and management education",
+    name: "Faculdade de Negócios",
+    description: "Educação especializada em negócios e gestão",
     created_at: "2024-02-01T14:20:00Z",
     updated_at: "2024-02-01T14:20:00Z",
     courses_count: 28,

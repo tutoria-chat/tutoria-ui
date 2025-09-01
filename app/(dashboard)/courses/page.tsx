@@ -15,10 +15,10 @@ import type { Course, TableColumn, BreadcrumbItem } from '@/lib/types';
 const mockCourses: Course[] = [
   {
     id: 1,
-    name: "Computer Science Fundamentals",
-    description: "Introduction to programming concepts, data structures, and algorithms",
+    name: "Fundamentos da Ciência da Computação",
+    description: "Introdução aos conceitos de programação, estruturas de dados e algoritmos",
     university_id: 1,
-    university_name: "University of Technology",
+    university_name: "Universidade de Tecnologia",
     created_at: "2024-01-15T08:30:00Z",
     updated_at: "2024-01-15T08:30:00Z",
     modules_count: 12,
@@ -27,10 +27,10 @@ const mockCourses: Course[] = [
   },
   {
     id: 2,
-    name: "Web Development Bootcamp",
-    description: "Full-stack web development using modern frameworks and technologies",
+    name: "Bootcamp de Desenvolvimento Web",
+    description: "Desenvolvimento web full-stack usando frameworks e tecnologias modernas",
     university_id: 1,
-    university_name: "University of Technology",
+    university_name: "Universidade de Tecnologia",
     created_at: "2024-01-20T10:15:00Z",
     updated_at: "2024-01-20T10:15:00Z",
     modules_count: 8,
@@ -39,10 +39,10 @@ const mockCourses: Course[] = [
   },
   {
     id: 3,
-    name: "Data Science and Analytics",
-    description: "Statistics, machine learning, and data visualization techniques",
+    name: "Ciência de Dados e Análises",
+    description: "Estatísticas, aprendizado de máquina e técnicas de visualização de dados",
     university_id: 2,
-    university_name: "State University",
+    university_name: "Universidade Estadual",
     created_at: "2024-02-01T14:20:00Z",
     updated_at: "2024-02-01T14:20:00Z",
     modules_count: 15,
@@ -51,10 +51,10 @@ const mockCourses: Course[] = [
   },
   {
     id: 4,
-    name: "Business Management",
-    description: "Strategic planning, operations, and leadership principles",
+    name: "Gestão Empresarial",
+    description: "Planejamento estratégico, operações e princípios de liderança",
     university_id: 3,
-    university_name: "Business College",
+    university_name: "Faculdade de Negócios",
     created_at: "2024-02-10T09:45:00Z",
     updated_at: "2024-02-10T09:45:00Z",
     modules_count: 10,
@@ -63,10 +63,10 @@ const mockCourses: Course[] = [
   },
   {
     id: 5,
-    name: "Digital Marketing",
-    description: "Social media, SEO, content marketing, and analytics",
+    name: "Marketing Digital",
+    description: "Redes sociais, SEO, marketing de conteúdo e análises",
     university_id: 3,
-    university_name: "Business College",
+    university_name: "Faculdade de Negócios",
     created_at: "2024-02-15T16:30:00Z",
     updated_at: "2024-02-15T16:30:00Z",
     modules_count: 6,
@@ -86,13 +86,13 @@ export default function CoursesPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Courses', isCurrentPage: true }
+    { label: 'Cursos', isCurrentPage: true }
   ];
 
   const columns: TableColumn<Course>[] = [
     {
       key: 'name',
-      label: 'Course',
+      label: 'Curso',
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-3">
@@ -112,7 +112,7 @@ export default function CoursesPage() {
     },
     {
       key: 'university_name',
-      label: 'University',
+      label: 'Universidade',
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-2">
@@ -123,17 +123,17 @@ export default function CoursesPage() {
     },
     {
       key: 'modules_count',
-      label: 'Modules',
+      label: 'Módulos',
       sortable: true,
       render: (value) => (
         <Badge variant="secondary">
-          {value || 0} modules
+          {value || 0} módulos
         </Badge>
       )
     },
     {
       key: 'professors_count',
-      label: 'Professors',
+      label: 'Professores',
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -144,7 +144,7 @@ export default function CoursesPage() {
     },
     {
       key: 'students_count',
-      label: 'Students',
+      label: 'Estudantes',
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -155,13 +155,13 @@ export default function CoursesPage() {
     },
     {
       key: 'created_at',
-      label: 'Created',
+      label: 'Criado em',
       sortable: true,
       render: (value) => new Date(value as string).toLocaleDateString()
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: 'Ações',
       width: '120px',
       render: (_, course) => (
         <div className="flex items-center space-x-1">
@@ -259,15 +259,15 @@ export default function CoursesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Courses"
-        description={`Manage courses and academic programs. Showing ${stats.total} courses with ${stats.totalStudents} students across ${stats.totalModules} modules`}
+        title="Cursos"
+        description={`Gerencie cursos e programas acadêmicos. Mostrando ${stats.total} cursos com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
         breadcrumbs={breadcrumbs}
         actions={
           <AdminOnly>
             <Button asChild>
               <Link href="/courses/create">
                 <Plus className="mr-2 h-4 w-4" />
-                Create Course
+                Criar Curso
               </Link>
             </Button>
           </AdminOnly>
@@ -278,7 +278,7 @@ export default function CoursesPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Courses</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Cursos</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.total}</div>
@@ -286,7 +286,7 @@ export default function CoursesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Students</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Estudantes</h3>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalStudents}</div>
@@ -294,7 +294,7 @@ export default function CoursesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Modules</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Módulos</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalModules}</div>
@@ -303,7 +303,7 @@ export default function CoursesPage() {
         {user?.role === 'super_admin' && (
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Universities</h3>
+              <h3 className="tracking-tight text-sm font-medium">Universidades</h3>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="text-2xl font-bold">{stats.universities}</div>
@@ -317,7 +317,7 @@ export default function CoursesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Search courses, descriptions, or universities...",
+          placeholder: "Buscar cursos, descrições ou universidades...",
           onSearchChange: setSearchTerm
         }}
         pagination={{
@@ -332,7 +332,7 @@ export default function CoursesPage() {
           direction: sortDirection,
           onSortChange: handleSortChange
         }}
-        emptyMessage="No courses found. Create your first course to get started."
+        emptyMessage="Nenhum curso encontrado. Crie seu primeiro curso para começar."
       />
     </div>
   );

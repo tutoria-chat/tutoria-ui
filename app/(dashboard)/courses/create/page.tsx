@@ -13,8 +13,8 @@ export default function CreateCoursePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Courses', href: '/courses' },
-    { label: 'Create Course', isCurrentPage: true }
+    { label: 'Cursos', href: '/courses' },
+    { label: 'Criar Curso', isCurrentPage: true }
   ];
 
   const handleSubmit = async (data: CourseCreate) => {
@@ -44,8 +44,8 @@ export default function CreateCoursePage() {
     <AdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Create New Course"
-          description="Add a new course to your university's academic catalog"
+          title="Criar Novo Curso"
+          description="Adicione um novo curso ao catálogo acadêmico da sua universidade"
           breadcrumbs={breadcrumbs}
         />
 

@@ -15,12 +15,12 @@ import type { Module, TableColumn, BreadcrumbItem } from '@/lib/types';
 const mockModules: Module[] = [
   {
     id: 1,
-    name: "Introduction to Programming",
-    description: "Basic programming concepts, variables, control structures, and simple algorithms",
+    name: "Introdução à Programação",
+    description: "Conceitos básicos de programação, variáveis, estruturas de controle e algoritmos simples",
     course_id: 1,
-    course_name: "Computer Science Fundamentals",
+    course_name: "Fundamentos da Ciência da Computação",
     university_id: 1,
-    system_prompt: "You are a programming tutor helping beginners learn fundamental concepts...",
+    system_prompt: "Você é um tutor de programação ajudando iniciantes a aprender conceitos fundamentais...",
     created_at: "2024-01-20T10:00:00Z",
     updated_at: "2024-03-15T14:30:00Z",
     files_count: 8,
@@ -28,12 +28,12 @@ const mockModules: Module[] = [
   },
   {
     id: 2,
-    name: "Data Structures",
-    description: "Arrays, linked lists, stacks, queues, trees, and their implementations",
+    name: "Estruturas de Dados",
+    description: "Arrays, listas ligadas, pilhas, filas, árvores e suas implementações",
     course_id: 1,
-    course_name: "Computer Science Fundamentals",
+    course_name: "Fundamentos da Ciência da Computação",
     university_id: 1,
-    system_prompt: "You are an expert in data structures helping students understand...",
+    system_prompt: "Você é um especialista em estruturas de dados ajudando estudantes a compreender...",
     created_at: "2024-02-01T09:00:00Z",
     updated_at: "2024-03-10T16:45:00Z",
     files_count: 12,
@@ -41,12 +41,12 @@ const mockModules: Module[] = [
   },
   {
     id: 3,
-    name: "Web Development Basics",
-    description: "HTML, CSS, JavaScript fundamentals and responsive design principles",
+    name: "Básicos de Desenvolvimento Web",
+    description: "Fundamentos de HTML, CSS, JavaScript e princípios de design responsivo",
     course_id: 2,
-    course_name: "Web Development Bootcamp",
+    course_name: "Bootcamp de Desenvolvimento Web",
     university_id: 1,
-    system_prompt: "You are a web development mentor specializing in frontend technologies...",
+    system_prompt: "Você é um mentor de desenvolvimento web especializado em tecnologias frontend...",
     created_at: "2024-02-10T11:15:00Z",
     updated_at: "2024-03-12T09:20:00Z",
     files_count: 15,
@@ -54,12 +54,12 @@ const mockModules: Module[] = [
   },
   {
     id: 4,
-    name: "Database Design",
-    description: "Relational database concepts, SQL, normalization, and query optimization",
+    name: "Design de Banco de Dados",
+    description: "Conceitos de banco de dados relacionais, SQL, normalização e otimização de consultas",
     course_id: 2,
-    course_name: "Web Development Bootcamp",
+    course_name: "Bootcamp de Desenvolvimento Web",
     university_id: 1,
-    system_prompt: "You are a database expert helping students learn relational concepts...",
+    system_prompt: "Você é um especialista em bancos de dados ajudando estudantes a aprender conceitos relacionais...",
     created_at: "2024-02-15T13:30:00Z",
     updated_at: "2024-03-08T11:10:00Z",
     files_count: 10,
@@ -67,12 +67,12 @@ const mockModules: Module[] = [
   },
   {
     id: 5,
-    name: "Statistics Fundamentals",
-    description: "Descriptive statistics, probability distributions, hypothesis testing",
+    name: "Fundamentos de Estatística",
+    description: "Estatística descritiva, distribuições de probabilidade, teste de hipóteses",
     course_id: 3,
-    course_name: "Data Science and Analytics",
+    course_name: "Ciência de Dados e Análises",
     university_id: 2,
-    system_prompt: "You are a statistics tutor helping students understand mathematical concepts...",
+    system_prompt: "Você é um tutor de estatística ajudando estudantes a compreender conceitos matemáticos...",
     created_at: "2024-02-20T15:45:00Z",
     updated_at: "2024-03-14T12:30:00Z",
     files_count: 18,
@@ -80,10 +80,10 @@ const mockModules: Module[] = [
   },
   {
     id: 6,
-    name: "Machine Learning Basics",
-    description: "Supervised learning, regression, classification, and model evaluation",
+    name: "Básicos de Aprendizado de Máquina",
+    description: "Aprendizado supervisionado, regressão, classificação e avaliação de modelos",
     course_id: 3,
-    course_name: "Data Science and Analytics",
+    course_name: "Ciência de Dados e Análises",
     university_id: 2,
     created_at: "2024-03-01T10:20:00Z",
     updated_at: "2024-03-16T08:45:00Z",
@@ -103,13 +103,13 @@ export default function ModulesPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Modules', isCurrentPage: true }
+    { label: 'Módulos', isCurrentPage: true }
   ];
 
   const columns: TableColumn<Module>[] = [
     {
       key: 'name',
-      label: 'Module',
+      label: 'Módulo',
       sortable: true,
       render: (value, module) => (
         <div className="flex items-center space-x-3">
@@ -132,7 +132,7 @@ export default function ModulesPage() {
     },
     {
       key: 'files_count',
-      label: 'Files',
+      label: 'Arquivos',
       sortable: true,
       render: (value, module) => (
         <div className="flex items-center space-x-1">
@@ -154,19 +154,19 @@ export default function ModulesPage() {
     },
     {
       key: 'ai_configured',
-      label: 'AI Tutor',
+      label: 'Tutor IA',
       render: (_, module) => (
         <div className="flex items-center space-x-1">
           <Bot className={`h-4 w-4 ${module.system_prompt ? 'text-green-500' : 'text-muted-foreground'}`} />
           <Badge variant={module.system_prompt ? "default" : "secondary"}>
-            {module.system_prompt ? 'Configured' : 'Not Set'}
+            {module.system_prompt ? 'Configurado' : 'Não Definido'}
           </Badge>
         </div>
       )
     },
     {
       key: 'updated_at',
-      label: 'Last Updated',
+      label: 'Última Atualização',
       sortable: true,
       render: (value) => (
         <div className="text-sm">
@@ -176,7 +176,7 @@ export default function ModulesPage() {
     },
     {
       key: 'actions',
-      label: 'Actions',
+      label: 'Ações',
       width: '160px',
       render: (_, module) => (
         <div className="flex items-center space-x-1">
@@ -288,8 +288,8 @@ export default function ModulesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Modules"
-        description={`Manage learning modules and AI tutoring configuration. ${stats.total} modules across ${stats.courses} courses with ${stats.aiConfigured} AI tutors configured`}
+        title="Módulos"
+        description={`Gerencie módulos de aprendizado e configuração de tutores IA. ${stats.total} módulos em ${stats.courses} cursos com ${stats.aiConfigured} tutores IA configurados`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -297,14 +297,14 @@ export default function ModulesPage() {
               <Button variant="outline" asChild>
                 <Link href="/files/upload">
                   <Upload className="mr-2 h-4 w-4" />
-                  Upload Files
+                  Enviar Arquivos
                 </Link>
               </Button>
               
               <Button asChild>
                 <Link href="/modules/create">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Module
+                  Criar Módulo
                 </Link>
               </Button>
             </ProfessorOnly>
@@ -316,7 +316,7 @@ export default function ModulesPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Modules</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Módulos</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.total}</div>
@@ -324,7 +324,7 @@ export default function ModulesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Files</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Arquivos</h3>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalFiles}</div>
@@ -332,7 +332,7 @@ export default function ModulesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Access Tokens</h3>
+            <h3 className="tracking-tight text-sm font-medium">Tokens de Acesso</h3>
             <Key className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalTokens}</div>
@@ -340,7 +340,7 @@ export default function ModulesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">AI Tutors</h3>
+            <h3 className="tracking-tight text-sm font-medium">Tutores IA</h3>
             <Bot className="h-4 w-4 text-green-500" />
           </div>
           <div className="text-2xl font-bold">{stats.aiConfigured}</div>
@@ -348,7 +348,7 @@ export default function ModulesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Courses</h3>
+            <h3 className="tracking-tight text-sm font-medium">Cursos</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.courses}</div>
@@ -361,7 +361,7 @@ export default function ModulesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Search modules, descriptions, or courses...",
+          placeholder: "Buscar módulos, descrições ou cursos...",
           onSearchChange: setSearchTerm
         }}
         pagination={{
@@ -376,7 +376,7 @@ export default function ModulesPage() {
           direction: sortDirection,
           onSortChange: handleSortChange
         }}
-        emptyMessage="No modules found. Create your first module to get started."
+        emptyMessage="Nenhum módulo encontrado. Crie seu primeiro módulo para começar."
       />
     </div>
   );

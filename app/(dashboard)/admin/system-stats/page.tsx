@@ -74,8 +74,8 @@ export default function SystemStatsPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Administration', href: '/admin' },
-    { label: 'System Statistics', isCurrentPage: true }
+    { label: 'Administração', href: '/admin' },
+    { label: 'Estatísticas do Sistema', isCurrentPage: true }
   ];
 
   const handleRefresh = async () => {
@@ -87,15 +87,15 @@ export default function SystemStatsPage() {
 
   const handleExport = () => {
     // Simular export de dados
-    alert('System statistics would be exported to CSV in a real application');
+    alert('As estatísticas do sistema seriam exportadas para CSV em uma aplicação real');
   };
 
   return (
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="System Statistics & Analytics"
-          description="Comprehensive system metrics, performance data, and usage analytics"
+          title="Estatísticas e Análises do Sistema"
+          description="Métricas abrangentes do sistema, dados de desempenho e análises de uso"
           breadcrumbs={breadcrumbs}
           actions={
             <div className="flex items-center space-x-2">
@@ -115,12 +115,12 @@ export default function SystemStatsPage() {
               
               <Button variant="outline" onClick={handleRefresh} disabled={isRefreshing}>
                 <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                Refresh
+                Atualizar
               </Button>
               
               <Button onClick={handleExport}>
                 <Download className="mr-2 h-4 w-4" />
-                Export
+                Exportar
               </Button>
             </div>
           }
@@ -130,55 +130,55 @@ export default function SystemStatsPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Universities</CardTitle>
+              <CardTitle className="text-sm font-medium">Total de Universidades</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{mockStats.overview.totalUniversities}</div>
               <p className="text-xs text-muted-foreground flex items-center">
                 <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-                +{mockStats.growth.universitiesGrowth}% from last month
+                +{mockStats.growth.universitiesGrowth}% desde o mês passado
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium">Total de Usuários</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{mockStats.overview.totalUsers.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground flex items-center">
                 <TrendingUp className="h-3 w-3 mr-1 text-green-500" />
-                +{mockStats.growth.usersGrowth}% from last month
+                +{mockStats.growth.usersGrowth}% desde o mês passado
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">API Calls Today</CardTitle>
+              <CardTitle className="text-sm font-medium">Chamadas de API Hoje</CardTitle>
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{mockStats.overview.apiCallsToday.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
-                Peak: {Math.floor(mockStats.overview.apiCallsToday * 1.3)} calls/hour
+                Pico: {Math.floor(mockStats.overview.apiCallsToday * 1.3)} chamadas/hora
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Storage Used</CardTitle>
+              <CardTitle className="text-sm font-medium">Armazenamento Usado</CardTitle>
               <Database className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{mockStats.overview.storageUsedGB} GB</div>
               <p className="text-xs text-muted-foreground flex items-center">
                 <TrendingUp className="h-3 w-3 mr-1 text-amber-500" />
-                +{mockStats.growth.storageGrowth}% from last month
+                +{mockStats.growth.storageGrowth}% desde o mês passado
               </p>
             </CardContent>
           </Card>
@@ -190,40 +190,40 @@ export default function SystemStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Server className="mr-2 h-5 w-5" />
-                System Performance
+                Desempenho do Sistema
               </CardTitle>
-              <CardDescription>Real-time system health and performance metrics</CardDescription>
+              <CardDescription>Métricas de saúde e desempenho do sistema em tempo real</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Average Response Time</span>
+                <span className="text-sm">Tempo de Resposta Médio</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="default">{mockStats.performance.avgResponseTime}ms</Badge>
-                  <Badge variant="outline" className="text-green-600">Excellent</Badge>
+                  <Badge variant="outline" className="text-green-600">Excelente</Badge>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">System Uptime</span>
+                <span className="text-sm">Tempo de Atividade do Sistema</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="default">{mockStats.performance.uptime}%</Badge>
-                  <Badge variant="outline" className="text-green-600">Healthy</Badge>
+                  <Badge variant="outline" className="text-green-600">Saudável</Badge>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Error Rate</span>
+                <span className="text-sm">Taxa de Erro</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="secondary">{mockStats.performance.errorRate}%</Badge>
-                  <Badge variant="outline" className="text-green-600">Low</Badge>
+                  <Badge variant="outline" className="text-green-600">Baixa</Badge>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Cache Hit Rate</span>
+                <span className="text-sm">Taxa de Acerto do Cache</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="default">{mockStats.performance.cacheHitRate}%</Badge>
-                  <Badge variant="outline" className="text-green-600">Optimal</Badge>
+                  <Badge variant="outline" className="text-green-600">Ótima</Badge>
                 </div>
               </div>
             </CardContent>
@@ -233,40 +233,40 @@ export default function SystemStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Activity className="mr-2 h-5 w-5" />
-                User Activity
+                Atividade do Usuário
               </CardTitle>
-              <CardDescription>User engagement and session analytics</CardDescription>
+              <CardDescription>Engajamento do usuário e análises de sessão</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Active Users Today</span>
+                <span className="text-sm">Usuários Ativos Hoje</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="default">{mockStats.usage.activeUsersToday}</Badge>
-                  <span className="text-xs text-green-600">+12% vs yesterday</span>
+                  <span className="text-xs text-green-600">+12% vs ontem</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Active Users This Week</span>
+                <span className="text-sm">Usuários Ativos Esta Semana</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="secondary">{mockStats.usage.activeUsersThisWeek.toLocaleString()}</Badge>
-                  <span className="text-xs text-green-600">+8% vs last week</span>
+                  <span className="text-xs text-green-600">+8% vs semana passada</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Peak Concurrent Users</span>
+                <span className="text-sm">Pico de Usuários Concorrentes</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline">{mockStats.usage.peakConcurrentUsers}</Badge>
-                  <span className="text-xs text-muted-foreground">at 2:30 PM</span>
+                  <span className="text-xs text-muted-foreground">às 14:30</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm">Avg Session Duration</span>
+                <span className="text-sm">Duração Média da Sessão</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline">{mockStats.usage.averageSessionDuration} min</Badge>
-                  <span className="text-xs text-green-600">+5 min vs last week</span>
+                  <span className="text-xs text-green-600">+5 min vs semana passada</span>
                 </div>
               </div>
             </CardContent>
@@ -279,20 +279,20 @@ export default function SystemStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <BookOpen className="mr-2 h-5 w-5" />
-                Content Overview
+                Visão Geral do Conteúdo
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Total Courses</span>
+                <span className="text-sm">Total de Cursos</span>
                 <Badge variant="secondary">{mockStats.overview.totalCourses}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Total Modules</span>
+                <span className="text-sm">Total de Módulos</span>
                 <Badge variant="secondary">{mockStats.overview.totalModules}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Total Files</span>
+                <span className="text-sm">Total de Arquivos</span>
                 <Badge variant="secondary">{mockStats.overview.totalFiles}</Badge>
               </div>
             </CardContent>
@@ -302,20 +302,20 @@ export default function SystemStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Zap className="mr-2 h-5 w-5" />
-                AI Integration
+                Integração IA
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Modules with AI</span>
+                <span className="text-sm">Módulos com IA</span>
                 <Badge variant="default">{mockStats.content.modulesWithAI}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">AI Configuration Rate</span>
+                <span className="text-sm">Taxa de Configuração IA</span>
                 <Badge variant="outline">{mockStats.content.aiConfigurationRate}%</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">Active Tokens</span>
+                <span className="text-sm">Tokens Ativos</span>
                 <Badge variant="secondary">{mockStats.content.totalTokens}</Badge>
               </div>
             </CardContent>
@@ -325,20 +325,20 @@ export default function SystemStatsPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <BarChart3 className="mr-2 h-5 w-5" />
-                Usage Today
+                Uso Hoje
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Token API Calls</span>
+                <span className="text-sm">Chamadas de API de Token</span>
                 <Badge variant="default">{mockStats.content.tokenUsageToday}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">New Files Uploaded</span>
+                <span className="text-sm">Novos Arquivos Enviados</span>
                 <Badge variant="secondary">24</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm">New Modules Created</span>
+                <span className="text-sm">Novos Módulos Criados</span>
                 <Badge variant="secondary">8</Badge>
               </div>
             </CardContent>
@@ -350,9 +350,9 @@ export default function SystemStatsPage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Clock className="mr-2 h-5 w-5" />
-              24-Hour Activity Timeline
+              Linha do Tempo de Atividade de 24 Horas
             </CardTitle>
-            <CardDescription>System activity over the last 24 hours</CardDescription>
+            <CardDescription>Atividade do sistema nas últimas 24 horas</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -363,11 +363,11 @@ export default function SystemStatsPage() {
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-2">
                         <Users className="h-3 w-3 text-blue-500" />
-                        <span className="text-sm">{metric.users} users</span>
+                        <span className="text-sm">{metric.users} usuários</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Activity className="h-3 w-3 text-green-500" />
-                        <span className="text-sm">{metric.api_calls} API calls</span>
+                        <span className="text-sm">{metric.api_calls} chamadas de API</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Server className="h-3 w-3 text-amber-500" />
@@ -376,7 +376,7 @@ export default function SystemStatsPage() {
                     </div>
                   </div>
                   <Badge variant={metric.cpu > 40 ? "destructive" : metric.cpu > 25 ? "secondary" : "default"}>
-                    {metric.cpu > 40 ? 'High Load' : metric.cpu > 25 ? 'Medium Load' : 'Normal'}
+                    {metric.cpu > 40 ? 'Alta Carga' : metric.cpu > 25 ? 'Carga Média' : 'Normal'}
                   </Badge>
                 </div>
               ))}
@@ -387,21 +387,21 @@ export default function SystemStatsPage() {
         {/* System Alerts */}
         <Card className="border-amber-200 bg-amber-50">
           <CardHeader>
-            <CardTitle className="text-amber-900">System Alerts & Notifications</CardTitle>
+            <CardTitle className="text-amber-900">Alertas e Notificações do Sistema</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-amber-700 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-amber-500"></div>
-                <span>Storage usage is at 78% - consider expanding capacity</span>
+                <span>Uso de armazenamento está em 78% - considere expandir a capacidade</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                <span>All systems operational - no critical issues detected</span>
+                <span>Todos os sistemas operacionais - nenhum problema crítico detectado</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                <span>Scheduled maintenance window: Sunday 2:00-4:00 AM</span>
+                <span>Janela de manutenção programada: Domingo 2:00-4:00</span>
               </div>
             </div>
           </CardContent>

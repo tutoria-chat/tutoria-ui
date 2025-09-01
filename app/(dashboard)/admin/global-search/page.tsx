@@ -15,32 +15,32 @@ import type { BreadcrumbItem } from '@/lib/types';
 // Mock search results
 const mockSearchResults = {
   universities: [
-    { id: 1, name: 'University of Technology', description: 'Leading tech university', type: 'university', courses: 45 },
-    { id: 2, name: 'State University', description: 'Public comprehensive university', type: 'university', courses: 67 }
+    { id: 1, name: 'Universidade de Tecnologia', description: 'Universidade líder em tecnologia', type: 'university', courses: 45 },
+    { id: 2, name: 'Universidade Estadual', description: 'Universidade pública abrangente', type: 'university', courses: 67 }
   ],
   courses: [
-    { id: 1, name: 'Computer Science Fundamentals', university: 'University of Technology', type: 'course', students: 89 },
-    { id: 2, name: 'Web Development Bootcamp', university: 'University of Technology', type: 'course', students: 67 },
-    { id: 3, name: 'Data Science and Analytics', university: 'State University', type: 'course', students: 123 }
+    { id: 1, name: 'Fundamentos da Ciência da Computação', university: 'Universidade de Tecnologia', type: 'course', students: 89 },
+    { id: 2, name: 'Bootcamp de Desenvolvimento Web', university: 'Universidade de Tecnologia', type: 'course', students: 67 },
+    { id: 3, name: 'Ciência de Dados e Análises', university: 'Universidade Estadual', type: 'course', students: 123 }
   ],
   modules: [
-    { id: 1, name: 'Introduction to Programming', course: 'Computer Science Fundamentals', type: 'module', files: 8 },
-    { id: 2, name: 'Data Structures', course: 'Computer Science Fundamentals', type: 'module', files: 12 },
-    { id: 3, name: 'Machine Learning Basics', course: 'Data Science and Analytics', type: 'module', files: 22 }
+    { id: 1, name: 'Introdução à Programação', course: 'Fundamentos da Ciência da Computação', type: 'module', files: 8 },
+    { id: 2, name: 'Estruturas de Dados', course: 'Fundamentos da Ciência da Computação', type: 'module', files: 12 },
+    { id: 3, name: 'Básicos de Aprendizado de Máquina', course: 'Ciência de Dados e Análises', type: 'module', files: 22 }
   ],
   professors: [
-    { id: 1, name: 'Dr. John Smith', email: 'john.smith@university.edu', university: 'University of Technology', type: 'professor', role: 'Admin Professor' },
-    { id: 2, name: 'Prof. Sarah Johnson', email: 'sarah.johnson@university.edu', university: 'University of Technology', type: 'professor', role: 'Regular Professor' },
-    { id: 3, name: 'Dr. Michael Davis', email: 'michael.davis@state.edu', university: 'State University', type: 'professor', role: 'Admin Professor' }
+    { id: 1, name: 'Dr. João Silva', email: 'joao.silva@universidade.edu.br', university: 'Universidade de Tecnologia', type: 'professor', role: 'Professor Administrador' },
+    { id: 2, name: 'Prof. Maria Santos', email: 'maria.santos@universidade.edu.br', university: 'Universidade de Tecnologia', type: 'professor', role: 'Professor Regular' },
+    { id: 3, name: 'Dr. Carlos Oliveira', email: 'carlos.oliveira@estadual.edu.br', university: 'Universidade Estadual', type: 'professor', role: 'Professor Administrador' }
   ],
   students: [
-    { id: 1, name: 'Alice Wilson', email: 'alice.wilson@student.edu', university: 'University of Technology', type: 'student', courses: 3 },
-    { id: 2, name: 'Bob Chen', email: 'bob.chen@student.edu', university: 'State University', type: 'student', courses: 2 }
+    { id: 1, name: 'Ana Souza', email: 'ana.souza@estudante.edu.br', university: 'Universidade de Tecnologia', type: 'student', courses: 3 },
+    { id: 2, name: 'Pedro Lima', email: 'pedro.lima@estudante.edu.br', university: 'Universidade Estadual', type: 'student', courses: 2 }
   ],
   files: [
-    { id: 1, name: 'Introduction_to_Python.pdf', module: 'Introduction to Programming', type: 'file', size: '2.4 MB' },
-    { id: 2, name: 'Data_Structures_Slides.pptx', module: 'Data Structures', type: 'file', size: '8.7 MB' },
-    { id: 3, name: 'ML_Dataset.csv', module: 'Machine Learning Basics', type: 'file', size: '156 MB' }
+    { id: 1, name: 'Introducao_ao_Python.pdf', module: 'Introdução à Programação', type: 'file', size: '2.4 MB' },
+    { id: 2, name: 'Slides_Estruturas_de_Dados.pptx', module: 'Estruturas de Dados', type: 'file', size: '8.7 MB' },
+    { id: 3, name: 'Dataset_ML.csv', module: 'Básicos de Aprendizado de Máquina', type: 'file', size: '156 MB' }
   ]
 };
 
@@ -52,18 +52,18 @@ export default function GlobalSearchPage() {
   const [searchTime, setSearchTime] = useState<number>(0);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Administration', href: '/admin' },
-    { label: 'Global Search', isCurrentPage: true }
+    { label: 'Administração', href: '/admin' },
+    { label: 'Busca Global', isCurrentPage: true }
   ];
 
   const searchTypes = [
-    { value: 'all', label: 'All Content' },
-    { value: 'universities', label: 'Universities' },
-    { value: 'courses', label: 'Courses' },
-    { value: 'modules', label: 'Modules' },
-    { value: 'professors', label: 'Professors' },
-    { value: 'students', label: 'Students' },
-    { value: 'files', label: 'Files' }
+    { value: 'all', label: 'Todo Conteúdo' },
+    { value: 'universities', label: 'Universidades' },
+    { value: 'courses', label: 'Cursos' },
+    { value: 'modules', label: 'Módulos' },
+    { value: 'professors', label: 'Professores' },
+    { value: 'students', label: 'Estudantes' },
+    { value: 'files', label: 'Arquivos' }
   ];
 
   const handleSearch = async () => {
@@ -130,8 +130,8 @@ export default function GlobalSearchPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Global Search"
-          description="Search across all universities, courses, modules, users, and files"
+          title="Busca Global"
+          description="Busque em todas as universidades, cursos, módulos, usuários e arquivos"
           breadcrumbs={breadcrumbs}
         />
 
@@ -140,17 +140,17 @@ export default function GlobalSearchPage() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Search className="mr-2 h-5 w-5" />
-              Search System-Wide Content
+              Buscar Conteúdo em Todo o Sistema
             </CardTitle>
             <CardDescription>
-              Search for any content across all universities and institutions in the system
+              Busque por qualquer conteúdo em todas as universidades e instituições do sistema
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex space-x-4">
               <div className="flex-1">
                 <Input
-                  placeholder="Search for universities, courses, modules, users, files..."
+                  placeholder="Buscar por universidades, cursos, módulos, usuários, arquivos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -174,11 +174,11 @@ export default function GlobalSearchPage() {
                 disabled={isSearching || !searchQuery.trim()}
               >
                 {isSearching ? (
-                  <>Searching...</>
+                  <>Buscando...</>
                 ) : (
                   <>
                     <Search className="mr-2 h-4 w-4" />
-                    Search
+                    Buscar
                   </>
                 )}
               </Button>
@@ -188,7 +188,7 @@ export default function GlobalSearchPage() {
               <div className="flex items-center justify-between pt-2 border-t">
                 <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                   <span>
-                    Found <strong>{getTotalResults()}</strong> results for "<strong>{searchQuery}</strong>"
+                    Encontrados <strong>{getTotalResults()}</strong> resultados para "<strong>{searchQuery}</strong>"
                   </span>
                   <div className="flex items-center space-x-1">
                     <Clock className="h-3 w-3" />
@@ -203,7 +203,7 @@ export default function GlobalSearchPage() {
                     setSearchQuery('');
                   }}
                 >
-                  Clear Results
+                  Limpar Resultados
                 </Button>
               </div>
             )}
@@ -219,7 +219,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Building2 className="mr-2 h-5 w-5 text-blue-500" />
-                    Universities ({searchResults.universities.length})
+                    Universidades ({searchResults.universities.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -234,7 +234,7 @@ export default function GlobalSearchPage() {
                             <h4 className="font-medium">{item.name}</h4>
                             <p className="text-sm text-muted-foreground">{item.description}</p>
                             <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="secondary">{item.courses} courses</Badge>
+                              <Badge variant="secondary">{item.courses} cursos</Badge>
                             </div>
                           </div>
                         </div>
@@ -254,7 +254,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <BookOpen className="mr-2 h-5 w-5 text-green-500" />
-                    Courses ({searchResults.courses.length})
+                    Cursos ({searchResults.courses.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -269,7 +269,7 @@ export default function GlobalSearchPage() {
                             <h4 className="font-medium">{item.name}</h4>
                             <p className="text-sm text-muted-foreground">{item.university}</p>
                             <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="secondary">{item.students} students</Badge>
+                              <Badge variant="secondary">{item.students} estudantes</Badge>
                             </div>
                           </div>
                         </div>
@@ -289,7 +289,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <FileText className="mr-2 h-5 w-5 text-purple-500" />
-                    Modules ({searchResults.modules.length})
+                    Módulos ({searchResults.modules.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -304,7 +304,7 @@ export default function GlobalSearchPage() {
                             <h4 className="font-medium">{item.name}</h4>
                             <p className="text-sm text-muted-foreground">{item.course}</p>
                             <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="secondary">{item.files} files</Badge>
+                              <Badge variant="secondary">{item.files} arquivos</Badge>
                             </div>
                           </div>
                         </div>
@@ -324,7 +324,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Users className="mr-2 h-5 w-5 text-amber-500" />
-                    Professors ({searchResults.professors.length})
+                    Professores ({searchResults.professors.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -360,7 +360,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <GraduationCap className="mr-2 h-5 w-5 text-pink-500" />
-                    Students ({searchResults.students.length})
+                    Estudantes ({searchResults.students.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -376,7 +376,7 @@ export default function GlobalSearchPage() {
                             <p className="text-sm text-muted-foreground">{item.email}</p>
                             <div className="flex items-center space-x-2 mt-1">
                               <Badge variant="secondary">{item.university}</Badge>
-                              <Badge variant="outline">{item.courses} courses</Badge>
+                              <Badge variant="outline">{item.courses} cursos</Badge>
                             </div>
                           </div>
                         </div>
@@ -396,7 +396,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <FileText className="mr-2 h-5 w-5 text-gray-500" />
-                    Files ({searchResults.files.length})
+                    Arquivos ({searchResults.files.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -433,9 +433,9 @@ export default function GlobalSearchPage() {
             <CardContent className="py-12">
               <div className="text-center">
                 <Search className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-4 text-lg font-semibold">Search System Content</h3>
+                <h3 className="mt-4 text-lg font-semibold">Buscar Conteúdo do Sistema</h3>
                 <p className="mt-2 text-sm text-muted-foreground max-w-sm mx-auto">
-                  Enter a search query above to find universities, courses, modules, users, and files across the entire system.
+                  Digite uma consulta de busca acima para encontrar universidades, cursos, módulos, usuários e arquivos em todo o sistema.
                 </p>
               </div>
             </CardContent>

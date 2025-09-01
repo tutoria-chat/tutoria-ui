@@ -25,10 +25,10 @@ import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem } 
 // Mock data - em produção viria da API
 const mockCourse: Course = {
   id: 1,
-  name: "Computer Science Fundamentals",
-  description: "This comprehensive course introduces students to the fundamental concepts of computer science, including programming principles, data structures, algorithms, and software engineering practices. Students will gain hands-on experience with modern programming languages and development tools.",
+  name: "Fundamentos da Ciência da Computação",
+  description: "Este curso abrangente apresenta aos estudantes os conceitos fundamentais da ciência da computação, incluindo princípios de programação, estruturas de dados, algoritmos e práticas de engenharia de software. Os estudantes terão experiência prática com linguagens de programação modernas e ferramentas de desenvolvimento.",
   university_id: 1,
-  university_name: "University of Technology",
+  university_name: "Universidade de Tecnologia",
   created_at: "2024-01-15T08:30:00Z",
   updated_at: "2024-03-10T14:20:00Z",
   modules_count: 12,
@@ -39,10 +39,10 @@ const mockCourse: Course = {
 const mockModules: Module[] = [
   {
     id: 1,
-    name: "Introduction to Programming",
-    description: "Basic programming concepts and syntax",
+    name: "Introdução à Programação",
+    description: "Conceitos básicos de programação e sintaxe",
     course_id: 1,
-    course_name: "Computer Science Fundamentals",
+    course_name: "Fundamentos da Ciência da Computação",
     created_at: "2024-01-20T10:00:00Z",
     updated_at: "2024-01-20T10:00:00Z",
     files_count: 8,
@@ -50,10 +50,10 @@ const mockModules: Module[] = [
   },
   {
     id: 2,
-    name: "Data Structures",
-    description: "Arrays, linked lists, trees, and graphs",
+    name: "Estruturas de Dados",
+    description: "Arrays, listas ligadas, árvores e grafos",
     course_id: 1,
-    course_name: "Computer Science Fundamentals",
+    course_name: "Fundamentos da Ciência da Computação",
     created_at: "2024-02-01T09:00:00Z",
     updated_at: "2024-02-01T09:00:00Z",
     files_count: 12,
@@ -61,10 +61,10 @@ const mockModules: Module[] = [
   },
   {
     id: 3,
-    name: "Algorithms and Complexity",
-    description: "Sorting, searching, and algorithm analysis",
+    name: "Algoritmos e Complexidade",
+    description: "Ordenação, busca e análise de algoritmos",
     course_id: 1,
-    course_name: "Computer Science Fundamentals",
+    course_name: "Fundamentos da Ciência da Computação",
     created_at: "2024-02-15T11:00:00Z",
     updated_at: "2024-02-15T11:00:00Z",
     files_count: 15,
@@ -75,11 +75,11 @@ const mockModules: Module[] = [
 const mockProfessors: Professor[] = [
   {
     id: 1,
-    email: "john.smith@university.edu",
-    first_name: "John",
-    last_name: "Smith",
+    email: "joao.silva@universidade.edu.br",
+    first_name: "João",
+    last_name: "Silva",
     university_id: 1,
-    university_name: "University of Technology",
+    university_name: "Universidade de Tecnologia",
     is_admin: true,
     created_at: "2024-01-10T08:00:00Z",
     updated_at: "2024-01-10T08:00:00Z",
@@ -87,11 +87,11 @@ const mockProfessors: Professor[] = [
   },
   {
     id: 2,
-    email: "sarah.johnson@university.edu",
-    first_name: "Sarah",
-    last_name: "Johnson",
+    email: "maria.santos@universidade.edu.br",
+    first_name: "Maria",
+    last_name: "Santos",
     university_id: 1,
-    university_name: "University of Technology",
+    university_name: "Universidade de Tecnologia",
     is_admin: false,
     created_at: "2024-01-12T09:00:00Z",
     updated_at: "2024-01-12T09:00:00Z",
@@ -109,14 +109,14 @@ export default function CourseDetailsPage() {
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Courses', href: '/courses' },
+    { label: 'Cursos', href: '/courses' },
     { label: course.name, isCurrentPage: true }
   ];
 
   const moduleColumns: TableColumn<Module>[] = [
     {
       key: 'name',
-      label: 'Module',
+      label: 'Módulo',
       sortable: true,
       render: (value, module) => (
         <div className="flex items-center space-x-3">
@@ -136,7 +136,7 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'files_count',
-      label: 'Files',
+      label: 'Arquivos',
       render: (value) => (
         <div className="flex items-center space-x-1">
           <FileText className="h-3 w-3 text-muted-foreground" />
@@ -153,7 +153,7 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'updated_at',
-      label: 'Last Updated',
+      label: 'Última Atualização',
       render: (value) => new Date(value as string).toLocaleDateString()
     }
   ];
@@ -176,17 +176,17 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'is_admin',
-      label: 'Role',
+      label: 'Função',
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? "Admin Professor" : "Regular Professor"}
+          {value ? "Professor Administrador" : "Professor Regular"}
         </Badge>
       )
     },
     {
       key: 'courses_count',
-      label: 'Total Courses',
-      render: (value) => `${value || 0} courses`
+      label: 'Total de Cursos',
+      render: (value) => `${value || 0} cursos`
     }
   ];
 
@@ -194,7 +194,7 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Course in ${course.university_name} • Created ${new Date(course.created_at).toLocaleDateString()}`}
+        description={`Curso em ${course.university_name} • Criado em ${new Date(course.created_at).toLocaleDateString()}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -202,7 +202,7 @@ export default function CourseDetailsPage() {
               <Button variant="outline" asChild>
                 <Link href={`/modules/create?course_id=${courseId}`}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Add Module
+                  Adicionar Módulo
                 </Link>
               </Button>
             </ProfessorOnly>
@@ -211,7 +211,7 @@ export default function CourseDetailsPage() {
               <Button asChild>
                 <Link href={`/courses/${courseId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
-                  Edit Course
+                  Editar Curso
                 </Link>
               </Button>
             </AdminOnly>
@@ -223,11 +223,11 @@ export default function CourseDetailsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Course Information</CardTitle>
+            <CardTitle>Informações do Curso</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-2">Description</h4>
+              <h4 className="font-medium text-sm text-muted-foreground mb-2">Descrição</h4>
               <p className="text-sm leading-relaxed">{course.description}</p>
             </div>
             
@@ -238,7 +238,7 @@ export default function CourseDetailsPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>Updated {new Date(course.updated_at).toLocaleDateString()}</span>
+                <span>Atualizado em {new Date(course.updated_at).toLocaleDateString()}</span>
               </div>
             </div>
           </CardContent>
@@ -250,7 +250,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{course.modules_count}</p>
-                  <p className="text-sm text-muted-foreground">Modules</p>
+                  <p className="text-sm text-muted-foreground">Módulos</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-500" />
               </div>
@@ -262,7 +262,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{course.students_count}</p>
-                  <p className="text-sm text-muted-foreground">Students Enrolled</p>
+                  <p className="text-sm text-muted-foreground">Estudantes Inscritos</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
               </div>
@@ -274,7 +274,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{course.professors_count}</p>
-                  <p className="text-sm text-muted-foreground">Professors</p>
+                  <p className="text-sm text-muted-foreground">Professores</p>
                 </div>
                 <Users className="h-8 w-8 text-purple-500" />
               </div>
@@ -287,9 +287,9 @@ export default function CourseDetailsPage() {
       <div className="border-b border-border">
         <nav className="-mb-px flex space-x-8">
           {[
-            { key: 'modules', label: 'Modules', count: modules.length },
-            { key: 'professors', label: 'Professors', count: professors.length },
-            { key: 'students', label: 'Students', count: course.students_count }
+            { key: 'modules', label: 'Módulos', count: modules.length },
+            { key: 'professors', label: 'Professores', count: professors.length },
+            { key: 'students', label: 'Estudantes', count: course.students_count }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -314,16 +314,16 @@ export default function CourseDetailsPage() {
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
-              <CardTitle>Course Modules</CardTitle>
+              <CardTitle>Módulos do Curso</CardTitle>
               <CardDescription>
-                Manage the modules and learning content for this course
+                Gerencie os módulos e conteúdo de aprendizado para este curso
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable
                 data={modules}
                 columns={moduleColumns}
-                emptyMessage="No modules found. Add your first module to get started."
+                emptyMessage="Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."
               />
             </CardContent>
           </Card>
@@ -332,16 +332,16 @@ export default function CourseDetailsPage() {
         {activeTab === 'professors' && (
           <Card>
             <CardHeader>
-              <CardTitle>Assigned Professors</CardTitle>
+              <CardTitle>Professores Atribuídos</CardTitle>
               <CardDescription>
-                Professors who are teaching or managing this course
+                Professores que estão ensinando ou gerenciando este curso
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable
                 data={professors}
                 columns={professorColumns}
-                emptyMessage="No professors assigned to this course."
+                emptyMessage="Nenhum professor atribuído a este curso."
               />
             </CardContent>
           </Card>
@@ -350,22 +350,22 @@ export default function CourseDetailsPage() {
         {activeTab === 'students' && (
           <Card>
             <CardHeader>
-              <CardTitle>Enrolled Students</CardTitle>
+              <CardTitle>Estudantes Inscritos</CardTitle>
               <CardDescription>
-                Students currently enrolled in this course
+                Estudantes atualmente inscritos neste curso
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <GraduationCap className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-2 text-sm font-semibold">Student Management</h3>
+                <h3 className="mt-2 text-sm font-semibold">Gerenciamento de Estudantes</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Student management interface will be implemented here
+                  A interface de gerenciamento de estudantes será implementada aqui
                 </p>
                 <div className="mt-4">
                   <Button variant="outline" asChild>
                     <Link href="/students">
-                      View All Students
+                      Ver Todos os Estudantes
                     </Link>
                   </Button>
                 </div>

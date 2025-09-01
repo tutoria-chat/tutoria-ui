@@ -11,12 +11,12 @@ export default function ProfessorsPage() {
     <AdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Professor Management"
-          description="Manage professors and their course assignments"
+          title="Gerenciamento de Professores"
+          description="Gerencie professores e suas atribuições de curso"
           actions={
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              Add Professor
+              Adicionar Professor
             </Button>
           }
         />
@@ -26,7 +26,7 @@ export default function ProfessorsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5" />
-                <span>Total Professors</span>
+                <span>Total de Professores</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -38,7 +38,7 @@ export default function ProfessorsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <UserCheck className="h-5 w-5 text-green-500" />
-                <span>Admin Professors</span>
+                <span>Professores Administradores</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -50,7 +50,7 @@ export default function ProfessorsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Users className="h-5 w-5 text-blue-500" />
-                <span>Regular Professors</span>
+                <span>Professores Regulares</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -62,7 +62,7 @@ export default function ProfessorsPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <UserX className="h-5 w-5 text-amber-500" />
-                <span>Unassigned</span>
+                <span>Não Atribuídos</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -73,12 +73,12 @@ export default function ProfessorsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Professors</CardTitle>
-            <CardDescription>Professor management interface will be implemented here</CardDescription>
+            <CardTitle>Professores</CardTitle>
+            <CardDescription>A interface de gerenciamento de professores será implementada aqui</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground text-center py-12">
-              Professor management system coming soon...
+              Sistema de gerenciamento de professores em breve...
             </p>
           </CardContent>
         </Card>

@@ -9,12 +9,12 @@ export default function FilesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="File Management"
-        description="Upload and manage files for your modules"
+        title="Gerenciamento de Arquivos"
+        description="Envie e gerencie arquivos para seus módulos"
         actions={
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Upload Files
+            Enviar Arquivos
           </Button>
         }
       />
@@ -24,7 +24,7 @@ export default function FilesPage() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <FileText className="h-5 w-5" />
-              <span>Total Files</span>
+              <span>Total de Arquivos</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -36,7 +36,7 @@ export default function FilesPage() {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Upload className="h-5 w-5" />
-              <span>Storage Used</span>
+              <span>Armazenamento Usado</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -46,23 +46,23 @@ export default function FilesPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent Uploads</CardTitle>
+            <CardTitle>Uploads Recentes</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">24</p>
-            <p className="text-sm text-muted-foreground">This week</p>
+            <p className="text-sm text-muted-foreground">Esta semana</p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Files</CardTitle>
-          <CardDescription>File management interface will be implemented here</CardDescription>
+          <CardTitle>Arquivos</CardTitle>
+          <CardDescription>A interface de gerenciamento de arquivos será implementada aqui</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground text-center py-12">
-            File upload and management system coming soon...
+            Sistema de upload e gerenciamento de arquivos em breve...
           </p>
         </CardContent>
       </Card>

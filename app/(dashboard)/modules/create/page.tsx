@@ -15,8 +15,8 @@ export default function CreateModulePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Modules', href: '/modules' },
-    { label: 'Create Module', isCurrentPage: true }
+    { label: 'Módulos', href: '/modules' },
+    { label: 'Criar Módulo', isCurrentPage: true }
   ];
 
   const handleSubmit = async (data: ModuleCreate) => {
@@ -46,8 +46,8 @@ export default function CreateModulePage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Create New Module"
-          description="Create a new learning module with AI tutor configuration for your course"
+          title="Criar Novo Módulo"
+          description="Crie um novo módulo de aprendizado com configuração de tutor IA para seu curso"
           breadcrumbs={breadcrumbs}
         />
 
