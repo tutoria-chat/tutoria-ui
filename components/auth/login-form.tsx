@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAuth } from './auth-provider';
@@ -96,7 +95,7 @@ export function LoginForm() {
           </Button>
         </form>
 
-        <div className="mt-4 text-center text-sm space-y-2">
+        {/* <div className="mt-4 text-center text-sm space-y-2">
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-left">
             <p className="text-blue-900 font-medium text-sm mb-2">🧪 Contas de Demonstração (Senha: admin)</p>
             <div className="space-y-1 text-xs text-blue-700">
@@ -121,7 +120,7 @@ export function LoginForm() {
           >
             Esqueceu sua senha?
           </Link>
-        </div>
+        </div> */}
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
           <p>© 2025 Tutoria. All rights reserved.</p>

@@ -22,6 +22,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: course?.name || '',
+    code: course?.code || '',
     description: course?.description || '',
     university_id: course?.university_id || user?.university_id || '',
   });
@@ -54,10 +55,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     // Validate form
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Course name is required';
+      newErrors.name = 'Nome do curso é obrigatório';
+    }
+    if (!formData.code.trim()) {
+      newErrors.code = 'Código do curso é obrigatório';
     }
     if (!formData.university_id) {
-      newErrors.university_id = 'University is required';
+      newErrors.university_id = 'Universidade é obrigatória';
     }
     
     setErrors(newErrors);
@@ -69,12 +73,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     try {
       await onSubmit({
         name: formData.name.trim(),
+        code: formData.code.trim(),
         description: formData.description.trim() || undefined,
         university_id: Number(formData.university_id),
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: 'Failed to save course. Please try again.' });
+      setErrors({ submit: 'Falha ao salvar curso. Tente novamente.' });
     }
   };
 
@@ -91,7 +96,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle>
-          {course ? 'Edit Course' : 'Create New Course'}
+          {course ? 'Editar Curso' : 'Criar Novo Curso'}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -99,11 +104,11 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Course Name */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="name">Course Name *</FormLabel>
+              <FormLabel htmlFor="name">Nome do Curso *</FormLabel>
               <Input
                 id="name"
                 type="text"
-                placeholder="e.g., Computer Science Fundamentals"
+                placeholder="ex: Fundamentos da Ciência da Computação"
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 disabled={isLoading}
@@ -113,16 +118,33 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
             </FormItem>
           </FormField>
 
+          {/* Course Code */}
+          <FormField>
+            <FormItem>
+              <FormLabel htmlFor="code">Código *</FormLabel>
+              <Input
+                id="code"
+                type="text"
+                placeholder="ex: CS101, COMP200"
+                value={formData.code}
+                onChange={(e) => handleInputChange('code', e.target.value)}
+                disabled={isLoading}
+                className={errors.code ? 'border-destructive' : ''}
+              />
+              {errors.code && <FormMessage>{errors.code}</FormMessage>}
+            </FormItem>
+          </FormField>
+
           {/* University Selection */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="university_id">University *</FormLabel>
+              <FormLabel htmlFor="university_id">Universidade *</FormLabel>
               {user?.role === 'super_admin' ? (
                 <Select
                   value={String(formData.university_id)}
                   onValueChange={(value) => handleInputChange('university_id', value)}
                   disabled={isLoading || loadingUniversities}
-                  placeholder={loadingUniversities ? "Loading universities..." : "Select a university"}
+                  placeholder={loadingUniversities ? "Carregando universidades..." : "Selecione uma universidade"}
                 >
                   {universities.map((university) => (
                     <SelectItem key={university.id} value={String(university.id)}>
@@ -132,7 +154,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                 </Select>
               ) : (
                 <Input
-                  value={user?.university_id ? `University ID: ${user.university_id}` : 'No university assigned'}
+                  value={user?.university_id ? `ID da Universidade: ${user.university_id}` : 'Nenhuma universidade atribuída'}
                   disabled
                   className="bg-muted"
                 />
@@ -144,10 +166,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Description */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="description">Description</FormLabel>
+              <FormLabel htmlFor="description">Descrição</FormLabel>
               <Textarea
                 id="description"
-                placeholder="Describe the course objectives, content, and target audience..."
+                placeholder="Descreva os objetivos do curso, conteúdo e público-alvo..."
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 disabled={isLoading}
@@ -170,13 +192,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
               onClick={onCancel}
               disabled={isLoading}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? (course ? 'Updating...' : 'Creating...') : (course ? 'Update Course' : 'Create Course')}
+              {isLoading ? (course ? 'Atualizando...' : 'Criando...') : (course ? 'Atualizar Curso' : 'Criar Curso')}
             </Button>
           </div>
         </form>

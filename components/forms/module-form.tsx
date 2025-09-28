@@ -27,6 +27,9 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
   const [formData, setFormData] = useState({
     name: module?.name || '',
     description: module?.description || '',
+    code: module?.code || '',
+    year: module?.year || '',
+    semester: module?.semester || '',
     course_id: module?.course_id || courseId || '',
     system_prompt: module?.system_prompt || '',
   });
@@ -37,75 +40,75 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
   // Predefined system prompt templates
   const promptTemplates = [
     {
-      name: "General Tutor",
-      description: "A helpful and knowledgeable tutor for general learning",
-      prompt: `You are an expert tutor helping students learn about this module's content. Your role is to:
+      name: "Tutor Geral",
+      description: "Um tutor útil e conhecedor para aprendizado geral",
+      prompt: `Você é um tutor especialista ajudando estudantes a aprender sobre o conteúdo deste módulo. Seu papel é:
 
-1. Provide clear, accurate explanations of concepts
-2. Ask guiding questions to help students think through problems
-3. Offer examples and analogies to make complex topics understandable
-4. Encourage critical thinking and deeper understanding
-5. Be patient and supportive in your responses
+1. Fornecer explicações claras e precisas de conceitos
+2. Fazer perguntas orientadoras para ajudar os estudantes a pensar sobre os problemas
+3. Oferecer exemplos e analogias para tornar tópicos complexos compreensíveis
+4. Encorajar pensamento crítico e compreensão mais profunda
+5. Ser paciente e solidário em suas respostas
 
-Always maintain a helpful, encouraging tone and adapt your explanations to the student's level of understanding.`
+Sempre mantenha um tom útil e encorajador e adapte suas explicações ao nível de compreensão do estudante.`
     },
     {
-      name: "Programming Tutor",
-      description: "Specialized tutor for programming and computer science concepts",
-      prompt: `You are a programming tutor specializing in computer science education. Your responsibilities include:
+      name: "Tutor de Programação",
+      description: "Tutor especializado em programação e conceitos de ciência da computação",
+      prompt: `Você é um tutor de programação especializado em educação em ciência da computação. Suas responsabilidades incluem:
 
-1. Explaining programming concepts clearly with code examples
-2. Helping debug and troubleshoot code issues
-3. Teaching best practices and coding standards
-4. Providing step-by-step problem-solving approaches
-5. Encouraging good software development habits
+1. Explicar conceitos de programação claramente com exemplos de código
+2. Ajudar a depurar e solucionar problemas de código
+3. Ensinar melhores práticas e padrões de codificação
+4. Fornecer abordagens passo a passo para resolução de problemas
+5. Encorajar bons hábitos de desenvolvimento de software
 
-When helping with code:
-- Show examples and explain the logic
-- Point out common mistakes and how to avoid them
-- Suggest improvements and optimizations
-- Encourage testing and documentation
+Ao ajudar com código:
+- Mostrar exemplos e explicar a lógica
+- Apontar erros comuns e como evitá-los
+- Sugerir melhorias e otimizações
+- Encorajar testes e documentação
 
-Be patient and break down complex programming concepts into manageable parts.`
+Seja paciente e divida conceitos complexos de programação em partes gerenciáveis.`
     },
     {
-      name: "Math & Science Tutor",
-      description: "Tutor focused on mathematics and scientific concepts",
-      prompt: `You are a mathematics and science tutor dedicated to helping students understand quantitative concepts. Your approach should:
+      name: "Tutor de Matemática e Ciências",
+      description: "Tutor focado em matemática e conceitos científicos",
+      prompt: `Você é um tutor de matemática e ciências dedicado a ajudar estudantes a entender conceitos quantitativos. Sua abordagem deve:
 
-1. Break down complex mathematical problems into clear steps
-2. Explain the underlying principles and theory
-3. Use real-world applications to illustrate abstract concepts
-4. Help students develop problem-solving strategies
-5. Encourage mathematical reasoning and scientific thinking
+1. Dividir problemas matemáticos complexos em etapas claras
+2. Explicar os princípios e teoria subjacentes
+3. Usar aplicações do mundo real para ilustrar conceitos abstratos
+4. Ajudar estudantes a desenvolver estratégias de resolução de problemas
+5. Encorajar raciocínio matemático e pensamento científico
 
-When working through problems:
-- Show each step clearly
-- Explain why each step is necessary
-- Connect concepts to broader mathematical or scientific principles
-- Help students check their work and understand mistakes
+Ao trabalhar com problemas:
+- Mostrar cada etapa claramente
+- Explicar por que cada etapa é necessária
+- Conectar conceitos a princípios matemáticos ou científicos mais amplos
+- Ajudar estudantes a verificar seu trabalho e entender erros
 
-Foster curiosity and logical thinking in STEM subjects.`
+Fomentar curiosidade e pensamento lógico em disciplinas STEM.`
     },
     {
-      name: "Research Assistant",
-      description: "Academic research and writing support",
-      prompt: `You are an academic research assistant helping students with research skills and academic writing. Your role includes:
+      name: "Assistente de Pesquisa",
+      description: "Suporte para pesquisa acadêmica e escrita",
+      prompt: `Você é um assistente de pesquisa acadêmica ajudando estudantes com habilidades de pesquisa e escrita acadêmica. Seu papel inclui:
 
-1. Guiding students through the research process
-2. Helping evaluate source credibility and relevance
-3. Assisting with academic writing structure and style
-4. Teaching proper citation and referencing
-5. Encouraging critical analysis of information
+1. Orientar estudantes através do processo de pesquisa
+2. Ajudar a avaliar credibilidade e relevância de fontes
+3. Auxiliar com estrutura e estilo de escrita acadêmica
+4. Ensinar citação e referenciamento adequados
+5. Encorajar análise crítica de informações
 
-Focus on:
-- Teaching research methodologies
-- Helping organize and synthesize information
-- Improving academic writing skills
-- Promoting scholarly integrity
-- Developing critical thinking about sources
+Foque em:
+- Ensinar metodologias de pesquisa
+- Ajudar a organizar e sintetizar informações
+- Melhorar habilidades de escrita acadêmica
+- Promover integridade acadêmica
+- Desenvolver pensamento crítico sobre fontes
 
-Support students in becoming independent researchers and clear academic writers.`
+Apoie estudantes para se tornarem pesquisadores independentes e escritores acadêmicos claros.`
     }
   ];
 
@@ -135,10 +138,10 @@ Support students in becoming independent researchers and clear academic writers.
     // Validar formulário
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Module name is required';
+      newErrors.name = 'Nome do módulo é obrigatório';
     }
     if (!formData.course_id) {
-      newErrors.course_id = 'Course is required';
+      newErrors.course_id = 'Curso é obrigatório';
     }
     
     setErrors(newErrors);
@@ -151,12 +154,15 @@ Support students in becoming independent researchers and clear academic writers.
       await onSubmit({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
+        code: formData.code.trim() || undefined,
+        year: formData.year ? Number(formData.year) : undefined,
+        semester: formData.semester ? Number(formData.semester) : undefined,
         course_id: Number(formData.course_id),
         system_prompt: formData.system_prompt.trim() || undefined,
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: 'Failed to save module. Please try again.' });
+      setErrors({ submit: 'Falha ao salvar módulo. Tente novamente.' });
     }
   };
 
@@ -183,7 +189,7 @@ Support students in becoming independent researchers and clear academic writers.
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <FileText className="h-5 w-5" />
-            <span>{module ? 'Edit Module' : 'Create New Module'}</span>
+            <span>{module ? 'Editar Módulo' : 'Criar Novo Módulo'}</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -191,11 +197,11 @@ Support students in becoming independent researchers and clear academic writers.
             {/* Module Name */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="name">Module Name *</FormLabel>
+                <FormLabel htmlFor="name">Nome do Módulo *</FormLabel>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="e.g., Introduction to Data Structures"
+                  placeholder="ex: Introdução a Estruturas de Dados"
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   disabled={isLoading}
@@ -205,10 +211,65 @@ Support students in becoming independent researchers and clear academic writers.
               </FormItem>
             </FormField>
 
+            {/* Module Code */}
+            <FormField>
+              <FormItem>
+                <FormLabel htmlFor="code">Código do Módulo</FormLabel>
+                <Input
+                  id="code"
+                  type="text"
+                  placeholder="ex: CS101, MAT201, FIS301"
+                  value={formData.code}
+                  onChange={(e) => handleInputChange('code', e.target.value)}
+                  disabled={isLoading}
+                  className={errors.code ? 'border-destructive' : ''}
+                />
+                {errors.code && <FormMessage>{errors.code}</FormMessage>}
+              </FormItem>
+            </FormField>
+
+            {/* Year and Semester */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField>
+                <FormItem>
+                  <FormLabel htmlFor="year">Ano</FormLabel>
+                  <Input
+                    id="year"
+                    type="number"
+                    placeholder="ex: 2024"
+                    value={formData.year}
+                    onChange={(e) => handleInputChange('year', e.target.value)}
+                    disabled={isLoading}
+                    className={errors.year ? 'border-destructive' : ''}
+                    min="2020"
+                    max="2030"
+                  />
+                  {errors.year && <FormMessage>{errors.year}</FormMessage>}
+                </FormItem>
+              </FormField>
+
+              <FormField>
+                <FormItem>
+                  <FormLabel htmlFor="semester">Semestre</FormLabel>
+                  <Input
+                    id="semester"
+                    type="number"
+                    placeholder="ex: 1, 2..."
+                    value={formData.semester}
+                    onChange={(e) => handleInputChange('semester', e.target.value)}
+                    disabled={isLoading}
+                    className={errors.semester ? 'border-destructive' : ''}
+                    min="1"
+                  />
+                  {errors.semester && <FormMessage>{errors.semester}</FormMessage>}
+                </FormItem>
+              </FormField>
+            </div>
+
             {/* Course Selection */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="course_id">Course *</FormLabel>
+                <FormLabel htmlFor="course_id">Curso *</FormLabel>
                 {courseId ? (
                   <div className="flex items-center space-x-2">
                     <Input
@@ -216,18 +277,18 @@ Support students in becoming independent researchers and clear academic writers.
                       disabled
                       className="bg-muted"
                     />
-                    <Badge variant="secondary">Pre-selected</Badge>
+                    <Badge variant="secondary">Pré-selecionado</Badge>
                   </div>
                 ) : (
                   <Select
                     value={String(formData.course_id)}
                     onValueChange={(value) => handleInputChange('course_id', value)}
                     disabled={isLoading || loadingCourses}
-                    placeholder={loadingCourses ? "Loading courses..." : "Select a course"}
+                    placeholder={loadingCourses ? "Carregando cursos..." : "Selecione um curso"}
                   >
                     {courses.map((course) => (
                       <SelectItem key={course.id} value={String(course.id)}>
-                        {course.name} ({course.university_name})
+                        {course.name}
                       </SelectItem>
                     ))}
                   </Select>
@@ -239,10 +300,10 @@ Support students in becoming independent researchers and clear academic writers.
             {/* Description */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="description">Description</FormLabel>
+                <FormLabel htmlFor="description">Descrição</FormLabel>
                 <Textarea
                   id="description"
-                  placeholder="Describe the module's learning objectives, content overview, and key concepts..."
+                  placeholder="Descreva os objetivos de aprendizagem do módulo, visão geral do conteúdo e conceitos-chave..."
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   disabled={isLoading}
@@ -251,6 +312,90 @@ Support students in becoming independent researchers and clear academic writers.
                 {errors.description && <FormMessage>{errors.description}</FormMessage>}
               </FormItem>
             </FormField>
+
+            <Separator className="my-6" />
+
+            {/* AI System Prompt Configuration */}
+            <div className="space-y-6">
+              <div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <Bot className="h-5 w-5 text-blue-500" />
+                  <h3 className="text-lg font-semibold">Configuração do Tutor IA</h3>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Configure como o tutor IA deve se comportar ao ajudar estudantes com este módulo.
+                  O prompt do sistema define a personalidade, expertise e abordagem de ensino da IA.
+                </p>
+              </div>
+
+              {/* Prompt Templates */}
+              <div>
+                <div className="flex items-center space-x-2 mb-3">
+                  <Lightbulb className="h-4 w-4 text-amber-500" />
+                  <h4 className="font-medium text-sm">Modelos Rápidos</h4>
+                </div>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {promptTemplates.map((template, index) => (
+                    <Card key={index} className="cursor-pointer hover:bg-muted/50 transition-colors">
+                      <CardContent className="p-4">
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <h5 className="font-medium text-sm">{template.name}</h5>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => applyPromptTemplate(template)}
+                              disabled={isLoading}
+                            >
+                              Usar Modelo
+                            </Button>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {template.description}
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Custom System Prompt */}
+              <FormField>
+                <FormItem>
+                  <FormLabel htmlFor="system_prompt">Prompt Personalizado do Sistema</FormLabel>
+                  <Textarea
+                    id="system_prompt"
+                    placeholder="Defina como o tutor IA deve se comportar, seu nível de expertise, estilo de ensino e diretrizes de interação..."
+                    value={formData.system_prompt}
+                    onChange={(e) => handleInputChange('system_prompt', e.target.value)}
+                    disabled={isLoading}
+                    rows={8}
+                    className="font-mono text-sm"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.system_prompt.length} caracteres
+                    {formData.system_prompt.length > 0 && (
+                      <span className="ml-2 text-green-600">✓ Configurado</span>
+                    )}
+                  </p>
+                  {errors.system_prompt && <FormMessage>{errors.system_prompt}</FormMessage>}
+                </FormItem>
+              </FormField>
+
+              {/* Prompt Guidelines */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-medium text-sm text-blue-900 mb-2">💡 Dicas para Escrever Prompts</h4>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>• Defina o papel e expertise da IA claramente</li>
+                  <li>• Especifique o estilo de ensino e abordagem</li>
+                  <li>• Inclua diretrizes para diferentes tipos de perguntas</li>
+                  <li>• Defina expectativas para formato e tom de resposta</li>
+                  <li>• Considere o público-alvo e seu nível</li>
+                </ul>
+              </div>
+            </div>
 
             {/* Submit Error */}
             {errors.submit && (
@@ -265,103 +410,19 @@ Support students in becoming independent researchers and clear academic writers.
                 onClick={onCancel}
                 disabled={isLoading}
               >
-                Cancel
+                Cancelar
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? (module ? 'Updating...' : 'Creating...') : (module ? 'Update Module' : 'Create Module')}
+                {isLoading ? (module ? 'Atualizando...' : 'Criando...') : (module ? 'Atualizar Módulo' : 'Criar Módulo')}
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
 
-      {/* AI System Prompt Configuration */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Bot className="h-5 w-5 text-blue-500" />
-            <span>AI Tutor Configuration</span>
-          </CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Configure how the AI tutor should behave when helping students with this module. 
-            The system prompt defines the AI's personality, expertise, and teaching approach.
-          </p>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Prompt Templates */}
-          <div>
-            <div className="flex items-center space-x-2 mb-3">
-              <Lightbulb className="h-4 w-4 text-amber-500" />
-              <h4 className="font-medium text-sm">Quick Templates</h4>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              {promptTemplates.map((template, index) => (
-                <Card key={index} className="cursor-pointer hover:bg-muted/50 transition-colors">
-                  <CardContent className="p-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <h5 className="font-medium text-sm">{template.name}</h5>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => applyPromptTemplate(template)}
-                          disabled={isLoading}
-                        >
-                          Use Template
-                        </Button>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        {template.description}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          <Separator />
-
-          {/* Custom System Prompt */}
-          <FormField>
-            <FormItem>
-              <FormLabel htmlFor="system_prompt">Custom System Prompt</FormLabel>
-              <Textarea
-                id="system_prompt"
-                placeholder="Define how the AI tutor should behave, its expertise level, teaching style, and interaction guidelines..."
-                value={formData.system_prompt}
-                onChange={(e) => handleInputChange('system_prompt', e.target.value)}
-                disabled={isLoading}
-                rows={8}
-                className="font-mono text-sm"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                {formData.system_prompt.length} characters
-                {formData.system_prompt.length > 0 && (
-                  <span className="ml-2 text-green-600">✓ Configured</span>
-                )}
-              </p>
-              {errors.system_prompt && <FormMessage>{errors.system_prompt}</FormMessage>}
-            </FormItem>
-          </FormField>
-
-          {/* Prompt Guidelines */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-medium text-sm text-blue-900 mb-2">💡 Prompt Writing Tips</h4>
-            <ul className="text-xs text-blue-700 space-y-1">
-              <li>• Define the AI's role and expertise clearly</li>
-              <li>• Specify the teaching style and approach</li>
-              <li>• Include guidelines for different types of questions</li>
-              <li>• Set expectations for response format and tone</li>
-              <li>• Consider the target audience and their level</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -1,9 +1,23 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { authService } from '@/lib/auth';
 import { checkPermission } from '@/lib/permissions';
-import type { User, Permission, PermissionContext } from '@/lib/types';
+import { apiClient } from '@/lib/api';
+import { jwtDecode } from 'jwt-decode';
+import type { User, Permission, PermissionContext, UserRole } from '@/lib/types';
+
+interface JWTPayload {
+  user_id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  type: UserRole;
+  university_id?: number;
+  is_admin?: boolean;
+  assigned_courses?: number[];
+  exp: number;
+  iat: number;
+}
 
 interface AuthContextType {
   user: User | null;
@@ -22,76 +36,86 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize auth state
-    const currentUser = authService.getUser();
-    setUser(currentUser);
-    setIsLoading(false);
-  }, []);
+    // Initialize auth state from stored token
+    const initializeAuth = () => {
+      if (typeof window !== 'undefined') {
+        const storedUser = localStorage.getItem('tutoria_user');
+        const storedToken = localStorage.getItem('tutoria_token');
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      // Mock users para desenvolvimento
-      const mockUsers = {
-        'admin': {
-          id: 1,
-          email: 'admin@tutoria.com',
-          first_name: 'Super',
-          last_name: 'Admin',
-          role: 'super_admin' as const,
-          university_id: 1,
-          is_admin: true,
-          assigned_courses: [1, 2, 3],
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-        'professor': {
-          id: 2,
-          email: 'professor@university.edu',
-          first_name: 'John',
-          last_name: 'Smith',
-          role: 'admin_professor' as const,
-          university_id: 1,
-          is_admin: true,
-          assigned_courses: [1, 2, 3, 4],
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        },
-        'teacher': {
-          id: 3,
-          email: 'teacher@university.edu',
-          first_name: 'Sarah',
-          last_name: 'Johnson',
-          role: 'regular_professor' as const,
-          university_id: 1,
-          is_admin: false,
-          assigned_courses: [2, 3],
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        }
-      };
+        if (storedUser && storedToken) {
+          try {
+            // Verify token is still valid by checking if it's not expired
+            const decoded = jwtDecode<JWTPayload>(storedToken);
+            const now = Date.now() / 1000;
 
-      // Mock authentication - using only local data
-      if (password === 'admin') {
-        // Simular delay de API
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const mockUser = mockUsers[email as keyof typeof mockUsers];
-        if (mockUser) {
-          setUser(mockUser);
-          return { success: true, user: mockUser };
+            if (decoded.exp > now) {
+              // Token is still valid, restore user and set token in apiClient
+              const user = JSON.parse(storedUser);
+              apiClient.setToken(storedToken);
+              setUser(user);
+            } else {
+              // Token expired, clear auth
+              localStorage.removeItem('tutoria_user');
+              localStorage.removeItem('tutoria_token');
+              apiClient.clearToken();
+            }
+          } catch (error) {
+            // Invalid token or user data, clear auth
+            console.error('Invalid stored auth data:', error);
+            localStorage.removeItem('tutoria_user');
+            localStorage.removeItem('tutoria_token');
+            apiClient.clearToken();
+          }
         }
       }
-      
-      // Invalid credentials
-      return { 
-        success: false, 
-        error: 'Credenciais inválidas. Tente: admin/admin, professor/admin ou teacher/admin' 
+      setIsLoading(false);
+    };
+
+    initializeAuth();
+  }, []);
+
+  const login = async (username: string, password: string) => {
+    setIsLoading(true);
+    try {
+      // Make API call directly since we need to send 'username' not 'email'
+      const response = await apiClient.login({ username, password });
+
+      if (response.access_token) {
+        // Decode JWT token to extract user information
+        const decoded = jwtDecode<JWTPayload>(response.access_token);
+
+        const user: User = {
+          id: decoded.user_id,
+          email: decoded.email,
+          first_name: decoded.first_name,
+          last_name: decoded.last_name,
+          role: decoded.type,
+          university_id: decoded.university_id,
+          is_admin: decoded.is_admin || false,
+          assigned_courses: decoded.assigned_courses || [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
+
+        // Store in localStorage for persistence
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('tutoria_user', JSON.stringify(user));
+          localStorage.setItem('tutoria_token', response.access_token);
+        }
+
+        setUser(user);
+        return { success: true, user };
+      }
+
+      return {
+        success: false,
+        error: 'Credenciais inválidas. Tente novamente.'
       };
     } catch (error) {
-      return { 
-        success: false, 
-        error: 'Falha no login. Tente: admin/admin, professor/admin ou teacher/admin' 
+      console.error('Login error:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Falha no login. Tente novamente.'
       };
     } finally {
       setIsLoading(false);
@@ -101,7 +125,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     setIsLoading(true);
     try {
-      // Mock logout - just clear user state
+      // Clear stored token and user data
+      apiClient.clearToken();
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('tutoria_user');
+        localStorage.removeItem('tutoria_token');
+      }
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -117,7 +146,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const changePassword = async (currentPassword: string, newPassword: string) => {
-    return await authService.changePassword(currentPassword, newPassword);
+    try {
+      await apiClient.changePassword(currentPassword, newPassword);
+      return { success: true };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Password change failed'
+      };
+    }
   };
 
   const value: AuthContextType = {

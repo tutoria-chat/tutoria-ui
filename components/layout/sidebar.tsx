@@ -173,7 +173,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                     className="w-full justify-start"
                     size="sm"
                   >
-                    <item.icon className="mr-3 h-4 w-4" />
+                    {item.icon && <item.icon className="mr-3 h-4 w-4" />}
                     {item.label}
                     {isActive(item.href) && (
                       <ChevronRight className="ml-auto h-4 w-4" />
@@ -205,7 +205,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                           className="w-full justify-start"
                           size="sm"
                         >
-                          <item.icon className="mr-3 h-4 w-4" />
+                          {item.icon && <item.icon className="mr-3 h-4 w-4" />}
                           {item.label}
                           {isActive(item.href) && (
                             <ChevronRight className="ml-auto h-4 w-4" />

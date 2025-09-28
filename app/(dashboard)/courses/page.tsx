@@ -9,76 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
-import type { Course, TableColumn, BreadcrumbItem } from '@/lib/types';
-
-// Mock data - em produção viria da API
-const mockCourses: Course[] = [
-  {
-    id: 1,
-    name: "Fundamentos da Ciência da Computação",
-    description: "Introdução aos conceitos de programação, estruturas de dados e algoritmos",
-    university_id: 1,
-    university_name: "Universidade de Tecnologia",
-    created_at: "2024-01-15T08:30:00Z",
-    updated_at: "2024-01-15T08:30:00Z",
-    modules_count: 12,
-    professors_count: 3,
-    students_count: 89
-  },
-  {
-    id: 2,
-    name: "Bootcamp de Desenvolvimento Web",
-    description: "Desenvolvimento web full-stack usando frameworks e tecnologias modernas",
-    university_id: 1,
-    university_name: "Universidade de Tecnologia",
-    created_at: "2024-01-20T10:15:00Z",
-    updated_at: "2024-01-20T10:15:00Z",
-    modules_count: 8,
-    professors_count: 2,
-    students_count: 67
-  },
-  {
-    id: 3,
-    name: "Ciência de Dados e Análises",
-    description: "Estatísticas, aprendizado de máquina e técnicas de visualização de dados",
-    university_id: 2,
-    university_name: "Universidade Estadual",
-    created_at: "2024-02-01T14:20:00Z",
-    updated_at: "2024-02-01T14:20:00Z",
-    modules_count: 15,
-    professors_count: 4,
-    students_count: 123
-  },
-  {
-    id: 4,
-    name: "Gestão Empresarial",
-    description: "Planejamento estratégico, operações e princípios de liderança",
-    university_id: 3,
-    university_name: "Faculdade de Negócios",
-    created_at: "2024-02-10T09:45:00Z",
-    updated_at: "2024-02-10T09:45:00Z",
-    modules_count: 10,
-    professors_count: 2,
-    students_count: 45
-  },
-  {
-    id: 5,
-    name: "Marketing Digital",
-    description: "Redes sociais, SEO, marketing de conteúdo e análises",
-    university_id: 3,
-    university_name: "Faculdade de Negócios",
-    created_at: "2024-02-15T16:30:00Z",
-    updated_at: "2024-02-15T16:30:00Z",
-    modules_count: 6,
-    professors_count: 2,
-    students_count: 34
-  }
-];
+import { useFetch } from '@/lib/hooks';
+import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function CoursesPage() {
   const { user } = useAuth();
-  const [courses] = useState<Course[]>(mockCourses);
-  const [loading] = useState(false);
+
+  // API call to get courses
+  const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>('/courses/');
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -213,6 +151,14 @@ export default function CoursesPage() {
     }
   };
 
+  // Get courses from API response
+  const courses = coursesResponse?.items || [];
+
+  // Handle API error
+  if (error) {
+    console.error('Error fetching courses:', error);
+  }
+
   // Filtrar cursos baseado na busca e permissões do usuário
   const filteredCourses = courses.filter(course => {
     // Filtro de busca
@@ -284,13 +230,13 @@ export default function CoursesPage() {
           <div className="text-2xl font-bold">{stats.total}</div>
         </div>
 
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+        {/* <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
             <h3 className="tracking-tight text-sm font-medium">Total de Estudantes</h3>
             <GraduationCap className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalStudents}</div>
-        </div>
+        </div> */}
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">

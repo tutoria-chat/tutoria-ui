@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { ModuleForm } from '@/components/forms/module-form';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
-import type { ModuleCreate, BreadcrumbItem } from '@/lib/types';
+import type { ModuleCreate, ModuleUpdate, BreadcrumbItem } from '@/lib/types';
 
 export default function CreateModulePage() {
   const router = useRouter();
@@ -19,15 +19,20 @@ export default function CreateModulePage() {
     { label: 'Criar Módulo', isCurrentPage: true }
   ];
 
-  const handleSubmit = async (data: ModuleCreate) => {
+  const handleSubmit = async (data: ModuleCreate | ModuleUpdate) => {
     setIsLoading(true);
     try {
-      // Em produção, isso chamaria a API real
-      console.log('Creating module:', data);
-      
-      // Simular criação bem-sucedida
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      // Criar módulo via API
+      await apiClient.post('/modules/', {
+        name: data.name,
+        code: data.code,
+        system_prompt: data.system_prompt,
+        semester: data.semester,
+        year: data.year,
+        course_id: data.course_id,
+        description: data.description
+      });
+
       // Redirecionar para a lista de módulos
       router.push('/modules');
     } catch (error) {

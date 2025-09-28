@@ -35,7 +35,10 @@ class AuthService {
 
   async login(credentials: LoginCredentials): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
-      const response: TokenResponse = await apiClient.login(credentials);
+      const response: TokenResponse = await apiClient.login({
+        username: credentials.email,
+        password: credentials.password
+      });
       
       // Decode JWT token to get user info (simplified - in production use a JWT library)
       const userInfo = this.decodeToken(response.access_token);
@@ -112,12 +115,12 @@ class AuthService {
         email: payload.email,
         first_name: payload.first_name,
         last_name: payload.last_name,
-        role: payload.role,
+        role: payload.type, // Use 'type' from JWT payload as defined in JWTPayload interface
         university_id: payload.university_id,
         is_admin: payload.is_admin,
         assigned_courses: payload.assigned_courses,
-        created_at: payload.created_at,
-        updated_at: payload.updated_at,
+        created_at: payload.created_at || new Date().toISOString(),
+        updated_at: payload.updated_at || new Date().toISOString(),
       };
     } catch (error) {
       console.error('Failed to decode token:', error);

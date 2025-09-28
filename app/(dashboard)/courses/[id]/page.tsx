@@ -26,6 +26,7 @@ import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem } 
 const mockCourse: Course = {
   id: 1,
   name: "Fundamentos da Ciência da Computação",
+  code: "CS101",
   description: "Este curso abrangente apresenta aos estudantes os conceitos fundamentais da ciência da computação, incluindo princípios de programação, estruturas de dados, algoritmos e práticas de engenharia de software. Os estudantes terão experiência prática com linguagens de programação modernas e ferramentas de desenvolvimento.",
   university_id: 1,
   university_name: "Universidade de Tecnologia",

@@ -6,47 +6,14 @@ import { Plus, Edit, Trash2, Eye, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
-import type { University, TableColumn, BreadcrumbItem } from '@/lib/types';
-
-// Mock data - in real app this would come from API
-const mockUniversities: University[] = [
-  {
-    id: 1,
-    name: "Universidade de Tecnologia",
-    description: "Universidade líder em tecnologia com programas inovadores",
-    created_at: "2024-01-15T08:30:00Z",
-    updated_at: "2024-01-15T08:30:00Z",
-    courses_count: 45,
-    professors_count: 23,
-    students_count: 892
-  },
-  {
-    id: 2,
-    name: "Universidade Estadual",
-    description: "Universidade pública oferecendo educação abrangente",
-    created_at: "2024-01-20T10:15:00Z",
-    updated_at: "2024-01-20T10:15:00Z",
-    courses_count: 67,
-    professors_count: 34,
-    students_count: 1245
-  },
-  {
-    id: 3,
-    name: "Faculdade de Negócios",
-    description: "Educação especializada em negócios e gestão",
-    created_at: "2024-02-01T14:20:00Z",
-    updated_at: "2024-02-01T14:20:00Z",
-    courses_count: 28,
-    professors_count: 18,
-    students_count: 456
-  }
-];
+import { useFetch } from '@/lib/hooks';
+import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function UniversitiesPage() {
-  const [universities] = useState<University[]>(mockUniversities);
-  const [loading] = useState(false);
+  // API call to get universities
+  const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/universities/');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -76,36 +43,6 @@ export default function UniversitiesPage() {
             )}
           </div>
         </div>
-      )
-    },
-    {
-      key: 'courses_count',
-      label: 'Cursos',
-      sortable: true,
-      render: (value) => (
-        <Badge variant="secondary">
-          {value || 0} cursos
-        </Badge>
-      )
-    },
-    {
-      key: 'professors_count',
-      label: 'Professores',
-      sortable: true,
-      render: (value) => (
-        <Badge variant="outline">
-          {value || 0} professores
-        </Badge>
-      )
-    },
-    {
-      key: 'students_count',
-      label: 'Estudantes',
-      sortable: true,
-      render: (value) => (
-        <Badge variant="outline">
-          {value || 0} estudantes
-        </Badge>
       )
     },
     {
@@ -167,6 +104,14 @@ export default function UniversitiesPage() {
       setSortDirection('asc');
     }
   };
+
+  // Get universities from API response
+  const universities = universitiesResponse?.items || [];
+
+  // Handle API error
+  if (error) {
+    console.error('Error fetching universities:', error);
+  }
 
   // Filter universities based on search term
   const filteredUniversities = universities.filter(university =>

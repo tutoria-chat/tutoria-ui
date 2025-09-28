@@ -37,6 +37,7 @@ export interface AuthResult {
 export interface University {
   id: number;
   name: string;
+  code: string;
   description?: string;
   created_at: string;
   updated_at: string;
@@ -63,6 +64,7 @@ export interface UniversityWithCourses extends University {
 export interface Course {
   id: number;
   name: string;
+  code: string;
   description?: string;
   university_id: number;
   university_name?: string;
@@ -75,12 +77,14 @@ export interface Course {
 
 export interface CourseCreate {
   name: string;
+  code: string;
   description?: string;
   university_id: number;
 }
 
 export interface CourseUpdate {
   name?: string;
+  code?: string;
   description?: string;
 }
 
