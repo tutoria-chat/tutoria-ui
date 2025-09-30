@@ -48,11 +48,13 @@ export interface University {
 
 export interface UniversityCreate {
   name: string;
+  code: string;
   description?: string;
 }
 
 export interface UniversityUpdate {
   name?: string;
+  code?: string;
   description?: string;
 }
 
@@ -98,8 +100,11 @@ export interface CourseWithDetails extends Course {
 export interface Module {
   id: number;
   name: string;
+  code?: string;
   description?: string;
   system_prompt?: string;
+  semester?: number;
+  year?: number;
   course_id: number;
   course_name?: string;
   university_id?: number;
@@ -111,15 +116,22 @@ export interface Module {
 
 export interface ModuleCreate {
   name: string;
+  code?: string;
   description?: string;
   system_prompt?: string;
+  semester?: number;
+  year?: number;
   course_id: number;
 }
 
 export interface ModuleUpdate {
   name?: string;
+  code?: string;
   description?: string;
   system_prompt?: string;
+  semester?: number;
+  year?: number;
+  course_id?: number;
 }
 
 export interface ModuleWithDetails extends Module {
