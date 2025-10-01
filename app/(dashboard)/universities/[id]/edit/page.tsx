@@ -161,7 +161,7 @@ export default function EditUniversityPage() {
                 <Input
                   id="name"
                   type="text"
-                  value={formData.name}
+                  value={formData.name || ''}
                   onChange={(e) => handleChange('name', e.target.value)}
                   placeholder="Ex: Universidade Federal de São Paulo"
                   className={errors.name ? 'border-destructive' : ''}
@@ -178,7 +178,7 @@ export default function EditUniversityPage() {
                 <Input
                   id="code"
                   type="text"
-                  value={formData.code}
+                  value={formData.code || ''}
                   onChange={(e) => handleChange('code', e.target.value)}
                   placeholder="Ex: UNIFESP"
                   className={errors.code ? 'border-destructive' : ''}

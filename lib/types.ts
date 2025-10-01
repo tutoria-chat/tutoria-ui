@@ -53,8 +53,8 @@ export interface UniversityCreate {
 }
 
 export interface UniversityUpdate {
-  name?: string;
-  code?: string;
+  name: string;
+  code: string;
   description?: string;
 }
 
