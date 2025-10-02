@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProtectedRoute } from '@/components/auth/protected-route';
-import { DashboardLayoutClient } from './dashboard-layout-client';
+import { DashboardLayoutWrapper } from '@/components/layout/dashboard-layout-wrapper';
 
 export default function DashboardLayout({
   children,
@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <DashboardLayoutClient>{children}</DashboardLayoutClient>
+      <DashboardLayoutWrapper>{children}</DashboardLayoutWrapper>
     </ProtectedRoute>
   );
 }

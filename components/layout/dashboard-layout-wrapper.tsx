@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Header } from '@/components/layout/header';
 import { Sidebar } from '@/components/layout/sidebar';
 
-export function DashboardLayoutClient({
+export function DashboardLayoutWrapper({
   children,
 }: {
   children: React.ReactNode;
