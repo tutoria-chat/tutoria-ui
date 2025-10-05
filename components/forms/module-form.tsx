@@ -322,10 +322,14 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   <Bot className="h-5 w-5 text-blue-500" />
                   <h3 className="text-lg font-semibold">Configuração do Tutor IA</h3>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Configure como o tutor IA deve se comportar ao ajudar estudantes com este módulo.
-                  O prompt do sistema define a personalidade, expertise e abordagem de ensino da IA.
-                </p>
+                <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                    <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
+                    Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
+                    "Você é um tutor de matemática que sempre resolve passo a passo".
+                    Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                  </p>
+                </div>
               </div>
 
               {/* Prompt Templates */}

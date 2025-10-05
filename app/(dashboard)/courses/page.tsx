@@ -137,9 +137,19 @@ export default function CoursesPage() {
     }
   ];
 
-  const handleDelete = (id: number) => {
-    // Em produção, chamaria a API para deletar o curso
-    console.log('Delete course:', id);
+  const handleDelete = async (id: number) => {
+    if (!confirm('Tem certeza que deseja deletar este curso? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.deleteCourse(id);
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao deletar curso:', error);
+      alert('Erro ao deletar curso. Tente novamente.');
+    }
   };
 
   const handleSortChange = (column: string) => {

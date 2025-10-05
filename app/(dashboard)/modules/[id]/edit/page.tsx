@@ -11,8 +11,11 @@ import { PageHeader } from '@/components/layout/page-header';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
-import { ArrowLeft, Loader2 } from 'lucide-react';
-import type { Module, ModuleUpdate, Course, BreadcrumbItem } from '@/lib/types';
+import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download } from 'lucide-react';
+import { DataTable } from '@/components/shared/data-table';
+import { Label } from '@/components/ui/label';
+import { useFetch } from '@/lib/hooks';
+import type { Module, ModuleUpdate, Course, File, TableColumn, BreadcrumbItem } from '@/lib/types';
 
 export default function EditModulePage() {
   const router = useRouter();
@@ -35,6 +38,10 @@ export default function EditModulePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [loadingCourses, setLoadingCourses] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const { data: files = [], loading: filesLoading, refetch: refetchFiles } = useFetch<File[]>(`/files/?module_id=${moduleId}`);
 
   const loadModule = useCallback(async () => {
     setIsLoadingData(true);
@@ -300,16 +307,21 @@ export default function EditModulePage() {
                 <label htmlFor="system_prompt" className="block text-sm font-medium mb-1">
                   Prompt do Sistema (Tutor IA)
                 </label>
+                <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                    <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
+                    Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
+                    "Você é um tutor de matemática que sempre resolve passo a passo".
+                    Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                  </p>
+                </div>
                 <Textarea
                   id="system_prompt"
                   value={formData.system_prompt}
                   onChange={(e) => handleChange('system_prompt', e.target.value)}
-                  placeholder="Instruções para o tutor IA deste módulo (opcional)"
+                  placeholder="Ex: Você é um tutor especializado em Python que explica conceitos usando analogias do mundo real..."
                   rows={6}
                 />
-                <p className="text-sm text-muted-foreground mt-1">
-                  Configure como o tutor IA deve se comportar para este módulo específico.
-                </p>
               </div>
 
               {errors.submit && (
@@ -331,6 +343,137 @@ export default function EditModulePage() {
                 </Button>
               </div>
             </form>
+          </CardContent>
+        </Card>
+
+        {/* File Upload Section */}
+        <Card className="max-w-2xl">
+          <CardHeader>
+            <CardTitle>Arquivos do Módulo</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const file = formData.get('file') as File;
+
+              if (!file) {
+                setUploadError('Selecione um arquivo para enviar');
+                return;
+              }
+
+              setIsUploading(true);
+              setUploadError(null);
+
+              try {
+                const uploadFormData = new FormData();
+                uploadFormData.append('file', file);
+                uploadFormData.append('module_id', moduleId.toString());
+
+                await apiClient.uploadFile(uploadFormData);
+                e.currentTarget.reset();
+                refetchFiles?.();
+              } catch (error) {
+                console.error('Erro ao enviar arquivo:', error);
+                setUploadError('Erro ao enviar arquivo. Tente novamente.');
+              } finally {
+                setIsUploading(false);
+              }
+            }} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="file">Enviar novo arquivo</Label>
+                <Input
+                  id="file"
+                  name="file"
+                  type="file"
+                  disabled={isUploading}
+                  accept=".pdf,.doc,.docx,.txt,.ppt,.pptx"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX
+                </p>
+              </div>
+
+              {uploadError && (
+                <p className="text-sm text-destructive">{uploadError}</p>
+              )}
+
+              <Button type="submit" disabled={isUploading} variant="outline">
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Enviar Arquivo
+                  </>
+                )}
+              </Button>
+            </form>
+
+            <DataTable
+              data={files}
+              columns={[
+                {
+                  key: 'original_filename',
+                  label: 'Arquivo',
+                  render: (value, file) => (
+                    <div className="flex items-center space-x-2">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{value as string}</span>
+                    </div>
+                  )
+                },
+                {
+                  key: 'file_size',
+                  label: 'Tamanho',
+                  render: (value) => `${((value as number) / 1024 / 1024).toFixed(2)} MB`
+                },
+                {
+                  key: 'actions',
+                  label: 'Ações',
+                  width: '100px',
+                  render: (_, file) => (
+                    <div className="flex items-center space-x-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          try {
+                            const { download_url } = await apiClient.getFileDownloadUrl(file.id);
+                            window.open(download_url, '_blank');
+                          } catch (error) {
+                            console.error('Erro ao baixar arquivo:', error);
+                          }
+                        }}
+                      >
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          if (confirm('Tem certeza que deseja deletar este arquivo?')) {
+                            try {
+                              await apiClient.deleteFile(file.id);
+                              refetchFiles?.();
+                            } catch (error) {
+                              console.error('Erro ao deletar arquivo:', error);
+                            }
+                          }
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </div>
+                  )
+                }
+              ] as TableColumn<File>[]}
+              loading={filesLoading}
+              emptyMessage="Nenhum arquivo enviado ainda."
+            />
           </CardContent>
         </Card>
       </div>

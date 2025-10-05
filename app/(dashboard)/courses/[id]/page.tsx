@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { 
-  Edit, 
-  Plus, 
-  Users, 
-  GraduationCap, 
-  BookOpen, 
+import {
+  Edit,
+  Plus,
+  Users,
+  GraduationCap,
+  BookOpen,
   FileText,
   Calendar,
   Building2,
@@ -20,99 +20,32 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { useFetch } from '@/lib/hooks';
 import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem } from '@/lib/types';
-
-// Mock data - em produção viria da API
-const mockCourse: Course = {
-  id: 1,
-  name: "Fundamentos da Ciência da Computação",
-  code: "CS101",
-  description: "Este curso abrangente apresenta aos estudantes os conceitos fundamentais da ciência da computação, incluindo princípios de programação, estruturas de dados, algoritmos e práticas de engenharia de software. Os estudantes terão experiência prática com linguagens de programação modernas e ferramentas de desenvolvimento.",
-  university_id: 1,
-  university_name: "Universidade de Tecnologia",
-  created_at: "2024-01-15T08:30:00Z",
-  updated_at: "2024-03-10T14:20:00Z",
-  modules_count: 12,
-  professors_count: 3,
-  students_count: 89
-};
-
-const mockModules: Module[] = [
-  {
-    id: 1,
-    name: "Introdução à Programação",
-    description: "Conceitos básicos de programação e sintaxe",
-    course_id: 1,
-    course_name: "Fundamentos da Ciência da Computação",
-    created_at: "2024-01-20T10:00:00Z",
-    updated_at: "2024-01-20T10:00:00Z",
-    files_count: 8,
-    tokens_count: 2
-  },
-  {
-    id: 2,
-    name: "Estruturas de Dados",
-    description: "Arrays, listas ligadas, árvores e grafos",
-    course_id: 1,
-    course_name: "Fundamentos da Ciência da Computação",
-    created_at: "2024-02-01T09:00:00Z",
-    updated_at: "2024-02-01T09:00:00Z",
-    files_count: 12,
-    tokens_count: 3
-  },
-  {
-    id: 3,
-    name: "Algoritmos e Complexidade",
-    description: "Ordenação, busca e análise de algoritmos",
-    course_id: 1,
-    course_name: "Fundamentos da Ciência da Computação",
-    created_at: "2024-02-15T11:00:00Z",
-    updated_at: "2024-02-15T11:00:00Z",
-    files_count: 15,
-    tokens_count: 4
-  }
-];
-
-const mockProfessors: Professor[] = [
-  {
-    id: 1,
-    email: "joao.silva@universidade.edu.br",
-    first_name: "João",
-    last_name: "Silva",
-    university_id: 1,
-    university_name: "Universidade de Tecnologia",
-    is_admin: true,
-    created_at: "2024-01-10T08:00:00Z",
-    updated_at: "2024-01-10T08:00:00Z",
-    courses_count: 3
-  },
-  {
-    id: 2,
-    email: "maria.santos@universidade.edu.br",
-    first_name: "Maria",
-    last_name: "Santos",
-    university_id: 1,
-    university_name: "Universidade de Tecnologia",
-    is_admin: false,
-    created_at: "2024-01-12T09:00:00Z",
-    updated_at: "2024-01-12T09:00:00Z",
-    courses_count: 2
-  }
-];
 
 export default function CourseDetailsPage() {
   const params = useParams();
   const courseId = params.id as string;
-  
-  const [course] = useState<Course>(mockCourse);
-  const [modules] = useState<Module[]>(mockModules);
-  const [professors] = useState<Professor[]>(mockProfessors);
+
+  // Fetch course data from API
+  const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
+  const { data: modules = [], loading: modulesLoading } = useFetch<Module[]>(`/modules/?course_id=${courseId}`);
+  const { data: professors = [], loading: professorsLoading } = useFetch<Professor[]>(`/courses/${courseId}/professors`);
+
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Cursos', href: '/courses' },
-    { label: course.name, isCurrentPage: true }
+    { label: 'Disciplinas', href: '/courses' },
+    { label: course?.name || 'Carregando...', isCurrentPage: true }
   ];
+
+  if (courseLoading) {
+    return <div className="flex items-center justify-center h-64">Loading...</div>;
+  }
+
+  if (courseError || !course) {
+    return <div className="flex items-center justify-center h-64">Error loading course</div>;
+  }
 
   const moduleColumns: TableColumn<Module>[] = [
     {

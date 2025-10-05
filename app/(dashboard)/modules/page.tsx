@@ -112,7 +112,7 @@ export default function ModulesPage() {
     {
       key: 'actions',
       label: 'Ações',
-      width: '160px',
+      width: '120px',
       render: (_, module) => (
         <div className="flex items-center space-x-1">
           <Button
@@ -124,7 +124,7 @@ export default function ModulesPage() {
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          
+
           <ProfessorOnly>
             <Button
               variant="ghost"
@@ -135,17 +135,7 @@ export default function ModulesPage() {
                 <Edit className="h-4 w-4" />
               </Link>
             </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-            >
-              <Link href={`/modules/${module.id}/files`}>
-                <Upload className="h-4 w-4" />
-              </Link>
-            </Button>
-            
+
             <Button
               variant="ghost"
               size="sm"
@@ -159,9 +149,19 @@ export default function ModulesPage() {
     }
   ];
 
-  const handleDelete = (id: number) => {
-    // Em produção, chamaria a API para deletar o módulo
-    console.log('Delete module:', id);
+  const handleDelete = async (id: number) => {
+    if (!confirm('Tem certeza que deseja deletar este módulo? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.deleteModule(id);
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao deletar módulo:', error);
+      alert('Erro ao deletar módulo. Tente novamente.');
+    }
   };
 
   const handleSortChange = (column: string) => {
@@ -233,23 +233,14 @@ export default function ModulesPage() {
         description={`Gerencie módulos de aprendizado e configuração de tutores IA. ${stats.total} módulos em ${stats.courses} cursos com ${stats.aiConfigured} tutores IA configurados`}
         breadcrumbs={breadcrumbs}
         actions={
-          <div className="flex items-center space-x-2">
-            <ProfessorOnly>
-              <Button variant="outline" asChild>
-                <Link href="/files/upload">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Enviar Arquivos
-                </Link>
-              </Button>
-              
-              <Button asChild>
-                <Link href="/modules/create">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Criar Módulo
-                </Link>
-              </Button>
-            </ProfessorOnly>
-          </div>
+          <ProfessorOnly>
+            <Button asChild>
+              <Link href="/modules/create">
+                <Plus className="mr-2 h-4 w-4" />
+                Criar Módulo
+              </Link>
+            </Button>
+          </ProfessorOnly>
         }
       />
 

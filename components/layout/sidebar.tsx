@@ -51,7 +51,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       roles: ['super_admin'],
     },
     {
-      label: 'Cursos',
+      label: 'Disciplinas',
       href: '/courses',
       icon: BookOpen,
       roles: ['super_admin', 'admin_professor', 'regular_professor'],
@@ -60,12 +60,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: 'Módulos',
       href: '/modules',
       icon: Folder,
-      roles: ['super_admin', 'admin_professor', 'regular_professor'],
-    },
-    {
-      label: 'Arquivos',
-      href: '/files',
-      icon: FileText,
       roles: ['super_admin', 'admin_professor', 'regular_professor'],
     },
     {
