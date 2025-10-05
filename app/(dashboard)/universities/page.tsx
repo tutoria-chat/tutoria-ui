@@ -91,9 +91,19 @@ export default function UniversitiesPage() {
     }
   ];
 
-  const handleDelete = (id: number) => {
-    // In real app, this would call the API to delete the university
-    console.log('Delete university:', id);
+  const handleDelete = async (id: number) => {
+    if (!confirm('Tem certeza que deseja deletar esta universidade? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.deleteUniversity(id);
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao deletar universidade:', error);
+      alert('Erro ao deletar universidade. Tente novamente.');
+    }
   };
 
   const handleSortChange = (column: string) => {

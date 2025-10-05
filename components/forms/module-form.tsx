@@ -269,29 +269,31 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Course Selection */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="course_id">Curso *</FormLabel>
+                <FormLabel htmlFor="course_id">Disciplina *</FormLabel>
                 {courseId ? (
                   <div className="flex items-center space-x-2">
                     <Input
-                      value={selectedCourse ? `${selectedCourse.name} (${selectedCourse.university_name})` : `Course ID: ${courseId}`}
+                      value={selectedCourse ? `${selectedCourse.name} (${selectedCourse.university_name})` : `Disciplina ID: ${courseId}`}
                       disabled
                       className="bg-muted"
                     />
                     <Badge variant="secondary">Pré-selecionado</Badge>
                   </div>
                 ) : (
-                  <Select
+                  <select
+                    id="course_id"
                     value={String(formData.course_id)}
-                    onValueChange={(value) => handleInputChange('course_id', value)}
+                    onChange={(e) => handleInputChange('course_id', e.target.value)}
                     disabled={isLoading || loadingCourses}
-                    placeholder={loadingCourses ? "Carregando cursos..." : "Selecione um curso"}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
+                    <option value="">{loadingCourses ? "Carregando disciplinas..." : "Selecione uma disciplina"}</option>
                     {courses.map((course) => (
-                      <SelectItem key={course.id} value={String(course.id)}>
+                      <option key={course.id} value={String(course.id)}>
                         {course.name}
-                      </SelectItem>
+                      </option>
                     ))}
-                  </Select>
+                  </select>
                 )}
                 {errors.course_id && <FormMessage>{errors.course_id}</FormMessage>}
               </FormItem>
@@ -322,10 +324,14 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   <Bot className="h-5 w-5 text-blue-500" />
                   <h3 className="text-lg font-semibold">Configuração do Tutor IA</h3>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  Configure como o tutor IA deve se comportar ao ajudar estudantes com este módulo.
-                  O prompt do sistema define a personalidade, expertise e abordagem de ensino da IA.
-                </p>
+                <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                    <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
+                    Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
+                    "Você é um tutor de matemática que sempre resolve passo a passo".
+                    Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                  </p>
+                </div>
               </div>
 
               {/* Prompt Templates */}

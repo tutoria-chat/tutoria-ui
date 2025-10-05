@@ -221,7 +221,43 @@ export interface StudentUpdate {
   last_name?: string;
 }
 
-// Module Token Types
+// Module Token Types (API Schema)
+export interface ModuleAccessToken {
+  id: number;
+  token: string;
+  name: string;
+  description?: string;
+  module_id: number;
+  module_name?: string;
+  course_name?: string;
+  allow_chat: boolean;
+  allow_file_access: boolean;
+  expires_at?: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  last_used_at?: string;
+  usage_count?: number;
+}
+
+export interface ModuleAccessTokenCreate {
+  name: string;
+  description?: string;
+  module_id: number;
+  allow_chat: boolean;
+  allow_file_access: boolean;
+  expires_in_days?: number;
+}
+
+export interface ModuleAccessTokenUpdate {
+  name?: string;
+  description?: string;
+  allow_chat?: boolean;
+  allow_file_access?: boolean;
+  is_active?: boolean;
+}
+
+// Legacy Module Token Types (for backwards compatibility)
 export interface ModuleToken {
   id: number;
   token: string;
