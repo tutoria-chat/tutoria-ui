@@ -355,7 +355,7 @@ export default function EditModulePage() {
             <form onSubmit={async (e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              const file = formData.get('file') as File;
+              const file = formData.get('file') as globalThis.File;
 
               if (!file) {
                 setUploadError('Selecione um arquivo para enviar');
@@ -414,7 +414,7 @@ export default function EditModulePage() {
             </form>
 
             <DataTable
-              data={files}
+              data={files || []}
               columns={[
                 {
                   key: 'original_filename',

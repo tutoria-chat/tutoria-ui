@@ -39,8 +39,15 @@ export default function TokensPage() {
     }
   };
 
-  const handleCopyToken = (token: string) => {
-    navigator.clipboard.writeText(token);
+  const handleCopyToken = async (token: string) => {
+    try {
+      await navigator.clipboard.writeText(token);
+      // You could use a toast notification here instead of alert
+      alert('Token copiado para a área de transferência!');
+    } catch (error) {
+      console.error('Erro ao copiar token:', error);
+      alert('Falha ao copiar o token. Tente novamente.');
+    }
   };
 
   const handleSortChange = (column: string) => {

@@ -35,13 +35,14 @@ export default function EditTokenPage() {
     setIsLoadingData(true);
     try {
       const data = await apiClient.getModuleToken(tokenId);
-      setToken(data as any);
+
+      setToken(data);
       setFormData({
         name: data.name,
-        description: (data as any).description || '',
-        allow_chat: (data as any).allow_chat ?? true,
-        allow_file_access: (data as any).allow_file_access ?? true,
-        is_active: (data as any).is_active ?? true,
+        description: data.description || '',
+        allow_chat: data.allow_chat,
+        allow_file_access: data.allow_file_access,
+        is_active: data.is_active,
       });
     } catch (error) {
       console.error('Falha ao carregar token:', error);

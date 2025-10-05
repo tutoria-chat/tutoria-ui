@@ -221,9 +221,9 @@ export default function CourseDetailsPage() {
       <div className="border-b border-border">
         <nav className="-mb-px flex space-x-8">
           {[
-            { key: 'modules', label: 'Módulos', count: modules.length },
-            { key: 'professors', label: 'Professores', count: professors.length },
-            { key: 'students', label: 'Estudantes', count: course.students_count }
+            { key: 'modules', label: 'Módulos', count: modules?.length || 0 },
+            { key: 'professors', label: 'Professores', count: professors?.length || 0 },
+            { key: 'students', label: 'Estudantes', count: course.students_count || 0 }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -255,7 +255,7 @@ export default function CourseDetailsPage() {
             </CardHeader>
             <CardContent>
               <DataTable
-                data={modules}
+                data={modules || []}
                 columns={moduleColumns}
                 emptyMessage="Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."
               />
@@ -273,7 +273,7 @@ export default function CourseDetailsPage() {
             </CardHeader>
             <CardContent>
               <DataTable
-                data={professors}
+                data={professors || []}
                 columns={professorColumns}
                 emptyMessage="Nenhum professor atribuído a este curso."
               />

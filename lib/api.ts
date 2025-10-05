@@ -21,9 +21,9 @@ import type {
   Student,
   StudentCreate,
   StudentUpdate,
-  ModuleToken,
-  ModuleTokenCreate,
-  ModuleTokenUpdate,
+  ModuleAccessToken,
+  ModuleAccessTokenCreate,
+  ModuleAccessTokenUpdate,
   SuperAdmin,
   SuperAdminCreate,
   SystemStats,
@@ -329,19 +329,19 @@ class TutoriaAPIClient {
   }
 
   // Module Token endpoints
-  async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleToken>> {
+  async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
     return this.get('/module-tokens/', params);
   }
 
-  async createModuleToken(data: ModuleTokenCreate): Promise<ModuleToken> {
+  async createModuleToken(data: ModuleAccessTokenCreate): Promise<ModuleAccessToken> {
     return this.post('/module-tokens/', data);
   }
 
-  async getModuleToken(id: number): Promise<ModuleToken> {
+  async getModuleToken(id: number): Promise<ModuleAccessToken> {
     return this.get(`/module-tokens/${id}`);
   }
 
-  async updateModuleToken(id: number, data: ModuleTokenUpdate): Promise<ModuleToken> {
+  async updateModuleToken(id: number, data: ModuleAccessTokenUpdate): Promise<ModuleAccessToken> {
     return this.put(`/module-tokens/${id}`, data);
   }
 

@@ -46,7 +46,7 @@ export default function ModuleDetailsPage() {
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const file = formData.get('file') as File;
+    const file = formData.get('file') as globalThis.File;
 
     if (!file) {
       setUploadError('Selecione um arquivo para enviar');
@@ -250,7 +250,7 @@ export default function ModuleDetailsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">{files.length}</p>
+                <p className="text-2xl font-bold">{files?.length || 0}</p>
                 <p className="text-sm text-muted-foreground">Arquivos</p>
               </div>
               <FileText className="h-8 w-8 text-blue-500" />
@@ -324,7 +324,7 @@ export default function ModuleDetailsPage() {
         </CardHeader>
         <CardContent>
           <DataTable
-            data={files}
+            data={files || []}
             columns={fileColumns}
             loading={filesLoading}
             emptyMessage="Nenhum arquivo enviado ainda. Faça upload do primeiro arquivo acima."
