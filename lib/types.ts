@@ -142,14 +142,17 @@ export interface ModuleWithDetails extends Module {
 // File Types
 export interface File {
   id: number;
-  filename: string;
-  original_filename: string;
-  file_size: number;
-  content_type: string;
+  name: string;
+  file_name: string;
+  file_type: string;
+  file_size?: number;
+  content_type?: string;
   module_id: number;
   module_name?: string;
   course_name?: string;
-  azure_blob_url: string;
+  blob_url: string;
+  blob_container?: string;
+  blob_path?: string;
   created_at: string;
   updated_at: string;
 }

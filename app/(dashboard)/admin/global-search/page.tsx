@@ -59,7 +59,7 @@ export default function GlobalSearchPage() {
   const searchTypes = [
     { value: 'all', label: 'Todo Conteúdo' },
     { value: 'universities', label: 'Universidades' },
-    { value: 'courses', label: 'Cursos' },
+    { value: 'courses', label: 'Disciplinas' },
     { value: 'modules', label: 'Módulos' },
     { value: 'professors', label: 'Professores' },
     { value: 'students', label: 'Estudantes' },
@@ -254,7 +254,7 @@ export default function GlobalSearchPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <BookOpen className="mr-2 h-5 w-5 text-green-500" />
-                    Cursos ({searchResults.courses.length})
+                    Disciplinas ({searchResults.courses.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

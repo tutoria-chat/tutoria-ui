@@ -15,8 +15,8 @@ export default function CreateCoursePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Cursos', href: '/courses' },
-    { label: 'Criar Curso', isCurrentPage: true }
+    { label: 'Disciplinas', href: '/courses' },
+    { label: 'Criar Disciplina', isCurrentPage: true }
   ];
 
   const handleSubmit = async (data: CourseCreate | CourseUpdate) => {
@@ -35,8 +35,8 @@ export default function CreateCoursePage() {
       const newCourse = await apiClient.createCourse(courseData);
       console.log('Course created successfully:', newCourse);
 
-      // Redirecionar para a lista de cursos
-      router.push('/courses');
+      // Redirecionar para a página de detalhes da disciplina
+      router.push(`/courses/${newCourse.id}`);
     } catch (error) {
       console.error('Failed to create course:', error);
       throw error;
@@ -53,8 +53,8 @@ export default function CreateCoursePage() {
     <AdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Novo Curso"
-          description="Adicione um novo curso ao catálogo acadêmico da sua universidade"
+          title="Criar Nova Disciplina"
+          description="Adicione uma nova disciplina ao catálogo acadêmico da sua universidade"
           breadcrumbs={breadcrumbs}
         />
 

@@ -78,14 +78,29 @@ class TutoriaAPIClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
+    // Build headers - don't set Content-Type if it's explicitly null (for FormData)
+    const headers: Record<string, string> = {
+      ...(this.token && { Authorization: `Bearer ${this.token}` }),
+    };
+
+    // Add other headers, excluding Content-Type if it's null (for FormData)
+    if (options.headers) {
+      Object.entries(options.headers).forEach(([key, value]) => {
+        if (value !== null) {
+          headers[key] = value as string;
+        }
+      });
+    }
+
+    // Add default Content-Type for non-FormData requests
+    if (!options.headers || !('Content-Type' in options.headers)) {
+      headers['Content-Type'] = 'application/json';
+    }
+
     const config: RequestInit = {
       ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-        ...options.headers,
-      },
+      headers,
     };
 
     const controller = new AbortController();
@@ -139,8 +154,13 @@ class TutoriaAPIClient {
 
   async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
     const headers: Record<string, string> = {};
+
+    // For FormData, DON'T set Content-Type - browser will auto-set with boundary
     if (!isFormData) {
       headers['Content-Type'] = 'application/json';
+    } else {
+      // Mark that we explicitly want no Content-Type for FormData
+      (headers as any)['Content-Type'] = null;
     }
 
     return this.request<T>(endpoint, {
@@ -266,8 +286,13 @@ class TutoriaAPIClient {
     return this.get('/files/', params);
   }
 
-  async uploadFile(formData: FormData): Promise<FileResponse> {
-    return this.post('/files/', formData, true);
+  async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
+    const params = new URLSearchParams();
+    params.append('module_id', moduleId.toString());
+    if (fileName) {
+      params.append('name', fileName);
+    }
+    return this.post(`/files/?${params.toString()}`, formData, true);
   }
 
   async getFile(id: number): Promise<FileResponse> {

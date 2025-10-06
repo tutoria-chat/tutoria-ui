@@ -25,7 +25,7 @@ import { Label } from '@/components/ui/label';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
-import type { Module, File, TableColumn, BreadcrumbItem } from '@/lib/types';
+import type { Module, File, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -33,7 +33,9 @@ export default function ModuleDetailsPage() {
   const moduleId = Number(params.id);
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
-  const { data: files = [], loading: filesLoading, refetch: refetchFiles } = useFetch<File[]>(`/files/?module_id=${moduleId}`);
+  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<File>>(`/files/?module_id=${moduleId}`);
+
+  const files = filesResponse?.items || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -45,7 +47,8 @@ export default function ModuleDetailsPage() {
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const file = formData.get('file') as globalThis.File;
 
     if (!file) {
@@ -59,12 +62,12 @@ export default function ModuleDetailsPage() {
     try {
       const uploadFormData = new FormData();
       uploadFormData.append('file', file);
-      uploadFormData.append('module_id', moduleId.toString());
 
-      await apiClient.uploadFile(uploadFormData);
+      // Pass module_id and file name as query parameters
+      await apiClient.uploadFile(uploadFormData, moduleId, file.name);
 
       // Reset form and refetch files
-      e.currentTarget.reset();
+      form.reset();
       refetchFiles?.();
     } catch (error) {
       console.error('Erro ao enviar arquivo:', error);
@@ -100,7 +103,7 @@ export default function ModuleDetailsPage() {
 
   const fileColumns: TableColumn<File>[] = [
     {
-      key: 'original_filename',
+      key: 'file_name',
       label: 'Arquivo',
       sortable: true,
       render: (value, file) => (
@@ -109,9 +112,9 @@ export default function ModuleDetailsPage() {
             <FileText className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <div className="font-medium">{value as string}</div>
+            <div className="font-medium">{(value as string) || file.name || 'Arquivo sem nome'}</div>
             <div className="text-sm text-muted-foreground">
-              {file.content_type}
+              {file.content_type || file.file_type || 'Tipo desconhecido'}
             </div>
           </div>
         </div>

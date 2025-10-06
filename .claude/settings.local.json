@@ -5,7 +5,9 @@
       "Bash(npm install)",
       "Bash(ls:*)",
       "Read(//d/Users/Steve/code/tutoria-api/**)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:tutoria-api-dev.orangesmoke-8addc8f4.eastus2.azurecontainerapps.io)",
+      "Bash(npx tsc:*)"
     ],
     "deny": [],
     "ask": []

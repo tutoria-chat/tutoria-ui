@@ -96,7 +96,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     <Card className="w-full max-w-2xl">
       <CardHeader>
         <CardTitle>
-          {course ? 'Editar Curso' : 'Criar Novo Curso'}
+          {course ? 'Editar Disciplina' : 'Criar Nova Disciplina'}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -104,7 +104,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Course Name */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="name">Nome do Curso *</FormLabel>
+              <FormLabel htmlFor="name">Nome da Disciplina *</FormLabel>
               <Input
                 id="name"
                 type="text"
@@ -198,7 +198,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? (course ? 'Atualizando...' : 'Criando...') : (course ? 'Atualizar Curso' : 'Criar Curso')}
+              {isLoading ? (course ? 'Atualizando...' : 'Criando...') : (course ? 'Atualizar Disciplina' : 'Criar Disciplina')}
             </Button>
           </div>
         </form>

@@ -23,7 +23,7 @@ export default function CreateModulePage() {
     setIsLoading(true);
     try {
       // Criar módulo via API
-      await apiClient.post('/modules/', {
+      const newModule = await apiClient.post<{ id: number }>('/modules/', {
         name: data.name,
         code: data.code,
         system_prompt: data.system_prompt,
@@ -33,8 +33,8 @@ export default function CreateModulePage() {
         description: data.description
       });
 
-      // Redirecionar para a lista de módulos
-      router.push('/modules');
+      // Redirecionar para a página de detalhes do módulo para upload de arquivos
+      router.push(`/modules/${newModule.id}`);
     } catch (error) {
       console.error('Failed to create module:', error);
       throw error;
@@ -52,7 +52,7 @@ export default function CreateModulePage() {
       <div className="space-y-6">
         <PageHeader
           title="Criar Novo Módulo"
-          description="Crie um novo módulo de aprendizado com configuração de tutor IA para seu curso"
+          description="Crie um novo módulo de aprendizado com configuração de tutor IA. Você será redirecionado para fazer upload de arquivos após a criação."
           breadcrumbs={breadcrumbs}
         />
 

@@ -21,7 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import { useFetch } from '@/lib/hooks';
-import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem } from '@/lib/types';
+import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -29,8 +29,11 @@ export default function CourseDetailsPage() {
 
   // Fetch course data from API
   const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
-  const { data: modules = [], loading: modulesLoading } = useFetch<Module[]>(`/modules/?course_id=${courseId}`);
-  const { data: professors = [], loading: professorsLoading } = useFetch<Professor[]>(`/courses/${courseId}/professors`);
+  const { data: modulesResponse, loading: modulesLoading } = useFetch<PaginatedResponse<Module>>(`/modules/?course_id=${courseId}`);
+  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?course_id=${courseId}`);
+
+  const modules = modulesResponse?.items || [];
+  const professors = professorsResponse?.items || [];
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
@@ -119,8 +122,8 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'courses_count',
-      label: 'Total de Cursos',
-      render: (value) => `${value || 0} cursos`
+      label: 'Total de Disciplinas',
+      render: (value) => `${value || 0} disciplinas`
     }
   ];
 
@@ -128,7 +131,7 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Curso em ${course.university_name} • Criado em ${new Date(course.created_at).toLocaleDateString()}`}
+        description={`Disciplina em ${course.university_name} • Criado em ${new Date(course.created_at).toLocaleDateString()}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">

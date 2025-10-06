@@ -15,22 +15,26 @@ import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/l
 export default function CoursesPage() {
   const { user } = useAuth();
 
-  // API call to get courses
-  const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>('/courses/');
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
+  // Build API URL with pagination params
+  const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
+
+  // API call to get courses
+  const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(apiUrl);
+
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Cursos', isCurrentPage: true }
+    { label: 'Disciplinas', isCurrentPage: true }
   ];
 
   const columns: TableColumn<Course>[] = [
     {
       key: 'name',
-      label: 'Curso',
+      label: 'Disciplina',
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-3">
@@ -138,7 +142,7 @@ export default function CoursesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar este curso? Esta ação não pode ser desfeita.')) {
+    if (!confirm('Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.')) {
       return;
     }
 
@@ -147,8 +151,8 @@ export default function CoursesPage() {
       await apiClient.deleteCourse(id);
       window.location.reload();
     } catch (error) {
-      console.error('Erro ao deletar curso:', error);
-      alert('Erro ao deletar curso. Tente novamente.');
+      console.error('Erro ao deletar disciplina:', error);
+      alert('Erro ao deletar disciplina. Tente novamente.');
     }
   };
 
@@ -163,67 +167,36 @@ export default function CoursesPage() {
 
   // Get courses from API response
   const courses = coursesResponse?.items || [];
+  const totalCourses = coursesResponse?.total || 0;
 
   // Handle API error
   if (error) {
     console.error('Error fetching courses:', error);
   }
 
-  // Filtrar cursos baseado na busca e permissões do usuário
-  const filteredCourses = courses.filter(course => {
-    // Filtro de busca
-    const matchesSearch = course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (course.description && course.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (course.university_name && course.university_name.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    if (!matchesSearch) return false;
-
-    // Filtro por permissões
-    if (user?.role === 'super_admin') return true;
-    if (user?.role === 'admin_professor') return course.university_id === user.university_id;
-    if (user?.role === 'regular_professor') return user.assigned_courses?.includes(course.id);
-    
-    return false;
-  });
-
-  // Ordenar cursos
-  const sortedCourses = [...filteredCourses].sort((a, b) => {
-    if (!sortColumn || !sortDirection) return 0;
-    
-    const aValue = a[sortColumn as keyof Course];
-    const bValue = b[sortColumn as keyof Course];
-    
-    if (aValue === null || aValue === undefined) return 1;
-    if (bValue === null || bValue === undefined) return -1;
-    
-    const result = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    return sortDirection === 'asc' ? result : -result;
-  });
-
-  // Paginar cursos
-  const startIndex = (page - 1) * limit;
-  const paginatedCourses = sortedCourses.slice(startIndex, startIndex + limit);
+  // Use server-side paginated data directly (API handles filtering, sorting, pagination)
+  const paginatedCourses = courses;
 
   // Estatísticas baseadas no papel do usuário
   const stats = {
-    total: filteredCourses.length,
-    totalStudents: filteredCourses.reduce((sum, course) => sum + (course.students_count || 0), 0),
-    totalModules: filteredCourses.reduce((sum, course) => sum + (course.modules_count || 0), 0),
-    universities: [...new Set(filteredCourses.map(course => course.university_name))].length
+    total: totalCourses,
+    totalStudents: courses.reduce((sum, course) => sum + (course.students_count || 0), 0),
+    totalModules: courses.reduce((sum, course) => sum + (course.modules_count || 0), 0),
+    universities: [...new Set(courses.map(course => course.university_name))].length
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Cursos"
-        description={`Gerencie cursos e programas acadêmicos. Mostrando ${stats.total} cursos com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
+        title="Disciplinas"
+        description={`Gerencie disciplinas e programas acadêmicos. Mostrando ${stats.total} disciplinas com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
         breadcrumbs={breadcrumbs}
         actions={
           <AdminOnly>
             <Button asChild>
               <Link href="/courses/create">
                 <Plus className="mr-2 h-4 w-4" />
-                Criar Curso
+                Criar Disciplina
               </Link>
             </Button>
           </AdminOnly>
@@ -234,7 +207,7 @@ export default function CoursesPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total de Cursos</h3>
+            <h3 className="tracking-tight text-sm font-medium">Total de Disciplinas</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.total}</div>
@@ -273,13 +246,13 @@ export default function CoursesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Buscar cursos, descrições ou universidades...",
+          placeholder: "Buscar disciplinas, descrições ou universidades...",
           onSearchChange: setSearchTerm
         }}
         pagination={{
           page,
           limit,
-          total: sortedCourses.length,
+          total: totalCourses,
           onPageChange: setPage,
           onLimitChange: setLimit
         }}
@@ -288,7 +261,7 @@ export default function CoursesPage() {
           direction: sortDirection,
           onSortChange: handleSortChange
         }}
-        emptyMessage="Nenhum curso encontrado. Crie seu primeiro curso para começar."
+        emptyMessage="Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar."
       />
     </div>
   );

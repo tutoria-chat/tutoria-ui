@@ -324,14 +324,6 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   <Bot className="h-5 w-5 text-blue-500" />
                   <h3 className="text-lg font-semibold">Configuração do Tutor IA</h3>
                 </div>
-                <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
-                  <p className="text-sm text-blue-900 dark:text-blue-100">
-                    <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
-                    Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
-                    "Você é um tutor de matemática que sempre resolve passo a passo".
-                    Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
-                  </p>
-                </div>
               </div>
 
               {/* Prompt Templates */}
@@ -370,7 +362,15 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               {/* Custom System Prompt */}
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="system_prompt">Prompt Personalizado do Sistema</FormLabel>
+                  <FormLabel htmlFor="system_prompt">Prompt de Configuração do Sistema</FormLabel>
+                  <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                    <p className="text-sm text-blue-900 dark:text-blue-100">
+                      <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
+                      Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
+                      "Você é um tutor de matemática que sempre resolve passo a passo".
+                      Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                    </p>
+                  </div>
                   <Textarea
                     id="system_prompt"
                     placeholder="Defina como o tutor IA deve se comportar, seu nível de expertise, estilo de ensino e diretrizes de interação..."

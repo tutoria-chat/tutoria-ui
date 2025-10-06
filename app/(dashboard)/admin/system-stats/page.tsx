@@ -284,7 +284,7 @@ export default function SystemStatsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm">Total de Cursos</span>
+                <span className="text-sm">Total de Disciplinas</span>
                 <Badge variant="secondary">{mockStats.overview.totalCourses}</Badge>
               </div>
               <div className="flex items-center justify-between">
