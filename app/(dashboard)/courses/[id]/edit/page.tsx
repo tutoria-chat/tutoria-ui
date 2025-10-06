@@ -39,7 +39,7 @@ export default function EditCoursePage() {
       });
     } catch (error) {
       console.error('Failed to load course:', error);
-      setErrors({ load: 'Erro ao carregar dados do curso.' });
+      setErrors({ load: 'Erro ao carregar dados da disciplina.' });
     } finally {
       setIsLoadingData(false);
     }
@@ -50,7 +50,7 @@ export default function EditCoursePage() {
   }, [loadCourse]);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Cursos', href: '/courses' },
+    { label: 'Disciplinas', href: '/courses' },
     { label: course?.name || 'Carregando...', href: `/courses/${courseId}` },
     { label: 'Editar', isCurrentPage: true }
   ];
@@ -66,11 +66,11 @@ export default function EditCoursePage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Nome do curso é obrigatório';
+      newErrors.name = 'Nome da disciplina é obrigatório';
     }
 
     if (!formData.code?.trim()) {
-      newErrors.code = 'Código do curso é obrigatório';
+      newErrors.code = 'Código da disciplina é obrigatório';
     }
 
     setErrors(newErrors);
@@ -90,7 +90,7 @@ export default function EditCoursePage() {
       router.push('/courses');
     } catch (error) {
       console.error('Failed to update course:', error);
-      setErrors({ submit: 'Erro ao atualizar curso. Tente novamente.' });
+      setErrors({ submit: 'Erro ao atualizar disciplina. Tente novamente.' });
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +114,7 @@ export default function EditCoursePage() {
         <div className="space-y-6">
           <PageHeader
             title="Erro"
-            description="Não foi possível carregar os dados do curso"
+            description="Não foi possível carregar os dados da disciplina"
             breadcrumbs={breadcrumbs}
           />
           <Card>
@@ -134,8 +134,8 @@ export default function EditCoursePage() {
     <AdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Editar Curso"
-          description={`Edite as informações do curso ${course?.name}`}
+          title="Editar Disciplina"
+          description={`Edite as informações da disciplina ${course?.name}`}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -150,13 +150,13 @@ export default function EditCoursePage() {
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Informações do Curso</CardTitle>
+            <CardTitle>Informações da Disciplina</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Nome do Curso *
+                  Nome da Disciplina *
                 </label>
                 <Input
                   id="name"
@@ -173,7 +173,7 @@ export default function EditCoursePage() {
 
               <div>
                 <label htmlFor="code" className="block text-sm font-medium mb-1">
-                  Código do Curso *
+                  Código da Disciplina *
                 </label>
                 <Input
                   id="code"
@@ -196,7 +196,7 @@ export default function EditCoursePage() {
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição do curso (opcional)"
+                  placeholder="Descrição da disciplina (opcional)"
                   rows={4}
                 />
               </div>

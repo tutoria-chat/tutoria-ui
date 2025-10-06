@@ -109,7 +109,7 @@ export function LoginForm() {
               </div>
               <div className="flex justify-between">
                 <code className="bg-blue-100 px-2 py-1 rounded">teacher</code>
-                <span className="text-blue-600">Professor Regular - Cursos</span>
+                <span className="text-blue-600">Professor Regular - Disciplinas</span>
               </div>
             </div>
           </div>

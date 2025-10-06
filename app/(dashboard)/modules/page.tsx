@@ -15,13 +15,17 @@ import type { Module, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/l
 export default function ModulesPage() {
   const { user } = useAuth();
 
-  // API call to get modules
-  const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>('/modules/');
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Build API URL with pagination params
+  const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
+
+  // API call to get modules
+  const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Módulos', isCurrentPage: true }
@@ -105,7 +109,7 @@ export default function ModulesPage() {
       sortable: true,
       render: (value) => (
         <div className="text-sm">
-          {new Date(value as string).toLocaleDateString()}
+          {value ? new Date(value as string).toLocaleDateString() : 'Nunca'}
         </div>
       )
     },
@@ -175,62 +179,28 @@ export default function ModulesPage() {
 
   // Get modules from API response
   const modules = modulesResponse?.items || [];
+  const totalModules = modulesResponse?.total || 0;
 
   // Handle API error
   if (error) {
     console.error('Error fetching modules:', error);
   }
 
-  // Filtrar módulos baseado na busca e permissões do usuário
-  const filteredModules = modules.filter(module => {
-    // Filtro de busca
-    const matchesSearch = module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (module.description && module.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (module.course_name && module.course_name.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    if (!matchesSearch) return false;
+  // Use server-side paginated data directly (API handles filtering, sorting, pagination)
+  const paginatedModules = modules;
 
-    // Filtro por permissões
-    if (user?.role === 'super_admin') return true;
-    if (user?.role === 'admin_professor') return module.university_id === user.university_id;
-    if (user?.role === 'regular_professor') return user.assigned_courses?.some(courseId => 
-      // Em produção, isso seria baseado nos cursos reais do módulo
-      [1, 2, 3].includes(courseId)
-    );
-    
-    return false;
-  });
-
-  // Ordenar módulos
-  const sortedModules = [...filteredModules].sort((a, b) => {
-    if (!sortColumn || !sortDirection) return 0;
-    
-    const aValue = a[sortColumn as keyof Module];
-    const bValue = b[sortColumn as keyof Module];
-    
-    if (aValue === null || aValue === undefined) return 1;
-    if (bValue === null || bValue === undefined) return -1;
-    
-    const result = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
-    return sortDirection === 'asc' ? result : -result;
-  });
-
-  // Paginar módulos
-  const startIndex = (page - 1) * limit;
-  const paginatedModules = sortedModules.slice(startIndex, startIndex + limit);
-
-  // Estatísticas
+  // Estatísticas - calculate from current page data
   const stats = {
-    total: filteredModules.length,
-    aiConfigured: filteredModules.filter(module => module.system_prompt).length,
-    courses: [...new Set(filteredModules.map(module => module.course_name))].length
+    total: totalModules,
+    aiConfigured: modules.filter(module => module.system_prompt).length,
+    courses: [...new Set(modules.map(module => module.course_name))].length
   };
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Módulos"
-        description={`Gerencie módulos de aprendizado e configuração de tutores IA. ${stats.total} módulos em ${stats.courses} cursos com ${stats.aiConfigured} tutores IA configurados`}
+        description={`Gerencie módulos de aprendizado e configuração de tutores IA. ${stats.total} módulos em ${stats.courses} disciplinas com ${stats.aiConfigured} tutores IA configurados`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
@@ -266,7 +236,7 @@ export default function ModulesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Cursos</h3>
+            <h3 className="tracking-tight text-sm font-medium">Disciplinas</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.courses}</div>
@@ -279,13 +249,13 @@ export default function ModulesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Buscar módulos, descrições ou cursos...",
+          placeholder: "Buscar módulos, descrições ou disciplinas...",
           onSearchChange: setSearchTerm
         }}
         pagination={{
           page,
           limit,
-          total: sortedModules.length,
+          total: totalModules,
           onPageChange: setPage,
           onLimitChange: setLimit
         }}

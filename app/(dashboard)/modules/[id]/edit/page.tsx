@@ -15,7 +15,7 @@ import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download } from 'lucide-r
 import { DataTable } from '@/components/shared/data-table';
 import { Label } from '@/components/ui/label';
 import { useFetch } from '@/lib/hooks';
-import type { Module, ModuleUpdate, Course, File, TableColumn, BreadcrumbItem } from '@/lib/types';
+import type { Module, ModuleUpdate, Course, File, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function EditModulePage() {
   const router = useRouter();
@@ -41,7 +41,9 @@ export default function EditModulePage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
-  const { data: files = [], loading: filesLoading, refetch: refetchFiles } = useFetch<File[]>(`/files/?module_id=${moduleId}`);
+  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<File>>(`/files/?module_id=${moduleId}`);
+
+  const files = filesResponse?.items || [];
 
   const loadModule = useCallback(async () => {
     setIsLoadingData(true);
@@ -110,6 +112,10 @@ export default function EditModulePage() {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const getFileDisplayName = (file: File): string => {
+    return file.file_name || file.name || 'Arquivo sem nome';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -266,29 +272,20 @@ export default function EditModulePage() {
                 </div>
               </div>
 
-              {user?.role === 'super_admin' && (
-                <div>
-                  <label htmlFor="course_id" className="block text-sm font-medium mb-1">
-                    Curso *
-                  </label>
-                  <Select
-                    value={formData.course_id?.toString() || ''}
-                    onValueChange={(value) => handleChange('course_id', Number(value))}
-                    disabled={loadingCourses}
-                    placeholder={loadingCourses ? "Carregando cursos..." : "Selecione um curso"}
-                    className={errors.course_id ? 'border-destructive' : ''}
-                  >
-                    {courses.map((course) => (
-                      <SelectItem key={course.id} value={course.id.toString()}>
-                        {course.name}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                  {errors.course_id && (
-                    <p className="text-sm text-destructive mt-1">{errors.course_id}</p>
-                  )}
-                </div>
-              )}
+              <div>
+                <label htmlFor="course_name" className="block text-sm font-medium mb-1">
+                  Disciplina
+                </label>
+                <Input
+                  id="course_name"
+                  value={module?.course_name || 'Carregando...'}
+                  disabled
+                  className="bg-muted cursor-not-allowed"
+                />
+                <p className="text-sm text-muted-foreground mt-1">
+                  A disciplina não pode ser alterada após a criação do módulo
+                </p>
+              </div>
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium mb-1">
@@ -354,7 +351,8 @@ export default function EditModulePage() {
           <CardContent className="space-y-6">
             <form onSubmit={async (e) => {
               e.preventDefault();
-              const formData = new FormData(e.currentTarget);
+              const form = e.currentTarget;
+              const formData = new FormData(form);
               const file = formData.get('file') as globalThis.File;
 
               if (!file) {
@@ -368,10 +366,10 @@ export default function EditModulePage() {
               try {
                 const uploadFormData = new FormData();
                 uploadFormData.append('file', file);
-                uploadFormData.append('module_id', moduleId.toString());
 
-                await apiClient.uploadFile(uploadFormData);
-                e.currentTarget.reset();
+                // Pass module_id and file name as query parameters
+                await apiClient.uploadFile(uploadFormData, moduleId, file.name);
+                form.reset();
                 refetchFiles?.();
               } catch (error) {
                 console.error('Erro ao enviar arquivo:', error);
@@ -417,12 +415,12 @@ export default function EditModulePage() {
               data={files || []}
               columns={[
                 {
-                  key: 'original_filename',
+                  key: 'file_name',
                   label: 'Arquivo',
-                  render: (value, file) => (
+                  render: (_, file) => (
                     <div className="flex items-center space-x-2">
                       <FileText className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{value as string}</span>
+                      <span className="text-sm">{getFileDisplayName(file)}</span>
                     </div>
                   )
                 },
