@@ -153,15 +153,13 @@ class TutoriaAPIClient {
   }
 
   async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
-    const headers: Record<string, string | null> = {};
+    const headers: HeadersInit = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
     if (!isFormData) {
-      headers['Content-Type'] = 'application/json';
-    } else {
-      // Mark that we explicitly want no Content-Type for FormData
-      headers['Content-Type'] = null;
+      (headers as Record<string, string>)['Content-Type'] = 'application/json';
     }
+    // For FormData, we don't set Content-Type at all - browser handles it
 
     return this.request<T>(endpoint, {
       method: 'POST',
