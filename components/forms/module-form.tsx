@@ -122,8 +122,16 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad√
   const loadCourses = async () => {
     setLoadingCourses(true);
     try {
-      // Em produ√ß√£o, isso filtraria baseado nas permiss√µes do usu√°rio
-      const response = await apiClient.getCourses({ limit: 1000 });
+      // For super admins and admin professors: get all courses (filtered by university for profs)
+      // For regular professors: API will return only their assigned courses
+      const params: Record<string, string | number> = { limit: 1000 };
+      if (user?.university_id && user.role !== 'super_admin') {
+        params.university_id = user.university_id;
+      }
+      const response = await apiClient.getCourses(params);
+
+      // The API already filters courses for non-admin professors to show only assigned courses
+      // So we can use the response directly
       setCourses(response.items);
     } catch (error) {
       console.error('Failed to load courses:', error);
@@ -134,7 +142,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad√
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validar formul√°rio
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
@@ -143,9 +151,13 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad√
     if (!formData.course_id) {
       newErrors.course_id = 'Curso √© obrigat√≥rio';
     }
-    
+
+    // For regular professors, the API already filters courses to show only assigned ones
+    // So if they selected a course, it must be one they're assigned to
+    // No additional validation needed here - the API will handle authorization
+
     setErrors(newErrors);
-    
+
     if (Object.keys(newErrors).length > 0) {
       return;
     }
@@ -206,6 +218,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad√
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   disabled={isLoading}
                   className={errors.name ? 'border-destructive' : ''}
+                  required
                 />
                 {errors.name && <FormMessage>{errors.name}</FormMessage>}
               </FormItem>
@@ -286,6 +299,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad√
                     onChange={(e) => handleInputChange('course_id', e.target.value)}
                     disabled={isLoading || loadingCourses}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    required
                   >
                     <option value="">{loadingCourses ? "Carregando disciplinas..." : "Selecione uma disciplina"}</option>
                     {courses.map((course) => (

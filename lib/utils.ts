@@ -5,12 +5,38 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatDate(date: string | Date): string {
-  return new Intl.DateTimeFormat('en-US', {
+export function formatDate(date: string | Date | null | undefined): string {
+  if (!date) return 'N/A';
+
+  const dateObj = new Date(date);
+
+  // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
+  if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {
+    return 'N/A';
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  }).format(new Date(date));
+  }).format(dateObj);
+}
+
+export function formatDateShort(date: string | Date | null | undefined): string {
+  if (!date) return 'N/A';
+
+  const dateObj = new Date(date);
+
+  // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
+  if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {
+    return 'N/A';
+  }
+
+  return new Intl.DateTimeFormat('pt-BR', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(dateObj);
 }
 
 export function formatRelativeTime(date: string | Date): string {

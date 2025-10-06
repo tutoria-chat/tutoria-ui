@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, Bot, Upload, BookOpen } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -10,10 +11,12 @@ import { Badge } from '@/components/ui/badge';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { formatDateShort } from '@/lib/utils';
 import type { Module, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModulesPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -21,8 +24,25 @@ export default function ModulesPage() {
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
-  // Build API URL with pagination params
-  const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
+  // Helper function to check if user can edit/delete a module
+  // Note: For regular professors, the API already filters modules to show only those in assigned courses
+  // So if a module appears in the list for a regular professor, they can edit it
+  const canEditModule = (module: Module): boolean => {
+    // Super admins and admin professors can edit all modules
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
+      return true;
+    }
+    // Regular professors (is_admin = false) can edit modules that appear in their filtered list
+    // The API ensures they only see modules from their assigned courses
+    if (user?.role === 'professor' && user?.is_admin === false) {
+      return true;
+    }
+    return false;
+  };
+
+  // Build API URL with pagination params and university filter for professors
+  const universityFilter = user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '';
+  const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get modules
   const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);
@@ -101,7 +121,7 @@ export default function ModulesPage() {
       key: 'created_at',
       label: 'Criado em',
       sortable: true,
-      render: (value) => new Date(value as string).toLocaleDateString()
+      render: (value) => formatDateShort(value as string)
     },
     {
       key: 'updated_at',
@@ -109,7 +129,7 @@ export default function ModulesPage() {
       sortable: true,
       render: (value) => (
         <div className="text-sm">
-          {value ? new Date(value as string).toLocaleDateString() : 'Nunca'}
+          {value ? formatDateShort(value as string) : 'Nunca'}
         </div>
       )
     },
@@ -129,25 +149,27 @@ export default function ModulesPage() {
             </Link>
           </Button>
 
-          <ProfessorOnly>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-            >
-              <Link href={`/modules/${module.id}/edit`}>
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
+          {canEditModule(module) && (
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <Link href={`/modules/${module.id}/edit`}>
+                  <Edit className="h-4 w-4" />
+                </Link>
+              </Button>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDelete(module.id)}
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          </ProfessorOnly>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleDelete(module.id)}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </>
+          )}
         </div>
       )
     }
@@ -204,12 +226,20 @@ export default function ModulesPage() {
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
-            <Button asChild>
-              <Link href="/modules/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar Módulo
-              </Link>
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" asChild>
+                <Link href="/courses">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Ver Disciplinas
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/modules/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Módulo
+                </Link>
+              </Button>
+            </div>
           </ProfessorOnly>
         }
       />
@@ -265,6 +295,7 @@ export default function ModulesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage="Nenhum módulo encontrado. Crie seu primeiro módulo para começar."
+        onRowClick={(module) => router.push(`/modules/${module.id}`)}
       />
     </div>
   );

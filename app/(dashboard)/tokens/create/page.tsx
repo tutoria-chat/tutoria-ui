@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { PageHeader } from '@/components/layout/page-header';
 import { ProfessorOnly } from '@/components/auth/role-guard';
+import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 import type { Module, ModuleAccessTokenCreate, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
@@ -17,6 +18,7 @@ import type { Module, ModuleAccessTokenCreate, BreadcrumbItem, PaginatedResponse
 export default function CreateTokenPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuth();
   const moduleIdParam = searchParams.get('module_id');
 
   const [modules, setModules] = useState<Module[]>([]);
@@ -36,7 +38,12 @@ export default function CreateTokenPage() {
     const loadModules = async () => {
       setLoadingModules(true);
       try {
-        const response = await apiClient.getModules({ limit: 1000 });
+        // Filter modules by user's university for professors
+        const params: Record<string, string | number> = { limit: 1000 };
+        if (user?.university_id && user.role !== 'super_admin') {
+          params.university_id = user.university_id;
+        }
+        const response = await apiClient.getModules(params);
         setModules(response.items);
       } catch (error) {
         console.error('Failed to load modules:', error);
@@ -46,7 +53,7 @@ export default function CreateTokenPage() {
     };
 
     loadModules();
-  }, []);
+  }, [user]);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Tokens de Módulos', href: '/tokens' },
@@ -117,6 +124,7 @@ export default function CreateTokenPage() {
                   value={formData.module_id}
                   onChange={(e) => handleChange('module_id', Number(e.target.value))}
                   disabled={isLoading || loadingModules}
+                  required
                   className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="0">{loadingModules ? "Carregando módulos..." : "Selecione um módulo"}</option>
@@ -139,6 +147,7 @@ export default function CreateTokenPage() {
                   onChange={(e) => handleChange('name', e.target.value)}
                   placeholder="Ex: Widget Moodle 2024"
                   disabled={isLoading}
+                  required
                 />
                 {errors.name && (
                   <p className="text-sm text-destructive">{errors.name}</p>

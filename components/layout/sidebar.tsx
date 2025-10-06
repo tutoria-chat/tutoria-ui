@@ -51,34 +51,16 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       roles: ['super_admin'],
     },
     {
-      label: 'Disciplinas',
-      href: '/courses',
-      icon: BookOpen,
-      roles: ['super_admin', 'admin_professor', 'regular_professor'],
-    },
-    {
-      label: 'Módulos',
-      href: '/modules',
-      icon: Folder,
-      roles: ['super_admin', 'admin_professor', 'regular_professor'],
-    },
-    {
-      label: 'Professores',
-      href: '/professors',
-      icon: Users,
-      roles: ['super_admin', 'admin_professor'],
-    },
-    {
-      label: 'Estudantes',
-      href: '/students',
-      icon: GraduationCap,
-      roles: ['super_admin', 'admin_professor', 'regular_professor'],
+      label: 'Minha Universidade',
+      href: user.university_id ? `/universities/${user.university_id}` : '/universities',
+      icon: Building2,
+      roles: ['professor'],
     },
     {
       label: 'Tokens de Módulos',
       href: '/tokens',
       icon: Key,
-      roles: ['super_admin', 'admin_professor', 'regular_professor'],
+      roles: ['super_admin', 'professor'],
     },
   ];
 

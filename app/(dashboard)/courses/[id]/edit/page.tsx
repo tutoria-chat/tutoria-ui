@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageHeader } from '@/components/layout/page-header';
-import { AdminOnly } from '@/components/auth/role-guard';
+import { AdminProfessorOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import type { Course, CourseUpdate, BreadcrumbItem } from '@/lib/types';
@@ -98,19 +98,19 @@ export default function EditCoursePage() {
 
   if (isLoadingData) {
     return (
-      <AdminOnly>
+      <AdminProfessorOnly>
         <div className="space-y-6">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         </div>
-      </AdminOnly>
+      </AdminProfessorOnly>
     );
   }
 
   if (errors.load) {
     return (
-      <AdminOnly>
+      <AdminProfessorOnly>
         <div className="space-y-6">
           <PageHeader
             title="Erro"
@@ -126,12 +126,12 @@ export default function EditCoursePage() {
             </CardContent>
           </Card>
         </div>
-      </AdminOnly>
+      </AdminProfessorOnly>
     );
   }
 
   return (
-    <AdminOnly>
+    <AdminProfessorOnly>
       <div className="space-y-6">
         <PageHeader
           title="Editar Disciplina"
@@ -223,6 +223,6 @@ export default function EditCoursePage() {
           </CardContent>
         </Card>
       </div>
-    </AdminOnly>
+    </AdminProfessorOnly>
   );
 }

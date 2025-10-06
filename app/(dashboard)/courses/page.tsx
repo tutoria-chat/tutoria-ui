@@ -2,18 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { AdminProfessorOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { formatDateShort } from '@/lib/utils';
 import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function CoursesPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -21,8 +24,9 @@ export default function CoursesPage() {
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
-  // Build API URL with pagination params
-  const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
+  // Build API URL with pagination params and university filter for professors
+  const universityFilter = user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '';
+  const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get courses
   const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(apiUrl);
@@ -99,7 +103,7 @@ export default function CoursesPage() {
       key: 'created_at',
       label: 'Criado em',
       sortable: true,
-      render: (value) => new Date(value as string).toLocaleDateString()
+      render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
@@ -116,8 +120,8 @@ export default function CoursesPage() {
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          
-          <AdminOnly>
+
+          <AdminProfessorOnly>
             <Button
               variant="ghost"
               size="sm"
@@ -127,7 +131,7 @@ export default function CoursesPage() {
                 <Edit className="h-4 w-4" />
               </Link>
             </Button>
-            
+
             <Button
               variant="ghost"
               size="sm"
@@ -135,7 +139,7 @@ export default function CoursesPage() {
             >
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
-          </AdminOnly>
+          </AdminProfessorOnly>
         </div>
       )
     }
@@ -192,14 +196,24 @@ export default function CoursesPage() {
         description={`Gerencie disciplinas e programas acadêmicos. Mostrando ${stats.total} disciplinas com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
         breadcrumbs={breadcrumbs}
         actions={
-          <AdminOnly>
-            <Button asChild>
-              <Link href="/courses/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar Disciplina
-              </Link>
-            </Button>
-          </AdminOnly>
+          <div className="flex items-center space-x-2">
+            <ProfessorOnly>
+              <Button variant="outline" asChild>
+                <Link href="/modules">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Ver Módulos
+                </Link>
+              </Button>
+            </ProfessorOnly>
+            <AdminProfessorOnly>
+              <Button asChild>
+                <Link href="/courses/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Disciplina
+                </Link>
+              </Button>
+            </AdminProfessorOnly>
+          </div>
         }
       />
 
@@ -262,6 +276,7 @@ export default function CoursesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage="Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar."
+        onRowClick={(course) => router.push(`/courses/${course.id}`)}
       />
     </div>
   );
