@@ -32,7 +32,7 @@ const getStatsForRole = (role: string) => {
         files: 1248,
         tokens: 89,
       };
-    case 'admin_professor':
+    case 'professor':
       return {
         courses: 18,
         professors: 12,
@@ -40,14 +40,6 @@ const getStatsForRole = (role: string) => {
         modules: 45,
         files: 156,
         tokens: 12,
-      };
-    case 'regular_professor':
-      return {
-        courses: 3,
-        modules: 8,
-        students: 89,
-        files: 24,
-        tokens: 4,
       };
     default:
       return {};
@@ -90,14 +82,14 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                {user.role === 'regular_professor' ? 'Minhas Disciplinas' : 'Disciplinas'}
+                {user.role === 'professor' && !user.is_admin ? 'Minhas Disciplinas' : 'Disciplinas'}
               </CardTitle>
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.courses}</div>
               <p className="text-xs text-muted-foreground">
-                {user.role === 'regular_professor' ? 'Atribuídos a você' : 'Na sua universidade'}
+                {user.role === 'professor' && !user.is_admin ? 'Atribuídos a você' : 'Na sua universidade'}
               </p>
             </CardContent>
           </Card>
@@ -133,7 +125,7 @@ export default function DashboardPage() {
           </Card>
         </ProfessorOnly>
 
-        {user.role === 'regular_professor' && (
+        {user.role === 'professor' && !user.is_admin && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Meus Módulos</CardTitle>

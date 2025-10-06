@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
 import {
   Edit,
   Upload,
@@ -20,12 +21,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FileUpload } from '@/components/ui/file-upload';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
-import type { Module, File, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { formatDateShort } from '@/lib/utils';
+import type { Module, File as FileType, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -33,12 +34,13 @@ export default function ModuleDetailsPage() {
   const moduleId = Number(params.id);
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
-  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<File>>(`/files/?module_id=${moduleId}`);
+  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
 
   const files = filesResponse?.items || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Módulos', href: '/modules' },
@@ -48,11 +50,31 @@ export default function ModuleDetailsPage() {
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    const file = formData.get('file') as globalThis.File;
 
-    if (!file) {
+    if (!selectedFile) {
       setUploadError('Selecione um arquivo para enviar');
+      return;
+    }
+
+    // Validate file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024;
+    if (selectedFile.size > maxSize) {
+      setUploadError('Arquivo muito grande. Tamanho máximo: 50MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ];
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setUploadError('Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX');
       return;
     }
 
@@ -61,17 +83,27 @@ export default function ModuleDetailsPage() {
 
     try {
       const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
+      uploadFormData.append('file', selectedFile);
 
       // Pass module_id and file name as query parameters
-      await apiClient.uploadFile(uploadFormData, moduleId, file.name);
+      await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
 
       // Reset form and refetch files
       form.reset();
+      setSelectedFile(null);
       refetchFiles?.();
+
+      toast.success('Arquivo enviado com sucesso!', {
+        description: `${selectedFile.name} foi adicionado ao módulo.`,
+      });
     } catch (error) {
       console.error('Erro ao enviar arquivo:', error);
-      setUploadError('Erro ao enviar arquivo. Tente novamente.');
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      setUploadError(`Erro ao enviar arquivo: ${errorMessage}. Tente novamente.`);
+
+      toast.error('Erro ao enviar arquivo', {
+        description: errorMessage,
+      });
     } finally {
       setIsUploading(false);
     }
@@ -85,9 +117,14 @@ export default function ModuleDetailsPage() {
     try {
       await apiClient.deleteFile(fileId);
       refetchFiles?.();
+      toast.success('Arquivo deletado', {
+        description: 'O arquivo foi removido do módulo.',
+      });
     } catch (error) {
       console.error('Erro ao deletar arquivo:', error);
-      alert('Erro ao deletar arquivo. Tente novamente.');
+      toast.error('Erro ao deletar arquivo', {
+        description: 'Não foi possível deletar o arquivo. Tente novamente.',
+      });
     }
   };
 
@@ -95,21 +132,26 @@ export default function ModuleDetailsPage() {
     try {
       const { download_url } = await apiClient.getFileDownloadUrl(fileId);
       window.open(download_url, '_blank');
+      toast.success('Download iniciado', {
+        description: 'O arquivo será baixado em breve.',
+      });
     } catch (error) {
       console.error('Erro ao baixar arquivo:', error);
-      alert('Erro ao baixar arquivo. Tente novamente.');
+      toast.error('Erro ao baixar arquivo', {
+        description: 'Não foi possível baixar o arquivo. Tente novamente.',
+      });
     }
   };
 
-  const getFileDisplayName = (file: File): string => {
+  const getFileDisplayName = (file: FileType): string => {
     return file.file_name || file.name || 'Arquivo sem nome';
   };
 
-  const getFileType = (file: File): string => {
+  const getFileType = (file: FileType): string => {
     return file.content_type || file.file_type || 'Tipo desconhecido';
   };
 
-  const fileColumns: TableColumn<File>[] = [
+  const fileColumns: TableColumn<FileType>[] = [
     {
       key: 'file_name',
       label: 'Arquivo',
@@ -138,7 +180,7 @@ export default function ModuleDetailsPage() {
       key: 'created_at',
       label: 'Enviado em',
       sortable: true,
-      render: (value) => new Date(value as string).toLocaleDateString('pt-BR')
+      render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
@@ -241,7 +283,7 @@ export default function ModuleDetailsPage() {
               )}
               <div>
                 <p className="text-muted-foreground">Criado em</p>
-                <p className="font-medium">{new Date(module.created_at).toLocaleDateString('pt-BR')}</p>
+                <p className="font-medium">{formatDateShort(module.created_at)}</p>
               </div>
             </div>
 
@@ -289,25 +331,20 @@ export default function ModuleDetailsPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleFileUpload} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="file">Selecione um arquivo</Label>
-                <Input
-                  id="file"
-                  name="file"
-                  type="file"
-                  disabled={isUploading}
-                  accept=".pdf,.doc,.docx,.txt,.ppt,.pptx"
-                />
-                <p className="text-sm text-muted-foreground">
-                  Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX
-                </p>
-              </div>
+              <FileUpload
+                onFileSelect={setSelectedFile}
+                disabled={isUploading}
+                selectedFile={selectedFile}
+                maxSizeMB={50}
+              />
 
               {uploadError && (
-                <p className="text-sm text-destructive">{uploadError}</p>
+                <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
+                  <p className="text-sm text-destructive">{uploadError}</p>
+                </div>
               )}
 
-              <Button type="submit" disabled={isUploading}>
+              <Button type="submit" disabled={isUploading || !selectedFile}>
                 {isUploading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

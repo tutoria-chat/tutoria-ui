@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
+import { formatDateShort } from '@/lib/utils';
 import type { SuperAdmin, TableColumn, BreadcrumbItem } from '@/lib/types';
 
 // Mock data - em produção viria da API
@@ -88,7 +89,7 @@ export default function SuperAdminsPage() {
       render: (value) => (
         <div className="flex items-center space-x-1">
           <Calendar className="h-3 w-3 text-muted-foreground" />
-          <span className="text-sm">{new Date(value as string).toLocaleDateString()}</span>
+          <span className="text-sm">{formatDateShort(value as string)}</span>
         </div>
       )
     },
@@ -98,7 +99,7 @@ export default function SuperAdminsPage() {
       sortable: true,
       render: (value) => (
         <div className="text-sm">
-          {new Date(value as string).toLocaleDateString()}
+          {formatDateShort(value as string)}
         </div>
       )
     },

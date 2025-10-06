@@ -19,13 +19,16 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { AdminProfessorOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { formatDateShort } from '@/lib/utils';
 import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function CourseDetailsPage() {
   const params = useParams();
   const courseId = params.id as string;
+  const { user } = useAuth();
 
   // Fetch course data from API
   const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
@@ -36,6 +39,24 @@ export default function CourseDetailsPage() {
   const professors = professorsResponse?.items || [];
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
+
+  // Check if user can add modules to this course
+  const canAddModule = (): boolean => {
+    // Super admins can add modules to any course
+    if (user?.role === 'super_admin') {
+      return true;
+    }
+    // Admin professors can add modules to courses in their university
+    if (user?.role === 'professor' && user?.is_admin === true) {
+      return true;
+    }
+    // Regular professors: For now, allow them to see the button
+    // The module form will handle filtering courses by assignment
+    if (user?.role === 'professor' && user?.is_admin === false) {
+      return true;
+    }
+    return false;
+  };
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Disciplinas', href: '/courses' },
@@ -91,7 +112,7 @@ export default function CourseDetailsPage() {
     {
       key: 'updated_at',
       label: 'Última Atualização',
-      render: (value) => new Date(value as string).toLocaleDateString()
+      render: (value) => formatDateShort(value as string)
     }
   ];
 
@@ -131,27 +152,27 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Disciplina em ${course.university_name} • Criado em ${new Date(course.created_at).toLocaleDateString()}`}
+        description={`Disciplina em ${course.university_name} • Criado em ${formatDateShort(course.created_at)}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
-            <ProfessorOnly>
+            {canAddModule() && (
               <Button variant="outline" asChild>
                 <Link href={`/modules/create?course_id=${courseId}`}>
                   <Plus className="mr-2 h-4 w-4" />
                   Adicionar Módulo
                 </Link>
               </Button>
-            </ProfessorOnly>
-            
-            <AdminOnly>
+            )}
+
+            <AdminProfessorOnly>
               <Button asChild>
                 <Link href={`/courses/${courseId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
                   Editar Curso
                 </Link>
               </Button>
-            </AdminOnly>
+            </AdminProfessorOnly>
           </div>
         }
       />
@@ -175,7 +196,7 @@ export default function CourseDetailsPage() {
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>Atualizado em {new Date(course.updated_at).toLocaleDateString()}</span>
+                <span>Atualizado em {formatDateShort(course.updated_at)}</span>
               </div>
             </div>
           </CardContent>

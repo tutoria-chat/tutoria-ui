@@ -9,11 +9,17 @@ import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy } from 'lucide-react';
 import { ProfessorOnly } from '@/components/auth/role-guard';
+import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { formatDateShort } from '@/lib/utils';
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function TokensPage() {
-  const { data: tokensResponse, loading, error } = useFetch<PaginatedResponse<ModuleAccessToken>>('/module-tokens/');
+  const { user } = useAuth();
+
+  // Build API URL with university filter for professors
+  const universityFilter = user?.university_id && user.role !== 'super_admin' ? `?university_id=${user.university_id}` : '';
+  const { data: tokensResponse, loading, error } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -123,7 +129,7 @@ export default function TokensPage() {
       key: 'expires_at',
       label: 'Expira em',
       sortable: true,
-      render: (value) => value ? new Date(value as string).toLocaleDateString('pt-BR') : 'Nunca'
+      render: (value) => value ? formatDateShort(value as string) : 'Nunca'
     },
     {
       key: 'is_active',

@@ -6,15 +6,15 @@ export interface User {
   email: string;
   first_name: string;
   last_name: string;
-  role: UserRole;
+  role: UserRole; // 'super_admin', 'professor', or 'student'
   university_id?: number;
-  is_admin?: boolean;
-  assigned_courses?: number[];
+  is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
+  assigned_courses?: number[]; // Fetched separately via API for regular professors
   created_at: string;
   updated_at: string;
 }
 
-export type UserRole = 'super_admin' | 'admin_professor' | 'regular_professor' | 'student';
+export type UserRole = 'super_admin' | 'professor' | 'student';
 
 export interface LoginCredentials {
   email: string;
@@ -438,7 +438,8 @@ export interface NavigationItem {
   label: string;
   href: string;
   icon?: React.ComponentType<any>;
-  roles?: UserRole[];
+  roles?: UserRole[]; // 'super_admin', 'professor', or 'student'
+  requiresAdmin?: boolean; // For professors: requires is_admin = true
   children?: NavigationItem[];
 }
 

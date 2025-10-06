@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PageHeader } from '@/components/layout/page-header';
 import { CourseForm } from '@/components/forms/course-form';
-import { AdminOnly } from '@/components/auth/role-guard';
+import { AdminProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import type { CourseCreate, CourseUpdate, BreadcrumbItem } from '@/lib/types';
@@ -50,7 +50,7 @@ export default function CreateCoursePage() {
   };
 
   return (
-    <AdminOnly>
+    <AdminProfessorOnly>
       <div className="space-y-6">
         <PageHeader
           title="Criar Nova Disciplina"
@@ -66,6 +66,6 @@ export default function CreateCoursePage() {
           />
         </div>
       </div>
-    </AdminOnly>
+    </AdminProfessorOnly>
   );
 }

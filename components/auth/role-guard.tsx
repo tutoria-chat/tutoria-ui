@@ -68,15 +68,33 @@ export function AdminOnly({ children, fallback, hideIfNoAccess = true }: {
   fallback?: React.ReactNode;
   hideIfNoAccess?: boolean;
 }) {
-  return (
-    <RoleGuard 
-      allowedRoles={['super_admin', 'admin_professor']} 
-      fallback={fallback} 
-      hideIfNoAccess={hideIfNoAccess}
-    >
-      {children}
-    </RoleGuard>
-  );
+  const { user } = useAuth();
+
+  // Super admins or professors with is_admin = true
+  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
+
+  if (!hasAccess) {
+    return hideIfNoAccess ? null : fallback;
+  }
+
+  return <>{children}</>;
+}
+
+export function AdminProfessorOnly({ children, fallback, hideIfNoAccess = true }: {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  hideIfNoAccess?: boolean;
+}) {
+  const { user } = useAuth();
+
+  // Super admins or professors with is_admin = true
+  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
+
+  if (!hasAccess) {
+    return hideIfNoAccess ? null : fallback;
+  }
+
+  return <>{children}</>;
 }
 
 export function ProfessorOnly({ children, fallback, hideIfNoAccess = true }: {
@@ -84,13 +102,14 @@ export function ProfessorOnly({ children, fallback, hideIfNoAccess = true }: {
   fallback?: React.ReactNode;
   hideIfNoAccess?: boolean;
 }) {
-  return (
-    <RoleGuard 
-      allowedRoles={['super_admin', 'admin_professor', 'regular_professor']} 
-      fallback={fallback} 
-      hideIfNoAccess={hideIfNoAccess}
-    >
-      {children}
-    </RoleGuard>
-  );
+  const { user } = useAuth();
+
+  // Super admins or any professor (admin or regular)
+  const hasAccess = user?.role === 'super_admin' || user?.role === 'professor';
+
+  if (!hasAccess) {
+    return hideIfNoAccess ? null : fallback;
+  }
+
+  return <>{children}</>;
 }

@@ -112,6 +112,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 disabled={isLoading}
+                required
                 className={errors.name ? 'border-destructive' : ''}
               />
               {errors.name && <FormMessage>{errors.name}</FormMessage>}
@@ -129,6 +130,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                 value={formData.code}
                 onChange={(e) => handleInputChange('code', e.target.value)}
                 disabled={isLoading}
+                required
                 className={errors.code ? 'border-destructive' : ''}
               />
               {errors.code && <FormMessage>{errors.code}</FormMessage>}

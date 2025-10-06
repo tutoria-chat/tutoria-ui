@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,9 +14,9 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download } from 'lucide-react';
 import { DataTable } from '@/components/shared/data-table';
-import { Label } from '@/components/ui/label';
+import { FileUpload } from '@/components/ui/file-upload';
 import { useFetch } from '@/lib/hooks';
-import type { Module, ModuleUpdate, Course, File, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { Module, ModuleUpdate, Course, File as FileType, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function EditModulePage() {
   const router = useRouter();
@@ -40,8 +41,9 @@ export default function EditModulePage() {
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<File>>(`/files/?module_id=${moduleId}`);
+  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
 
   const files = filesResponse?.items || [];
 
@@ -49,6 +51,10 @@ export default function EditModulePage() {
     setIsLoadingData(true);
     try {
       const data = await apiClient.getModule(moduleId);
+
+      // For regular professors, they can only see modules in their assigned courses
+      // The API handles this filtering, so no additional check needed here
+
       setModule(data);
       setFormData({
         name: data.name,
@@ -65,14 +71,19 @@ export default function EditModulePage() {
     } finally {
       setIsLoadingData(false);
     }
-  }, [moduleId]);
+  }, [moduleId, user]);
 
   const loadCourses = useCallback(async () => {
     if (user?.role !== 'super_admin') return;
 
     setLoadingCourses(true);
     try {
-      const response = await apiClient.getCourses({ limit: 1000 });
+      // Filter courses by user's university for professors
+      const params: any = { limit: 1000 };
+      if (user?.university_id && user.role !== 'super_admin') {
+        params.university_id = user.university_id;
+      }
+      const response = await apiClient.getCourses(params);
       setCourses(response.items);
     } catch (error) {
       console.error('Failed to load courses:', error);
@@ -114,8 +125,68 @@ export default function EditModulePage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const getFileDisplayName = (file: File): string => {
+  const getFileDisplayName = (file: FileType): string => {
     return file.file_name || file.name || 'Arquivo sem nome';
+  };
+
+  const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+
+    if (!selectedFile) {
+      setUploadError('Selecione um arquivo para enviar');
+      return;
+    }
+
+    // Validate file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024;
+    if (selectedFile.size > maxSize) {
+      setUploadError('Arquivo muito grande. Tamanho máximo: 50MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'application/vnd.ms-powerpoint',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ];
+
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setUploadError('Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', selectedFile);
+
+      // Pass module_id and file name as query parameters
+      await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
+      form.reset();
+      setSelectedFile(null);
+      refetchFiles?.();
+
+      toast.success('Arquivo enviado com sucesso!', {
+        description: `${selectedFile.name} foi adicionado ao módulo.`,
+      });
+    } catch (error) {
+      console.error('Erro ao enviar arquivo:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      setUploadError(`Erro ao enviar arquivo: ${errorMessage}. Tente novamente.`);
+
+      toast.error('Erro ao enviar arquivo', {
+        description: errorMessage,
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -349,54 +420,21 @@ export default function EditModulePage() {
             <CardTitle>Arquivos do Módulo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <form onSubmit={async (e) => {
-              e.preventDefault();
-              const form = e.currentTarget;
-              const formData = new FormData(form);
-              const file = formData.get('file') as globalThis.File;
-
-              if (!file) {
-                setUploadError('Selecione um arquivo para enviar');
-                return;
-              }
-
-              setIsUploading(true);
-              setUploadError(null);
-
-              try {
-                const uploadFormData = new FormData();
-                uploadFormData.append('file', file);
-
-                // Pass module_id and file name as query parameters
-                await apiClient.uploadFile(uploadFormData, moduleId, file.name);
-                form.reset();
-                refetchFiles?.();
-              } catch (error) {
-                console.error('Erro ao enviar arquivo:', error);
-                setUploadError('Erro ao enviar arquivo. Tente novamente.');
-              } finally {
-                setIsUploading(false);
-              }
-            }} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="file">Enviar novo arquivo</Label>
-                <Input
-                  id="file"
-                  name="file"
-                  type="file"
-                  disabled={isUploading}
-                  accept=".pdf,.doc,.docx,.txt,.ppt,.pptx"
-                />
-                <p className="text-sm text-muted-foreground">
-                  Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX
-                </p>
-              </div>
+            <form onSubmit={handleFileUpload} className="space-y-4">
+              <FileUpload
+                onFileSelect={setSelectedFile}
+                disabled={isUploading}
+                selectedFile={selectedFile}
+                maxSizeMB={50}
+              />
 
               {uploadError && (
-                <p className="text-sm text-destructive">{uploadError}</p>
+                <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
+                  <p className="text-sm text-destructive">{uploadError}</p>
+                </div>
               )}
 
-              <Button type="submit" disabled={isUploading} variant="outline">
+              <Button type="submit" disabled={isUploading || !selectedFile} variant="outline">
                 {isUploading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -468,7 +506,7 @@ export default function EditModulePage() {
                     </div>
                   )
                 }
-              ] as TableColumn<File>[]}
+              ] as TableColumn<FileType>[]}
               loading={filesLoading}
               emptyMessage="Nenhum arquivo enviado ainda."
             />

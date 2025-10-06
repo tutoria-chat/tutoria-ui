@@ -7,11 +7,22 @@ import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
+import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { formatDateShort } from '@/lib/utils';
 import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function UniversitiesPage() {
-  // API call to get universities
+  const { user } = useAuth();
+
+  // For professors, redirect to their university page instead of showing list
+  React.useEffect(() => {
+    if (user && user.role !== 'super_admin' && user.university_id) {
+      window.location.href = `/universities/${user.university_id}`;
+    }
+  }, [user]);
+
+  // API call to get universities (only for super_admin)
   const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/universities/');
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,7 +60,7 @@ export default function UniversitiesPage() {
       key: 'created_at',
       label: 'Criado em',
       sortable: true,
-      render: (value) => new Date(value as string).toLocaleDateString()
+      render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
