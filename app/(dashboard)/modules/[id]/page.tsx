@@ -101,20 +101,28 @@ export default function ModuleDetailsPage() {
     }
   };
 
+  const getFileDisplayName = (file: File): string => {
+    return file.file_name || file.name || 'Arquivo sem nome';
+  };
+
+  const getFileType = (file: File): string => {
+    return file.content_type || file.file_type || 'Tipo desconhecido';
+  };
+
   const fileColumns: TableColumn<File>[] = [
     {
       key: 'file_name',
       label: 'Arquivo',
       sortable: true,
-      render: (value, file) => (
+      render: (_, file) => (
         <div className="flex items-center space-x-3">
           <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
             <FileText className="h-5 w-5 text-blue-600" />
           </div>
           <div>
-            <div className="font-medium">{(value as string) || file.name || 'Arquivo sem nome'}</div>
+            <div className="font-medium">{getFileDisplayName(file)}</div>
             <div className="text-sm text-muted-foreground">
-              {file.content_type || file.file_type || 'Tipo desconhecido'}
+              {getFileType(file)}
             </div>
           </div>
         </div>

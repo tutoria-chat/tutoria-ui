@@ -114,6 +114,10 @@ export default function EditModulePage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const getFileDisplayName = (file: File): string => {
+    return file.file_name || file.name || 'Arquivo sem nome';
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -413,10 +417,10 @@ export default function EditModulePage() {
                 {
                   key: 'file_name',
                   label: 'Arquivo',
-                  render: (value, file) => (
+                  render: (_, file) => (
                     <div className="flex items-center space-x-2">
                       <FileText className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{(value as string) || file.name || 'Arquivo sem nome'}</span>
+                      <span className="text-sm">{getFileDisplayName(file)}</span>
                     </div>
                   )
                 },
