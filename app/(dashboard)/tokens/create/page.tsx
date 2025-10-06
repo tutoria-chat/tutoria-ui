@@ -39,7 +39,7 @@ export default function CreateTokenPage() {
       setLoadingModules(true);
       try {
         // Filter modules by user's university for professors
-        const params: any = { limit: 1000 };
+        const params: Record<string, string | number> = { limit: 1000 };
         if (user?.university_id && user.role !== 'super_admin') {
           params.university_id = user.university_id;
         }

@@ -42,7 +42,11 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const breadcrumbs: BreadcrumbItem[] = [
+  const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
+    { label: 'Disciplinas', href: '/courses' },
+    { label: module?.course_name || 'Disciplina', href: `/courses/${module.course_id}` },
+    { label: module?.name || 'Carregando...', isCurrentPage: true }
+  ] : [
     { label: 'Módulos', href: '/modules' },
     { label: module?.name || 'Carregando...', isCurrentPage: true }
   ];
@@ -238,12 +242,22 @@ export default function ModuleDetailsPage() {
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
-            <Button asChild>
-              <Link href={`/modules/${moduleId}/edit`}>
-                <Edit className="mr-2 h-4 w-4" />
-                Editar Módulo
-              </Link>
-            </Button>
+            <div className="flex items-center space-x-2">
+              {module.course_id && (
+                <Button variant="outline" asChild>
+                  <Link href={`/courses/${module.course_id}`}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Ver Disciplina
+                  </Link>
+                </Button>
+              )}
+              <Button asChild>
+                <Link href={`/modules/${moduleId}/edit`}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Editar Módulo
+                </Link>
+              </Button>
+            </div>
           </ProfessorOnly>
         }
       />

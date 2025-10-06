@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -14,6 +15,7 @@ import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from 
 
 export default function UniversitiesPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   // For professors, redirect to their university page instead of showing list
   React.useEffect(() => {
@@ -198,6 +200,7 @@ export default function UniversitiesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage="Nenhuma universidade encontrada"
+        onRowClick={(university) => router.push(`/universities/${university.id}`)}
       />
     </div>
   );

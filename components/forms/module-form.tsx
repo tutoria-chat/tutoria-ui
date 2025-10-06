@@ -124,7 +124,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acadÃ
     try {
       // For super admins and admin professors: get all courses (filtered by university for profs)
       // For regular professors: API will return only their assigned courses
-      const params: any = { limit: 1000 };
+      const params: Record<string, string | number> = { limit: 1000 };
       if (user?.university_id && user.role !== 'super_admin') {
         params.university_id = user.university_id;
       }

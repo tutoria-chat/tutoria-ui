@@ -44,6 +44,7 @@ interface DataTableProps<T> {
   actions?: React.ReactNode;
   emptyMessage?: string;
   className?: string;
+  onRowClick?: (item: T, index: number) => void;
 }
 
 export function DataTable<T>({
@@ -56,6 +57,7 @@ export function DataTable<T>({
   actions,
   emptyMessage = 'No data available',
   className,
+  onRowClick,
 }: DataTableProps<T>) {
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
@@ -200,11 +202,18 @@ export function DataTable<T>({
                 <TableRow
                   key={index}
                   className={cn(
-                    "cursor-pointer",
+                    onRowClick && "cursor-pointer",
                     hoveredRow === index && "bg-muted/50"
                   )}
                   onMouseEnter={() => setHoveredRow(index)}
                   onMouseLeave={() => setHoveredRow(null)}
+                  onClick={(e) => {
+                    // Only trigger row click if not clicking on action buttons
+                    const target = e.target as HTMLElement;
+                    if (!target.closest('button') && !target.closest('a') && onRowClick) {
+                      onRowClick(item, index);
+                    }
+                  }}
                 >
                   {columns.map((column) => (
                     <TableCell key={String(column.key)}>

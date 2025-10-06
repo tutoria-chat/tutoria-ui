@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -15,6 +16,7 @@ import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/l
 
 export default function CoursesPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -194,14 +196,24 @@ export default function CoursesPage() {
         description={`Gerencie disciplinas e programas acadêmicos. Mostrando ${stats.total} disciplinas com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
         breadcrumbs={breadcrumbs}
         actions={
-          <AdminProfessorOnly>
-            <Button asChild>
-              <Link href="/courses/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar Disciplina
-              </Link>
-            </Button>
-          </AdminProfessorOnly>
+          <div className="flex items-center space-x-2">
+            <ProfessorOnly>
+              <Button variant="outline" asChild>
+                <Link href="/modules">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Ver Módulos
+                </Link>
+              </Button>
+            </ProfessorOnly>
+            <AdminProfessorOnly>
+              <Button asChild>
+                <Link href="/courses/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Disciplina
+                </Link>
+              </Button>
+            </AdminProfessorOnly>
+          </div>
         }
       />
 
@@ -264,6 +276,7 @@ export default function CoursesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage="Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar."
+        onRowClick={(course) => router.push(`/courses/${course.id}`)}
       />
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import {
   Edit,
   Plus,
@@ -12,7 +12,8 @@ import {
   FileText,
   Calendar,
   Building2,
-  Activity
+  Activity,
+  Eye
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,7 @@ import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, P
 
 export default function CourseDetailsPage() {
   const params = useParams();
+  const router = useRouter();
   const courseId = params.id as string;
   const { user } = useAuth();
 
@@ -58,7 +60,11 @@ export default function CourseDetailsPage() {
     return false;
   };
 
-  const breadcrumbs: BreadcrumbItem[] = [
+  const breadcrumbs: BreadcrumbItem[] = course?.university_id ? [
+    { label: 'Universidades', href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
+    { label: course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
+    { label: course?.name || 'Carregando...', isCurrentPage: true }
+  ] : [
     { label: 'Disciplinas', href: '/courses' },
     { label: course?.name || 'Carregando...', isCurrentPage: true }
   ];
@@ -70,6 +76,16 @@ export default function CourseDetailsPage() {
   if (courseError || !course) {
     return <div className="flex items-center justify-center h-64">Error loading course</div>;
   }
+
+  const canEditModule = (module: Module): boolean => {
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
+      return true;
+    }
+    if (user?.role === 'professor' && user?.is_admin === false) {
+      return true;
+    }
+    return false;
+  };
 
   const moduleColumns: TableColumn<Module>[] = [
     {
@@ -113,6 +129,36 @@ export default function CourseDetailsPage() {
       key: 'updated_at',
       label: 'Última Atualização',
       render: (value) => formatDateShort(value as string)
+    },
+    {
+      key: 'actions',
+      label: 'Ações',
+      width: '120px',
+      render: (_, module) => (
+        <div className="flex items-center space-x-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+          >
+            <Link href={`/modules/${module.id}`}>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </Button>
+
+          {canEditModule(module) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+            >
+              <Link href={`/modules/${module.id}/edit`}>
+                <Edit className="h-4 w-4" />
+              </Link>
+            </Button>
+          )}
+        </div>
+      )
     }
   ];
 
@@ -156,6 +202,15 @@ export default function CourseDetailsPage() {
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
+            {course.university_id && (
+              <Button variant="outline" asChild>
+                <Link href={`/universities/${course.university_id}`}>
+                  <Building2 className="mr-2 h-4 w-4" />
+                  Ver Universidade
+                </Link>
+              </Button>
+            )}
+
             {canAddModule() && (
               <Button variant="outline" asChild>
                 <Link href={`/modules/create?course_id=${courseId}`}>
@@ -282,6 +337,7 @@ export default function CourseDetailsPage() {
                 data={modules || []}
                 columns={moduleColumns}
                 emptyMessage="Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."
+                onRowClick={(module) => router.push(`/modules/${module.id}`)}
               />
             </CardContent>
           </Card>

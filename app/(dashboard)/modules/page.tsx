@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, Bot, Upload, BookOpen } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -15,6 +16,7 @@ import type { Module, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/l
 
 export default function ModulesPage() {
   const { user } = useAuth();
+  const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -224,12 +226,20 @@ export default function ModulesPage() {
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
-            <Button asChild>
-              <Link href="/modules/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar Módulo
-              </Link>
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" asChild>
+                <Link href="/courses">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Ver Disciplinas
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link href="/modules/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Módulo
+                </Link>
+              </Button>
+            </div>
           </ProfessorOnly>
         }
       />
@@ -285,6 +295,7 @@ export default function ModulesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage="Nenhum módulo encontrado. Crie seu primeiro módulo para começar."
+        onRowClick={(module) => router.push(`/modules/${module.id}`)}
       />
     </div>
   );
