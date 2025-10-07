@@ -46,8 +46,8 @@ export function LoginForm() {
           <Image
             src="/Color_01.png"
             alt="Tutoria Logo"
-            width={200}
-            height={64}
+            width={4008}
+            height={1438}
             priority
             className="h-16 w-auto"
           />

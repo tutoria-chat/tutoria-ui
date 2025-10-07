@@ -130,8 +130,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
             <Image
               src="/Color_01.png"
               alt="Tutoria Logo"
-              width={120}
-              height={32}
+              width={4008}
+              height={1438}
               priority
               className="h-8 w-auto"
             />
