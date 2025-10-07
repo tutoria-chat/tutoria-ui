@@ -84,17 +84,27 @@ class TutoriaAPIClient {
       ...(this.token && { Authorization: `Bearer ${this.token}` }),
     };
 
+    let hasContentType = false;
+    let contentTypeIsNull = false;
+
     // Add other headers, excluding Content-Type if it's null (for FormData)
     if (options.headers) {
       Object.entries(options.headers).forEach(([key, value]) => {
-        if (value !== null) {
+        if (key === 'Content-Type') {
+          hasContentType = true;
+          if (value === null) {
+            contentTypeIsNull = true;
+          } else {
+            headers[key] = value as string;
+          }
+        } else if (value !== null) {
           headers[key] = value as string;
         }
       });
     }
 
-    // Add default Content-Type for non-FormData requests
-    if (!options.headers || !('Content-Type' in options.headers)) {
+    // Add default Content-Type for non-FormData requests (only if not explicitly set to null)
+    if (!hasContentType || (!contentTypeIsNull && !headers['Content-Type'])) {
       headers['Content-Type'] = 'application/json';
     }
 
@@ -102,6 +112,17 @@ class TutoriaAPIClient {
       ...options,
       headers,
     };
+
+    // Debug: Log request details (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('API Request:', {
+        url,
+        method: options.method,
+        headers,
+        bodyType: options.body instanceof FormData ? 'FormData' : typeof options.body,
+        body: options.body instanceof FormData ? 'FormData instance' : options.body
+      });
+    }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
@@ -137,10 +158,10 @@ class TutoriaAPIClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown> | object): Promise<T> {
     const searchParams = new URLSearchParams();
     if (params) {
-      Object.entries(params).forEach(([key, value]) => {
+      Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           searchParams.append(key, String(value));
         }
@@ -153,17 +174,27 @@ class TutoriaAPIClient {
   }
 
   async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
-    const headers: HeadersInit = {};
+    const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
-    if (!isFormData) {
-      (headers as Record<string, string>)['Content-Type'] = 'application/json';
+    if (isFormData) {
+      // Explicitly set to null to prevent default Content-Type from being added
+      headers['Content-Type'] = null;
+
+      // Debug: Log FormData contents (development only)
+      if (process.env.NODE_ENV === 'development' && data instanceof FormData) {
+        console.log('FormData contents:');
+        for (const [key, value] of (data as FormData).entries()) {
+          console.log(`  ${key}:`, value);
+        }
+      }
+    } else {
+      headers['Content-Type'] = 'application/json';
     }
-    // For FormData, we don't set Content-Type at all - browser handles it
 
     return this.request<T>(endpoint, {
       method: 'POST',
-      headers,
+      headers: headers as unknown as HeadersInit,
       body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
     });
   }

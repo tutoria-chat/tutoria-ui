@@ -148,8 +148,11 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
     if (!formData.name.trim()) {
       newErrors.name = 'Nome do módulo é obrigatório';
     }
+    if (!formData.code.trim()) {
+      newErrors.code = 'Código do módulo é obrigatório';
+    }
     if (!formData.course_id) {
-      newErrors.course_id = 'Curso é obrigatório';
+      newErrors.course_id = 'Disciplina é obrigatório';
     }
 
     // For regular professors, the API already filters courses to show only assigned ones
@@ -227,7 +230,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Module Code */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="code">Código do Módulo</FormLabel>
+                <FormLabel htmlFor="code">Código do Módulo *</FormLabel>
                 <Input
                   id="code"
                   type="text"
@@ -236,6 +239,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   onChange={(e) => handleInputChange('code', e.target.value)}
                   disabled={isLoading}
                   className={errors.code ? 'border-destructive' : ''}
+                  required
                 />
                 {errors.code && <FormMessage>{errors.code}</FormMessage>}
               </FormItem>

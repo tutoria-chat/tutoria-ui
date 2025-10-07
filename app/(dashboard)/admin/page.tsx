@@ -51,7 +51,7 @@ const recentActivities = [
   {
     id: 2,
     type: 'course_created',
-    message: 'Curso "Aprendizado de Máquina Avançado" criado',
+    message: 'Disciplina "Aprendizado de Máquina Avançado" criado',
     user: 'Dr. Silva (Professor Administrador)',
     timestamp: '2024-03-16T13:45:00Z',
     status: 'success'

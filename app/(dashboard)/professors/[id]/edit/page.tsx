@@ -185,7 +185,7 @@ export default function EditProfessorPage() {
                 <div className="space-y-0.5">
                   <Label htmlFor="is_admin">Professor Administrador</Label>
                   <p className="text-sm text-muted-foreground">
-                    Administradores podem gerenciar cursos e atribuir professores
+                    Administradores podem gerenciar disciplinas e atribuir professores
                   </p>
                 </div>
                 <Switch
