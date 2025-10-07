@@ -131,7 +131,7 @@ export default function GlobalSearchPage() {
       <div className="space-y-6">
         <PageHeader
           title="Busca Global"
-          description="Busque em todas as universidades, cursos, módulos, usuários e arquivos"
+          description="Busque em todas as universidades, disciplinas, módulos, usuários e arquivos"
           breadcrumbs={breadcrumbs}
         />
 
@@ -150,7 +150,7 @@ export default function GlobalSearchPage() {
             <div className="flex space-x-4">
               <div className="flex-1">
                 <Input
-                  placeholder="Buscar por universidades, cursos, módulos, usuários, arquivos..."
+                  placeholder="Buscar por universidades, disciplinas, módulos, usuários, arquivos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyPress={handleKeyPress}
@@ -234,7 +234,7 @@ export default function GlobalSearchPage() {
                             <h4 className="font-medium">{item.name}</h4>
                             <p className="text-sm text-muted-foreground">{item.description}</p>
                             <div className="flex items-center space-x-2 mt-1">
-                              <Badge variant="secondary">{item.courses} cursos</Badge>
+                              <Badge variant="secondary">{item.courses} disciplinas</Badge>
                             </div>
                           </div>
                         </div>
@@ -376,7 +376,7 @@ export default function GlobalSearchPage() {
                             <p className="text-sm text-muted-foreground">{item.email}</p>
                             <div className="flex items-center space-x-2 mt-1">
                               <Badge variant="secondary">{item.university}</Badge>
-                              <Badge variant="outline">{item.courses} cursos</Badge>
+                              <Badge variant="outline">{item.courses} disciplinas</Badge>
                             </div>
                           </div>
                         </div>
@@ -435,7 +435,7 @@ export default function GlobalSearchPage() {
                 <Search className="mx-auto h-12 w-12 text-muted-foreground" />
                 <h3 className="mt-4 text-lg font-semibold">Buscar Conteúdo do Sistema</h3>
                 <p className="mt-2 text-sm text-muted-foreground max-w-sm mx-auto">
-                  Digite uma consulta de busca acima para encontrar universidades, cursos, módulos, usuários e arquivos em todo o sistema.
+                  Digite uma consulta de busca acima para encontrar universidades, disciplinas, módulos, usuários e arquivos em todo o sistema.
                 </p>
               </div>
             </CardContent>

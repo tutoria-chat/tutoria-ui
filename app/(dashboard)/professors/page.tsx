@@ -12,7 +12,7 @@ export default function ProfessorsPage() {
       <div className="space-y-6">
         <PageHeader
           title="Gerenciamento de Professores"
-          description="Gerencie professores e suas atribuições de curso"
+          description="Gerencie professores e suas atribuições de disciplina"
           actions={
             <Button>
               <Plus className="mr-2 h-4 w-4" />

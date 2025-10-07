@@ -224,7 +224,7 @@ export default function CourseDetailsPage() {
               <Button asChild>
                 <Link href={`/courses/${courseId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
-                  Editar Curso
+                  Editar Disciplina
                 </Link>
               </Button>
             </AdminProfessorOnly>
@@ -236,7 +236,7 @@ export default function CourseDetailsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Curso</CardTitle>
+            <CardTitle>Informações do Disciplina</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -327,9 +327,9 @@ export default function CourseDetailsPage() {
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
-              <CardTitle>Módulos do Curso</CardTitle>
+              <CardTitle>Módulos do Disciplina</CardTitle>
               <CardDescription>
-                Gerencie os módulos e conteúdo de aprendizado para este curso
+                Gerencie os módulos e conteúdo de aprendizado para este disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -348,14 +348,14 @@ export default function CourseDetailsPage() {
             <CardHeader>
               <CardTitle>Professores Atribuídos</CardTitle>
               <CardDescription>
-                Professores que estão ensinando ou gerenciando este curso
+                Professores que estão ensinando ou gerenciando este disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable
                 data={professors || []}
                 columns={professorColumns}
-                emptyMessage="Nenhum professor atribuído a este curso."
+                emptyMessage="Nenhum professor atribuído a este disciplina."
               />
             </CardContent>
           </Card>
@@ -366,7 +366,7 @@ export default function CourseDetailsPage() {
             <CardHeader>
               <CardTitle>Estudantes Inscritos</CardTitle>
               <CardDescription>
-                Estudantes atualmente inscritos neste curso
+                Estudantes atualmente inscritos neste disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>

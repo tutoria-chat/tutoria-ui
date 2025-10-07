@@ -118,7 +118,7 @@ export default function EditModulePage() {
     }
 
     if (user?.role === 'super_admin' && !formData.course_id) {
-      newErrors.course_id = 'Curso é obrigatório';
+      newErrors.course_id = 'Disciplina é obrigatório';
     }
 
     setErrors(newErrors);

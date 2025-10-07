@@ -152,7 +152,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
       newErrors.code = 'Código do módulo é obrigatório';
     }
     if (!formData.course_id) {
-      newErrors.course_id = 'Curso é obrigatório';
+      newErrors.course_id = 'Disciplina é obrigatório';
     }
 
     // For regular professors, the API already filters courses to show only assigned ones

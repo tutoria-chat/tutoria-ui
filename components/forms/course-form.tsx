@@ -55,10 +55,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     // Validate form
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome do curso é obrigatório';
+      newErrors.name = 'Nome do disciplina é obrigatório';
     }
     if (!formData.code.trim()) {
-      newErrors.code = 'Código do curso é obrigatório';
+      newErrors.code = 'Código do disciplina é obrigatório';
     }
     if (!formData.university_id) {
       newErrors.university_id = 'Universidade é obrigatória';
@@ -79,7 +79,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: 'Falha ao salvar curso. Tente novamente.' });
+      setErrors({ submit: 'Falha ao salvar disciplina. Tente novamente.' });
     }
   };
 
@@ -171,7 +171,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
               <FormLabel htmlFor="description">Descrição</FormLabel>
               <Textarea
                 id="description"
-                placeholder="Descreva os objetivos do curso, conteúdo e público-alvo..."
+                placeholder="Descreva os objetivos do disciplina, conteúdo e público-alvo..."
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 disabled={isLoading}

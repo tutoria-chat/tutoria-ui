@@ -191,7 +191,7 @@ export default function DashboardPage() {
             <AdminOnly>
               <Button className="h-20 p-4 flex flex-col items-center justify-center space-y-2">
                 <Plus className="h-6 w-6" />
-                <span>Criar Curso</span>
+                <span>Criar Disciplina</span>
               </Button>
             </AdminOnly>
 
