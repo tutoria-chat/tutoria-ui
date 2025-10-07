@@ -12,7 +12,9 @@
       "Bash(npm install:*)",
       "Bash(cat:*)",
       "Bash(tail:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npx next:*)",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

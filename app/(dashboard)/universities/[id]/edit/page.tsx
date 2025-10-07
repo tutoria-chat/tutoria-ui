@@ -182,6 +182,7 @@ export default function EditUniversityPage() {
                   onChange={(e) => handleChange('code', e.target.value)}
                   placeholder="Ex: UNIFESP"
                   className={errors.code ? 'border-destructive' : ''}
+                  required
                 />
                 {errors.code && (
                   <p className="text-sm text-destructive mt-1">{errors.code}</p>
