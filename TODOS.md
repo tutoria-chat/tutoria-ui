@@ -90,6 +90,16 @@
 **Estimated Effort**: Low-Medium (DevOps setup)
 **Customer Value**: Low (internal quality improvement)
 
+### 10. **Remove TypeScript `any` Types** 🔧
+- [ ] Audit codebase for all `:any` usages
+- [ ] Replace with proper type definitions
+- [ ] Use `unknown` where appropriate and add type guards
+- [ ] Improve type safety throughout the application
+- [ ] Consider enabling `noImplicitAny` in tsconfig if not already enabled
+
+**Estimated Effort**: Medium (requires careful typing)
+**Customer Value**: Low (internal code quality improvement)
+
 ---
 
 ## Prioritization Matrix

@@ -366,7 +366,7 @@ export default function CourseDetailsPage() {
             <CardHeader>
               <CardTitle>Estudantes Inscritos</CardTitle>
               <CardDescription>
-                Estudantes atualmente inscritos neste disciplina
+                Estudantes atualmente inscritos nesta disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>
