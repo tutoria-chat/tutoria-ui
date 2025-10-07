@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { LogOut, User, Settings, Bell, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -53,18 +54,6 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
             <Menu className="h-5 w-5" />
           )}
         </Button>
-
-        {/* Logo */}
-        <div className="flex items-center space-x-2">
-          <Link href="/dashboard" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">T</span>
-            </div>
-            <span className="hidden sm:inline-block font-bold text-lg">
-              Tutoria
-            </span>
-          </Link>
-        </div>
 
         {/* Search - placeholder for future implementation */}
         <div className="flex-1 max-w-md mx-4 hidden md:flex">

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   Home, 
@@ -121,15 +122,19 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       <div className="relative flex h-full w-64 flex-col bg-background">
         {/* Header */}
         <div className="flex h-14 items-center border-b border-border px-3">
-          <Link 
-            href="/dashboard" 
+          <Link
+            href="/dashboard"
             className="flex items-center space-x-2"
             onClick={handleItemClick}
           >
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">T</span>
-            </div>
-            <span className="font-bold text-lg">Tutoria</span>
+            <Image
+              src="/Color_01.png"
+              alt="Tutoria Logo"
+              width={4008}
+              height={1438}
+              priority
+              className="h-8 w-auto"
+            />
           </Link>
         </div>
 
