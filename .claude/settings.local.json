@@ -14,7 +14,8 @@
       "Bash(tail:*)",
       "Bash(grep:*)",
       "Bash(npx next:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
