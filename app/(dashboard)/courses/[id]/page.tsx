@@ -236,7 +236,7 @@ export default function CourseDetailsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Disciplina</CardTitle>
+            <CardTitle>Informações da Disciplina</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -327,9 +327,9 @@ export default function CourseDetailsPage() {
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
-              <CardTitle>Módulos do Disciplina</CardTitle>
+              <CardTitle>Módulos da Disciplina</CardTitle>
               <CardDescription>
-                Gerencie os módulos e conteúdo de aprendizado para este disciplina
+                Gerencie os módulos e conteúdo de aprendizado para esta disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -348,14 +348,14 @@ export default function CourseDetailsPage() {
             <CardHeader>
               <CardTitle>Professores Atribuídos</CardTitle>
               <CardDescription>
-                Professores que estão ensinando ou gerenciando este disciplina
+                Professores que estão ensinando ou gerenciando esta disciplina
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable
                 data={professors || []}
                 columns={professorColumns}
-                emptyMessage="Nenhum professor atribuído a este disciplina."
+                emptyMessage="Nenhum professor atribuído a esta disciplina."
               />
             </CardContent>
           </Card>

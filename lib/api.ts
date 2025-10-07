@@ -113,14 +113,16 @@ class TutoriaAPIClient {
       headers,
     };
 
-    // Debug: Log request details
-    console.log('API Request:', {
-      url,
-      method: options.method,
-      headers,
-      bodyType: options.body instanceof FormData ? 'FormData' : typeof options.body,
-      body: options.body instanceof FormData ? 'FormData instance' : options.body
-    });
+    // Debug: Log request details (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('API Request:', {
+        url,
+        method: options.method,
+        headers,
+        bodyType: options.body instanceof FormData ? 'FormData' : typeof options.body,
+        body: options.body instanceof FormData ? 'FormData instance' : options.body
+      });
+    }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
@@ -179,8 +181,8 @@ class TutoriaAPIClient {
       // Explicitly set to null to prevent default Content-Type from being added
       headers['Content-Type'] = null;
 
-      // Debug: Log FormData contents
-      if (data instanceof FormData) {
+      // Debug: Log FormData contents (development only)
+      if (process.env.NODE_ENV === 'development' && data instanceof FormData) {
         console.log('FormData contents:');
         for (const [key, value] of (data as FormData).entries()) {
           console.log(`  ${key}:`, value);
