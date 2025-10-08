@@ -58,7 +58,7 @@ export default function CourseDetailsPage() {
 
   // Get unique semesters and years for filters
   const availableSemesters = Array.from(new Set(allModules.map(m => m.semester).filter(Boolean))).sort();
-  const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => b - a);
+  const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => (b ?? 0) - (a ?? 0));
 
   // Check if user can add modules to this course
   const canAddModule = (): boolean => {
@@ -80,7 +80,7 @@ export default function CourseDetailsPage() {
 
   const breadcrumbs: BreadcrumbItem[] = course?.university_id ? [
     { label: 'Universidades', href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
-    { label: course?.university?.name || course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
+    { label: course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
     { label: course?.name || 'Carregando...', isCurrentPage: true }
   ] : [
     { label: 'Disciplinas', href: '/courses' },
@@ -254,7 +254,7 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Disciplina em ${course.university?.name || course.university_name || 'Universidade'} • Criado em ${formatDateShort(course.created_at)}`}
+        description={`Disciplina em ${course.university_name || 'Universidade'} • Criado em ${formatDateShort(course.created_at)}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -303,7 +303,7 @@ export default function CourseDetailsPage() {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.university?.name || course.university_name || 'Universidade'}</span>
+                <span>{course.university_name || 'Universidade'}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />

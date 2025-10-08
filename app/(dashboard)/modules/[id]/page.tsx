@@ -391,7 +391,7 @@ export default function ModuleDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={module.name}
-        description={`Módulo em ${module.course?.name || module.course_name || 'Disciplina'}`}
+        description={`Módulo em ${module.course_name || 'Disciplina'}`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
