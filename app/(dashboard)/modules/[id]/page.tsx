@@ -17,7 +17,8 @@ import {
   ArrowLeft,
   Key,
   Copy,
-  Eye
+  Eye,
+  ExternalLink
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ import { TokenModal } from '@/components/tokens/token-modal';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
+import { APP_CONFIG } from '@/lib/constants';
 import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
@@ -48,6 +50,7 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
+  const [isPreparing, setIsPreparing] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
     { label: 'Disciplinas', href: '/courses' },
@@ -151,6 +154,53 @@ export default function ModuleDetailsPage() {
       toast.error('Erro ao baixar arquivo', {
         description: 'Não foi possível baixar o arquivo. Tente novamente.',
       });
+    }
+  };
+
+  const handlePrepareModule = async () => {
+    if (!tokens || tokens.length === 0) {
+      toast.error('Nenhum token disponível', {
+        description: 'Crie um token primeiro para preparar o módulo.',
+      });
+      return;
+    }
+
+    const activeToken = tokens.find(t => t.is_active && t.allow_chat);
+    if (!activeToken) {
+      toast.error('Token inválido', {
+        description: 'Crie um token ativo com permissão de chat.',
+      });
+      return;
+    }
+
+    setIsPreparing(true);
+    try {
+      // Call the widget chat endpoint to trigger file upload to OpenAI
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/widget/chat?module_token=${activeToken.token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Preparar arquivos',
+          student_id: null
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao preparar módulo');
+      }
+
+      toast.success('Módulo preparado!', {
+        description: 'Arquivos foram enviados para OpenAI e o assistente está pronto.',
+      });
+    } catch (error) {
+      console.error('Erro ao preparar módulo:', error);
+      toast.error('Erro ao preparar módulo', {
+        description: 'Não foi possível preparar o módulo. Tente novamente.',
+      });
+    } finally {
+      setIsPreparing(false);
     }
   };
 
@@ -294,6 +344,26 @@ export default function ModuleDetailsPage() {
       label: 'Criado em',
       sortable: true,
       render: (value) => formatDateShort(value as string)
+    },
+    {
+      key: 'actions',
+      label: 'Ações',
+      width: '80px',
+      render: (_, token) => (
+        <div className="flex items-center space-x-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+              window.open(widgetUrl, '_blank');
+            }}
+            title="Abrir no Widget"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        </div>
+      )
     }
   ];
 
@@ -334,6 +404,24 @@ export default function ModuleDetailsPage() {
                   </Link>
                 </Button>
               )}
+              <Button
+                variant="outline"
+                onClick={handlePrepareModule}
+                disabled={isPreparing || !tokens || tokens.length === 0}
+                title="Clique se você adicionou novos arquivos. Requer um token ativo."
+              >
+                {isPreparing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Preparando...
+                  </>
+                ) : (
+                  <>
+                    <Bot className="mr-2 h-4 w-4" />
+                    Preparar Módulo
+                  </>
+                )}
+              </Button>
               <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
                 <Key className="mr-2 h-4 w-4" />
                 Criar Token
