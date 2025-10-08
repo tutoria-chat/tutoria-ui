@@ -18,6 +18,11 @@ export default function EditCoursePage() {
   const courseId = Number(params.id);
 
   const [course, setCourse] = useState<Course | null>(null);
+  const [originalFormData, setOriginalFormData] = useState<CourseUpdate>({
+    name: '',
+    code: '',
+    description: '',
+  });
   const [formData, setFormData] = useState<CourseUpdate>({
     name: '',
     code: '',
@@ -27,16 +32,27 @@ export default function EditCoursePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
+  // Check if form has changes
+  const hasChanges = () => {
+    return (
+      formData.name !== originalFormData.name ||
+      formData.code !== originalFormData.code ||
+      formData.description !== originalFormData.description
+    );
+  };
+
   const loadCourse = useCallback(async () => {
     setIsLoadingData(true);
     try {
       const data = await apiClient.getCourse(courseId);
       setCourse(data);
-      setFormData({
+      const initialData = {
         name: data.name,
         code: data.code,
         description: data.description || '',
-      });
+      };
+      setFormData(initialData);
+      setOriginalFormData(initialData);
     } catch (error) {
       console.error('Failed to load course:', error);
       setErrors({ load: 'Erro ao carregar dados da disciplina.' });
@@ -87,7 +103,7 @@ export default function EditCoursePage() {
     setIsLoading(true);
     try {
       await apiClient.updateCourse(courseId, formData);
-      router.push('/courses');
+      router.push(`/courses/${courseId}`);
     } catch (error) {
       console.error('Failed to update course:', error);
       setErrors({ submit: 'Erro ao atualizar disciplina. Tente novamente.' });
@@ -206,7 +222,7 @@ export default function EditCoursePage() {
               )}
 
               <div className="flex gap-3 pt-4">
-                <Button type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading || !hasChanges()}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Salvar Alterações
                 </Button>

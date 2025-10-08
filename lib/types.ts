@@ -23,8 +23,9 @@ export interface LoginCredentials {
 
 export interface TokenResponse {
   access_token: string;
+  refresh_token?: string;
   token_type: string;
-  expires_in: number;
+  expires_in?: number;
 }
 
 export interface AuthResult {
@@ -91,6 +92,7 @@ export interface CourseUpdate {
 }
 
 export interface CourseWithDetails extends Course {
+  university?: University;
   modules: Module[];
   professors: Professor[];
   students: Student[];
@@ -135,6 +137,7 @@ export interface ModuleUpdate {
 }
 
 export interface ModuleWithDetails extends Module {
+  course?: Course;
   files: File[];
   tokens: ModuleToken[];
 }

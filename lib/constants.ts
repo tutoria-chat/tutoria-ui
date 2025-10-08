@@ -2,6 +2,7 @@ export const APP_CONFIG = {
   name: 'Tutoria UI',
   version: '0.1.0',
   description: 'A modern frontend application',
+  widgetUrl: process.env.NEXT_PUBLIC_WIDGET_URL || 'http://localhost:4321',
 } as const;
 
 export const ROUTES = {

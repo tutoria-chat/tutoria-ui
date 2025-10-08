@@ -14,7 +14,10 @@ import {
   BookOpen,
   Bot,
   Loader2,
-  ArrowLeft
+  ArrowLeft,
+  Key,
+  Copy,
+  Eye
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -23,10 +26,11 @@ import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import { ProfessorOnly } from '@/components/auth/role-guard';
+import { TokenModal } from '@/components/tokens/token-modal';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
-import type { Module, File as FileType, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -35,12 +39,15 @@ export default function ModuleDetailsPage() {
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
   const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/?module_id=${moduleId}`);
 
   const files = filesResponse?.items || [];
+  const tokens = tokensResponse?.items || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [tokenModalOpen, setTokenModalOpen] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
     { label: 'Disciplinas', href: '/courses' },
@@ -214,6 +221,82 @@ export default function ModuleDetailsPage() {
     }
   ];
 
+  const tokenColumns: TableColumn<ModuleAccessToken>[] = [
+    {
+      key: 'name',
+      label: 'Nome do Token',
+      sortable: true,
+      render: (value, token) => (
+        <div>
+          <div className="font-medium">{value}</div>
+          {token.description && (
+            <div className="text-sm text-muted-foreground line-clamp-1 max-w-xs">
+              {token.description}
+            </div>
+          )}
+        </div>
+      )
+    },
+    {
+      key: 'token',
+      label: 'Token',
+      render: (value) => (
+        <div className="flex items-center space-x-2">
+          <code className="text-xs bg-muted px-2 py-1 rounded">
+            {(value as string).substring(0, 16)}...
+          </code>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(value as string);
+                toast.success('Token copiado!');
+              } catch (error) {
+                toast.error('Erro ao copiar token');
+              }
+            }}
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        </div>
+      )
+    },
+    {
+      key: 'allow_chat',
+      label: 'Chat',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Permitido' : 'Bloqueado'}
+        </Badge>
+      )
+    },
+    {
+      key: 'allow_file_access',
+      label: 'Arquivos',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Permitido' : 'Bloqueado'}
+        </Badge>
+      )
+    },
+    {
+      key: 'is_active',
+      label: 'Status',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Ativo' : 'Inativo'}
+        </Badge>
+      )
+    },
+    {
+      key: 'created_at',
+      label: 'Criado em',
+      sortable: true,
+      render: (value) => formatDateShort(value as string)
+    }
+  ];
+
   if (moduleLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -238,7 +321,7 @@ export default function ModuleDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={module.name}
-        description={`Módulo em ${module.course_name}`}
+        description={`Módulo em ${module.course?.name || module.course_name || 'Disciplina'}`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
@@ -251,6 +334,10 @@ export default function ModuleDetailsPage() {
                   </Link>
                 </Button>
               )}
+              <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
+                <Key className="mr-2 h-4 w-4" />
+                Criar Token
+              </Button>
               <Button asChild>
                 <Link href={`/modules/${moduleId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
@@ -393,6 +480,39 @@ export default function ModuleDetailsPage() {
           />
         </CardContent>
       </Card>
+
+      {/* Module Tokens */}
+      <ProfessorOnly>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tokens de Acesso</CardTitle>
+            <CardDescription>
+              Tokens gerados para este módulo
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTable
+              data={tokens || []}
+              columns={tokenColumns}
+              loading={tokensLoading}
+              emptyMessage="Nenhum token gerado ainda. Clique em 'Criar Token' acima."
+            />
+          </CardContent>
+        </Card>
+      </ProfessorOnly>
+
+      {/* Token Creation Modal */}
+      <TokenModal
+        mode="create"
+        open={tokenModalOpen}
+        onClose={() => setTokenModalOpen(false)}
+        onSuccess={() => {
+          setTokenModalOpen(false);
+          refetchTokens?.();
+          toast.success('Token criado com sucesso!');
+        }}
+        preselectedModuleId={moduleId}
+      />
     </div>
   );
 }

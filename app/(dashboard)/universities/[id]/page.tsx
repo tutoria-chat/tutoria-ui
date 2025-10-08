@@ -10,7 +10,8 @@ import {
   BookOpen,
   Building2,
   GraduationCap,
-  Folder
+  Folder,
+  Trash2
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -96,7 +97,7 @@ export default function UniversityDetailsPage() {
     {
       key: 'actions',
       label: 'Ações',
-      width: '100px',
+      width: '120px',
       render: (_, course) => (
         <div className="flex items-center space-x-1">
           <Button variant="ghost" size="sm" asChild>
@@ -109,6 +110,13 @@ export default function UniversityDetailsPage() {
               <Link href={`/courses/${course.id}/edit`}>
                 <Edit className="h-4 w-4" />
               </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDeleteCourse(course.id)}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </AdminOnly>
         </div>
@@ -150,6 +158,21 @@ export default function UniversityDetailsPage() {
       )
     }
   ];
+
+  const handleDeleteCourse = async (id: number) => {
+    if (!confirm('Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.deleteCourse(id);
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao deletar disciplina:', error);
+      alert('Erro ao deletar disciplina. Tente novamente.');
+    }
+  };
 
   if (universityLoading) {
     return <div>Carregando...</div>;

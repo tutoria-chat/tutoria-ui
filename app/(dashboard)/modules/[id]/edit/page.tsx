@@ -25,6 +25,15 @@ export default function EditModulePage() {
   const { user } = useAuth();
 
   const [module, setModule] = useState<Module | null>(null);
+  const [originalFormData, setOriginalFormData] = useState<ModuleUpdate>({
+    name: '',
+    code: '',
+    description: '',
+    system_prompt: '',
+    semester: undefined,
+    year: undefined,
+    course_id: undefined,
+  });
   const [formData, setFormData] = useState<ModuleUpdate>({
     name: '',
     code: '',
@@ -47,6 +56,19 @@ export default function EditModulePage() {
 
   const files = filesResponse?.items || [];
 
+  // Check if form has changes
+  const hasChanges = () => {
+    return (
+      formData.name !== originalFormData.name ||
+      formData.code !== originalFormData.code ||
+      formData.description !== originalFormData.description ||
+      formData.system_prompt !== originalFormData.system_prompt ||
+      formData.semester !== originalFormData.semester ||
+      formData.year !== originalFormData.year ||
+      (user?.role === 'super_admin' && formData.course_id !== originalFormData.course_id)
+    );
+  };
+
   const loadModule = useCallback(async () => {
     setIsLoadingData(true);
     try {
@@ -56,7 +78,7 @@ export default function EditModulePage() {
       // The API handles this filtering, so no additional check needed here
 
       setModule(data);
-      setFormData({
+      const initialData = {
         name: data.name,
         code: data.code || '',
         description: data.description || '',
@@ -64,7 +86,9 @@ export default function EditModulePage() {
         semester: data.semester,
         year: data.year,
         course_id: data.course_id,
-      });
+      };
+      setFormData(initialData);
+      setOriginalFormData(initialData);
     } catch (error) {
       console.error('Failed to load module:', error);
       setErrors({ load: 'Erro ao carregar dados do módulo.' });
@@ -214,7 +238,12 @@ export default function EditModulePage() {
       }
 
       await apiClient.updateModule(moduleId, updateData);
-      router.push('/modules');
+      // Go back to the course page or module details
+      if (module?.course_id) {
+        router.push(`/courses/${module.course_id}`);
+      } else {
+        router.push(`/modules/${moduleId}`);
+      }
     } catch (error) {
       console.error('Failed to update module:', error);
       setErrors({ submit: 'Erro ao atualizar módulo. Tente novamente.' });
@@ -397,7 +426,7 @@ export default function EditModulePage() {
               )}
 
               <div className="flex gap-3 pt-4">
-                <Button type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading || !hasChanges()}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Salvar Alterações
                 </Button>

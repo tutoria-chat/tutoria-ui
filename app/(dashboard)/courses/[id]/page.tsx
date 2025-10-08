@@ -13,7 +13,8 @@ import {
   Calendar,
   Building2,
   Activity,
-  Eye
+  Eye,
+  Trash2
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -34,13 +35,30 @@ export default function CourseDetailsPage() {
 
   // Fetch course data from API
   const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
-  const { data: modulesResponse, loading: modulesLoading } = useFetch<PaginatedResponse<Module>>(`/modules/?course_id=${courseId}`);
+  const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(`/modules/?course_id=${courseId}`);
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?course_id=${courseId}`);
 
-  const modules = modulesResponse?.items || [];
+  const allModules = modulesResponse?.items || [];
   const professors = professorsResponse?.items || [];
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
+  const [semesterFilter, setSemesterFilter] = useState<string>('all');
+  const [yearFilter, setYearFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter modules
+  const modules = allModules.filter(module => {
+    const matchesSemester = semesterFilter === 'all' || module.semester?.toString() === semesterFilter;
+    const matchesYear = yearFilter === 'all' || module.year?.toString() === yearFilter;
+    const matchesSearch = !searchTerm ||
+      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      module.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSemester && matchesYear && matchesSearch;
+  });
+
+  // Get unique semesters and years for filters
+  const availableSemesters = Array.from(new Set(allModules.map(m => m.semester).filter(Boolean))).sort();
+  const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => b - a);
 
   // Check if user can add modules to this course
   const canAddModule = (): boolean => {
@@ -62,7 +80,7 @@ export default function CourseDetailsPage() {
 
   const breadcrumbs: BreadcrumbItem[] = course?.university_id ? [
     { label: 'Universidades', href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
-    { label: course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
+    { label: course?.university?.name || course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
     { label: course?.name || 'Carregando...', isCurrentPage: true }
   ] : [
     { label: 'Disciplinas', href: '/courses' },
@@ -87,6 +105,21 @@ export default function CourseDetailsPage() {
     return false;
   };
 
+  const handleDeleteModule = async (moduleId: number) => {
+    if (!confirm('Tem certeza que deseja deletar este módulo? Esta ação não pode ser desfeita.')) {
+      return;
+    }
+
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.delete(`/modules/${moduleId}`);
+      refetchModules();
+    } catch (error) {
+      console.error('Erro ao deletar módulo:', error);
+      alert('Erro ao deletar módulo. Tente novamente.');
+    }
+  };
+
   const moduleColumns: TableColumn<Module>[] = [
     {
       key: 'name',
@@ -106,6 +139,16 @@ export default function CourseDetailsPage() {
             )}
           </div>
         </div>
+      )
+    },
+    {
+      key: 'semester',
+      label: 'Semestre/Ano',
+      sortable: true,
+      render: (value, module) => (
+        <Badge variant="outline">
+          {module.semester}º Sem / {module.year}
+        </Badge>
       )
     },
     {
@@ -133,7 +176,7 @@ export default function CourseDetailsPage() {
     {
       key: 'actions',
       label: 'Ações',
-      width: '120px',
+      width: '150px',
       render: (_, module) => (
         <div className="flex items-center space-x-1">
           <Button
@@ -147,15 +190,28 @@ export default function CourseDetailsPage() {
           </Button>
 
           {canEditModule(module) && (
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-            >
-              <Link href={`/modules/${module.id}/edit`}>
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+              >
+                <Link href={`/modules/${module.id}/edit`}>
+                  <Edit className="h-4 w-4" />
+                </Link>
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteModule(module.id);
+                }}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </>
           )}
         </div>
       )
@@ -198,7 +254,7 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Disciplina em ${course.university_name} • Criado em ${formatDateShort(course.created_at)}`}
+        description={`Disciplina em ${course.university?.name || course.university_name || 'Universidade'} • Criado em ${formatDateShort(course.created_at)}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -247,7 +303,7 @@ export default function CourseDetailsPage() {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.university_name}</span>
+                <span>{course.university?.name || course.university_name || 'Universidade'}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -258,11 +314,11 @@ export default function CourseDetailsPage() {
         </Card>
 
         <div className="grid gap-4">
-          <Card>
+          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('modules')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.modules_count}</p>
+                  <p className="text-2xl font-bold">{allModules.length}</p>
                   <p className="text-sm text-muted-foreground">Módulos</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-500" />
@@ -270,11 +326,11 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.students_count}</p>
+                  <p className="text-2xl font-bold">{course.students_count || 0}</p>
                   <p className="text-sm text-muted-foreground">Estudantes Inscritos</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
@@ -282,11 +338,11 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('professors')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.professors_count}</p>
+                  <p className="text-2xl font-bold">{professors.length}</p>
                   <p className="text-sm text-muted-foreground">Professores</p>
                 </div>
                 <Users className="h-8 w-8 text-purple-500" />
@@ -332,11 +388,46 @@ export default function CourseDetailsPage() {
                 Gerencie os módulos e conteúdo de aprendizado para esta disciplina
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              {/* Filters */}
+              <div className="flex flex-wrap gap-4">
+                <div className="flex-1 min-w-[200px]">
+                  <input
+                    type="text"
+                    placeholder="Buscar módulos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  />
+                </div>
+                <select
+                  value={semesterFilter}
+                  onChange={(e) => setSemesterFilter(e.target.value)}
+                  className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="all">Todos os Semestres</option>
+                  {availableSemesters.map(sem => (
+                    <option key={sem} value={sem}>{sem}º Semestre</option>
+                  ))}
+                </select>
+                <select
+                  value={yearFilter}
+                  onChange={(e) => setYearFilter(e.target.value)}
+                  className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="all">Todos os Anos</option>
+                  {availableYears.map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
+
               <DataTable
                 data={modules || []}
                 columns={moduleColumns}
-                emptyMessage="Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."
+                emptyMessage={searchTerm || semesterFilter !== 'all' || yearFilter !== 'all'
+                  ? "Nenhum módulo encontrado com os filtros aplicados."
+                  : "Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."}
                 onRowClick={(module) => router.push(`/modules/${module.id}`)}
               />
             </CardContent>

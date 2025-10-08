@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -17,6 +17,7 @@ import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/l
 export default function CoursesPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -24,8 +25,14 @@ export default function CoursesPage() {
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
-  // Build API URL with pagination params and university filter for professors
-  const universityFilter = user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '';
+  // Check for university_id from URL query parameter
+  const urlUniversityId = searchParams.get('university_id');
+
+  // Build API URL with pagination params and university filter
+  // Priority: URL parameter > user's university (for professors)
+  const universityFilter = urlUniversityId
+    ? `&university_id=${urlUniversityId}`
+    : (user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '');
   const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get courses
