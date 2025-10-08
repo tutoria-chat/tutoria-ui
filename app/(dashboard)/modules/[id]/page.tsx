@@ -14,7 +14,11 @@ import {
   BookOpen,
   Bot,
   Loader2,
-  ArrowLeft
+  ArrowLeft,
+  Key,
+  Copy,
+  Eye,
+  ExternalLink
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -23,10 +27,12 @@ import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import { ProfessorOnly } from '@/components/auth/role-guard';
+import { TokenModal } from '@/components/tokens/token-modal';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
-import type { Module, File as FileType, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { APP_CONFIG } from '@/lib/constants';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -35,12 +41,16 @@ export default function ModuleDetailsPage() {
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
   const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/?module_id=${moduleId}`);
 
   const files = filesResponse?.items || [];
+  const tokens = tokensResponse?.items || [];
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [tokenModalOpen, setTokenModalOpen] = useState(false);
+  const [isPreparing, setIsPreparing] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
     { label: 'Disciplinas', href: '/courses' },
@@ -147,6 +157,53 @@ export default function ModuleDetailsPage() {
     }
   };
 
+  const handlePrepareModule = async () => {
+    if (!tokens || tokens.length === 0) {
+      toast.error('Nenhum token disponível', {
+        description: 'Crie um token primeiro para preparar o módulo.',
+      });
+      return;
+    }
+
+    const activeToken = tokens.find(t => t.is_active && t.allow_chat);
+    if (!activeToken) {
+      toast.error('Token inválido', {
+        description: 'Crie um token ativo com permissão de chat.',
+      });
+      return;
+    }
+
+    setIsPreparing(true);
+    try {
+      // Call the widget chat endpoint to trigger file upload to OpenAI
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/widget/chat?module_token=${activeToken.token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: 'Preparar arquivos',
+          student_id: null
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Falha ao preparar módulo');
+      }
+
+      toast.success('Módulo preparado!', {
+        description: 'Arquivos foram enviados para OpenAI e o assistente está pronto.',
+      });
+    } catch (error) {
+      console.error('Erro ao preparar módulo:', error);
+      toast.error('Erro ao preparar módulo', {
+        description: 'Não foi possível preparar o módulo. Tente novamente.',
+      });
+    } finally {
+      setIsPreparing(false);
+    }
+  };
+
   const getFileDisplayName = (file: FileType): string => {
     return file.file_name || file.name || 'Arquivo sem nome';
   };
@@ -214,6 +271,102 @@ export default function ModuleDetailsPage() {
     }
   ];
 
+  const tokenColumns: TableColumn<ModuleAccessToken>[] = [
+    {
+      key: 'name',
+      label: 'Nome do Token',
+      sortable: true,
+      render: (value, token) => (
+        <div>
+          <div className="font-medium">{value}</div>
+          {token.description && (
+            <div className="text-sm text-muted-foreground line-clamp-1 max-w-xs">
+              {token.description}
+            </div>
+          )}
+        </div>
+      )
+    },
+    {
+      key: 'token',
+      label: 'Token',
+      render: (value) => (
+        <div className="flex items-center space-x-2">
+          <code className="text-xs bg-muted px-2 py-1 rounded">
+            {(value as string).substring(0, 16)}...
+          </code>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(value as string);
+                toast.success('Token copiado!');
+              } catch (error) {
+                toast.error('Erro ao copiar token');
+              }
+            }}
+          >
+            <Copy className="h-3 w-3" />
+          </Button>
+        </div>
+      )
+    },
+    {
+      key: 'allow_chat',
+      label: 'Chat',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Permitido' : 'Bloqueado'}
+        </Badge>
+      )
+    },
+    {
+      key: 'allow_file_access',
+      label: 'Arquivos',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Permitido' : 'Bloqueado'}
+        </Badge>
+      )
+    },
+    {
+      key: 'is_active',
+      label: 'Status',
+      render: (value) => (
+        <Badge variant={value ? "default" : "secondary"}>
+          {value ? 'Ativo' : 'Inativo'}
+        </Badge>
+      )
+    },
+    {
+      key: 'created_at',
+      label: 'Criado em',
+      sortable: true,
+      render: (value) => formatDateShort(value as string)
+    },
+    {
+      key: 'actions',
+      label: 'Ações',
+      width: '80px',
+      render: (_, token) => (
+        <div className="flex items-center space-x-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+              window.open(widgetUrl, '_blank');
+            }}
+            title="Abrir no Widget"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+        </div>
+      )
+    }
+  ];
+
   if (moduleLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -238,7 +391,7 @@ export default function ModuleDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={module.name}
-        description={`Módulo em ${module.course_name}`}
+        description={`Módulo em ${module.course_name || 'Disciplina'}`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
@@ -251,6 +404,28 @@ export default function ModuleDetailsPage() {
                   </Link>
                 </Button>
               )}
+              <Button
+                variant="outline"
+                onClick={handlePrepareModule}
+                disabled={isPreparing || !tokens || tokens.length === 0}
+                title="Clique se você adicionou novos arquivos. Requer um token ativo."
+              >
+                {isPreparing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Preparando...
+                  </>
+                ) : (
+                  <>
+                    <Bot className="mr-2 h-4 w-4" />
+                    Preparar Módulo
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
+                <Key className="mr-2 h-4 w-4" />
+                Criar Token
+              </Button>
               <Button asChild>
                 <Link href={`/modules/${moduleId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
@@ -393,6 +568,39 @@ export default function ModuleDetailsPage() {
           />
         </CardContent>
       </Card>
+
+      {/* Module Tokens */}
+      <ProfessorOnly>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tokens de Acesso</CardTitle>
+            <CardDescription>
+              Tokens gerados para este módulo
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DataTable
+              data={tokens || []}
+              columns={tokenColumns}
+              loading={tokensLoading}
+              emptyMessage="Nenhum token gerado ainda. Clique em 'Criar Token' acima."
+            />
+          </CardContent>
+        </Card>
+      </ProfessorOnly>
+
+      {/* Token Creation Modal */}
+      <TokenModal
+        mode="create"
+        open={tokenModalOpen}
+        onClose={() => setTokenModalOpen(false)}
+        onSuccess={() => {
+          setTokenModalOpen(false);
+          refetchTokens?.();
+          toast.success('Token criado com sucesso!');
+        }}
+        preselectedModuleId={moduleId}
+      />
     </div>
   );
 }

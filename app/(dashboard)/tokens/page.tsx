@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +11,7 @@ import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
+import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
 export default function TokensPage() {
@@ -19,16 +19,36 @@ export default function TokensPage() {
 
   // Build API URL with university filter for professors
   const universityFilter = user?.university_id && user.role !== 'super_admin' ? `?university_id=${user.university_id}` : '';
-  const { data: tokensResponse, loading, error } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
+  const { data: tokensResponse, loading, error, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('created_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('desc');
 
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<TokenModalMode>('create');
+  const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
+
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Tokens de Módulos', isCurrentPage: true }
   ];
+
+  const handleOpenModal = (mode: TokenModalMode, token?: ModuleAccessToken) => {
+    setModalMode(mode);
+    setSelectedToken(token);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedToken(undefined);
+  };
+
+  const handleModalSuccess = () => {
+    refetch();
+  };
 
   const handleDelete = async (id: number) => {
     if (!confirm('Tem certeza que deseja deletar este token? Esta ação não pode ser desfeita.')) {
@@ -38,7 +58,7 @@ export default function TokensPage() {
     try {
       const { apiClient } = await import('@/lib/api');
       await apiClient.deleteModuleToken(id);
-      window.location.reload();
+      refetch();
     } catch (error) {
       console.error('Erro ao deletar token:', error);
       alert('Erro ao deletar token. Tente novamente.');
@@ -149,22 +169,32 @@ export default function TokensPage() {
           <Button
             variant="ghost"
             size="sm"
-            asChild
+            onClick={() => handleOpenModal('view', token)}
           >
-            <Link href={`/tokens/${token.id}`}>
-              <Eye className="h-4 w-4" />
-            </Link>
+            <Eye className="h-4 w-4" />
           </Button>
 
           <Button
             variant="ghost"
             size="sm"
-            asChild
+            onClick={() => handleOpenModal('edit', token)}
           >
-            <Link href={`/tokens/${token.id}/edit`}>
-              <Edit className="h-4 w-4" />
-            </Link>
+            <Edit className="h-4 w-4" />
           </Button>
+
+          {/* TODO: Add Widget Redirect Button */}
+          {/*
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+              window.open(widgetUrl, '_blank');
+            }}
+          >
+            <ExternalLink className="h-4 w-4" />
+          </Button>
+          */}
 
           <Button
             variant="ghost"
@@ -221,11 +251,9 @@ export default function TokensPage() {
           description="Crie e gerencie tokens de acesso para widgets de tutoria IA"
           breadcrumbs={breadcrumbs}
           actions={
-            <Button asChild>
-              <Link href="/tokens/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Gerar Token
-              </Link>
+            <Button onClick={() => handleOpenModal('create')}>
+              <Plus className="mr-2 h-4 w-4" />
+              Gerar Token
             </Button>
           }
         />
@@ -302,6 +330,14 @@ export default function TokensPage() {
             onSortChange: handleSortChange
           }}
           emptyMessage="Nenhum token encontrado. Crie seu primeiro token para começar."
+        />
+
+        <TokenModal
+          mode={modalMode}
+          open={modalOpen}
+          onClose={handleCloseModal}
+          onSuccess={handleModalSuccess}
+          token={selectedToken}
         />
       </div>
     </ProfessorOnly>

@@ -57,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               // Token expired, clear auth
               localStorage.removeItem('tutoria_user');
               localStorage.removeItem('tutoria_token');
+              localStorage.removeItem('tutoria_refresh_token');
               apiClient.clearToken();
             }
           } catch (error) {
@@ -64,6 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             console.error('Invalid stored auth data:', error);
             localStorage.removeItem('tutoria_user');
             localStorage.removeItem('tutoria_token');
+            localStorage.removeItem('tutoria_refresh_token');
             apiClient.clearToken();
           }
         }
@@ -101,6 +103,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (typeof window !== 'undefined') {
           localStorage.setItem('tutoria_user', JSON.stringify(user));
           localStorage.setItem('tutoria_token', response.access_token);
+          if (response.refresh_token) {
+            localStorage.setItem('tutoria_refresh_token', response.refresh_token);
+          }
         }
 
         setUser(user);
@@ -130,6 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('tutoria_user');
         localStorage.removeItem('tutoria_token');
+        localStorage.removeItem('tutoria_refresh_token');
       }
       setUser(null);
     } finally {

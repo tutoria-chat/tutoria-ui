@@ -107,23 +107,123 @@
 **Estimated Effort**: Medium (requires careful typing)
 **Customer Value**: Low (internal code quality improvement)
 
+### 11. **Auth Token Refresh Implementation** 🔐 ⚡ CRITICAL
+- [ ] **Implement Refresh Token Flow**
+  - Add refresh token endpoint integration
+  - Auto-refresh before token expiration
+  - Handle refresh token errors gracefully
+- [ ] **Token Expiration Handling**
+  - Detect token expiration (401 errors)
+  - Automatically attempt refresh
+  - Logout if refresh fails
+- [ ] **Interceptor/Middleware**
+  - Add request interceptor to check token expiry
+  - Add response interceptor for 401 handling
+  - Queue requests during token refresh
+- [ ] **Session Management**
+  - Persist refresh token securely
+  - Clear tokens on logout
+  - Handle multiple tabs/windows
+- [ ] **User Experience**
+  - Silent token refresh (no user interruption)
+  - Show notification if manual login required
+  - Prevent data loss during refresh
+
+**Estimated Effort**: 6-8 hours frontend
+**Customer Value**: CRITICAL (prevents unexpected logouts)
+**Complexity**: Medium
+**Breaking Changes**: None
+**Backend**: Verify `/auth/refresh` endpoint exists and works
+
+### 12. **Module Token Management Improvements** 🔑 ⚡ SUPER HIGH PRIORITY ✅ COMPLETED
+- [x] **Convert to Modal Pattern**: Replace token pages with modals
+  - [x] Create token modal
+  - [x] Edit token modal
+  - [x] View token details modal
+- [x] **Add Token Actions**
+  - [x] View/edit existing tokens (currently only create/list)
+  - [x] Copy token to clipboard
+  - [ ] Regenerate token (backend endpoint needed)
+  - [x] Revoke token
+  - [ ] QR code for widget access (future enhancement)
+- [x] **Token List Improvements**
+  - [x] Show token status (active/expired/revoked)
+  - [x] Show usage statistics (when available from backend)
+  - [x] Filter by module/status (client-side filtering)
+  - [x] Search tokens
+- [x] **Refactor Pages**
+  - [x] Remove `/tokens/create` page
+  - [x] Remove `/tokens/[id]/edit` page
+  - [x] Keep `/tokens` as main page with modal actions
+  - [x] Reduce routing complexity
+
+**Estimated Effort**: 8-12 hours frontend ✅ COMPLETED
+**Customer Value**: Medium (better UX, less navigation)
+**Complexity**: Low-Medium
+**Breaking Changes**: None (routing cleanup)
+
 ---
 
-## Prioritization Matrix
+## Implementation Summary
+
+### Effort Estimates (Hours)
+
+| TODO | Frontend | Backend | Total | Complexity | Risk |
+|------|----------|---------|-------|------------|------|
+| ~~1. Logo~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
+| ~~2. Colors~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
+| 3. Dark Mode | 4-6 | 4-6 | 8-12 | Low | Low |
+| 4. i18n | 20-30 | 0 | 20-30 | Medium | Low |
+| 5. Dashboard Stats | 8-12 | 12-16 | 20-28 | Medium | Medium |
+| 6. Multi-Model AI | 8-12 | 20-30 | 28-42 | High | High |
+| 7. Super Admin UI | 12-16 | 16-24 | 28-40 | Medium-High | Medium |
+| 8. Notifications | 8-12 | 12-18 | 20-30 | High | Medium |
+| ~~9. CI/CD~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
+| 10. Remove :any | 8-12 | 0 | 8-12 | Low | Low |
+| 11. Auth Refresh | 6-8 | 0 | 6-8 | Medium | Medium |
+| 12. Token Modals | 8-12 | 0 | 8-12 | Low-Medium | Low |
+| **TOTAL** | **84-130** | **64-94** | **148-224** | - | - |
+
+### Prioritization Matrix
 
 Based on **Customer Value** + **Ease of Implementation**:
 
-| Priority | Item | Customer Value | Implementation Ease | Score |
-|----------|------|----------------|---------------------|-------|
-| 1 | **Logo Integration** | Medium | Very High | ⭐⭐⭐⭐⭐ |
-| 2 | **Color Palette** | Medium | Very High | ⭐⭐⭐⭐⭐ |
-| 3 | **Dark Mode** | High | Medium | ⭐⭐⭐⭐ |
-| 4 | **i18n** | Very High | Low | ⭐⭐⭐⭐ |
-| 5 | **CI/CD** | Low | Medium-High | ⭐⭐⭐⭐ |
-| 6 | **Dashboard Stats** | High | Medium | ⭐⭐⭐ |
-| 7 | **Notifications** | Medium-High | Low | ⭐⭐⭐ |
-| 8 | **Super Admin UI** | Medium | Medium | ⭐⭐ |
-| 9 | **Multi-Model Config** | Medium-High | Very Low | ⭐⭐ |
+| Priority | Item | Customer Value | Implementation Ease | Effort | Score |
+|----------|------|----------------|---------------------|--------|-------|
+| ~~1~~ | ~~**Logo Integration**~~ | ~~Medium~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐⭐~~ |
+| ~~2~~ | ~~**Color Palette**~~ | ~~Medium~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐⭐~~ |
+| 3 | **Dark Mode** | High | High | 8-12h | ⭐⭐⭐⭐⭐ |
+| 4 | **i18n** | Very High | Medium | 20-30h | ⭐⭐⭐⭐ |
+| ~~5~~ | ~~**CI/CD**~~ | ~~Low~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐~~ |
+| 6 | **Auth Refresh** ⚡ | **CRITICAL** | Medium | 6-8h | ⭐⭐⭐⭐⭐ |
+| 7 | **Dashboard Stats** | High | Medium | 20-28h | ⭐⭐⭐⭐ |
+| 8 | **Token Modals** ⚡ | **SUPER HIGH** | High | 8-12h | ⭐⭐⭐⭐⭐ |
+| 9 | **Remove :any** | Low | High | 8-12h | ⭐⭐⭐ |
+| 10 | **Super Admin UI** | Medium | Medium | 28-40h | ⭐⭐⭐ |
+| 11 | **Notifications** | Medium-High | Low | 20-30h | ⭐⭐ |
+| 12 | **Multi-Model AI** | Medium-High | Very Low | 28-42h | ⭐⭐ |
+
+### Recommended Implementation Order
+
+**Phase 1: Quick Wins** (Completed ✅)
+- ✅ Logo Integration
+- ✅ Color Palette
+- ✅ CI/CD Pipeline
+
+**Phase 2: Foundation & UX Improvements** (30-44 hours)
+1. **Auth Token Refresh** (6-8h) ⚡ CRITICAL PRIORITY
+2. **Token Management Modals** (8-12h) ⚡ SUPER HIGH PRIORITY
+3. Dark Mode Setup (8-12h)
+4. Remove TypeScript :any (8-12h)
+
+**Phase 3: High-Value Features** (40-58 hours)
+4. Dashboard Statistics (20-28h)
+5. i18n Implementation (20-30h)
+
+**Phase 4: Advanced Features** (56-82 hours)
+6. Super Admin UI Pages (28-40h)
+7. Notifications System (20-30h)
+8. Multi-Model AI Config (28-42h)
 
 ---
 

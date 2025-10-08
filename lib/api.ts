@@ -48,11 +48,13 @@ class TutoriaAPIClient {
   private baseURL: string;
   private timeout: number;
   private token: string | null = null;
+  private isRefreshing: boolean = false;
+  private refreshPromise: Promise<boolean> | null = null;
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
     this.timeout = config.timeout;
-    
+
     // Initialize token from localStorage if available
     if (typeof window !== 'undefined') {
       this.token = localStorage.getItem('auth-token');
@@ -71,6 +73,57 @@ class TutoriaAPIClient {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth-token');
     }
+  }
+
+  private async refreshAccessToken(): Promise<boolean> {
+    if (typeof window === 'undefined') return false;
+
+    // If already refreshing, wait for that promise
+    if (this.isRefreshing && this.refreshPromise) {
+      return this.refreshPromise;
+    }
+
+    this.isRefreshing = true;
+    this.refreshPromise = (async () => {
+      try {
+        const refreshToken = localStorage.getItem('tutoria_refresh_token');
+        if (!refreshToken) {
+          return false;
+        }
+
+        // Call refresh endpoint
+        const response = await fetch(`${this.baseURL}/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${refreshToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          return false;
+        }
+
+        const data: TokenResponse = await response.json();
+
+        // Update tokens
+        this.setToken(data.access_token);
+        localStorage.setItem('tutoria_token', data.access_token);
+        if (data.refresh_token) {
+          localStorage.setItem('tutoria_refresh_token', data.refresh_token);
+        }
+
+        return true;
+      } catch (error) {
+        console.error('Token refresh failed:', error);
+        return false;
+      } finally {
+        this.isRefreshing = false;
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
   }
 
   private async request<T>(
@@ -133,13 +186,24 @@ class TutoriaAPIClient {
         signal: controller.signal,
       });
 
-      if (response.status === 401) {
-        // Token expired or invalid
-        this.clearToken();
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+      if (response.status === 401 && !endpoint.includes('/auth/')) {
+        // Token expired or invalid - try to refresh
+        const refreshed = await this.refreshAccessToken();
+
+        if (refreshed) {
+          // Retry the original request with new token
+          return this.request<T>(endpoint, options);
+        } else {
+          // Refresh failed, clear token and redirect to login
+          this.clearToken();
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('tutoria_user');
+            localStorage.removeItem('tutoria_token');
+            localStorage.removeItem('tutoria_refresh_token');
+            window.location.href = '/login';
+          }
+          throw new Error('Unauthorized');
         }
-        throw new Error('Unauthorized');
       }
 
       if (!response.ok) {

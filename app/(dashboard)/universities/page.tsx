@@ -167,14 +167,26 @@ export default function UniversitiesPage() {
         description="Gerencie universidades e seus programas acadêmicos"
         breadcrumbs={breadcrumbs}
         actions={
-          <SuperAdminOnly>
-            <Button asChild>
-              <Link href="/universities/create">
-                <Plus className="mr-2 h-4 w-4" />
-                Criar Universidade
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href="/courses">
+                Ver Todas as Disciplinas
               </Link>
             </Button>
-          </SuperAdminOnly>
+            <Button variant="outline" asChild>
+              <Link href="/modules">
+                Ver Todos os Módulos
+              </Link>
+            </Button>
+            <SuperAdminOnly>
+              <Button asChild>
+                <Link href="/universities/create">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Criar Universidade
+                </Link>
+              </Button>
+            </SuperAdminOnly>
+          </div>
         }
       />
 
