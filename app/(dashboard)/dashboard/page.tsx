@@ -24,11 +24,12 @@ export default function DashboardPage() {
   if (!user) return null;
 
   const roleDisplayName = getUserRoleDisplayName(user.role);
+  const userName = user.first_name || user.email?.split('@')[0] || 'Usuário';
 
   return (
     <div className="space-y-8">
       <PageHeader
-        title={`Bem-vindo de volta, ${user.first_name}!`}
+        title={`Bem-vindo de volta, ${userName}!`}
         description={`Dashboard ${roleDisplayName} - Gerencie seu conteúdo educacional e configurações`}
       />
 

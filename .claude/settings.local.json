@@ -15,7 +15,9 @@
       "Bash(grep:*)",
       "Bash(npx next:*)",
       "Bash(npm run lint)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(python:*)",
+      "Read(//d/Users/Steve/Code/**)"
     ],
     "deny": [],
     "ask": []

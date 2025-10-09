@@ -110,6 +110,7 @@ export interface Module {
   course_id: number;
   course_name?: string;
   university_id?: number;
+  tutor_language?: string; // Language for AI tutor responses (pt-br, en, es)
   created_at: string;
   updated_at: string;
   files_count?: number;
@@ -124,6 +125,7 @@ export interface ModuleCreate {
   semester?: number;
   year?: number;
   course_id: number;
+  tutor_language?: string;
 }
 
 export interface ModuleUpdate {
@@ -134,6 +136,7 @@ export interface ModuleUpdate {
   semester?: number;
   year?: number;
   course_id?: number;
+  tutor_language?: string;
 }
 
 export interface ModuleWithDetails extends Module {

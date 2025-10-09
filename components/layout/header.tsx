@@ -8,6 +8,8 @@ import { LogOut, User, Settings, Bell, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { LanguageToggle } from '@/components/ui/language-toggle';
 import { useAuth } from '@/components/auth/auth-provider';
 import { getUserRoleDisplayName } from '@/lib/permissions';
 
@@ -55,18 +57,26 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
           )}
         </Button>
 
-        {/* Search - placeholder for future implementation */}
-        <div className="flex-1 max-w-md mx-4 hidden md:flex">
-          {/* Search component will go here */}
-        </div>
+        {/* Spacer to push content to the right */}
+        <div className="flex-1"></div>
 
         {/* Right side actions */}
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 ml-auto">
+          {/* Language toggle */}
+          <LanguageToggle />
+
+          <Separator orientation="vertical" className="h-6 hidden sm:block" />
+
+          {/* Theme toggle */}
+          <ThemeToggle />
+
+          <Separator orientation="vertical" className="h-6 hidden sm:block" />
+
           {/* Notifications */}
           <Button variant="ghost" size="sm" className="hidden sm:flex">
             <Bell className="h-4 w-4" />
-            <Badge 
-              variant="destructive" 
+            <Badge
+              variant="destructive"
               className="ml-1 h-5 w-5 rounded-full p-0 text-xs"
             >
               3
@@ -109,29 +119,29 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                   className="w-full justify-start"
                   onClick={handleProfileClick}
                 >
-                  <User className="mr-2 h-4 w-4" />
+                  <span className="mr-2">👤</span>
                   Perfil
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
                   className="w-full justify-start"
                   onClick={handleSettingsClick}
                 >
-                  <Settings className="mr-2 h-4 w-4" />
+                  <span className="mr-2">⚙️</span>
                   Configurações
                 </Button>
-                
+
                 <Separator className="my-1" />
-                
+
                 <Button
                   variant="ghost"
                   size="sm"
                   className="w-full justify-start text-destructive hover:text-destructive"
                   onClick={handleLogout}
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <span className="mr-2">🚪</span>
                   Sair
                 </Button>
               </div>

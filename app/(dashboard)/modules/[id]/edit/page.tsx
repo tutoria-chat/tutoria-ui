@@ -12,7 +12,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
-import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download } from 'lucide-react';
+import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download, Sparkles } from 'lucide-react';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import { useFetch } from '@/lib/hooks';
@@ -51,6 +51,8 @@ export default function EditModulePage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
+  const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
 
   const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
 
@@ -151,6 +153,38 @@ export default function EditModulePage() {
 
   const getFileDisplayName = (file: FileType): string => {
     return file.file_name || file.name || 'Arquivo sem nome';
+  };
+
+  const handleImprovePrompt = async () => {
+    if (!formData.system_prompt?.trim()) {
+      toast.error('Escreva um prompt primeiro', {
+        description: 'Você precisa ter um prompt inicial para melhorar.',
+      });
+      return;
+    }
+
+    setIsImprovingPrompt(true);
+    try {
+      const response = await apiClient.post<{ improved_prompt: string; remaining_improvements: number }>(
+        `/modules/${moduleId}/improve-prompt`,
+        { current_prompt: formData.system_prompt }
+      );
+
+      setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
+      setRemainingImprovements(response.remaining_improvements);
+
+      toast.success('Prompt melhorado!', {
+        description: `Melhorias restantes: ${response.remaining_improvements}/3 nas próximas 72h.`,
+      });
+    } catch (error: any) {
+      console.error('Error improving prompt:', error);
+      const errorMsg = error?.response?.data?.detail || error.message || 'Erro desconhecido';
+      toast.error('Erro ao melhorar prompt', {
+        description: errorMsg,
+      });
+    } finally {
+      setIsImprovingPrompt(false);
+    }
   };
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -401,9 +435,30 @@ export default function EditModulePage() {
               </div>
 
               <div>
-                <label htmlFor="system_prompt" className="block text-sm font-medium mb-1">
-                  Prompt do Sistema (Tutor IA)
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label htmlFor="system_prompt" className="block text-sm font-medium">
+                    Prompt do Sistema (Tutor IA)
+                  </label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleImprovePrompt}
+                    disabled={isImprovingPrompt || isLoading || !formData.system_prompt?.trim()}
+                  >
+                    {isImprovingPrompt ? (
+                      <>
+                        <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                        Melhorando...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="mr-2 h-3 w-3" />
+                        Melhorar com IA
+                      </>
+                    )}
+                  </Button>
+                </div>
                 <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
                   <p className="text-sm text-blue-900 dark:text-blue-100">
                     <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
@@ -418,7 +473,21 @@ export default function EditModulePage() {
                   onChange={(e) => handleChange('system_prompt', e.target.value)}
                   placeholder="Ex: Você é um tutor especializado em Python que explica conceitos usando analogias do mundo real..."
                   rows={6}
+                  className="font-mono text-sm"
                 />
+                <div className="flex items-center justify-between mt-1">
+                  <p className="text-xs text-muted-foreground">
+                    {(formData.system_prompt || '').length} caracteres
+                    {(formData.system_prompt || '').length > 0 && (
+                      <span className="ml-2 text-green-600">✓ Configurado</span>
+                    )}
+                  </p>
+                  {remainingImprovements !== null && (
+                    <p className="text-xs text-muted-foreground">
+                      Melhorias restantes: {remainingImprovements}/3 (72h)
+                    </p>
+                  )}
+                </div>
               </div>
 
               {errors.submit && (
