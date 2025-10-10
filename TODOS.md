@@ -75,16 +75,19 @@
 **Estimated Effort**: Medium-High (depends on backend needs)
 **Customer Value**: Medium (admin tool improvements)
 
-### 8. **Notifications System** 🔔
-- [ ] Implement notifications bell in top-right corner
-- [ ] Fix header alignment (profile + notifications to right edge)
+### 8. **Notifications System** 🔔 🚧 IN PROGRESS
+- [ ] Implement notifications bell in top-right corner (currently commented out in header)
 - [ ] **Backend**: Create notifications API
 - [ ] Real-time updates (WebSocket or polling)
 - [ ] Notification preferences per user
 - [ ] Mark as read functionality
+- [ ] Badge showing unread count
+- [ ] Dropdown showing recent notifications
 
 **Estimated Effort**: High (real-time infrastructure needed)
 **Customer Value**: Medium-High (improves engagement)
+
+**Note**: Notifications bell is currently commented out in `components/layout/header.tsx` until backend API is ready.
 
 ### 9. **CI/CD for Frontend** ⚙️ ✅ COMPLETED
 - [x] Set up GitHub Actions workflow

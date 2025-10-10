@@ -34,8 +34,10 @@ export function DashboardLayoutWrapper({
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="container max-w-screen-2xl py-6 px-4">
-            {children}
+          <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 max-w-[1920px] 2xl:max-w-[2200px]">
+            <div className="max-w-[1600px] mx-auto">
+              {children}
+            </div>
           </div>
         </main>
       </div>

@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Settings, Bell, Menu, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { LogOut, User, Settings, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { LanguageToggle } from '@/components/ui/language-toggle';
+import { UserSettingsModal } from '@/components/layout/user-settings-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { getUserRoleDisplayName } from '@/lib/permissions';
 
@@ -21,28 +20,26 @@ interface HeaderProps {
 export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
   const { user, logout } = useAuth();
   const router = useRouter();
+  const t = useTranslations('header');
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const handleLogout = async () => {
     await logout();
     router.push('/login');
   };
 
-  const handleProfileClick = () => {
-    setShowUserMenu(false);
-    router.push('/profile');
-  };
-
   const handleSettingsClick = () => {
     setShowUserMenu(false);
-    router.push('/profile/edit');
+    setShowSettingsModal(true);
   };
 
   if (!user) return null;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center px-4">
+      <div className="flex h-14 items-center px-4 sm:px-6 lg:px-8 max-w-[1920px] 2xl:max-w-[2200px] mx-auto w-full">
+        <div className="max-w-[1600px] mx-auto w-full flex items-center">
         {/* Mobile menu button */}
         <Button
           variant="ghost"
@@ -61,19 +58,9 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
         <div className="flex-1"></div>
 
         {/* Right side actions */}
-        <div className="flex items-center space-x-2 ml-auto">
-          {/* Language toggle */}
-          <LanguageToggle />
-
-          <Separator orientation="vertical" className="h-6 hidden sm:block" />
-
-          {/* Theme toggle */}
-          <ThemeToggle />
-
-          <Separator orientation="vertical" className="h-6 hidden sm:block" />
-
-          {/* Notifications */}
-          <Button variant="ghost" size="sm" className="hidden sm:flex">
+        <div className="flex items-center space-x-2">
+          {/* TODO: Notifications - implement notification system */}
+          {/* <Button variant="ghost" size="sm" className="hidden sm:flex">
             <Bell className="h-4 w-4" />
             <Badge
               variant="destructive"
@@ -82,8 +69,7 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
               3
             </Badge>
           </Button>
-
-          <Separator orientation="vertical" className="h-6 hidden sm:block" />
+          <Separator orientation="vertical" className="h-6 hidden sm:block" /> */}
 
           {/* User menu */}
           <div className="relative">
@@ -112,16 +98,6 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                   {user.email}
                 </div>
                 <Separator className="my-1" />
-                
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start"
-                  onClick={handleProfileClick}
-                >
-                  <span className="mr-2">👤</span>
-                  Perfil
-                </Button>
 
                 <Button
                   variant="ghost"
@@ -129,8 +105,8 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                   className="w-full justify-start"
                   onClick={handleSettingsClick}
                 >
-                  <span className="mr-2">⚙️</span>
-                  Configurações
+                  <Settings className="mr-2 h-4 w-4" />
+                  {t('settings')}
                 </Button>
 
                 <Separator className="my-1" />
@@ -141,22 +117,29 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                   className="w-full justify-start text-destructive hover:text-destructive"
                   onClick={handleLogout}
                 >
-                  <span className="mr-2">🚪</span>
-                  Sair
+                  <LogOut className="mr-2 h-4 w-4" />
+                  {t('logout')}
                 </Button>
               </div>
             )}
           </div>
         </div>
+        </div>
       </div>
 
       {/* Click overlay to close user menu */}
       {showUserMenu && (
-        <div 
-          className="fixed inset-0 z-40" 
+        <div
+          className="fixed inset-0 z-40"
           onClick={() => setShowUserMenu(false)}
         />
       )}
+
+      {/* Settings Modal */}
+      <UserSettingsModal
+        open={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+      />
     </header>
   );
 }

@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Plus, Edit, Trash2, Eye, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -16,6 +17,7 @@ import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from 
 export default function UniversitiesPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const t = useTranslations('universities');
 
   // For professors, redirect to their university page instead of showing list
   React.useEffect(() => {
@@ -34,13 +36,13 @@ export default function UniversitiesPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Universidades', isCurrentPage: true }
+    { label: t('title'), isCurrentPage: true }
   ];
 
   const columns: TableColumn<University>[] = [
     {
       key: 'name',
-      label: 'Nome da Universidade',
+      label: t('columns.universityName'),
       sortable: true,
       render: (value, university) => (
         <div className="flex items-center space-x-2">
@@ -60,13 +62,13 @@ export default function UniversitiesPage() {
     },
     {
       key: 'created_at',
-      label: 'Criado em',
+      label: t('columns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('columns.actions'),
       width: '120px',
       render: (_, university) => (
         <div className="flex items-center space-x-1">
@@ -105,7 +107,7 @@ export default function UniversitiesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar esta universidade? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('deleteConfirm'))) {
       return;
     }
 
@@ -115,7 +117,7 @@ export default function UniversitiesPage() {
       window.location.reload();
     } catch (error) {
       console.error('Erro ao deletar universidade:', error);
-      alert('Erro ao deletar universidade. Tente novamente.');
+      alert(t('deleteError'));
     }
   };
 
@@ -163,26 +165,26 @@ export default function UniversitiesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Universidades"
-        description="Gerencie universidades e seus programas acadêmicos"
+        title={t('title')}
+        description={t('description')}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex gap-2">
             <Button variant="outline" asChild>
               <Link href="/courses">
-                Ver Todas as Disciplinas
+                {t('viewAllCourses')}
               </Link>
             </Button>
             <Button variant="outline" asChild>
               <Link href="/modules">
-                Ver Todos os Módulos
+                {t('viewAllModules')}
               </Link>
             </Button>
             <SuperAdminOnly>
               <Button asChild>
                 <Link href="/universities/create">
                   <Plus className="mr-2 h-4 w-4" />
-                  Criar Universidade
+                  {t('createButton')}
                 </Link>
               </Button>
             </SuperAdminOnly>
@@ -196,7 +198,7 @@ export default function UniversitiesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Buscar universidades...",
+          placeholder: t('searchPlaceholder'),
           onSearchChange: setSearchTerm
         }}
         pagination={{
@@ -211,7 +213,7 @@ export default function UniversitiesPage() {
           direction: sortDirection,
           onSortChange: handleSortChange
         }}
-        emptyMessage="Nenhuma universidade encontrada"
+        emptyMessage={t('emptyMessage')}
         onRowClick={(university) => router.push(`/universities/${university.id}`)}
       />
     </div>

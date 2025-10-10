@@ -9,9 +9,11 @@ export interface User {
   role: UserRole; // 'super_admin', 'professor', or 'student'
   university_id?: number;
   is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
-  assigned_courses?: number[]; // Fetched separately via API for regular professors
+  assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
   created_at: string;
   updated_at: string;
+  theme_preference?: string; // 'system' | 'light' | 'dark'
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export type UserRole = 'super_admin' | 'professor' | 'student';

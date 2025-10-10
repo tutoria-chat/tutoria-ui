@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,6 +24,9 @@ export default function EditModulePage() {
   const params = useParams();
   const moduleId = Number(params.id);
   const { user } = useAuth();
+  const t = useTranslations('modules.edit');
+  const tForm = useTranslations('modules.form');
+  const tCommon = useTranslations('common');
 
   const [module, setModule] = useState<Module | null>(null);
   const [originalFormData, setOriginalFormData] = useState<ModuleUpdate>({
@@ -93,7 +97,7 @@ export default function EditModulePage() {
       setOriginalFormData(initialData);
     } catch (error) {
       console.error('Failed to load module:', error);
-      setErrors({ load: 'Erro ao carregar dados do módulo.' });
+      setErrors({ load: t('loadError') });
     } finally {
       setIsLoadingData(false);
     }
@@ -124,9 +128,9 @@ export default function EditModulePage() {
   }, [loadModule, loadCourses]);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Módulos', href: '/modules' },
-    { label: module?.name || 'Carregando...', href: `/modules/${moduleId}` },
-    { label: 'Editar', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.modules'), href: '/modules' },
+    { label: module?.name || tCommon('loading'), href: `/modules/${moduleId}` },
+    { label: tCommon('buttons.edit'), isCurrentPage: true }
   ];
 
   const handleChange = (field: keyof ModuleUpdate, value: string | number | undefined) => {
@@ -140,11 +144,11 @@ export default function EditModulePage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Nome do módulo é obrigatório';
+      newErrors.name = tForm('nameRequired');
     }
 
     if (user?.role === 'super_admin' && !formData.course_id) {
-      newErrors.course_id = 'Disciplina é obrigatório';
+      newErrors.course_id = tForm('courseRequired');
     }
 
     setErrors(newErrors);
@@ -152,13 +156,13 @@ export default function EditModulePage() {
   };
 
   const getFileDisplayName = (file: FileType): string => {
-    return file.file_name || file.name || 'Arquivo sem nome';
+    return file.file_name || file.name || tCommon('noData');
   };
 
   const handleImprovePrompt = async () => {
     if (!formData.system_prompt?.trim()) {
-      toast.error('Escreva um prompt primeiro', {
-        description: 'Você precisa ter um prompt inicial para melhorar.',
+      toast.error(tForm('improvePromptNoContent'), {
+        description: tForm('improvePromptNoContentDesc'),
       });
       return;
     }
@@ -173,13 +177,13 @@ export default function EditModulePage() {
       setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
       setRemainingImprovements(response.remaining_improvements);
 
-      toast.success('Prompt melhorado!', {
-        description: `Melhorias restantes: ${response.remaining_improvements}/3 nas próximas 72h.`,
+      toast.success(tForm('improveSuccess'), {
+        description: tForm('improveSuccessDesc', { count: response.remaining_improvements }),
       });
     } catch (error: any) {
       console.error('Error improving prompt:', error);
-      const errorMsg = error?.response?.data?.detail || error.message || 'Erro desconhecido';
-      toast.error('Erro ao melhorar prompt', {
+      const errorMsg = error?.response?.data?.detail || error.message || tCommon('error');
+      toast.error(tForm('improveError'), {
         description: errorMsg,
       });
     } finally {
@@ -192,14 +196,14 @@ export default function EditModulePage() {
     const form = e.currentTarget;
 
     if (!selectedFile) {
-      setUploadError('Selecione um arquivo para enviar');
+      setUploadError(tForm('improvePromptNoContent', { ns: 'modules.detail' }));
       return;
     }
 
     // Validate file size (max 50MB)
     const maxSize = 50 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
-      setUploadError('Arquivo muito grande. Tamanho máximo: 50MB');
+      setUploadError(t('fileTooLarge', { ns: 'modules.detail' }));
       return;
     }
 
@@ -214,7 +218,7 @@ export default function EditModulePage() {
     ];
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      setUploadError('Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX');
+      setUploadError(t('fileTypeNotSupported', { ns: 'modules.detail' }));
       return;
     }
 
@@ -231,15 +235,15 @@ export default function EditModulePage() {
       setSelectedFile(null);
       refetchFiles?.();
 
-      toast.success('Arquivo enviado com sucesso!', {
-        description: `${selectedFile.name} foi adicionado ao módulo.`,
+      toast.success(t('fileUploadSuccess', { ns: 'modules.detail' }), {
+        description: t('fileUploadSuccessDesc', { fileName: selectedFile.name, ns: 'modules.detail' }),
       });
     } catch (error) {
       console.error('Erro ao enviar arquivo:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      setUploadError(`Erro ao enviar arquivo: ${errorMessage}. Tente novamente.`);
+      const errorMessage = error instanceof Error ? error.message : tCommon('error');
+      setUploadError(`${t('fileUploadError', { ns: 'modules.detail' })}: ${errorMessage}`);
 
-      toast.error('Erro ao enviar arquivo', {
+      toast.error(t('fileUploadError', { ns: 'modules.detail' }), {
         description: errorMessage,
       });
     } finally {
@@ -280,7 +284,7 @@ export default function EditModulePage() {
       }
     } catch (error) {
       console.error('Failed to update module:', error);
-      setErrors({ submit: 'Erro ao atualizar módulo. Tente novamente.' });
+      setErrors({ submit: t('updateError') });
     } finally {
       setIsLoading(false);
     }
@@ -303,15 +307,15 @@ export default function EditModulePage() {
       <ProfessorOnly>
         <div className="space-y-6">
           <PageHeader
-            title="Erro"
-            description="Não foi possível carregar os dados do módulo"
+            title={tCommon('error')}
+            description={t('loadErrorDesc')}
             breadcrumbs={breadcrumbs}
           />
           <Card>
             <CardContent className="pt-6">
               <p className="text-destructive">{errors.load}</p>
               <Button onClick={() => router.back()} className="mt-4">
-                Voltar
+                {t('back')}
               </Button>
             </CardContent>
           </Card>
@@ -324,8 +328,8 @@ export default function EditModulePage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Editar Módulo"
-          description={`Edite as informações do módulo ${module?.name}`}
+          title={t('title')}
+          description={t('description', { name: module?.name })}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -333,27 +337,27 @@ export default function EditModulePage() {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
+              {t('back')}
             </Button>
           }
         />
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Informações do Módulo</CardTitle>
+            <CardTitle>{t('moduleInfo')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Nome do Módulo *
+                  {t('nameLabel')}
                 </label>
                 <Input
                   id="name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Ex: Introdução à Programação"
+                  placeholder={t('namePlaceholder')}
                   className={errors.name ? 'border-destructive' : ''}
                 />
                 {errors.name && (
@@ -363,28 +367,28 @@ export default function EditModulePage() {
 
               <div>
                 <label htmlFor="code" className="block text-sm font-medium mb-1">
-                  Código do Módulo
+                  {t('codeLabel')}
                 </label>
                 <Input
                   id="code"
                   type="text"
                   value={formData.code}
                   onChange={(e) => handleChange('code', e.target.value)}
-                  placeholder="Ex: PROG101"
+                  placeholder={t('codePlaceholder')}
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="semester" className="block text-sm font-medium mb-1">
-                    Semestre
+                    {t('semesterLabel')}
                   </label>
                   <Input
                     id="semester"
                     type="number"
                     value={formData.semester || ''}
                     onChange={(e) => handleChange('semester', e.target.value ? Number(e.target.value) : undefined)}
-                    placeholder="Ex: 1"
+                    placeholder={t('semesterPlaceholder')}
                     min="1"
                     max="12"
                   />
@@ -392,14 +396,14 @@ export default function EditModulePage() {
 
                 <div>
                   <label htmlFor="year" className="block text-sm font-medium mb-1">
-                    Ano
+                    {t('yearLabel')}
                   </label>
                   <Input
                     id="year"
                     type="number"
                     value={formData.year || ''}
                     onChange={(e) => handleChange('year', e.target.value ? Number(e.target.value) : undefined)}
-                    placeholder="Ex: 2024"
+                    placeholder={t('yearPlaceholder')}
                     min="2000"
                     max="2100"
                   />
@@ -408,28 +412,28 @@ export default function EditModulePage() {
 
               <div>
                 <label htmlFor="course_name" className="block text-sm font-medium mb-1">
-                  Disciplina
+                  {t('courseLabel')}
                 </label>
                 <Input
                   id="course_name"
-                  value={module?.course_name || 'Carregando...'}
+                  value={module?.course_name || tCommon('loading')}
                   disabled
                   className="bg-muted cursor-not-allowed"
                 />
                 <p className="text-sm text-muted-foreground mt-1">
-                  A disciplina não pode ser alterada após a criação do módulo
+                  {t('courseCannotChange')}
                 </p>
               </div>
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium mb-1">
-                  Descrição
+                  {t('descriptionLabel')}
                 </label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição do módulo (opcional)"
+                  placeholder={t('descriptionPlaceholder')}
                   rows={3}
                 />
               </div>
@@ -437,7 +441,7 @@ export default function EditModulePage() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label htmlFor="system_prompt" className="block text-sm font-medium">
-                    Prompt do Sistema (Tutor IA)
+                    {t('systemPromptLabel')}
                   </label>
                   <Button
                     type="button"
@@ -449,42 +453,39 @@ export default function EditModulePage() {
                     {isImprovingPrompt ? (
                       <>
                         <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                        Melhorando...
+                        {tForm('improving')}
                       </>
                     ) : (
                       <>
                         <Sparkles className="mr-2 h-3 w-3" />
-                        Melhorar com IA
+                        {tForm('improveWithAI')}
                       </>
                     )}
                   </Button>
                 </div>
                 <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
                   <p className="text-sm text-blue-900 dark:text-blue-100">
-                    <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
-                    Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
-                    "Você é um tutor de matemática que sempre resolve passo a passo".
-                    Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                    {tForm('promptExplanation')}
                   </p>
                 </div>
                 <Textarea
                   id="system_prompt"
                   value={formData.system_prompt}
                   onChange={(e) => handleChange('system_prompt', e.target.value)}
-                  placeholder="Ex: Você é um tutor especializado em Python que explica conceitos usando analogias do mundo real..."
+                  placeholder={t('systemPromptPlaceholder')}
                   rows={6}
                   className="font-mono text-sm"
                 />
                 <div className="flex items-center justify-between mt-1">
                   <p className="text-xs text-muted-foreground">
-                    {(formData.system_prompt || '').length} caracteres
+                    {tForm('charactersCount', { count: (formData.system_prompt || '').length })}
                     {(formData.system_prompt || '').length > 0 && (
-                      <span className="ml-2 text-green-600">✓ Configurado</span>
+                      <span className="ml-2 text-green-600">{tForm('configured')}</span>
                     )}
                   </p>
                   {remainingImprovements !== null && (
                     <p className="text-xs text-muted-foreground">
-                      Melhorias restantes: {remainingImprovements}/3 (72h)
+                      {tForm('remainingImprovements', { count: remainingImprovements })}
                     </p>
                   )}
                 </div>
@@ -497,7 +498,7 @@ export default function EditModulePage() {
               <div className="flex gap-3 pt-4">
                 <Button type="submit" disabled={isLoading || !hasChanges()}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Salvar Alterações
+                  {t('saveChanges')}
                 </Button>
                 <Button
                   type="button"
@@ -505,7 +506,7 @@ export default function EditModulePage() {
                   onClick={() => router.back()}
                   disabled={isLoading}
                 >
-                  Cancelar
+                  {t('cancel')}
                 </Button>
               </div>
             </form>

@@ -17,7 +17,12 @@
       "Bash(npm run lint)",
       "Bash(taskkill:*)",
       "Bash(python:*)",
-      "Read(//d/Users/Steve/Code/**)"
+      "Read(//d/Users/Steve/Code/**)",
+      "Bash(npx jsonlint:*)",
+      "Bash(if [ -d .next ])",
+      "Bash(then rm -rf .next)",
+      "Bash(else echo \".next folder not found\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": []

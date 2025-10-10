@@ -16,11 +16,28 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [messages, setMessages] = useState<any>({});
 
   useEffect(() => {
-    // Load locale from localStorage
+    // Load locale from user preferences or localStorage
+    const storedUser = localStorage.getItem('tutoria_user');
+    let initialLocale: Locale = 'pt-br';
+
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        if (userData.language_preference) {
+          initialLocale = userData.language_preference as Locale;
+        }
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+      }
+    }
+
+    // Fallback to localStorage
     const storedLocale = localStorage.getItem('tutoria_locale') as Locale;
     if (storedLocale && (storedLocale === 'pt-br' || storedLocale === 'en' || storedLocale === 'es')) {
-      setLocaleState(storedLocale);
+      initialLocale = storedLocale;
     }
+
+    setLocaleState(initialLocale);
   }, []);
 
   useEffect(() => {

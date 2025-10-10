@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
@@ -18,6 +19,7 @@ export default function CoursesPage() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const t = useTranslations('courses');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -39,13 +41,13 @@ export default function CoursesPage() {
   const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(apiUrl);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Disciplinas', isCurrentPage: true }
+    { label: t('title'), isCurrentPage: true }
   ];
 
   const columns: TableColumn<Course>[] = [
     {
       key: 'name',
-      label: 'Disciplina',
+      label: t('columns.discipline'),
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-3">
@@ -65,7 +67,7 @@ export default function CoursesPage() {
     },
     {
       key: 'university_name',
-      label: 'Universidade',
+      label: t('columns.university'),
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-2">
@@ -76,17 +78,17 @@ export default function CoursesPage() {
     },
     {
       key: 'modules_count',
-      label: 'Módulos',
+      label: t('columns.modules'),
       sortable: true,
       render: (value) => (
         <Badge variant="secondary">
-          {value || 0} módulos
+          {t('columns.modulesCount', { count: value || 0 })}
         </Badge>
       )
     },
     {
       key: 'professors_count',
-      label: 'Professores',
+      label: t('columns.professors'),
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -97,7 +99,7 @@ export default function CoursesPage() {
     },
     {
       key: 'students_count',
-      label: 'Estudantes',
+      label: t('columns.students'),
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -108,13 +110,13 @@ export default function CoursesPage() {
     },
     {
       key: 'created_at',
-      label: 'Criado em',
+      label: t('columns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('columns.actions'),
       width: '120px',
       render: (_, course) => (
         <div className="flex items-center space-x-1">
@@ -153,7 +155,7 @@ export default function CoursesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('deleteConfirm'))) {
       return;
     }
 
@@ -163,7 +165,7 @@ export default function CoursesPage() {
       window.location.reload();
     } catch (error) {
       console.error('Erro ao deletar disciplina:', error);
-      alert('Erro ao deletar disciplina. Tente novamente.');
+      alert(t('deleteError'));
     }
   };
 
@@ -199,8 +201,12 @@ export default function CoursesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Disciplinas"
-        description={`Gerencie disciplinas e programas acadêmicos. Mostrando ${stats.total} disciplinas com ${stats.totalStudents} estudantes em ${stats.totalModules} módulos`}
+        title={t('title')}
+        description={t('description', {
+          total: stats.total,
+          students: stats.totalStudents,
+          modules: stats.totalModules
+        })}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -208,7 +214,7 @@ export default function CoursesPage() {
               <Button variant="outline" asChild>
                 <Link href="/modules">
                   <BookOpen className="mr-2 h-4 w-4" />
-                  Ver Módulos
+                  {t('viewModules')}
                 </Link>
               </Button>
             </ProfessorOnly>
@@ -216,7 +222,7 @@ export default function CoursesPage() {
               <Button asChild>
                 <Link href="/courses/create">
                   <Plus className="mr-2 h-4 w-4" />
-                  Criar Disciplina
+                  {t('createButton')}
                 </Link>
               </Button>
             </AdminProfessorOnly>
@@ -228,7 +234,7 @@ export default function CoursesPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total de Disciplinas</h3>
+            <h3 className="tracking-tight text-sm font-medium">{t('stats.totalCourses')}</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.total}</div>
@@ -244,7 +250,7 @@ export default function CoursesPage() {
 
         <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
           <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total de Módulos</h3>
+            <h3 className="tracking-tight text-sm font-medium">{t('stats.totalModules')}</h3>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </div>
           <div className="text-2xl font-bold">{stats.totalModules}</div>
@@ -253,7 +259,7 @@ export default function CoursesPage() {
         {user?.role === 'super_admin' && (
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">Universidades</h3>
+              <h3 className="tracking-tight text-sm font-medium">{t('stats.universities')}</h3>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="text-2xl font-bold">{stats.universities}</div>
@@ -267,7 +273,7 @@ export default function CoursesPage() {
         loading={loading}
         search={{
           value: searchTerm,
-          placeholder: "Buscar disciplinas, descrições ou universidades...",
+          placeholder: t('searchPlaceholder'),
           onSearchChange: setSearchTerm
         }}
         pagination={{
@@ -282,7 +288,7 @@ export default function CoursesPage() {
           direction: sortDirection,
           onSortChange: handleSortChange
         }}
-        emptyMessage="Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar."
+        emptyMessage={t('emptyMessage')}
         onRowClick={(course) => router.push(`/courses/${course.id}`)}
       />
     </div>

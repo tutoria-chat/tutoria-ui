@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Initialize auth state from stored token
-    const initializeAuth = () => {
+    const initializeAuth = async () => {
       if (typeof window !== 'undefined') {
         const storedUser = localStorage.getItem('tutoria_user');
         const storedToken = localStorage.getItem('tutoria_token');
@@ -49,10 +49,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const now = Date.now() / 1000;
 
             if (decoded.exp > now) {
-              // Token is still valid, restore user and set token in apiClient
-              const user = JSON.parse(storedUser);
+              // Token is still valid, set token in apiClient
               apiClient.setToken(storedToken);
-              setUser(user);
+
+              const parsedUser = JSON.parse(storedUser);
+
+              // Check if user data is missing first_name (old format)
+              if (!parsedUser.first_name) {
+                console.log('Refreshing user data from /me endpoint...');
+                try {
+                  // Fetch fresh user data from /me endpoint
+                  const userData = await apiClient.getCurrentUser();
+
+                  const user: User = {
+                    id: userData.id,
+                    email: userData.email,
+                    first_name: userData.first_name,
+                    last_name: userData.last_name,
+                    role: userData.role,
+                    university_id: userData.university_id,
+                    is_admin: userData.is_admin || false,
+                    assigned_courses: userData.assigned_courses || [],
+                    created_at: userData.created_at || new Date().toISOString(),
+                    updated_at: userData.updated_at || new Date().toISOString(),
+                    theme_preference: userData.theme_preference,
+                    language_preference: userData.language_preference,
+                  };
+
+                  localStorage.setItem('tutoria_user', JSON.stringify(user));
+                  setUser(user);
+                } catch (error) {
+                  console.error('Failed to refresh user data:', error);
+                  // Use old user data as fallback
+                  setUser(parsedUser);
+                }
+              } else {
+                // User data is up to date
+                setUser(parsedUser);
+              }
             } else {
               // Token expired, clear auth
               localStorage.removeItem('tutoria_user');
@@ -83,20 +117,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const response = await apiClient.login({ username, password });
 
       if (response.access_token) {
-        // Decode JWT token to extract user information
-        const decoded = jwtDecode<JWTPayload>(response.access_token);
+        // Set token first so the /me endpoint can use it
+        apiClient.setToken(response.access_token);
+
+        // Fetch full user data from /me endpoint
+        const userData = await apiClient.getCurrentUser();
 
         const user: User = {
-          id: decoded.user_id,
-          email: decoded.email,
-          first_name: decoded.first_name,
-          last_name: decoded.last_name,
-          role: decoded.type,
-          university_id: decoded.university_id,
-          is_admin: decoded.is_admin || false,
-          assigned_courses: decoded.assigned_courses || [],
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          id: userData.id,
+          email: userData.email,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          role: userData.role,
+          university_id: userData.university_id,
+          is_admin: userData.is_admin || false,
+          assigned_courses: userData.assigned_courses || [],
+          created_at: userData.created_at || new Date().toISOString(),
+          updated_at: userData.updated_at || new Date().toISOString(),
+          theme_preference: userData.theme_preference,
+          language_preference: userData.language_preference,
         };
 
         // Store in localStorage for persistence

@@ -50,7 +50,7 @@ const SelectItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <option
     ref={ref}
-    className={cn("py-1.5 pl-2 pr-8 text-sm", className)}
+    className={cn("py-1.5 pl-2 pr-8 text-sm bg-background text-foreground", className)}
     {...props}
   />
 ))

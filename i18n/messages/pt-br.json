@@ -81,6 +81,8 @@
       "saveError": "Falha ao salvar a disciplina. Tente novamente."
     },
     "detail": {
+      "breadcrumbUniversities": "Universidades",
+      "breadcrumbCourses": "Disciplinas",
       "viewUniversity": "Ver Universidade",
       "addModule": "Adicionar Módulo",
       "editCourse": "Editar Disciplina",
@@ -101,6 +103,7 @@
         "search": "Buscar módulos...",
         "allSemesters": "Todos os Semestres",
         "semester": "{num}º Semestre",
+        "semesterYear": "Semestre/Ano",
         "allYears": "Todos os Anos",
         "noModules": "Nenhum módulo encontrado com os filtros aplicados.",
         "noModulesInitial": "Nenhum módulo encontrado. Adicione seu primeiro módulo para começar.",
@@ -329,7 +332,81 @@
       "actions": "Ações"
     },
     "deleteConfirm": "Tem certeza que deseja deletar esta universidade? Esta ação não pode ser desfeita.",
-    "deleteError": "Erro ao deletar universidade. Tente novamente."
+    "deleteError": "Erro ao deletar universidade. Tente novamente.",
+    "detail": {
+      "breadcrumb": "Universidades",
+      "edit": "Editar",
+      "notFound": "Universidade não encontrada",
+      "stats": {
+        "courses": "Disciplinas",
+        "professors": "Professores",
+        "code": "Código"
+      },
+      "tabs": {
+        "courses": "Disciplinas",
+        "professors": "Professores"
+      },
+      "courseColumns": {
+        "name": "Disciplina",
+        "modules": "Módulos",
+        "modulesCount": "{count} módulos",
+        "professors": "Professores",
+        "professorsCount": "{count} professores",
+        "createdAt": "Criado em",
+        "actions": "Ações"
+      },
+      "professorColumns": {
+        "name": "Professor",
+        "type": "Tipo",
+        "admin": "Administrador",
+        "professor": "Professor",
+        "courses": "Disciplinas",
+        "coursesCount": "{count} disciplinas"
+      },
+      "coursesTab": {
+        "title": "Disciplinas",
+        "description": "Disciplinas oferecidas por esta universidade",
+        "newCourse": "Nova Disciplina",
+        "emptyMessage": "Nenhuma disciplina cadastrada ainda."
+      },
+      "professorsTab": {
+        "title": "Professores",
+        "description": "Professores vinculados a esta universidade",
+        "newProfessor": "Novo Professor",
+        "emptyMessage": "Nenhum professor cadastrado ainda."
+      },
+      "deleteConfirm": "Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.",
+      "deleteError": "Erro ao deletar disciplina. Tente novamente."
+    },
+    "form": {
+      "breadcrumb": "Universidades",
+      "createTitle": "Criar Universidade",
+      "createDescription": "Crie uma nova universidade no sistema",
+      "editTitle": "Editar Universidade",
+      "editDescription": "Edite as informações da universidade",
+      "breadcrumbCreate": "Criar Universidade",
+      "breadcrumbEdit": "Editar",
+      "back": "Voltar",
+      "universityInfo": "Informações da Universidade",
+      "nameLabel": "Nome da Universidade *",
+      "namePlaceholder": "Ex: Universidade Federal de São Paulo",
+      "nameRequired": "Nome da universidade é obrigatório",
+      "codeLabel": "Código da Universidade *",
+      "codePlaceholder": "Ex: UNIFESP",
+      "codeRequired": "Código da universidade é obrigatório",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "Descrição da universidade (opcional)",
+      "create": "Criar Universidade",
+      "update": "Atualizar Universidade",
+      "cancel": "Cancelar",
+      "creating": "Criando...",
+      "updating": "Atualizando...",
+      "createError": "Erro ao criar universidade. Tente novamente.",
+      "updateError": "Erro ao atualizar universidade. Tente novamente.",
+      "loadError": "Erro ao carregar dados da universidade.",
+      "loadErrorTitle": "Erro",
+      "loadErrorDescription": "Não foi possível carregar os dados da universidade"
+    }
   },
   "professors": {
     "title": "Gerenciamento de Professores",
@@ -449,17 +526,41 @@
     "universities": "Universidades",
     "myUniversity": "Minha Universidade",
     "moduleTokens": "Tokens de Módulos",
+    "professors": "Professores",
     "administration": "Administração",
     "systemOverview": "Visão Geral do Sistema",
     "superAdmins": "Super Administradores",
     "globalSearch": "Busca Global",
-    "systemOnline": "System Online",
-    "version": "Version 1.0.0"
+    "systemOnline": "Sistema Online",
+    "version": "Versão 1.0.0"
   },
   "header": {
     "profile": "Perfil",
     "settings": "Configurações",
     "logout": "Sair"
+  },
+  "settings": {
+    "title": "Configurações do Perfil",
+    "description": "Personalize sua experiência no TutorIA",
+    "userLabel": "Usuário",
+    "themeLabel": "Tema da Interface",
+    "themeSystem": "Sistema (Automático)",
+    "themeLight": "Claro",
+    "themeDark": "Escuro",
+    "themeSystemDesc": "Ajustado automaticamente baseado no seu dispositivo",
+    "themeLightDesc": "Interface sempre em modo claro",
+    "themeDarkDesc": "Interface sempre em modo escuro",
+    "languageLabel": "Idioma da Interface",
+    "languagePtBr": "Português (Brasil)",
+    "languageEn": "English (United States)",
+    "languageEs": "Español",
+    "languageDesc": "O idioma será aplicado em toda a interface",
+    "cancel": "Cancelar",
+    "save": "Salvar Configurações",
+    "saving": "Salvando...",
+    "saveSuccess": "Configurações salvas com sucesso!",
+    "languageChangeInfo": "A página será recarregada para aplicar o novo idioma",
+    "saveError": "Erro ao salvar configurações"
   },
   "common": {
     "buttons": {
@@ -477,6 +578,16 @@
     "pagination": {
       "rowsPerPage": "Linhas por página:",
       "showing": "Mostrando {from} até {to} de {total} registros"
+    },
+    "breadcrumbs": {
+      "courses": "Disciplinas",
+      "course": "Disciplina",
+      "modules": "Módulos",
+      "module": "Módulo",
+      "universities": "Universidades",
+      "university": "Universidade",
+      "professors": "Professores",
+      "professor": "Professor"
     },
     "loading": "Carregando...",
     "noData": "No data available",

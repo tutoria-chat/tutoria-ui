@@ -81,6 +81,8 @@
       "saveError": "Failed to save course. Please try again."
     },
     "detail": {
+      "breadcrumbUniversities": "Universities",
+      "breadcrumbCourses": "Courses",
       "viewUniversity": "View University",
       "addModule": "Add Module",
       "editCourse": "Edit Course",
@@ -101,6 +103,7 @@
         "search": "Search modules...",
         "allSemesters": "All Semesters",
         "semester": "{num}º Semester",
+        "semesterYear": "Semester/Year",
         "allYears": "All Years",
         "noModules": "No modules found with the applied filters.",
         "noModulesInitial": "No modules found. Add your first module to get started.",
@@ -329,7 +332,81 @@
       "actions": "Actions"
     },
     "deleteConfirm": "Are you sure you want to delete this university? This action cannot be undone.",
-    "deleteError": "Error deleting university. Please try again."
+    "deleteError": "Error deleting university. Please try again.",
+    "detail": {
+      "breadcrumb": "Universities",
+      "edit": "Edit",
+      "notFound": "University not found",
+      "stats": {
+        "courses": "Courses",
+        "professors": "Professors",
+        "code": "Code"
+      },
+      "tabs": {
+        "courses": "Courses",
+        "professors": "Professors"
+      },
+      "courseColumns": {
+        "name": "Course",
+        "modules": "Modules",
+        "modulesCount": "{count} modules",
+        "professors": "Professors",
+        "professorsCount": "{count} professors",
+        "createdAt": "Created at",
+        "actions": "Actions"
+      },
+      "professorColumns": {
+        "name": "Professor",
+        "type": "Type",
+        "admin": "Administrator",
+        "professor": "Professor",
+        "courses": "Courses",
+        "coursesCount": "{count} courses"
+      },
+      "coursesTab": {
+        "title": "Courses",
+        "description": "Courses offered by this university",
+        "newCourse": "New Course",
+        "emptyMessage": "No courses registered yet."
+      },
+      "professorsTab": {
+        "title": "Professors",
+        "description": "Professors associated with this university",
+        "newProfessor": "New Professor",
+        "emptyMessage": "No professors registered yet."
+      },
+      "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
+      "deleteError": "Error deleting course. Please try again."
+    },
+    "form": {
+      "breadcrumb": "Universities",
+      "createTitle": "Create University",
+      "createDescription": "Create a new university in the system",
+      "editTitle": "Edit University",
+      "editDescription": "Edit university information",
+      "breadcrumbCreate": "Create University",
+      "breadcrumbEdit": "Edit",
+      "back": "Back",
+      "universityInfo": "University Information",
+      "nameLabel": "University Name *",
+      "namePlaceholder": "Ex: Federal University of São Paulo",
+      "nameRequired": "University name is required",
+      "codeLabel": "University Code *",
+      "codePlaceholder": "Ex: UNIFESP",
+      "codeRequired": "University code is required",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "University description (optional)",
+      "create": "Create University",
+      "update": "Update University",
+      "cancel": "Cancel",
+      "creating": "Creating...",
+      "updating": "Updating...",
+      "createError": "Error creating university. Please try again.",
+      "updateError": "Error updating university. Please try again.",
+      "loadError": "Error loading university data.",
+      "loadErrorTitle": "Error",
+      "loadErrorDescription": "Could not load university data"
+    }
   },
   "professors": {
     "title": "Professor Management",
@@ -449,6 +526,7 @@
     "universities": "Universities",
     "myUniversity": "My University",
     "moduleTokens": "Module Tokens",
+    "professors": "Professors",
     "administration": "Administration",
     "systemOverview": "System Overview",
     "superAdmins": "Super Administrators",
@@ -460,6 +538,29 @@
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout"
+  },
+  "settings": {
+    "title": "Profile Settings",
+    "description": "Customize your TutorIA experience",
+    "userLabel": "User",
+    "themeLabel": "Interface Theme",
+    "themeSystem": "System (Automatic)",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystemDesc": "Automatically adjusted based on your device",
+    "themeLightDesc": "Interface always in light mode",
+    "themeDarkDesc": "Interface always in dark mode",
+    "languageLabel": "Interface Language",
+    "languagePtBr": "Português (Brasil)",
+    "languageEn": "English (United States)",
+    "languageEs": "Español",
+    "languageDesc": "The language will be applied throughout the interface",
+    "cancel": "Cancel",
+    "save": "Save Settings",
+    "saving": "Saving...",
+    "saveSuccess": "Settings saved successfully!",
+    "languageChangeInfo": "The page will reload to apply the new language",
+    "saveError": "Error saving settings"
   },
   "common": {
     "buttons": {
@@ -477,6 +578,16 @@
     "pagination": {
       "rowsPerPage": "Rows per page:",
       "showing": "Showing {from} to {to} of {total} records"
+    },
+    "breadcrumbs": {
+      "courses": "Courses",
+      "course": "Course",
+      "modules": "Modules",
+      "module": "Module",
+      "universities": "Universities",
+      "university": "University",
+      "professors": "Professors",
+      "professor": "Professor"
     },
     "loading": "Loading...",
     "noData": "No data available",

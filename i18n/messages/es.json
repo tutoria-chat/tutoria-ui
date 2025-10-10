@@ -81,6 +81,8 @@
       "saveError": "Error al guardar el curso. Por favor, intenta de nuevo."
     },
     "detail": {
+      "breadcrumbUniversities": "Universidades",
+      "breadcrumbCourses": "Cursos",
       "viewUniversity": "Ver universidad",
       "addModule": "Agregar módulo",
       "editCourse": "Editar curso",
@@ -101,6 +103,7 @@
         "search": "Buscar módulos...",
         "allSemesters": "Todos los semestres",
         "semester": "{num}º Semestre",
+        "semesterYear": "Semestre/Año",
         "allYears": "Todos los años",
         "noModules": "No se encontraron módulos con los filtros aplicados.",
         "noModulesInitial": "No se encontraron módulos. Agrega tu primer módulo para comenzar.",
@@ -329,7 +332,81 @@
       "actions": "Acciones"
     },
     "deleteConfirm": "¿Estás seguro de que deseas eliminar esta universidad? Esta acción no se puede deshacer.",
-    "deleteError": "Error al eliminar la universidad. Por favor, intenta de nuevo."
+    "deleteError": "Error al eliminar la universidad. Por favor, intenta de nuevo.",
+    "detail": {
+      "breadcrumb": "Universidades",
+      "edit": "Editar",
+      "notFound": "Universidad no encontrada",
+      "stats": {
+        "courses": "Cursos",
+        "professors": "Profesores",
+        "code": "Código"
+      },
+      "tabs": {
+        "courses": "Cursos",
+        "professors": "Profesores"
+      },
+      "courseColumns": {
+        "name": "Curso",
+        "modules": "Módulos",
+        "modulesCount": "{count} módulos",
+        "professors": "Profesores",
+        "professorsCount": "{count} profesores",
+        "createdAt": "Creado el",
+        "actions": "Acciones"
+      },
+      "professorColumns": {
+        "name": "Profesor",
+        "type": "Tipo",
+        "admin": "Administrador",
+        "professor": "Profesor",
+        "courses": "Cursos",
+        "coursesCount": "{count} cursos"
+      },
+      "coursesTab": {
+        "title": "Cursos",
+        "description": "Cursos ofrecidos por esta universidad",
+        "newCourse": "Nuevo curso",
+        "emptyMessage": "Aún no hay cursos registrados."
+      },
+      "professorsTab": {
+        "title": "Profesores",
+        "description": "Profesores asociados con esta universidad",
+        "newProfessor": "Nuevo profesor",
+        "emptyMessage": "Aún no hay profesores registrados."
+      },
+      "deleteConfirm": "¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.",
+      "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo."
+    },
+    "form": {
+      "breadcrumb": "Universidades",
+      "createTitle": "Crear universidad",
+      "createDescription": "Crea una nueva universidad en el sistema",
+      "editTitle": "Editar universidad",
+      "editDescription": "Edita la información de la universidad",
+      "breadcrumbCreate": "Crear universidad",
+      "breadcrumbEdit": "Editar",
+      "back": "Volver",
+      "universityInfo": "Información de la universidad",
+      "nameLabel": "Nombre de la universidad *",
+      "namePlaceholder": "Ej: Universidad Federal de São Paulo",
+      "nameRequired": "El nombre de la universidad es requerido",
+      "codeLabel": "Código de la universidad *",
+      "codePlaceholder": "Ej: UNIFESP",
+      "codeRequired": "El código de la universidad es requerido",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Descripción de la universidad (opcional)",
+      "create": "Crear universidad",
+      "update": "Actualizar universidad",
+      "cancel": "Cancelar",
+      "creating": "Creando...",
+      "updating": "Actualizando...",
+      "createError": "Error al crear la universidad. Por favor, intenta de nuevo.",
+      "updateError": "Error al actualizar la universidad. Por favor, intenta de nuevo.",
+      "loadError": "Error al cargar los datos de la universidad.",
+      "loadErrorTitle": "Error",
+      "loadErrorDescription": "No se pudieron cargar los datos de la universidad"
+    }
   },
   "professors": {
     "title": "Gestión de profesores",
@@ -449,6 +526,7 @@
     "universities": "Universidades",
     "myUniversity": "Mi universidad",
     "moduleTokens": "Tokens de módulos",
+    "professors": "Profesores",
     "administration": "Administración",
     "systemOverview": "Vista general del sistema",
     "superAdmins": "Super administradores",
@@ -460,6 +538,29 @@
     "profile": "Perfil",
     "settings": "Configuración",
     "logout": "Cerrar sesión"
+  },
+  "settings": {
+    "title": "Configuración del perfil",
+    "description": "Personaliza tu experiencia en TutorIA",
+    "userLabel": "Usuario",
+    "themeLabel": "Tema de la interfaz",
+    "themeSystem": "Sistema (Automático)",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystemDesc": "Ajustado automáticamente según tu dispositivo",
+    "themeLightDesc": "Interfaz siempre en modo claro",
+    "themeDarkDesc": "Interfaz siempre en modo oscuro",
+    "languageLabel": "Idioma de la interfaz",
+    "languagePtBr": "Português (Brasil)",
+    "languageEn": "English (United States)",
+    "languageEs": "Español",
+    "languageDesc": "El idioma se aplicará en toda la interfaz",
+    "cancel": "Cancelar",
+    "save": "Guardar configuración",
+    "saving": "Guardando...",
+    "saveSuccess": "¡Configuración guardada exitosamente!",
+    "languageChangeInfo": "La página se recargará para aplicar el nuevo idioma",
+    "saveError": "Error al guardar la configuración"
   },
   "common": {
     "buttons": {
@@ -477,6 +578,16 @@
     "pagination": {
       "rowsPerPage": "Filas por página:",
       "showing": "Mostrando {from} a {to} de {total} registros"
+    },
+    "breadcrumbs": {
+      "courses": "Cursos",
+      "course": "Curso",
+      "modules": "Módulos",
+      "module": "Módulo",
+      "universities": "Universidades",
+      "university": "Universidad",
+      "professors": "Profesores",
+      "professor": "Profesor"
     },
     "loading": "Cargando...",
     "noData": "No hay datos disponibles",

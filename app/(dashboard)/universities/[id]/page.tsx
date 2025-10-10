@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Edit,
   Plus,
@@ -18,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
+import { Loading } from '@/components/ui/loading-spinner';
 import { AdminOnly, ProfessorOnly, SuperAdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
@@ -28,6 +30,7 @@ export default function UniversityDetailsPage() {
   const params = useParams();
   const { user } = useAuth();
   const universityId = params.id as string;
+  const t = useTranslations('universities.detail');
 
   // For professors, ensure they can only access their own university
   React.useEffect(() => {
@@ -48,15 +51,17 @@ export default function UniversityDetailsPage() {
 
   const [activeTab, setActiveTab] = useState<'courses' | 'professors'>('courses');
 
+  const tCommon = useTranslations('common');
+
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Universidades', href: '/universities' },
-    { label: university?.name || 'Carregando...', isCurrentPage: true }
+    { label: t('breadcrumb'), href: '/universities' },
+    { label: university?.name || tCommon('loading'), isCurrentPage: true }
   ];
 
   const courseColumns: TableColumn<Course>[] = [
     {
       key: 'name',
-      label: 'Disciplina',
+      label: t('courseColumns.name'),
       sortable: true,
       render: (value, course) => (
         <Link href={`/courses/${course.id}`} className="hover:underline">
@@ -76,27 +81,27 @@ export default function UniversityDetailsPage() {
     },
     {
       key: 'modules_count',
-      label: 'Módulos',
+      label: t('courseColumns.modules'),
       render: (value) => (
-        <Badge variant="outline">{value || 0} módulos</Badge>
+        <Badge variant="outline">{t('courseColumns.modulesCount', { count: value || 0 })}</Badge>
       )
     },
     {
       key: 'professors_count',
-      label: 'Professores',
+      label: t('courseColumns.professors'),
       render: (value) => (
-        <Badge variant="outline">{value || 0} professores</Badge>
+        <Badge variant="outline">{t('courseColumns.professorsCount', { count: value || 0 })}</Badge>
       )
     },
     {
       key: 'created_at',
-      label: 'Criado em',
+      label: t('courseColumns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('courseColumns.actions'),
       width: '120px',
       render: (_, course) => (
         <div className="flex items-center space-x-1">
@@ -127,7 +132,7 @@ export default function UniversityDetailsPage() {
   const professorColumns: TableColumn<Professor>[] = [
     {
       key: 'first_name',
-      label: 'Professor',
+      label: t('professorColumns.name'),
       sortable: true,
       render: (_, professor) => (
         <div className="flex items-center space-x-3">
@@ -143,24 +148,24 @@ export default function UniversityDetailsPage() {
     },
     {
       key: 'is_admin',
-      label: 'Tipo',
+      label: t('professorColumns.type'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Administrador' : 'Professor'}
+          {value ? t('professorColumns.admin') : t('professorColumns.professor')}
         </Badge>
       )
     },
     {
       key: 'courses_count',
-      label: 'Disciplinas',
+      label: t('professorColumns.courses'),
       render: (value) => (
-        <span className="text-sm">{value || 0} disciplinas</span>
+        <span className="text-sm">{t('professorColumns.coursesCount', { count: value || 0 })}</span>
       )
     }
   ];
 
   const handleDeleteCourse = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('deleteConfirm'))) {
       return;
     }
 
@@ -170,16 +175,16 @@ export default function UniversityDetailsPage() {
       window.location.reload();
     } catch (error) {
       console.error('Erro ao deletar disciplina:', error);
-      alert('Erro ao deletar disciplina. Tente novamente.');
+      alert(t('deleteError'));
     }
   };
 
   if (universityLoading) {
-    return <div>Carregando...</div>;
+    return <Loading />;
   }
 
   if (!university) {
-    return <div>Universidade não encontrada</div>;
+    return <div>{t('notFound')}</div>;
   }
 
   return (
@@ -194,7 +199,7 @@ export default function UniversityDetailsPage() {
               <Button variant="outline" asChild>
                 <Link href={`/universities/${universityId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
-                  Editar
+                  {t('edit')}
                 </Link>
               </Button>
             </SuperAdminOnly>
@@ -206,7 +211,7 @@ export default function UniversityDetailsPage() {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Disciplinas</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.courses')}</CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -215,7 +220,7 @@ export default function UniversityDetailsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Professores</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.professors')}</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -224,7 +229,7 @@ export default function UniversityDetailsPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Código</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('stats.code')}</CardTitle>
             <Building2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -244,7 +249,7 @@ export default function UniversityDetailsPage() {
           }`}
         >
           <BookOpen className="inline-block mr-2 h-4 w-4" />
-          Disciplinas
+          {t('tabs.courses')}
         </button>
         <button
           onClick={() => setActiveTab('professors')}
@@ -255,7 +260,7 @@ export default function UniversityDetailsPage() {
           }`}
         >
           <Users className="inline-block mr-2 h-4 w-4" />
-          Professores
+          {t('tabs.professors')}
         </button>
       </div>
 
@@ -265,16 +270,16 @@ export default function UniversityDetailsPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Disciplinas</CardTitle>
+                <CardTitle>{t('coursesTab.title')}</CardTitle>
                 <CardDescription>
-                  Disciplinas oferecidas por esta universidade
+                  {t('coursesTab.description')}
                 </CardDescription>
               </div>
               <AdminOnly>
                 <Button asChild>
                   <Link href={`/courses/create?university_id=${universityId}`}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Nova Disciplina
+                    {t('coursesTab.newCourse')}
                   </Link>
                 </Button>
               </AdminOnly>
@@ -285,7 +290,7 @@ export default function UniversityDetailsPage() {
               data={courses}
               columns={courseColumns}
               loading={coursesLoading}
-              emptyMessage="Nenhuma disciplina cadastrada ainda."
+              emptyMessage={t('coursesTab.emptyMessage')}
             />
           </CardContent>
         </Card>
@@ -297,16 +302,16 @@ export default function UniversityDetailsPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Professores</CardTitle>
+                <CardTitle>{t('professorsTab.title')}</CardTitle>
                 <CardDescription>
-                  Professores vinculados a esta universidade
+                  {t('professorsTab.description')}
                 </CardDescription>
               </div>
               <AdminOnly>
                 <Button asChild>
                   <Link href={`/professors/create?university_id=${universityId}`}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Novo Professor
+                    {t('professorsTab.newProfessor')}
                   </Link>
                 </Button>
               </AdminOnly>
@@ -317,7 +322,7 @@ export default function UniversityDetailsPage() {
               data={professors}
               columns={professorColumns}
               loading={professorsLoading}
-              emptyMessage="Nenhum professor cadastrado ainda."
+              emptyMessage={t('professorsTab.emptyMessage')}
             />
           </CardContent>
         </Card>
