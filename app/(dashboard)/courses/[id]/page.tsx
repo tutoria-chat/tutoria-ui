@@ -412,7 +412,7 @@ export default function CourseDetailsPage() {
                 >
                   <option value="all">{t('modulesTab.allSemesters')}</option>
                   {availableSemesters.map(sem => (
-                    <option key={sem} value={sem}>{t('modulesTab.semester', { num: sem })}</option>
+                    <option key={sem} value={sem}>{t('modulesTab.semester', { num: sem || 0 })}</option>
                   ))}
                 </select>
                 <select

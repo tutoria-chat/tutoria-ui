@@ -329,7 +329,7 @@ export default function EditModulePage() {
       <div className="space-y-6">
         <PageHeader
           title={t('title')}
-          description={t('description', { name: module?.name })}
+          description={t('description', { name: module?.name || '' })}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -516,7 +516,7 @@ export default function EditModulePage() {
         {/* File Upload Section */}
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Arquivos do Módulo</CardTitle>
+            <CardTitle>{t('moduleFiles')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <form onSubmit={handleFileUpload} className="space-y-4">
@@ -537,12 +537,12 @@ export default function EditModulePage() {
                 {isUploading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Enviando...
+                    {t('uploading')}
                   </>
                 ) : (
                   <>
                     <Upload className="mr-2 h-4 w-4" />
-                    Enviar Arquivo
+                    {t('uploadFile')}
                   </>
                 )}
               </Button>
@@ -553,7 +553,7 @@ export default function EditModulePage() {
               columns={[
                 {
                   key: 'file_name',
-                  label: 'Arquivo',
+                  label: t('fileColumn'),
                   render: (_, file) => (
                     <div className="flex items-center space-x-2">
                       <FileText className="h-4 w-4 text-muted-foreground" />
@@ -563,12 +563,12 @@ export default function EditModulePage() {
                 },
                 {
                   key: 'file_size',
-                  label: 'Tamanho',
+                  label: t('sizeColumn'),
                   render: (value) => `${((value as number) / 1024 / 1024).toFixed(2)} MB`
                 },
                 {
                   key: 'actions',
-                  label: 'Ações',
+                  label: t('actionsColumn'),
                   width: '100px',
                   render: (_, file) => (
                     <div className="flex items-center space-x-1">
@@ -590,7 +590,7 @@ export default function EditModulePage() {
                         variant="ghost"
                         size="sm"
                         onClick={async () => {
-                          if (confirm('Tem certeza que deseja deletar este arquivo?')) {
+                          if (confirm(t('confirmDelete'))) {
                             try {
                               await apiClient.deleteFile(file.id);
                               refetchFiles?.();
@@ -607,7 +607,7 @@ export default function EditModulePage() {
                 }
               ] as TableColumn<FileType>[]}
               loading={filesLoading}
-              emptyMessage="Nenhum arquivo enviado ainda."
+              emptyMessage={t('noFilesYet')}
             />
           </CardContent>
         </Card>

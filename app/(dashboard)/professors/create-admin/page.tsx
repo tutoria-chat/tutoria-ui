@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectItem } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Copy, Check, Mail, AlertCircle, Building2 } from 'lucide-react';
@@ -48,7 +48,9 @@ export default function CreateAdminProfessorPage() {
   const loadUniversities = async () => {
     try {
       const data = await apiClient.getUniversities();
-      setUniversities(data);
+      // Handle paginated response
+      const universities = Array.isArray(data) ? data : (data.items || []);
+      setUniversities(universities);
     } catch (error: any) {
       console.error('Error loading universities:', error);
       toast.error('Erro ao carregar universidades');
@@ -282,20 +284,17 @@ export default function CreateAdminProfessorPage() {
               <div className="space-y-2">
                 <Label htmlFor="university_id">Universidade *</Label>
                 <Select
+                  id="university_id"
                   value={formData.university_id}
                   onValueChange={(value) => setFormData({ ...formData, university_id: value })}
                   disabled={loadingUniversities}
+                  placeholder={loadingUniversities ? "Carregando..." : "Selecione a universidade"}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder={loadingUniversities ? "Carregando..." : "Selecione a universidade"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {universities.map((university) => (
-                      <SelectItem key={university.id} value={String(university.id)}>
-                        {university.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
+                  {universities.map((university) => (
+                    <SelectItem key={university.id} value={String(university.id)}>
+                      {university.name}
+                    </SelectItem>
+                  ))}
                 </Select>
                 {errors.university_id && (
                   <p className="text-sm text-destructive">{errors.university_id}</p>

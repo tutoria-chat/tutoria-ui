@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { CourseForm } from '@/components/forms/course-form';
 import { AdminProfessorOnly } from '@/components/auth/role-guard';
@@ -13,10 +14,12 @@ export default function CreateCoursePage() {
   const router = useRouter();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations('courses.create');
+  const tCommon = useTranslations('common');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Disciplinas', href: '/courses' },
-    { label: 'Criar Disciplina', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.courses'), href: '/courses' },
+    { label: t('createCourse'), isCurrentPage: true }
   ];
 
   const handleSubmit = async (data: CourseCreate | CourseUpdate) => {
@@ -53,8 +56,8 @@ export default function CreateCoursePage() {
     <AdminProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Nova Disciplina"
-          description="Adicione uma nova disciplina ao catálogo acadêmico da sua universidade"
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
         />
 
