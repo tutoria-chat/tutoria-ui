@@ -11,7 +11,8 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
-import { Bot, FileText, Lightbulb } from 'lucide-react';
+import { Bot, FileText, Lightbulb, Sparkles, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import type { Module, ModuleCreate, ModuleUpdate, Course } from '@/lib/types';
 
 interface ModuleFormProps {
@@ -32,10 +33,13 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     semester: module?.semester || '',
     course_id: module?.course_id || courseId || '',
     system_prompt: module?.system_prompt || '',
+    tutor_language: module?.tutor_language || 'pt-br',
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingCourses, setLoadingCourses] = useState(false);
+  const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
+  const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
 
   // Predefined system prompt templates
   const promptTemplates = [
@@ -174,6 +178,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
         semester: formData.semester ? Number(formData.semester) : undefined,
         course_id: Number(formData.course_id),
         system_prompt: formData.system_prompt.trim() || undefined,
+        tutor_language: formData.tutor_language,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -193,6 +198,45 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
   const applyPromptTemplate = (template: typeof promptTemplates[0]) => {
     setFormData(prev => ({ ...prev, system_prompt: template.prompt }));
     setErrors(prev => ({ ...prev, system_prompt: '' }));
+  };
+
+  const handleImprovePrompt = async () => {
+    if (!formData.system_prompt.trim()) {
+      toast.error('Escreva um prompt primeiro', {
+        description: 'Você precisa ter um prompt inicial para melhorar.',
+      });
+      return;
+    }
+
+    if (!module?.id) {
+      toast.error('Salve o módulo primeiro', {
+        description: 'Você precisa salvar o módulo antes de melhorar o prompt.',
+      });
+      return;
+    }
+
+    setIsImprovingPrompt(true);
+    try {
+      const response = await apiClient.post<{ improved_prompt: string; remaining_improvements: number }>(
+        `/modules/${module.id}/improve-prompt`,
+        { current_prompt: formData.system_prompt }
+      );
+
+      setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
+      setRemainingImprovements(response.remaining_improvements);
+
+      toast.success('Prompt melhorado!', {
+        description: `Melhorias restantes: ${response.remaining_improvements}/3 nas próximas 72h.`,
+      });
+    } catch (error: any) {
+      console.error('Error improving prompt:', error);
+      const errorMsg = error?.response?.data?.detail || error.message || 'Erro desconhecido';
+      toast.error('Erro ao melhorar prompt', {
+        description: errorMsg,
+      });
+    } finally {
+      setIsImprovingPrompt(false);
+    }
   };
 
   const selectedCourse = courses.find(c => c.id === Number(formData.course_id));
@@ -380,7 +424,30 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               {/* Custom System Prompt */}
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="system_prompt">Prompt de Configuração do Sistema</FormLabel>
+                  <div className="flex items-center justify-between mb-2">
+                    <FormLabel htmlFor="system_prompt">Prompt de Configuração do Sistema</FormLabel>
+                    {module && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={handleImprovePrompt}
+                        disabled={isImprovingPrompt || isLoading || !formData.system_prompt.trim()}
+                      >
+                        {isImprovingPrompt ? (
+                          <>
+                            <Loader2 className="mr-2 h-3 w-3 animate-spin" />
+                            Melhorando...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="mr-2 h-3 w-3" />
+                            Melhorar com IA
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
                   <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
                     <p className="text-sm text-blue-900 dark:text-blue-100">
                       <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
@@ -398,20 +465,52 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                     rows={8}
                     className="font-mono text-sm"
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {formData.system_prompt.length} caracteres
-                    {formData.system_prompt.length > 0 && (
-                      <span className="ml-2 text-green-600">✓ Configurado</span>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xs text-muted-foreground">
+                      {formData.system_prompt.length} caracteres
+                      {formData.system_prompt.length > 0 && (
+                        <span className="ml-2 text-green-600">✓ Configurado</span>
+                      )}
+                    </p>
+                    {remainingImprovements !== null && (
+                      <p className="text-xs text-muted-foreground">
+                        Melhorias restantes: {remainingImprovements}/3 (72h)
+                      </p>
                     )}
-                  </p>
+                  </div>
                   {errors.system_prompt && <FormMessage>{errors.system_prompt}</FormMessage>}
                 </FormItem>
               </FormField>
 
+              {/* Tutor Language Selection */}
+              <FormField>
+                <FormItem>
+                  <FormLabel htmlFor="tutor_language">🌐 Idioma do Tutor IA</FormLabel>
+                  <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-md">
+                    <p className="text-sm text-amber-900 dark:text-amber-100">
+                      <strong>Importante:</strong> Selecione em qual idioma o tutor IA deve responder às perguntas dos alunos.
+                      Isso define o idioma das respostas, independentemente do idioma da pergunta.
+                    </p>
+                  </div>
+                  <select
+                    id="tutor_language"
+                    value={formData.tutor_language}
+                    onChange={(e) => handleInputChange('tutor_language', e.target.value)}
+                    disabled={isLoading}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="pt-br">🇧🇷 Português (Brasil)</option>
+                    <option value="en">🇺🇸 English (United States)</option>
+                    <option value="es">🇪🇸 Español (Spanish)</option>
+                  </select>
+                  {errors.tutor_language && <FormMessage>{errors.tutor_language}</FormMessage>}
+                </FormItem>
+              </FormField>
+
               {/* Prompt Guidelines */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-medium text-sm text-blue-900 mb-2">💡 Dicas para Escrever Prompts</h4>
-                <ul className="text-xs text-blue-700 space-y-1">
+              <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <h4 className="font-medium text-sm text-blue-900 dark:text-blue-100 mb-2">💡 Dicas para Escrever Prompts</h4>
+                <ul className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
                   <li>• Defina o papel e expertise da IA claramente</li>
                   <li>• Especifique o estilo de ensino e abordagem</li>
                   <li>• Inclua diretrizes para diferentes tipos de perguntas</li>

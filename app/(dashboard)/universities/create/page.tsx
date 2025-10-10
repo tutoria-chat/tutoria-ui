@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -14,6 +15,7 @@ import type { UniversityCreate, BreadcrumbItem } from '@/lib/types';
 
 export default function CreateUniversityPage() {
   const router = useRouter();
+  const t = useTranslations('universities.form');
   const [formData, setFormData] = useState<UniversityCreate>({
     name: '',
     code: '',
@@ -23,8 +25,8 @@ export default function CreateUniversityPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Universidades', href: '/universities' },
-    { label: 'Criar Universidade', isCurrentPage: true }
+    { label: t('breadcrumb'), href: '/universities' },
+    { label: t('breadcrumbCreate'), isCurrentPage: true }
   ];
 
   const handleChange = (field: keyof UniversityCreate, value: string) => {
@@ -38,11 +40,11 @@ export default function CreateUniversityPage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome da universidade é obrigatório';
+      newErrors.name = t('nameRequired');
     }
 
     if (!formData.code.trim()) {
-      newErrors.code = 'Código da universidade é obrigatório';
+      newErrors.code = t('codeRequired');
     }
 
     setErrors(newErrors);
@@ -62,7 +64,7 @@ export default function CreateUniversityPage() {
       router.push('/universities');
     } catch (error) {
       console.error('Failed to create university:', error);
-      setErrors({ submit: 'Erro ao criar universidade. Tente novamente.' });
+      setErrors({ submit: t('createError') });
     } finally {
       setIsLoading(false);
     }
@@ -72,8 +74,8 @@ export default function CreateUniversityPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Universidade"
-          description="Crie uma nova universidade no sistema"
+          title={t('createTitle')}
+          description={t('createDescription')}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -81,27 +83,27 @@ export default function CreateUniversityPage() {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
+              {t('back')}
             </Button>
           }
         />
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Informações da Universidade</CardTitle>
+            <CardTitle>{t('universityInfo')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Nome da Universidade *
+                  {t('nameLabel')}
                 </label>
                 <Input
                   id="name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Ex: Universidade Federal de São Paulo"
+                  placeholder={t('namePlaceholder')}
                   className={errors.name ? 'border-destructive' : ''}
                 />
                 {errors.name && (
@@ -111,14 +113,14 @@ export default function CreateUniversityPage() {
 
               <div>
                 <label htmlFor="code" className="block text-sm font-medium mb-1">
-                  Código da Universidade *
+                  {t('codeLabel')}
                 </label>
                 <Input
                   id="code"
                   type="text"
                   value={formData.code}
                   onChange={(e) => handleChange('code', e.target.value)}
-                  placeholder="Ex: UNIFESP"
+                  placeholder={t('codePlaceholder')}
                   className={errors.code ? 'border-destructive' : ''}
                   required
                 />
@@ -129,13 +131,13 @@ export default function CreateUniversityPage() {
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium mb-1">
-                  Descrição
+                  {t('descriptionLabel')}
                 </label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição da universidade (opcional)"
+                  placeholder={t('descriptionPlaceholder')}
                   rows={4}
                 />
               </div>
@@ -147,7 +149,7 @@ export default function CreateUniversityPage() {
               <div className="flex gap-3 pt-4">
                 <Button type="submit" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Criar Universidade
+                  {isLoading ? t('creating') : t('create')}
                 </Button>
                 <Button
                   type="button"
@@ -155,7 +157,7 @@ export default function CreateUniversityPage() {
                   onClick={() => router.back()}
                   disabled={isLoading}
                 >
-                  Cancelar
+                  {t('cancel')}
                 </Button>
               </div>
             </form>

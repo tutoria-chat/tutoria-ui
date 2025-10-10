@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Home, RefreshCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Error({
   error,
@@ -12,6 +13,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('errors');
+
   useEffect(() => {
     // Log the error to an error reporting service
     console.error('Error boundary caught:', error);
@@ -26,9 +29,9 @@ export default function Error({
               <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Algo deu errado!</CardTitle>
+          <CardTitle className="text-2xl">{t('somethingWrong')}</CardTitle>
           <CardDescription>
-            Ocorreu um erro inesperado. Tente novamente ou volte para a página inicial.
+            {t('unexpectedError')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -51,7 +54,7 @@ export default function Error({
               variant="default"
             >
               <RefreshCcw className="mr-2 h-4 w-4" />
-              Tentar Novamente
+              {t('tryAgain')}
             </Button>
             <Button
               onClick={() => window.location.href = '/'}
@@ -59,7 +62,7 @@ export default function Error({
               variant="outline"
             >
               <Home className="mr-2 h-4 w-4" />
-              Página Inicial
+              {t('homePage')}
             </Button>
           </div>
         </CardContent>

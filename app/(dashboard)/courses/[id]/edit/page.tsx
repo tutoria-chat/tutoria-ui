@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -16,6 +17,9 @@ export default function EditCoursePage() {
   const router = useRouter();
   const params = useParams();
   const courseId = Number(params.id);
+  const t = useTranslations('courses.edit');
+  const tForm = useTranslations('courses.form');
+  const tCommon = useTranslations('common');
 
   const [course, setCourse] = useState<Course | null>(null);
   const [originalFormData, setOriginalFormData] = useState<CourseUpdate>({
@@ -55,7 +59,7 @@ export default function EditCoursePage() {
       setOriginalFormData(initialData);
     } catch (error) {
       console.error('Failed to load course:', error);
-      setErrors({ load: 'Erro ao carregar dados da disciplina.' });
+      setErrors({ load: t('loadError') });
     } finally {
       setIsLoadingData(false);
     }
@@ -66,9 +70,9 @@ export default function EditCoursePage() {
   }, [loadCourse]);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Disciplinas', href: '/courses' },
-    { label: course?.name || 'Carregando...', href: `/courses/${courseId}` },
-    { label: 'Editar', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.courses'), href: '/courses' },
+    { label: course?.name || tCommon('loading'), href: `/courses/${courseId}` },
+    { label: tCommon('buttons.edit'), isCurrentPage: true }
   ];
 
   const handleChange = (field: keyof CourseUpdate, value: string) => {
@@ -82,11 +86,11 @@ export default function EditCoursePage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Nome da disciplina é obrigatório';
+      newErrors.name = tForm('nameRequired');
     }
 
     if (!formData.code?.trim()) {
-      newErrors.code = 'Código da disciplina é obrigatório';
+      newErrors.code = tForm('codeRequired');
     }
 
     setErrors(newErrors);
@@ -106,7 +110,7 @@ export default function EditCoursePage() {
       router.push(`/courses/${courseId}`);
     } catch (error) {
       console.error('Failed to update course:', error);
-      setErrors({ submit: 'Erro ao atualizar disciplina. Tente novamente.' });
+      setErrors({ submit: t('updateError') });
     } finally {
       setIsLoading(false);
     }
@@ -129,15 +133,15 @@ export default function EditCoursePage() {
       <AdminProfessorOnly>
         <div className="space-y-6">
           <PageHeader
-            title="Erro"
-            description="Não foi possível carregar os dados da disciplina"
+            title={tCommon('error')}
+            description={t('loadErrorDesc')}
             breadcrumbs={breadcrumbs}
           />
           <Card>
             <CardContent className="pt-6">
               <p className="text-destructive">{errors.load}</p>
               <Button onClick={() => router.back()} className="mt-4">
-                Voltar
+                {t('back')}
               </Button>
             </CardContent>
           </Card>
@@ -150,8 +154,8 @@ export default function EditCoursePage() {
     <AdminProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Editar Disciplina"
-          description={`Edite as informações da disciplina ${course?.name}`}
+          title={t('title')}
+          description={t('description', { name: course?.name || '' })}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -159,27 +163,27 @@ export default function EditCoursePage() {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
+              {t('back')}
             </Button>
           }
         />
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Informações da Disciplina</CardTitle>
+            <CardTitle>{t('courseInfo')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Nome da Disciplina *
+                  {t('nameLabel')}
                 </label>
                 <Input
                   id="name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Ex: Ciência da Computação"
+                  placeholder={t('namePlaceholder')}
                   className={errors.name ? 'border-destructive' : ''}
                 />
                 {errors.name && (
@@ -189,14 +193,14 @@ export default function EditCoursePage() {
 
               <div>
                 <label htmlFor="code" className="block text-sm font-medium mb-1">
-                  Código da Disciplina *
+                  {t('codeLabel')}
                 </label>
                 <Input
                   id="code"
                   type="text"
                   value={formData.code}
                   onChange={(e) => handleChange('code', e.target.value)}
-                  placeholder="Ex: CC"
+                  placeholder={t('codePlaceholder')}
                   className={errors.code ? 'border-destructive' : ''}
                 />
                 {errors.code && (
@@ -206,13 +210,13 @@ export default function EditCoursePage() {
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium mb-1">
-                  Descrição
+                  {t('descriptionLabel')}
                 </label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição da disciplina (opcional)"
+                  placeholder={t('descriptionPlaceholder')}
                   rows={4}
                 />
               </div>
@@ -224,7 +228,7 @@ export default function EditCoursePage() {
               <div className="flex gap-3 pt-4">
                 <Button type="submit" disabled={isLoading || !hasChanges()}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Salvar Alterações
+                  {t('saveChanges')}
                 </Button>
                 <Button
                   type="button"
@@ -232,7 +236,7 @@ export default function EditCoursePage() {
                   onClick={() => router.back()}
                   disabled={isLoading}
                 >
-                  Cancelar
+                  {t('cancel')}
                 </Button>
               </div>
             </form>

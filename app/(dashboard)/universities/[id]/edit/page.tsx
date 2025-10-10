@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
+import { Loading } from '@/components/ui/loading-spinner';
 import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import type { University, UniversityUpdate, BreadcrumbItem } from '@/lib/types';
@@ -15,6 +17,8 @@ import type { University, UniversityUpdate, BreadcrumbItem } from '@/lib/types';
 export default function EditUniversityPage() {
   const router = useRouter();
   const params = useParams();
+  const t = useTranslations('universities.form');
+  const tCommon = useTranslations('common');
   const universityId = Number(params.id);
 
   const [university, setUniversity] = useState<University | null>(null);
@@ -39,20 +43,20 @@ export default function EditUniversityPage() {
       });
     } catch (error) {
       console.error('Failed to load university:', error);
-      setErrors({ load: 'Erro ao carregar dados da universidade.' });
+      setErrors({ load: t('loadError') });
     } finally {
       setIsLoadingData(false);
     }
-  }, [universityId]);
+  }, [universityId, t]);
 
   useEffect(() => {
     loadUniversity();
   }, [loadUniversity]);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Universidades', href: '/universities' },
-    { label: university?.name || 'Carregando...', href: `/universities/${universityId}` },
-    { label: 'Editar', isCurrentPage: true }
+    { label: t('breadcrumb'), href: '/universities' },
+    { label: university?.name || tCommon('loading'), href: `/universities/${universityId}` },
+    { label: t('breadcrumbEdit'), isCurrentPage: true }
   ];
 
   const handleChange = (field: keyof UniversityUpdate, value: string) => {
@@ -66,11 +70,11 @@ export default function EditUniversityPage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Nome da universidade é obrigatório';
+      newErrors.name = t('nameRequired');
     }
 
     if (!formData.code?.trim()) {
-      newErrors.code = 'Código da universidade é obrigatório';
+      newErrors.code = t('codeRequired');
     }
 
     setErrors(newErrors);
@@ -90,7 +94,7 @@ export default function EditUniversityPage() {
       router.push('/universities');
     } catch (error) {
       console.error('Failed to update university:', error);
-      setErrors({ submit: 'Erro ao atualizar universidade. Tente novamente.' });
+      setErrors({ submit: t('updateError') });
     } finally {
       setIsLoading(false);
     }
@@ -99,11 +103,7 @@ export default function EditUniversityPage() {
   if (isLoadingData) {
     return (
       <SuperAdminOnly>
-        <div className="space-y-6">
-          <div className="flex items-center justify-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        </div>
+        <Loading />
       </SuperAdminOnly>
     );
   }
@@ -113,15 +113,15 @@ export default function EditUniversityPage() {
       <SuperAdminOnly>
         <div className="space-y-6">
           <PageHeader
-            title="Erro"
-            description="Não foi possível carregar os dados da universidade"
+            title={t('loadErrorTitle')}
+            description={t('loadErrorDescription')}
             breadcrumbs={breadcrumbs}
           />
           <Card>
             <CardContent className="pt-6">
               <p className="text-destructive">{errors.load}</p>
               <Button onClick={() => router.back()} className="mt-4">
-                Voltar
+                {t('back')}
               </Button>
             </CardContent>
           </Card>
@@ -134,8 +134,8 @@ export default function EditUniversityPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Editar Universidade"
-          description={`Edite as informações da universidade ${university?.name}`}
+          title={t('editTitle')}
+          description={t('editDescription')}
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -143,27 +143,27 @@ export default function EditUniversityPage() {
               onClick={() => router.back()}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar
+              {t('back')}
             </Button>
           }
         />
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>Informações da Universidade</CardTitle>
+            <CardTitle>{t('universityInfo')}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Nome da Universidade *
+                  {t('nameLabel')}
                 </label>
                 <Input
                   id="name"
                   type="text"
                   value={formData.name || ''}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Ex: Universidade Federal de São Paulo"
+                  placeholder={t('namePlaceholder')}
                   className={errors.name ? 'border-destructive' : ''}
                 />
                 {errors.name && (
@@ -173,14 +173,14 @@ export default function EditUniversityPage() {
 
               <div>
                 <label htmlFor="code" className="block text-sm font-medium mb-1">
-                  Código da Universidade *
+                  {t('codeLabel')}
                 </label>
                 <Input
                   id="code"
                   type="text"
                   value={formData.code || ''}
                   onChange={(e) => handleChange('code', e.target.value)}
-                  placeholder="Ex: UNIFESP"
+                  placeholder={t('codePlaceholder')}
                   className={errors.code ? 'border-destructive' : ''}
                   required
                 />
@@ -191,13 +191,13 @@ export default function EditUniversityPage() {
 
               <div>
                 <label htmlFor="description" className="block text-sm font-medium mb-1">
-                  Descrição
+                  {t('descriptionLabel')}
                 </label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição da universidade (opcional)"
+                  placeholder={t('descriptionPlaceholder')}
                   rows={4}
                 />
               </div>
@@ -209,7 +209,7 @@ export default function EditUniversityPage() {
               <div className="flex gap-3 pt-4">
                 <Button type="submit" disabled={isLoading}>
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Salvar Alterações
+                  {isLoading ? t('updating') : t('update')}
                 </Button>
                 <Button
                   type="button"
@@ -217,7 +217,7 @@ export default function EditUniversityPage() {
                   onClick={() => router.back()}
                   disabled={isLoading}
                 >
-                  Cancelar
+                  {t('cancel')}
                 </Button>
               </div>
             </form>

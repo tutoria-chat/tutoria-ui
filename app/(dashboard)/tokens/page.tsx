@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse 
 
 export default function TokensPage() {
   const { user } = useAuth();
+  const t = useTranslations('tokens');
 
   // Build API URL with university filter for professors
   const universityFilter = user?.university_id && user.role !== 'super_admin' ? `?university_id=${user.university_id}` : '';
@@ -32,7 +34,7 @@ export default function TokensPage() {
   const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Tokens de Módulos', isCurrentPage: true }
+    { label: t('title'), isCurrentPage: true }
   ];
 
   const handleOpenModal = (mode: TokenModalMode, token?: ModuleAccessToken) => {
@@ -51,7 +53,7 @@ export default function TokensPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Tem certeza que deseja deletar este token? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('deleteConfirm'))) {
       return;
     }
 
@@ -61,7 +63,7 @@ export default function TokensPage() {
       refetch();
     } catch (error) {
       console.error('Erro ao deletar token:', error);
-      alert('Erro ao deletar token. Tente novamente.');
+      alert(t('deleteError'));
     }
   };
 
@@ -69,10 +71,10 @@ export default function TokensPage() {
     try {
       await navigator.clipboard.writeText(token);
       // You could use a toast notification here instead of alert
-      alert('Token copiado para a área de transferência!');
+      alert(t('copySuccess'));
     } catch (error) {
       console.error('Erro ao copiar token:', error);
-      alert('Falha ao copiar o token. Tente novamente.');
+      alert(t('copyError'));
     }
   };
 
@@ -88,7 +90,7 @@ export default function TokensPage() {
   const columns: TableColumn<ModuleAccessToken>[] = [
     {
       key: 'name',
-      label: 'Nome do Token',
+      label: t('columns.tokenName'),
       sortable: true,
       render: (value, token) => (
         <div>
@@ -103,7 +105,7 @@ export default function TokensPage() {
     },
     {
       key: 'module_name',
-      label: 'Módulo',
+      label: t('columns.module'),
       sortable: true,
       render: (value) => (
         <span className="text-sm">{value}</span>
@@ -111,7 +113,7 @@ export default function TokensPage() {
     },
     {
       key: 'token',
-      label: 'Token',
+      label: t('columns.token'),
       render: (value) => (
         <div className="flex items-center space-x-2">
           <code className="text-xs bg-muted px-2 py-1 rounded">
@@ -129,40 +131,40 @@ export default function TokensPage() {
     },
     {
       key: 'allow_chat',
-      label: 'Chat',
+      label: t('columns.chat'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Permitido' : 'Bloqueado'}
+          {value ? t('columns.allowed') : t('columns.blocked')}
         </Badge>
       )
     },
     {
       key: 'allow_file_access',
-      label: 'Arquivos',
+      label: t('columns.files'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Permitido' : 'Bloqueado'}
+          {value ? t('columns.allowed') : t('columns.blocked')}
         </Badge>
       )
     },
     {
       key: 'expires_at',
-      label: 'Expira em',
+      label: t('columns.expiresAt'),
       sortable: true,
-      render: (value) => value ? formatDateShort(value as string) : 'Nunca'
+      render: (value) => value ? formatDateShort(value as string) : t('columns.never')
     },
     {
       key: 'is_active',
-      label: 'Status',
+      label: t('columns.status'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Ativo' : 'Inativo'}
+          {value ? t('columns.active') : t('columns.inactive')}
         </Badge>
       )
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('columns.actions'),
       width: '120px',
       render: (_, token) => (
         <div className="flex items-center space-x-1">
@@ -247,13 +249,13 @@ export default function TokensPage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Gerenciamento de Tokens de Módulo"
-          description="Crie e gerencie tokens de acesso para widgets de tutoria IA"
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
           actions={
             <Button onClick={() => handleOpenModal('create')}>
               <Plus className="mr-2 h-4 w-4" />
-              Gerar Token
+              {t('createButton')}
             </Button>
           }
         />
@@ -263,7 +265,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Key className="h-5 w-5" />
-                <span>Tokens Totais</span>
+                <span>{t('stats.totalTokens')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -275,7 +277,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Activity className="h-5 w-5 text-green-500" />
-                <span>Tokens Ativos</span>
+                <span>{t('stats.activeTokens')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -287,7 +289,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Shield className="h-5 w-5 text-blue-500" />
-                <span>Taxa de Segurança</span>
+                <span>{t('stats.securityRate')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -299,7 +301,7 @@ export default function TokensPage() {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Clock className="h-5 w-5 text-amber-500" />
-                <span>Expirando em Breve</span>
+                <span>{t('stats.expiringSoon')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -314,7 +316,7 @@ export default function TokensPage() {
           loading={loading}
           search={{
             value: searchTerm,
-            placeholder: "Buscar tokens, módulos ou descrições...",
+            placeholder: t('searchPlaceholder'),
             onSearchChange: setSearchTerm
           }}
           pagination={{
@@ -329,7 +331,7 @@ export default function TokensPage() {
             direction: sortDirection,
             onSortChange: handleSortChange
           }}
-          emptyMessage="Nenhum token encontrado. Crie seu primeiro token para começar."
+          emptyMessage={t('emptyMessage')}
         />
 
         <TokenModal

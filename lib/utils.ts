@@ -32,10 +32,11 @@ export function formatDateShort(date: string | Date | null | undefined): string 
     return 'N/A';
   }
 
-  return new Intl.DateTimeFormat('pt-BR', {
+  // Format as "26 Jul 2025" to avoid confusion between date formats
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'short',
     year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
   }).format(dateObj);
 }
 

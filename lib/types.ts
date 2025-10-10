@@ -9,9 +9,11 @@ export interface User {
   role: UserRole; // 'super_admin', 'professor', or 'student'
   university_id?: number;
   is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
-  assigned_courses?: number[]; // Fetched separately via API for regular professors
+  assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
   created_at: string;
   updated_at: string;
+  theme_preference?: string; // 'system' | 'light' | 'dark'
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export type UserRole = 'super_admin' | 'professor' | 'student';
@@ -110,6 +112,7 @@ export interface Module {
   course_id: number;
   course_name?: string;
   university_id?: number;
+  tutor_language?: string; // Language for AI tutor responses (pt-br, en, es)
   created_at: string;
   updated_at: string;
   files_count?: number;
@@ -124,6 +127,7 @@ export interface ModuleCreate {
   semester?: number;
   year?: number;
   course_id: number;
+  tutor_language?: string;
 }
 
 export interface ModuleUpdate {
@@ -134,6 +138,7 @@ export interface ModuleUpdate {
   semester?: number;
   year?: number;
   course_id?: number;
+  tutor_language?: string;
 }
 
 export interface ModuleWithDetails extends Module {

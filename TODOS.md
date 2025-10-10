@@ -75,16 +75,19 @@
 **Estimated Effort**: Medium-High (depends on backend needs)
 **Customer Value**: Medium (admin tool improvements)
 
-### 8. **Notifications System** 🔔
-- [ ] Implement notifications bell in top-right corner
-- [ ] Fix header alignment (profile + notifications to right edge)
+### 8. **Notifications System** 🔔 🚧 IN PROGRESS
+- [ ] Implement notifications bell in top-right corner (currently commented out in header)
 - [ ] **Backend**: Create notifications API
 - [ ] Real-time updates (WebSocket or polling)
 - [ ] Notification preferences per user
 - [ ] Mark as read functionality
+- [ ] Badge showing unread count
+- [ ] Dropdown showing recent notifications
 
 **Estimated Effort**: High (real-time infrastructure needed)
 **Customer Value**: Medium-High (improves engagement)
+
+**Note**: Notifications bell is currently commented out in `components/layout/header.tsx` until backend API is ready.
 
 ### 9. **CI/CD for Frontend** ⚙️ ✅ COMPLETED
 - [x] Set up GitHub Actions workflow
@@ -107,33 +110,32 @@
 **Estimated Effort**: Medium (requires careful typing)
 **Customer Value**: Low (internal code quality improvement)
 
-### 11. **Auth Token Refresh Implementation** 🔐 ⚡ CRITICAL
-- [ ] **Implement Refresh Token Flow**
-  - Add refresh token endpoint integration
-  - Auto-refresh before token expiration
-  - Handle refresh token errors gracefully
-- [ ] **Token Expiration Handling**
-  - Detect token expiration (401 errors)
-  - Automatically attempt refresh
-  - Logout if refresh fails
-- [ ] **Interceptor/Middleware**
-  - Add request interceptor to check token expiry
-  - Add response interceptor for 401 handling
-  - Queue requests during token refresh
-- [ ] **Session Management**
-  - Persist refresh token securely
-  - Clear tokens on logout
-  - Handle multiple tabs/windows
-- [ ] **User Experience**
-  - Silent token refresh (no user interruption)
-  - Show notification if manual login required
-  - Prevent data loss during refresh
+### 11. **Auth Token Refresh Implementation** 🔐 ⚡ CRITICAL ✅ COMPLETED
+- [x] **Implement Refresh Token Flow**
+  - [x] Add refresh token endpoint integration
+  - [x] Auto-refresh on 401 errors
+  - [x] Handle refresh token errors gracefully
+- [x] **Token Expiration Handling**
+  - [x] Detect token expiration (401 errors)
+  - [x] Automatically attempt refresh
+  - [x] Logout if refresh fails
+- [x] **Interceptor/Middleware**
+  - [x] Add response interceptor for 401 handling (in api.ts)
+  - [x] Prevent concurrent refresh calls with promise queue
+- [x] **Session Management**
+  - [x] Persist refresh token securely
+  - [x] Clear tokens on logout
+  - [x] Handle multiple tabs/windows
+- [x] **User Experience**
+  - [x] Silent token refresh (no user interruption)
+  - [x] Redirect to login if manual login required
+  - [x] Retry original request after refresh
 
-**Estimated Effort**: 6-8 hours frontend
+**Estimated Effort**: 6-8 hours frontend ✅ COMPLETED
 **Customer Value**: CRITICAL (prevents unexpected logouts)
 **Complexity**: Medium
 **Breaking Changes**: None
-**Backend**: Verify `/auth/refresh` endpoint exists and works
+**Backend**: `/auth/refresh` endpoint exists and works ✅
 
 ### 12. **Module Token Management Improvements** 🔑 ⚡ SUPER HIGH PRIORITY ✅ COMPLETED
 - [x] **Convert to Modal Pattern**: Replace token pages with modals
@@ -224,6 +226,186 @@ Based on **Customer Value** + **Ease of Implementation**:
 6. Super Admin UI Pages (28-40h)
 7. Notifications System (20-30h)
 8. Multi-Model AI Config (28-42h)
+
+---
+
+## Phase 5: Widget Chat Enhancements ⭐ HIGH PRIORITY
+
+### 13. **Widget Chat Message Tracking & Conversation History** 💬 🔥 NEW
+- [ ] **Backend: Message Storage System**
+  - [ ] Create ChatMessage/Conversation database table
+  - [ ] Store all /widget/chat messages (question + response + metadata)
+  - [ ] Track student_id, module_id, timestamp, tokens used
+  - [ ] Add session/conversation grouping
+- [ ] **Backend: Conversation Context API**
+  - [ ] Modify /widget/chat to load previous messages
+  - [ ] Pass conversation history to OpenAI Assistants API
+  - [ ] Implement conversation thread management
+  - [ ] Set reasonable context window (last 10-20 messages)
+- [ ] **Backend: Analytics Endpoints**
+  - [ ] GET /widget/analytics/frequent-questions endpoint
+  - [ ] Aggregate and rank most common questions
+  - [ ] Filter by module, time period, etc.
+  - [ ] Export capabilities for professors
+- [ ] **AI Enhancement: Contextual Responses**
+  - [ ] AI can reference previous conversation
+  - [ ] Generate personalized study suggestions
+  - [ ] Detect struggling topics and recommend focus areas
+  - [ ] Suggest action items based on conversation flow
+- [ ] **Frontend: Analytics Dashboard**
+  - [ ] Professor view of frequent questions per module
+  - [ ] Visualization of topic distribution
+  - [ ] Identify knowledge gaps from student questions
+  - [ ] Export conversation logs (anonymized)
+
+**Database Schema Needed (PascalCase)**:
+```
+ChatConversations table:
+- Id (Primary Key)
+- StudentId (String, nullable - can be anonymous)
+- ModuleId (Foreign Key)
+- ModuleTokenId (Foreign Key)
+- StartedAt (DateTime)
+- LastMessageAt (DateTime)
+- MessageCount (Integer)
+- IsActive (Boolean)
+
+ChatMessages table:
+- Id (Primary Key)
+- ConversationId (Foreign Key)
+- Role (String: 'user' or 'assistant')
+- Content (Text)
+- TokensUsed (Integer, nullable)
+- CreatedAt (DateTime)
+- Metadata (JSON, nullable)
+```
+
+**Estimated Effort**: 16-24 hours (8-12h backend + 6-8h frontend + 2-4h testing)
+**Customer Value**: VERY HIGH (improves learning outcomes + provides insights)
+**Complexity**: Medium-High
+**Breaking Changes**: None (additive feature)
+**Priority**: HIGH - Directly improves AI tutor quality
+
+**Benefits**:
+- 📊 Analytics on student struggles and common questions
+- 💡 AI provides better, contextual responses
+- 🎯 Personalized study recommendations
+- 📈 Identify course content gaps
+- 🔍 Track learning patterns
+
+---
+
+## Phase 6: Student Management & Identification
+
+### 14. **Student Import & Identity Management** 👥 🎓 NEW
+- [ ] **Backend: Student Import System**
+  - [ ] Create Students database table (if not exists)
+  - [ ] POST /students/import-excel endpoint
+  - [ ] Parse Excel file (name, email, student_id, enrollment_number, etc.)
+  - [ ] Bulk insert/update students
+  - [ ] Associate students with courses/modules
+  - [ ] Validate and deduplicate entries
+- [ ] **Backend: Student Lookup API**
+  - [ ] GET /students/lookup/{student_id} endpoint
+  - [ ] Quick lookup by student_id or email
+  - [ ] Return student info for widget authentication
+- [ ] **Widget Integration**
+  - [ ] Widget accepts student_id parameter
+  - [ ] Pass student_id to /widget/chat endpoint
+  - [ ] Link conversations to actual students (not anonymous)
+  - [ ] Show "Logged in as [Student Name]" in widget
+- [ ] **Frontend: Student Management UI**
+  - [ ] Professor page: Upload Excel of students
+  - [ ] Download Excel template
+  - [ ] View imported students per course/module
+  - [ ] Manual student add/edit/remove
+  - [ ] Bulk operations (delete, export)
+- [ ] **Excel Import Features**
+  - [ ] Support .xlsx and .csv formats
+  - [ ] Required columns: student_id, name, email
+  - [ ] Optional columns: enrollment_number, phone, course_id
+  - [ ] Validation preview before import
+  - [ ] Error reporting (which rows failed, why)
+  - [ ] Import history/logs
+
+**Database Schema Needed (PascalCase)**:
+```
+Students table (if not exists):
+- Id (Primary Key)
+- StudentId (String, unique) - External student ID from university
+- EnrollmentNumber (String, nullable)
+- FirstName (String)
+- LastName (String)
+- Email (String, unique)
+- PhoneNumber (String, nullable)
+- UniversityId (Foreign Key)
+- CreatedAt (DateTime)
+- UpdatedAt (DateTime)
+- IsActive (Boolean, default true)
+
+StudentCourseEnrollments table:
+- Id (Primary Key)
+- StudentId (Foreign Key to Students)
+- CourseId (Foreign Key to Courses)
+- EnrolledAt (DateTime)
+- Status (String: 'active', 'completed', 'dropped')
+
+StudentImportLogs table:
+- Id (Primary Key)
+- UploadedBy (Foreign Key to Professors)
+- FileName (String)
+- TotalRows (Integer)
+- SuccessfulRows (Integer)
+- FailedRows (Integer)
+- ErrorDetails (JSON)
+- UploadedAt (DateTime)
+```
+
+**Excel Template Format**:
+```
+| StudentId | FirstName | LastName | Email              | EnrollmentNumber | CourseId (optional) |
+|-----------|-----------|----------|--------------------|------------------|---------------------|
+| S123456   | João      | Silva    | joao@email.com     | 2024001          | 1                   |
+| S123457   | Maria     | Santos   | maria@email.com    | 2024002          | 1                   |
+```
+
+**Widget URL with Student ID**:
+```
+https://widget.tutoria.com/?module_token={TOKEN}&student_id=S123456
+```
+
+**Estimated Effort**: 12-18 hours (8-12h backend + 4-6h frontend)
+**Customer Value**: VERY HIGH (enables personalized learning + real analytics)
+**Complexity**: Medium
+**Breaking Changes**: None (additive feature)
+**Priority**: HIGH - Required for conversation tracking (#13)
+
+**Benefits**:
+- 🎯 Track individual student progress
+- 📊 Real analytics (not anonymous)
+- 💡 Personalized AI responses per student
+- 📈 Identify struggling students early
+- 🔍 Full conversation history per student
+- 📧 Enable email notifications to students
+- 🎓 Grade/assessment integration (future)
+
+**Implementation Flow**:
+1. Professor uploads Excel with student list
+2. System validates and imports students
+3. Students are associated with courses
+4. Module tokens are shared with students (via LMS or email)
+5. Widget URL includes student_id: `?module_token=XYZ&student_id=S123456`
+6. Widget chat sends student_id with every message
+7. Backend stores conversations linked to real students
+8. Professors see analytics per student
+
+**Security Considerations**:
+- Validate student_id belongs to module's course
+- Rate limit imports (prevent spam)
+- Sanitize Excel input (prevent injection)
+- GDPR compliance for student data
+- Allow students to opt-out of tracking
+- Anonymize data in exports (professor-facing)
 
 ---
 

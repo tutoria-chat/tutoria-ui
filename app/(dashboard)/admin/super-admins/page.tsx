@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Edit, Trash2, Shield, Users, Mail, Calendar } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
@@ -10,47 +10,13 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
+import { apiClient } from '@/lib/api';
+import { toast } from 'sonner';
 import type { SuperAdmin, TableColumn, BreadcrumbItem } from '@/lib/types';
 
-// Mock data - em produção viria da API
-const mockSuperAdmins: SuperAdmin[] = [
-  {
-    id: 1,
-    email: 'admin@tutoria.com.br',
-    first_name: 'Super',
-    last_name: 'Administrador',
-    created_at: '2024-01-01T00:00:00Z',
-    updated_at: '2024-01-01T00:00:00Z'
-  },
-  {
-    id: 2,
-    email: 'joao.silva@tutoria.com.br',
-    first_name: 'João',
-    last_name: 'Silva',
-    created_at: '2024-01-15T10:30:00Z',
-    updated_at: '2024-02-20T14:45:00Z'
-  },
-  {
-    id: 3,
-    email: 'maria.santos@tutoria.com.br',
-    first_name: 'Maria',
-    last_name: 'Santos',
-    created_at: '2024-02-01T08:15:00Z',
-    updated_at: '2024-03-10T16:20:00Z'
-  },
-  {
-    id: 4,
-    email: 'carlos.oliveira@tutoria.com.br',
-    first_name: 'Carlos',
-    last_name: 'Oliveira',
-    created_at: '2024-02-15T12:00:00Z',
-    updated_at: '2024-03-05T09:30:00Z'
-  }
-];
-
 export default function SuperAdminsPage() {
-  const [superAdmins] = useState<SuperAdmin[]>(mockSuperAdmins);
-  const [loading] = useState(false);
+  const [superAdmins, setSuperAdmins] = useState<SuperAdmin[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -61,6 +27,23 @@ export default function SuperAdminsPage() {
     { label: 'Administração', href: '/admin' },
     { label: 'Super Administradores', isCurrentPage: true }
   ];
+
+  useEffect(() => {
+    loadSuperAdmins();
+  }, []);
+
+  const loadSuperAdmins = async () => {
+    setLoading(true);
+    try {
+      const response = await apiClient.getSuperAdmins();
+      setSuperAdmins(response.items || response);
+    } catch (error: any) {
+      console.error('Error loading super admins:', error);
+      toast.error('Erro ao carregar super administradores');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns: TableColumn<SuperAdmin>[] = [
     {
@@ -220,7 +203,7 @@ export default function SuperAdminsPage() {
         />
 
         {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total de Super Administradores</CardTitle>

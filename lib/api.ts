@@ -303,6 +303,14 @@ class TutoriaAPIClient {
     return this.put('/auth/password', { current_password: currentPassword, new_password: newPassword });
   }
 
+  async getCurrentUser(): Promise<User> {
+    return this.get('/auth/me');
+  }
+
+  async updateUserPreferences(data: { theme_preference?: string; language_preference?: string }): Promise<{ message: string }> {
+    return this.put('/auth/preferences', data);
+  }
+
   // University endpoints
   async getUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
     return this.get('/universities/', params);
@@ -343,6 +351,10 @@ class TutoriaAPIClient {
 
   async deleteCourse(id: number): Promise<void> {
     return this.delete(`/courses/${id}`);
+  }
+
+  async getCoursesByUniversity(universityId: number): Promise<Course[]> {
+    return this.get(`/courses/`, { university_id: universityId });
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {

@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import {
   Edit,
   Upload,
@@ -38,6 +39,8 @@ export default function ModuleDetailsPage() {
   const params = useParams();
   const router = useRouter();
   const moduleId = Number(params.id);
+  const t = useTranslations('modules.detail');
+  const tCommon = useTranslations('common');
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
   const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
@@ -53,12 +56,12 @@ export default function ModuleDetailsPage() {
   const [isPreparing, setIsPreparing] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
-    { label: 'Disciplinas', href: '/courses' },
-    { label: module?.course_name || 'Disciplina', href: `/courses/${module.course_id}` },
-    { label: module?.name || 'Carregando...', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.courses'), href: '/courses' },
+    { label: module?.course_name || tCommon('breadcrumbs.course'), href: `/courses/${module.course_id}` },
+    { label: module?.name || tCommon('loading'), isCurrentPage: true }
   ] : [
-    { label: 'Módulos', href: '/modules' },
-    { label: module?.name || 'Carregando...', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.modules'), href: '/modules' },
+    { label: module?.name || tCommon('loading'), isCurrentPage: true }
   ];
 
   const handleFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,14 +69,14 @@ export default function ModuleDetailsPage() {
     const form = e.currentTarget;
 
     if (!selectedFile) {
-      setUploadError('Selecione um arquivo para enviar');
+      setUploadError(t('fileSelectError'));
       return;
     }
 
     // Validate file size (max 50MB)
     const maxSize = 50 * 1024 * 1024;
     if (selectedFile.size > maxSize) {
-      setUploadError('Arquivo muito grande. Tamanho máximo: 50MB');
+      setUploadError(t('fileTooLarge'));
       return;
     }
 
@@ -88,7 +91,7 @@ export default function ModuleDetailsPage() {
     ];
 
     if (!allowedTypes.includes(selectedFile.type)) {
-      setUploadError('Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX');
+      setUploadError(t('fileTypeNotSupported'));
       return;
     }
 
@@ -107,15 +110,15 @@ export default function ModuleDetailsPage() {
       setSelectedFile(null);
       refetchFiles?.();
 
-      toast.success('Arquivo enviado com sucesso!', {
-        description: `${selectedFile.name} foi adicionado ao módulo.`,
+      toast.success(t('fileUploadSuccess'), {
+        description: t('fileUploadSuccessDesc', { fileName: selectedFile.name }),
       });
     } catch (error) {
       console.error('Erro ao enviar arquivo:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
-      setUploadError(`Erro ao enviar arquivo: ${errorMessage}. Tente novamente.`);
+      const errorMessage = error instanceof Error ? error.message : tCommon('error');
+      setUploadError(`${t('fileUploadError')}: ${errorMessage}`);
 
-      toast.error('Erro ao enviar arquivo', {
+      toast.error(t('fileUploadError'), {
         description: errorMessage,
       });
     } finally {
@@ -124,20 +127,20 @@ export default function ModuleDetailsPage() {
   };
 
   const handleDeleteFile = async (fileId: number) => {
-    if (!confirm('Tem certeza que deseja deletar este arquivo? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('columns.deleteConfirm', { ns: 'modules' }))) {
       return;
     }
 
     try {
       await apiClient.deleteFile(fileId);
       refetchFiles?.();
-      toast.success('Arquivo deletado', {
-        description: 'O arquivo foi removido do módulo.',
+      toast.success(t('fileDeleteSuccess'), {
+        description: t('fileDeleteSuccessDesc'),
       });
     } catch (error) {
       console.error('Erro ao deletar arquivo:', error);
-      toast.error('Erro ao deletar arquivo', {
-        description: 'Não foi possível deletar o arquivo. Tente novamente.',
+      toast.error(t('fileDeleteError'), {
+        description: t('fileDeleteErrorDesc'),
       });
     }
   };
@@ -146,29 +149,29 @@ export default function ModuleDetailsPage() {
     try {
       const { download_url } = await apiClient.getFileDownloadUrl(fileId);
       window.open(download_url, '_blank');
-      toast.success('Download iniciado', {
-        description: 'O arquivo será baixado em breve.',
+      toast.success(t('downloadStarted'), {
+        description: t('downloadStartedDesc'),
       });
     } catch (error) {
       console.error('Erro ao baixar arquivo:', error);
-      toast.error('Erro ao baixar arquivo', {
-        description: 'Não foi possível baixar o arquivo. Tente novamente.',
+      toast.error(t('downloadError'), {
+        description: t('downloadErrorDesc'),
       });
     }
   };
 
   const handlePrepareModule = async () => {
     if (!tokens || tokens.length === 0) {
-      toast.error('Nenhum token disponível', {
-        description: 'Crie um token primeiro para preparar o módulo.',
+      toast.error(t('prepareNoTokens'), {
+        description: t('prepareNoTokensDesc'),
       });
       return;
     }
 
     const activeToken = tokens.find(t => t.is_active && t.allow_chat);
     if (!activeToken) {
-      toast.error('Token inválido', {
-        description: 'Crie um token ativo com permissão de chat.',
+      toast.error(t('prepareInvalidToken'), {
+        description: t('prepareInvalidTokenDesc'),
       });
       return;
     }
@@ -188,16 +191,16 @@ export default function ModuleDetailsPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Falha ao preparar módulo');
+        throw new Error(t('prepareError'));
       }
 
-      toast.success('Módulo preparado!', {
-        description: 'Arquivos foram enviados para OpenAI e o assistente está pronto.',
+      toast.success(t('prepareSuccess'), {
+        description: t('prepareSuccessDesc'),
       });
     } catch (error) {
       console.error('Erro ao preparar módulo:', error);
-      toast.error('Erro ao preparar módulo', {
-        description: 'Não foi possível preparar o módulo. Tente novamente.',
+      toast.error(t('prepareError'), {
+        description: t('prepareErrorDesc'),
       });
     } finally {
       setIsPreparing(false);
@@ -215,7 +218,7 @@ export default function ModuleDetailsPage() {
   const fileColumns: TableColumn<FileType>[] = [
     {
       key: 'file_name',
-      label: 'Arquivo',
+      label: t('columns.fileName'),
       sortable: true,
       render: (_, file) => (
         <div className="flex items-center space-x-3">
@@ -233,19 +236,19 @@ export default function ModuleDetailsPage() {
     },
     {
       key: 'file_size',
-      label: 'Tamanho',
+      label: t('columns.size'),
       sortable: true,
       render: (value) => `${((value as number) / 1024 / 1024).toFixed(2)} MB`
     },
     {
       key: 'created_at',
-      label: 'Enviado em',
+      label: t('columns.uploadedAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('columns.actions'),
       width: '120px',
       render: (_, file) => (
         <div className="flex items-center space-x-1">
@@ -274,7 +277,7 @@ export default function ModuleDetailsPage() {
   const tokenColumns: TableColumn<ModuleAccessToken>[] = [
     {
       key: 'name',
-      label: 'Nome do Token',
+      label: tCommon('columns.tokenName', { ns: 'tokens' }),
       sortable: true,
       render: (value, token) => (
         <div>
@@ -289,7 +292,7 @@ export default function ModuleDetailsPage() {
     },
     {
       key: 'token',
-      label: 'Token',
+      label: tCommon('columns.token', { ns: 'tokens' }),
       render: (value) => (
         <div className="flex items-center space-x-2">
           <code className="text-xs bg-muted px-2 py-1 rounded">
@@ -301,9 +304,9 @@ export default function ModuleDetailsPage() {
             onClick={async () => {
               try {
                 await navigator.clipboard.writeText(value as string);
-                toast.success('Token copiado!');
+                toast.success(t('tokenCopied'));
               } catch (error) {
-                toast.error('Erro ao copiar token');
+                toast.error(t('tokenCopyError'));
               }
             }}
           >
@@ -314,40 +317,40 @@ export default function ModuleDetailsPage() {
     },
     {
       key: 'allow_chat',
-      label: 'Chat',
+      label: tCommon('columns.chat', { ns: 'tokens' }),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Permitido' : 'Bloqueado'}
+          {value ? tCommon('columns.allowed', { ns: 'tokens' }) : tCommon('columns.blocked', { ns: 'tokens' })}
         </Badge>
       )
     },
     {
       key: 'allow_file_access',
-      label: 'Arquivos',
+      label: tCommon('columns.files', { ns: 'tokens' }),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Permitido' : 'Bloqueado'}
+          {value ? tCommon('columns.allowed', { ns: 'tokens' }) : tCommon('columns.blocked', { ns: 'tokens' })}
         </Badge>
       )
     },
     {
       key: 'is_active',
-      label: 'Status',
+      label: tCommon('columns.status', { ns: 'tokens' }),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? 'Ativo' : 'Inativo'}
+          {value ? tCommon('columns.active', { ns: 'tokens' }) : tCommon('columns.inactive', { ns: 'tokens' })}
         </Badge>
       )
     },
     {
       key: 'created_at',
-      label: 'Criado em',
+      label: t('createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: t('columns.actions'),
       width: '80px',
       render: (_, token) => (
         <div className="flex items-center space-x-1">
@@ -378,10 +381,10 @@ export default function ModuleDetailsPage() {
   if (moduleError || !module) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <p className="text-destructive">Erro ao carregar módulo</p>
+        <p className="text-destructive">{tCommon('error')}</p>
         <Button onClick={() => router.push('/modules')}>
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Voltar para Módulos
+          {tCommon('buttons.back')}
         </Button>
       </div>
     );
@@ -391,7 +394,7 @@ export default function ModuleDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={module.name}
-        description={`Módulo em ${module.course_name || 'Disciplina'}`}
+        description={`${t('moduleInfo')} - ${module.course_name || tCommon('breadcrumbs.course')}`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
@@ -400,7 +403,7 @@ export default function ModuleDetailsPage() {
                 <Button variant="outline" asChild>
                   <Link href={`/courses/${module.course_id}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Ver Disciplina
+                    {t('viewCourse')}
                   </Link>
                 </Button>
               )}
@@ -408,28 +411,27 @@ export default function ModuleDetailsPage() {
                 variant="outline"
                 onClick={handlePrepareModule}
                 disabled={isPreparing || !tokens || tokens.length === 0}
-                title="Clique se você adicionou novos arquivos. Requer um token ativo."
               >
                 {isPreparing ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Preparando...
+                    {t('preparing')}
                   </>
                 ) : (
                   <>
                     <Bot className="mr-2 h-4 w-4" />
-                    Preparar Módulo
+                    {t('prepareModule')}
                   </>
                 )}
               </Button>
               <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
                 <Key className="mr-2 h-4 w-4" />
-                Criar Token
+                {t('createToken')}
               </Button>
               <Button asChild>
                 <Link href={`/modules/${moduleId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
-                  Editar Módulo
+                  {t('editModule')}
                 </Link>
               </Button>
             </div>
@@ -441,12 +443,12 @@ export default function ModuleDetailsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Módulo</CardTitle>
+            <CardTitle>{t('moduleInfo')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {module.description && (
               <div>
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">Descrição</h4>
+                <h4 className="font-medium text-sm text-muted-foreground mb-2">{t('description')}</h4>
                 <p className="text-sm leading-relaxed">{module.description}</p>
               </div>
             )}
@@ -454,24 +456,24 @@ export default function ModuleDetailsPage() {
             <div className="grid grid-cols-2 gap-4 text-sm">
               {module.code && (
                 <div>
-                  <p className="text-muted-foreground">Código</p>
+                  <p className="text-muted-foreground">{t('code')}</p>
                   <p className="font-medium font-mono">{module.code}</p>
                 </div>
               )}
               {module.semester && (
                 <div>
-                  <p className="text-muted-foreground">Semestre</p>
+                  <p className="text-muted-foreground">{t('semester')}</p>
                   <p className="font-medium">{module.semester}</p>
                 </div>
               )}
               {module.year && (
                 <div>
-                  <p className="text-muted-foreground">Ano</p>
+                  <p className="text-muted-foreground">{t('year')}</p>
                   <p className="font-medium">{module.year}</p>
                 </div>
               )}
               <div>
-                <p className="text-muted-foreground">Criado em</p>
+                <p className="text-muted-foreground">{t('createdAt')}</p>
                 <p className="font-medium">{formatDateShort(module.created_at)}</p>
               </div>
             </div>
@@ -479,7 +481,7 @@ export default function ModuleDetailsPage() {
             <div className="flex items-center space-x-2 pt-2">
               <Bot className={`h-4 w-4 ${module.system_prompt ? 'text-green-500' : 'text-muted-foreground'}`} />
               <Badge variant={module.system_prompt ? "default" : "secondary"}>
-                {module.system_prompt ? 'Tutor IA Configurado' : 'Tutor IA Não Configurado'}
+                {module.system_prompt ? t('aiTutorConfigured') : t('aiTutorNotConfigured')}
               </Badge>
             </div>
           </CardContent>
@@ -487,13 +489,13 @@ export default function ModuleDetailsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Estatísticas</CardTitle>
+            <CardTitle>{t('stats')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">{files?.length || 0}</p>
-                <p className="text-sm text-muted-foreground">Arquivos</p>
+                <p className="text-sm text-muted-foreground">{t('files')}</p>
               </div>
               <FileText className="h-8 w-8 text-blue-500" />
             </div>
@@ -501,7 +503,7 @@ export default function ModuleDetailsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold">{module.tokens_count || 0}</p>
-                <p className="text-sm text-muted-foreground">Tokens de Acesso</p>
+                <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
               </div>
               <BookOpen className="h-8 w-8 text-purple-500" />
             </div>
@@ -513,9 +515,9 @@ export default function ModuleDetailsPage() {
       <ProfessorOnly>
         <Card>
           <CardHeader>
-            <CardTitle>Enviar Arquivo</CardTitle>
+            <CardTitle>{t('uploadFile')}</CardTitle>
             <CardDescription>
-              Faça upload de materiais de estudo para este módulo
+              {t('uploadFileDesc')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -537,12 +539,12 @@ export default function ModuleDetailsPage() {
                 {isUploading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Enviando...
+                    {t('uploading')}
                   </>
                 ) : (
                   <>
                     <Upload className="mr-2 h-4 w-4" />
-                    Enviar Arquivo
+                    {t('uploadButton')}
                   </>
                 )}
               </Button>
@@ -554,9 +556,9 @@ export default function ModuleDetailsPage() {
       {/* Files List */}
       <Card>
         <CardHeader>
-          <CardTitle>Arquivos do Módulo</CardTitle>
+          <CardTitle>{t('moduleFiles')}</CardTitle>
           <CardDescription>
-            Arquivos disponíveis neste módulo
+            {t('filesAvailable')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -564,7 +566,7 @@ export default function ModuleDetailsPage() {
             data={files || []}
             columns={fileColumns}
             loading={filesLoading}
-            emptyMessage="Nenhum arquivo enviado ainda. Faça upload do primeiro arquivo acima."
+            emptyMessage={t('noFiles')}
           />
         </CardContent>
       </Card>
@@ -573,9 +575,9 @@ export default function ModuleDetailsPage() {
       <ProfessorOnly>
         <Card>
           <CardHeader>
-            <CardTitle>Tokens de Acesso</CardTitle>
+            <CardTitle>{t('moduleTokens')}</CardTitle>
             <CardDescription>
-              Tokens gerados para este módulo
+              {t('tokensGenerated')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -583,7 +585,7 @@ export default function ModuleDetailsPage() {
               data={tokens || []}
               columns={tokenColumns}
               loading={tokensLoading}
-              emptyMessage="Nenhum token gerado ainda. Clique em 'Criar Token' acima."
+              emptyMessage={t('noTokens')}
             />
           </CardContent>
         </Card>
@@ -597,7 +599,7 @@ export default function ModuleDetailsPage() {
         onSuccess={() => {
           setTokenModalOpen(false);
           refetchTokens?.();
-          toast.success('Token criado com sucesso!');
+          toast.success(t('tokenCreatedSuccess'));
         }}
         preselectedModuleId={moduleId}
       />

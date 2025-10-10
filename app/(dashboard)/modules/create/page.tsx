@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { ModuleForm } from '@/components/forms/module-form';
 import { ProfessorOnly } from '@/components/auth/role-guard';
@@ -13,10 +14,12 @@ export default function CreateModulePage() {
   const searchParams = useSearchParams();
   const courseId = searchParams.get('course_id');
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations('modules.create');
+  const tCommon = useTranslations('common');
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Módulos', href: '/modules' },
-    { label: 'Criar Módulo', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.modules'), href: '/modules' },
+    { label: t('createModule'), isCurrentPage: true }
   ];
 
   const handleSubmit = async (data: ModuleCreate | ModuleUpdate) => {
@@ -51,8 +54,8 @@ export default function CreateModulePage() {
     <ProfessorOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Novo Módulo"
-          description="Crie um novo módulo de aprendizado com configuração de tutor IA. Você será redirecionado para fazer upload de arquivos após a criação."
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
         />
 

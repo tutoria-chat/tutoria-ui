@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Edit,
   Plus,
@@ -21,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
+import { Loading } from '@/components/ui/loading-spinner';
 import { AdminProfessorOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
@@ -32,6 +34,9 @@ export default function CourseDetailsPage() {
   const router = useRouter();
   const courseId = params.id as string;
   const { user } = useAuth();
+  const t = useTranslations('courses.detail');
+  const tCommon = useTranslations('common');
+  const tModules = useTranslations('modules');
 
   // Fetch course data from API
   const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
@@ -78,22 +83,22 @@ export default function CourseDetailsPage() {
     return false;
   };
 
-  const breadcrumbs: BreadcrumbItem[] = course?.university_id ? [
-    { label: 'Universidades', href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
-    { label: course?.university_name || 'Universidade', href: `/universities/${course.university_id}` },
-    { label: course?.name || 'Carregando...', isCurrentPage: true }
-  ] : [
-    { label: 'Disciplinas', href: '/courses' },
-    { label: course?.name || 'Carregando...', isCurrentPage: true }
-  ];
-
   if (courseLoading) {
-    return <div className="flex items-center justify-center h-64">Loading...</div>;
+    return <Loading />;
   }
 
   if (courseError || !course) {
-    return <div className="flex items-center justify-center h-64">Error loading course</div>;
+    return <div className="flex items-center justify-center h-64">{tCommon('error')}</div>;
   }
+
+  const breadcrumbs: BreadcrumbItem[] = course.university_id ? [
+    { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
+    { label: course.university_name || 'University', href: `/universities/${course.university_id}` },
+    { label: course.name, isCurrentPage: true }
+  ] : [
+    { label: t('breadcrumbCourses'), href: '/courses' },
+    { label: course.name, isCurrentPage: true }
+  ];
 
   const canEditModule = (module: Module): boolean => {
     if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
@@ -106,7 +111,7 @@ export default function CourseDetailsPage() {
   };
 
   const handleDeleteModule = async (moduleId: number) => {
-    if (!confirm('Tem certeza que deseja deletar este módulo? Esta ação não pode ser desfeita.')) {
+    if (!confirm(tModules('deleteConfirm'))) {
       return;
     }
 
@@ -116,14 +121,14 @@ export default function CourseDetailsPage() {
       refetchModules();
     } catch (error) {
       console.error('Erro ao deletar módulo:', error);
-      alert('Erro ao deletar módulo. Tente novamente.');
+      alert(tModules('deleteError'));
     }
   };
 
   const moduleColumns: TableColumn<Module>[] = [
     {
       key: 'name',
-      label: 'Módulo',
+      label: t('modulesTab.title'),
       sortable: true,
       render: (value, module) => (
         <div className="flex items-center space-x-3">
@@ -143,7 +148,7 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'semester',
-      label: 'Semestre/Ano',
+      label: t('modulesTab.semesterYear'),
       sortable: true,
       render: (value, module) => (
         <Badge variant="outline">
@@ -153,7 +158,7 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'files_count',
-      label: 'Arquivos',
+      label: t('modulesTab.files'),
       render: (value) => (
         <div className="flex items-center space-x-1">
           <FileText className="h-3 w-3 text-muted-foreground" />
@@ -163,19 +168,19 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'tokens_count',
-      label: 'Tokens',
+      label: t('modulesTab.tokens'),
       render: (value) => (
-        <Badge variant="outline">{value || 0} tokens</Badge>
+        <Badge variant="outline">{t('modulesTab.tokensCount', { count: value || 0 })}</Badge>
       )
     },
     {
       key: 'updated_at',
-      label: 'Última Atualização',
+      label: t('modulesTab.lastUpdate'),
       render: (value) => formatDateShort(value as string)
     },
     {
       key: 'actions',
-      label: 'Ações',
+      label: tCommon('buttons.edit'),
       width: '150px',
       render: (_, module) => (
         <div className="flex items-center space-x-1">
@@ -221,7 +226,7 @@ export default function CourseDetailsPage() {
   const professorColumns: TableColumn<Professor>[] = [
     {
       key: 'name',
-      label: 'Professor',
+      label: t('professorsTab.title'),
       render: (_, professor) => (
         <div className="flex items-center space-x-3">
           <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
@@ -236,17 +241,17 @@ export default function CourseDetailsPage() {
     },
     {
       key: 'is_admin',
-      label: 'Função',
+      label: t('professorsTab.role'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? "Professor Administrador" : "Professor Regular"}
+          {value ? t('professorsTab.adminProfessor') : t('professorsTab.regularProfessor')}
         </Badge>
       )
     },
     {
       key: 'courses_count',
-      label: 'Total de Disciplinas',
-      render: (value) => `${value || 0} disciplinas`
+      label: t('professorsTab.totalCourses'),
+      render: (value) => t('professorsTab.coursesCount', { count: value || 0 })
     }
   ];
 
@@ -254,7 +259,7 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`Disciplina em ${course.university_name || 'Universidade'} • Criado em ${formatDateShort(course.created_at)}`}
+        description={`${course.university_name || t('courseInfo')} • ${t('updated', { date: formatDateShort(course.created_at) })}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -262,7 +267,7 @@ export default function CourseDetailsPage() {
               <Button variant="outline" asChild>
                 <Link href={`/universities/${course.university_id}`}>
                   <Building2 className="mr-2 h-4 w-4" />
-                  Ver Universidade
+                  {t('viewUniversity')}
                 </Link>
               </Button>
             )}
@@ -271,7 +276,7 @@ export default function CourseDetailsPage() {
               <Button variant="outline" asChild>
                 <Link href={`/modules/create?course_id=${courseId}`}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Adicionar Módulo
+                  {t('addModule')}
                 </Link>
               </Button>
             )}
@@ -280,7 +285,7 @@ export default function CourseDetailsPage() {
               <Button asChild>
                 <Link href={`/courses/${courseId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
-                  Editar Disciplina
+                  {t('editCourse')}
                 </Link>
               </Button>
             </AdminProfessorOnly>
@@ -292,22 +297,22 @@ export default function CourseDetailsPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Informações da Disciplina</CardTitle>
+            <CardTitle>{t('courseInfo')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-2">Descrição</h4>
+              <h4 className="font-medium text-sm text-muted-foreground mb-2">{t('description')}</h4>
               <p className="text-sm leading-relaxed">{course.description}</p>
             </div>
-            
+
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.university_name || 'Universidade'}</span>
+                <span>{course.university_name || t('courseInfo')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>Atualizado em {formatDateShort(course.updated_at)}</span>
+                <span>{t('updated', { date: formatDateShort(course.updated_at) })}</span>
               </div>
             </div>
           </CardContent>
@@ -319,7 +324,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{allModules.length}</p>
-                  <p className="text-sm text-muted-foreground">Módulos</p>
+                  <p className="text-sm text-muted-foreground">{t('modules')}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-500" />
               </div>
@@ -331,7 +336,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{course.students_count || 0}</p>
-                  <p className="text-sm text-muted-foreground">Estudantes Inscritos</p>
+                  <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
               </div>
@@ -343,7 +348,7 @@ export default function CourseDetailsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-2xl font-bold">{professors.length}</p>
-                  <p className="text-sm text-muted-foreground">Professores</p>
+                  <p className="text-sm text-muted-foreground">{t('professors')}</p>
                 </div>
                 <Users className="h-8 w-8 text-purple-500" />
               </div>
@@ -356,9 +361,9 @@ export default function CourseDetailsPage() {
       <div className="border-b border-border">
         <nav className="-mb-px flex space-x-8">
           {[
-            { key: 'modules', label: 'Módulos', count: modules?.length || 0 },
-            { key: 'professors', label: 'Professores', count: professors?.length || 0 },
-            { key: 'students', label: 'Estudantes', count: course.students_count || 0 }
+            { key: 'modules', label: t('tabs.modules'), count: modules?.length || 0 },
+            { key: 'professors', label: t('tabs.professors'), count: professors?.length || 0 },
+            { key: 'students', label: t('tabs.students'), count: course.students_count || 0 }
           ].map((tab) => (
             <button
               key={tab.key}
@@ -383,9 +388,9 @@ export default function CourseDetailsPage() {
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
-              <CardTitle>Módulos da Disciplina</CardTitle>
+              <CardTitle>{t('modulesTab.title')}</CardTitle>
               <CardDescription>
-                Gerencie os módulos e conteúdo de aprendizado para esta disciplina
+                {t('modulesTab.description')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -394,7 +399,7 @@ export default function CourseDetailsPage() {
                 <div className="flex-1 min-w-[200px]">
                   <input
                     type="text"
-                    placeholder="Buscar módulos..."
+                    placeholder={t('modulesTab.search')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -405,9 +410,9 @@ export default function CourseDetailsPage() {
                   onChange={(e) => setSemesterFilter(e.target.value)}
                   className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                  <option value="all">Todos os Semestres</option>
+                  <option value="all">{t('modulesTab.allSemesters')}</option>
                   {availableSemesters.map(sem => (
-                    <option key={sem} value={sem}>{sem}º Semestre</option>
+                    <option key={sem} value={sem}>{t('modulesTab.semester', { num: sem || 0 })}</option>
                   ))}
                 </select>
                 <select
@@ -415,7 +420,7 @@ export default function CourseDetailsPage() {
                   onChange={(e) => setYearFilter(e.target.value)}
                   className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
-                  <option value="all">Todos os Anos</option>
+                  <option value="all">{t('modulesTab.allYears')}</option>
                   {availableYears.map(year => (
                     <option key={year} value={year}>{year}</option>
                   ))}
@@ -426,8 +431,8 @@ export default function CourseDetailsPage() {
                 data={modules || []}
                 columns={moduleColumns}
                 emptyMessage={searchTerm || semesterFilter !== 'all' || yearFilter !== 'all'
-                  ? "Nenhum módulo encontrado com os filtros aplicados."
-                  : "Nenhum módulo encontrado. Adicione seu primeiro módulo para começar."}
+                  ? t('modulesTab.noModules')
+                  : t('modulesTab.noModulesInitial')}
                 onRowClick={(module) => router.push(`/modules/${module.id}`)}
               />
             </CardContent>
@@ -437,16 +442,16 @@ export default function CourseDetailsPage() {
         {activeTab === 'professors' && (
           <Card>
             <CardHeader>
-              <CardTitle>Professores Atribuídos</CardTitle>
+              <CardTitle>{t('professorsTab.title')}</CardTitle>
               <CardDescription>
-                Professores que estão ensinando ou gerenciando esta disciplina
+                {t('professorsTab.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <DataTable
                 data={professors || []}
                 columns={professorColumns}
-                emptyMessage="Nenhum professor atribuído a esta disciplina."
+                emptyMessage={t('professorsTab.emptyMessage')}
               />
             </CardContent>
           </Card>
@@ -455,22 +460,22 @@ export default function CourseDetailsPage() {
         {activeTab === 'students' && (
           <Card>
             <CardHeader>
-              <CardTitle>Estudantes Inscritos</CardTitle>
+              <CardTitle>{t('studentsTab.title')}</CardTitle>
               <CardDescription>
-                Estudantes atualmente inscritos nesta disciplina
+                {t('studentsTab.description')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
                 <GraduationCap className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-2 text-sm font-semibold">Gerenciamento de Estudantes</h3>
+                <h3 className="mt-2 text-sm font-semibold">{t('studentsTab.managementTitle')}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  A interface de gerenciamento de estudantes será implementada aqui
+                  {t('studentsTab.managementDescription')}
                 </p>
                 <div className="mt-4">
                   <Button variant="outline" asChild>
                     <Link href="/students">
-                      Ver Todos os Estudantes
+                      {t('studentsTab.viewAll')}
                     </Link>
                   </Button>
                 </div>
