@@ -303,12 +303,14 @@ export interface ModuleTokenUpdate {
 
 // Super Admin Types
 export interface SuperAdmin {
-  id: number;
+  super_admin_id: number;
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
+  is_active: boolean;
   created_at: string;
-  updated_at: string;
+  last_login_at: string | null;
 }
 
 export interface SuperAdminCreate {

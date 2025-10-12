@@ -603,7 +603,8 @@
     },
     "warningTitle": "Advertencia de Seguridad",
     "warningDescription": "Los super administradores tienen acceso completo al sistema. Solo crea cuentas para individuos confiables. Todas las acciones de super administradores se registran para auditoría de seguridad.",
-    "activity": {
+    "_activity": {
+      "_comment": "Activity section commented out - TODO: Implement real activity tracking",
       "title": "Actividad Reciente de Super Administradores",
       "description": "Acciones administrativas más recientes realizadas por super administradores",
       "example1": "Nueva universidad \"Universidad de Tecnología\" creada",

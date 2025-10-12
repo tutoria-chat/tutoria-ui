@@ -287,8 +287,8 @@ export default function SuperAdminsPage() {
           emptyMessage={t('emptyMessage')}
         />
 
-        {/* Recent Admin Activity */}
-        <Card>
+        {/* Recent Admin Activity - TODO: Implement real activity tracking */}
+        {/* <Card>
           <CardHeader>
             <CardTitle>{t('activity.title')}</CardTitle>
             <CardDescription>{t('activity.description')}</CardDescription>
@@ -323,7 +323,7 @@ export default function SuperAdminsPage() {
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </SuperAdminOnly>
   );

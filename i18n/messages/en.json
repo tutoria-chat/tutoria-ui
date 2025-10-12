@@ -603,7 +603,8 @@
     },
     "warningTitle": "Security Warning",
     "warningDescription": "Super administrators have full system access. Only create accounts for trusted individuals. All super administrator actions are logged for security auditing.",
-    "activity": {
+    "_activity": {
+      "_comment": "Activity section commented out - TODO: Implement real activity tracking",
       "title": "Recent Super Administrator Activity",
       "description": "Most recent administrative actions performed by super administrators",
       "example1": "New university \"Technology University\" created",
