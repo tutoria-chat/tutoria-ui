@@ -88,11 +88,12 @@ export default function CreateUniversityPage() {
           }
         />
 
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle>{t('universityInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="flex justify-center">
+          <Card className="max-w-4xl w-full">
+            <CardHeader>
+              <CardTitle>{t('universityInfo')}</CardTitle>
+            </CardHeader>
+            <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -163,6 +164,7 @@ export default function CreateUniversityPage() {
             </form>
           </CardContent>
         </Card>
+        </div>
       </div>
     </SuperAdminOnly>
   );

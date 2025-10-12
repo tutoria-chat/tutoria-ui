@@ -49,3 +49,50 @@ The `lib/utils.ts` file contains essential utilities including:
 - Strict mode enabled with modern ES2017 target
 - Path mapping configured for `@/*` imports
 - Next.js plugin integration for optimal bundling
+
+## Internationalization (i18n)
+
+This application uses `next-intl` for internationalization with support for English, Spanish, and Portuguese (Brazil).
+
+### Translation Files
+- Located in `i18n/messages/` directory
+- `en.json` - English translations
+- `es.json` - Spanish translations
+- `pt-br.json` - Portuguese (Brazil) translations
+
+### Translation Rules
+**CRITICAL**: Always use translations for user-facing text. Never hardcode labels, messages, or descriptions.
+
+1. **Always create translations** for any user-facing text:
+   - Button labels, form labels, descriptions, messages, errors, etc.
+   - Add the translation key to ALL three language files (en.json, es.json, pt-br.json)
+   - Use the `useTranslations` hook: `const t = useTranslations('namespace')`
+
+2. **Fix hardcoded text** when you encounter it:
+   - Replace hardcoded strings with translation keys
+   - Only exception: If there's a comment saying "Hardcoded for X reason"
+   - Example: Change `"Loading..."` to `{t('loading')}`
+
+3. **Translation key structure**:
+   - Organize by page/feature namespace (e.g., `courses`, `modules`, `common`)
+   - Use descriptive, hierarchical keys (e.g., `courses.form.nameLabel`, `common.pagination.rowsPerPage`)
+   - Common translations go in `common` namespace for reuse
+
+4. **Adding new translations**:
+   ```typescript
+   // In component
+   import { useTranslations } from 'next-intl';
+   const t = useTranslations('courses');
+
+   // Use translation
+   <span>{t('createButton')}</span>
+   ```
+
+5. **Translation with variables**:
+   ```typescript
+   // In JSON
+   "showing": "Showing {from} to {to} of {total} records"
+
+   // In code
+   {t('pagination.showing', { from: 1, to: 10, total: 100 })}
+   ```

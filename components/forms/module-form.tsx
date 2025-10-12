@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -25,6 +26,7 @@ interface ModuleFormProps {
 
 export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = false }: ModuleFormProps) {
   const { user } = useAuth();
+  const t = useTranslations('modules.form');
   const [formData, setFormData] = useState({
     name: module?.name || '',
     description: module?.description || '',
@@ -44,75 +46,24 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
   // Predefined system prompt templates
   const promptTemplates = [
     {
-      name: "Tutor Geral",
-      description: "Um tutor útil e conhecedor para aprendizado geral",
-      prompt: `Você é um tutor especialista ajudando estudantes a aprender sobre o conteúdo deste módulo. Seu papel é:
-
-1. Fornecer explicações claras e precisas de conceitos
-2. Fazer perguntas orientadoras para ajudar os estudantes a pensar sobre os problemas
-3. Oferecer exemplos e analogias para tornar tópicos complexos compreensíveis
-4. Encorajar pensamento crítico e compreensão mais profunda
-5. Ser paciente e solidário em suas respostas
-
-Sempre mantenha um tom útil e encorajador e adapte suas explicações ao nível de compreensão do estudante.`
+      name: t('templates.general.name'),
+      description: t('templates.general.description'),
+      prompt: t('templates.general.prompt')
     },
     {
-      name: "Tutor de Programação",
-      description: "Tutor especializado em programação e conceitos de ciência da computação",
-      prompt: `Você é um tutor de programação especializado em educação em ciência da computação. Suas responsabilidades incluem:
-
-1. Explicar conceitos de programação claramente com exemplos de código
-2. Ajudar a depurar e solucionar problemas de código
-3. Ensinar melhores práticas e padrões de codificação
-4. Fornecer abordagens passo a passo para resolução de problemas
-5. Encorajar bons hábitos de desenvolvimento de software
-
-Ao ajudar com código:
-- Mostrar exemplos e explicar a lógica
-- Apontar erros comuns e como evitá-los
-- Sugerir melhorias e otimizações
-- Encorajar testes e documentação
-
-Seja paciente e divida conceitos complexos de programação em partes gerenciáveis.`
+      name: t('templates.programming.name'),
+      description: t('templates.programming.description'),
+      prompt: t('templates.programming.prompt')
     },
     {
-      name: "Tutor de Matemática e Ciências",
-      description: "Tutor focado em matemática e conceitos científicos",
-      prompt: `Você é um tutor de matemática e ciências dedicado a ajudar estudantes a entender conceitos quantitativos. Sua abordagem deve:
-
-1. Dividir problemas matemáticos complexos em etapas claras
-2. Explicar os princípios e teoria subjacentes
-3. Usar aplicações do mundo real para ilustrar conceitos abstratos
-4. Ajudar estudantes a desenvolver estratégias de resolução de problemas
-5. Encorajar raciocínio matemático e pensamento científico
-
-Ao trabalhar com problemas:
-- Mostrar cada etapa claramente
-- Explicar por que cada etapa é necessária
-- Conectar conceitos a princípios matemáticos ou científicos mais amplos
-- Ajudar estudantes a verificar seu trabalho e entender erros
-
-Fomentar curiosidade e pensamento lógico em disciplinas STEM.`
+      name: t('templates.mathScience.name'),
+      description: t('templates.mathScience.description'),
+      prompt: t('templates.mathScience.prompt')
     },
     {
-      name: "Assistente de Pesquisa",
-      description: "Suporte para pesquisa acadêmica e escrita",
-      prompt: `Você é um assistente de pesquisa acadêmica ajudando estudantes com habilidades de pesquisa e escrita acadêmica. Seu papel inclui:
-
-1. Orientar estudantes através do processo de pesquisa
-2. Ajudar a avaliar credibilidade e relevância de fontes
-3. Auxiliar com estrutura e estilo de escrita acadêmica
-4. Ensinar citação e referenciamento adequados
-5. Encorajar análise crítica de informações
-
-Foque em:
-- Ensinar metodologias de pesquisa
-- Ajudar a organizar e sintetizar informações
-- Melhorar habilidades de escrita acadêmica
-- Promover integridade acadêmica
-- Desenvolver pensamento crítico sobre fontes
-
-Apoie estudantes para se tornarem pesquisadores independentes e escritores acadêmicos claros.`
+      name: t('templates.research.name'),
+      description: t('templates.research.description'),
+      prompt: t('templates.research.prompt')
     }
   ];
 
@@ -147,16 +98,16 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar formulário
+    // Validate form
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome do módulo é obrigatório';
+      newErrors.name = t('nameRequired');
     }
     if (!formData.code.trim()) {
-      newErrors.code = 'Código do módulo é obrigatório';
+      newErrors.code = t('codeRequired');
     }
     if (!formData.course_id) {
-      newErrors.course_id = 'Disciplina é obrigatório';
+      newErrors.course_id = t('courseRequired');
     }
 
     // For regular professors, the API already filters courses to show only assigned ones
@@ -182,7 +133,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: 'Falha ao salvar módulo. Tente novamente.' });
+      setErrors({ submit: t('saveError') });
     }
   };
 
@@ -202,15 +153,15 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
 
   const handleImprovePrompt = async () => {
     if (!formData.system_prompt.trim()) {
-      toast.error('Escreva um prompt primeiro', {
-        description: 'Você precisa ter um prompt inicial para melhorar.',
+      toast.error(t('improvePromptNoContent'), {
+        description: t('improvePromptNoContentDesc'),
       });
       return;
     }
 
     if (!module?.id) {
-      toast.error('Salve o módulo primeiro', {
-        description: 'Você precisa salvar o módulo antes de melhorar o prompt.',
+      toast.error(t('improvePromptSaveFirst'), {
+        description: t('improvePromptSaveFirstDesc'),
       });
       return;
     }
@@ -225,13 +176,13 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
       setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
       setRemainingImprovements(response.remaining_improvements);
 
-      toast.success('Prompt melhorado!', {
-        description: `Melhorias restantes: ${response.remaining_improvements}/3 nas próximas 72h.`,
+      toast.success(t('improveSuccess'), {
+        description: t('improveSuccessDesc', { count: response.remaining_improvements }),
       });
     } catch (error: any) {
       console.error('Error improving prompt:', error);
-      const errorMsg = error?.response?.data?.detail || error.message || 'Erro desconhecido';
-      toast.error('Erro ao melhorar prompt', {
+      const errorMsg = error?.response?.data?.detail || error.message || t('improveError');
+      toast.error(t('improveError'), {
         description: errorMsg,
       });
     } finally {
@@ -248,7 +199,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <FileText className="h-5 w-5" />
-            <span>{module ? 'Editar Módulo' : 'Criar Novo Módulo'}</span>
+            <span>{module ? t('edit') : t('create')}</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -256,11 +207,11 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Module Name */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="name">Nome do Módulo *</FormLabel>
+                <FormLabel htmlFor="name">{t('nameLabel')}</FormLabel>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="ex: Introdução a Estruturas de Dados"
+                  placeholder={t('namePlaceholder')}
                   value={formData.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   disabled={isLoading}
@@ -274,11 +225,11 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Module Code */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="code">Código do Módulo *</FormLabel>
+                <FormLabel htmlFor="code">{t('codeLabel')}</FormLabel>
                 <Input
                   id="code"
                   type="text"
-                  placeholder="ex: CS101, MAT201, FIS301"
+                  placeholder={t('codePlaceholder')}
                   value={formData.code}
                   onChange={(e) => handleInputChange('code', e.target.value)}
                   disabled={isLoading}
@@ -293,11 +244,11 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="year">Ano</FormLabel>
+                  <FormLabel htmlFor="year">{t('yearLabel')}</FormLabel>
                   <Input
                     id="year"
                     type="number"
-                    placeholder="ex: 2024"
+                    placeholder={t('yearPlaceholder')}
                     value={formData.year}
                     onChange={(e) => handleInputChange('year', e.target.value)}
                     disabled={isLoading}
@@ -311,11 +262,11 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
 
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="semester">Semestre</FormLabel>
+                  <FormLabel htmlFor="semester">{t('semesterLabel')}</FormLabel>
                   <Input
                     id="semester"
                     type="number"
-                    placeholder="ex: 1, 2..."
+                    placeholder={t('semesterPlaceholder')}
                     value={formData.semester}
                     onChange={(e) => handleInputChange('semester', e.target.value)}
                     disabled={isLoading}
@@ -330,7 +281,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Course Selection */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="course_id">Disciplina *</FormLabel>
+                <FormLabel htmlFor="course_id">{t('courseLabel')}</FormLabel>
                 {courseId ? (
                   <div className="flex items-center space-x-2">
                     <Input
@@ -338,7 +289,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                       disabled
                       className="bg-muted"
                     />
-                    <Badge variant="secondary">Pré-selecionado</Badge>
+                    <Badge variant="secondary">{t('coursePreselected')}</Badge>
                   </div>
                 ) : (
                   <select
@@ -349,7 +300,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     required
                   >
-                    <option value="">{loadingCourses ? "Carregando disciplinas..." : "Selecione uma disciplina"}</option>
+                    <option value="">{loadingCourses ? t('loadingCourses') : t('selectCourse')}</option>
                     {courses.map((course) => (
                       <option key={course.id} value={String(course.id)}>
                         {course.name}
@@ -364,10 +315,10 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
             {/* Description */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="description">Descrição</FormLabel>
+                <FormLabel htmlFor="description">{t('descriptionLabel')}</FormLabel>
                 <Textarea
                   id="description"
-                  placeholder="Descreva os objetivos de aprendizagem do módulo, visão geral do conteúdo e conceitos-chave..."
+                  placeholder={t('descriptionPlaceholder')}
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
                   disabled={isLoading}
@@ -384,7 +335,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               <div>
                 <div className="flex items-center space-x-2 mb-2">
                   <Bot className="h-5 w-5 text-blue-500" />
-                  <h3 className="text-lg font-semibold">Configuração do Tutor IA</h3>
+                  <h3 className="text-lg font-semibold">{t('aiConfig')}</h3>
                 </div>
               </div>
 
@@ -392,7 +343,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               <div>
                 <div className="flex items-center space-x-2 mb-3">
                   <Lightbulb className="h-4 w-4 text-amber-500" />
-                  <h4 className="font-medium text-sm">Modelos Rápidos</h4>
+                  <h4 className="font-medium text-sm">{t('quickTemplates')}</h4>
                 </div>
                 <div className="grid gap-3 md:grid-cols-2">
                   {promptTemplates.map((template, index) => (
@@ -408,7 +359,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                               onClick={() => applyPromptTemplate(template)}
                               disabled={isLoading}
                             >
-                              Usar Modelo
+                              {t('useTemplate')}
                             </Button>
                           </div>
                           <p className="text-xs text-muted-foreground">
@@ -425,7 +376,7 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               <FormField>
                 <FormItem>
                   <div className="flex items-center justify-between mb-2">
-                    <FormLabel htmlFor="system_prompt">Prompt de Configuração do Sistema</FormLabel>
+                    <FormLabel htmlFor="system_prompt">{t('systemPromptLabel')}</FormLabel>
                     {module && (
                       <Button
                         type="button"
@@ -437,12 +388,12 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                         {isImprovingPrompt ? (
                           <>
                             <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                            Melhorando...
+                            {t('improving')}
                           </>
                         ) : (
                           <>
                             <Sparkles className="mr-2 h-3 w-3" />
-                            Melhorar com IA
+                            {t('improveWithAI')}
                           </>
                         )}
                       </Button>
@@ -450,15 +401,12 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   </div>
                   <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
                     <p className="text-sm text-blue-900 dark:text-blue-100">
-                      <strong>O que é isso?</strong> Pense nisso como as "instruções de personalidade" para o tutor IA.
-                      Por exemplo: "Você é um professor paciente de programação que usa exemplos do dia a dia" ou
-                      "Você é um tutor de matemática que sempre resolve passo a passo".
-                      Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.
+                      {t('promptExplanation')}
                     </p>
                   </div>
                   <Textarea
                     id="system_prompt"
-                    placeholder="Defina como o tutor IA deve se comportar, seu nível de expertise, estilo de ensino e diretrizes de interação..."
+                    placeholder={t('systemPromptPlaceholder')}
                     value={formData.system_prompt}
                     onChange={(e) => handleInputChange('system_prompt', e.target.value)}
                     disabled={isLoading}
@@ -467,14 +415,14 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                   />
                   <div className="flex items-center justify-between mt-1">
                     <p className="text-xs text-muted-foreground">
-                      {formData.system_prompt.length} caracteres
+                      {t('charactersCount', { count: formData.system_prompt.length })}
                       {formData.system_prompt.length > 0 && (
-                        <span className="ml-2 text-green-600">✓ Configurado</span>
+                        <span className="ml-2 text-green-600">{t('configured')}</span>
                       )}
                     </p>
                     {remainingImprovements !== null && (
                       <p className="text-xs text-muted-foreground">
-                        Melhorias restantes: {remainingImprovements}/3 (72h)
+                        {t('remainingImprovements', { count: remainingImprovements })}
                       </p>
                     )}
                   </div>
@@ -485,11 +433,10 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
               {/* Tutor Language Selection */}
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="tutor_language">🌐 Idioma do Tutor IA</FormLabel>
+                  <FormLabel htmlFor="tutor_language">🌐 {t('tutorLanguageLabel')}</FormLabel>
                   <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-md">
                     <p className="text-sm text-amber-900 dark:text-amber-100">
-                      <strong>Importante:</strong> Selecione em qual idioma o tutor IA deve responder às perguntas dos alunos.
-                      Isso define o idioma das respostas, independentemente do idioma da pergunta.
+                      {t('tutorLanguageHint')}
                     </p>
                   </div>
                   <select
@@ -509,13 +456,13 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
 
               {/* Prompt Guidelines */}
               <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <h4 className="font-medium text-sm text-blue-900 dark:text-blue-100 mb-2">💡 Dicas para Escrever Prompts</h4>
+                <h4 className="font-medium text-sm text-blue-900 dark:text-blue-100 mb-2">{t('promptTips')}</h4>
                 <ul className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
-                  <li>• Defina o papel e expertise da IA claramente</li>
-                  <li>• Especifique o estilo de ensino e abordagem</li>
-                  <li>• Inclua diretrizes para diferentes tipos de perguntas</li>
-                  <li>• Defina expectativas para formato e tom de resposta</li>
-                  <li>• Considere o público-alvo e seu nível</li>
+                  <li>{t('promptTip1')}</li>
+                  <li>{t('promptTip2')}</li>
+                  <li>{t('promptTip3')}</li>
+                  <li>{t('promptTip4')}</li>
+                  <li>{t('promptTip5')}</li>
                 </ul>
               </div>
             </div>
@@ -533,13 +480,13 @@ Apoie estudantes para se tornarem pesquisadores independentes e escritores acad�
                 onClick={onCancel}
                 disabled={isLoading}
               >
-                Cancelar
+                {t('cancel')}
               </Button>
               <Button
                 type="submit"
                 disabled={isLoading}
               >
-                {isLoading ? (module ? 'Atualizando...' : 'Criando...') : (module ? 'Atualizar Módulo' : 'Criar Módulo')}
+                {isLoading ? (module ? t('updating') : t('creating')) : (module ? t('update') : t('create'))}
               </Button>
             </div>
           </form>

@@ -481,27 +481,27 @@ class TutoriaAPIClient {
 
   // Super Admin endpoints
   async getSystemStats(): Promise<SystemStats> {
-    return this.get('/super-admins/stats');
+    return this.get('/super-admin/stats');
   }
 
   async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
-    return this.get('/super-admins/super-admins/', params);
+    return this.get('/super-admin/super-admins/', params);
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    return this.post('/super-admins/super-admins/', data);
+    return this.post('/super-admin/super-admins/', data);
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
-    return this.put(`/super-admins/super-admins/${id}`, data);
+    return this.put(`/super-admin/super-admins/${id}`, data);
   }
 
-  async getAllUniversities(): Promise<University[]> {
-    return this.get('/super-admins/universities/all');
+  async getAllUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
+    return this.get('/super-admin/universities/all', params);
   }
 
-  async getAllProfessors(): Promise<Professor[]> {
-    return this.get('/super-admins/professors/all');
+  async getAllProfessors(params?: PaginationParams): Promise<PaginatedResponse<Professor>> {
+    return this.get('/super-admin/professors/all', params);
   }
 
   // AI Tutor endpoints

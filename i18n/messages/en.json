@@ -34,10 +34,16 @@
   "courses": {
     "title": "Courses",
     "description": "Manage courses and academic programs. Showing {total} courses with {students} students across {modules} modules",
+    "descriptionSimple": "Manage courses and academic programs",
     "createButton": "Create Course",
     "viewModules": "View Modules",
     "searchPlaceholder": "Search courses, descriptions or universities...",
     "emptyMessage": "No courses found. Create your first course to get started.",
+    "create": {
+      "title": "Create New Course",
+      "description": "Create a new course in the system",
+      "createCourse": "Create Course"
+    },
     "columns": {
       "discipline": "Course",
       "university": "University",
@@ -79,6 +85,23 @@
       "creating": "Creating...",
       "updating": "Updating...",
       "saveError": "Failed to save course. Please try again."
+    },
+    "edit": {
+      "title": "Edit Course",
+      "description": "Edit course information for {name}",
+      "back": "Back",
+      "courseInfo": "Course Information",
+      "nameLabel": "Course Name *",
+      "namePlaceholder": "e.g., Fundamentals of Computer Science",
+      "codeLabel": "Code *",
+      "codePlaceholder": "e.g., CS101, COMP200",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe the course objectives, content, and target audience...",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "loadError": "Error loading course data.",
+      "loadErrorDesc": "Could not load course data",
+      "updateError": "Error updating course. Please try again."
     },
     "detail": {
       "breadcrumbUniversities": "Universities",
@@ -134,10 +157,16 @@
   "modules": {
     "title": "Modules",
     "description": "Manage learning modules and AI tutor configuration. {total} modules across {courses} courses with {aiConfigured} configured AI tutors",
+    "descriptionSimple": "Manage learning modules and AI tutor configuration",
     "createButton": "Create Module",
     "viewCourses": "View Courses",
     "searchPlaceholder": "Search modules, descriptions or courses...",
     "emptyMessage": "No modules found. Create your first module to get started.",
+    "create": {
+      "title": "Create New Module",
+      "description": "Create a new learning module in the system",
+      "createModule": "Create Module"
+    },
     "columns": {
       "module": "Module",
       "semester": "Semester",
@@ -195,6 +224,8 @@
       "promptTip3": "• Include guidelines for different question types",
       "promptTip4": "• Set expectations for response format and tone",
       "promptTip5": "• Consider target audience and their level",
+      "tutorLanguageLabel": "AI Tutor Language",
+      "tutorLanguageHint": "Important: Select which language the AI tutor should respond to student questions in. This defines the response language, regardless of the question language.",
       "cancel": "Cancel",
       "create": "Create Module",
       "update": "Update Module",
@@ -288,7 +319,15 @@
         "size": "Size",
         "uploadedAt": "Uploaded at",
         "actions": "Actions"
-      }
+      },
+      "fileUpload": {
+        "clickToSelect": "Click to select or drag the file here",
+        "supportedFormats": "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+        "maxSize": "Maximum size: {maxSizeMB}MB"
+      },
+      "fileNameUnknown": "File without name",
+      "fileTypeUnknown": "Unknown type",
+      "openInWidget": "Open in Widget"
     },
     "edit": {
       "title": "Edit Module",
@@ -315,7 +354,17 @@
       "loadError": "Error loading module data.",
       "loadErrorDesc": "Could not load module data",
       "updateError": "Error updating module. Please try again.",
-      "deleteFileConfirm": "Are you sure you want to delete this file?"
+      "deleteFileConfirm": "Are you sure you want to delete this file?",
+      "fileUploadClick": "Click to select or drag the file here",
+      "fileUploadFormats": "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+      "fileUploadMaxSize": "Maximum size: {maxSizeMB}MB",
+      "uploadFile": "Upload File",
+      "uploading": "Uploading...",
+      "fileColumn": "File",
+      "sizeColumn": "Size",
+      "actionsColumn": "Actions",
+      "confirmDelete": "Are you sure you want to delete this file?",
+      "noFilesYet": "No files uploaded yet"
     }
   },
   "universities": {
@@ -519,6 +568,107 @@
       "updateError": "Error updating token. Please try again.",
       "copySuccessShort": "Token copied!",
       "copyErrorShort": "Error copying token"
+    }
+  },
+  "superAdmins": {
+    "title": "Super Administrators Management",
+    "description": "Manage super administrator accounts and their permissions",
+    "breadcrumb": "Administration",
+    "createButton": "Create Super Administrator",
+    "searchPlaceholder": "Search super administrators by name or email...",
+    "emptyMessage": "No super administrators found.",
+    "loadError": "Error loading super administrators",
+    "deleteConfirm": "Are you sure you want to delete this super administrator?",
+    "deleteError": "Error deleting super administrator",
+    "deleteMainError": "Cannot delete the main super administrator account",
+    "deleteNotImplemented": "Delete functionality will be implemented soon",
+    "columns": {
+      "name": "Super Administrator",
+      "createdAt": "Created at",
+      "lastActivity": "Last Activity",
+      "status": "Status",
+      "active": "Active",
+      "actions": "Actions"
+    },
+    "stats": {
+      "total": "Total Super Administrators",
+      "totalDesc": "System administrators",
+      "activeToday": "Active Today",
+      "activeTodayDesc": "Online in last 24h",
+      "recentActions": "Recent Actions",
+      "recentActionsDesc": "Administrative actions today",
+      "security": "Security Status",
+      "securityStatus": "Secure",
+      "securityDesc": "All systems normal"
+    },
+    "warningTitle": "Security Warning",
+    "warningDescription": "Super administrators have full system access. Only create accounts for trusted individuals. All super administrator actions are logged for security auditing.",
+    "activity": {
+      "title": "Recent Super Administrator Activity",
+      "description": "Most recent administrative actions performed by super administrators",
+      "example1": "New university \"Technology University\" created",
+      "example2": "System settings updated",
+      "example3": "New super administrator account created",
+      "by": "by",
+      "bySystem": "by Super Administrator",
+      "time1": "2 hours ago",
+      "time2": "4 hours ago",
+      "time3": "1 day ago"
+    },
+    "create": {
+      "title": "Create Super Administrator",
+      "titleSuccess": "Super Administrator Created!",
+      "description": "Create a new super administrator account with full system access",
+      "descriptionSuccess": "Share the setup link with the new super administrator",
+      "breadcrumbCreate": "Create Super Administrator",
+      "securityWarning": "Security Warning:",
+      "securityMessage": "Super administrators have full system access. Only create accounts for trusted individuals.",
+      "formTitle": "Super Administrator Information",
+      "formDescription": "Fill in the new super administrator's details. A password setup link will be generated after creation.",
+      "firstNameLabel": "First Name *",
+      "firstNamePlaceholder": "e.g., John",
+      "firstNameRequired": "First name is required",
+      "lastNameLabel": "Last Name *",
+      "lastNamePlaceholder": "e.g., Smith",
+      "lastNameRequired": "Last name is required",
+      "usernameLabel": "Username *",
+      "usernamePlaceholder": "e.g., john.smith",
+      "usernameRequired": "Username is required",
+      "usernameHint": "Will be used for login. Use only letters, numbers, dots and underscores.",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "e.g., john.smith@university.edu",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordLabel": "Temporary Password *",
+      "passwordPlaceholder": "Minimum 6 characters",
+      "passwordRequired": "Temporary password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordHint": "This password will be used to generate the setup link. The user will set their own password.",
+      "cancel": "Cancel",
+      "submit": "Create Super Administrator",
+      "submitting": "Creating...",
+      "successTitle": "Super Administrator Created Successfully",
+      "successDescription": "Super administrator {name} has been created.",
+      "usernameDisplay": "Username",
+      "emailDisplay": "Email",
+      "resetLinkTitle": "Password Setup Link",
+      "resetLinkDescription": "Share this link with the new super administrator so they can set their password.",
+      "resetLinkExpiry": "This link expires in 72 hours.",
+      "resetLinkExpiryWarning": "Make sure to share it with the user as soon as possible.",
+      "resetLinkLabel": "Setup Link",
+      "copyLink": "Copy Link",
+      "linkCopied": "Copied!",
+      "shareTitle": "How to share:",
+      "shareEmail": "Send via email to",
+      "shareMessaging": "Share via Slack, Teams or WhatsApp",
+      "shareSecure": "Deliver personally in secure digital format",
+      "backToList": "Back to List",
+      "createAnother": "Create Another Super Administrator",
+      "createSuccess": "Super administrator created successfully!",
+      "createError": "Error creating super administrator",
+      "formError": "Please correct the errors in the form",
+      "linkCopySuccess": "Link copied to clipboard!",
+      "linkCopyError": "Error copying link"
     }
   },
   "sidebar": {

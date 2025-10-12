@@ -10,6 +10,11 @@ interface FileUploadProps {
   disabled?: boolean;
   maxSizeMB?: number;
   selectedFile?: File | null;
+  translations?: {
+    clickToSelect?: string;
+    supportedFormats?: string;
+    maxSize?: string;
+  };
 }
 
 export function FileUpload({
@@ -18,6 +23,7 @@ export function FileUpload({
   disabled = false,
   maxSizeMB = 50,
   selectedFile,
+  translations,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -101,13 +107,13 @@ export function FileUpload({
           </div>
           <div>
             <p className="text-sm font-medium">
-              Clique para selecionar ou arraste o arquivo aqui
+              {translations?.clickToSelect || 'Clique para selecionar ou arraste o arquivo aqui'}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX
+              {translations?.supportedFormats || 'Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX'}
             </p>
             <p className="text-xs text-muted-foreground">
-              Tamanho máximo: {maxSizeMB}MB
+              {translations?.maxSize ? translations.maxSize.replace('{maxSizeMB}', maxSizeMB.toString()) : `Tamanho máximo: ${maxSizeMB}MB`}
             </p>
           </div>
         </div>

@@ -34,10 +34,16 @@
   "courses": {
     "title": "Disciplinas",
     "description": "Gerencie disciplinas e programas acadêmicos. Mostrando {total} disciplinas com {students} estudantes em {modules} módulos",
+    "descriptionSimple": "Gerencie disciplinas e programas acadêmicos",
     "createButton": "Criar Disciplina",
     "viewModules": "Ver Módulos",
     "searchPlaceholder": "Buscar disciplinas, descrições ou universidades...",
     "emptyMessage": "Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar.",
+    "create": {
+      "title": "Criar Nova Disciplina",
+      "description": "Criar uma nova disciplina no sistema",
+      "createCourse": "Criar Disciplina"
+    },
     "columns": {
       "discipline": "Disciplina",
       "university": "Universidade",
@@ -79,6 +85,23 @@
       "creating": "Criando...",
       "updating": "Atualizando...",
       "saveError": "Falha ao salvar a disciplina. Tente novamente."
+    },
+    "edit": {
+      "title": "Editar Disciplina",
+      "description": "Edite as informações da disciplina {name}",
+      "back": "Voltar",
+      "courseInfo": "Informações da Disciplina",
+      "nameLabel": "Nome da Disciplina *",
+      "namePlaceholder": "ex: Fundamentos da Ciência da Computação",
+      "codeLabel": "Código *",
+      "codePlaceholder": "ex: CS101, COMP200",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "Descreva os objetivos da disciplina, conteúdo e público-alvo...",
+      "saveChanges": "Salvar Alterações",
+      "cancel": "Cancelar",
+      "loadError": "Erro ao carregar dados da disciplina.",
+      "loadErrorDesc": "Não foi possível carregar os dados da disciplina",
+      "updateError": "Erro ao atualizar disciplina. Tente novamente."
     },
     "detail": {
       "breadcrumbUniversities": "Universidades",
@@ -134,10 +157,16 @@
   "modules": {
     "title": "Módulos",
     "description": "Gerencie módulos de aprendizado e configuração de tutores IA. {total} módulos em {courses} disciplinas com {aiConfigured} tutores IA configurados",
+    "descriptionSimple": "Gerencie módulos de aprendizado e configuração de tutores IA",
     "createButton": "Criar Módulo",
     "viewCourses": "Ver Disciplinas",
     "searchPlaceholder": "Buscar módulos, descrições ou disciplinas...",
     "emptyMessage": "Nenhum módulo encontrado. Crie seu primeiro módulo para começar.",
+    "create": {
+      "title": "Criar Novo Módulo",
+      "description": "Criar um novo módulo de aprendizagem no sistema",
+      "createModule": "Criar Módulo"
+    },
     "columns": {
       "module": "Módulo",
       "semester": "Semestre",
@@ -195,6 +224,8 @@
       "promptTip3": "• Inclua diretrizes para diferentes tipos de perguntas",
       "promptTip4": "• Defina expectativas para formato e tom de resposta",
       "promptTip5": "• Considere o público-alvo e seu nível",
+      "tutorLanguageLabel": "Idioma do Tutor IA",
+      "tutorLanguageHint": "Importante: Selecione em qual idioma o tutor IA deve responder às perguntas dos alunos. Isso define o idioma das respostas, independentemente do idioma da pergunta.",
       "cancel": "Cancelar",
       "create": "Criar Módulo",
       "update": "Atualizar Módulo",
@@ -288,7 +319,15 @@
         "size": "Tamanho",
         "uploadedAt": "Enviado em",
         "actions": "Ações"
-      }
+      },
+      "fileUpload": {
+        "clickToSelect": "Clique para selecionar ou arraste o arquivo aqui",
+        "supportedFormats": "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
+        "maxSize": "Tamanho máximo: {maxSizeMB}MB"
+      },
+      "fileNameUnknown": "Arquivo sem nome",
+      "fileTypeUnknown": "Tipo desconhecido",
+      "openInWidget": "Abrir no Widget"
     },
     "edit": {
       "title": "Editar Módulo",
@@ -315,7 +354,17 @@
       "loadError": "Erro ao carregar dados do módulo.",
       "loadErrorDesc": "Não foi possível carregar os dados do módulo",
       "updateError": "Erro ao atualizar módulo. Tente novamente.",
-      "deleteFileConfirm": "Tem certeza que deseja deletar este arquivo?"
+      "deleteFileConfirm": "Tem certeza que deseja deletar este arquivo?",
+      "fileUploadClick": "Clique para selecionar ou arraste o arquivo aqui",
+      "fileUploadFormats": "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
+      "fileUploadMaxSize": "Tamanho máximo: {maxSizeMB}MB",
+      "uploadFile": "Enviar Arquivo",
+      "uploading": "Enviando...",
+      "fileColumn": "Arquivo",
+      "sizeColumn": "Tamanho",
+      "actionsColumn": "Ações",
+      "confirmDelete": "Tem certeza que deseja deletar este arquivo?",
+      "noFilesYet": "Nenhum arquivo enviado ainda"
     }
   },
   "universities": {
@@ -519,6 +568,107 @@
       "updateError": "Erro ao atualizar token. Tente novamente.",
       "copySuccessShort": "Token copiado!",
       "copyErrorShort": "Erro ao copiar token"
+    }
+  },
+  "superAdmins": {
+    "title": "Gerenciamento de Super Administradores",
+    "description": "Gerencie contas de super administrador e suas permissões",
+    "breadcrumb": "Administração",
+    "createButton": "Criar Super Administrador",
+    "searchPlaceholder": "Buscar super administradores por nome ou email...",
+    "emptyMessage": "Nenhum super administrador encontrado.",
+    "loadError": "Erro ao carregar super administradores",
+    "deleteConfirm": "Tem certeza que deseja deletar este super administrador?",
+    "deleteError": "Erro ao deletar super administrador",
+    "deleteMainError": "Não é possível excluir a conta principal de super administrador",
+    "deleteNotImplemented": "Funcionalidade de exclusão será implementada em breve",
+    "columns": {
+      "name": "Super Administrador",
+      "createdAt": "Criado em",
+      "lastActivity": "Última Atividade",
+      "status": "Status",
+      "active": "Ativo",
+      "actions": "Ações"
+    },
+    "stats": {
+      "total": "Total de Super Administradores",
+      "totalDesc": "Administradores do sistema",
+      "activeToday": "Ativos Hoje",
+      "activeTodayDesc": "Online nas últimas 24h",
+      "recentActions": "Ações Recentes",
+      "recentActionsDesc": "Ações administrativas hoje",
+      "security": "Status de Segurança",
+      "securityStatus": "Seguro",
+      "securityDesc": "Todos os sistemas normais"
+    },
+    "warningTitle": "Aviso de Segurança",
+    "warningDescription": "Super administradores têm acesso completo ao sistema. Crie contas apenas para indivíduos confiáveis. Todas as ações de super administradores são registradas para auditoria de segurança.",
+    "activity": {
+      "title": "Atividade Recente de Super Administradores",
+      "description": "Ações administrativas mais recentes realizadas por super administradores",
+      "example1": "Nova universidade \"Universidade de Tecnologia\" criada",
+      "example2": "Configurações do sistema atualizadas",
+      "example3": "Nova conta de super administrador criada",
+      "by": "por",
+      "bySystem": "pelo Super Administrador",
+      "time1": "2 horas atrás",
+      "time2": "4 horas atrás",
+      "time3": "1 dia atrás"
+    },
+    "create": {
+      "title": "Criar Super Administrador",
+      "titleSuccess": "Super Administrador Criado!",
+      "description": "Crie uma nova conta de super administrador com acesso completo ao sistema",
+      "descriptionSuccess": "Compartilhe o link de configuração com o novo super administrador",
+      "breadcrumbCreate": "Criar Super Administrador",
+      "securityWarning": "Aviso de Segurança:",
+      "securityMessage": "Super administradores têm acesso completo ao sistema. Crie contas apenas para indivíduos confiáveis.",
+      "formTitle": "Informações do Super Administrador",
+      "formDescription": "Preencha os dados do novo super administrador. Um link de configuração de senha será gerado após a criação.",
+      "firstNameLabel": "Primeiro Nome *",
+      "firstNamePlaceholder": "Ex: João",
+      "firstNameRequired": "Primeiro nome é obrigatório",
+      "lastNameLabel": "Sobrenome *",
+      "lastNamePlaceholder": "Ex: Silva",
+      "lastNameRequired": "Sobrenome é obrigatório",
+      "usernameLabel": "Nome de Usuário *",
+      "usernamePlaceholder": "Ex: joao.silva",
+      "usernameRequired": "Nome de usuário é obrigatório",
+      "usernameHint": "Será usado para login. Use apenas letras, números, pontos e underscores.",
+      "emailLabel": "Email *",
+      "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
+      "emailRequired": "Email é obrigatório",
+      "emailInvalid": "Email inválido",
+      "passwordLabel": "Senha Temporária *",
+      "passwordPlaceholder": "Mínimo 6 caracteres",
+      "passwordRequired": "Senha temporária é obrigatória",
+      "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
+      "passwordHint": "Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.",
+      "cancel": "Cancelar",
+      "submit": "Criar Super Administrador",
+      "submitting": "Criando...",
+      "successTitle": "Super Administrador Criado com Sucesso",
+      "successDescription": "O super administrador {name} foi criado.",
+      "usernameDisplay": "Nome de Usuário",
+      "emailDisplay": "Email",
+      "resetLinkTitle": "Link de Configuração de Senha",
+      "resetLinkDescription": "Compartilhe este link com o novo super administrador para que ele possa definir sua senha.",
+      "resetLinkExpiry": "Este link expira em 72 horas.",
+      "resetLinkExpiryWarning": "Certifique-se de compartilhar com o usuário o mais rápido possível.",
+      "resetLinkLabel": "Link de Configuração",
+      "copyLink": "Copiar Link",
+      "linkCopied": "Copiado!",
+      "shareTitle": "Como compartilhar:",
+      "shareEmail": "Envie via email para",
+      "shareMessaging": "Compartilhe via Slack, Teams ou WhatsApp",
+      "shareSecure": "Entregue pessoalmente em formato digital seguro",
+      "backToList": "Voltar para Lista",
+      "createAnother": "Criar Outro Super Administrador",
+      "createSuccess": "Super administrador criado com sucesso!",
+      "createError": "Erro ao criar super administrador",
+      "formError": "Por favor, corrija os erros no formulário",
+      "linkCopySuccess": "Link copiado para a área de transferência!",
+      "linkCopyError": "Erro ao copiar link"
     }
   },
   "sidebar": {
