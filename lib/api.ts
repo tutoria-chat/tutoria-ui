@@ -274,6 +274,13 @@ class TutoriaAPIClient {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 
+  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
   // Authentication endpoints
   async login(credentials: { username: string; password: string }): Promise<TokenResponse> {
     const response = await this.post<TokenResponse>('/auth/login', credentials);
@@ -291,12 +298,12 @@ class TutoriaAPIClient {
     return response;
   }
 
-  async requestPasswordReset(email: string): Promise<{ message: string }> {
+  async requestPasswordReset(email: string): Promise<{ message: string; reset_token: string }> {
     return this.post('/auth/reset-password-request', { email });
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post('/auth/reset-password', { token, new_password: newPassword });
+  async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
+    return this.post(`/auth/reset-password?username=${username}&reset_token=${token}`, { new_password: newPassword });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
@@ -309,6 +316,30 @@ class TutoriaAPIClient {
 
   async updateUserPreferences(data: { theme_preference?: string; language_preference?: string }): Promise<{ message: string }> {
     return this.put('/auth/preferences', data);
+  }
+
+  async deactivateUser(userId: number): Promise<User> {
+    return this.patch(`/auth/users/${userId}/deactivate`);
+  }
+
+  async activateUser(userId: number): Promise<User> {
+    return this.patch(`/auth/users/${userId}/activate`);
+  }
+
+  async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
+    return this.delete(`/auth/users/${userId}`);
+  }
+
+  async generatePasswordResetLink(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
+    return this.post('/auth/reset-password-request', { username, user_type: userType });
+  }
+
+  async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<User[]> {
+    return this.get('/auth/users/', { user_type: userType });
+  }
+
+  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string }): Promise<User> {
+    return this.put(`/auth/users/${userId}`, data);
   }
 
   // University endpoints

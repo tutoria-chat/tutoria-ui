@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Shield, Users, Mail, Calendar } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, Mail, Calendar, Ban, CheckCircle, Edit, AlertTriangle, Key } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
@@ -24,6 +25,17 @@ export default function SuperAdminsPage() {
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('first_name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    type: 'deactivate' | 'delete' | null;
+    adminId: number | null;
+    adminName: string;
+  }>({
+    open: false,
+    type: null,
+    adminId: null,
+    adminName: ''
+  });
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('breadcrumb'), href: '/admin' },
@@ -37,13 +49,80 @@ export default function SuperAdminsPage() {
   const loadSuperAdmins = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.getSuperAdmins();
-      setSuperAdmins(response.items || response);
+      const users = await apiClient.getUsersByType('super_admin');
+      // Map UserResponse to SuperAdmin interface
+      const admins: SuperAdmin[] = users.map((user: any) => ({
+        id: user.user_id,
+        username: user.username,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        is_active: user.is_active,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        last_login_at: user.last_login_at,
+        language_preference: user.language_preference,
+        theme_preference: user.theme_preference,
+      }));
+      setSuperAdmins(admins);
     } catch (error: any) {
       console.error('Error loading super admins:', error);
       toast.error(t('loadError'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openDeactivateDialog = (admin: SuperAdmin) => {
+    if (admin.id === 1) {
+      toast.error(t('deleteMainError'));
+      return;
+    }
+    setConfirmDialog({
+      open: true,
+      type: 'deactivate',
+      adminId: admin.id,
+      adminName: `${admin.first_name} ${admin.last_name}`
+    });
+  };
+
+  const handleDeactivate = async () => {
+    if (!confirmDialog.adminId) return;
+
+    try {
+      await apiClient.deactivateUser(confirmDialog.adminId);
+      toast.success(t('deactivateSuccess') || 'Super administrator deactivated successfully');
+      setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
+      loadSuperAdmins();
+    } catch (error: any) {
+      console.error('Error deactivating super admin:', error);
+      toast.error(error.message || t('deactivateError') || 'Error deactivating super administrator');
+    }
+  };
+
+  const handleActivate = async (id: number) => {
+    try {
+      await apiClient.activateUser(id);
+      toast.success(t('activateSuccess') || 'Super administrator activated successfully');
+      loadSuperAdmins();
+    } catch (error: any) {
+      console.error('Error activating super admin:', error);
+      toast.error(error.message || t('activateError') || 'Error activating super administrator');
+    }
+  };
+
+  const handlePasswordReset = async (admin: SuperAdmin) => {
+    try {
+      const response = await apiClient.generatePasswordResetLink(admin.username, 'super_admin');
+
+      // Copy reset link to clipboard
+      const resetUrl = `${window.location.origin}/reset-password?username=${admin.username}&token=${response.reset_token}`;
+      await navigator.clipboard.writeText(resetUrl);
+
+      toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');
+    } catch (error: any) {
+      console.error('Error generating password reset:', error);
+      toast.error(error.message || t('passwordResetError') || 'Error generating password reset link');
     }
   };
 
@@ -79,61 +158,112 @@ export default function SuperAdminsPage() {
       )
     },
     {
-      key: 'updated_at',
+      key: 'last_login_at',
       label: t('columns.lastActivity'),
       sortable: true,
       render: (value) => (
         <div className="text-sm">
-          {formatDateShort(value as string)}
+          {value ? formatDateShort(value as string) : t('columns.never')}
         </div>
       )
     },
     {
       key: 'status',
       label: t('columns.status'),
-      render: () => (
-        <Badge variant="default" className="bg-green-100 text-green-800">
-          {t('columns.active')}
-        </Badge>
+      render: (_, admin) => (
+        admin.is_active ? (
+          <Badge variant="default" className="bg-green-100 text-green-800">
+            {t('columns.active')}
+          </Badge>
+        ) : (
+          <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+            {t('columns.inactive') || 'Inactive'}
+          </Badge>
+        )
       )
     },
     {
       key: 'actions',
       label: t('columns.actions'),
-      width: '120px',
+      width: '180px',
       render: (_, admin) => (
         <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleDelete(admin.super_admin_id)}
-            disabled={admin.super_admin_id === 1}
+            asChild
+            title={t('editButton') || 'Edit'}
           >
-            <Trash2 className={`h-4 w-4 ${admin.super_admin_id === 1 ? 'text-muted-foreground' : 'text-destructive'}`} />
+            <Link href={`/admin/super-admins/${admin.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handlePasswordReset(admin)}
+            title={t('resetPassword') || 'Reset Password'}
+          >
+            <Key className="h-4 w-4 text-blue-600" />
+          </Button>
+          {admin.is_active ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openDeactivateDialog(admin)}
+              disabled={admin.id === 1}
+              title={t('deactivate') || 'Deactivate'}
+            >
+              <Ban className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-amber-600'}`} />
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleActivate(admin.id)}
+              title={t('activate') || 'Activate'}
+            >
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => openDeleteDialog(admin)}
+            disabled={admin.id === 1}
+            title={t('delete') || 'Delete'}
+          >
+            <Trash2 className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-destructive'}`} />
           </Button>
         </div>
       )
     }
   ];
 
-  const handleDelete = async (id: number) => {
-    if (id === 1) {
+  const openDeleteDialog = (admin: SuperAdmin) => {
+    if (admin.id === 1) {
       toast.error(t('deleteMainError'));
       return;
     }
+    setConfirmDialog({
+      open: true,
+      type: 'delete',
+      adminId: admin.id,
+      adminName: `${admin.first_name} ${admin.last_name}`
+    });
+  };
 
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
+  const handleDelete = async () => {
+    if (!confirmDialog.adminId) return;
 
     try {
-      // Note: Implement this endpoint in the backend if needed
-      // await apiClient.deleteSuperAdmin(id);
-      toast.info(t('deleteNotImplemented'));
-      console.log('Delete super admin:', id);
+      await apiClient.deleteUserPermanently(confirmDialog.adminId);
+      toast.success(t('deleteSuccess') || 'Super administrator deleted successfully');
+      setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
+      loadSuperAdmins();
     } catch (error: any) {
       console.error('Error deleting super admin:', error);
-      toast.error(t('deleteError'));
+      toast.error(error.message || t('deleteError') || 'Error deleting super administrator');
     }
   };
 
@@ -209,7 +339,8 @@ export default function SuperAdminsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          {/* TODO: Implement real-time statistics - hardcoded values commented out */}
+          {/* <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{t('stats.activeToday')}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
@@ -246,7 +377,7 @@ export default function SuperAdminsPage() {
                 {t('stats.securityDesc')}
               </p>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Warning Card */}
@@ -324,6 +455,37 @@ export default function SuperAdminsPage() {
             </div>
           </CardContent>
         </Card> */}
+
+        {/* Confirmation Dialog */}
+        <Dialog open={confirmDialog.open} onOpenChange={(open) => !open && setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' })}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <AlertTriangle className={`h-5 w-5 ${confirmDialog.type === 'delete' ? 'text-destructive' : 'text-amber-600'}`} />
+                {confirmDialog.type === 'deactivate' ? t('deactivate') : t('delete')}
+              </DialogTitle>
+              <DialogDescription>
+                {confirmDialog.type === 'deactivate' ? t('deactivateConfirm') : t('deleteConfirm')}
+                <br />
+                <span className="font-semibold mt-2 block">{confirmDialog.adminName}</span>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' })}
+              >
+                {t('cancel') || 'Cancel'}
+              </Button>
+              <Button
+                variant={confirmDialog.type === 'delete' ? 'destructive' : 'default'}
+                onClick={confirmDialog.type === 'deactivate' ? handleDeactivate : handleDelete}
+              >
+                {confirmDialog.type === 'deactivate' ? t('deactivate') : t('delete')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </SuperAdminOnly>
   );

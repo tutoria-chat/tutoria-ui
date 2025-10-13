@@ -193,14 +193,14 @@ class AuthService {
     }
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
+  async resetPassword(username: string, token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await apiClient.resetPassword(token, newPassword);
+      await apiClient.resetPassword(username, token, newPassword);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Password reset failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Password reset failed'
       };
     }
   }

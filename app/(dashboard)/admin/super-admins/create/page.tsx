@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectItem } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Copy, Check, Mail, AlertCircle } from 'lucide-react';
@@ -31,6 +32,7 @@ export default function CreateSuperAdminPage() {
     first_name: '',
     last_name: '',
     password: '',
+    language_preference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -77,8 +79,9 @@ export default function CreateSuperAdminPage() {
 
       setNewUser(response);
 
-      // Generate reset link (in production, backend would return this)
-      const resetToken = 'temp-token-' + Math.random().toString(36).substring(7);
+      // Request password reset token from backend
+      const resetResponse = await apiClient.requestPasswordReset(formData.email);
+      const resetToken = resetResponse.reset_token;
       const link = `${window.location.origin}/setup-password?token=${resetToken}&username=${formData.username}`;
       setResetLink(link);
 
@@ -113,56 +116,56 @@ export default function CreateSuperAdminPage() {
             breadcrumbs={breadcrumbs}
           />
 
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
             <CardHeader>
-              <CardTitle className="text-green-900 flex items-center">
+              <CardTitle className="text-green-900 dark:text-green-50 flex items-center">
                 <Shield className="mr-2 h-5 w-5" />
                 ✅ {t('successTitle')}
               </CardTitle>
-              <CardDescription className="text-green-700">
+              <CardDescription className="text-green-700 dark:text-green-200">
                 {t('successDescription', { name: `${newUser?.first_name} ${newUser?.last_name}` })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-sm font-medium text-green-900">{t('usernameDisplay')}</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200">
-                  <code className="text-sm">{formData.username}</code>
+                <Label className="text-sm font-medium text-green-900 dark:text-green-50">{t('usernameDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900/50 rounded border border-green-200 dark:border-green-700">
+                  <code className="text-sm text-foreground">{formData.username}</code>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">{t('emailDisplay')}</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
+                <Label className="text-sm font-medium text-green-900 dark:text-green-50">{t('emailDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900/50 rounded border border-green-200 dark:border-green-700 flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <code className="text-sm">{formData.email}</code>
+                  <code className="text-sm text-foreground">{formData.email}</code>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
             <CardHeader>
-              <CardTitle className="text-blue-900">🔗 {t('resetLinkTitle')}</CardTitle>
-              <CardDescription className="text-blue-700">
+              <CardTitle className="text-blue-900 dark:text-blue-50">🔗 {t('resetLinkTitle')}</CardTitle>
+              <CardDescription className="text-blue-700 dark:text-blue-200">
                 {t('resetLinkDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Alert className="bg-amber-50 border-amber-200">
-                <AlertCircle className="h-4 w-4 text-amber-600" />
-                <AlertDescription className="text-amber-900">
+              <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
+                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertDescription className="text-amber-900 dark:text-amber-100">
                   <strong>⏱️ {t('resetLinkExpiry')}</strong> {t('resetLinkExpiryWarning')}
                 </AlertDescription>
               </Alert>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900">{t('resetLinkLabel')}</Label>
+                <Label className="text-sm font-medium text-blue-900 dark:text-blue-50">{t('resetLinkLabel')}</Label>
                 <div className="flex space-x-2">
                   <Input
                     value={resetLink}
                     readOnly
-                    className="bg-white font-mono text-sm"
+                    className="bg-white dark:bg-blue-900/50 font-mono text-sm"
                   />
                   <Button
                     onClick={handleCopyLink}
@@ -171,7 +174,7 @@ export default function CreateSuperAdminPage() {
                   >
                     {copiedLink ? (
                       <>
-                        <Check className="mr-2 h-4 w-4 text-green-600" />
+                        <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
                         {t('linkCopied')}
                       </>
                     ) : (
@@ -184,9 +187,9 @@ export default function CreateSuperAdminPage() {
                 </div>
               </div>
 
-              <div className="p-4 bg-white rounded border border-blue-200">
-                <p className="text-sm text-blue-900 font-medium mb-2">📋 {t('shareTitle')}</p>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <div className="p-4 bg-white dark:bg-blue-900/50 rounded border border-blue-200 dark:border-blue-700">
+                <p className="text-sm text-blue-900 dark:text-blue-50 font-medium mb-2">📋 {t('shareTitle')}</p>
+                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
                   <li>{t('shareEmail')} <strong>{formData.email}</strong></li>
                   <li>{t('shareMessaging')}</li>
                   <li>{t('shareSecure')}</li>
@@ -207,6 +210,7 @@ export default function CreateSuperAdminPage() {
                 first_name: '',
                 last_name: '',
                 password: '',
+                language_preference: 'pt-br',
               });
               setResetLink('');
               setNewUser(null);
@@ -316,6 +320,23 @@ export default function CreateSuperAdminPage() {
                 )}
                 <p className="text-sm text-muted-foreground">
                   {t('passwordHint')}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Select
+                  id="language_preference"
+                  value={formData.language_preference}
+                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                  placeholder={t('languagePlaceholder')}
+                >
+                  <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
+                  <SelectItem value="en">{t('languageEnglish')}</SelectItem>
+                  <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {t('languageHint')}
                 </p>
               </div>
             </CardContent>

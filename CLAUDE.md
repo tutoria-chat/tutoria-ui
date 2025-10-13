@@ -33,6 +33,26 @@ This is a Next.js 15 application with App Router using TypeScript and Tailwind C
 - Utility-first CSS with Tailwind and custom utility functions
 - Path aliases configured: `@/` maps to project root
 
+### Loading States
+**IMPORTANT**: Always use the custom `LoadingSpinner` component for loading states in pages.
+
+```typescript
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+
+// For full-page loading states
+if (loading) {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <LoadingSpinner size="xl" className="text-primary" />
+    </div>
+  );
+}
+```
+
+Available sizes: `sm`, `md`, `lg`, `xl`
+- Use `xl` for full-page loading states (no text)
+- Use smaller sizes for inline loading indicators
+
 ### API Architecture
 - Custom `ApiClient` class in `lib/api.ts` with timeout, error handling, and standard HTTP methods
 - Environment-based API URL configuration (`NEXT_PUBLIC_API_URL`)
@@ -49,6 +69,51 @@ The `lib/utils.ts` file contains essential utilities including:
 - Strict mode enabled with modern ES2017 target
 - Path mapping configured for `@/*` imports
 - Next.js plugin integration for optimal bundling
+
+## CRITICAL Rules
+
+### TypeScript Type Safety
+**ALWAYS check types before making changes**:
+1. Read backend schema files in `D:\Users\Steve\code\tutoria-api\app\schemas\` to verify data structures
+2. Ensure frontend TypeScript interfaces match backend Pydantic schemas exactly
+3. Never assume field names or types - always verify with backend code first
+4. Run TypeScript compiler (`npx tsc --noEmit`) to check for errors before committing
+
+### User Management Endpoints
+**CRITICAL**: The application uses a unified Users table. For ANY user-related operations (professors, super_admins, students):
+
+1. **Use the `/auth/users/` endpoints** - NOT legacy endpoints like `/super-admin/super-admins/` or `/professors/`
+2. **Available user endpoints**:
+   - `POST /auth/users/create` - Create any user type (professor, super_admin, student)
+   - `GET /auth/users/` - Get all users (filtered by type if needed)
+   - `GET /auth/users/{id}` - Get specific user
+   - `PUT /auth/users/{id}` - Update user basic info (first_name, last_name, email, username)
+   - `PATCH /auth/users/{id}/activate` - Activate user
+   - `PATCH /auth/users/{id}/deactivate` - Deactivate user
+   - `DELETE /auth/users/{id}` - Permanently delete user
+   - `POST /auth/reset-password-request` - Generate password reset link (requires username and user_type)
+
+3. **Legacy endpoints are deprecated** - only use for backward compatibility when necessary
+
+### Development Server
+**NEVER start the dev server without asking permission first**:
+- User may already have it running in another terminal
+- Running multiple dev servers causes conflicts and instability
+- Always ask: "Would you like me to start the dev server?" before running `npm run dev`
+
+## Security TODOs
+
+### Authentication & Authorization
+1. **TODO: Implement client_id/secret authentication for login endpoint**
+   - Currently `/auth/login` is public but should have proper client authentication
+   - Add client_id/client_secret validation to prevent unauthorized access
+   - Consider implementing OAuth 2.0 client credentials flow
+
+2. **TODO: Review and secure public registration endpoints**
+   - `/auth/student/register` - Currently public, may need additional security (CAPTCHA, email verification)
+   - `/auth/professor/register` - Currently public, should require admin approval or invitation token
+   - Consider implementing invitation-only registration for professors
+   - Add rate limiting to prevent abuse
 
 ## Internationalization (i18n)
 
