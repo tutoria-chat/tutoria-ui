@@ -274,6 +274,13 @@ class TutoriaAPIClient {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 
+  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PATCH',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
   // Authentication endpoints
   async login(credentials: { username: string; password: string }): Promise<TokenResponse> {
     const response = await this.post<TokenResponse>('/auth/login', credentials);
@@ -291,12 +298,16 @@ class TutoriaAPIClient {
     return response;
   }
 
-  async requestPasswordReset(email: string): Promise<{ message: string }> {
-    return this.post('/auth/reset-password-request', { email });
+  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
+    return this.post('/auth/reset-password-request', { username, user_type: userType });
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post('/auth/reset-password', { token, new_password: newPassword });
+  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; language_preference: string; user_type: string }> {
+    return this.get('/auth/verify-reset-token', { username, reset_token: token });
+  }
+
+  async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
+    return this.post(`/auth/reset-password?username=${username}&reset_token=${token}`, { new_password: newPassword });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
@@ -309,6 +320,26 @@ class TutoriaAPIClient {
 
   async updateUserPreferences(data: { theme_preference?: string; language_preference?: string }): Promise<{ message: string }> {
     return this.put('/auth/preferences', data);
+  }
+
+  async deactivateUser(userId: number): Promise<User> {
+    return this.patch(`/auth/users/${userId}/deactivate`);
+  }
+
+  async activateUser(userId: number): Promise<User> {
+    return this.patch(`/auth/users/${userId}/activate`);
+  }
+
+  async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
+    return this.delete(`/auth/users/${userId}`);
+  }
+
+  async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<User[]> {
+    return this.get('/auth/users/', { user_type: userType });
+  }
+
+  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string }): Promise<User> {
+    return this.put(`/auth/users/${userId}`, data);
   }
 
   // University endpoints
@@ -481,27 +512,67 @@ class TutoriaAPIClient {
 
   // Super Admin endpoints
   async getSystemStats(): Promise<SystemStats> {
-    return this.get('/super-admins/stats');
+    return this.get('/super-admin/stats');
   }
 
   async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
-    return this.get('/super-admins/super-admins/', params);
+    return this.get('/super-admin/super-admins/', params);
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    return this.post('/super-admins/super-admins/', data);
+    // Use the unified /auth/users/create endpoint
+    interface BackendUserResponse {
+      user_id: number;
+      username: string;
+      email: string;
+      first_name: string;
+      last_name: string;
+      user_type: 'super_admin' | 'professor' | 'student';
+      is_active: boolean;
+      created_at: string;
+      updated_at: string;
+      last_login_at?: string | null;
+      language_preference?: string;
+      theme_preference?: string;
+    }
+
+    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+      username: data.username,
+      email: data.email,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      password: data.password,
+      user_type: 'super_admin',
+      is_admin: true, // Super admins are always admins
+      language_preference: data.language_preference || 'pt-br',
+    });
+
+    // Map backend UserResponse to SuperAdmin interface
+    return {
+      id: response.user_id,
+      username: response.username,
+      email: response.email,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      is_active: response.is_active,
+      created_at: response.created_at,
+      updated_at: response.updated_at,
+      last_login_at: response.last_login_at,
+      language_preference: response.language_preference,
+      theme_preference: response.theme_preference,
+    };
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
-    return this.put(`/super-admins/super-admins/${id}`, data);
+    return this.put(`/super-admin/super-admins/${id}`, data);
   }
 
-  async getAllUniversities(): Promise<University[]> {
-    return this.get('/super-admins/universities/all');
+  async getAllUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
+    return this.get('/super-admin/universities/all', params);
   }
 
-  async getAllProfessors(): Promise<Professor[]> {
-    return this.get('/super-admins/professors/all');
+  async getAllProfessors(params?: PaginationParams): Promise<PaginatedResponse<Professor>> {
+    return this.get('/super-admin/professors/all', params);
   }
 
   // AI Tutor endpoints

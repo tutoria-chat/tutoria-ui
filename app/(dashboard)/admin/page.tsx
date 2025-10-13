@@ -1,3 +1,7 @@
+// TODO: Implement System Overview page with real data from backend
+// This page is commented out until we have proper backend endpoints for system stats
+// See TODOs.md for more details
+
 'use client';
 
 import React, { useState } from 'react';

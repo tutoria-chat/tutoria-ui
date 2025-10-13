@@ -112,15 +112,21 @@ class AuthService {
       // Map JWT payload to User object
       return {
         id: payload.sub || payload.user_id,
+        username: payload.username,
         email: payload.email,
         first_name: payload.first_name,
         last_name: payload.last_name,
-        role: payload.type, // Use 'type' from JWT payload as defined in JWTPayload interface
+        user_type: payload.type, // Use 'type' from JWT payload
+        role: payload.type, // Alias for user_type (backwards compatibility)
+        is_active: payload.is_active !== undefined ? payload.is_active : true,
         university_id: payload.university_id,
         is_admin: payload.is_admin,
         assigned_courses: payload.assigned_courses,
         created_at: payload.created_at || new Date().toISOString(),
         updated_at: payload.updated_at || new Date().toISOString(),
+        last_login_at: payload.last_login_at,
+        theme_preference: payload.theme_preference,
+        language_preference: payload.language_preference,
       };
     } catch (error) {
       console.error('Failed to decode token:', error);
@@ -181,26 +187,26 @@ class AuthService {
     }
   }
 
-  async requestPasswordReset(email: string): Promise<{ success: boolean; error?: string }> {
+  async requestPasswordReset(email: string, userType: 'student' | 'professor' | 'super_admin' = 'student'): Promise<{ success: boolean; error?: string }> {
     try {
-      await apiClient.requestPasswordReset(email);
+      await apiClient.requestPasswordReset(email, userType);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Password reset request failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Password reset request failed'
       };
     }
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
+  async resetPassword(username: string, token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await apiClient.resetPassword(token, newPassword);
+      await apiClient.resetPassword(username, token, newPassword);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Password reset failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Password reset failed'
       };
     }
   }

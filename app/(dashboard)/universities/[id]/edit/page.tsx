@@ -91,7 +91,7 @@ export default function EditUniversityPage() {
     setIsLoading(true);
     try {
       await apiClient.updateUniversity(universityId, formData);
-      router.push('/universities');
+      router.push(`/universities/${universityId}`);
     } catch (error) {
       console.error('Failed to update university:', error);
       setErrors({ submit: t('updateError') });
@@ -148,11 +148,12 @@ export default function EditUniversityPage() {
           }
         />
 
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle>{t('universityInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="flex justify-center">
+          <Card className="max-w-4xl w-full">
+            <CardHeader>
+              <CardTitle>{t('universityInfo')}</CardTitle>
+            </CardHeader>
+            <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -223,6 +224,7 @@ export default function EditUniversityPage() {
             </form>
           </CardContent>
         </Card>
+        </div>
       </div>
     </SuperAdminOnly>
   );

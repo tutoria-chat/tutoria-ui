@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +32,8 @@ interface TokenModalProps {
 
 export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedModuleId }: TokenModalProps) {
   const { user } = useAuth();
+  const t = useTranslations('tokens.modal');
+  const tCommon = useTranslations('common');
   const [modules, setModules] = useState<Module[]>([]);
   const [loadingModules, setLoadingModules] = useState(false);
   const [showFullToken, setShowFullToken] = useState(false);
@@ -100,39 +104,40 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
     if (mode === 'create' && open) {
       const loadModules = async () => {
         setLoadingModules(true);
+        setErrors({});
         try {
-          const params: Record<string, string | number> = { page: 1, size: 100 };
-          if (user?.university_id && user.role !== 'super_admin') {
-            params.university_id = user.university_id;
-          }
-          if (moduleSearchQuery) {
-            params.search = moduleSearchQuery;
-          }
-          const response = await apiClient.getModules(params);
-          let modulesList = response.items;
-
-          // If there's a preselected module and search is empty, ensure it's in the list
-          if (preselectedModuleId && !moduleSearchQuery && !modulesList.find(m => m.id === preselectedModuleId)) {
-            try {
-              const preselectedModule = await apiClient.getModule(preselectedModuleId);
-              modulesList = [preselectedModule, ...modulesList];
-            } catch (error) {
-              console.error('Failed to load preselected module:', error);
+          // If there's a preselected module, load only that module
+          if (preselectedModuleId) {
+            const preselectedModule = await apiClient.getModule(preselectedModuleId);
+            setModules([preselectedModule]);
+          } else {
+            // Otherwise, load modules with search/filter
+            const params: Record<string, string | number> = { page: 1, size: 100 };
+            if (user?.university_id && user.role !== 'super_admin') {
+              params.university_id = user.university_id;
             }
+            if (moduleSearchQuery) {
+              params.search = moduleSearchQuery;
+            }
+            const response = await apiClient.getModules(params);
+            setModules(response.items);
           }
-
-          setModules(modulesList);
         } catch (error) {
           console.error('Failed to load modules:', error);
-          setErrors({ modules: 'Erro ao carregar módulos' });
+          // Set a flag that there was an error, actual message rendered in JSX with translation
+          setErrors({ modules: 'ERROR' });
         } finally {
           setLoadingModules(false);
         }
       };
 
-      // Debounce the search
-      const timeoutId = setTimeout(loadModules, moduleSearchQuery ? 300 : 0);
-      return () => clearTimeout(timeoutId);
+      // Only debounce if there's no preselected module and we have a search query
+      if (preselectedModuleId) {
+        loadModules();
+      } else {
+        const timeoutId = setTimeout(loadModules, moduleSearchQuery ? 300 : 0);
+        return () => clearTimeout(timeoutId);
+      }
     }
   }, [mode, open, user, preselectedModuleId, moduleSearchQuery]);
 
@@ -147,11 +152,11 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
     const newErrors: Record<string, string> = {};
 
     if (!formData.name?.trim()) {
-      newErrors.name = 'Nome do token é obrigatório';
+      newErrors.name = t('nameRequired');
     }
 
     if (mode === 'create' && (!formData.module_id || formData.module_id === 0)) {
-      newErrors.module_id = 'Selecione um módulo';
+      newErrors.module_id = t('moduleRequired');
     }
 
     setErrors(newErrors);
@@ -180,7 +185,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       onClose();
     } catch (error) {
       console.error(`Failed to ${mode} token:`, error);
-      setErrors({ submit: `Erro ao ${mode === 'create' ? 'criar' : 'atualizar'} token. Tente novamente.` });
+      setErrors({ submit: mode === 'create' ? t('createError') : t('updateError') });
     } finally {
       setIsLoading(false);
     }
@@ -190,17 +195,16 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
     if (!token?.token) return;
     try {
       await navigator.clipboard.writeText(token.token);
-      // TODO: Replace with toast notification
-      alert('Token copiado para a área de transferência!');
+      toast.success(t('copySuccessShort'));
     } catch (error) {
       console.error('Error copying token:', error);
-      alert('Falha ao copiar o token. Tente novamente.');
+      toast.error(t('copyErrorShort'));
     }
   };
 
   const handleRevokeToken = async () => {
     if (!token) return;
-    if (!confirm('Tem certeza que deseja revogar este token? Esta ação não pode ser desfeita.')) {
+    if (!confirm(t('revokeConfirm'))) {
       return;
     }
     try {
@@ -209,29 +213,29 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       onClose();
     } catch (error) {
       console.error('Error revoking token:', error);
-      alert('Erro ao revogar token. Tente novamente.');
+      toast.error(t('revokeError'));
     }
   };
 
   const getDialogTitle = () => {
     switch (mode) {
       case 'create':
-        return 'Criar Token de Módulo';
+        return t('createTitle');
       case 'edit':
-        return 'Editar Token de Módulo';
+        return t('editTitle');
       case 'view':
-        return 'Detalhes do Token';
+        return t('viewTitle');
     }
   };
 
   const getDialogDescription = () => {
     switch (mode) {
       case 'create':
-        return 'Gere um novo token de acesso para widgets de tutoria IA';
+        return t('createDescription');
       case 'edit':
-        return 'Atualize as configurações do token de acesso';
+        return t('editDescription');
       case 'view':
-        return 'Visualize as informações e ações disponíveis para este token';
+        return t('viewDescription');
     }
   };
 
@@ -250,7 +254,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               <Card>
                 <CardContent className="pt-6 space-y-4">
                   <div className="space-y-2">
-                    <Label>Token</Label>
+                    <Label>{t('tokenLabel')}</Label>
                     <div className="flex items-center space-x-2">
                       <code className="flex-1 text-xs bg-muted px-3 py-2 rounded font-mono break-all">
                         {showFullToken ? token.token : `${token.token.substring(0, 32)}...`}
@@ -276,71 +280,71 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Nome</Label>
+                      <Label>{t('name')}</Label>
                       <p className="text-sm">{token.name}</p>
                     </div>
                     <div className="space-y-2">
-                      <Label>Status</Label>
+                      <Label>{t('status')}</Label>
                       <Badge variant={token.is_active ? "default" : "secondary"}>
-                        {token.is_active ? 'Ativo' : 'Inativo'}
+                        {token.is_active ? t('active', { ns: 'tokens.columns' }) : t('inactive', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                   </div>
 
                   {token.description && (
                     <div className="space-y-2">
-                      <Label>Descrição</Label>
+                      <Label>{t('description')}</Label>
                       <p className="text-sm text-muted-foreground">{token.description}</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Módulo</Label>
+                      <Label>{t('module')}</Label>
                       <p className="text-sm">{token.module_name}</p>
                     </div>
                     <div className="space-y-2">
-                      <Label>Curso</Label>
+                      <Label>{t('course')}</Label>
                       <p className="text-sm">{token.course_name}</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Criado em</Label>
+                      <Label>{t('createdAt')}</Label>
                       <p className="text-sm">{formatDateShort(token.created_at)}</p>
                     </div>
                     <div className="space-y-2">
-                      <Label>Expira em</Label>
-                      <p className="text-sm">{token.expires_at ? formatDateShort(token.expires_at) : 'Nunca'}</p>
+                      <Label>{t('expiresAt')}</Label>
+                      <p className="text-sm">{token.expires_at ? formatDateShort(token.expires_at) : t('never', { ns: 'tokens.columns' })}</p>
                     </div>
                   </div>
 
                   {token.last_used_at && (
                     <div className="space-y-2">
-                      <Label>Último uso</Label>
+                      <Label>{t('lastUsed')}</Label>
                       <p className="text-sm">{formatDateShort(token.last_used_at)}</p>
                     </div>
                   )}
 
                   {token.usage_count !== undefined && (
                     <div className="space-y-2">
-                      <Label>Contagem de uso</Label>
-                      <p className="text-sm">{token.usage_count} requisições</p>
+                      <Label>{t('usageCount')}</Label>
+                      <p className="text-sm">{t('requests', { count: token.usage_count })}</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Permissão de Chat</Label>
+                      <Label>{t('chatPermission')}</Label>
                       <Badge variant={token.allow_chat ? "default" : "secondary"}>
-                        {token.allow_chat ? 'Permitido' : 'Bloqueado'}
+                        {token.allow_chat ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                     <div className="space-y-2">
-                      <Label>Acesso a Arquivos</Label>
+                      <Label>{t('filePermission')}</Label>
                       <Badge variant={token.allow_file_access ? "default" : "secondary"}>
-                        {token.allow_file_access ? 'Permitido' : 'Bloqueado'}
+                        {token.allow_file_access ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                   </div>
@@ -356,7 +360,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                   onClick={handleCopyToken}
                 >
                   <Copy className="mr-2 h-4 w-4" />
-                  Copiar Token
+                  {t('copyToken')}
                 </Button>
                 {token.is_active && (
                   <Button
@@ -366,7 +370,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     onClick={handleRevokeToken}
                   >
                     <XCircle className="mr-2 h-4 w-4" />
-                    Revogar Token
+                    {t('revokeToken')}
                   </Button>
                 )}
               </div>
@@ -379,64 +383,78 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {/* Module Selection (Create Only) */}
               {mode === 'create' && (
                 <div className="space-y-2">
-                  <Label htmlFor="module_id">Módulo *</Label>
-                  <Popover open={moduleComboboxOpen} onOpenChange={setModuleComboboxOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={moduleComboboxOpen}
-                        className="w-full justify-between"
-                        disabled={isLoading || loadingModules}
-                      >
-                        {formData.module_id && formData.module_id !== 0
-                          ? modules.find((m) => m.id === formData.module_id)?.name || "Selecione um módulo"
-                          : loadingModules ? "Carregando módulos..." : "Selecione um módulo"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-[400px] p-0">
-                      <Command shouldFilter={false}>
-                        <CommandInput
-                          placeholder="Buscar módulo..."
-                          value={moduleSearchQuery}
-                          onValueChange={setModuleSearchQuery}
-                        />
-                        <CommandList>
-                          {loadingModules ? (
-                            <div className="py-6 text-center text-sm">Carregando...</div>
-                          ) : modules.length === 0 ? (
-                            <CommandEmpty>Nenhum módulo encontrado.</CommandEmpty>
-                          ) : (
-                            <CommandGroup>
-                              {modules.map((module) => (
-                                <CommandItem
-                                  key={module.id}
-                                  value={module.id.toString()}
-                                  onSelect={() => {
-                                    handleChange('module_id', module.id);
-                                    setModuleComboboxOpen(false);
-                                    setModuleSearchQuery('');
-                                  }}
-                                >
-                                  <Check
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      formData.module_id === module.id ? "opacity-100" : "opacity-0"
-                                    )}
-                                  />
-                                  <div className="flex flex-col">
-                                    <span>{module.name}</span>
-                                    <span className="text-xs text-muted-foreground">{module.course_name}</span>
-                                  </div>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          )}
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  <Label htmlFor="module_id">{t('moduleLabel')}</Label>
+                  {preselectedModuleId ? (
+                    // Show selected module as read-only when preselected
+                    <div className="w-full rounded-md border border-input bg-muted px-3 py-2">
+                      <div className="flex flex-col">
+                        <span className="text-sm">{modules.find((m) => m.id === formData.module_id)?.name || t('loadingModules')}</span>
+                        <span className="text-xs text-muted-foreground">{modules.find((m) => m.id === formData.module_id)?.course_name}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    // Show searchable dropdown when no preselection
+                    <Popover open={moduleComboboxOpen} onOpenChange={setModuleComboboxOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={moduleComboboxOpen}
+                          className="w-full justify-between"
+                          disabled={isLoading || loadingModules}
+                        >
+                          {formData.module_id && formData.module_id !== 0
+                            ? modules.find((m) => m.id === formData.module_id)?.name || t('selectModule')
+                            : loadingModules ? t('loadingModules') : t('selectModule')}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[400px] p-0">
+                        <Command shouldFilter={false}>
+                          <CommandInput
+                            placeholder={t('searchModule')}
+                            value={moduleSearchQuery}
+                            onValueChange={setModuleSearchQuery}
+                          />
+                          <CommandList>
+                            {loadingModules ? (
+                              <div className="py-6 text-center text-sm">{t('loadingModules')}</div>
+                            ) : modules.length === 0 ? (
+                              <CommandEmpty>{t('noModules')}</CommandEmpty>
+                            ) : (
+                              <CommandGroup>
+                                {modules.map((module) => (
+                                  <CommandItem
+                                    key={module.id}
+                                    value={module.id.toString()}
+                                    onSelect={() => {
+                                      handleChange('module_id', module.id);
+                                      setModuleComboboxOpen(false);
+                                      setModuleSearchQuery('');
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        formData.module_id === module.id ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    <div className="flex flex-col">
+                                      <span>{module.name}</span>
+                                      <span className="text-xs text-muted-foreground">{module.course_name}</span>
+                                    </div>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            )}
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                  {errors.modules && (
+                    <p className="text-sm text-destructive">{t('loadingModules')}</p>
+                  )}
                   {errors.module_id && (
                     <p className="text-sm text-destructive">{errors.module_id}</p>
                   )}
@@ -446,19 +464,19 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {/* Module Display (Edit Only) */}
               {mode === 'edit' && token && (
                 <div className="space-y-2">
-                  <Label>Módulo</Label>
+                  <Label>{t('module')}</Label>
                   <p className="text-sm">{token.module_name} ({token.course_name})</p>
                 </div>
               )}
 
               {/* Name */}
               <div className="space-y-2">
-                <Label htmlFor="name">Nome do Token *</Label>
+                <Label htmlFor="name">{t('nameLabel')}</Label>
                 <Input
                   id="name"
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
-                  placeholder="Ex: Widget Moodle 2024"
+                  placeholder={t('namePlaceholder')}
                   disabled={isLoading}
                   required
                 />
@@ -469,12 +487,12 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
 
               {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="description">Descrição (opcional)</Label>
+                <Label htmlFor="description">{t('descriptionLabel')}</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => handleChange('description', e.target.value)}
-                  placeholder="Descrição do uso deste token..."
+                  placeholder={t('descriptionPlaceholder')}
                   rows={3}
                   disabled={isLoading}
                 />
@@ -483,30 +501,30 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {/* Expiration (Create Only) */}
               {mode === 'create' && (
                 <div className="space-y-2">
-                  <Label htmlFor="expires_in_days">Expira em (dias - opcional)</Label>
+                  <Label htmlFor="expires_in_days">{t('expiresLabel')}</Label>
                   <Input
                     id="expires_in_days"
                     type="number"
                     value={formData.expires_in_days || ''}
                     onChange={(e) => handleChange('expires_in_days', e.target.value ? Number(e.target.value) : undefined)}
-                    placeholder="Ex: 365"
+                    placeholder={t('expiresPlaceholder')}
                     disabled={isLoading}
                     min="1"
                   />
                   <p className="text-sm text-muted-foreground">
-                    Deixe vazio para um token sem expiração
+                    {t('expiresHint')}
                   </p>
                 </div>
               )}
 
               {/* Permissions */}
               <div className="space-y-4">
-                <Label>Permissões</Label>
+                <Label>{t('permissions')}</Label>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="allow_chat">Permitir Chat</Label>
+                    <Label htmlFor="allow_chat">{t('allowChat')}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Permite que usuários façam perguntas ao tutor IA
+                      {t('allowChatDesc')}
                     </p>
                   </div>
                   <Switch
@@ -519,9 +537,9 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="allow_file_access">Permitir Acesso a Arquivos</Label>
+                    <Label htmlFor="allow_file_access">{t('allowFileAccess')}</Label>
                     <p className="text-sm text-muted-foreground">
-                      Permite que usuários baixem arquivos do módulo
+                      {t('allowFileAccessDesc')}
                     </p>
                   </div>
                   <Switch
@@ -548,12 +566,12 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               onClick={onClose}
               disabled={isLoading}
             >
-              {mode === 'view' ? 'Fechar' : 'Cancelar'}
+              {mode === 'view' ? t('close') : t('cancel')}
             </Button>
             {mode !== 'view' && (
               <Button type="submit" disabled={isLoading || !hasChanges()}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {mode === 'create' ? 'Criar Token' : 'Salvar Alterações'}
+                {mode === 'create' ? t('createToken') : t('saveChanges')}
               </Button>
             )}
           </DialogFooter>

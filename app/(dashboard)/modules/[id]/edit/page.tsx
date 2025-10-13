@@ -34,6 +34,7 @@ export default function EditModulePage() {
     code: '',
     description: '',
     system_prompt: '',
+    tutor_language: 'pt-br',
     semester: undefined,
     year: undefined,
     course_id: undefined,
@@ -43,6 +44,7 @@ export default function EditModulePage() {
     code: '',
     description: '',
     system_prompt: '',
+    tutor_language: 'pt-br',
     semester: undefined,
     year: undefined,
     course_id: undefined,
@@ -69,6 +71,7 @@ export default function EditModulePage() {
       formData.code !== originalFormData.code ||
       formData.description !== originalFormData.description ||
       formData.system_prompt !== originalFormData.system_prompt ||
+      formData.tutor_language !== originalFormData.tutor_language ||
       formData.semester !== originalFormData.semester ||
       formData.year !== originalFormData.year ||
       (user?.role === 'super_admin' && formData.course_id !== originalFormData.course_id)
@@ -89,6 +92,7 @@ export default function EditModulePage() {
         code: data.code || '',
         description: data.description || '',
         system_prompt: data.system_prompt || '',
+        tutor_language: data.tutor_language || 'pt-br',
         semester: data.semester,
         year: data.year,
         course_id: data.course_id,
@@ -266,6 +270,7 @@ export default function EditModulePage() {
         code: formData.code?.trim() || undefined,
         description: formData.description?.trim() || undefined,
         system_prompt: formData.system_prompt?.trim() || undefined,
+        tutor_language: formData.tutor_language,
         semester: formData.semester,
         year: formData.year,
       };
@@ -342,11 +347,12 @@ export default function EditModulePage() {
           }
         />
 
-        <Card className="max-w-2xl">
-          <CardHeader>
-            <CardTitle>{t('moduleInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="flex justify-center">
+          <Card className="max-w-4xl w-full">
+            <CardHeader>
+              <CardTitle>{t('moduleInfo')}</CardTitle>
+            </CardHeader>
+            <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -491,6 +497,25 @@ export default function EditModulePage() {
                 </div>
               </div>
 
+              <div>
+                <label htmlFor="tutor_language" className="block text-sm font-medium mb-1">
+                  {tForm('tutorLanguageLabel')}
+                </label>
+                <select
+                  id="tutor_language"
+                  value={formData.tutor_language || 'pt-br'}
+                  onChange={(e) => handleChange('tutor_language', e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="pt-br">Português (Brasil)</option>
+                  <option value="en">English</option>
+                  <option value="es">Español</option>
+                </select>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {tForm('tutorLanguageHint')}
+                </p>
+              </div>
+
               {errors.submit && (
                 <p className="text-sm text-destructive">{errors.submit}</p>
               )}
@@ -512,9 +537,11 @@ export default function EditModulePage() {
             </form>
           </CardContent>
         </Card>
+        </div>
 
         {/* File Upload Section */}
-        <Card className="max-w-2xl">
+        <div className="flex justify-center">
+          <Card className="max-w-4xl w-full">
           <CardHeader>
             <CardTitle>{t('moduleFiles')}</CardTitle>
           </CardHeader>
@@ -525,6 +552,11 @@ export default function EditModulePage() {
                 disabled={isUploading}
                 selectedFile={selectedFile}
                 maxSizeMB={50}
+                translations={{
+                  clickToSelect: t('fileUploadClick'),
+                  supportedFormats: t('fileUploadFormats'),
+                  maxSize: t('fileUploadMaxSize', { maxSizeMB: 50 }),
+                }}
               />
 
               {uploadError && (
@@ -611,6 +643,7 @@ export default function EditModulePage() {
             />
           </CardContent>
         </Card>
+        </div>
       </div>
     </ProfessorOnly>
   );

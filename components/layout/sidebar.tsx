@@ -68,12 +68,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   ];
 
   const adminItems: NavigationItem[] = [
-    {
-      label: t('systemOverview'),
-      href: '/admin',
-      icon: BarChart3,
-      roles: ['super_admin'],
-    },
+    // TODO: Re-enable System Overview page when backend endpoints are ready
+    // {
+    //   label: t('systemOverview'),
+    //   href: '/admin',
+    //   icon: BarChart3,
+    //   roles: ['super_admin'],
+    // },
     {
       label: t('superAdmins'),
       href: '/admin/super-admins',

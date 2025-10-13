@@ -8,14 +8,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectItem } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Copy, Check, Mail, AlertCircle } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 
 export default function CreateSuperAdminPage() {
   const router = useRouter();
+  const t = useTranslations('superAdmins.create');
+  const tMain = useTranslations('superAdmins');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [resetLink, setResetLink] = useState('');
@@ -28,30 +32,31 @@ export default function CreateSuperAdminPage() {
     first_name: '',
     last_name: '',
     password: '',
+    language_preference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Administração', href: '/admin' },
-    { label: 'Super Administradores', href: '/admin/super-admins' },
-    { label: 'Criar Super Administrador', isCurrentPage: true }
+    { label: tMain('breadcrumb'), href: '/admin' },
+    { label: tMain('title'), href: '/admin/super-admins' },
+    { label: t('breadcrumbCreate'), isCurrentPage: true }
   ];
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.username.trim()) newErrors.username = 'Nome de usuário é obrigatório';
-    if (!formData.email.trim()) newErrors.email = 'Email é obrigatório';
-    if (!formData.first_name.trim()) newErrors.first_name = 'Primeiro nome é obrigatório';
-    if (!formData.last_name.trim()) newErrors.last_name = 'Sobrenome é obrigatório';
-    if (!formData.password.trim()) newErrors.password = 'Senha temporária é obrigatória';
-    if (formData.password.length < 6) newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
+    if (!formData.username.trim()) newErrors.username = t('usernameRequired');
+    if (!formData.email.trim()) newErrors.email = t('emailRequired');
+    if (!formData.first_name.trim()) newErrors.first_name = t('firstNameRequired');
+    if (!formData.last_name.trim()) newErrors.last_name = t('lastNameRequired');
+    if (!formData.password.trim()) newErrors.password = t('passwordRequired');
+    if (formData.password.length < 6) newErrors.password = t('passwordMinLength');
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+      newErrors.email = t('emailInvalid');
     }
 
     setErrors(newErrors);
@@ -62,7 +67,7 @@ export default function CreateSuperAdminPage() {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Por favor, corrija os erros no formulário');
+      toast.error(t('formError'));
       return;
     }
 
@@ -74,16 +79,17 @@ export default function CreateSuperAdminPage() {
 
       setNewUser(response);
 
-      // Generate reset link (in production, backend would return this)
-      const resetToken = 'temp-token-' + Math.random().toString(36).substring(7);
+      // Request password reset token from backend using username + user_type
+      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'super_admin');
+      const resetToken = resetResponse.reset_token;
       const link = `${window.location.origin}/setup-password?token=${resetToken}&username=${formData.username}`;
       setResetLink(link);
 
       setShowSuccess(true);
-      toast.success('Super administrador criado com sucesso!');
+      toast.success(t('createSuccess'));
     } catch (error: any) {
       console.error('Error creating super admin:', error);
-      toast.error(error.message || 'Erro ao criar super administrador');
+      toast.error(error.message || t('createError'));
     } finally {
       setLoading(false);
     }
@@ -93,10 +99,10 @@ export default function CreateSuperAdminPage() {
     try {
       await navigator.clipboard.writeText(resetLink);
       setCopiedLink(true);
-      toast.success('Link copiado para a área de transferência!');
+      toast.success(t('linkCopySuccess'));
       setTimeout(() => setCopiedLink(false), 2000);
     } catch (error) {
-      toast.error('Erro ao copiar link');
+      toast.error(t('linkCopyError'));
     }
   };
 
@@ -105,61 +111,61 @@ export default function CreateSuperAdminPage() {
       <SuperAdminOnly>
         <div className="space-y-6">
           <PageHeader
-            title="Super Administrador Criado!"
-            description="Compartilhe o link de configuração com o novo super administrador"
+            title={t('titleSuccess')}
+            description={t('descriptionSuccess')}
             breadcrumbs={breadcrumbs}
           />
 
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
             <CardHeader>
-              <CardTitle className="text-green-900 flex items-center">
+              <CardTitle className="text-green-900 dark:text-green-50 flex items-center">
                 <Shield className="mr-2 h-5 w-5" />
-                ✅ Super Administrador Criado com Sucesso
+                ✅ {t('successTitle')}
               </CardTitle>
-              <CardDescription className="text-green-700">
-                O super administrador <strong>{newUser?.first_name} {newUser?.last_name}</strong> foi criado.
+              <CardDescription className="text-green-700 dark:text-green-200">
+                {t('successDescription', { name: `${newUser?.first_name} ${newUser?.last_name}` })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-sm font-medium text-green-900">Nome de Usuário</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200">
-                  <code className="text-sm">{formData.username}</code>
+                <Label className="text-sm font-medium text-green-900 dark:text-green-50">{t('usernameDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900/50 rounded border border-green-200 dark:border-green-700">
+                  <code className="text-sm text-foreground">{formData.username}</code>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">Email</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
+                <Label className="text-sm font-medium text-green-900 dark:text-green-50">{t('emailDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900/50 rounded border border-green-200 dark:border-green-700 flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <code className="text-sm">{formData.email}</code>
+                  <code className="text-sm text-foreground">{formData.email}</code>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
             <CardHeader>
-              <CardTitle className="text-blue-900">🔗 Link de Configuração de Senha</CardTitle>
-              <CardDescription className="text-blue-700">
-                Compartilhe este link com o novo super administrador para que ele possa definir sua senha.
+              <CardTitle className="text-blue-900 dark:text-blue-50">🔗 {t('resetLinkTitle')}</CardTitle>
+              <CardDescription className="text-blue-700 dark:text-blue-200">
+                {t('resetLinkDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Alert className="bg-amber-50 border-amber-200">
-                <AlertCircle className="h-4 w-4 text-amber-600" />
-                <AlertDescription className="text-amber-900">
-                  <strong>⏱️ Este link expira em 72 horas.</strong> Certifique-se de compartilhar com o usuário o mais rápido possível.
+              <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
+                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertDescription className="text-amber-900 dark:text-amber-100">
+                  <strong>⏱️ {t('resetLinkExpiry')}</strong> {t('resetLinkExpiryWarning')}
                 </AlertDescription>
               </Alert>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900">Link de Configuração</Label>
+                <Label className="text-sm font-medium text-blue-900 dark:text-blue-50">{t('resetLinkLabel')}</Label>
                 <div className="flex space-x-2">
                   <Input
                     value={resetLink}
                     readOnly
-                    className="bg-white font-mono text-sm"
+                    className="bg-white dark:bg-blue-900/50 font-mono text-sm"
                   />
                   <Button
                     onClick={handleCopyLink}
@@ -168,25 +174,25 @@ export default function CreateSuperAdminPage() {
                   >
                     {copiedLink ? (
                       <>
-                        <Check className="mr-2 h-4 w-4 text-green-600" />
-                        Copiado!
+                        <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
+                        {t('linkCopied')}
                       </>
                     ) : (
                       <>
                         <Copy className="mr-2 h-4 w-4" />
-                        Copiar Link
+                        {t('copyLink')}
                       </>
                     )}
                   </Button>
                 </div>
               </div>
 
-              <div className="p-4 bg-white rounded border border-blue-200">
-                <p className="text-sm text-blue-900 font-medium mb-2">📋 Como compartilhar:</p>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                  <li>Envie via email para <strong>{formData.email}</strong></li>
-                  <li>Compartilhe via Slack, Teams ou WhatsApp</li>
-                  <li>Entregue pessoalmente em formato digital seguro</li>
+              <div className="p-4 bg-white dark:bg-blue-900/50 rounded border border-blue-200 dark:border-blue-700">
+                <p className="text-sm text-blue-900 dark:text-blue-50 font-medium mb-2">📋 {t('shareTitle')}</p>
+                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
+                  <li>{t('shareEmail')} <strong>{formData.email}</strong></li>
+                  <li>{t('shareMessaging')}</li>
+                  <li>{t('shareSecure')}</li>
                 </ul>
               </div>
             </CardContent>
@@ -194,7 +200,7 @@ export default function CreateSuperAdminPage() {
 
           <div className="flex space-x-4">
             <Button onClick={() => router.push('/admin/super-admins')} variant="outline">
-              Voltar para Lista
+              {t('backToList')}
             </Button>
             <Button onClick={() => {
               setShowSuccess(false);
@@ -204,11 +210,12 @@ export default function CreateSuperAdminPage() {
                 first_name: '',
                 last_name: '',
                 password: '',
+                language_preference: 'pt-br',
               });
               setResetLink('');
               setNewUser(null);
             }}>
-              Criar Outro Super Administrador
+              {t('createAnother')}
             </Button>
           </div>
         </div>
@@ -220,36 +227,35 @@ export default function CreateSuperAdminPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Super Administrador"
-          description="Crie uma nova conta de super administrador com acesso completo ao sistema"
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
         />
 
         <Alert className="border-amber-200 bg-amber-50">
           <Shield className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-900">
-            <strong>⚠️ Aviso de Segurança:</strong> Super administradores têm acesso completo ao sistema.
-            Crie contas apenas para indivíduos confiáveis.
+            <strong>⚠️ {t('securityWarning')}</strong> {t('securityMessage')}
           </AlertDescription>
         </Alert>
 
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>
-              <CardTitle>Informações do Super Administrador</CardTitle>
+              <CardTitle>{t('formTitle')}</CardTitle>
               <CardDescription>
-                Preencha os dados do novo super administrador. Um link de configuração de senha será gerado após a criação.
+                {t('formDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">Primeiro Nome *</Label>
+                  <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
                   <Input
                     id="first_name"
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                    placeholder="Ex: João"
+                    placeholder={t('firstNamePlaceholder')}
                   />
                   {errors.first_name && (
                     <p className="text-sm text-destructive">{errors.first_name}</p>
@@ -257,12 +263,12 @@ export default function CreateSuperAdminPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">Sobrenome *</Label>
+                  <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
                   <Input
                     id="last_name"
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                    placeholder="Ex: Silva"
+                    placeholder={t('lastNamePlaceholder')}
                   />
                   {errors.last_name && (
                     <p className="text-sm text-destructive">{errors.last_name}</p>
@@ -271,29 +277,29 @@ export default function CreateSuperAdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="username">Nome de Usuário *</Label>
+                <Label htmlFor="username">{t('usernameLabel')}</Label>
                 <Input
                   id="username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  placeholder="Ex: joao.silva"
+                  placeholder={t('usernamePlaceholder')}
                 />
                 {errors.username && (
                   <p className="text-sm text-destructive">{errors.username}</p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Será usado para login. Use apenas letras, números, pontos e underscores.
+                  {t('usernameHint')}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
+                <Label htmlFor="email">{t('emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="Ex: joao.silva@universidade.edu.br"
+                  placeholder={t('emailPlaceholder')}
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive">{errors.email}</p>
@@ -301,19 +307,36 @@ export default function CreateSuperAdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Senha Temporária *</Label>
+                <Label htmlFor="password">{t('passwordLabel')}</Label>
                 <Input
                   id="password"
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="Mínimo 6 caracteres"
+                  placeholder={t('passwordPlaceholder')}
                 />
                 {errors.password && (
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.
+                  {t('passwordHint')}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Select
+                  id="language_preference"
+                  value={formData.language_preference}
+                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                  placeholder={t('languagePlaceholder')}
+                >
+                  <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
+                  <SelectItem value="en">{t('languageEnglish')}</SelectItem>
+                  <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {t('languageHint')}
                 </p>
               </div>
             </CardContent>
@@ -326,10 +349,10 @@ export default function CreateSuperAdminPage() {
               onClick={() => router.push('/admin/super-admins')}
               disabled={loading}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Criando...' : 'Criar Super Administrador'}
+              {loading ? t('submitting') : t('submit')}
             </Button>
           </div>
         </form>

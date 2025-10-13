@@ -409,6 +409,84 @@ https://widget.tutoria.com/?module_token={TOKEN}&student_id=S123456
 
 ---
 
+---
+
+## Phase 7: System Overview Dashboard
+
+### 15. **System Overview Page** 📊 🔥 HIGH PRIORITY
+- [ ] **Implement System Overview Dashboard (/admin route)**
+  - [ ] Backend: Create GET /super-admin/stats endpoint with real data
+    - Total universities count
+    - Total courses count
+    - Total modules count
+    - Total professors count
+    - Total students count
+    - Total files count
+    - Total module tokens count
+    - Storage used (MB/GB)
+    - API calls today/week/month
+  - [ ] Backend: System health monitoring endpoints
+    - Database status & response time
+    - API server status & metrics
+    - Storage status & usage percentage
+    - AI service status & performance
+  - [ ] Frontend: Re-enable System Overview page (currently commented out)
+    - Display real-time system statistics
+    - Show system health indicators
+    - Recent activity feed
+    - Quick action buttons
+  - [ ] Frontend: Re-enable sidebar link (currently commented in components/layout/sidebar.tsx)
+
+**Current Status**: Page and sidebar link are commented out until backend endpoints are ready
+
+**Files to update**:
+- `app/(dashboard)/admin/page.tsx` - System Overview page (has TODO comment)
+- `components/layout/sidebar.tsx` - Sidebar navigation (has TODO comment on lines 71-77)
+
+**Estimated Effort**: 12-18 hours (8-12h backend + 4-6h frontend)
+**Customer Value**: HIGH (provides system insights for super admins)
+**Complexity**: Medium
+**Priority**: HIGH - Essential admin dashboard
+
+---
+
+## Phase 8: Super Admin Page Improvements
+
+### 16. **Super Admin Statistics & Activity Tracking** 📊 NEW
+- [ ] **Implement Real-Time Statistics**
+  - [ ] Active Today: Calculate from last_login_at (last 24h)
+  - [ ] Recent Actions: Track from audit logs/activity table
+  - [ ] Security Status: Monitor system health indicators
+  - [ ] Uncomment stats cards in super-admins page (lines 213-250)
+- [ ] **Implement Activity Tracking**
+  - [ ] Backend: Create AdminActivityLog table
+  - [ ] Track super admin actions (create user, update settings, etc.)
+  - [ ] API endpoint: GET /api/super-admins/activity
+  - [ ] Frontend: Display recent activity (currently commented lines 290-326)
+- [ ] **Backend Requirements**
+  - [ ] Add activity logging middleware
+  - [ ] Create activity aggregation endpoints
+  - [ ] Implement real-time activity counters
+
+**Database Schema Needed**:
+```sql
+AdminActivityLog table:
+- Id (PK)
+- SuperAdminId (FK)
+- ActionType (created_user, updated_settings, etc.)
+- EntityType (user, course, module, etc.)
+- EntityId (nullable)
+- Description (text)
+- CreatedAt (DateTime)
+```
+
+**Estimated Effort**: 8-12 hours (6-8h backend + 2-4h frontend)
+**Customer Value**: Medium (admin insights)
+**Complexity**: Medium
+**Priority**: LOW - Nice-to-have for admin dashboard
+
+---
+
 ## Notes
 
 - Items 1-2 are **mandatory** for the next work session

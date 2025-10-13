@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  ChevronsLeft, 
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
   ChevronsRight,
   ArrowUpDown,
   ArrowUp,
@@ -12,6 +12,7 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -59,6 +60,7 @@ export function DataTable<T>({
   className,
   onRowClick,
 }: DataTableProps<T>) {
+  const t = useTranslations('common');
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
 
   const renderCell = (item: T, column: TableColumn<T>, index: number) => {
@@ -128,13 +130,13 @@ export function DataTable<T>({
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             {search && (
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <div className="relative flex-1 max-w-2xl">
+                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder={search.placeholder || "Search..."}
                   value={search.value}
                   onChange={(e) => search.onSearchChange(e.target.value)}
-                  className="pl-9"
+                  className="pl-10 h-11 text-base"
                 />
               </div>
             )}
@@ -178,13 +180,13 @@ export function DataTable<T>({
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell 
-                  colSpan={columns.length} 
+                <TableCell
+                  colSpan={columns.length}
                   className="h-24 text-center"
                 >
                   <div className="flex items-center justify-center">
                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-                    <span className="ml-2 text-muted-foreground">Carregando...</span>
+                    <span className="ml-2 text-muted-foreground">{t('loading')}</span>
                   </div>
                 </TableCell>
               </TableRow>
@@ -231,7 +233,7 @@ export function DataTable<T>({
       {pagination && (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>Linhas por página:</span>
+            <span>{t('pagination.rowsPerPage')}</span>
             <Select
               value={String(pagination.limit)}
               onValueChange={(value) => pagination.onLimitChange(Number(value))}
@@ -245,9 +247,11 @@ export function DataTable<T>({
 
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">
-              Mostrando {(pagination.page - 1) * pagination.limit + 1} até{' '}
-              {Math.min(pagination.page * pagination.limit, pagination.total)} de{' '}
-              {pagination.total} registros
+              {t('pagination.showing', {
+                from: (pagination.page - 1) * pagination.limit + 1,
+                to: Math.min(pagination.page * pagination.limit, pagination.total),
+                total: pagination.total
+              })}
             </span>
 
             <div className="flex items-center gap-1">

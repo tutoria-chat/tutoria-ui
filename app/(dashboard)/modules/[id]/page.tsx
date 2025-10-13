@@ -41,6 +41,7 @@ export default function ModuleDetailsPage() {
   const moduleId = Number(params.id);
   const t = useTranslations('modules.detail');
   const tCommon = useTranslations('common');
+  const tTokens = useTranslations('tokens.columns');
 
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
   const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
@@ -208,11 +209,11 @@ export default function ModuleDetailsPage() {
   };
 
   const getFileDisplayName = (file: FileType): string => {
-    return file.file_name || file.name || 'Arquivo sem nome';
+    return file.file_name || file.name || t('fileNameUnknown');
   };
 
   const getFileType = (file: FileType): string => {
-    return file.content_type || file.file_type || 'Tipo desconhecido';
+    return file.content_type || file.file_type || t('fileTypeUnknown');
   };
 
   const fileColumns: TableColumn<FileType>[] = [
@@ -277,7 +278,7 @@ export default function ModuleDetailsPage() {
   const tokenColumns: TableColumn<ModuleAccessToken>[] = [
     {
       key: 'name',
-      label: tCommon('columns.tokenName', { ns: 'tokens' }),
+      label: tTokens('tokenName'),
       sortable: true,
       render: (value, token) => (
         <div>
@@ -292,7 +293,7 @@ export default function ModuleDetailsPage() {
     },
     {
       key: 'token',
-      label: tCommon('columns.token', { ns: 'tokens' }),
+      label: tTokens('token'),
       render: (value) => (
         <div className="flex items-center space-x-2">
           <code className="text-xs bg-muted px-2 py-1 rounded">
@@ -317,28 +318,28 @@ export default function ModuleDetailsPage() {
     },
     {
       key: 'allow_chat',
-      label: tCommon('columns.chat', { ns: 'tokens' }),
+      label: tTokens('chat'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? tCommon('columns.allowed', { ns: 'tokens' }) : tCommon('columns.blocked', { ns: 'tokens' })}
+          {value ? tTokens('allowed') : tTokens('blocked')}
         </Badge>
       )
     },
     {
       key: 'allow_file_access',
-      label: tCommon('columns.files', { ns: 'tokens' }),
+      label: tTokens('files'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? tCommon('columns.allowed', { ns: 'tokens' }) : tCommon('columns.blocked', { ns: 'tokens' })}
+          {value ? tTokens('allowed') : tTokens('blocked')}
         </Badge>
       )
     },
     {
       key: 'is_active',
-      label: tCommon('columns.status', { ns: 'tokens' }),
+      label: tTokens('status'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
-          {value ? tCommon('columns.active', { ns: 'tokens' }) : tCommon('columns.inactive', { ns: 'tokens' })}
+          {value ? tTokens('active') : tTokens('inactive')}
         </Badge>
       )
     },
@@ -361,7 +362,7 @@ export default function ModuleDetailsPage() {
               const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
               window.open(widgetUrl, '_blank');
             }}
-            title="Abrir no Widget"
+            title={t('openInWidget')}
           >
             <ExternalLink className="h-4 w-4" />
           </Button>
@@ -527,6 +528,11 @@ export default function ModuleDetailsPage() {
                 disabled={isUploading}
                 selectedFile={selectedFile}
                 maxSizeMB={50}
+                translations={{
+                  clickToSelect: t('fileUpload.clickToSelect'),
+                  supportedFormats: t('fileUpload.supportedFormats'),
+                  maxSize: t('fileUpload.maxSize', { maxSizeMB: 50 })
+                }}
               />
 
               {uploadError && (

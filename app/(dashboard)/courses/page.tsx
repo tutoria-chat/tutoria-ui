@@ -190,23 +190,11 @@ export default function CoursesPage() {
   // Use server-side paginated data directly (API handles filtering, sorting, pagination)
   const paginatedCourses = courses;
 
-  // Estatísticas baseadas no papel do usuário
-  const stats = {
-    total: totalCourses,
-    totalStudents: courses.reduce((sum, course) => sum + (course.students_count || 0), 0),
-    totalModules: courses.reduce((sum, course) => sum + (course.modules_count || 0), 0),
-    universities: [...new Set(courses.map(course => course.university_name))].length
-  };
-
   return (
     <div className="space-y-6">
       <PageHeader
         title={t('title')}
-        description={t('description', {
-          total: stats.total,
-          students: stats.totalStudents,
-          modules: stats.totalModules
-        })}
+        description={t('descriptionSimple')}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
@@ -229,43 +217,6 @@ export default function CoursesPage() {
           </div>
         }
       />
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">{t('stats.totalCourses')}</h3>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{stats.total}</div>
-        </div>
-
-        {/* <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total de Estudantes</h3>
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{stats.totalStudents}</div>
-        </div> */}
-
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">{t('stats.totalModules')}</h3>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{stats.totalModules}</div>
-        </div>
-
-        {user?.role === 'super_admin' && (
-          <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <h3 className="tracking-tight text-sm font-medium">{t('stats.universities')}</h3>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="text-2xl font-bold">{stats.universities}</div>
-          </div>
-        )}
-      </div>
 
       <DataTable
         data={paginatedCourses}

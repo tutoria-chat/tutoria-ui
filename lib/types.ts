@@ -2,16 +2,20 @@
 
 // User Authentication Types
 export interface User {
-  id: number;
+  id: number; // Maps to user_id from backend
+  username?: string;
   email: string;
   first_name: string;
   last_name: string;
-  role: UserRole; // 'super_admin', 'professor', or 'student'
+  user_type: UserRole; // 'super_admin', 'professor', or 'student'
+  role: UserRole; // Alias for user_type (for backwards compatibility)
+  is_active: boolean;
   university_id?: number;
   is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
   assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
   created_at: string;
   updated_at: string;
+  last_login_at?: string | null;
   theme_preference?: string; // 'system' | 'light' | 'dark'
   language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
@@ -175,16 +179,23 @@ export interface FileResponse extends File {
 }
 
 // Professor Types
+// Note: Professors are now stored in the unified Users table
+// This interface maps to UserResponse from backend with user_type='professor'
 export interface Professor {
-  id: number;
+  id: number; // Maps to user_id from backend UserResponse
+  username?: string;
   email: string;
   first_name: string;
   last_name: string;
   university_id: number;
   university_name?: string;
   is_admin: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
+  last_login_at?: string | null;
+  language_preference?: string;
+  theme_preference?: string;
   courses_count?: number;
   assigned_courses?: Course[];
 }
@@ -302,20 +313,29 @@ export interface ModuleTokenUpdate {
 }
 
 // Super Admin Types
+// Note: SuperAdmins are now stored in the unified Users table
+// This interface maps to UserResponse from backend with user_type='super_admin'
 export interface SuperAdmin {
-  id: number;
+  id: number; // Maps to user_id from backend UserResponse
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
-  created_at: string;
-  updated_at: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+  last_login_at?: string | null;
+  language_preference?: string;
+  theme_preference?: string;
 }
 
 export interface SuperAdminCreate {
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
   password: string;
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface SystemStats {

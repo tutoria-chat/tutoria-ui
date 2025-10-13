@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -20,6 +21,7 @@ interface CourseFormProps {
 
 export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: CourseFormProps) {
   const { user } = useAuth();
+  const t = useTranslations('courses.form');
   const [formData, setFormData] = useState({
     name: course?.name || '',
     code: course?.code || '',
@@ -55,13 +57,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     // Validate form
     const newErrors: Record<string, string> = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Nome da disciplina é obrigatório';
+      newErrors.name = t('nameRequired');
     }
     if (!formData.code.trim()) {
-      newErrors.code = 'Código da disciplina é obrigatório';
+      newErrors.code = t('codeRequired');
     }
     if (!formData.university_id) {
-      newErrors.university_id = 'Universidade é obrigatória';
+      newErrors.university_id = t('universityRequired');
     }
     
     setErrors(newErrors);
@@ -79,7 +81,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: 'Falha ao salvar a disciplina. Tente novamente.' });
+      setErrors({ submit: t('saveError') });
     }
   };
 
@@ -93,10 +95,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
   };
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-4xl">
       <CardHeader>
         <CardTitle>
-          {course ? 'Editar Disciplina' : 'Criar Nova Disciplina'}
+          {course ? t('edit') : t('create')}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -104,11 +106,11 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Course Name */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="name">Nome da Disciplina *</FormLabel>
+              <FormLabel htmlFor="name">{t('nameLabel')}</FormLabel>
               <Input
                 id="name"
                 type="text"
-                placeholder="ex: Fundamentos da Ciência da Computação"
+                placeholder={t('namePlaceholder')}
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 disabled={isLoading}
@@ -122,11 +124,11 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Course Code */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="code">Código *</FormLabel>
+              <FormLabel htmlFor="code">{t('codeLabel')}</FormLabel>
               <Input
                 id="code"
                 type="text"
-                placeholder="ex: CS101, COMP200"
+                placeholder={t('codePlaceholder')}
                 value={formData.code}
                 onChange={(e) => handleInputChange('code', e.target.value)}
                 disabled={isLoading}
@@ -140,13 +142,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* University Selection */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="university_id">Universidade *</FormLabel>
+              <FormLabel htmlFor="university_id">{t('universityLabel')}</FormLabel>
               {user?.role === 'super_admin' ? (
                 <Select
                   value={String(formData.university_id)}
                   onValueChange={(value) => handleInputChange('university_id', value)}
                   disabled={isLoading || loadingUniversities}
-                  placeholder={loadingUniversities ? "Carregando universidades..." : "Selecione uma universidade"}
+                  placeholder={loadingUniversities ? t('loadingUniversities') : t('universityPlaceholder')}
                 >
                   {universities.map((university) => (
                     <SelectItem key={university.id} value={String(university.id)}>
@@ -156,7 +158,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                 </Select>
               ) : (
                 <Input
-                  value={user?.university_id ? `ID da Universidade: ${user.university_id}` : 'Nenhuma universidade atribuída'}
+                  value={user?.university_id ? t('universityIdLabel', { id: user.university_id }) : t('noUniversity')}
                   disabled
                   className="bg-muted"
                 />
@@ -168,10 +170,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* Description */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="description">Descrição</FormLabel>
+              <FormLabel htmlFor="description">{t('descriptionLabel')}</FormLabel>
               <Textarea
                 id="description"
-                placeholder="Descreva os objetivos da disciplina, conteúdo e público-alvo..."
+                placeholder={t('descriptionPlaceholder')}
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 disabled={isLoading}
@@ -194,13 +196,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
               onClick={onCancel}
               disabled={isLoading}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? (course ? 'Atualizando...' : 'Criando...') : (course ? 'Atualizar Disciplina' : 'Criar Disciplina')}
+              {isLoading ? (course ? t('updating') : t('creating')) : (course ? t('update') : t('create'))}
             </Button>
           </div>
         </form>

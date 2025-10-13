@@ -2,19 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Shield, Users, Mail, Calendar } from 'lucide-react';
+import { Plus, Trash2, Shield, Mail, Calendar, Ban, CheckCircle, Edit, AlertTriangle, Key } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import type { SuperAdmin, TableColumn, BreadcrumbItem } from '@/lib/types';
 
 export default function SuperAdminsPage() {
+  const t = useTranslations('superAdmins');
   const [superAdmins, setSuperAdmins] = useState<SuperAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,10 +25,21 @@ export default function SuperAdminsPage() {
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('first_name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    type: 'deactivate' | 'delete' | null;
+    adminId: number | null;
+    adminName: string;
+  }>({
+    open: false,
+    type: null,
+    adminId: null,
+    adminName: ''
+  });
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Administração', href: '/admin' },
-    { label: 'Super Administradores', isCurrentPage: true }
+    { label: t('breadcrumb'), href: '/admin' },
+    { label: t('title'), isCurrentPage: true }
   ];
 
   useEffect(() => {
@@ -35,20 +49,94 @@ export default function SuperAdminsPage() {
   const loadSuperAdmins = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.getSuperAdmins();
-      setSuperAdmins(response.items || response);
-    } catch (error: any) {
-      console.error('Error loading super admins:', error);
-      toast.error('Erro ao carregar super administradores');
+      const users = await apiClient.getUsersByType('super_admin');
+      // Map UserResponse to SuperAdmin interface
+      const admins: SuperAdmin[] = users.map((user: any) => ({
+        id: user.user_id,
+        username: user.username,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        is_active: user.is_active,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
+        last_login_at: user.last_login_at,
+        language_preference: user.language_preference,
+        theme_preference: user.theme_preference,
+      }));
+      setSuperAdmins(admins);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error loading super admins:', error.message);
+      } else {
+        console.error('Error loading super admins:', error);
+      }
+      toast.error(t('loadError'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openDeactivateDialog = (admin: SuperAdmin) => {
+    if (admin.id === 1) {
+      toast.error(t('deleteMainError'));
+      return;
+    }
+    setConfirmDialog({
+      open: true,
+      type: 'deactivate',
+      adminId: admin.id,
+      adminName: `${admin.first_name} ${admin.last_name}`
+    });
+  };
+
+  const handleDeactivate = async () => {
+    if (!confirmDialog.adminId) return;
+
+    try {
+      await apiClient.deactivateUser(confirmDialog.adminId);
+      toast.success(t('deactivateSuccess') || 'Super administrator deactivated successfully');
+      setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
+      loadSuperAdmins();
+    } catch (error: unknown) {
+      console.error('Error deactivating super admin:', error);
+      const errorMessage = error instanceof Error ? error.message : t('deactivateError') || 'Error deactivating super administrator';
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleActivate = async (id: number) => {
+    try {
+      await apiClient.activateUser(id);
+      toast.success(t('activateSuccess') || 'Super administrator activated successfully');
+      loadSuperAdmins();
+    } catch (error: unknown) {
+      console.error('Error activating super admin:', error);
+      const errorMessage = error instanceof Error ? error.message : t('activateError') || 'Error activating super administrator';
+      toast.error(errorMessage);
+    }
+  };
+
+  const handlePasswordReset = async (admin: SuperAdmin) => {
+    try {
+      const response = await apiClient.requestPasswordReset(admin.username, 'super_admin');
+
+      // Copy reset link to clipboard - use setup-password page
+      const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.reset_token}`;
+      await navigator.clipboard.writeText(resetUrl);
+
+      toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');
+    } catch (error: unknown) {
+      console.error('Error generating password reset:', error);
+      const errorMessage = error instanceof Error ? error.message : t('passwordResetError') || 'Error generating password reset link';
+      toast.error(errorMessage);
     }
   };
 
   const columns: TableColumn<SuperAdmin>[] = [
     {
       key: 'name',
-      label: 'Super Administrador',
+      label: t('columns.name'),
       sortable: true,
       render: (value, admin) => (
         <div className="flex items-center space-x-3">
@@ -67,7 +155,7 @@ export default function SuperAdminsPage() {
     },
     {
       key: 'created_at',
-      label: 'Criado em',
+      label: t('columns.createdAt'),
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -77,55 +165,80 @@ export default function SuperAdminsPage() {
       )
     },
     {
-      key: 'updated_at',
-      label: 'Última Atividade',
+      key: 'last_login_at',
+      label: t('columns.lastActivity'),
       sortable: true,
       render: (value) => (
         <div className="text-sm">
-          {formatDateShort(value as string)}
+          {value ? formatDateShort(value as string) : t('columns.never')}
         </div>
       )
     },
     {
       key: 'status',
-      label: 'Status',
-      render: () => (
-        <Badge variant="default" className="bg-green-100 text-green-800">
-          Ativo
-        </Badge>
+      label: t('columns.status'),
+      render: (_, admin) => (
+        admin.is_active ? (
+          <Badge variant="default" className="bg-green-100 text-green-800">
+            {t('columns.active')}
+          </Badge>
+        ) : (
+          <Badge variant="secondary" className="bg-gray-100 text-gray-800">
+            {t('columns.inactive') || 'Inactive'}
+          </Badge>
+        )
       )
     },
     {
       key: 'actions',
-      label: 'Ações',
-      width: '120px',
+      label: t('columns.actions'),
+      width: '180px',
       render: (_, admin) => (
         <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
             size="sm"
             asChild
-          >
-            <Link href={`/admin/super-admins/${admin.id}`}>
-              <Shield className="h-4 w-4" />
-            </Link>
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
+            title={t('editButton') || 'Edit'}
           >
             <Link href={`/admin/super-admins/${admin.id}/edit`}>
               <Edit className="h-4 w-4" />
             </Link>
           </Button>
-          
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleDelete(admin.id)}
-            disabled={admin.id === 1} // Não pode deletar o primeiro admin
+            onClick={() => handlePasswordReset(admin)}
+            title={t('resetPassword') || 'Reset Password'}
+          >
+            <Key className="h-4 w-4 text-blue-600" />
+          </Button>
+          {admin.is_active ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openDeactivateDialog(admin)}
+              disabled={admin.id === 1}
+              title={t('deactivate') || 'Deactivate'}
+            >
+              <Ban className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-amber-600'}`} />
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleActivate(admin.id)}
+              title={t('activate') || 'Activate'}
+            >
+              <CheckCircle className="h-4 w-4 text-green-600" />
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => openDeleteDialog(admin)}
+            disabled={admin.id === 1}
+            title={t('delete') || 'Delete'}
           >
             <Trash2 className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-destructive'}`} />
           </Button>
@@ -134,15 +247,32 @@ export default function SuperAdminsPage() {
     }
   ];
 
-  const handleDelete = (id: number) => {
-    if (id === 1) {
-      alert('Não é possível excluir a conta principal de super administrador');
+  const openDeleteDialog = (admin: SuperAdmin) => {
+    if (admin.id === 1) {
+      toast.error(t('deleteMainError'));
       return;
     }
-    
-    // Em produção, chamaria a API para deletar o super admin
-    console.log('Delete super admin:', id);
-    alert('Isso excluiria o super administrador em uma aplicação real');
+    setConfirmDialog({
+      open: true,
+      type: 'delete',
+      adminId: admin.id,
+      adminName: `${admin.first_name} ${admin.last_name}`
+    });
+  };
+
+  const handleDelete = async () => {
+    if (!confirmDialog.adminId) return;
+
+    try {
+      await apiClient.deleteUserPermanently(confirmDialog.adminId);
+      toast.success(t('deleteSuccess') || 'Super administrator deleted successfully');
+      setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
+      loadSuperAdmins();
+    } catch (error: unknown) {
+      console.error('Error deleting super admin:', error);
+      const errorMessage = error instanceof Error ? error.message : t('deleteError') || 'Error deleting super administrator';
+      toast.error(errorMessage);
+    }
   };
 
   const handleSortChange = (column: string) => {
@@ -189,14 +319,14 @@ export default function SuperAdminsPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Gerenciamento de Super Administradores"
-          description="Gerencie contas de super administrador e suas permissões"
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
           actions={
             <Button asChild>
               <Link href="/admin/super-admins/create">
                 <Plus className="mr-2 h-4 w-4" />
-                Criar Super Administrador
+                {t('createButton')}
               </Link>
             </Button>
           }
@@ -206,55 +336,56 @@ export default function SuperAdminsPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total de Super Administradores</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('stats.total')}</CardTitle>
               <Shield className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{superAdmins.length}</div>
               <p className="text-xs text-muted-foreground">
-                Administradores do sistema
+                {t('stats.totalDesc')}
               </p>
             </CardContent>
           </Card>
 
-          <Card>
+          {/* TODO: Implement real-time statistics - hardcoded values commented out */}
+          {/* <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ativos Hoje</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('stats.activeToday')}</CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{Math.floor(superAdmins.length * 0.75)}</div>
               <p className="text-xs text-muted-foreground">
-                Online nas últimas 24h
+                {t('stats.activeTodayDesc')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ações Recentes</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('stats.recentActions')}</CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">47</div>
               <p className="text-xs text-muted-foreground">
-                Ações administrativas hoje
+                {t('stats.recentActionsDesc')}
               </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Status de Segurança</CardTitle>
+              <CardTitle className="text-sm font-medium">{t('stats.security')}</CardTitle>
               <Shield className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">Seguro</div>
+              <div className="text-2xl font-bold text-green-600">{t('stats.securityStatus')}</div>
               <p className="text-xs text-muted-foreground">
-                Todos os sistemas normais
+                {t('stats.securityDesc')}
               </p>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Warning Card */}
@@ -262,11 +393,10 @@ export default function SuperAdminsPage() {
           <CardHeader>
             <CardTitle className="text-amber-900 flex items-center">
               <Shield className="mr-2 h-5 w-5" />
-              Aviso de Segurança
+              {t('warningTitle')}
             </CardTitle>
             <CardDescription className="text-amber-700">
-              Super administradores têm acesso completo ao sistema. Crie contas apenas para indivíduos confiáveis.
-              Todas as ações de super administradores são registradas para auditoria de segurança.
+              {t('warningDescription')}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -278,7 +408,7 @@ export default function SuperAdminsPage() {
           loading={loading}
           search={{
             value: searchTerm,
-            placeholder: "Buscar super administradores por nome ou email...",
+            placeholder: t('searchPlaceholder'),
             onSearchChange: setSearchTerm
           }}
           pagination={{
@@ -293,46 +423,77 @@ export default function SuperAdminsPage() {
             direction: sortDirection,
             onSortChange: handleSortChange
           }}
-          emptyMessage="Nenhum super administrador encontrado."
+          emptyMessage={t('emptyMessage')}
         />
 
-        {/* Recent Admin Activity */}
-        <Card>
+        {/* Recent Admin Activity - TODO: Implement real activity tracking */}
+        {/* <Card>
           <CardHeader>
-            <CardTitle>Atividade Recente de Super Administradores</CardTitle>
-            <CardDescription>Ações administrativas mais recentes realizadas por super administradores</CardDescription>
+            <CardTitle>{t('activity.title')}</CardTitle>
+            <CardDescription>{t('activity.description')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center space-x-4 p-3 rounded-lg border">
                 <Shield className="h-4 w-4 text-green-500" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">Nova universidade "Universidade de Tecnologia" criada</p>
-                  <p className="text-sm text-muted-foreground">por João Silva</p>
+                  <p className="text-sm font-medium">{t('activity.example1')}</p>
+                  <p className="text-sm text-muted-foreground">{t('activity.by')} João Silva</p>
                 </div>
-                <span className="text-xs text-muted-foreground">2 horas atrás</span>
+                <span className="text-xs text-muted-foreground">{t('activity.time1')}</span>
               </div>
 
               <div className="flex items-center space-x-4 p-3 rounded-lg border">
                 <Shield className="h-4 w-4 text-blue-500" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">Configurações do sistema atualizadas</p>
-                  <p className="text-sm text-muted-foreground">por Maria Santos</p>
+                  <p className="text-sm font-medium">{t('activity.example2')}</p>
+                  <p className="text-sm text-muted-foreground">{t('activity.by')} Maria Santos</p>
                 </div>
-                <span className="text-xs text-muted-foreground">4 horas atrás</span>
+                <span className="text-xs text-muted-foreground">{t('activity.time2')}</span>
               </div>
 
               <div className="flex items-center space-x-4 p-3 rounded-lg border">
                 <Shield className="h-4 w-4 text-purple-500" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium">Nova conta de super administrador criada</p>
-                  <p className="text-sm text-muted-foreground">pelo Super Administrador</p>
+                  <p className="text-sm font-medium">{t('activity.example3')}</p>
+                  <p className="text-sm text-muted-foreground">{t('activity.bySystem')}</p>
                 </div>
-                <span className="text-xs text-muted-foreground">1 dia atrás</span>
+                <span className="text-xs text-muted-foreground">{t('activity.time3')}</span>
               </div>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
+
+        {/* Confirmation Dialog */}
+        <Dialog open={confirmDialog.open} onOpenChange={(open) => !open && setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' })}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <AlertTriangle className={`h-5 w-5 ${confirmDialog.type === 'delete' ? 'text-destructive' : 'text-amber-600'}`} />
+                {confirmDialog.type === 'deactivate' ? t('deactivate') : t('delete')}
+              </DialogTitle>
+              <DialogDescription>
+                {confirmDialog.type === 'deactivate' ? t('deactivateConfirm') : t('deleteConfirm')}
+                <br />
+                <span className="font-semibold mt-2 block">{confirmDialog.adminName}</span>
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' })}
+              >
+                {t('cancel') || 'Cancel'}
+              </Button>
+              <Button
+                variant={confirmDialog.type === 'delete' ? 'destructive' : 'default'}
+                onClick={confirmDialog.type === 'deactivate' ? handleDeactivate : handleDelete}
+              >
+                {confirmDialog.type === 'deactivate' ? t('deactivate') : t('delete')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </SuperAdminOnly>
   );

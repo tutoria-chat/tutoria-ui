@@ -53,7 +53,7 @@ export default function ModulesPage() {
     : (user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '');
   const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
-  // API call to get modules
+  // API call to get modules (paginated for display)
   const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -220,22 +220,11 @@ export default function ModulesPage() {
   // Use server-side paginated data directly (API handles filtering, sorting, pagination)
   const paginatedModules = modules;
 
-  // Estatísticas - calculate from current page data
-  const stats = {
-    total: totalModules,
-    aiConfigured: modules.filter(module => module.system_prompt).length,
-    courses: [...new Set(modules.map(module => module.course_name))].length
-  };
-
   return (
     <div className="space-y-6">
       <PageHeader
         title={t('title')}
-        description={t('description', {
-          total: stats.total,
-          courses: stats.courses,
-          aiConfigured: stats.aiConfigured
-        })}
+        description={t('descriptionSimple')}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
@@ -256,35 +245,6 @@ export default function ModulesPage() {
           </ProfessorOnly>
         }
       />
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">{t('stats.totalModules')}</h3>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{stats.total}</div>
-        </div>
-
-
-
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">{t('stats.aiTutors')}</h3>
-            <Bot className="h-4 w-4 text-green-500" />
-          </div>
-          <div className="text-2xl font-bold">{stats.aiConfigured}</div>
-        </div>
-
-        <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">{t('stats.courses')}</h3>
-            <BookOpen className="h-4 w-4 text-muted-foreground" />
-          </div>
-          <div className="text-2xl font-bold">{stats.courses}</div>
-        </div>
-      </div>
 
       <DataTable
         data={paginatedModules}
