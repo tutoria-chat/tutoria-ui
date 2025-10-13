@@ -567,7 +567,12 @@
       "createError": "Erro ao criar token. Tente novamente.",
       "updateError": "Erro ao atualizar token. Tente novamente.",
       "copySuccessShort": "Token copiado!",
-      "copyErrorShort": "Erro ao copiar token"
+      "copyErrorShort": "Erro ao copiar token",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "allowed": "Permitido",
+      "blocked": "Bloqueado",
+      "never": "Nunca"
     }
   },
   "setupPassword": {
