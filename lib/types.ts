@@ -326,10 +326,12 @@ export interface SuperAdmin {
 }
 
 export interface SuperAdminCreate {
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
   password: string;
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface SystemStats {

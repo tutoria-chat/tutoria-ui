@@ -11,11 +11,15 @@ import { Shield, Eye, EyeOff, CheckCircle, XCircle, AlertCircle } from 'lucide-r
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { useLanguage } from '@/components/providers/language-provider';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import type { Locale } from '@/i18n/config';
 
 function SetupPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('setupPassword');
+  const { setLocale } = useLanguage();
 
   const [token, setToken] = useState('');
   const [username, setUsername] = useState('');
@@ -24,6 +28,7 @@ function SetupPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [verifyingToken, setVerifyingToken] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
 
@@ -34,12 +39,33 @@ function SetupPasswordForm() {
     if (!tokenParam || !usernameParam) {
       toast.error(t('invalidLink'));
       setTimeout(() => router.push('/login'), 3000);
+      setVerifyingToken(false);
       return;
     }
 
     setToken(tokenParam);
     setUsername(usernameParam);
-  }, [searchParams, router, t]);
+
+    // Verify token and detect user's language preference
+    const verifyAndSetLanguage = async () => {
+      try {
+        const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
+
+        // Set locale based on user's preference
+        if (response.language_preference) {
+          setLocale(response.language_preference as Locale);
+        }
+      } catch (error) {
+        console.error('Failed to verify token or detect language:', error);
+        // Don't block the form if language detection fails
+        // User can still proceed with default language
+      } finally {
+        setVerifyingToken(false);
+      }
+    };
+
+    verifyAndSetLanguage();
+  }, [searchParams, router, t, setLocale]);
 
   const getPasswordStrength = (pwd: string): { strength: 'weak' | 'medium' | 'strong'; label: string; color: string } => {
     if (pwd.length < 6) return { strength: 'weak', label: t('passwordWeak'), color: 'text-red-600' };
@@ -94,6 +120,7 @@ function SetupPasswordForm() {
       setTimeout(() => {
         router.push('/login');
       }, 3000);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Error resetting password:', error);
       if (error.message.includes('expired') || error.message.includes('invalid')) {
@@ -105,6 +132,17 @@ function SetupPasswordForm() {
       setLoading(false);
     }
   };
+
+  // Show loading spinner while verifying token and detecting language
+  if (verifyingToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="flex flex-col items-center gap-4">
+          <LoadingSpinner size="xl" className="text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   if (!token || !username) {
     return (

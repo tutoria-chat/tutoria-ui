@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Plus, Trash2, Shield, Users, Mail, Calendar, Ban, CheckCircle, Edit, AlertTriangle, Key } from 'lucide-react';
+import { Plus, Trash2, Shield, Mail, Calendar, Ban, CheckCircle, Edit, AlertTriangle, Key } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -115,8 +115,8 @@ export default function SuperAdminsPage() {
     try {
       const response = await apiClient.generatePasswordResetLink(admin.username, 'super_admin');
 
-      // Copy reset link to clipboard
-      const resetUrl = `${window.location.origin}/reset-password?username=${admin.username}&token=${response.reset_token}`;
+      // Copy reset link to clipboard - use setup-password page
+      const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.reset_token}`;
       await navigator.clipboard.writeText(resetUrl);
 
       toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');

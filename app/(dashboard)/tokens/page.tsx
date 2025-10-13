@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
@@ -21,7 +21,7 @@ export default function TokensPage() {
 
   // Build API URL with university filter for professors
   const universityFilter = user?.university_id && user.role !== 'super_admin' ? `?university_id=${user.university_id}` : '';
-  const { data: tokensResponse, loading, error, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
+  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);

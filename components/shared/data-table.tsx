@@ -130,13 +130,13 @@ export function DataTable<T>({
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             {search && (
-              <div className="relative flex-1 max-w-sm">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <div className="relative flex-1 max-w-2xl">
+                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   placeholder={search.placeholder || "Search..."}
                   value={search.value}
                   onChange={(e) => search.onSearchChange(e.target.value)}
-                  className="pl-9"
+                  className="pl-10 h-11 text-base"
                 />
               </div>
             )}

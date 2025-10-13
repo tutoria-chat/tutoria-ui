@@ -298,8 +298,12 @@ class TutoriaAPIClient {
     return response;
   }
 
-  async requestPasswordReset(email: string): Promise<{ message: string; reset_token: string }> {
-    return this.post('/auth/reset-password-request', { email });
+  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
+    return this.post('/auth/reset-password-request', { username, user_type: userType });
+  }
+
+  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; language_preference: string; user_type: string }> {
+    return this.get('/auth/verify-reset-token', { username, reset_token: token });
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
@@ -520,7 +524,32 @@ class TutoriaAPIClient {
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    return this.post('/super-admin/super-admins/', data);
+    // Use the unified /auth/users/create endpoint
+    const response = await this.post('/auth/users/create', {
+      username: data.username,
+      email: data.email,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      password: data.password,
+      user_type: 'super_admin',
+      is_admin: true, // Super admins are always admins
+      language_preference: data.language_preference || 'pt-br',
+    });
+
+    // Map UserResponse to SuperAdmin interface
+    return {
+      id: response.user_id,
+      username: response.username,
+      email: response.email,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      is_active: response.is_active,
+      created_at: response.created_at,
+      updated_at: response.updated_at,
+      last_login_at: response.last_login_at,
+      language_preference: response.language_preference,
+      theme_preference: response.theme_preference,
+    };
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
