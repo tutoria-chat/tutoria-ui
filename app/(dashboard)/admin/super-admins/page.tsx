@@ -51,7 +51,7 @@ export default function SuperAdminsPage() {
     try {
       const users = await apiClient.getUsersByType('super_admin');
       // Map UserResponse to SuperAdmin interface
-      const admins: SuperAdmin[] = users.map((user: any) => ({
+      const admins: SuperAdmin[] = users.map((user) => ({
         id: user.user_id,
         username: user.username,
         email: user.email,

@@ -22,6 +22,24 @@ export interface User {
 
 export type UserRole = 'super_admin' | 'professor' | 'student';
 
+// Backend UserResponse type (matches API schema)
+export interface UserResponse {
+  user_id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  user_type: UserRole;
+  is_active: boolean;
+  is_admin?: boolean;
+  university_id?: number;
+  language_preference?: string;
+  theme_preference?: string;
+  created_at?: string;
+  updated_at?: string;
+  last_login_at?: string | null;
+}
+
 export interface LoginCredentials {
   email: string;
   password: string;
