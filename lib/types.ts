@@ -2,16 +2,20 @@
 
 // User Authentication Types
 export interface User {
-  id: number;
+  id: number; // Maps to user_id from backend
+  username?: string;
   email: string;
   first_name: string;
   last_name: string;
-  role: UserRole; // 'super_admin', 'professor', or 'student'
+  user_type: UserRole; // 'super_admin', 'professor', or 'student'
+  role: UserRole; // Alias for user_type (for backwards compatibility)
+  is_active: boolean;
   university_id?: number;
   is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
   assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
   created_at: string;
   updated_at: string;
+  last_login_at?: string | null;
   theme_preference?: string; // 'system' | 'light' | 'dark'
   language_preference?: string; // 'pt-br' | 'en' | 'es'
 }

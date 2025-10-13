@@ -63,15 +63,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                   const user: User = {
                     id: userData.id,
+                    username: userData.username,
                     email: userData.email,
                     first_name: userData.first_name,
                     last_name: userData.last_name,
+                    user_type: userData.user_type || userData.role,
                     role: userData.role,
+                    is_active: userData.is_active !== undefined ? userData.is_active : true,
                     university_id: userData.university_id,
                     is_admin: userData.is_admin || false,
                     assigned_courses: userData.assigned_courses || [],
                     created_at: userData.created_at || new Date().toISOString(),
                     updated_at: userData.updated_at || new Date().toISOString(),
+                    last_login_at: userData.last_login_at,
                     theme_preference: userData.theme_preference,
                     language_preference: userData.language_preference,
                   };
@@ -125,15 +129,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const user: User = {
           id: userData.id,
+          username: userData.username,
           email: userData.email,
           first_name: userData.first_name,
           last_name: userData.last_name,
+          user_type: userData.user_type || userData.role,
           role: userData.role,
+          is_active: userData.is_active !== undefined ? userData.is_active : true,
           university_id: userData.university_id,
           is_admin: userData.is_admin || false,
           assigned_courses: userData.assigned_courses || [],
           created_at: userData.created_at || new Date().toISOString(),
           updated_at: userData.updated_at || new Date().toISOString(),
+          last_login_at: userData.last_login_at,
           theme_preference: userData.theme_preference,
           language_preference: userData.language_preference,
         };

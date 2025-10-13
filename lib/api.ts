@@ -525,7 +525,22 @@ class TutoriaAPIClient {
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
     // Use the unified /auth/users/create endpoint
-    const response = await this.post('/auth/users/create', {
+    interface BackendUserResponse {
+      user_id: number;
+      username: string;
+      email: string;
+      first_name: string;
+      last_name: string;
+      user_type: 'super_admin' | 'professor' | 'student';
+      is_active: boolean;
+      created_at: string;
+      updated_at: string;
+      last_login_at?: string | null;
+      language_preference?: string;
+      theme_preference?: string;
+    }
+
+    const response = await this.post<BackendUserResponse>('/auth/users/create', {
       username: data.username,
       email: data.email,
       first_name: data.first_name,
@@ -536,7 +551,7 @@ class TutoriaAPIClient {
       language_preference: data.language_preference || 'pt-br',
     });
 
-    // Map UserResponse to SuperAdmin interface
+    // Map backend UserResponse to SuperAdmin interface
     return {
       id: response.user_id,
       username: response.username,
