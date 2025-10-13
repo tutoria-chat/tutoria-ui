@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ArrowLeft } from 'lucide-react';
@@ -21,6 +21,7 @@ export default function EditSuperAdminPage() {
   const t = useTranslations('superAdmins.edit');
   const tCommon = useTranslations('superAdmins');
   const id = parseInt(params.id as string);
+  const isMountedRef = useRef(true);
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -40,8 +41,6 @@ export default function EditSuperAdminPage() {
   ];
 
   const loadSuperAdmin = useCallback(async () => {
-    let isMounted = true;
-
     setLoading(true);
     try {
       // Fetch user directly by ID (efficient single API call)
@@ -63,7 +62,7 @@ export default function EditSuperAdminPage() {
       };
 
       // Only update state if component is still mounted
-      if (isMounted) {
+      if (isMountedRef.current) {
         setSuperAdmin(admin);
         setFormData({
           first_name: admin.first_name,
@@ -74,26 +73,23 @@ export default function EditSuperAdminPage() {
       }
     } catch (error: unknown) {
       console.error('Error loading super admin:', error);
-      if (isMounted) {
+      if (isMountedRef.current) {
         const errorMessage = error instanceof Error ? error.message : t('loadError') || 'Error loading super administrator';
         toast.error(errorMessage);
         router.push('/admin/super-admins');
       }
     } finally {
-      if (isMounted) {
+      if (isMountedRef.current) {
         setLoading(false);
       }
     }
-
-    return () => {
-      isMounted = false;
-    };
   }, [id, router, t]);
 
   useEffect(() => {
-    const cleanup = loadSuperAdmin();
+    loadSuperAdmin();
+
     return () => {
-      cleanup.then((cleanupFn) => cleanupFn?.());
+      isMountedRef.current = false;
     };
   }, [loadSuperAdmin]);
 
