@@ -334,10 +334,6 @@ class TutoriaAPIClient {
     return this.delete(`/auth/users/${userId}`);
   }
 
-  async generatePasswordResetLink(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
-    return this.post('/auth/reset-password-request', { username, user_type: userType });
-  }
-
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<User[]> {
     return this.get('/auth/users/', { user_type: userType });
   }

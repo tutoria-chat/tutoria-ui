@@ -65,8 +65,12 @@ export default function SuperAdminsPage() {
         theme_preference: user.theme_preference,
       }));
       setSuperAdmins(admins);
-    } catch (error: any) {
-      console.error('Error loading super admins:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error loading super admins:', error.message);
+      } else {
+        console.error('Error loading super admins:', error);
+      }
       toast.error(t('loadError'));
     } finally {
       setLoading(false);
@@ -94,9 +98,10 @@ export default function SuperAdminsPage() {
       toast.success(t('deactivateSuccess') || 'Super administrator deactivated successfully');
       setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
       loadSuperAdmins();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error deactivating super admin:', error);
-      toast.error(error.message || t('deactivateError') || 'Error deactivating super administrator');
+      const errorMessage = error instanceof Error ? error.message : t('deactivateError') || 'Error deactivating super administrator';
+      toast.error(errorMessage);
     }
   };
 
@@ -105,24 +110,26 @@ export default function SuperAdminsPage() {
       await apiClient.activateUser(id);
       toast.success(t('activateSuccess') || 'Super administrator activated successfully');
       loadSuperAdmins();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error activating super admin:', error);
-      toast.error(error.message || t('activateError') || 'Error activating super administrator');
+      const errorMessage = error instanceof Error ? error.message : t('activateError') || 'Error activating super administrator';
+      toast.error(errorMessage);
     }
   };
 
   const handlePasswordReset = async (admin: SuperAdmin) => {
     try {
-      const response = await apiClient.generatePasswordResetLink(admin.username, 'super_admin');
+      const response = await apiClient.requestPasswordReset(admin.username, 'super_admin');
 
       // Copy reset link to clipboard - use setup-password page
       const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.reset_token}`;
       await navigator.clipboard.writeText(resetUrl);
 
       toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error generating password reset:', error);
-      toast.error(error.message || t('passwordResetError') || 'Error generating password reset link');
+      const errorMessage = error instanceof Error ? error.message : t('passwordResetError') || 'Error generating password reset link';
+      toast.error(errorMessage);
     }
   };
 
@@ -261,9 +268,10 @@ export default function SuperAdminsPage() {
       toast.success(t('deleteSuccess') || 'Super administrator deleted successfully');
       setConfirmDialog({ open: false, type: null, adminId: null, adminName: '' });
       loadSuperAdmins();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error deleting super admin:', error);
-      toast.error(error.message || t('deleteError') || 'Error deleting super administrator');
+      const errorMessage = error instanceof Error ? error.message : t('deleteError') || 'Error deleting super administrator';
+      toast.error(errorMessage);
     }
   };
 

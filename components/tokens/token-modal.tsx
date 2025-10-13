@@ -426,7 +426,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                                 {modules.map((module) => (
                                   <CommandItem
                                     key={module.id}
-                                    value={module.name}
+                                    value={module.id.toString()}
                                     onSelect={() => {
                                       handleChange('module_id', module.id);
                                       setModuleComboboxOpen(false);

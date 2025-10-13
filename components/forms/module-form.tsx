@@ -139,8 +139,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Limpar erro quando usuário começa a digitar
+
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }

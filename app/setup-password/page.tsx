@@ -120,13 +120,22 @@ function SetupPasswordForm() {
       setTimeout(() => {
         router.push('/login');
       }, 3000);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error resetting password:', error);
-      if (error.message.includes('expired') || error.message.includes('invalid')) {
-        toast.error(t('tokenExpired'));
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'message' in error &&
+        typeof (error as { message: unknown }).message === 'string'
+      ) {
+        const message = (error as { message: string }).message;
+        if (message.includes('expired') || message.includes('invalid')) {
+          toast.error(t('tokenExpired'));
+        } else {
+          toast.error(message || t('error'));
+        }
       } else {
-        toast.error(error.message || t('error'));
+        toast.error(t('error'));
       }
     } finally {
       setLoading(false);
