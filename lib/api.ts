@@ -1,6 +1,7 @@
 import type {
   TokenResponse,
   User,
+  UserResponse,
   University,
   UniversityCreate,
   UniversityUpdate,
@@ -334,11 +335,15 @@ class TutoriaAPIClient {
     return this.delete(`/auth/users/${userId}`);
   }
 
-  async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<User[]> {
+  async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
     return this.get('/auth/users/', { user_type: userType });
   }
 
-  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string }): Promise<User> {
+  async getUser(userId: number): Promise<UserResponse> {
+    return this.get(`/auth/users/${userId}`);
+  }
+
+  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string }): Promise<UserResponse> {
     return this.put(`/auth/users/${userId}`, data);
   }
 

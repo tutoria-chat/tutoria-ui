@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ArrowLeft } from 'lucide-react';
@@ -13,7 +13,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
-import type { SuperAdmin, BreadcrumbItem } from '@/lib/types';
+import type { SuperAdmin, BreadcrumbItem, UserResponse } from '@/lib/types';
 
 export default function EditSuperAdminPage() {
   const router = useRouter();
@@ -21,6 +21,7 @@ export default function EditSuperAdminPage() {
   const t = useTranslations('superAdmins.edit');
   const tCommon = useTranslations('superAdmins');
   const id = parseInt(params.id as string);
+  const isMountedRef = useRef(true);
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -39,16 +40,14 @@ export default function EditSuperAdminPage() {
     { label: t('breadcrumb') || 'Edit', isCurrentPage: true }
   ];
 
-  useEffect(() => {
-    loadSuperAdmin();
-  }, [id]);
-
-  const loadSuperAdmin = async () => {
+  const loadSuperAdmin = useCallback(async () => {
     setLoading(true);
     try {
-      const users = await apiClient.getUsersByType('super_admin');
+      // Fetch user directly by ID (efficient single API call)
+      const user: UserResponse = await apiClient.getUser(id);
+
       // Map UserResponse to SuperAdmin
-      const admins: SuperAdmin[] = users.map((user: any) => ({
+      const admin: SuperAdmin = {
         id: user.user_id,
         username: user.username,
         email: user.email,
@@ -60,30 +59,39 @@ export default function EditSuperAdminPage() {
         last_login_at: user.last_login_at,
         language_preference: user.language_preference,
         theme_preference: user.theme_preference,
-      }));
-      const admin = admins.find((a: SuperAdmin) => a.id === id);
+      };
 
-      if (!admin) {
-        toast.error(t('notFound') || 'Super administrator not found');
-        router.push('/admin/super-admins');
-        return;
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setSuperAdmin(admin);
+        setFormData({
+          first_name: admin.first_name,
+          last_name: admin.last_name,
+          email: admin.email,
+          username: admin.username,
+        });
       }
-
-      setSuperAdmin(admin);
-      setFormData({
-        first_name: admin.first_name,
-        last_name: admin.last_name,
-        email: admin.email,
-        username: admin.username,
-      });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error loading super admin:', error);
-      toast.error(t('loadError') || 'Error loading super administrator');
-      router.push('/admin/super-admins');
+      if (isMountedRef.current) {
+        const errorMessage = error instanceof Error ? error.message : t('loadError') || 'Error loading super administrator';
+        toast.error(errorMessage);
+        router.push('/admin/super-admins');
+      }
     } finally {
-      setLoading(false);
+      if (isMountedRef.current) {
+        setLoading(false);
+      }
     }
-  };
+  }, [id, router, t]);
+
+  useEffect(() => {
+    loadSuperAdmin();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [loadSuperAdmin]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -120,9 +128,10 @@ export default function EditSuperAdminPage() {
       await apiClient.updateUser(id, formData);
       toast.success(t('updateSuccess') || 'Super administrator updated successfully!');
       router.push('/admin/super-admins');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating super admin:', error);
-      toast.error(error.message || t('updateError') || 'Error updating super administrator');
+      const errorMessage = error instanceof Error ? error.message : t('updateError') || 'Error updating super administrator';
+      toast.error(errorMessage);
     } finally {
       setSubmitting(false);
     }
