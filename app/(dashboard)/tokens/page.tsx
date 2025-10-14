@@ -14,6 +14,7 @@ import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
 
 export default function TokensPage() {
   const { user } = useAuth();
@@ -61,20 +62,20 @@ export default function TokensPage() {
       const { apiClient } = await import('@/lib/api');
       await apiClient.deleteModuleToken(id);
       refetch();
+      toast.success(t('deleteSuccess'));
     } catch (error) {
       console.error('Erro ao deletar token:', error);
-      alert(t('deleteError'));
+      toast.error(t('deleteError'));
     }
   };
 
   const handleCopyToken = async (token: string) => {
     try {
       await navigator.clipboard.writeText(token);
-      // You could use a toast notification here instead of alert
-      alert(t('copySuccess'));
+      toast.success(t('copySuccess'));
     } catch (error) {
       console.error('Erro ao copiar token:', error);
-      alert(t('copyError'));
+      toast.error(t('copyError'));
     }
   };
 

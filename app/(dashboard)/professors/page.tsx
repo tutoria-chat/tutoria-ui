@@ -2,12 +2,20 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { AdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
@@ -16,6 +24,7 @@ import { useTranslations } from 'next-intl';
 import type { Professor, TableColumn, BreadcrumbItem, User } from '@/lib/types';
 
 export default function ProfessorsPage() {
+  const router = useRouter();
   const t = useTranslations('professors');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +34,7 @@ export default function ProfessorsPage() {
   const [sortColumn, setSortColumn] = useState<string | null>('first_name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -119,6 +129,25 @@ export default function ProfessorsPage() {
     } catch (error: any) {
       console.error('Error deleting professor:', error);
       toast.error(error.message || t('deleteError') || 'Error deleting professor');
+    }
+  };
+
+  const handleAddProfessor = () => {
+    // If super admin, show dialog to choose type
+    if (currentUser?.role === 'super_admin') {
+      setShowProfessorTypeDialog(true);
+    } else {
+      // If admin professor, go directly to create regular professor
+      router.push('/professors/create');
+    }
+  };
+
+  const handleSelectProfessorType = (type: 'regular' | 'admin') => {
+    setShowProfessorTypeDialog(false);
+    if (type === 'admin') {
+      router.push('/professors/create-admin');
+    } else {
+      router.push('/professors/create');
     }
   };
 
@@ -275,11 +304,9 @@ export default function ProfessorsPage() {
           breadcrumbs={breadcrumbs}
           actions={
             currentUser?.is_admin && (
-              <Button asChild>
-                <Link href="/professors/create">
-                  <Plus className="mr-2 h-4 w-4" />
-                  {t('addButton')}
-                </Link>
+              <Button onClick={handleAddProfessor}>
+                <Plus className="mr-2 h-4 w-4" />
+                {t('addButton')}
               </Button>
             )
           }
@@ -351,6 +378,55 @@ export default function ProfessorsPage() {
           }}
           emptyMessage={t('emptyMessage') || 'No professors found'}
         />
+
+        {/* Professor Type Selection Dialog */}
+        <Dialog open={showProfessorTypeDialog} onOpenChange={setShowProfessorTypeDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('selectTypeDialog.title')}</DialogTitle>
+              <DialogDescription>
+                {t('selectTypeDialog.description')}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <Button
+                variant="outline"
+                className="h-auto flex-col items-start p-4 hover:bg-blue-50 hover:border-blue-500"
+                onClick={() => handleSelectProfessorType('regular')}
+              >
+                <div className="flex items-center space-x-3 mb-2">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-base">{t('selectTypeDialog.regularProfessor')}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground text-left">
+                  {t('selectTypeDialog.regularDescription')}
+                </p>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="h-auto flex-col items-start p-4 hover:bg-purple-50 hover:border-purple-500"
+                onClick={() => handleSelectProfessorType('admin')}
+              >
+                <div className="flex items-center space-x-3 mb-2">
+                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <Shield className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-base">{t('selectTypeDialog.adminProfessor')}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground text-left">
+                  {t('selectTypeDialog.adminDescription')}
+                </p>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </AdminOnly>
   );
