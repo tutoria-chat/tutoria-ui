@@ -63,7 +63,7 @@
     "deleteConfirm": "¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.",
     "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo.",
     "form": {
-      "create": "Crear nuevo curso",
+      "create": "Crear curso",
       "edit": "Editar curso",
       "nameLabel": "Nombre del curso *",
       "namePlaceholder": "ej., Fundamentos de Ciencias de la Computación",
@@ -80,7 +80,6 @@
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Describe los objetivos del curso, contenido y público objetivo...",
       "cancel": "Cancelar",
-      "create": "Crear curso",
       "update": "Actualizar curso",
       "creating": "Creando...",
       "updating": "Actualizando...",
@@ -188,7 +187,7 @@
     "deleteConfirm": "¿Estás seguro de que deseas eliminar este módulo? Esta acción no se puede deshacer.",
     "deleteError": "Error al eliminar el módulo. Por favor, intenta de nuevo.",
     "form": {
-      "create": "Crear nuevo módulo",
+      "create": "Crear módulo",
       "edit": "Editar módulo",
       "nameLabel": "Nombre del módulo *",
       "namePlaceholder": "ej., Introducción a Estructuras de Datos",
@@ -227,7 +226,6 @@
       "tutorLanguageLabel": "Idioma del Tutor IA",
       "tutorLanguageHint": "Importante: Selecciona en qué idioma el tutor IA debe responder a las preguntas de los estudiantes. Esto define el idioma de las respuestas, independientemente del idioma de la pregunta.",
       "cancel": "Cancelar",
-      "create": "Crear módulo",
       "update": "Actualizar módulo",
       "creating": "Creando...",
       "updating": "Actualizando...",
@@ -2039,6 +2037,11 @@
           "Haz clic en el ícono de eliminar",
           "Confirma la eliminación"
         ]
+      },
+      "regularProfessor": {
+        "title": "Guía para Profesores Regulares",
+        "subtitle": "Guía súper detallada para profesores regulares. ¡Esta guía es MUY similar a la guía del Profesor Administrador, pero tendrás algunas diferencias de acceso!",
+        "note": "NOTA: Como Profesor Regular, puedes hacer CASI TODO lo que hace un Profesor Administrador, EXCEPTO: Crear otros profesores, Ver todos los cursos de la universidad (solo ves los tuyos). Para crear módulos, subir archivos, configurar tutores IA, crear tokens, preparar módulos - ¡ES TODO IGUAL! Sigue los mismos tutoriales de la sección 'Profesor Administrador' arriba."
       }
     },
     "modules": {
@@ -2559,6 +2562,335 @@
           "Mantén una copia de seguridad de tus prompts del sistema para reutilizar en futuros semestres"
         ]
       }
+    }
+  },
+  "regularProfessor": {
+    "title": "Guía del Profesor",
+    "subtitle": "Guía completa para instructores de cursos",
+    "overview": {
+      "title": "Descripción General del Rol",
+      "description": "Como Profesor, puedes gestionar módulos para los cursos que te han sido asignados. Puedes crear módulos, configurar tutores de IA, subir archivos y generar tokens de acceso para tus estudiantes.",
+      "keyResponsibilities": "Responsabilidades Clave",
+      "responsibilities": [
+        "Crear y gestionar módulos para cursos asignados",
+        "Configurar los prompts del sistema del tutor de IA",
+        "Subir contenido educativo y archivos",
+        "Generar y gestionar tokens de acceso a módulos",
+        "Preparar módulos para uso de estudiantes",
+        "Monitorear el uso de módulos y la participación de estudiantes"
+      ]
+    },
+    "gettingStarted": {
+      "title": "Comenzando",
+      "step1Title": "1. Primer Inicio de Sesión",
+      "step1Desc": "Usa el enlace de configuración de contraseña proporcionado por tu administrador para establecer tu contraseña. Después de configurar tu contraseña, puedes iniciar sesión con tu nombre de usuario.",
+      "step2Title": "2. Ver tu Panel de Control",
+      "step2Desc": "Tu panel de control (/dashboard) muestra acciones rápidas: Crear Módulo, Ver Cursos, Ver Módulos y Gestionar Tokens.",
+      "step3Title": "3. Ver tus Cursos",
+      "step3Desc": "Navega a Cursos (/courses) para ver todos los cursos que te han sido asignados por tu administrador.",
+      "step4Title": "4. Crear tu Primer Módulo",
+      "step4Desc": "Selecciona un curso y crea tu primer módulo para empezar a construir tu contenido educativo."
+    },
+    "courses": {
+      "title": "Trabajando con Cursos",
+      "description": "Puedes ver los detalles de los cursos que te han sido asignados, pero no puedes crear o editar cursos. Contacta a tu profesor administrador si necesitas cambios en los cursos.",
+      "viewing": {
+        "title": "Ver Detalles del Curso",
+        "steps": [
+          "Navega a Cursos (/courses)",
+          "Haz clic en cualquier curso al que estés asignado",
+          "Ver información del curso, módulos, profesores y estudiantes",
+          "Usa el botón 'Agregar Módulo' para crear un nuevo módulo para este curso"
+        ]
+      },
+      "limitations": {
+        "title": "Limitaciones de Curso",
+        "description": "Como profesor regular, no puedes:",
+        "list": [
+          "Crear nuevos cursos",
+          "Editar cursos existentes",
+          "Eliminar cursos",
+          "Asignar otros profesores a cursos"
+        ],
+        "note": "Si necesitas crear o modificar cursos, contacta al profesor administrador de tu universidad."
+      }
+    },
+    "modules": {
+      "title": "Gestionando tus Módulos",
+      "description": "Los módulos son el núcleo de tu contenido de enseñanza. Puedes crear, editar y gestionar módulos para tus cursos asignados.",
+      "creating": {
+        "title": "Creando un Módulo",
+        "steps": [
+          "Navega a Módulos (/modules) o haz clic en 'Crear Módulo'",
+          "Completa los detalles del módulo:",
+          "  • Nombre del Módulo (ej., 'Introducción a la Programación en Python')",
+          "  • Código del Módulo (ej., 'CS101-W1')",
+          "  • Selecciona tu curso del menú desplegable",
+          "  • Semestre y Año (opcional pero recomendado)",
+          "  • Descripción (opcional pero útil para estudiantes)",
+          "Configura el Tutor de IA:",
+          "  • Elige una plantilla rápida O escribe un prompt personalizado",
+          "  • Define cómo el tutor de IA debe interactuar con los estudiantes",
+          "  • Selecciona el idioma de respuesta del tutor",
+          "Haz clic en 'Crear Módulo' para guardar"
+        ]
+      },
+      "aiTutor": {
+        "title": "Configurando el Tutor de IA",
+        "description": "El tutor de IA es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y objetivos del curso.",
+        "templates": {
+          "title": "Usando Plantillas",
+          "description": "Las plantillas rápidas proporcionan prompts pre-escritos para escenarios comunes de enseñanza:",
+          "options": [
+            "Tutor General: Asistente de enseñanza de propósito general",
+            "Tutor de Programación: Para ciencias de la computación y cursos de programación",
+            "Tutor de Matemáticas y Ciencias: Para materias STEM",
+            "Asistente de Investigación: Para métodos de investigación y escritura académica"
+          ]
+        },
+        "customPrompts": {
+          "title": "Escribiendo Prompts Personalizados",
+          "description": "Crea una personalidad de enseñanza única para tu tutor de IA:",
+          "tips": [
+            "Comienza con: 'Eres un tutor de [tipo] para [materia]...'",
+            "Describe el enfoque de enseñanza (ej., 'paciente', 'socrático', 'paso a paso')",
+            "Establece límites (ej., 'No des respuestas directas, guía a los estudiantes hacia las soluciones')",
+            "Especifica el formato de respuesta (ej., 'Usa viñetas para las listas')",
+            "Considera el nivel del estudiante (ej., 'Asume conocimiento básico de matemáticas de secundaria')"
+          ],
+          "example": "Ejemplo: 'Eres un tutor paciente de programación en Python para principiantes. Siempre explica los conceptos usando analogías del mundo real. Cuando un estudiante pida código, proporciónalo con comentarios detallados explicando cada línea. Anima a los estudiantes a intentar soluciones antes de dar la respuesta.'"
+        },
+        "improving": {
+          "title": "Mejorando Prompts",
+          "steps": [
+            "Después de guardar tu módulo, haz clic en 'Editar Módulo'",
+            "Desplázate a la sección de Configuración del Tutor de IA",
+            "Haz clic en 'Mejorar con IA' para mejorar tu prompt",
+            "La IA reescribirá tu prompt para hacerlo más efectivo",
+            "Puedes mejorar hasta 3 veces por módulo cada 72 horas",
+            "Revisa el prompt mejorado y guarda si estás satisfecho"
+          ]
+        },
+        "language": {
+          "title": "Configuración de Idioma del Tutor",
+          "description": "Selecciona el idioma que tu tutor de IA debe usar al responder a los estudiantes. Este es independiente del idioma de la pregunta del estudiante - el tutor responderá en el idioma seleccionado sin importar cómo se haga la pregunta."
+        }
+      },
+      "files": {
+        "title": "Gestionando Archivos del Módulo",
+        "description": "Sube materiales del curso que el tutor de IA pueda referenciar al ayudar a los estudiantes.",
+        "uploading": {
+          "title": "Subiendo Archivos",
+          "steps": [
+            "Navega a la página de detalles de tu módulo (/modules/{id})",
+            "Haz clic en 'Subir Archivo' en la sección de Archivos",
+            "Selecciona o arrastra y suelta tu archivo",
+            "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
+            "Tamaño máximo: 50MB por archivo",
+            "Haz clic en 'Subir Archivo' para agregarlo",
+            "El archivo será indexado y estará disponible para el tutor de IA"
+          ]
+        },
+        "bestPractices": {
+          "title": "Mejores Prácticas para Subir Archivos",
+          "list": [
+            "Sube diapositivas de clase, notas y lecturas",
+            "Incluye conjuntos de problemas y ejemplos",
+            "Agrega materiales suplementarios y referencias",
+            "Usa nombres de archivo claros y descriptivos",
+            "Sube archivos antes de preparar el módulo",
+            "Actualiza archivos a medida que progresa tu curso",
+            "Elimina materiales desactualizados regularmente"
+          ]
+        },
+        "managing": {
+          "title": "Gestionando Archivos",
+          "actions": [
+            "Descargar: Obtén una copia de cualquier archivo subido",
+            "Eliminar: Elimina un archivo del módulo (requiere confirmación)"
+          ]
+        }
+      },
+      "preparing": {
+        "title": "Preparando Módulos",
+        "description": "Antes de que los estudiantes puedan usar tu módulo, debes 'prepararlo'. Este proceso sube tus archivos a OpenAI y crea el asistente de IA.",
+        "requirements": {
+          "title": "Requisitos Previos",
+          "list": [
+            "Al menos un token de acceso al módulo activo con permiso de chat",
+            "Prompt del sistema del tutor de IA configurado (recomendado)",
+            "Archivos subidos (opcional pero recomendado)"
+          ]
+        },
+        "steps": {
+          "title": "Pasos de Preparación",
+          "list": [
+            "Asegúrate de haber creado un token para el módulo",
+            "Navega a la página de detalles del módulo",
+            "Haz clic en el botón 'Preparar Módulo'",
+            "Espera a que se complete la preparación (usualmente unos segundos)",
+            "Verás un mensaje de éxito cuando esté listo",
+            "El tutor de IA ahora está listo para los estudiantes"
+          ]
+        },
+        "updating": {
+          "title": "Actualizando un Módulo Preparado",
+          "description": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el tutor de IA con el nuevo contenido."
+        }
+      },
+      "editing": {
+        "title": "Editando Módulos",
+        "steps": [
+          "Desde la lista de Módulos o la página de detalles del módulo, haz clic en 'Editar'",
+          "Actualiza la información del módulo, el prompt del tutor de IA o la configuración",
+          "No puedes cambiar el curso después de la creación",
+          "Haz clic en 'Guardar Cambios' para actualizar"
+        ]
+      },
+      "deleting": {
+        "title": "Eliminando Módulos",
+        "warning": "⚠️ Advertencia: Eliminar un módulo elimina todos sus archivos, tokens e historial de interacción con estudiantes. Esto no se puede deshacer.",
+        "steps": [
+          "Desde la lista de Módulos, haz clic en el ícono de eliminar",
+          "Confirma la eliminación",
+          "El módulo y todo su contenido se eliminarán permanentemente"
+        ]
+      }
+    },
+    "tokens": {
+      "title": "Tokens de Acceso a Módulos",
+      "description": "Los tokens proporcionan acceso seguro a tu widget del tutor de IA. Crea tokens para compartir tus módulos con estudiantes.",
+      "creating": {
+        "title": "Creando un Token",
+        "steps": [
+          "Navega a Tokens de Módulo (/tokens)",
+          "Haz clic en 'Generar Token'",
+          "Selecciona tu módulo del menú desplegable",
+          "Completa los detalles del token:",
+          "  • Nombre del Token (ej., 'Otoño 2024 - Sección A')",
+          "  • Descripción (opcional, ej., 'Para curso de CS101 en Moodle')",
+          "  • Expiración en días (opcional, ej., 120 para duración del semestre)",
+          "Establece permisos:",
+          "  • Permitir Chat: Permite a los estudiantes hacer preguntas",
+          "  • Permitir Acceso a Archivos: Permite a los estudiantes descargar archivos",
+          "Haz clic en 'Crear Token'",
+          "Copia el token - lo necesitarás para el widget"
+        ]
+      },
+      "permissions": {
+        "title": "Entendiendo Permisos",
+        "chat": {
+          "title": "Permitir Chat",
+          "description": "Cuando está habilitado, los estudiantes pueden hacer preguntas al tutor de IA. Deshabilita esto si solo quieres compartir archivos sin interacción de IA."
+        },
+        "fileAccess": {
+          "title": "Permitir Acceso a Archivos",
+          "description": "Cuando está habilitado, los estudiantes pueden descargar archivos del módulo. Deshabilita esto si quieres que los archivos sean accesibles solo por la IA sin descargas directas."
+        }
+      },
+      "using": {
+        "title": "Usando Tokens en tu LMS",
+        "description": "Integra el widget del tutor de IA en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
+        "steps": [
+          "Copia tu token de módulo",
+          "Usa la URL del widget: https://widget.tutoria.ai/?module_token=TU_TOKEN",
+          "Agrega esta URL como una herramienta externa o iframe en tu LMS",
+          "Los estudiantes ahora pueden interactuar con tu tutor de IA a través del LMS"
+        ]
+      },
+      "managing": {
+        "title": "Gestionando Tokens",
+        "viewing": {
+          "title": "Ver Detalles del Token",
+          "description": "Haz clic en el ícono 'Ver' para ver:",
+          "details": [
+            "Cadena de token y copia rápida",
+            "Información del módulo y curso",
+            "Fechas de creación y expiración",
+            "Estadísticas de uso (conteo de solicitudes)",
+            "Estado actual y permisos"
+          ]
+        },
+        "editing": {
+          "title": "Editando Tokens",
+          "description": "Actualiza el nombre del token, descripción o permisos sin cambiar la cadena del token."
+        },
+        "revoking": {
+          "title": "Revocando Tokens",
+          "description": "Elimina un token para revocar el acceso inmediatamente. Los estudiantes ya no podrán usar el widget con ese token."
+        }
+      },
+      "bestPractices": {
+        "title": "Mejores Prácticas para Tokens",
+        "list": [
+          "Crea tokens separados para diferentes secciones o semestres",
+          "Usa nombres descriptivos que incluyan código del curso y período",
+          "Establece fechas de expiración alineadas con la fecha de fin de tu curso",
+          "Monitorea el uso de tokens para rastrear la participación de estudiantes",
+          "Revoca tokens después de que finalice el curso",
+          "Mantén los tokens seguros - no los compartas públicamente",
+          "Prueba el widget con el token antes de compartirlo con estudiantes",
+          "Crea un token de respaldo en caso de que necesites revocar el principal"
+        ]
+      }
+    },
+    "workflow": {
+      "title": "Flujo de Trabajo Típico",
+      "description": "Sigue este flujo de trabajo para cada módulo que crees:",
+      "steps": [
+        "1. Crea el módulo con información básica",
+        "2. Escribe o selecciona un prompt del sistema del tutor de IA",
+        "3. Sube tus materiales del curso (diapositivas, notas, lecturas)",
+        "4. Revisa y mejora el prompt del tutor de IA si es necesario",
+        "5. Crea un token de acceso al módulo para tus estudiantes",
+        "6. Prepara el módulo (sube archivos a la IA y crea el asistente)",
+        "7. Prueba el widget con tu token para asegurar que funciona",
+        "8. Comparte el enlace del widget en tu LMS o con estudiantes",
+        "9. Monitorea el uso y actualiza el contenido según sea necesario",
+        "10. Al final del semestre, revoca tokens o establece nuevos para el próximo período"
+      ]
+    },
+    "troubleshooting": {
+      "title": "Solución de Problemas",
+      "modulePreparation": {
+        "title": "Problemas de Preparación de Módulos",
+        "noTokens": "Error: 'No hay tokens disponibles' - Crea al menos un token activo con permiso de chat antes de preparar.",
+        "invalidToken": "Error: 'Token inválido' - Asegúrate de que el token esté activo y tenga habilitado el permiso de chat.",
+        "preparationFailed": "Si la preparación falla, verifica que tus archivos estén bajo 50MB y en formatos soportados."
+      },
+      "fileUploads": {
+        "title": "Problemas de Subida de Archivos",
+        "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 50MB.",
+        "unsupportedFormat": "Formato no soportado: Convierte archivos a PDF, DOC, DOCX, TXT, PPT o PPTX.",
+        "uploadFailed": "Subida fallida: Verifica tu conexión a internet e intenta de nuevo."
+      },
+      "tokenIssues": {
+        "title": "Problemas con Tokens",
+        "widgetNotWorking": "El widget no funciona: Verifica que el token esté activo y el módulo esté preparado.",
+        "chatDisabled": "Los estudiantes no pueden chatear: Habilita el permiso 'Permitir Chat' en el token.",
+        "filesNotAccessible": "Archivos no accesibles: Habilita el permiso 'Permitir Acceso a Archivos' o vuelve a preparar el módulo."
+      },
+      "permissions": {
+        "title": "Problemas de Permisos",
+        "cannotCreateCourse": "No puedes crear cursos: Solo los profesores administradores pueden crear cursos. Pregunta a tu administrador.",
+        "cannotEditCourse": "No puedes editar cursos: Contacta a tu profesor administrador para modificar detalles del curso.",
+        "cannotSeeModule": "No puedes ver un módulo: Los módulos se filtran por tus cursos asignados. Pide que te asignen al curso."
+      }
+    },
+    "tips": {
+      "title": "Consejos Profesionales",
+      "list": [
+        "Usa la función 'Mejorar con IA' para refinar tus prompts de tutor - a menudo produce mejores resultados",
+        "Sube archivos en orden lógico (ej., Semana 1, Semana 2) para mejor organización de la IA",
+        "Prueba tu tutor de IA haciéndole preguntas que los estudiantes podrían hacer",
+        "Incluye documentos de políticas del curso y preguntas frecuentes para que la IA los referencie",
+        "Actualiza tu prompt del tutor a mitad de semestre si notas áreas de mejora",
+        "Crea múltiples tokens para pruebas A/B de diferentes configuraciones de IA",
+        "Usa semestre/año en nombres de módulos para fácil identificación a través de períodos",
+        "Monitorea qué temas generan más preguntas de estudiantes",
+        "Comparte prompts exitosos del tutor de IA con tus colegas",
+        "Mantén un respaldo de tus prompts del sistema para reutilizarlos en semestres futuros"
+      ]
     }
   }
 }
