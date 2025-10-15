@@ -1367,7 +1367,7 @@
             "PROBLEMA: A janela não abre quando clico em 'Criar Universidade' - SOLUÇÃO: 1) Aguarde alguns segundos e tente novamente, 2) Atualize a página (F5), 3) Verifique sua conexão com internet, 4) Tente fazer logout e login novamente.",
             "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos (às vezes a internet está lenta), 2) Se continuar, verifique sua conexão, 3) NÃO clique várias vezes no botão (isso pode criar universidades duplicadas!), 4) Se travar, feche a janela e verifique se a universidade foi criada voltando para a lista de universidades.",
             "PROBLEMA: Criei a universidade mas quero mudar o nome - SOLUÇÃO: Não tem problema! Vá para a seção 'Editando uma Universidade' deste tutorial para aprender como mudar o nome."
-          },
+          ],
           "tips": [
             "DICA: Crie as universidades UMA POR VEZ e com calma. Não tente fazer correndo - é melhor fazer direito uma vez do que ter que corrigir depois!",
             "DICA: Mantenha uma lista (pode ser no papel ou Excel) com o nome e código de cada universidade que você criar. Isso ajuda você a lembrar e a evitar duplicatas.",
@@ -1480,7 +1480,7 @@
             "PROBLEMA: Deletei a universidade errada - O QUE FAZER: Infelizmente, NÃO HÁ COMO DESFAZER. Os dados foram permanentemente deletados. Você precisará: 1) Criar a universidade novamente, 2) Recriar todas as disciplinas, 3) Recriar todos os módulos, 4) Pedir aos professores para fazer upload dos arquivos novamente. Por isso que deletar é IRREVERSÍVEL e perigoso!",
             "PROBLEMA: A universidade não deleta (aparece erro) - SOLUÇÃO: Pode haver alguma restrição do sistema. Verifique se há outros dados dependentes. Entre em contato com suporte técnico.",
             "PROBLEMA: Quero deletar mas estou com medo de fazer errado - SOLUÇÃO: Se você tem QUALQUER dúvida, NÃO DELETE! Peça ajuda a outro super administrador, ou entre em contato com suporte técnico primeiro."
-          },
+          ],
           "finalWarning": "LEMB RETE FINAL: Deletar é como queimar um livro - uma vez feito, não tem volta. Se você tem QUALQUER dúvida, NÃO DELETE. É sempre melhor deixar uma universidade parada/vazia do que deletar por engano e perder tudo. Só delete se você tem 100% de certeza, conversou com todos os envolvidos, e não há nenhuma chance de precisar daqueles dados no futuro. Em caso de dúvida, NÃO DELETE!"
         }
       }
