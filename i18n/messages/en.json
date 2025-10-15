@@ -953,6 +953,7 @@
   },
   "sidebar": {
     "dashboard": "Dashboard",
+    "tutorials": "Tutorials & Guides",
     "universities": "Universities",
     "myUniversity": "My University",
     "moduleTokens": "Module Tokens",
@@ -1032,5 +1033,1546 @@
     "unexpectedError": "An unexpected error occurred. Please try again or go back to the home page.",
     "tryAgain": "Try Again",
     "homePage": "Home Page"
+  },
+  "tutorials": {
+    "title": "System Tutorials & Guides",
+    "description": "Comprehensive guides to help you master the Tutoria platform",
+    "tableOfContents": "Table of Contents",
+    "quickLinks": "Quick Links",
+    "gettingStarted": "Getting Started",
+    "overview": "Overview",
+    "searchPlaceholder": "Search tutorials...",
+    "superAdmin": {
+      "title": "Super Administrator Guide",
+      "subtitle": "Complete guide for system administrators",
+      "overview": {
+        "title": "Role Overview",
+        "description": "As a Super Administrator, you have complete access to all system features and settings. You are responsible for managing the entire platform, including universities, administrators, and system-wide configurations.",
+        "keyResponsibilities": "Key Responsibilities",
+        "responsibilities": [
+          "Creating and managing universities in the system",
+          "Creating and managing super administrator accounts",
+          "Creating admin professors for each university",
+          "Monitoring system-wide activity and security",
+          "Managing global search and system statistics",
+          "Overseeing all content across universities"
+        ]
+      },
+      "gettingStarted": {
+        "title": "Getting Started",
+        "step1Title": "1. Dashboard Overview",
+        "step1Desc": "After logging in, you'll see your dashboard at /dashboard with quick actions and system overview. The dashboard provides access to all major features.",
+        "step2Title": "2. Understanding Your Navigation",
+        "step2Desc": "Your sidebar contains: Dashboard, Universities, Module Tokens, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
+        "step3Title": "3. First Steps",
+        "step3Desc": "Start by creating your first university, then create an admin professor for that university. The admin professor can then manage courses and regular professors."
+      },
+      "universities": {
+        "title": "Managing Universities",
+        "description": "Universities are the top-level organizational units in Tutoria. Each university can have multiple courses, professors, and students.",
+        "creating": {
+          "title": "Creating a University",
+          "steps": [
+            "Navigate to Universities (/universities) from the sidebar",
+            "Click 'Create University' button",
+            "Fill in the required information: University Name and Code",
+            "Add an optional description",
+            "Click 'Create University' to save",
+            "You'll be redirected to the university detail page"
+          ]
+        },
+        "viewing": {
+          "title": "Viewing University Details",
+          "description": "Click on any university from the list to view its details. You'll see:",
+          "features": [
+            "University information and statistics",
+            "List of courses offered by the university",
+            "List of professors associated with the university",
+            "Quick actions to add courses or professors"
+          ]
+        },
+        "editing": {
+          "title": "Editing a University",
+          "steps": [
+            "From the university detail page, click 'Edit'",
+            "Update the university name, code, or description",
+            "Click 'Update University' to save changes"
+          ]
+        },
+        "deleting": {
+          "title": "Deleting a University",
+          "warning": "⚠️ Warning: Deleting a university will also delete all associated courses, modules, and content. This action cannot be undone.",
+          "steps": [
+            "From the Universities list, click the delete icon",
+            "Confirm the deletion in the dialog",
+            "The university and all its content will be permanently removed"
+          ]
+        }
+      },
+      "superAdmins": {
+        "title": "Managing Super Administrators",
+        "description": "Super administrators have full system access. Only create accounts for trusted individuals.",
+        "creating": {
+          "title": "Creating a Super Administrator",
+          "steps": [
+            "Navigate to Administration > Super Administrators (/admin/super-admins)",
+            "Click 'Create Super Administrator'",
+            "Fill in: First Name, Last Name, Username, Email, Temporary Password, and Preferred Language",
+            "Click 'Create Super Administrator'",
+            "Copy the password setup link and share it securely with the new administrator",
+            "The link expires in 72 hours"
+          ]
+        },
+        "managing": {
+          "title": "Managing Super Administrators",
+          "actions": [
+            "Edit: Update administrator information",
+            "Reset Password: Generate a new password setup link",
+            "Deactivate: Temporarily disable an administrator account",
+            "Activate: Re-enable a deactivated administrator",
+            "Delete: Permanently remove an administrator (except the main account)"
+          ]
+        },
+        "security": {
+          "title": "Security Best Practices",
+          "practices": [
+            "Only create super administrator accounts for trusted individuals",
+            "Share password setup links through secure channels",
+            "Regularly review the list of active administrators",
+            "Deactivate accounts that are no longer needed",
+            "Monitor administrator activity through system logs"
+          ]
+        }
+      },
+      "professors": {
+        "title": "Managing Admin Professors",
+        "description": "Admin professors manage their university's courses, modules, and regular professors. Super admins can create admin professors for any university.",
+        "creating": {
+          "title": "Creating an Admin Professor",
+          "steps": [
+            "Navigate to Professors (/professors)",
+            "Click 'Add Professor'",
+            "Select 'Admin Professor' type",
+            "Select the university",
+            "Fill in: First Name, Last Name, Username, Email, and Temporary Password",
+            "Click 'Create Admin Professor'",
+            "Copy and share the password setup link securely",
+            "The link expires in 72 hours"
+          ]
+        },
+        "permissions": {
+          "title": "Admin Professor Permissions",
+          "description": "Admin professors can:",
+          "list": [
+            "View and manage all courses in their university",
+            "Create and edit courses",
+            "Create and manage modules for courses",
+            "Create regular professors and assign them to courses",
+            "Generate and manage module access tokens",
+            "Upload files to modules",
+            "Configure AI tutor system prompts"
+          ]
+        }
+      },
+      "globalSearch": {
+        "title": "Global Search",
+        "description": "The Global Search feature (/admin/global-search) allows you to search across all universities, courses, modules, and users in the system.",
+        "usage": {
+          "title": "Using Global Search",
+          "steps": [
+            "Navigate to Administration > Global Search",
+            "Enter your search query in the search box",
+            "Filter results by type (Universities, Courses, Modules, Users)",
+            "Click on any result to navigate to its detail page"
+          ]
+        },
+        "tips": {
+          "title": "Search Tips",
+          "list": [
+            "Use specific keywords for better results",
+            "Search by university code, course name, or module code",
+            "Use email addresses to find specific users",
+            "Combine filters to narrow down results"
+          ]
+        }
+      },
+      "moduleTokens": {
+        "title": "Module Tokens Overview",
+        "description": "Module tokens provide access to AI tutoring widgets. Super admins can view tokens across all universities.",
+        "viewing": {
+          "title": "Viewing Module Tokens",
+          "steps": [
+            "Navigate to Module Tokens (/tokens) from the sidebar",
+            "View all tokens across the system",
+            "Filter tokens by university using the URL parameter",
+            "See token permissions, expiration dates, and usage statistics"
+          ]
+        },
+        "note": "Note: Module token creation and management is typically done by professors. As a super admin, you have read access to monitor token usage across the system."
+      },
+      "bestPractices": {
+        "title": "Best Practices",
+        "list": [
+          "Create admin professors to distribute university management responsibilities",
+          "Use descriptive names and codes for universities",
+          "Regularly review system activity through Global Search",
+          "Keep super administrator accounts to a minimum",
+          "Use password setup links instead of sharing passwords directly",
+          "Monitor token usage to ensure security compliance",
+          "Document university structures and policies",
+          "Perform regular security audits"
+        ]
+      }
+    },
+    "adminProfessor": {
+      "title": "Admin Professor Guide",
+      "subtitle": "COMPLETE and SUPER detailed guide for professors who manage a university. You will learn EVERYTHING step by step!",
+      "overview": {
+        "title": "Understanding Your Role - What Is an Admin Professor?",
+        "whatIs": "Imagine that the Tutoria system is a large apartment building, where each apartment is a university. If the Super Administrator is the general building manager for the entire building, the Admin Professor is the MANAGER OF YOUR APARTMENT - you take care of EVERYTHING inside your university, but only yours. You don't touch other universities.",
+        "keyResponsibilities": "Key Responsibilities",
+        "responsibilities": [
+          "📚 Create and manage YOUR university's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
+          "📖 Create and manage MODULES within courses - Modules are like 'chapters' or 'units' of a course",
+          "👨‍🏫 Create REGULAR PROFESSOR accounts - Other professors who will help you teach and manage modules",
+          "🤖 Configure AI TUTORS - The 'brain' that will chat with students and help them study"
+        ]
+      },
+      "workflow": {
+        "title": "Complete Workflow - Your Step-by-Step Journey",
+        "whatIs": "This is the COMPLETE path you will follow from start to finish. Think of it as a RECIPE - you need to follow the steps in order for everything to work!",
+        "steps": [
+          {
+            "number": "1",
+            "title": "Set Your Password",
+            "desc": "First time? You received a LINK from the Super Admin. Click the link and create YOUR password. After this, you can log in whenever you want!"
+          },
+          {
+            "number": "2",
+            "title": "Create Courses (Disciplines)",
+            "desc": "Enter the system and create the DISCIPLINES of your university. Example: 'Introduction to Programming', 'Advanced Mathematics', etc."
+          },
+          {
+            "number": "3",
+            "title": "Create Modules",
+            "desc": "Inside each discipline, create MODULES (like chapters). Example: In 'Programming', you can have Module 1: 'Variables and Data Types', Module 2: 'Loops', etc."
+          },
+          {
+            "number": "4",
+            "title": "Configure the AI Tutor",
+            "desc": "Tell the AI HOW it should behave. It's like giving 'personality instructions' to a tutor. Example: 'You are a patient math teacher who explains step by step'."
+          },
+          {
+            "number": "5",
+            "title": "Upload Files (PDFs, Slides, etc.)",
+            "desc": "Upload the MODULE'S STUDY MATERIALS. PDFs, PowerPoints, Word documents, etc. The AI will READ these files to answer students' questions!"
+          },
+          {
+            "number": "6",
+            "title": "Create Tokens (Keys for Students)",
+            "desc": "Create 'KEYS' (tokens) that students will use to ACCESS the AI tutor. Think of it like creating passwords that you will give to students."
+          },
+          {
+            "number": "7",
+            "title": "Prepare the Module",
+            "desc": "Click 'Prepare Module' - This sends ALL FILES to the AI and makes everything READY for students to use!"
+          },
+          {
+            "number": "8",
+            "title": "Create Regular Professors (Optional)",
+            "desc": "If you want, create accounts for OTHER PROFESSORS who will help you manage modules and courses. They will have LESS permissions than you."
+          },
+          {
+            "number": "9",
+            "title": "Distribute Tokens to Students",
+            "desc": "Copy the tokens (keys) and paste them into Moodle, send by email, WhatsApp, or wherever you communicate with students!"
+          },
+          {
+            "number": "10",
+            "title": "Monitor and Update",
+            "desc": "Keep an eye on how students are using it! You can add more files, improve the AI tutor, create more tokens, etc."
+          }
+        ],
+        "tip": "💡 TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 token, and TEST everything before creating more!"
+      },
+      "creatingCourses": {
+        "title": "HOW TO CREATE COURSES (DISCIPLINES) - COMPLETE TUTORIAL",
+        "whatIs": "A COURSE (or DISCIPLINE) is like a BIG BOOK in a library. Inside this book, you will have several CHAPTERS (which are the modules). For example: 'Introduction to Programming' is a COURSE. Inside it you can have Module 1, Module 2, Module 3, etc.",
+        "why": "You need to create courses BEFORE creating modules! It's like: you need to create the BOOK before you can write the CHAPTERS inside it.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "OPEN the SIDE MENU (left side of the screen)",
+            "desc": "Look at the left side of the screen. There is a MENU with several options. Find the option that says 'COURSES' or 'Courses'. It usually has a BOOK icon 📚 next to it."
+          },
+          {
+            "number": "2",
+            "title": "CLICK on 'Courses'",
+            "desc": "Click on 'Courses'. You will see a NEW PAGE open with a LIST of all courses (if you have already created any). If this is your FIRST TIME, the list will be EMPTY."
+          },
+          {
+            "number": "3",
+            "title": "CLICK on the 'CREATE COURSE' button",
+            "desc": "Look at the TOP RIGHT of the screen. There is a BLUE button with white text that says 'CREATE COURSE' or 'Create Course'. CLICK on this button."
+          },
+          {
+            "number": "4",
+            "title": "FILL IN the COURSE NAME",
+            "desc": "A FORM will open (a box with several fields to fill in). The FIRST field is 'Course Name'. Type the NAME of the course you want to create. Example: 'Introduction to Computer Science' or 'Advanced Mathematics' or 'Data Structures'."
+          },
+          {
+            "number": "5",
+            "title": "FILL IN the COURSE CODE",
+            "desc": "The SECOND field is 'Course Code' or 'Code'. This is an ABBREVIATION or SHORT CODE for the course. Example: If the course is 'Introduction to Computer Science', the code could be 'CS101' or 'COMP100'. Use something SHORT and easy to remember!"
+          },
+          {
+            "number": "6",
+            "title": "FILL IN the DESCRIPTION (OPTIONAL - but RECOMMENDED!)",
+            "desc": "The THIRD field is 'Description'. This is OPTIONAL (you can leave it blank), but we HIGHLY RECOMMEND filling it in! Write what the course is ABOUT. Example: 'This course teaches the fundamentals of programming using Python, covering variables, loops, functions, and basic data structures.' This helps OTHER PROFESSORS and STUDENTS understand what the course is about."
+          },
+          {
+            "number": "7",
+            "title": "CHECK if YOUR UNIVERSITY is SELECTED",
+            "desc": "There should be a field called 'University'. Usually YOUR university is ALREADY AUTOMATICALLY SELECTED (because you are an Admin Professor of this university). Just CHECK if it's correct!"
+          },
+          {
+            "number": "8",
+            "title": "CLICK on 'CREATE COURSE' or 'Create'",
+            "desc": "After filling in everything, look for a BLUE BUTTON at the bottom of the form that says 'CREATE COURSE' or 'Create'. CLICK on this button."
+          },
+          {
+            "number": "9",
+            "title": "WAIT for CONFIRMATION",
+            "desc": "The system will SAVE your course. You will see a GREEN MESSAGE at the top saying something like 'Course created successfully!' or you will be REDIRECTED to the COURSE PAGE (where you can see details of the course you just created)."
+          }
+        ],
+        "whatYouShouldSee": "After creating the course, you should see the COURSE DETAIL PAGE with TABS: 'Modules', 'Professors', 'Students'. The 'Modules' tab will be EMPTY (because you haven't created any modules yet!). You will also see buttons like 'ADD MODULE', 'EDIT COURSE', etc.",
+        "commonMistakes": [
+          {
+            "mistake": "I forgot to fill in the Course Name and the system won't let me save!",
+            "solution": "The 'Course Name' field is MANDATORY (it has a * asterisk next to it). You MUST fill it in! Without a name, you can't create the course."
+          },
+          {
+            "mistake": "I forgot to fill in the Course Code and the system won't let me save!",
+            "solution": "The 'Course Code' field is also MANDATORY! You need to create a CODE for the course. It can be something simple like 'MATH101' or 'CS1'."
+          },
+          {
+            "mistake": "I created the course but can't find it in the list!",
+            "solution": "After creating, you are usually REDIRECTED to the course page. To see the LIST of all courses, click on 'Courses' in the left menu again. Your course should appear there!"
+          },
+          {
+            "mistake": "I entered a code that's already being used by another course!",
+            "solution": "Each course needs a UNIQUE code! If you get an error saying the code already exists, choose a DIFFERENT code. Example: Instead of 'CS101', try 'CS101-2024' or 'CS101-A'."
+          },
+          {
+            "mistake": "I created the course but want to change the name!",
+            "solution": "No problem! Go to the course page (click on 'Courses' in the menu, then click on the course name). Click the 'EDIT COURSE' button (usually at the top right). Change what you want and click 'SAVE CHANGES'."
+          },
+          {
+            "mistake": "I created a course by mistake and want to delete it!",
+            "solution": "Go to the COURSES page (click 'Courses' in the left menu). Find the course you want to delete in the list. Click the RED DELETE ICON (usually a trash can 🗑️) on the right side of the row. Confirm deletion. ⚠️ WARNING: This will DELETE ALL MODULES of the course too!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "The 'CREATE COURSE' button is not appearing!",
+            "solution": "Make sure you are an ADMIN PROFESSOR! Only admin professors can create courses. If you are a REGULAR professor, you will NOT see this button. Talk to your Admin Professor or Super Administrator."
+          },
+          {
+            "problem": "I filled in everything but when I click 'Create' nothing happens!",
+            "solution": "Check if ALL MANDATORY fields are filled in (the ones with * asterisk). Also check if there are any ERROR MESSAGES in RED below the fields. If there is an error message, read what it says and fix it!"
+          },
+          {
+            "problem": "The system says 'Error creating course'!",
+            "solution": "This can happen for several reasons: 1) Your internet disconnected - check your connection and try again. 2) The course code is already being used - try another code. 3) System error - wait a few minutes and try again. If it persists, contact technical support."
+          },
+          {
+            "problem": "I created the course but don't know how to add modules to it!",
+            "solution": "Great! You've completed the first step! Now go to the section 'HOW TO CREATE MODULES' below in this tutorial. There you'll learn how to create modules INSIDE this course you just created!"
+          },
+          {
+            "problem": "I created a course for the wrong university!",
+            "solution": "As an Admin Professor, you can ONLY create courses for YOUR university! If the wrong university appeared, something is wrong with your account. Contact the Super Administrator to check your account settings."
+          },
+          {
+            "problem": "I don't know what to write in the Description!",
+            "solution": "The description is OPTIONAL! But if you want to fill it in, write something simple like: 'This course covers the basics of [subject]' or 'Students will learn about [topics]'. It doesn't have to be perfect! You can change it later."
+          }
+        ],
+        "tips": [
+          "💡 Use DESCRIPTIVE NAMES! Instead of 'Math', use 'Introduction to Differential Mathematics' or 'Linear Algebra I'. This helps identify the course later!",
+          "💡 Create CODES WITH A PATTERN! Example: CS101, CS102, CS103 for Computer Science courses. This makes organization easier!",
+          "💡 FILL IN THE DESCRIPTION even though it's optional! Your future self will thank you when you have 20 courses and can't remember what each one is about!",
+          "💡 START SIMPLE! Create 1 or 2 courses first, create modules for them, TEST everything, THEN create more courses! Don't try to create 10 courses at once on the first day!",
+          "💡 If you're not sure about the course name, CREATE IT anyway! You can CHANGE the name later by editing the course!"
+        ]
+      },
+      "creatingModules": {
+        "title": "HOW TO CREATE MODULES - COMPLETE TUTORIAL WITH AI TUTOR",
+        "whatIs": "A MODULE is like a CHAPTER or UNIT within a course. For example: if you have a course called 'Introduction to Programming', you can have: Module 1: 'Variables and Data Types', Module 2: 'Loops and Conditions', Module 3: 'Functions', etc. Each module is a SPECIFIC PART of the content!",
+        "why": "Modules are where STUDENTS will interact with the AI TUTOR! Each module has: 1) Files (PDFs, slides, etc.), 2) An AI Tutor configured to help students with THIS specific topic, 3) Tokens (keys) that students use to access the content.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "OPEN the SIDE MENU and click on 'MODULES' or go to DASHBOARD",
+            "desc": "You can create a module in 2 ways: 1) Click on 'Modules' in the left menu, then click 'CREATE MODULE'. OR 2) On the DASHBOARD (home page), click the 'CREATE MODULE' button. Choose whichever is easier for you!"
+          },
+          {
+            "number": "2",
+            "title": "FILL IN the MODULE NAME",
+            "desc": "The FIRST field is 'Module Name'. Type a DESCRIPTIVE NAME for this module. Example: 'Introduction to Variables in Python' or 'Linear Algebra - Unit 1: Matrices' or 'Module 1: Basics of Chemistry'. Be SPECIFIC! Don't just write 'Module 1' - say what this module is ABOUT!"
+          },
+          {
+            "number": "3",
+            "title": "FILL IN the MODULE CODE",
+            "desc": "The SECOND field is 'Module Code' or 'Code'. This is an ABBREVIATION or short identifier. Example: 'CS101-M1' (meaning Computer Science 101, Module 1) or 'MATH-W1' (Math, Week 1). Use something that makes sense for YOU and is easy to find later!"
+          },
+          {
+            "number": "4",
+            "title": "SELECT the COURSE (Discipline) this module belongs to",
+            "desc": "There is a DROPDOWN MENU (a box where you click and a list appears) called 'Course'. Click on it and SELECT which COURSE this module belongs to. Example: If you're creating a module about 'Variables in Python', select the course 'Introduction to Programming'. You MUST select a course! Every module needs to be inside a course!"
+          },
+          {
+            "number": "5",
+            "title": "FILL IN SEMESTER and YEAR (OPTIONAL)",
+            "desc": "There are two OPTIONAL fields: 'Semester' and 'Year'. If you want to ORGANIZE by semester, fill them in! Example: Semester = 1, Year = 2024. If you don't care about this, just LEAVE IT BLANK! It's not mandatory."
+          },
+          {
+            "number": "6",
+            "title": "FILL IN the DESCRIPTION (OPTIONAL but RECOMMENDED)",
+            "desc": "There is a 'Description' field. This is OPTIONAL, but we RECOMMEND filling it in! Write what THIS MODULE is about. Example: 'This module teaches how to use variables in Python, covering integers, strings, floats, and variable naming conventions.' This helps YOU remember later and helps STUDENTS know what they will learn!"
+          },
+          {
+            "number": "7",
+            "title": "NOW COMES THE IMPORTANT PART: CONFIGURE THE AI TUTOR!",
+            "desc": "Scroll down a bit. You will see a section called 'AI Tutor Configuration' or 'System Prompt Configuration'. THIS IS WHERE THE MAGIC HAPPENS! This is where you will tell the AI HOW it should behave when helping students!"
+          },
+          {
+            "number": "8",
+            "title": "CHOOSE: Quick Template OR Custom Prompt?",
+            "desc": "You have 2 OPTIONS: 1) Use a QUICK TEMPLATE: Click one of the ready-made buttons like 'General Tutor', 'Programming Tutor', 'Math & Science Tutor'. These are READY-TO-USE prompts! 2) Write YOUR OWN CUSTOM PROMPT: If you want something more specific, write it yourself in the big text box!"
+          },
+          {
+            "number": "9",
+            "title": "UNDERSTANDING SYSTEM PROMPTS - WHAT IS THIS?",
+            "desc": "The SYSTEM PROMPT is like giving 'PERSONALITY INSTRUCTIONS' to the AI. Example of a GOOD prompt: 'You are a patient and friendly Python Programming tutor for beginners. Always explain step by step, use everyday examples, and ask guiding questions instead of giving direct answers.' Example of a BAD prompt: 'Help students.' (too vague!). Be SPECIFIC about HOW you want the AI to teach!"
+          },
+          {
+            "number": "10",
+            "title": "WRITE or SELECT your System Prompt",
+            "desc": "If you chose a TEMPLATE, it's already filled in! You can READ what it says and EDIT if you want. If you're writing from scratch, here's a SIMPLE FORMULA: 'You are a [type of tutor] for [subject]. Your teaching style is [how you teach]. When students ask questions, you should [what to do]. Example: 'You are a friendly Math tutor for high school students. Your teaching style is patient and step-by-step. When students ask questions, you should guide them to the answer instead of just giving it.'"
+          },
+          {
+            "number": "11",
+            "title": "SELECT the AI TUTOR LANGUAGE",
+            "desc": "Below the prompt, there is a DROPDOWN called 'AI Tutor Language' or similar. This defines which LANGUAGE the AI will RESPOND in. For example, if you select 'Portuguese', the AI will ALWAYS respond in Portuguese, even if the student asks in English! Select the language your STUDENTS speak!"
+          },
+          {
+            "number": "12",
+            "title": "Optional: Use 'IMPROVE WITH AI' (after saving)",
+            "desc": "After you SAVE the module (next step), you can come back and click 'IMPROVE WITH AI'. The system will use AI to REWRITE your prompt and make it BETTER! You get 3 attempts to improve every 72 hours. This is OPTIONAL but can help a lot!"
+          },
+          {
+            "number": "13",
+            "title": "CHECK everything and CLICK 'CREATE MODULE'",
+            "desc": "Scroll down to the BOTTOM of the form. Make sure: 1) Module Name is filled, 2) Module Code is filled, 3) Course is selected, 4) System Prompt has something written. Then click the BIG BLUE BUTTON that says 'CREATE MODULE' or 'Create'."
+          },
+          {
+            "number": "14",
+            "title": "WAIT for CONFIRMATION and GO TO MODULE PAGE",
+            "desc": "The system will SAVE your module. You'll see a GREEN SUCCESS MESSAGE or be REDIRECTED to the MODULE DETAIL PAGE. This page shows: Files, Tokens, Module Info, etc. CONGRATULATIONS! You created a module!"
+          }
+        ],
+        "whatYouShouldSee": "After creating the module, you should see the MODULE DETAIL PAGE with several sections: 1) MODULE INFORMATION (name, code, course, description), 2) FILES section (empty for now), 3) ACCESS TOKENS section (empty for now), 4) Buttons like 'UPLOAD FILE', 'CREATE TOKEN', 'PREPARE MODULE', etc.",
+        "commonMistakes": [
+          {
+            "mistake": "I forgot to select a Course and the system won't save!",
+            "solution": "The 'Course' field is MANDATORY! You MUST select which course this module belongs to. Click the Course dropdown and select one. If you don't have any courses, you need to CREATE A COURSE FIRST! (Go back to the 'How to Create Courses' section)"
+          },
+          {
+            "mistake": "I left the System Prompt empty - is that a problem?",
+            "solution": "It's NOT mandatory, but HIGHLY RECOMMENDED! If you leave it empty, the AI Tutor won't have specific instructions. It's like hiring a teacher and not telling them what to teach! Fill it in with something simple, or use one of the QUICK TEMPLATES!"
+          },
+          {
+            "mistake": "I don't know what to write in the System Prompt!",
+            "solution": "Use a QUICK TEMPLATE! Click one of the ready-made buttons like 'General Tutor', 'Programming Tutor', or 'Math & Science Tutor'. They are ALREADY WELL WRITTEN! You can use them as-is or EDIT them to match your style!"
+          },
+          {
+            "mistake": "I selected the wrong Course and want to change it!",
+            "solution": "⚠️ IMPORTANT: You CANNOT change the course after creating the module! If you selected the wrong course, you'll need to: 1) DELETE this module (from the modules list), 2) CREATE A NEW module with the correct course. This is a system limitation to maintain data integrity!"
+          },
+          {
+            "mistake": "My System Prompt is too long and the system is complaining!",
+            "solution": "System Prompts can be long, but not TOO long! If you wrote several paragraphs, try to SUMMARIZE. Focus on: WHO the AI is, HOW it should teach, WHAT it should/shouldn't do. If it's still too long, contact support or try to condense it!"
+          },
+          {
+            "mistake": "I created the module but don't see any files or students!",
+            "solution": "That's NORMAL! You just created an EMPTY module! Now you need to: 1) UPLOAD FILES (next section), 2) CREATE TOKENS (section after that), 3) PREPARE the module, 4) Share tokens with students. Follow the complete workflow!"
+          },
+          {
+            "mistake": "I selected the wrong AI Tutor Language!",
+            "solution": "No problem! Click 'EDIT MODULE' (button on the module page), scroll down to 'AI Tutor Language', change it, and click 'SAVE CHANGES'. Easy!"
+          },
+          {
+            "mistake": "I want to use the 'Improve with AI' feature but the button doesn't appear!",
+            "solution": "The 'Improve with AI' button only appears AFTER you've saved the module AND you have a System Prompt written. Go to the module page, click 'EDIT MODULE', write or paste a prompt, SAVE, then the 'Improve with AI' button should appear!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "The 'Course' dropdown is empty - I don't have any courses to select!",
+            "solution": "You need to CREATE A COURSE FIRST! Modules must belong to a course. Go to 'Courses' in the left menu and create at least one course. Then come back and create the module!"
+          },
+          {
+            "problem": "I clicked 'Create Module' but nothing happens!",
+            "solution": "Check if there are ERROR MESSAGES in RED below any fields! Common errors: 1) Module Name is empty, 2) Module Code is empty, 3) No Course selected. Fix the errors and try again!"
+          },
+          {
+            "problem": "The system says 'Module code already exists'!",
+            "solution": "Each module needs a UNIQUE code! You can't have two modules with the same code. Change the code to something else. Example: Instead of 'M1', use 'M1-2024' or 'CS101-M1-SectionA'."
+          },
+          {
+            "problem": "I saved the module but my System Prompt disappeared!",
+            "solution": "This shouldn't happen! If it did, it's a bug. Go to 'EDIT MODULE', write the prompt again, and save. If it keeps disappearing, contact technical support!"
+          },
+          {
+            "problem": "I don't understand what a 'System Prompt' is!",
+            "solution": "Think of it as INSTRUCTIONS you give to a private tutor. Example: You hire a tutor and say: 'You're teaching Calculus to college freshmen. Be patient, explain step-by-step, and use real-world examples.' That's basically what the System Prompt is - instructions for the AI on HOW to teach!"
+          },
+          {
+            "problem": "Can I create a module without configuring the AI Tutor?",
+            "solution": "YES! It's optional. But if you don't configure it, the AI won't have specific instructions. It will still work, but won't have the PERSONALITY or TEACHING STYLE you want. We STRONGLY RECOMMEND configuring it!"
+          }
+        ],
+        "tips": [
+          "💡 START WITH A TEMPLATE! Don't try to write the perfect System Prompt from scratch. Use a Quick Template and EDIT it to match your style!",
+          "💡 Be SPECIFIC in your System Prompt! Instead of 'Help students', write 'You are a patient tutor who explains step by step and asks guiding questions.'",
+          "💡 TEST your AI Tutor! After creating the module, uploading files, and preparing it, test by asking questions like students would. See if the AI responds the way you want!",
+          "💡 Use the 'IMPROVE WITH AI' feature! After saving your module, edit it and click 'Improve with AI'. The system often makes your prompt much better!",
+          "💡 ORGANIZE your modules! Use codes like 'CS101-W1' (Week 1), 'CS101-W2' (Week 2). This makes it easy to find and sort later!",
+          "💡 Don't create ALL modules at once! Create 1 module, upload files to it, test with students, SEE HOW IT GOES, then create more. This way you learn what works best!",
+          "💡 The Description field is for HUMANS, the System Prompt is for the AI! Description = what students will learn. System Prompt = how the AI should teach!"
+        ]
+      },
+      "uploadingFiles": {
+        "title": "HOW TO UPLOAD FILES TO MODULES - Complete Tutorial",
+        "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the AI TUTOR will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
+        "why": "WHY upload files? Because the AI needs CONTENT to work with! If you don't upload files, the AI will only have its general knowledge. But if you upload YOUR lecture slides, YOUR notes, YOUR PDFs, the AI can answer questions SPECIFICALLY about YOUR course content!",
+        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 50MB per file.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "GO TO the MODULE PAGE",
+            "desc": "First, you need to GO TO THE MODULE where you want to upload files. Click 'Modules' in the left menu, then click on the NAME of the module you want. You'll see the MODULE DETAIL PAGE."
+          },
+          {
+            "number": "2",
+            "title": "FIND the 'FILES' or 'Module Files' section",
+            "desc": "Scroll down a bit on the module page. You'll see a section titled 'FILES' or 'Module Files' or something similar. This is where all uploaded files appear."
+          },
+          {
+            "number": "3",
+            "title": "CLICK the 'UPLOAD FILE' button",
+            "desc": "Look for a BUTTON (usually BLUE) that says 'UPLOAD FILE' or 'Upload File' or 'Add File'. Click on it! A FILE UPLOAD DIALOG will appear (either a popup or an inline form)."
+          },
+          {
+            "number": "4",
+            "title": "CHOOSE YOUR FILE - Method 1: CLICK to select",
+            "desc": "You'll see a box that says something like 'Click to select or drag file here'. CLICK on this box. A FILE BROWSER window will open (the same window you use to open files normally). NAVIGATE to where your file is saved on your computer, SELECT the file, and click 'OPEN'."
+          },
+          {
+            "number": "5",
+            "title": "CHOOSE YOUR FILE - Method 2: DRAG AND DROP (easier!)",
+            "desc": "Alternative method: Instead of clicking, you can DRAG the file from your computer (from a folder window) and DROP it directly into the upload box! This is often easier if you can see both windows at the same time."
+          },
+          {
+            "number": "6",
+            "title": "WAIT for the upload to complete",
+            "desc": "After selecting the file, you'll see a PROGRESS BAR (a line that fills up) showing the upload progress. WAIT until it reaches 100%! Don't close the page or click away while it's uploading! For large files (like a 40MB PDF), this might take 30 seconds to a few minutes depending on your internet speed."
+          }
+        ],
+        "whatYouShouldSee": "After uploading: You should see the FILE appear in the FILES LIST with: 1) File name, 2) File size (like '2.5 MB'), 3) Upload date/time, 4) Actions (DOWNLOAD and DELETE buttons). If you see your file in the list, SUCCESS!",
+        "commonMistakes": [
+          {
+            "mistake": "I selected a file but it says 'File type not supported'!",
+            "solution": "Check the file extension! Only these types are allowed: PDF, DOC, DOCX, TXT, PPT, PPTX. If you have a different file type (like .jpg, .png, .mp4, .zip), you need to CONVERT it first! For images, create a PDF with the images inside. For videos, you can't upload them directly - consider providing a link in a text/PDF file instead."
+          },
+          {
+            "mistake": "My file is too large and won't upload!",
+            "solution": "The maximum file size is 50MB! If your file is larger: 1) SPLIT it into smaller parts (like splitting a 100MB PDF into two 50MB PDFs), 2) COMPRESS the PDF (use online tools like 'smallpdf.com' or 'ilovepdf.com' to reduce size), 3) Remove unnecessary images/pages to reduce size."
+          },
+          {
+            "mistake": "The upload started but got stuck at 50% and won't continue!",
+            "solution": "This usually means internet connection problems! 1) Check your internet connection, 2) REFRESH the page (don't worry, it won't lose the module), 3) Try uploading again. If it keeps happening, try uploading at a different time or from a different location with better internet!"
+          },
+          {
+            "mistake": "I uploaded the wrong file and want to delete it!",
+            "solution": "Easy! Find the file in the FILES LIST. On the right side of the file row, you'll see ACTION BUTTONS. Click the RED DELETE ICON (🗑️ trash can). A confirmation will appear asking 'Are you sure?'. Click YES or CONFIRM. The file will be REMOVED!"
+          },
+          {
+            "mistake": "I uploaded a file but the AI isn't using it when answering questions!",
+            "solution": "Did you PREPARE THE MODULE after uploading? Uploading files is NOT enough! You need to click 'PREPARE MODULE' (see the 'How to Prepare Modules' section below) to send all files to the AI system. Only then will the AI be able to use them!"
+          },
+          {
+            "mistake": "I can't find the 'Upload File' button!",
+            "solution": "Make sure you're on the MODULE DETAIL PAGE (not the modules list). The upload button only appears on individual module pages. If you still don't see it, you might not have permission - check if you're an Admin Professor or if you're assigned to this module!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "Every time I try to upload, it says 'Error uploading file'!",
+            "solution": "Several possible causes: 1) Your internet disconnected mid-upload - check connection and try again, 2) The file is corrupted - try opening the file on your computer first to make sure it's not broken, 3) Server is down - wait a few minutes and try again, 4) File name has special characters - try renaming the file to something simple (like 'lecture1.pdf' instead of 'Aula #1 - Introdução @2024!.pdf')."
+          },
+          {
+            "problem": "I uploaded multiple files but only some appear in the list!",
+            "solution": "Did all of them finish uploading? Check that you WAITED for each upload to complete (100%) before uploading the next one! If you start multiple uploads at once, some might fail. Upload ONE AT A TIME to be safe!"
+          },
+          {
+            "problem": "Can I upload the same file to multiple modules?",
+            "solution": "YES! If you have a file that's relevant to multiple modules, you need to upload it SEPARATELY to each module. Files aren't shared between modules - each module has its own independent file library."
+          },
+          {
+            "problem": "I uploaded files but students say they can't see them!",
+            "solution": "Check two things: 1) Did you PREPARE THE MODULE? (See next section), 2) Does the token you gave students have 'Allow File Access' permission? If the token doesn't allow file access, students can chat but can't download files!"
+          },
+          {
+            "problem": "Can I upload folders/multiple files at once?",
+            "solution": "No! Currently you can only upload ONE FILE AT A TIME. If you have 10 files, you need to upload them one by one. This ensures each file is processed correctly. Take your time - you can upload them all in one sitting!"
+          }
+        ],
+        "tips": [
+          "💡 Use DESCRIPTIVE FILE NAMES! Instead of 'doc1.pdf', use 'Week1-Introduction-To-Programming.pdf'. This makes it easy to find files later!",
+          "💡 ORGANIZE files by topic or week! If you have 'Week 1 Lecture.pdf', 'Week 1 Exercises.pdf', 'Week 1 Solutions.pdf', they'll appear together in the list (usually alphabetically)!",
+          "💡 Upload files BEFORE preparing the module! It's more efficient to upload ALL your files first, THEN click 'Prepare Module' once. This saves time!",
+          "💡 You can DOWNLOAD your own files! Click the DOWNLOAD icon next to any file to get a copy back. This is useful if you need to check what version you uploaded!",
+          "💡 Regularly UPDATE old files! If you have an updated version of a lecture, DELETE the old one and UPLOAD the new one. Then RE-PREPARE the module so the AI uses the latest version!",
+          "💡 Don't upload EVERYTHING at once! Start with the most important files (like main lecture slides and required readings). You can always add more files later!"
+        ]
+      },
+      "creatingTokens": {
+        "title": "HOW TO CREATE TOKENS (Access Keys for Students) - COMPLETE TUTORIAL",
+        "whatIs": "A TOKEN is like a SPECIAL KEY or PASSWORD that students use to ACCESS the AI tutor! Think of it like this: You have a ROOM (the module) with an AI tutor inside. The TOKEN is the KEY that opens the door to that room! Each module can have MULTIPLE tokens (multiple keys) that you give to different groups of students.",
+        "why": "WHY create tokens? Because you need a way to CONTROL who can access your module! You don't want the whole internet using your AI tutor - you only want YOUR students! Tokens also let you: 1) Control what students can do (chat only? or also download files?), 2) Set expiration dates (so the token stops working after the semester ends), 3) Track usage (see how many times the token was used).",
+        "steps": [
+          {
+            "number": "1",
+            "title": "GO TO 'Module Tokens' page",
+            "desc": "Click on 'MODULE TOKENS' or 'Module Tokens' in the LEFT MENU. You'll see a page showing ALL your tokens (if you have any). If this is your first time, the list will be EMPTY."
+          },
+          {
+            "number": "2",
+            "title": "CLICK 'Generate Token' or 'Create Token'",
+            "desc": "Look for a BLUE BUTTON at the TOP RIGHT that says 'GENERATE TOKEN' or 'Create Token' or 'New Token'. CLICK on it! A FORM (dialog box) will open where you'll fill in the token details."
+          },
+          {
+            "number": "3",
+            "title": "SELECT which MODULE this token is for",
+            "desc": "The FIRST field is usually 'Module' or 'Select Module'. Click the DROPDOWN and SELECT which module this token will unlock. For example, if you want students to access your 'Introduction to Python - Week 1' module, select that module from the list!"
+          },
+          {
+            "number": "4",
+            "title": "GIVE the token a NAME",
+            "desc": "The second field is 'Token Name'. Give it a DESCRIPTIVE name so you know what it's for later! Example: 'Fall 2024 - Section A', 'Moodle Widget - CS101', 'WhatsApp Group Token'. Don't just write 'Token 1' - be specific about WHERE or WHO will use this token!"
+          },
+          {
+            "number": "5",
+            "title": "ADD a description (OPTIONAL but recommended)",
+            "desc": "There's usually a 'Description' field. This is OPTIONAL but helpful! Write something like: 'Token for CS101 students enrolled in Moodle course' or 'For private tutoring students'. This helps you remember the purpose of each token later!"
+          },
+          {
+            "number": "6",
+            "title": "SET expiration (OPTIONAL)",
+            "desc": "There's a field called 'Expires in (days)' or 'Expiration'. This is OPTIONAL! If you LEAVE IT EMPTY, the token will NEVER EXPIRE (works forever). If you FILL IT IN, enter a NUMBER of days. Example: '120' means the token will work for 120 days from today, then automatically stop working. Good for semester-based courses!"
+          },
+          {
+            "number": "7",
+            "title": "CONFIGURE PERMISSIONS - Allow Chat?",
+            "desc": "You'll see a CHECKBOX or TOGGLE that says 'Allow Chat' or 'Chat Permission'. If you CHECK THIS (turn it ON), students can ASK QUESTIONS to the AI tutor. If you UNCHECK IT (turn it OFF), students can only access files but can't chat. MOST OF THE TIME you want this ON!"
+          },
+          {
+            "number": "8",
+            "title": "CONFIGURE PERMISSIONS - Allow File Access?",
+            "desc": "Another CHECKBOX/TOGGLE says 'Allow File Access' or 'File Permission'. If you CHECK THIS, students can DOWNLOAD the files you uploaded to the module. If you UNCHECK IT, students can ask the AI about the files, but can't download them directly. Typically you want this ON too!"
+          },
+          {
+            "number": "9",
+            "title": "CLICK 'Create Token' or 'Generate'",
+            "desc": "After filling everything in, look for the BLUE BUTTON at the bottom that says 'CREATE TOKEN' or 'Generate' or 'Save'. CLICK on it! The system will create your token."
+          },
+          {
+            "number": "10",
+            "title": "COPY the token!",
+            "desc": "After creating, you'll see the TOKEN STRING (a long text like 'abc123xyz456...'). There should be a 'COPY' button or 'Copy Token' button. CLICK on it to copy the token to your clipboard. You'll need this to share with students!"
+          }
+        ],
+        "whatYouShouldSee": "After creating the token: You should see the token in the TOKEN LIST with: Name, Module, Status (Active), Expiration date (or 'Never'), Permissions (Chat/Files), and Actions. The token string itself is usually HIDDEN for security, but you can VIEW it or COPY it by clicking the view/copy icons.",
+        "distribution": {
+          "title": "HOW TO DISTRIBUTE TOKENS TO STUDENTS",
+          "methods": [
+            {
+              "method": "📚 MOODLE (or other LMS)",
+              "desc": "BEST METHOD for most professors! In Moodle: 1) Create an 'External Tool' or 'URL' resource, 2) Paste the widget URL with your token: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE, 3) Students click on it inside Moodle and the widget opens!"
+            },
+            {
+              "method": "📧 EMAIL",
+              "desc": "Send an email to all students with: 'Click this link to access the AI tutor: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students click the link and the widget opens in their browser!"
+            },
+            {
+              "method": "📱 WHATSAPP / TELEGRAM",
+              "desc": "Post the widget link in your class WhatsApp/Telegram group: 'AI Tutor link: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students can save it and access anytime!"
+            },
+            {
+              "method": "🌐 GOOGLE CLASSROOM",
+              "desc": "Post an 'Announcement' or 'Material' in Google Classroom with the widget URL. Students can access it directly from Classroom!"
+            },
+            {
+              "method": "📱 QR CODE (advanced)",
+              "desc": "Use a QR Code generator website (like qr-code-generator.com) to convert the widget URL into a QR CODE. Put the QR code on slides, printouts, or show on screen. Students scan with their phones to access!"
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "I created the token but students say it doesn't work!",
+            "solution": "Check these things: 1) Did you PREPARE THE MODULE? Tokens only work after the module is prepared! 2) Is 'Allow Chat' enabled? If not, students can't ask questions! 3) Did you copy the FULL token string? Sometimes people copy only part of it. 4) Has the token expired? Check the expiration date!"
+          },
+          {
+            "mistake": "I forgot to copy the token after creating it!",
+            "solution": "No problem! Go to the MODULE TOKENS page, find your token in the list, and click the VIEW icon (👁️ eye) or COPY icon (📋 clipboard) to see/copy the token again!"
+          },
+          {
+            "mistake": "Students can chat but say they can't download files!",
+            "solution": "Check the token PERMISSIONS! Go to Module Tokens, find your token, and click EDIT. Make sure 'Allow File Access' is CHECKED (turned ON). If it was off, turn it on and save. Students should now be able to download files!"
+          },
+          {
+            "mistake": "I want to create separate tokens for different sections of the same course!",
+            "solution": "GREAT IDEA! Create MULTIPLE tokens for the SAME MODULE with different names! Example: 'Section A - Morning Class', 'Section B - Afternoon Class'. This way you can track which section uses the AI more, and you can revoke one section's access without affecting the other!"
+          },
+          {
+            "mistake": "The token expired and students can't access anymore!",
+            "solution": "You have 2 options: 1) CREATE A NEW TOKEN (easier) - make a new token for the same module and share the new link with students, 2) EDIT THE EXISTING TOKEN (if the system allows) - but usually it's easier to just create a fresh token!"
+          },
+          {
+            "mistake": "I want to stop students from using the AI but keep the token for later!",
+            "solution": "You can DEACTIVATE or DELETE the token! Go to Module Tokens, find the token, and click the DELETE icon. This immediately stops the token from working. Students who try to use it will see an error. You can create a new token anytime to re-enable access!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "I can't create a token because there are no modules in the dropdown!",
+            "solution": "You need to CREATE A MODULE FIRST! Tokens are tied to modules. If you don't have any modules, go create one first (see 'How to Create Modules' section), THEN come back and create a token for that module!"
+          },
+          {
+            "problem": "The 'Generate Token' button is not appearing!",
+            "solution": "Check your permissions! Are you an Admin Professor or a Regular Professor assigned to this course? If you're a Regular Professor but not assigned to any courses, you won't see the button. Contact your Admin Professor!"
+          },
+          {
+            "problem": "Can I use the same token for multiple modules?",
+            "solution": "NO! Each token is for ONE SPECIFIC MODULE! If you have 5 modules, you need 5 tokens (or however many you want per module). This is intentional - it allows you to control access per module!"
+          },
+          {
+            "problem": "Students are complaining the widget is too slow!",
+            "solution": "This is usually NOT related to the token - it's either: 1) The student's internet is slow, 2) The AI system is overloaded (rare), 3) The module has HUGE files and the AI is processing them (happens with very large PDFs). Unfortunately you can't control this from the token side!"
+          },
+          {
+            "problem": "Can I see how many times a token was used?",
+            "solution": "YES! In the Module Tokens list, you should see a column like 'Usage Count' or 'Requests' that shows how many times the token was used. Click on VIEW for a token to see detailed stats!"
+          }
+        ],
+        "tips": [
+          "💡 Use DESCRIPTIVE NAMES! 'Fall 2024 Moodle Section A' is way better than 'Token 1'!",
+          "💡 Set EXPIRATION DATES for semester-based courses! Example: If your semester ends in 120 days, set expiration to 120 days. This prevents students from using it in future semesters with different content!",
+          "💡 Create BACKUP TOKENS! Make 2 tokens for the same module - one PRIMARY (share with students) and one BACKUP (keep secret). If you need to revoke the primary, you have a backup ready!",
+          "💡 Test the token YOURSELF before sharing with students! Copy the widget URL and open it in your browser. Ask the AI a question to make sure everything works!",
+          "💡 MONITOR token usage! Check the usage count periodically. If a token has 0 uses after a week, maybe students didn't get the link or don't know how to use it - check in with them!",
+          "💡 For LARGE CLASSES, use LMS integration (Moodle/Canvas)! Don't send individual links - embed the widget in your LMS so students access it where they're already comfortable!",
+          "💡 Keep a SPREADSHEET or NOTE of which tokens you created for which purpose! With many modules and tokens, it's easy to forget which is which!"
+        ]
+      },
+      "preparingModules": {
+        "title": "HOW TO PREPARE MODULES - Making Everything READY for Students!",
+        "whatIs": "PREPARING A MODULE is the FINAL STEP before students can use your AI tutor! Think of it like this: You've 1) Created the room (module), 2) Put books inside (uploaded files), 3) Made keys (tokens)... but the AI tutor hasn't READ the books yet! 'Preparing' = Sending ALL your files to OpenAI's system and creating the ACTUAL AI assistant that will chat with students!",
+        "why": "WHY is this necessary? Because uploading files to Tutoria is NOT the same as making them available to the AI! When you 'Prepare', the system: 1) Sends all your files to OpenAI, 2) Creates a specialized AI assistant with your System Prompt, 3) Links everything together so students can use it. Without preparing, the AI has NOTHING to work with!",
+        "prerequisites": {
+          "title": "BEFORE YOU PREPARE - Checklist",
+          "items": [
+            "✅ You MUST have created at least ONE TOKEN with 'Allow Chat' permission! (The system needs a token to create the AI assistant)",
+            "✅ You SHOULD have uploaded files to the module (optional but highly recommended - otherwise the AI only has general knowledge)",
+            "✅ You SHOULD have configured a System Prompt (optional but recommended - this tells the AI how to behave)"
+          ]
+        },
+        "steps": [
+          {
+            "number": "1",
+            "title": "GO TO the MODULE PAGE",
+            "desc": "Click on 'Modules' in the left menu, then click on the NAME of the module you want to prepare. You'll see the module detail page with files, tokens, etc."
+          },
+          {
+            "number": "2",
+            "title": "MAKE SURE you have at least 1 token created!",
+            "desc": "Look at the 'ACCESS TOKENS' section on the module page. You should see at least ONE token in the list! If the list is EMPTY, go create a token first (see the section above). You CANNOT prepare without a token!"
+          },
+          {
+            "number": "3",
+            "title": "FIND the 'PREPARE MODULE' button",
+            "desc": "Look at the TOP of the module page, near the 'Edit Module' button. You should see a button that says 'PREPARE MODULE' or 'Prepare'. It's usually GREEN or BLUE."
+          },
+          {
+            "number": "4",
+            "title": "CLICK 'Prepare Module'",
+            "desc": "Click the button! The system will start the preparation process. You'll see a LOADING indicator (spinning circle or similar)."
+          },
+          {
+            "number": "5",
+            "title": "WAIT for the process to complete",
+            "desc": "This usually takes 5-30 SECONDS depending on how many files you have! The system is: 1) Uploading all files to OpenAI, 2) Creating an AI assistant, 3) Configuring everything. DO NOT CLOSE THE PAGE while this is happening! Just wait patiently!"
+          }
+        ],
+        "whatYouShouldSee": "After successful preparation: You should see a GREEN SUCCESS MESSAGE that says something like 'Module prepared successfully!' or 'Files have been uploaded to OpenAI and the assistant is ready'. The module is now LIVE and students can use it!",
+        "testing": {
+          "title": "HOW TO TEST if it worked",
+          "steps": [
+            {
+              "number": "1",
+              "desc": "Copy one of your module TOKENS (from the Access Tokens section)"
+            },
+            {
+              "number": "2",
+              "desc": "Open a NEW BROWSER TAB or window"
+            },
+            {
+              "number": "3",
+              "desc": "Paste this URL (replacing YOUR_TOKEN_HERE with your actual token): https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE"
+            },
+            {
+              "number": "4",
+              "desc": "Press ENTER. The AI tutor widget should OPEN!"
+            },
+            {
+              "number": "5",
+              "desc": "Ask a question related to your uploaded files! Example: If you uploaded a PDF about Python variables, ask 'What are the different types of variables in Python?'"
+            },
+            {
+              "number": "6",
+              "desc": "Check if the AI responds using information from YOUR files (not just general knowledge). If it mentions specific things from your PDFs, SUCCESS! It's working!"
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "I clicked 'Prepare Module' but it says 'No tokens available'!",
+            "solution": "You need to CREATE A TOKEN FIRST! Go to the 'Module Tokens' page (or the Access Tokens section on the module page), create a token with 'Allow Chat' enabled, THEN try preparing again!"
+          },
+          {
+            "mistake": "It says 'Invalid token' when I try to prepare!",
+            "solution": "The token needs to have 'Allow Chat' permission ENABLED! Check your token - if 'Allow Chat' is turned OFF, turn it ON, save the token, and try preparing again!"
+          },
+          {
+            "mistake": "The preparation completed but the AI doesn't know about my files!",
+            "solution": "Did you upload the files BEFORE preparing? If you uploaded files AFTER preparing, the AI won't have them! You need to RE-PREPARE the module: Just click 'Prepare Module' again! This will update the AI with the new files!"
+          },
+          {
+            "mistake": "I made changes to the System Prompt and want the AI to use the new version!",
+            "solution": "RE-PREPARE THE MODULE! Whenever you change the System Prompt, you need to prepare again for the changes to take effect. Click 'Prepare Module' and it will update the AI assistant!"
+          },
+          {
+            "mistake": "The preparation got stuck and never completed!",
+            "solution": "Wait 2-3 minutes to be sure. If it's still stuck: 1) REFRESH the page, 2) Try clicking 'Prepare Module' again. If it fails repeatedly, it might be a temporary server issue - wait 10-15 minutes and try again, or contact support if it persists!"
+          },
+          {
+            "mistake": "Can I prepare the module multiple times?",
+            "solution": "YES! You can (and should) RE-PREPARE whenever you: 1) Add new files, 2) Delete files, 3) Change the System Prompt. Re-preparing updates everything! It doesn't hurt to prepare multiple times!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "The 'Prepare Module' button is not visible!",
+            "solution": "Possible reasons: 1) You're not on the MODULE DETAIL PAGE - make sure you clicked into an individual module, 2) You don't have permission - are you an Admin Professor or assigned to this module? 3) The module is already being prepared - wait for it to finish!"
+          },
+          {
+            "problem": "Preparation failed with error 'OpenAI error'!",
+            "solution": "This usually means: 1) OpenAI's system is temporarily down (rare) - wait and try again later, 2) One of your files is corrupted or incompatible - try removing files one by one and preparing again to identify the problematic file, 3) Contact support if it keeps happening!"
+          },
+          {
+            "problem": "How long does preparation usually take?",
+            "solution": "NORMAL: 5-30 seconds for modules with a few files. LONGER: 30-60 seconds for modules with many large files (like 10 PDFs of 40MB each). If it takes more than 2 minutes, something might be wrong - check your internet connection!"
+          },
+          {
+            "problem": "I deleted a file and re-prepared but the AI still mentions that file!",
+            "solution": "This shouldn't happen, but if it does: 1) Try preparing again (sometimes it needs 2 attempts), 2) Check if the file is REALLY deleted (refresh the page and check the files list), 3) If it persists, it might be an AI caching issue - wait 5-10 minutes and test again!"
+          },
+          {
+            "problem": "Does preparing cost money or use up credits?",
+            "solution": "That depends on your institution's setup! Some systems have unlimited preparations, others might have quotas. Check with your Super Administrator or the person who set up your Tutoria account. USUALLY there's no limit for professors!"
+          }
+        ],
+        "tips": [
+          "💡 PREPARE EARLY! Don't wait until the day before class starts! Prepare a week early and TEST thoroughly so you have time to fix issues!",
+          "💡 RE-PREPARE after ANY changes! Changed the System Prompt? Re-prepare. Added files? Re-prepare. This ensures students always have the latest version!",
+          "💡 TEST YOURSELF before sharing with students! After preparing, use the widget yourself! Ask questions, download files, make sure everything works!",
+          "💡 If you're updating files mid-semester, TELL STUDENTS! Send a message like 'I updated the study materials - the AI tutor now has the latest version!' so they know to ask questions about the new content!",
+          "💡 Keep a PREPARATION LOG! Write down when you prepared each module (like 'CS101-W1: Prepared on Jan 15, 2024 with 5 PDFs'). This helps track what's current!",
+          "💡 Don't OVER-PREPARE! You don't need to prepare every hour! Only re-prepare when you make actual changes. Preparing 50 times in a day doesn't make it better!",
+          "💡 If you have 10 modules, you need to prepare each one SEPARATELY! Preparing Module 1 doesn't automatically prepare Modules 2-10. Do them one by one!"
+        ],
+        "finalChecklist": {
+          "title": "FINAL CHECKLIST - Is My Module REALLY Ready for Students?",
+          "items": [
+            "✅ Module created with good name and description?",
+            "✅ System Prompt configured (AI knows how to teach)?",
+            "✅ Files uploaded (lecture slides, notes, readings)?",
+            "✅ At least 1 token created with proper permissions?",
+            "✅ Module PREPARED (clicked the Prepare button and saw success)?",
+            "✅ TESTED the widget yourself (asked questions, downloaded files)?",
+            "✅ Widget link shared with students (Moodle, email, WhatsApp, etc.)?",
+            "✅ Students know HOW to use the AI tutor (maybe provide instructions)?",
+            "✅ You're monitoring usage (checking token stats occasionally)?",
+            "✅ You have a plan to update content and re-prepare as needed?"
+          ]
+        }
+      },
+      "regularProfessor": {
+        "title": "Guide for Regular Professors",
+        "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
+        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating tokens, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
+      },
+        "viewing": {
+          "title": "Viewing Course Details",
+          "description": "The course detail page shows:",
+          "tabs": [
+            "Modules Tab: All modules for this course, filterable by semester and year",
+            "Professors Tab: All professors assigned to this course",
+            "Students Tab: All students enrolled in this course (when implemented)"
+          ],
+          "actions": [
+            "Add Module: Create a new module for this course",
+            "Edit Course: Update course information",
+            "View University: Navigate to your university page"
+          ]
+        },
+        "editing": {
+          "title": "Editing a Course",
+          "steps": [
+            "From the course detail page, click 'Edit Course'",
+            "Update the course name, code, or description",
+            "Click 'Save Changes' to update"
+          ]
+        },
+        "deleting": {
+          "title": "Deleting a Course",
+          "warning": "⚠️ Warning: Deleting a course will also delete all its modules and associated content. This cannot be undone.",
+          "steps": [
+            "From the Courses list, click the delete icon on the course row",
+            "Confirm the deletion",
+            "The course and all its modules will be permanently removed"
+          ]
+        }
+      },
+      "modules": {
+        "title": "Managing Modules",
+        "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and access tokens.",
+        "creating": {
+          "title": "Creating a Module",
+          "steps": [
+            "Navigate to Modules (/modules) or click 'Create Module' from the dashboard",
+            "Fill in the required information:",
+            "  • Module Name (e.g., 'Data Structures and Algorithms')",
+            "  • Module Code (e.g., 'CS101-M1')",
+            "  • Course (select from your courses)",
+            "  • Semester and Year (optional)",
+            "  • Description (optional but recommended)",
+            "Configure the AI Tutor (optional):",
+            "  • Choose a template or write a custom system prompt",
+            "  • The system prompt defines how the AI tutor behaves",
+            "  • Select the AI tutor language",
+            "  • You can improve the prompt up to 3 times in 72 hours",
+            "Click 'Create Module' to save"
+          ]
+        },
+        "aiTutor": {
+          "title": "Configuring the AI Tutor",
+          "description": "The AI tutor system prompt defines how the AI assistant responds to student questions.",
+          "templates": {
+            "title": "Quick Templates",
+            "list": [
+              "General Tutor: A helpful tutor for general learning",
+              "Programming Tutor: Specialized for programming and CS concepts",
+              "Math & Science Tutor: Focused on mathematical and scientific concepts",
+              "Research Assistant: Support for academic research and writing"
+            ]
+          },
+          "customizing": {
+            "title": "Writing Custom Prompts",
+            "tips": [
+              "Define the AI's role and expertise clearly",
+              "Specify teaching style and approach",
+              "Include guidelines for different question types",
+              "Set expectations for response format and tone",
+              "Consider your target audience and their level",
+              "Example: 'You are a patient programming teacher who uses everyday examples and always breaks down complex concepts into simple steps'"
+            ]
+          },
+          "improving": {
+            "title": "Improving Prompts with AI",
+            "description": "After saving a module, you can use the 'Improve with AI' feature to enhance your system prompt. You get 3 improvements per module every 72 hours."
+          }
+        },
+        "uploadingFiles": {
+          "title": "Uploading Files to Modules",
+          "description": "Upload educational materials that students can access through the AI tutor widget.",
+          "steps": [
+            "Navigate to the module detail page (/modules/{id})",
+            "Click 'Upload File' button",
+            "Select a file from your computer (or drag and drop)",
+            "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+            "Maximum file size: 50MB",
+            "Click 'Upload File' to add it to the module",
+            "Files are automatically indexed for the AI tutor"
+          ],
+          "managing": {
+            "title": "Managing Files",
+            "actions": [
+              "Download: Download a copy of any file",
+              "Delete: Remove a file from the module (with confirmation)"
+            ]
+          }
+        },
+        "preparingModule": {
+          "title": "Preparing a Module",
+          "description": "Before students can use the AI tutor, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
+          "prerequisites": [
+            "The module must have at least one active token with chat permission",
+            "The module should have an AI tutor system prompt configured",
+            "Files should be uploaded (optional but recommended)"
+          ],
+          "steps": [
+            "Navigate to the module detail page",
+            "Click 'Prepare Module' button",
+            "Wait for the preparation process to complete",
+            "Once prepared, the AI tutor is ready for students"
+          ],
+          "note": "Note: You can update files and re-prepare the module at any time."
+        }
+      },
+      "tokens": {
+        "title": "Managing Module Tokens",
+        "description": "Module tokens provide secure access to AI tutoring widgets. Each token controls what students can do (chat, access files, etc.).",
+        "creating": {
+          "title": "Creating a Token",
+          "steps": [
+            "Navigate to Module Tokens (/tokens)",
+            "Click 'Generate Token'",
+            "Fill in the token details:",
+            "  • Select the module",
+            "  • Token Name (e.g., 'Moodle Widget 2024')",
+            "  • Description (optional)",
+            "  • Expiration (optional, in days)",
+            "Configure permissions:",
+            "  • Allow Chat: Students can ask questions to the AI tutor",
+            "  • Allow File Access: Students can download module files",
+            "Click 'Create Token'",
+            "Copy the generated token - you'll need it for the widget"
+          ]
+        },
+        "using": {
+          "title": "Using Tokens",
+          "description": "Tokens are used to embed the AI tutor widget in your LMS or website.",
+          "example": "Widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE",
+          "security": "Keep tokens secure and only share them through official channels."
+        },
+        "managing": {
+          "title": "Managing Tokens",
+          "actions": [
+            "View: See token details and statistics",
+            "Edit: Update token name, description, or permissions",
+            "Copy: Copy the token to clipboard",
+            "Revoke/Delete: Disable a token permanently"
+          ]
+        },
+        "bestPractices": {
+          "title": "Token Best Practices",
+          "list": [
+            "Use descriptive names that indicate where the token is used",
+            "Set expiration dates for tokens used in temporary contexts",
+            "Disable chat or file access if not needed",
+            "Monitor token usage through the statistics",
+            "Revoke tokens that are no longer in use",
+            "Create separate tokens for different LMS courses or contexts"
+          ]
+        }
+      },
+      "professors": {
+        "title": "Managing Professors",
+        "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your university.",
+        "creating": {
+          "title": "Creating a Regular Professor",
+          "steps": [
+            "Navigate to Professors (/professors)",
+            "Click 'Add Professor'",
+            "Select 'Regular Professor' type",
+            "Fill in the professor information:",
+            "  • First Name and Last Name",
+            "  • Username (will be used for login)",
+            "  • Email address",
+            "  • Temporary Password",
+            "Your university is automatically selected",
+            "Select one or more courses to assign",
+            "Click 'Create Professor'",
+            "Copy and securely share the password setup link",
+            "The link expires in 72 hours"
+          ]
+        },
+        "assigning": {
+          "title": "Course Assignments",
+          "description": "Regular professors can only view and manage modules for courses they are assigned to. You can assign multiple courses during creation.",
+          "updating": "To change course assignments, you'll need to edit the professor from their detail page (coming soon)."
+        },
+        "managing": {
+          "title": "Managing Professor Accounts",
+          "actions": [
+            "Activate: Enable a deactivated professor account",
+            "Deactivate: Temporarily disable a professor account",
+            "Delete: Permanently remove a professor (super admin only)"
+          ]
+        }
+      },
+      "workflow": {
+        "title": "Recommended Workflow",
+        "description": "Follow this workflow for setting up a new course:",
+        "steps": [
+          "1. Create the course with name, code, and description",
+          "2. Create modules for the course (one per topic/unit)",
+          "3. Configure AI tutor prompts for each module",
+          "4. Upload educational files to modules",
+          "5. Create regular professors and assign them to the course",
+          "6. Generate module access tokens",
+          "7. Prepare modules for student use",
+          "8. Share widget links with students through your LMS"
+        ]
+      },
+      "bestPractices": {
+        "title": "Best Practices",
+        "list": [
+          "Use clear, descriptive names for courses and modules",
+          "Write detailed AI tutor prompts that match your teaching style",
+          "Upload comprehensive materials before preparing modules",
+          "Create separate tokens for different student groups or LMS courses",
+          "Regularly review and update module content",
+          "Use the 'Improve with AI' feature to refine tutor prompts",
+          "Set expiration dates on tokens for semester-based courses",
+          "Monitor professor and token usage regularly",
+          "Keep course codes consistent across semesters",
+          "Document your course structure and token usage"
+        ]
+      }
+    },
+    "regularProfessor": {
+      "title": "Professor Guide",
+      "subtitle": "Complete guide for course instructors",
+      "overview": {
+        "title": "Role Overview",
+        "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate access tokens for your students.",
+        "keyResponsibilities": "Key Responsibilities",
+        "responsibilities": [
+          "Creating and managing modules for assigned courses",
+          "Configuring AI tutor system prompts",
+          "Uploading educational content and files",
+          "Generating and managing module access tokens",
+          "Preparing modules for student use",
+          "Monitoring module usage and student engagement"
+        ]
+      },
+      "gettingStarted": {
+        "title": "Getting Started",
+        "step1Title": "1. First Login",
+        "step1Desc": "Use the password setup link provided by your administrator to set your password. After setting your password, you can log in with your username.",
+        "step2Title": "2. View Your Dashboard",
+        "step2Desc": "Your dashboard (/dashboard) shows quick actions: Create Module, View Courses, View Modules, and Manage Tokens.",
+        "step3Title": "3. View Your Courses",
+        "step3Desc": "Navigate to Courses (/courses) to see all courses you've been assigned to by your administrator.",
+        "step4Title": "4. Create Your First Module",
+        "step4Desc": "Select a course and create your first module to start building your educational content."
+      },
+      "courses": {
+        "title": "Working with Courses",
+        "description": "You can view details of courses you've been assigned to, but you cannot create or edit courses. Contact your admin professor if you need course changes.",
+        "viewing": {
+          "title": "Viewing Course Details",
+          "steps": [
+            "Navigate to Courses (/courses)",
+            "Click on any course you're assigned to",
+            "View course information, modules, professors, and students",
+            "Use the 'Add Module' button to create a new module for this course"
+          ]
+        },
+        "limitations": {
+          "title": "Course Limitations",
+          "description": "As a regular professor, you cannot:",
+          "list": [
+            "Create new courses",
+            "Edit existing courses",
+            "Delete courses",
+            "Assign other professors to courses"
+          ],
+          "note": "If you need to create or modify courses, contact your university's admin professor."
+        }
+      },
+      "modules": {
+        "title": "Managing Your Modules",
+        "description": "Modules are the core of your teaching content. You can create, edit, and manage modules for your assigned courses.",
+        "creating": {
+          "title": "Creating a Module",
+          "steps": [
+            "Navigate to Modules (/modules) or click 'Create Module'",
+            "Fill in the module details:",
+            "  • Module Name (e.g., 'Introduction to Python Programming')",
+            "  • Module Code (e.g., 'CS101-W1')",
+            "  • Select your course from the dropdown",
+            "  • Semester and Year (optional but recommended)",
+            "  • Description (optional but helpful for students)",
+            "Configure the AI Tutor:",
+            "  • Choose a quick template OR write a custom prompt",
+            "  • Define how the AI tutor should interact with students",
+            "  • Select the tutor's response language",
+            "Click 'Create Module' to save"
+          ]
+        },
+        "aiTutor": {
+          "title": "Configuring the AI Tutor",
+          "description": "The AI tutor is your virtual teaching assistant. Configure it to match your teaching style and course objectives.",
+          "templates": {
+            "title": "Using Templates",
+            "description": "Quick templates provide pre-written prompts for common teaching scenarios:",
+            "options": [
+              "General Tutor: All-purpose teaching assistant",
+              "Programming Tutor: For computer science and coding courses",
+              "Math & Science Tutor: For STEM subjects",
+              "Research Assistant: For research methods and academic writing"
+            ]
+          },
+          "customPrompts": {
+            "title": "Writing Custom Prompts",
+            "description": "Create a unique teaching personality for your AI tutor:",
+            "tips": [
+              "Start with: 'You are a [type] tutor for [subject]...'",
+              "Describe the teaching approach (e.g., 'patient', 'socratic', 'step-by-step')",
+              "Set boundaries (e.g., 'Don't give direct answers, guide students to solutions')",
+              "Specify response format (e.g., 'Use bullet points for lists')",
+              "Consider student level (e.g., 'Assume basic high school math knowledge')"
+            ],
+            "example": "Example: 'You are a patient Python programming tutor for beginners. Always explain concepts using real-world analogies. When a student asks for code, provide it with detailed comments explaining each line. Encourage students to try solutions before giving the answer.'"
+          },
+          "improving": {
+            "title": "Improving Prompts",
+            "steps": [
+              "After saving your module, click 'Edit Module'",
+              "Scroll to the AI Tutor Configuration section",
+              "Click 'Improve with AI' to enhance your prompt",
+              "The AI will rewrite your prompt to be more effective",
+              "You can improve up to 3 times per module every 72 hours",
+              "Review the improved prompt and save if satisfied"
+            ]
+          },
+          "language": {
+            "title": "Tutor Language Settings",
+            "description": "Select the language your AI tutor should use when responding to students. This is independent of the student's question language - the tutor will respond in the selected language regardless of how the question is asked."
+          }
+        },
+        "files": {
+          "title": "Managing Module Files",
+          "description": "Upload course materials that the AI tutor can reference when helping students.",
+          "uploading": {
+            "title": "Uploading Files",
+            "steps": [
+              "Navigate to your module detail page (/modules/{id})",
+              "Click 'Upload File' in the Files section",
+              "Select or drag and drop your file",
+              "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+              "Maximum size: 50MB per file",
+              "Click 'Upload File' to add it",
+              "The file will be indexed and available to the AI tutor"
+            ]
+          },
+          "bestPractices": {
+            "title": "File Upload Best Practices",
+            "list": [
+              "Upload lecture slides, notes, and readings",
+              "Include problem sets and examples",
+              "Add supplementary materials and references",
+              "Use clear, descriptive filenames",
+              "Upload files before preparing the module",
+              "Update files as your course progresses",
+              "Remove outdated materials regularly"
+            ]
+          },
+          "managing": {
+            "title": "Managing Files",
+            "actions": [
+              "Download: Get a copy of any uploaded file",
+              "Delete: Remove a file from the module (requires confirmation)"
+            ]
+          }
+        },
+        "preparing": {
+          "title": "Preparing Modules",
+          "description": "Before students can use your module, you must 'prepare' it. This process uploads your files to OpenAI and creates the AI assistant.",
+          "requirements": {
+            "title": "Prerequisites",
+            "list": [
+              "At least one active module access token with chat permission",
+              "AI tutor system prompt configured (recommended)",
+              "Files uploaded (optional but recommended)"
+            ]
+          },
+          "steps": {
+            "title": "Preparation Steps",
+            "list": [
+              "Ensure you have created a token for the module",
+              "Navigate to the module detail page",
+              "Click 'Prepare Module' button",
+              "Wait for the preparation to complete (usually a few seconds)",
+              "You'll see a success message when ready",
+              "The AI tutor is now ready for students"
+            ]
+          },
+          "updating": {
+            "title": "Updating a Prepared Module",
+            "description": "You can add or remove files at any time. After making changes, click 'Prepare Module' again to update the AI tutor with the new content."
+          }
+        },
+        "editing": {
+          "title": "Editing Modules",
+          "steps": [
+            "From the Modules list or module detail page, click 'Edit'",
+            "Update module information, AI tutor prompt, or settings",
+            "You cannot change the course after creation",
+            "Click 'Save Changes' to update"
+          ]
+        },
+        "deleting": {
+          "title": "Deleting Modules",
+          "warning": "⚠️ Warning: Deleting a module removes all its files, tokens, and student interaction history. This cannot be undone.",
+          "steps": [
+            "From the Modules list, click the delete icon",
+            "Confirm the deletion",
+            "The module and all its content will be permanently removed"
+          ]
+        }
+      },
+      "tokens": {
+        "title": "Module Access Tokens",
+        "description": "Tokens provide secure access to your AI tutor widget. Create tokens to share your modules with students.",
+        "creating": {
+          "title": "Creating a Token",
+          "steps": [
+            "Navigate to Module Tokens (/tokens)",
+            "Click 'Generate Token'",
+            "Select your module from the dropdown",
+            "Fill in token details:",
+            "  • Token Name (e.g., 'Fall 2024 - Section A')",
+            "  • Description (optional, e.g., 'For CS101 Moodle course')",
+            "  • Expiration in days (optional, e.g., 120 for semester-long)",
+            "Set permissions:",
+            "  • Allow Chat: Let students ask questions",
+            "  • Allow File Access: Let students download files",
+            "Click 'Create Token'",
+            "Copy the token - you'll need it for the widget"
+          ]
+        },
+        "permissions": {
+          "title": "Understanding Permissions",
+          "chat": {
+            "title": "Allow Chat",
+            "description": "When enabled, students can ask questions to the AI tutor. Disable this if you only want to share files without AI interaction."
+          },
+          "fileAccess": {
+            "title": "Allow File Access",
+            "description": "When enabled, students can download module files. Disable this if you want files to be AI-accessible only without direct downloads."
+          }
+        },
+        "using": {
+          "title": "Using Tokens in Your LMS",
+          "description": "Embed the AI tutor widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
+          "steps": [
+            "Copy your module token",
+            "Use the widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN",
+            "Add this URL as an external tool or iframe in your LMS",
+            "Students can now interact with your AI tutor through the LMS"
+          ]
+        },
+        "managing": {
+          "title": "Managing Tokens",
+          "viewing": {
+            "title": "Viewing Token Details",
+            "description": "Click the 'View' icon to see:",
+            "details": [
+              "Token string and quick copy",
+              "Module and course information",
+              "Creation and expiration dates",
+              "Usage statistics (request count)",
+              "Current status and permissions"
+            ]
+          },
+          "editing": {
+            "title": "Editing Tokens",
+            "description": "Update token name, description, or permissions without changing the token string."
+          },
+          "revoking": {
+            "title": "Revoking Tokens",
+            "description": "Delete a token to immediately revoke access. Students will no longer be able to use the widget with that token."
+          }
+        },
+        "bestPractices": {
+          "title": "Token Best Practices",
+          "list": [
+            "Create separate tokens for different sections or semesters",
+            "Use descriptive names that include course code and term",
+            "Set expiration dates aligned with your course end date",
+            "Monitor token usage to track student engagement",
+            "Revoke tokens after the course ends",
+            "Keep tokens secure - don't share them publicly",
+            "Test the widget with the token before sharing with students",
+            "Create a backup token in case you need to revoke the primary one"
+          ]
+        }
+      },
+      "workflow": {
+        "title": "Typical Workflow",
+        "description": "Follow this workflow for each module you create:",
+        "steps": [
+          "1. Create the module with basic information",
+          "2. Write or select an AI tutor system prompt",
+          "3. Upload your course materials (slides, notes, readings)",
+          "4. Review and improve the AI tutor prompt if needed",
+          "5. Create a module access token for your students",
+          "6. Prepare the module (uploads files to AI and creates assistant)",
+          "7. Test the widget with your token to ensure it works",
+          "8. Share the widget link in your LMS or with students",
+          "9. Monitor usage and update content as needed",
+          "10. At the end of the semester, revoke tokens or set new ones for next term"
+        ]
+      },
+      "troubleshooting": {
+        "title": "Troubleshooting",
+        "modulePreparation": {
+          "title": "Module Preparation Issues",
+          "noTokens": "Error: 'No tokens available' - Create at least one active token with chat permission before preparing.",
+          "invalidToken": "Error: 'Invalid token' - Ensure the token is active and has chat permission enabled.",
+          "preparationFailed": "If preparation fails, check that your files are under 50MB and in supported formats."
+        },
+        "fileUploads": {
+          "title": "File Upload Issues",
+          "tooLarge": "File too large: Split large PDFs or compress files to under 50MB.",
+          "unsupportedFormat": "Unsupported format: Convert files to PDF, DOC, DOCX, TXT, PPT, or PPTX.",
+          "uploadFailed": "Upload failed: Check your internet connection and try again."
+        },
+        "tokenIssues": {
+          "title": "Token Issues",
+          "widgetNotWorking": "Widget not working: Verify the token is active and the module is prepared.",
+          "chatDisabled": "Students can't chat: Enable 'Allow Chat' permission on the token.",
+          "filesNotAccessible": "Files not accessible: Enable 'Allow File Access' permission or re-prepare the module."
+        },
+        "permissions": {
+          "title": "Permission Issues",
+          "cannotCreateCourse": "Cannot create courses: Only admin professors can create courses. Ask your administrator.",
+          "cannotEditCourse": "Cannot edit courses: Contact your admin professor to modify course details.",
+          "cannotSeeModule": "Cannot see a module: Modules are filtered by your assigned courses. Ask to be assigned to the course."
+        }
+      },
+      "tips": {
+        "title": "Pro Tips",
+        "list": [
+          "Use the 'Improve with AI' feature to refine your tutor prompts - it often produces better results",
+          "Upload files in a logical order (e.g., Week 1, Week 2) for better AI organization",
+          "Test your AI tutor by asking it questions students might ask",
+          "Include course policies and FAQ documents for the AI to reference",
+          "Update your tutor prompt mid-semester if you notice areas for improvement",
+          "Create multiple tokens for A/B testing different AI configurations",
+          "Use semester/year in module names for easy identification across terms",
+          "Monitor which topics generate the most student questions",
+          "Share successful AI tutor prompts with your colleagues",
+          "Keep a backup of your system prompts for reuse in future semesters"
+        ]
+      }
+    },
+    "common": {
+      "passwordSetup": {
+        "title": "Setting Up Your Password",
+        "description": "When you receive a password setup link:",
+        "steps": [
+          "Click the link provided by your administrator",
+          "You'll be taken to the password setup page (/setup-password)",
+          "Your username will be pre-filled",
+          "Enter your new password (minimum 6 characters)",
+          "Confirm your password by entering it again",
+          "Click 'Set Password'",
+          "You'll be redirected to the login page",
+          "Log in with your username and new password"
+        ],
+        "note": "Note: Password setup links expire in 72 hours. If your link has expired, contact your administrator for a new one."
+      },
+      "profileSettings": {
+        "title": "Profile Settings",
+        "description": "Customize your Tutoria experience at /settings.",
+        "theme": {
+          "title": "Interface Theme",
+          "description": "Choose how Tutoria looks:",
+          "options": [
+            "System (Automatic): Matches your device's theme setting",
+            "Light: Always use light mode",
+            "Dark: Always use dark mode"
+          ]
+        },
+        "language": {
+          "title": "Interface Language",
+          "description": "Select your preferred language:",
+          "options": [
+            "English (United States)",
+            "Español (Spanish)",
+            "Português (Brasil)"
+          ],
+          "note": "The page will reload when you change the language."
+        }
+      },
+      "navigation": {
+        "title": "Navigating the System",
+        "sidebar": {
+          "title": "Sidebar Navigation",
+          "description": "The left sidebar provides access to main features:",
+          "common": [
+            "Dashboard: Your home page with quick actions",
+            "Module Tokens: View and manage access tokens"
+          ],
+          "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
+        },
+        "breadcrumbs": {
+          "title": "Breadcrumbs",
+          "description": "At the top of most pages, breadcrumbs show your current location and allow quick navigation back to parent pages."
+        },
+        "quickLinks": {
+          "title": "Quick Links",
+          "description": "Many pages include quick link buttons to related features (e.g., 'View Course' from a module page)."
+        }
+      },
+      "search": {
+        "title": "Using Search",
+        "description": "Most list pages (Courses, Modules, etc.) include a search box. Search looks through names, descriptions, and codes.",
+        "tips": [
+          "Use specific keywords for better results",
+          "Search is case-insensitive",
+          "Results update as you type",
+          "Combine search with sorting for best results"
+        ]
+      },
+      "tables": {
+        "title": "Working with Data Tables",
+        "features": {
+          "search": "Search: Filter results by keyword",
+          "sorting": "Sorting: Click column headers to sort (click again to reverse)",
+          "pagination": "Pagination: Navigate large datasets with page controls",
+          "rowsPerPage": "Rows per page: Change how many items are displayed",
+          "actions": "Actions: Quick buttons for View, Edit, Delete operations"
+        }
+      }
+    }
   }
-}

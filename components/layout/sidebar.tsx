@@ -48,6 +48,12 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       icon: Home,
     },
     {
+      label: t('tutorials'),
+      href: '/tutorials',
+      icon: BookOpen,
+      roles: ['super_admin', 'professor'],
+    },
+    {
       label: t('universities'),
       href: '/universities',
       icon: Building2,

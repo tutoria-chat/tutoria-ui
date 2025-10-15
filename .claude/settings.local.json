@@ -22,7 +22,11 @@
       "Bash(if [ -d .next ])",
       "Bash(then rm -rf .next)",
       "Bash(else echo \".next folder not found\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "Bash(node compare-translations.js)",
+      "Bash(del compare-translations.js)",
+      "Bash(node:*)",
+      "Bash(del add-translations.js verify-translations.js)"
     ],
     "deny": [],
     "ask": []
