@@ -1,0 +1,288 @@
+{
+  "Note": "This file contains the COMPLETE tutorials section for pt-br.json - INSERT from line 1037 onwards, replacing everything after the 'tutorials' key",
+  "tutorials": {
+    "title": "Tutoriais e Guias do Sistema",
+    "description": "Guias completos e super detalhados para ajudá-lo a dominar a plataforma Tutoria. Estes tutoriais foram criados pensando em você, mesmo que nunca tenha usado um sistema parecido antes. Cada passo está explicado com o máximo de detalhes possível!",
+    "tableOfContents": "Índice",
+    "quickLinks": "Links Rápidos",
+    "gettingStarted": "Começando",
+    "overview": "Visão Geral",
+    "searchPlaceholder": "Buscar tutoriais...",
+    "common": {
+      "whatIsThis": "O Que É Isso?",
+      "whyDoINeedThis": "Por Que Eu Preciso Disso?",
+      "stepByStep": "Passo a Passo",
+      "whatYouShouldSee": "O Que Você Deve Ver",
+      "commonMistakes": "Erros Comuns para Evitar",
+      "troubleshooting": "Solucionando Problemas",
+      "tips": "Dicas Importantes",
+      "note": "Observação",
+      "warning": "Atenção",
+      "example": "Exemplo",
+      "important": "IMPORTANTE",
+      "passwordSetup": {
+        "title": "Configurando Sua Senha pela Primeira Vez",
+        "whatIs": "Quando você recebe uma conta nova no sistema, o administrador envia para você um link especial. Este link é como uma chave que te leva para uma página onde você pode criar sua própria senha secreta. É muito importante que só VOCÊ saiba esta senha, nunca compartilhe com ninguém!",
+        "why": "A senha é necessária para proteger sua conta. Sem ela, qualquer pessoa poderia entrar e mexer nas suas coisas no sistema. Com sua senha, só VOCÊ pode acessar sua conta.",
+        "step1": {
+          "title": "Passo 1: Encontre o Link no Seu Email",
+          "desc": "Abra seu programa de email (pode ser Gmail, Outlook, ou outro). Procure por um email que veio do seu administrador. O email terá um título parecido com 'Bem-vindo ao Tutoria' ou 'Configure sua conta'. Dentro deste email, você verá um link azul e sublinhado. Clique neste link com o mouse (ou toque nele se estiver no celular)."
+        },
+        "step2": {
+          "title": "Passo 2: A Página de Configuração Vai Abrir",
+          "desc": "Seu navegador (Chrome, Firefox, Edge, Safari...) vai abrir uma nova página. No topo desta página, você verá escrito 'Defina sua Senha' em letras grandes. Não se preocupe se a página estiver em branco no início - é normal demorar alguns segundos para carregar completamente."
+        },
+        "step3": {
+          "title": "Passo 3: Veja Seu Nome de Usuário",
+          "desc": "Na página, você verá uma caixa com a palavra 'Nome de Usuário' em cima. Dentro desta caixa já estará escrito seu nome de usuário (por exemplo: joao.silva). VOCÊ NÃO PRECISA DIGITAR NADA AQUI. Esta caixa está bloqueada e mostra apenas o nome que foi criado para você. Anote este nome em algum lugar seguro, pois você vai usar ele toda vez que fizer login!"
+        },
+        "step4": {
+          "title": "Passo 4: Crie Sua Nova Senha",
+          "desc": "Mais abaixo, você verá outra caixa com as palavras 'Nova Senha' escritas em cima. Clique dentro desta caixa com o mouse (você vai ver uma linha piscando dentro da caixa - isso significa que ela está pronta para você digitar). Agora digite sua senha. IMPORTANTE: Quando você digitar, vai aparecer apenas bolinhas pretas (●●●●●) em vez das letras que você está digitando. Isso é NORMAL e serve para que ninguém que esteja olhando sua tela consiga ver sua senha."
+        },
+        "step5": {
+          "title": "Passo 5: Crie uma Senha Forte",
+          "desc": "Sua senha precisa ter pelo menos 6 caracteres (letras, números ou símbolos). Para ter uma senha realmente segura, misture letras maiúsculas (A, B, C...), letras minúsculas (a, b, c...), números (1, 2, 3...) e símbolos (@, #, $, %...). Exemplo de uma senha forte: 'Meudog@2024' ou 'C0mpras#Market'. Enquanto você digita, pode aparecer uma barrinha colorida embaixo mostrando se sua senha é 'Fraca' (vermelha), 'Média' (amarela) ou 'Forte' (verde). Tente fazer aparecer 'Forte'!"
+        },
+        "step6": {
+          "title": "Passo 6: Digite a Senha Novamente",
+          "desc": "Logo abaixo, você verá mais uma caixa com as palavras 'Confirmar Senha'. Clique dentro desta caixa e digite EXATAMENTE a mesma senha que você digitou antes. Isso é para ter certeza que você não cometeu nenhum erro de digitação. Se você cometer algum erro e as senhas não forem idênticas, vai aparecer uma mensagem em vermelho dizendo 'As senhas não coincidem'. Se isso acontecer, não entre em pânico! Apenas apague e digite novamente com mais cuidado. Quando as duas senhas estiverem iguais, vai aparecer uma mensagem em verde: 'As senhas coincidem' ✓"
+        },
+        "step7": {
+          "title": "Passo 7: Clique no Botão Azul",
+          "desc": "No final da página, você verá um botão retangular AZUL com o texto branco 'Definir Senha'. Clique neste botão com o mouse. Depois que você clicar, o botão vai mudar para mostrar 'Definindo senha...' e um círculo girando. Isso significa que o sistema está salvando sua nova senha. Aguarde alguns segundos (geralmente de 2 a 5 segundos) sem fechar a página ou clicar em nada."
+        },
+        "step8": {
+          "title": "Passo 8: Sucesso! Agora Você Vai Para a Tela de Login",
+          "desc": "Quando tudo der certo, vai aparecer uma caixinha verde no canto superior direito da tela com a mensagem 'Senha definida com sucesso!'. Logo depois, a página vai mudar automaticamente (você não precisa fazer nada) e vai te levar para a tela de Login. Isso pode demorar de 3 a 5 segundos. Se demorar mais, você pode clicar no texto azul 'Clique aqui para fazer login' que vai aparecer."
+        },
+        "commonMistakes": [
+          "ERRO: Digitar senhas diferentes nas duas caixas - SOLUÇÃO: Tenha cuidado ao digitar, se possível anote sua senha em um papel primeiro e depois copie ela com atenção nas duas caixas",
+          "ERRO: Usar uma senha muito curta (menos de 6 caracteres) - SOLUÇÃO: Adicione mais letras ou números até chegar a pelo menos 6 caracteres",
+          "ERRO: Esquecer a senha que acabou de criar - SOLUÇÃO: Assim que criar sua senha, anote em um lugar seguro (como um caderno que você guarda em casa). Nunca deixe anotada perto do computador!",
+          "ERRO: Tentar usar espaços no meio da senha - SOLUÇÃO: Evite usar espaços (a tecla grande embaixo do teclado). Use apenas letras, números e símbolos como @, #, $, %, !, etc.",
+          "ERRO: Clicar no botão azul antes de preencher as duas caixas - SOLUÇÃO: Certifique-se de que tanto a caixa 'Nova Senha' quanto 'Confirmar Senha' estão preenchidas antes de clicar no botão azul"
+        ],
+        "troubleshooting": [
+          "PROBLEMA: A página não abre quando clico no link - SOLUÇÃO: 1) Verifique se sua internet está funcionando, 2) Tente copiar o link do email e colar na barra de endereços do navegador, 3) Se não funcionar, peça ao administrador um novo link",
+          "PROBLEMA: Aparece mensagem 'Link inválido ou expirado' - SOLUÇÃO: O link que você recebeu só funciona por 72 horas (3 dias). Se passou desse tempo, entre em contato com o administrador e peça um novo link",
+          "PROBLEMA: Quando tento clicar no botão azul, nada acontece - SOLUÇÃO: 1) Verifique se você preencheu as duas caixas de senha, 2) Verifique se as senhas são idênticas, 3) Tente atualizar a página (aperte F5 no teclado) e preencha tudo novamente",
+          "PROBLEMA: A página fica carregando para sempre depois que clico no botão - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos, 2) Se continuar carregando, verifique sua conexão de internet, 3) Se sua internet estiver OK, feche a página e tente todo o processo novamente",
+          "PROBLEMA: Esqueci a senha que acabei de criar - SOLUÇÃO: Não tem problema! Na tela de Login, clique no texto 'Esqueceu sua senha?' e peça ajuda ao administrador para criar uma nova"
+        ],
+        "tips": [
+          "DICA: Escreva sua senha em um papel e guarde em um lugar seguro (como uma gaveta fechada em casa). Não deixe o papel grudado no monitor ou embaixo do teclado!",
+          "DICA: Use uma frase que você consegue lembrar facilmente, mas que outras pessoas não sabem. Por exemplo, se você tem um cachorro chamado Rex que nasceu em 2020, pode usar 'Rex@2020' como senha",
+          "DICA: NÃO use senhas muito óbvias como '123456', 'senha', seu nome, data de nascimento ou 'admin'. Essas são as primeiras que pessoas mal-intencionadas tentam!",
+          "DICA: Se você tem dificuldade para lembrar senhas, considere usar um gerenciador de senhas (pergunte a alguém de confiança sobre isso) ou manter um caderninho em casa com todas as suas senhas anotadas",
+          "DICA: Nunca compartilhe sua senha com NINGUÉM, nem mesmo com pessoas que dizem ser do suporte técnico. Ninguém legítimo nunca vai te pedir sua senha!"
+        ]
+      },
+      "navigation": {
+        "title": "Como Navegar no Sistema - Entendendo a Tela",
+        "whatIs": "Quando você entra no sistema Tutoria, você vai ver várias partes diferentes na tela. Vamos explicar cada uma delas como se você nunca tivesse visto um sistema parecido antes. Pense nessas partes como diferentes 'áreas' de uma casa - cada uma tem sua função específica.",
+        "sidebar": {
+          "title": "A Barra Lateral Esquerda (Menu Principal)",
+          "whatIs": "No lado ESQUERDO da sua tela, você vai ver uma coluna estreita com várias opções escritas. Esta é a barra lateral, também chamada de 'menu' ou 'sidebar'. É como o corredor de uma casa que te leva para diferentes cômodos.",
+          "where": "Olhe para o lado esquerdo da tela, desde o topo até embaixo. Você verá um fundo geralmente de cor escura ou clara (dependendo do tema que você escolheu) com várias palavras e ícones (desenhinhos) pequenos.",
+          "items": [
+            "Dashboard: É a primeira opção, geralmente com um ícone de gráfico ou quadrado. Clicando aqui você volta para a página inicial, onde vê o resumo de tudo.",
+            "Tutoriais e Guias: É onde você encontra estes textos que está lendo agora! Sempre que tiver dúvida, clique aqui.",
+            "Outras opções variam dependendo do seu perfil (se você é Super Administrador, Professor Administrador ou Professor Regular)."
+          ],
+          "howToClick": "Para ir para uma dessas páginas, simplesmente mova o mouse até o texto que você quer (o texto vai ficar destacado ou mudar de cor quando você passa o mouse por cima) e clique UMA VEZ com o botão esquerdo do mouse. A página vai carregar - aguarde de 1 a 3 segundos."
+        },
+        "topBar": {
+          "title": "A Barra Superior (Cabeçalho)",
+          "whatIs": "No TOPO da sua tela, você vai ver uma faixa horizontal que cruza toda a largura da tela. Esta é a barra superior ou 'cabeçalho'. Ela fica sempre visível, não importa em qual página você está.",
+          "rightCorner": "No canto superior DIREITO, você verá um círculo ou quadradinho com suas iniciais ou foto. Este é o menu do seu perfil.",
+          "clickProfile": "Quando você clicar neste círculo/quadrado, vai aparecer um menu pequeno caindo para baixo com opções como: 'Perfil' (ver suas informações), 'Configurações' (mudar tema, idioma), e 'Sair' (fazer logout do sistema)."
+        },
+        "breadcrumbs": {
+          "title": "As 'Migalhas de Pão' (Breadcrumbs)",
+          "whatIs": "Logo abaixo da barra superior, em algumas páginas, você verá um caminho de palavras separadas por uma barrinha inclinada assim: / ou setinha assim: >. Exemplo: 'Universidades > UNIFESP > Disciplinas'. Isso mostra onde você está no sistema.",
+          "why": "É como se fossem migalhas de pão te mostrando o caminho de volta (igual no conto João e Maria). Se você clicar em qualquer uma dessas palavras, você volta para aquela página. Por exemplo, se você está em 'Universidades > UNIFESP > Disciplinas > Matemática' e clica em 'Disciplinas', você volta para a lista de todas as disciplinas.",
+          "tip": "Se você se perder no sistema, olhe para estas 'migalhas' e clique em uma das palavras mais à esquerda para voltar para trás!"
+        },
+        "mainContent": {
+          "title": "Área de Conteúdo Principal (Centro da Tela)",
+          "whatIs": "No meio da sua tela, ocupando a maior parte do espaço, você verá o conteúdo principal da página. É aqui que aparecem as informações, formulários, tabelas, botões e tudo que você precisa trabalhar.",
+          "pageTitle": "Cada página tem um TÍTULO grande no topo (geralmente com letras maiores e em negrito) que te diz onde você está. Por exemplo: 'Disciplinas', 'Criar Módulo', 'Configurações do Perfil', etc.",
+          "buttons": "Você verá botões coloridos (geralmente azuis, verdes, vermelhos ou cinzas) espalhados pela página. Cada cor tem um significado: AZUL geralmente significa 'criar novo' ou 'salvar', VERDE significa 'confirmar' ou 'ok', VERMELHO significa 'deletar' ou 'cancelar', CINZA significa 'voltar' ou 'fechar'."
+        },
+        "tables": {
+          "title": "Entendendo as Tabelas (Listas de Informações)",
+          "whatIs": "Muitas páginas mostram informações em formato de tabela - igual uma planilha do Excel, com linhas e colunas. Cada linha horizontal mostra informações sobre um item (por exemplo, uma disciplina, um professor, um módulo). Cada coluna vertical mostra um tipo específico de informação (nome, data de criação, ações, etc.).",
+          "header": "No topo da tabela, você verá os CABEÇALHOS (os nomes das colunas) em cor diferente ou em negrito. Exemplos: 'Nome', 'Disciplina', 'Criado em', 'Ações'.",
+          "clickHeader": "VOCÊ PODE clicar nos cabeçalhos para ORDENAR a tabela. Por exemplo, se você clicar em 'Nome', a lista vai se reorganizar em ordem alfabética (A a Z). Se clicar de novo no mesmo lugar, vai inverter (Z a A).",
+          "search": "Acima da tabela, você geralmente verá uma caixinha com um ícone de lupa e as palavras 'Buscar...' ou 'Pesquisar...'. Se você digitar algo aqui, a tabela vai filtrar e mostrar apenas os itens que têm o que você digitou.",
+          "pagination": "Embaixo da tabela, você pode ver algo como 'Mostrando 1 até 10 de 50 registros' e setinhas para avançar ou voltar páginas. Isso acontece quando há muitos itens para mostrar todos de uma vez."
+        },
+        "actions": {
+          "title": "Botões de Ação nas Tabelas",
+          "whatIs": "Na última coluna de cada tabela (geralmente chamada 'Ações'), você verá ícones pequenos ou botões. Estes são os botões de ação que permitem fazer algo com aquele item específico.",
+          "common": [
+            "Ícone de OLHO (👁️): Clique para VER detalhes daquele item",
+            "Ícone de LÁPIS (✏️): Clique para EDITAR/modificar aquele item",
+            "Ícone de LIXEIRA (🗑️): Clique para DELETAR/remover aquele item (CUIDADO: normalmente não dá para desfazer!)"
+          ],
+          "tip": "Antes de clicar em qualquer ícone, passe o mouse por cima dele e aguarde 1 segundo. Vai aparecer uma caixinha pequena (tooltip) explicando o que aquele botão faz!"
+        }
+      },
+      "profileSettings": {
+        "title": "Configurações do Seu Perfil - Personalizando o Sistema",
+        "whatIs": "As Configurações do Perfil são como o painel de controle da sua conta. É onde você pode mudar como o sistema aparece para você e em qual idioma você quer usar o sistema.",
+        "why": "Cada pessoa é diferente! Algumas pessoas preferem cores escuras na tela (modo escuro), outras preferem cores claras. Algumas pessoas preferem ver tudo em Português, outras em Inglês ou Espanhol. As configurações permitem que você deixe o sistema do jeito que é mais confortável para VOCÊ!",
+        "howToAccess": {
+          "title": "Como Chegar nas Configurações",
+          "step1": "Olhe para o canto superior DIREITO da tela",
+          "step2": "Você verá um círculo ou quadrado pequeno com suas iniciais ou foto",
+          "step3": "Clique UMA VEZ neste círculo/quadrado",
+          "step4": "Vai aparecer um menu pequeno descendo",
+          "step5": "Neste menu, clique na opção 'Configurações' (pode estar escrito 'Settings' se estiver em inglês)",
+          "step6": "Uma nova página vai abrir com as suas opções de configuração"
+        },
+        "theme": {
+          "title": "Mudando o Tema (Cores do Sistema)",
+          "whatIs": "O tema controla se o sistema aparece com fundo claro (como uma folha de papel branca) ou fundo escuro (como uma lousa preta).",
+          "location": "Na página de Configurações, você verá uma seção chamada 'Tema da Interface' com três opções em forma de cartões (quadrados grandes).",
+          "options": [
+            {
+              "name": "Sistema (Automático)",
+              "desc": "Se você escolher esta opção, o sistema vai seguir a configuração do seu computador ou celular. Se seu aparelho estiver em modo escuro, o sistema ficará escuro. Se estiver em modo claro, o sistema ficará claro. É como se o sistema 'copiasse' o que seu computador está usando."
+            },
+            {
+              "name": "Claro",
+              "desc": "Se você escolher esta opção, o sistema SEMPRE vai mostrar com fundo branco/claro, não importa o que seu computador esteja usando. Recomendado para ambientes bem iluminados ou se você tem dificuldade para ler em fundos escuros."
+            },
+            {
+              "name": "Escuro",
+              "desc": "Se você escolher esta opção, o sistema SEMPRE vai mostrar com fundo escuro/preto, não importa o que seu computador esteja usando. Recomendado se você usa o sistema à noite ou em lugares com pouca luz, ou se você acha que o fundo escuro cansa menos seus olhos."
+            }
+          ],
+          "howToChange": "Para escolher um tema, simplesmente clique no quadrado da opção que você quer. O quadrado vai ficar destacado (geralmente com uma borda colorida ou um marcador de seleção ✓). Você vai notar que a mudança acontece IMEDIATAMENTE - você não precisa clicar em nenhum botão 'Salvar' para o tema!"
+        },
+        "language": {
+          "title": "Mudando o Idioma do Sistema",
+          "whatIs": "Esta opção permite que você escolha em qual idioma quer ver TODOS os textos do sistema - botões, mensagens, títulos, tudo!",
+          "location": "Na página de Configurações, abaixo da seção de Tema, você verá 'Idioma da Interface' com três opções.",
+          "options": [
+            {
+              "name": "Português (Brasil)",
+              "desc": "Todo o sistema aparece em Português do Brasil"
+            },
+            {
+              "name": "English (United States)",
+              "desc": "Todo o sistema aparece em Inglês dos Estados Unidos"
+            },
+            {
+              "name": "Español",
+              "desc": "Todo o sistema aparece em Espanhol"
+            }
+          ],
+          "howToChange": [
+            "Clique no quadrado da opção de idioma que você quer",
+            "A opção vai ficar destacada com uma borda ou marca ✓",
+            "Diferente do tema, quando você muda o idioma você PRECISA clicar no botão AZUL 'Salvar Configurações' no final da página",
+            "Depois de clicar em 'Salvar Configurações', a página vai RECARREGAR automaticamente (vai piscar e recarregar sozinha - não se assuste!)",
+            "Quando a página terminar de carregar novamente (demora de 2 a 5 segundos), você verá que TODO o sistema agora está no novo idioma escolhido"
+          ],
+          "important": "IMPORTANTE: Se você escolher um idioma que não entende bem, você pode ter dificuldade para navegar no sistema! Se isso acontecer, tente lembrar onde fica a opção de Configurações (canto superior direito > menu > Configurações) e repita o processo para voltar para Português."
+        },
+        "saving": {
+          "title": "Salvando Suas Configurações",
+          "step1": "Depois de escolher suas opções de idioma, role a página para baixo até o final",
+          "step2": "Você verá dois botões: um CINZA escrito 'Cancelar' e um AZUL escrito 'Salvar Configurações'",
+          "step3": "Se você mudou de ideia e NÃO quer salvar as mudanças, clique no botão CINZA 'Cancelar'. Você voltará para a página anterior sem salvar nada.",
+          "step4": "Se você QUER salvar as mudanças, clique no botão AZUL 'Salvar Configurações'",
+          "step5": "O botão vai mudar para 'Salvando...' com um círculo girando",
+          "step6": "Aguarde alguns segundos. Uma mensagem verde vai aparecer no canto superior dizendo 'Configurações salvas com sucesso!'",
+          "step7": "Se você mudou o idioma, a página vai recarregar automaticamente"
+        },
+        "commonMistakes": [
+          "ERRO: Escolher um idioma que você não entende - SOLUÇÃO: Sempre escolha o idioma que você lê melhor. Se escolher errado, use as 'migalhas de pão' visuais para voltar às configurações e mudar novamente.",
+          "ERRO: Esquecer de clicar em 'Salvar Configurações' - SOLUÇÃO: Apenas mudanças de TEMA são automáticas. Mudanças de IDIOMA precisam que você clique no botão azul 'Salvar Configurações'!",
+          "ERRO: Fechar a página antes de salvar - SOLUÇÃO: Se você fechar a página ou clicar em outro lugar antes de salvar, suas mudanças serão perdidas. Sempre certifique-se de ver a mensagem verde 'Configurações salvas' antes de sair."
+        ],
+        "tips": [
+          "DICA: Experimente os dois temas (claro e escuro) para ver qual você acha mais confortável. Não tenha medo de testar - você pode mudar quantas vezes quiser!",
+          "DICA: Se você trabalha em diferentes momentos do dia, considere usar 'Sistema (Automático)'. Assim, o sistema ficará claro durante o dia e escuro à noite automaticamente.",
+          "DICA: As configurações que você escolher aqui são salvas na SUA conta. Se você fizer login em outro computador, suas configurações virão junto!"
+        ]
+      }
+    },
+    "superAdmin": {
+      "title": "🔑 Guia do Super Administrador",
+      "subtitle": "Guia completo e SUPER detalhado para administradores do sistema. Este guia vai te ensinar TUDO, passo a passo, como se você nunca tivesse visto um sistema assim!",
+      "overview": {
+        "title": "Entendendo Seu Papel - O Que É um Super Administrador?",
+        "whatIs": "Pense no sistema Tutoria como um grande prédio de apartamentos. Cada apartamento é uma universidade diferente. O Super Administrador seria como o SÍNDICO GERAL do prédio inteiro - a pessoa que tem as chaves de tudo e pode gerenciar tudo no sistema.",
+        "description": "Como Super Administrador, você é a pessoa com MAIS poder no sistema. Você pode criar universidades, criar outros administradores, ver tudo que está acontecendo, e muito mais. É uma grande responsabilidade!",
+        "keyResponsibilities": "Suas Principais Responsabilidades (O Que Você Faz)",
+        "responsibilities": [
+          "🏛️ Criar e gerenciar universidades - Você cria 'prédios' novos no sistema (cada universidade é como um prédio independente)",
+          "👥 Criar outros super administradores - Você pode criar contas para outras pessoas que vão te ajudar a administrar tudo",
+          "🎓 Criar professores administradores para cada universidade - São como os 'síndicos de cada apartamento', que cuidam de uma universidade específica",
+          "🔍 Monitorar tudo no sistema - Você pode ver estatísticas, procurar por qualquer coisa, acompanhar atividades",
+          "🔐 Manter o sistema seguro - Garantir que apenas pessoas autorizadas tenham acesso",
+          "📊 Ver relatórios e estatísticas gerais - Quantas universidades existem, quantos professores, quantos módulos, etc."
+        ],
+        "important": "IMPORTANTE: Com grandes poderes vêm grandes responsabilidades! Tenha muito cuidado ao criar ou deletar coisas, pois suas ações afetam o sistema inteiro e todos os usuários."
+      },
+      "firstLogin": {
+        "title": "Seu Primeiro Login - Como Entrar no Sistema pela Primeira Vez",
+        "whatIs": "O 'login' é o processo de entrar no sistema usando seu nome de usuário e senha. É como usar uma chave para abrir a porta da sua casa - só você tem esta chave específica.",
+        "step1": {
+          "title": "Passo 1: Abra o Sistema no Seu Navegador",
+          "desc": "Primeiro, abra seu navegador de internet. Um navegador é o programa que você usa para acessar sites (pode ser Google Chrome, Mozilla Firefox, Microsoft Edge, Safari, ou outro). No topo do navegador, você verá uma barra comprida onde pode digitar endereços de sites - é a 'barra de endereços' (geralmente fica branca ou cinza clara). Clique DENTRO desta barra com o mouse (ela vai ficar destacada com uma bordinha azul ou preta) e digite o endereço completo que o administrador te passou. Geralmente é algo como 'tutoria.suaempresa.com' ou similar. Digite tudo em letras MINÚSCULAS e sem espaços. Depois de digitar, aperte a tecla ENTER no seu teclado (a tecla grande que geralmente fica do lado direito do teclado, às vezes tem uma setinha curvada ↵)."
+        },
+        "step2": {
+          "title": "Passo 2: A Tela de Login Vai Aparecer",
+          "whatYouShouldSee": "Depois de alguns segundos (de 2 a 10 segundos dependendo da velocidade da sua internet), você verá uma tela com as seguintes coisas: 1) Um título grande 'Bem-vindo ao Tutoria' ou 'Welcome to Tutoria' no centro ou parte superior da tela, 2) Duas caixas retangulares brancas ou cinza claras (uma em cima da outra) no centro da tela, 3) Um botão grande de cor AZUL escrito 'Entrar' ou 'Sign In' abaixo das caixas, 4) A tela pode ter um fundo com cores suaves (azul claro, cinza, branco) ou imagens relacionadas a educação (livros, computadores, pessoas estudando). Se você vê tudo isso, parabéns! A tela carregou corretamente!"
+        },
+        "step3": {
+          "title": "Passo 3: Digite Seu Nome de Usuário na Primeira Caixa",
+          "desc": "A primeira caixa retangular terá escrito em cima dela (em letras pequenas) 'Usuário / Email', 'Username / Email', ou algo similar. Leve o mouse até esta primeira caixa e clique UMA VEZ dentro dela com o botão esquerdo do mouse. Você saberá que clicou no lugar certo porque: 1) A caixa vai ficar com uma borda destacada (geralmente azul), 2) Dentro da caixa vai aparecer uma linha vertical piscando | (chamada de cursor) - isso significa que a caixa está pronta para você digitar. Agora digite seu nome de usuário EXATAMENTE como foi te passado pelo administrador. Por exemplo: se disseram que seu usuário é 'joao.silva', você deve digitar exatamente 'joao.silva' (com todas as letras MINÚSCULAS, com o pontinho no meio, sem espaços antes ou depois). MUITO IMPORTANTE: O sistema diferencia letras maiúsculas de minúsculas! Isso significa que 'Joao.Silva' (com J e S maiúsculos) é considerado DIFERENTE de 'joao.silva' (tudo minúsculo). Portanto, preste muita atenção em como seu usuário foi escrito!"
+        },
+        "step4": {
+          "title": "Passo 4: Digite Sua Senha na Segunda Caixa",
+          "desc": "Agora olhe para a segunda caixa retangular (que está logo abaixo da primeira). Esta caixa terá escrito em cima 'Senha' ou 'Password'. Leve o mouse até esta caixa e clique UMA VEZ dentro dela. Novamente, você verá a bordinha destacada e a linha vertical piscando. Agora digite sua senha com cuidado. ATENÇÃO: Quando você começar a digitar, você NÃO VAI VER as letras que está digitando! Em vez disso, para cada letra/número que você digitar, vai aparecer uma bolinha preta (●) ou um asterisco (*). Exemplo: se sua senha é 'MinhaSenh@123', você verá ●●●●●●●●●●●● na tela. Isso é completamente NORMAL e é um recurso de segurança - serve para impedir que alguém que esteja olhando por cima do seu ombro ou vendo sua tela consiga ler sua senha. Por isso, digite devagar e com atenção para não errar nenhuma letra!"
+        },
+        "step5": {
+          "title": "Passo 5: Confira Se Digitou Tudo Corretamente",
+          "desc": "Antes de clicar no botão para entrar, é bom verificar algumas coisas: 1) Olhe para a primeira caixa (usuário) - você consegue ver o nome de usuário escrito lá? Está escrito exatamente como deveria estar, sem erros de digitação? 2) Veja se não tem espaços antes ou depois do nome de usuário (às vezes sem querer apertamos a barra de espaço), 3) Para a senha, como você não consegue ver o que digitou (só vê as bolinhas), tente lembrar se digitou todos os caracteres. Se tiver alguma dúvida, é melhor apagar tudo da caixa de senha e digitar novamente do zero. Para apagar, clique dentro da caixa de senha, segure a tecla 'Backspace' (a tecla que geralmente tem uma setinha apontando para esquerda ←, fica no canto superior direito do teclado) até sumir todas as bolinhas, e digite sua senha novamente."
+        },
+        "step6": {
+          "title": "Passo 6: Clique no Botão Azul 'Entrar'",
+          "desc": "Depois de ter certeza que digitou o usuário e a senha corretamente, é hora de clicar no botão para entrar no sistema. Logo abaixo das duas caixas, você verá um botão retangular grande de cor AZUL com o texto 'Entrar' escrito em branco (ou 'Sign In' se estiver em inglês). Mova o mouse até este botão azul (quando você passar o mouse por cima, o botão pode ficar um pouco mais escuro ou brilhar - isso é normal) e clique UMA VEZ com o botão esquerdo do mouse. IMEDIATAMENTE depois que você clicar, você vai notar algumas mudanças: 1) O botão azul vai mudar o texto de 'Entrar' para 'Entrando...' (ou 'Signing in...'), 2) Pode aparecer um círculo ou animação girando no botão, 3) O botão pode ficar levemente apagado (isso significa que você não pode clicar nele de novo). Tudo isso significa que o sistema está verificando se seu usuário e senha estão corretos. AGUARDE de 2 a 8 segundos sem clicar em mais nada, sem fechar a página, sem apertar nenhuma tecla - apenas espere pacientemente!"
+        },
+        "step7": {
+          "title": "Passo 7: Bem-vindo ao Sistema! Você Está Dentro!",
+          "whatYouShouldSee": "Se seu usuário e senha estavam corretos, a tela vai mudar completamente e você vai ser levado automaticamente para o 'Dashboard' (painel principal/página inicial do sistema). A nova tela que você está vendo agora tem várias partes diferentes, vamos entender cada uma: 1) BEM NO TOPO, em letras grandes e em negrito, você verá uma mensagem de boas-vindas personalizada com seu nome, tipo assim: 'Bem-vindo de volta, João!' ou 'Welcome back, João!', 2) DO LADO ESQUERDO da tela, você verá uma coluna estreita (menu lateral/sidebar) com várias opções escritas como: 'Dashboard', 'Tutoriais e Guias', 'Universidades', 'Administração', etc. Cada opção pode ter um ícone (deseninho) do lado, 3) NO CENTRO da tela, você verá caixas coloridas (geralmente azuis, verdes ou roxas) mostrando números e estatísticas - essas são informações resumidas sobre o sistema, 4) Também no centro, você pode ver uma seção chamada 'Ações Rápidas' com botões como 'Criar Universidade', 'Ver Universidades', etc., 5) NO CANTO SUPERIOR DIREITO, você verá um círculo ou quadradinho pequeno com suas iniciais (primeira letra do seu nome e sobrenome) ou uma foto. Se você vê tudo isso, PARABÉNS! Você conseguiu entrar no sistema com sucesso!"
+        },
+        "commonMistakes": [
+          "ERRO: Digitar o usuário com letras maiúsculas/minúsculas erradas - SOLUÇÃO: O sistema diferencia maiúsculas de minúsculas! Se seu usuário é 'joao.silva' (tudo minúsculo), você DEVE digitar tudo minúsculo. Verificar com quem criou sua conta a forma EXATA de escrever seu usuário, incluindo quais letras são maiúsculas e quais são minúsculas.",
+          "ERRO: Colocar espaços antes ou depois do nome de usuário - SOLUÇÃO: Às vezes, sem perceber, apertamos a barra de espaço antes de começar a digitar ou depois de terminar. O sistema entende esses espaços como parte do usuário, então 'joao.silva' é diferente de ' joao.silva' (com espaço antes) ou 'joao.silva ' (com espaço depois). Se você receber erro de login, apague tudo da caixa de usuário e digite novamente, tomando MUITO cuidado para não apertar espaço.",
+          "ERRO: Estar com a tecla Caps Lock (Bloqueio de Maiúsculas) ativada - SOLUÇÃO: No seu teclado, existe uma tecla chamada 'Caps Lock' (geralmente fica do lado esquerdo, acima da tecla Shift). Quando você aperta esta tecla, ela 'trava' e faz com que TODAS as letras que você digita saiam em MAIÚSCULA, mesmo sem você apertar Shift. Muitos teclados têm uma luzinha que acende quando Caps Lock está ativado. Antes de digitar seu usuário e senha, olhe para seu teclado e veja se a luzinha do Caps Lock está APAGADA. Se estiver acesa, aperte a tecla Caps Lock UMA VEZ para desligar, e então digite seu usuário e senha normalmente.",
+          "ERRO: Copiar e colar o usuário/senha de um email ou documento e vir com caracteres invisíveis - SOLUÇÃO: Às vezes, quando você copia texto de um email ou documento do Word/PDF e cola no sistema, podem vir 'caracteres invisíveis' junto (espaços especiais, quebras de linha, etc) que você não consegue ver mas que fazem o login falhar. A solução mais segura é NÃO copiar e colar - digite manualmente, letra por letra, seu usuário e senha.",
+          "ERRO: Digitar a senha errada mas não perceber (porque só vê bolinhas) - SOLUÇÃO: Como a senha é mostrada apenas como bolinhas (●●●●), você não consegue ver se digitou errado. Se o login falhar, o problema pode estar na senha. Tente: 1) Clicar na caixa de senha, 2) Segurar a tecla Backspace até apagar todas as bolinhas, 3) Digitar sua senha novamente, DEVAGAR, prestando atenção em cada tecla que aperta. Se possível, diga em voz baixa cada letra/número enquanto digita para ajudar a não errar.",
+          "ERRO: Tentar fazer login com uma conta que ainda não foi ativada no sistema - SOLUÇÃO: Se você acabou de receber seu usuário e senha, mas o administrador ainda não terminou de configurar sua conta no sistema, você pode receber erro mesmo digitando tudo certo. Entre em contato com a pessoa que criou sua conta e confirme que ela está ativada e pronta para uso."
+        ],
+        "troubleshooting": [
+          "PROBLEMA: A página do sistema não carrega (fica em branco branca ou mostra mensagem 'não foi possível acessar este site') - SOLUÇÃO PASSO A PASSO: 1) Primeiro, verifique sua conexão com a internet: tente abrir outro site conhecido (como www.google.com) para ver se sua internet está funcionando. Se o Google abrir, sua internet está OK. Se não abrir nada, o problema é sua internet - reconecte ao WiFi ou cabo de rede. 2) Verifique se você digitou o endereço do sistema corretamente na barra de endereços. Peça ao administrador para te enviar o endereço novamente e copie/cole com cuidado. 3) Tente atualizar/recarregar a página apertando a tecla F5 no seu teclado (fica na parte de cima do teclado, na fileira de teclas F1, F2, F3... procure a que tem F5 escrito). 4) Tente fechar completamente o navegador (clique no X no canto superior direito) e abrir novamente. 5) Tente abrir o sistema em outro navegador (se você tentou no Chrome, tente no Firefox ou Edge). 6) Se nada funcionar, entre em contato com o suporte técnico - pode ser um problema no servidor.",
+          "PROBLEMA: Aparece mensagem 'Login failed', 'Falha no login' ou 'Credenciais inválidas' - SOLUÇÃO PASSO A PASSO: 1) Esta mensagem significa que o usuário OU a senha que você digitou está incorreto. Veja a mensagem de erro que aparece (geralmente em uma caixinha vermelha ou laranja no topo da tela ou abaixo do botão). 2) Verifique LETRA POR LETRA o usuário que você digitou. Compare com o que foi te passado. Certifique-se que não tem espaços extras antes ou depois. 3) Sobre a senha: como você não consegue ver o que digitou, vamos fazer assim: clique na caixa de senha, apague tudo (segure Backspace), e digite sua senha NOVAMENTE, mas desta vez MUITO devagar, falando baixinho cada caractere que você digita. 4) Verifique se o Caps Lock não está ativado (veja se a luzinha está apagada). 5) Tente fazer login novamente. Se AINDA assim não funcionar, entre em contato com quem criou sua conta - pode ser que o usuário ou senha que te passaram estejam errados, ou sua conta pode precisar ser reativada.",
+          "PROBLEMA: Depois que clico em 'Entrar', a página fica carregando para sempre (o círculo girando nunca para) - SOLUÇÃO PASSO A PASSO: 1) Primeiro, tenha paciência e aguarde pelo menos 30 a 40 segundos completos (conte devagar até 40). Às vezes, se a internet está lenta ou o servidor está ocupado, pode demorar mais que o normal. 2) Se depois de 40 segundos ainda estiver carregando, verifique sua conexão de internet - ela pode ter caído no meio do processo. 3) Se sua internet estiver OK, pare o carregamento: aperte a tecla ESC no teclado OU clique no X que aparece onde antes era o ícone de recarregar na barra de endereços. 4) Tente fazer login novamente desde o início. 5) Se continuar travando, feche o navegador completamente, abra novamente, acesse o sistema e tente mais uma vez. 6) Se o problema persistir, pode ser um problema técnico no servidor - entre em contato com o suporte técnico.",
+          "PROBLEMA: Consigo fazer login mas vou para uma página em branco ou com erro - SOLUÇÃO: 1) Primeiro, tente atualizar a página (aperte F5). 2) Se continuar em branco, limpe o cache do navegador. Para fazer isso no Chrome: aperte Ctrl+Shift+Delete juntos (no Windows) ou Cmd+Shift+Delete (no Mac), vai abrir uma janela, marque a opção 'Imagens e arquivos em cache', e clique em 'Limpar dados'. Depois, feche e abra o navegador novamente e faça login. 3) Tente fazer login usando o 'modo anônimo' ou 'janela privada' do navegador (no Chrome: Ctrl+Shift+N, no Firefox: Ctrl+Shift+P). Se funcionar no modo anônimo, o problema é cache ou cookies. 4) Se nada resolver, entre em contato com o suporte técnico.",
+          "PROBLEMA: Esqueci completamente minha senha, não lembro de jeito nenhum - SOLUÇÃO: 1) Na tela de login, procure um texto azul (um link) escrito 'Esqueceu sua senha?' ou 'Forgot your password?' geralmente localizado abaixo do botão 'Entrar'. 2) Clique neste link. 3) Siga as instruções na próxima tela. OU, se não achar esse link, entre em contato diretamente com o administrador do sistema ou a pessoa que criou sua conta. Explique que você esqueceu sua senha. Eles poderão gerar um novo link de redefinição de senha para você (igual ao link que você usou quando criou sua senha pela primeira vez). O administrador vai te enviar este novo link por email, e aí você poderá criar uma nova senha seguindo os mesmos passos que fez da primeira vez."
+        ],
+        "tips": [
+          "DICA: Depois que conseguir entrar no sistema pela primeira vez, ADICIONE o endereço aos FAVORITOS do seu navegador para não precisar digitar toda vez. Para fazer isso: 1) Com a página do sistema aberta, aperte Ctrl+D no teclado (no Windows) ou Cmd+D (no Mac), 2) Vai aparecer uma janelinha perguntando onde salvar o favorito, 3) Escolha a pasta 'Barra de Favoritos' ou apenas clique em 'Concluído'. Pronto! Agora você terá um atalho na parte de cima do navegador para acessar o sistema com apenas um clique!",
+          "DICA: Guarde seu nome de usuário e senha em um lugar MUITO seguro. Você pode: 1) Anotar em um caderno que você guarda trancado em casa (NUNCA deixe anotado perto do computador!), 2) Usar um gerenciador de senhas (pergunte a alguém de TI sobre isso se interessar), 3) Salvar em um arquivo protegido por senha no seu computador pessoal. O importante é ter como recuperar essas informações se você esquecer!",
+          "DICA: Nunca, em hipótese alguma, compartilhe sua senha com NINGUÉM, nem mesmo com pessoas que dizem ser do 'suporte técnico' ou 'administrador'. Pessoas legítimas do suporte NUNCA vão te pedir sua senha - eles podem redefinir sua senha, mas nunca vão pedir para você contar qual é. Se alguém pedir sua senha, desconfie!",
+          "DICA: Se você usa o sistema com frequência e o computador é seu (não é compartilhado com outras pessoas), quando o navegador perguntar 'Deseja salvar a senha?', você pode clicar em 'Salvar'. Isso vai fazer com que da próxima vez que você acessar o sistema, o usuário e senha já venham preenchidos automaticamente - você só precisa clicar em 'Entrar'. MAS ATENÇÃO: Só faça isso se o computador for exclusivamente seu e tiver senha de login! Se outras pessoas usam o mesmo computador, NÃO salve a senha no navegador, senão elas poderão acessar sua conta!",
+          "DICA: Se você tem dificuldade para lembrar senhas complexas, tente criar uma 'frase-senha' usando a primeira letra de cada palavra de uma frase que você lembra facilmente. Exemplo: a frase 'Meu cachorro Rex nasceu em 2020 e é muito feliz!' vira a senha 'McRne2020eémf!' - difícil para outras pessoas adivinharem, mas fácil para você lembrar!"
+        ]
+      }
+    }
+  }
+}

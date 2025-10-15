@@ -953,6 +953,7 @@
   },
   "sidebar": {
     "dashboard": "Dashboard",
+    "tutorials": "Tutoriais e Guias",
     "universities": "Universidades",
     "myUniversity": "Minha Universidade",
     "moduleTokens": "Tokens de Módulos",
@@ -1020,7 +1021,7 @@
       "professor": "Professor"
     },
     "loading": "Carregando...",
-    "noData": "No data available",
+    "noData": "Nenhum dado disponível",
     "error": "Erro",
     "success": "Sucesso"
   },
@@ -1032,5 +1033,1095 @@
     "unexpectedError": "Ocorreu um erro inesperado. Tente novamente ou volte para a página inicial.",
     "tryAgain": "Tentar Novamente",
     "homePage": "Página Inicial"
+  },
+  "tutorials": {
+    "title": "Tutoriais e Guias do Sistema",
+    "description": "Guias completos e detalhados para ajudá-lo a dominar a plataforma Tutoria. Estes tutoriais foram criados pensando em você, mesmo que nunca tenha usado um sistema parecido antes.",
+    "tableOfContents": "Índice",
+    "quickLinks": "Links Rápidos",
+    "gettingStarted": "Começando",
+    "overview": "Visão Geral",
+    "searchPlaceholder": "Buscar tutoriais...",
+    "common": {
+      "whatIsThis": "O Que É Isso?",
+      "whyDoINeedThis": "Por Que Eu Preciso Disso?",
+      "stepByStep": "Passo a Passo",
+      "whatYouShouldSee": "O Que Você Deve Ver",
+      "commonMistakes": "Erros Comuns para Evitar",
+      "troubleshooting": "Solucionando Problemas",
+      "tips": "Dicas Importantes",
+      "note": "Observação",
+      "warning": "Atenção",
+      "example": "Exemplo",
+      "important": "IMPORTANTE",
+      "passwordSetup": {
+        "title": "Configurando Sua Senha pela Primeira Vez",
+        "whatIs": "Quando você recebe uma conta nova no sistema, o administrador envia para você um link especial. Este link é como uma chave que te leva para uma página onde você pode criar sua própria senha secreta. É muito importante que só VOCÊ saiba esta senha, nunca compartilhe com ninguém!",
+        "why": "A senha é necessária para proteger sua conta. Sem ela, qualquer pessoa poderia entrar e mexer nas suas coisas no sistema. Com sua senha, só VOCÊ pode acessar sua conta.",
+        "step1": {
+          "title": "Passo 1: Encontre o Link no Seu Email",
+          "desc": "Abra seu programa de email (pode ser Gmail, Outlook, ou outro). Procure por um email que veio do seu administrador. O email terá um título parecido com 'Bem-vindo ao Tutoria' ou 'Configure sua conta'. Dentro deste email, você verá um link azul e sublinhado. Clique neste link com o mouse (ou toque nele se estiver no celular)."
+        },
+        "step2": {
+          "title": "Passo 2: A Página de Configuração Vai Abrir",
+          "desc": "Seu navegador (Chrome, Firefox, Edge, Safari...) vai abrir uma nova página. No topo desta página, você verá escrito 'Defina sua Senha' em letras grandes. Não se preocupe se a página estiver em branco no início - é normal demorar alguns segundos para carregar completamente."
+        },
+        "step3": {
+          "title": "Passo 3: Veja Seu Nome de Usuário",
+          "desc": "Na página, você verá uma caixa com a palavra 'Nome de Usuário' em cima. Dentro desta caixa já estará escrito seu nome de usuário (por exemplo: joao.silva). VOCÊ NÃO PRECISA DIGITAR NADA AQUI. Esta caixa está bloqueada e mostra apenas o nome que foi criado para você. Anote este nome em algum lugar seguro, pois você vai usar ele toda vez que fizer login!"
+        },
+        "step4": {
+          "title": "Passo 4: Crie Sua Nova Senha",
+          "desc": "Mais abaixo, você verá outra caixa com as palavras 'Nova Senha' escritas em cima. Clique dentro desta caixa com o mouse (você vai ver uma linha piscando dentro da caixa - isso significa que ela está pronta para você digitar). Agora digite sua senha. IMPORTANTE: Quando você digitar, vai aparecer apenas bolinhas pretas (●●●●●) em vez das letras que você está digitando. Isso é NORMAL e serve para que ninguém que esteja olhando sua tela consiga ver sua senha."
+        },
+        "step5": {
+          "title": "Passo 5: Crie uma Senha Forte",
+          "desc": "Sua senha precisa ter pelo menos 6 caracteres (letras, números ou símbolos). Para ter uma senha realmente segura, misture letras maiúsculas (A, B, C...), letras minúsculas (a, b, c...), números (1, 2, 3...) e símbolos (@, #, $, %...). Exemplo de uma senha forte: 'Meudog@2024' ou 'C0mpras#Market'. Enquanto você digita, pode aparecer uma barrinha colorida embaixo mostrando se sua senha é 'Fraca' (vermelha), 'Média' (amarela) ou 'Forte' (verde). Tente fazer aparecer 'Forte'!"
+        },
+        "step6": {
+          "title": "Passo 6: Digite a Senha Novamente",
+          "desc": "Logo abaixo, você verá mais uma caixa com as palavras 'Confirmar Senha'. Clique dentro desta caixa e digite EXATAMENTE a mesma senha que você digitou antes. Isso é para ter certeza que você não cometeu nenhum erro de digitação. Se você cometer algum erro e as senhas não forem idênticas, vai aparecer uma mensagem em vermelho dizendo 'As senhas não coincidem'. Se isso acontecer, não entre em pânico! Apenas apague e digite novamente com mais cuidado. Quando as duas senhas estiverem iguais, vai aparecer uma mensagem em verde: 'As senhas coincidem' ✓"
+        },
+        "step7": {
+          "title": "Passo 7: Clique no Botão Azul",
+          "desc": "No final da página, você verá um botão retangular AZUL com o texto branco 'Definir Senha'. Clique neste botão com o mouse. Depois que você clicar, o botão vai mudar para mostrar 'Definindo senha...' e um círculo girando. Isso significa que o sistema está salvando sua nova senha. Aguarde alguns segundos (geralmente de 2 a 5 segundos) sem fechar a página ou clicar em nada."
+        },
+        "step8": {
+          "title": "Passo 8: Sucesso! Agora Você Vai Para a Tela de Login",
+          "desc": "Quando tudo der certo, vai aparecer uma caixinha verde no canto superior direito da tela com a mensagem 'Senha definida com sucesso!'. Logo depois, a página vai mudar automaticamente (você não precisa fazer nada) e vai te levar para a tela de Login. Isso pode demorar de 3 a 5 segundos. Se demorar mais, você pode clicar no texto azul 'Clique aqui para fazer login' que vai aparecer."
+        },
+        "commonMistakes": [
+          "ERRO: Digitar senhas diferentes nas duas caixas - SOLUÇÃO: Tenha cuidado ao digitar, se possível anote sua senha em um papel primeiro e depois copie ela com atenção nas duas caixas",
+          "ERRO: Usar uma senha muito curta (menos de 6 caracteres) - SOLUÇÃO: Adicione mais letras ou números até chegar a pelo menos 6 caracteres",
+          "ERRO: Esquecer a senha que acabou de criar - SOLUÇÃO: Assim que criar sua senha, anote em um lugar seguro (como um caderno que você guarda em casa). Nunca deixe anotada perto do computador!",
+          "ERRO: Tentar usar espaços no meio da senha - SOLUÇÃO: Evite usar espaços (a tecla grande embaixo do teclado). Use apenas letras, números e símbolos como @, #, $, %, !, etc.",
+          "ERRO: Clicar no botão azul antes de preencher as duas caixas - SOLUÇÃO: Certifique-se de que tanto a caixa 'Nova Senha' quanto 'Confirmar Senha' estão preenchidas antes de clicar no botão azul"
+        ],
+        "troubleshooting": [
+          "PROBLEMA: A página não abre quando clico no link - SOLUÇÃO: 1) Verifique se sua internet está funcionando, 2) Tente copiar o link do email e colar na barra de endereços do navegador, 3) Se não funcionar, peça ao administrador um novo link",
+          "PROBLEMA: Aparece mensagem 'Link inválido ou expirado' - SOLUÇÃO: O link que você recebeu só funciona por 72 horas (3 dias). Se passou desse tempo, entre em contato com o administrador e peça um novo link",
+          "PROBLEMA: Quando tento clicar no botão azul, nada acontece - SOLUÇÃO: 1) Verifique se você preencheu as duas caixas de senha, 2) Verifique se as senhas são idênticas, 3) Tente atualizar a página (aperte F5 no teclado) e preencha tudo novamente",
+          "PROBLEMA: A página fica carregando para sempre depois que clico no botão - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos, 2) Se continuar carregando, verifique sua conexão de internet, 3) Se sua internet estiver OK, feche a página e tente todo o processo novamente",
+          "PROBLEMA: Esqueci a senha que acabei de criar - SOLUÇÃO: Não tem problema! Na tela de Login, clique no texto 'Esqueceu sua senha?' e peça ajuda ao administrador para criar uma nova"
+        ],
+        "tips": [
+          "DICA: Escreva sua senha em um papel e guarde em um lugar seguro (como uma gaveta fechada em casa). Não deixe o papel grudado no monitor ou embaixo do teclado!",
+          "DICA: Use uma frase que você consegue lembrar facilmente, mas que outras pessoas não sabem. Por exemplo, se você tem um cachorro chamado Rex que nasceu em 2020, pode usar 'Rex@2020' como senha",
+          "DICA: NÃO use senhas muito óbvias como '123456', 'senha', seu nome, data de nascimento ou 'admin'. Essas são as primeiras que pessoas mal-intencionadas tentam!",
+          "DICA: Se você tem dificuldade para lembrar senhas, considere usar um gerenciador de senhas (pergunte a alguém de confiança sobre isso) ou manter um caderninho em casa com todas as suas senhas anotadas",
+          "DICA: Nunca compartilhe sua senha com NINGUÉM, nem mesmo com pessoas que dizem ser do suporte técnico. Ninguém legítimo nunca vai te pedir sua senha!"
+        ]
+      },
+      "navigation": {
+        "title": "Como Navegar no Sistema - Entendendo a Tela",
+        "whatIs": "Quando você entra no sistema Tutoria, você vai ver várias partes diferentes na tela. Vamos explicar cada uma delas como se você nunca tivesse visto um sistema parecido antes. Pense nessas partes como diferentes 'áreas' de uma casa - cada uma tem sua função específica.",
+        "sidebar": {
+          "title": "A Barra Lateral Esquerda (Menu Principal)",
+          "whatIs": "No lado ESQUERDO da sua tela, você vai ver uma coluna estreita com várias opções escritas. Esta é a barra lateral, também chamada de 'menu' ou 'sidebar'. É como o corredor de uma casa que te leva para diferentes cômodos.",
+          "where": "Olhe para o lado esquerdo da tela, desde o topo até embaixo. Você verá um fundo geralmente de cor escura ou clara (dependendo do tema que você escolheu) com várias palavras e ícones (desenhinhos) pequenos.",
+          "items": [
+            "Dashboard: É a primeira opção, geralmente com um ícone de gráfico ou quadrado. Clicando aqui você volta para a página inicial, onde vê o resumo de tudo.",
+            "Tutoriais e Guias: É onde você encontra estes textos que está lendo agora! Sempre que tiver dúvida, clique aqui.",
+            "Outras opções variam dependendo do seu perfil (se você é Super Administrador, Professor Administrador ou Professor Regular)."
+          ],
+          "howToClick": "Para ir para uma dessas páginas, simplesmente mova o mouse até o texto que você quer (o texto vai ficar destacado ou mudar de cor quando você passa o mouse por cima) e clique UMA VEZ com o botão esquerdo do mouse. A página vai carregar - aguarde de 1 a 3 segundos."
+        },
+        "topBar": {
+          "title": "A Barra Superior (Cabeçalho)",
+          "whatIs": "No TOPO da sua tela, você vai ver uma faixa horizontal que cruza toda a largura da tela. Esta é a barra superior ou 'cabeçalho'. Ela fica sempre visível, não importa em qual página você está.",
+          "rightCorner": "No canto superior DIREITO, você verá um círculo ou quadradinho com suas iniciais ou foto. Este é o menu do seu perfil.",
+          "clickProfile": "Quando você clicar neste círculo/quadrado, vai aparecer um menu pequeno caindo para baixo com opções como: 'Perfil' (ver suas informações), 'Configurações' (mudar tema, idioma), e 'Sair' (fazer logout do sistema)."
+        },
+        "breadcrumbs": {
+          "title": "As 'Migalhas de Pão' (Breadcrumbs)",
+          "whatIs": "Logo abaixo da barra superior, em algumas páginas, você verá um caminho de palavras separadas por uma barrinha inclinada assim: / ou setinha assim: >. Exemplo: 'Universidades > UNIFESP > Disciplinas'. Isso mostra onde você está no sistema.",
+          "why": "É como se fossem migalhas de pão te mostrando o caminho de volta (igual no conto João e Maria). Se você clicar em qualquer uma dessas palavras, você volta para aquela página. Por exemplo, se você está em 'Universidades > UNIFESP > Disciplinas > Matemática' e clica em 'Disciplinas', você volta para a lista de todas as disciplinas.",
+          "tip": "Se você se perder no sistema, olhe para estas 'migalhas' e clique em uma das palavras mais à esquerda para voltar para trás!"
+        },
+        "mainContent": {
+          "title": "Área de Conteúdo Principal (Centro da Tela)",
+          "whatIs": "No meio da sua tela, ocupando a maior parte do espaço, você verá o conteúdo principal da página. É aqui que aparecem as informações, formulários, tabelas, botões e tudo que você precisa trabalhar.",
+          "title": "Cada página tem um TÍTULO grande no topo (geralmente com letras maiores e em negrito) que te diz onde você está. Por exemplo: 'Disciplinas', 'Criar Módulo', 'Configurações do Perfil', etc.",
+          "buttons": "Você verá botões coloridos (geralmente azuis, verdes, vermelhos ou cinzas) espalhados pela página. Cada cor tem um significado: AZUL geralmente significa 'criar novo' ou 'salvar', VERDE significa 'confirmar' ou 'ok', VERMELHO significa 'deletar' ou 'cancelar', CINZA significa 'voltar' ou 'fechar'."
+        },
+        "tables": {
+          "title": "Entendendo as Tabelas (Listas de Informações)",
+          "whatIs": "Muitas páginas mostram informações em formato de tabela - igual uma planilha do Excel, com linhas e colunas. Cada linha horizontal mostra informações sobre um item (por exemplo, uma disciplina, um professor, um módulo). Cada coluna vertical mostra um tipo específico de informação (nome, data de criação, ações, etc.).",
+          "header": "No topo da tabela, você verá os CABEÇALHOS (os nomes das colunas) em cor diferente ou em negrito. Exemplos: 'Nome', 'Disciplina', 'Criado em', 'Ações'.",
+          "clickHeader": "VOCÊ PODE clicar nos cabeçalhos para ORDENAR a tabela. Por exemplo, se você clicar em 'Nome', a lista vai se reorganizar em ordem alfabética (A a Z). Se clicar de novo no mesmo lugar, vai inverter (Z a A).",
+          "search": "Acima da tabela, você geralmente verá uma caixinha com um ícone de lupa e as palavras 'Buscar...' ou 'Pesquisar...'. Se você digitar algo aqui, a tabela vai filtrar e mostrar apenas os itens que têm o que você digitou.",
+          "pagination": "Embaixo da tabela, você pode ver algo como 'Mostrando 1 até 10 de 50 registros' e setinhas para avançar ou voltar páginas. Isso acontece quando há muitos itens para mostrar todos de uma vez."
+        },
+        "actions": {
+          "title": "Botões de Ação nas Tabelas",
+          "whatIs": "Na última coluna de cada tabela (geralmente chamada 'Ações'), você verá ícones pequenos ou botões. Estes são os botões de ação que permitem fazer algo com aquele item específico.",
+          "common": [
+            "Ícone de OLHO (👁️): Clique para VER detalhes daquele item",
+            "Ícone de LÁPIS (✏️): Clique para EDITAR/modificar aquele item",
+            "Ícone de LIXEIRA (🗑️): Clique para DELETAR/remover aquele item (CUIDADO: normalmente não dá para desfazer!)"
+          ],
+          "tip": "Antes de clicar em qualquer ícone, passe o mouse por cima dele e aguarde 1 segundo. Vai aparecer uma caixinha pequena (tooltip) explicando o que aquele botão faz!"
+        }
+      },
+      "profileSettings": {
+        "title": "Configurações do Seu Perfil - Personalizando o Sistema",
+        "whatIs": "As Configurações do Perfil são como o painel de controle da sua conta. É onde você pode mudar como o sistema aparece para você e em qual idioma você quer usar o sistema.",
+        "why": "Cada pessoa é diferente! Algumas pessoas preferem cores escuras na tela (modo escuro), outras preferem cores claras. Algumas pessoas preferem ver tudo em Português, outras em Inglês ou Espanhol. As configurações permitem que você deixe o sistema do jeito que é mais confortável para VOCÊ!",
+        "howToAccess": {
+          "title": "Como Chegar nas Configurações",
+          "step1": "Olhe para o canto superior DIREITO da tela",
+          "step2": "Você verá um círculo ou quadrado pequeno com suas iniciais ou foto",
+          "step3": "Clique UMA VEZ neste círculo/quadrado",
+          "step4": "Vai aparecer um menu pequeno descendo",
+          "step5": "Neste menu, clique na opção 'Configurações' (pode estar escrito 'Settings' se estiver em inglês)",
+          "step6": "Uma nova página vai abrir com as suas opções de configuração"
+        },
+        "theme": {
+          "title": "Mudando o Tema (Cores do Sistema)",
+          "whatIs": "O tema controla se o sistema aparece com fundo claro (como uma folha de papel branca) ou fundo escuro (como uma lousa preta).",
+          "location": "Na página de Configurações, você verá uma seção chamada 'Tema da Interface' com três opções em forma de cartões (quadrados grandes).",
+          "options": [
+            {
+              "name": "Sistema (Automático)",
+              "desc": "Se você escolher esta opção, o sistema vai seguir a configuração do seu computador ou celular. Se seu aparelho estiver em modo escuro, o sistema ficará escuro. Se estiver em modo claro, o sistema ficará claro. É como se o sistema 'copiasse' o que seu computador está usando."
+            },
+            {
+              "name": "Claro",
+              "desc": "Se você escolher esta opção, o sistema SEMPRE vai mostrar com fundo branco/claro, não importa o que seu computador esteja usando. Recomendado para ambientes bem iluminados ou se você tem dificuldade para ler em fundos escuros."
+            },
+            {
+              "name": "Escuro",
+              "desc": "Se você escolher esta opção, o sistema SEMPRE vai mostrar com fundo escuro/preto, não importa o que seu computador esteja usando. Recomendado se você usa o sistema à noite ou em lugares com pouca luz, ou se você acha que o fundo escuro cansa menos seus olhos."
+            }
+          ],
+          "howToChange": "Para escolher um tema, simplesmente clique no quadrado da opção que você quer. O quadrado vai ficar destacado (geralmente com uma borda colorida ou um marcador de seleção ✓). Você vai notar que a mudança acontece IMEDIATAMENTE - você não precisa clicar em nenhum botão 'Salvar' para o tema!"
+        },
+        "language": {
+          "title": "Mudando o Idioma do Sistema",
+          "whatIs": "Esta opção permite que você escolha em qual idioma quer ver TODOS os textos do sistema - botões, mensagens, títulos, tudo!",
+          "location": "Na página de Configurações, abaixo da seção de Tema, você verá 'Idioma da Interface' com três opções.",
+          "options": [
+            {
+              "name": "Português (Brasil)",
+              "desc": "Todo o sistema aparece em Português do Brasil"
+            },
+            {
+              "name": "English (United States)",
+              "desc": "Todo o sistema aparece em Inglês dos Estados Unidos"
+            },
+            {
+              "name": "Español",
+              "desc": "Todo o sistema aparece em Espanhol"
+            }
+          ],
+          "howToChange": [
+            "Clique no quadrado da opção de idioma que você quer",
+            "A opção vai ficar destacada com uma borda ou marca ✓",
+            "Diferente do tema, quando você muda o idioma você PRECISA clicar no botão AZUL 'Salvar Configurações' no final da página",
+            "Depois de clicar em 'Salvar Configurações', a página vai RECARREGAR automaticamente (vai piscar e recarregar sozinha - não se assuste!)",
+            "Quando a página terminar de carregar novamente (demora de 2 a 5 segundos), você verá que TODO o sistema agora está no novo idioma escolhido"
+          ],
+          "important": "IMPORTANTE: Se você escolher um idioma que não entende bem, você pode ter dificuldade para navegar no sistema! Se isso acontecer, tente lembrar onde fica a opção de Configurações (canto superior direito > menu > Configurações) e repita o processo para voltar para Português."
+        },
+        "saving": {
+          "title": "Salvando Suas Configurações",
+          "step1": "Depois de escolher suas opções de idioma, role a página para baixo até o final",
+          "step2": "Você verá dois botões: um CINZA escrito 'Cancelar' e um AZUL escrito 'Salvar Configurações'",
+          "step3": "Se você mudou de ideia e NÃO quer salvar as mudanças, clique no botão CINZA 'Cancelar'. Você voltará para a página anterior sem salvar nada.",
+          "step4": "Se você QUER salvar as mudanças, clique no botão AZUL 'Salvar Configurações'",
+          "step5": "O botão vai mudar para 'Salvando...' com um círculo girando",
+          "step6": "Aguarde alguns segundos. Uma mensagem verde vai aparecer no canto superior dizendo 'Configurações salvas com sucesso!'",
+          "step7": "Se você mudou o idioma, a página vai recarregar automaticamente"
+        },
+        "commonMistakes": [
+          "ERRO: Escolher um idioma que você não entende - SOLUÇÃO: Sempre escolha o idioma que você lê melhor. Se escolher errado, use as 'migalhas de pão' visuais para voltar às configurações e mudar novamente.",
+          "ERRO: Esquecer de clicar em 'Salvar Configurações' - SOLUÇÃO: Apenas mudanças de TEMA são automáticas. Mudanças de IDIOMA precisam que você clique no botão azul 'Salvar Configurações'!",
+          "ERRO: Fechar a página antes de salvar - SOLUÇÃO: Se você fechar a página ou clicar em outro lugar antes de salvar, suas mudanças serão perdidas. Sempre certifique-se de ver a mensagem verde 'Configurações salvas' antes de sair."
+        ],
+        "tips": [
+          "DICA: Experimente os dois temas (claro e escuro) para ver qual você acha mais confortável. Não tenha medo de testar - você pode mudar quantas vezes quiser!",
+          "DICA: Se você trabalha em diferentes momentos do dia, considere usar 'Sistema (Automático)'. Assim, o sistema ficará claro durante o dia e escuro à noite automaticamente.",
+          "DICA: As configurações que você escolher aqui são salvas na SUA conta. Se você fizer login em outro computador, suas configurações virão junto!"
+        ]
+      }
+    },
+    "superAdmin": {
+      "title": "Guia do Super Administrador",
+      "subtitle": "Guia completo e super detalhado para administradores do sistema. Este guia vai te ensinar TUDO, passo a passo!",
+      "overview": {
+        "title": "Entendendo Seu Papel - O Que É um Super Administrador?",
+        "whatIs": "Pense no sistema Tutoria como um grande prédio de apartamentos. Cada apartamento é uma universidade diferente. O Super Administrador seria como o SÍNDICO GERAL do prédio inteiro - a pessoa que tem as chaves de tudo e pode gerenciar tudo no sistema.",
+        "description": "Como Super Administrador, você é a pessoa com MAIS poder no sistema. Você pode criar universidades, criar outros administradores, ver tudo que está acontecendo, e muito mais. É uma grande responsabilidade!",
+        "keyResponsibilities": "Suas Principais Responsabilidades (O Que Você Faz)",
+        "responsibilities": [
+          "🏛️ Criar e gerenciar universidades - Você cria 'prédios' novos no sistema (cada universidade é como um prédio independente)",
+          "👥 Criar outros super administradores - Você pode criar contas para outras pessoas que vão te ajudar a administrar tudo",
+          "🎓 Criar professores administradores para cada universidade - São como os 'síndicos de cada apartamento', que cuidam de uma universidade específica",
+          "🔍 Monitorar tudo no sistema - Você pode ver estatísticas, procurar por qualquer coisa, acompanhar atividades",
+          "🔐 Manter o sistema seguro - Garantir que apenas pessoas autorizadas tenham acesso",
+          "📊 Ver relatórios e estatísticas gerais - Quantas universidades existem, quantos professores, quantos módulos, etc."
+        ],
+        "important": "IMPORTANTE: Com grandes poderes vêm grandes responsabilidades! Tenha muito cuidado ao criar ou deletar coisas, pois suas ações afetam o sistema inteiro e todos os usuários."
+      },
+      "firstLogin": {
+        "title": "Seu Primeiro Login - Como Entrar no Sistema",
+        "whatIs": "O 'login' é o processo de entrar no sistema usando seu nome de usuário e senha. É como usar uma chave para abrir a porta da sua casa - só você tem esta chave específica.",
+        "step1": {
+          "title": "Passo 1: Abra o Sistema no Seu Navegador",
+          "desc": "Primeiro, abra seu navegador de internet. Um navegador é o programa que você usa para acessar sites (pode ser Chrome, Firefox, Edge, Safari, ou outro). No topo do navegador, você verá uma barra onde pode digitar endereços de sites - é a 'barra de endereços'. Clique nesta barra com o mouse (ela vai ficar destacada) e digite o endereço que o administrador te passou. Geralmente algo como 'tutoria.seuaempresa.com' ou similar. Depois de digitar, aperte a tecla ENTER no seu teclado."
+        },
+        "step2": {
+          "title": "Passo 2: A Tela de Login Vai Aparecer",
+          "whatYouShouldSee": "Depois de alguns segundos (de 2 a 10 segundos dependendo da sua internet), você verá uma tela com: 1) Um título grande 'Bem-vindo ao Tutoria' ou 'Welcome to Tutoria', 2) Duas caixas brancas (uma em cima da outra), 3) Um botão azul grande escrito 'Entrar' ou 'Sign In', 4) A tela pode ter um fundo com cores suaves ou imagens relacionadas a educação."
+        },
+        "step3": {
+          "title": "Passo 3: Digite Seu Nome de Usuário",
+          "desc": "A primeira caixa branca terá escrito em cima 'Usuário / Email' ou 'Username / Email'. Clique dentro desta caixa com o mouse. Você verá uma linha vertical piscando - isso significa que a caixa está pronta para você digitar. Agora digite seu nome de usuário EXATAMENTE como foi te passado. Por exemplo: se disseram que seu usuário é 'joao.silva', digite exatamente 'joao.silva' (letras minúsculas, com o ponto no meio). CUIDADO: O sistema diferencia letras maiúsculas de minúsculas! 'Joao.Silva' é diferente de 'joao.silva'."
+        },
+        "step4": {
+          "title": "Passo 4: Digite Sua Senha",
+          "desc": "Clique na segunda caixa branca (logo abaixo da primeira). Esta caixa terá escrito em cima 'Senha' ou 'Password'. Assim que você clicar, a linha piscante vai aparecer nesta caixa. Agora digite sua senha. VOCÊ NÃO VAI VER as letras que está digitando - em vez disso, vai aparecer bolinhas pretas (●●●●) ou asteriscos (****). Isso é NORMAL e serve para proteger sua senha caso alguém esteja olhando sua tela. Digite com cuidado e atenção!"
+        },
+        "step5": {
+          "title": "Passo 5: Clique no Botão Azul 'Entrar'",
+          "desc": "Depois de ter digitado o usuário e a senha, clique com o mouse no botão azul grande escrito 'Entrar' (ou 'Sign In' se estiver em inglês). O botão vai mudar para 'Entrando...' (ou 'Signing in...') com um círculo girando. Isso significa que o sistema está verificando se seu usuário e senha estão corretos. Aguarde de 2 a 5 segundos sem clicar em mais nada."
+        },
+        "step6": {
+          "title": "Passo 6: Bem-vindo! Você Entrou no Sistema",
+          "whatYouShouldSee": "Se tudo estiver correto, a tela vai mudar e você vai ser levado para o 'Dashboard' (painel principal). Você verá: 1) No topo: 'Bem-vindo de volta, [SEU NOME]!' em letras grandes, 2) No lado esquerdo: um menu vertical com várias opções (Dashboard, Tutoriais e Guias, Universidades, etc.), 3) No centro: caixas coloridas mostrando estatísticas e botões de ações rápidas, 4) No canto superior direito: um círculo ou quadrado com suas iniciais."
+        },
+        "commonMistakes": [
+          "ERRO: Digitar o usuário ou senha errados - SOLUÇÃO: Você verá uma mensagem em vermelho dizendo 'Login failed' ou 'Falha no login'. Verifique se você digitou tudo corretamente, prestando atenção em letras maiúsculas/minúsculas. Se continuar com problemas, entre em contato com quem criou sua conta.",
+          "ERRO: Usar espaços antes ou depois do usuário - SOLUÇÃO: Às vezes, sem querer, apertamos a barra de espaço antes ou depois de digitar. Certifique-se de que não há espaços extras! Um jeito de evitar isso: depois de digitar, apague tudo e comece de novo, tomando cuidado para não apertar espaço.",
+          "ERRO: Ter Caps Lock ativado - SOLUÇÃO: Se a tecla 'Caps Lock' (Bloqueio de Maiúsculas) do seu teclado estiver ativada, tudo que você digitar sai em MAIÚSCULAS. Veja se a luzinha do Caps Lock está acesa no seu teclado. Se estiver, aperte a tecla Caps Lock uma vez para desligar.",
+          "ERRO: Copiar e colar o usuário/senha de um lugar que tem caracteres invisíveis - SOLUÇÃO: Se você copiou seu usuário ou senha de um email ou documento, pode ter vindo com espaços ou caracteres invisíveis junto. Melhor digitar manualmente.",
+          "ERRO: Conta ainda não foi ativada - SOLUÇÃO: Se você acabou de receber as credenciais e a conta ainda não foi ativada no sistema, você não vai conseguir entrar. Entre em contato com quem criou sua conta."
+        ],
+        "troubleshooting": [
+          "PROBLEMA: A página não carrega (fica em branco ou mostra erro 'não foi possível acessar o site') - SOLUÇÃO: 1) Verifique sua conexão com a internet, 2) Verifique se você digitou o endereço correto, 3) Tente atualizar a página (aperte F5 no teclado), 4) Tente abrir em outro navegador, 5) Entre em contato com o suporte técnico se o problema persistir.",
+          "PROBLEMA: Depois de clicar em 'Entrar' fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos, 2) Se continuar, verifique sua internet, 3) Feche a página e abra novamente, 4) Limpe o cache do navegador (procure 'como limpar cache' seguido do nome do seu navegador no Google).",
+          "PROBLEMA: Esqueci minha senha - SOLUÇÃO: Na tela de login, procure um texto azul escrito 'Esqueceu sua senha?' (ou 'Forgot your password?'). Clique nele e siga as instruções, ou entre em contato com o administrador do sistema.",
+          "PROBLEMA: O sistema está em outro idioma - SOLUÇÃO: Após fazer login, vá em Configurações (canto superior direito > clique no seu perfil > Configurações) e mude o idioma para Português."
+        ],
+        "tips": [
+          "DICA: Adicione o endereço do sistema aos 'Favoritos' ou 'Marcadores' do seu navegador para não precisar digitar toda vez. Na maioria dos navegadores, você aperta Ctrl+D (no Windows) ou Cmd+D (no Mac) para adicionar aos favoritos.",
+          "DICA: Guarde seu usuário e senha em um lugar seguro. Você pode anotar em um caderno guardado em casa, ou usar um gerenciador de senhas.",
+          "DICA: Nunca compartilhe sua senha com ninguém, nem com pessoas que dizem ser do suporte técnico. Ninguém legítimo vai te pedir sua senha!",
+          "DICA: Se você usa o sistema frequentemente, considere pedir ao navegador para 'salvar a senha' quando ele perguntar (aparece uma caixinha oferecendo salvar). Assim você não precisa digitar toda vez. MAS ATENÇÃO: só faça isso se o computador for seu e ninguém mais use!"
+        ]
+      },
+      "universities": {
+        "title": "Gerenciando Universidades - Criando os 'Prédios' do Sistema",
+        "whatIs": "Universidades são como 'prédios' ou 'empresas' no sistema Tutoria. Cada universidade é um espaço independente onde professores podem criar disciplinas e módulos. Por exemplo, você pode criar uma universidade chamada 'UNIFESP', outra chamada 'USP', e cada uma terá seus próprios professores, disciplinas e alunos separados. Como Super Administrador, VOCÊ é quem cria estas universidades.",
+        "why": "Por que criar universidades? Porque cada instituição de ensino precisa do seu próprio espaço no sistema. Imagine que você está administrando um sistema para várias faculdades diferentes - cada uma precisa ser separada das outras, com seus próprios administradores. É como ter vários prédios diferentes, cada um com seu próprio síndico (professor administrador).",
+        "creating": {
+          "title": "CRIANDO uma Nova Universidade - Passo a Passo COMPLETO",
+          "step1": {
+            "title": "Passo 1: Vá para a Página de Universidades",
+            "desc": "Olhe para o lado ESQUERDO da sua tela, onde fica o menu vertical (a barra lateral). Procure pela palavra 'Universidades' - geralmente está logo abaixo de 'Dashboard' ou 'Tutoriais e Guias'. Você verá um ícone de prédio 🏛️ ao lado da palavra. Clique UMA VEZ com o mouse na palavra 'Universidades'. A página vai carregar (demora de 1 a 3 segundos).",
+            "whatYouShouldSee": "Depois que carregar, você verá no topo da página um título grande 'Universidades'. Logo abaixo, você verá uma tabela (se já houver universidades criadas) ou uma mensagem dizendo 'Nenhuma universidade encontrada'."
+          },
+          "step2": {
+            "title": "Passo 2: Clique no Botão 'Criar Universidade'",
+            "desc": "No canto superior DIREITO da página (não confunda com o canto da tela inteira, é o canto direito da área de conteúdo), você verá um botão AZUL com o texto branco 'Criar Universidade'. Este botão pode ter um ícone de '+' (sinal de mais) ao lado do texto. Mova o mouse até este botão azul e clique UMA VEZ.",
+            "whatYouShouldSee": "Uma janela vai aparecer BEM NO CENTRO da sua tela, por cima de tudo. Esta janela tem um fundo um pouco escuro por trás dela (isso é para você focar na janela). No topo desta janela estará escrito 'Criar Nova Universidade'."
+          },
+          "step3": {
+            "title": "Passo 3: Preencha o Nome da Universidade",
+            "desc": "Dentro da janela que apareceu, você verá campos (caixinhas) para preencher. O PRIMEIRO campo está marcado com um asterisco vermelho (*) e tem escrito 'Nome da Universidade *' em cima dele. Clique DENTRO desta caixinha branca (você verá a linha piscando). Agora digite o nome completo da universidade. Exemplos: 'Universidade Federal de São Paulo', 'Universidade de São Paulo', 'Faculdade de Tecnologia do ABC'. Seja claro e use o nome oficial completo da instituição. Você pode usar letras maiúsculas e minúsculas normalmente, espaços, e acentos.",
+            "important": "IMPORTANTE: Este nome é o que vai aparecer em todo o sistema quando alguém mencionar esta universidade. Escolha um nome claro e profissional!"
+          },
+          "step4": {
+            "title": "Passo 4: Preencha o Código da Universidade",
+            "desc": "Logo abaixo do campo de nome, você verá outro campo obrigatório (também com asterisco vermelho *) escrito 'Código da Universidade *'. Clique dentro desta caixinha. Agora digite uma SIGLA ou CÓDIGO curto para identificar a universidade. Geralmente são de 3 a 6 letras. Exemplos: 'UNIFESP' (para Universidade Federal de São Paulo), 'USP' (para Universidade de São Paulo), 'FATEC' (para Faculdade de Tecnologia). Este código é como a 'placa' ou 'sigla' da universidade - deve ser fácil de lembrar e único.",
+            "tip": "DICA: Use códigos que as pessoas já conhecem. Se a universidade já tem uma sigla famosa (como USP, UNESP, etc.), use esta sigla! Evite inventar siglas complicadas."
+          },
+          "step5": {
+            "title": "Passo 5: Adicione uma Descrição (Opcional mas Recomendado)",
+            "desc": "Mais abaixo, você verá um campo maior escrito 'Descrição' (este NÃO tem asterisco, então é opcional). Clique dentro desta caixa maior. Aqui você pode escrever informações sobre a universidade. Por exemplo: 'Universidade federal localizada em São Paulo, focada em ciências da saúde e exatas'. Você pode escrever várias linhas se quiser - esta caixa é maior justamente para textos longos. A descrição ajuda outros administradores a entenderem sobre o que é esta universidade.",
+            "tip": "DICA: Mesmo sendo opcional, é BOM preencher! No futuro, quando você tiver muitas universidades, esta descrição ajuda a lembrar qual é qual."
+          },
+          "step6": {
+            "title": "Passo 6: Revise o Que Você Digitou",
+            "desc": "ANTES de clicar no botão para salvar, leia novamente tudo que você digitou. Verifique se: 1) O nome está correto (sem erros de digitação), 2) O código está certo (você vai usar este código em vários lugares), 3) A descrição faz sentido. Se encontrar algum erro, clique na caixinha que tem erro e corrija. Use as teclas de setas do teclado para mover o cursor, Delete para apagar à frente, Backspace para apagar atrás."
+          },
+          "step7": {
+            "title": "Passo 7: Clique em 'Criar Universidade'",
+            "desc": "No final da janela (role para baixo se necessário), você verá DOIS botões lado a lado: Um botão CINZA escrito 'Cancelar' e um botão AZUL escrito 'Criar Universidade'. Se você quiser DESISTIR e não criar a universidade, clique no botão CINZA 'Cancelar' - a janela vai fechar e nada será salvo. Se você quer mesmo criar a universidade, clique no botão AZUL 'Criar Universidade'.",
+            "whatYouShouldSee": "Depois de clicar no botão azul: 1) O botão vai mudar para 'Criando...' com um círculo girando, 2) Aguarde de 2 a 5 segundos, 3) Uma mensagem VERDE vai aparecer no canto superior direito dizendo algo como 'Universidade criada com sucesso!', 4) A janela vai fechar sozinha, 5) Você será levado automaticamente para a página de detalhes da universidade que acabou de criar."
+          },
+          "step8": {
+            "title": "Passo 8: Você Está na Página da Nova Universidade!",
+            "whatYouShouldSee": "Agora você está vendo a página de detalhes da universidade que acabou de criar. Você verá: 1) No topo: O nome da universidade em letras GRANDES, 2) Logo abaixo: O código da universidade, 3) Caixinhas mostrando estatísticas (número de disciplinas, professores), 4) Abas (tabs) para ver 'Disciplinas' e 'Professores', 5) Botões como 'Editar' (se você quiser mudar algo) e 'Nova Disciplina' (para criar uma disciplina nesta universidade)."
+          },
+          "commonMistakes": [
+            "ERRO: Usar o mesmo código para universidades diferentes - SOLUÇÃO: Cada universidade PRECISA ter um código ÚNICO. Se você tentar criar uma universidade com um código que já existe, vai aparecer um erro. Escolha outro código!",
+            "ERRO: Deixar campos obrigatórios (com *) em branco - SOLUÇÃO: Você não conseguirá salvar se não preencher os campos com asterisco vermelho (*). Preencha o Nome e o Código antes de tentar salvar.",
+            "ERRO: Usar caracteres especiais estranhos no código - SOLUÇÃO: O código deve ter apenas letras (A-Z), números (0-9), e alguns símbolos simples como hífen (-). Evite usar @, #, $, %, espaços, etc.",
+            "ERRO: Escrever o nome muito curto ou apenas siglas - SOLUÇÃO: No campo 'Nome', escreva o nome COMPLETO da universidade. No campo 'Código', aí sim use a sigla curta.",
+            "ERRO: Clicar em 'Cancelar' por engano - SOLUÇÃO: Se você clicou em Cancelar sem querer, não tem problema! Apenas comece o processo de novo do Passo 1. Nada foi salvo."
+          ],
+          "troubleshooting": [
+            "PROBLEMA: O botão 'Criar Universidade' não clica (está desabilitado/cinza) - SOLUÇÃO: Isso acontece quando você não preencheu todos os campos obrigatórios. Verifique se você preencheu TANTO o 'Nome' QUANTO o 'Código'. Os dois têm asterisco vermelho (*) e são obrigatórios.",
+            "PROBLEMA: Aparece erro 'Código já existe' - SOLUÇÃO: Outra universidade no sistema já está usando este código. Você precisa escolher um código diferente. Tente adicionar números no final (exemplo: se 'UNIFESP' já existe, tente 'UNIFESP2') ou use uma variação.",
+            "PROBLEMA: A janela não abre quando clico em 'Criar Universidade' - SOLUÇÃO: 1) Aguarde alguns segundos e tente novamente, 2) Atualize a página (F5), 3) Verifique sua conexão com internet, 4) Tente fazer logout e login novamente.",
+            "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos (às vezes a internet está lenta), 2) Se continuar, verifique sua conexão, 3) NÃO clique várias vezes no botão (isso pode criar universidades duplicadas!), 4) Se travar, feche a janela e verifique se a universidade foi criada voltando para a lista de universidades.",
+            "PROBLEMA: Criei a universidade mas quero mudar o nome - SOLUÇÃO: Não tem problema! Vá para a seção 'Editando uma Universidade' deste tutorial para aprender como mudar o nome."
+          },
+          "tips": [
+            "DICA: Crie as universidades UMA POR VEZ e com calma. Não tente fazer correndo - é melhor fazer direito uma vez do que ter que corrigir depois!",
+            "DICA: Mantenha uma lista (pode ser no papel ou Excel) com o nome e código de cada universidade que você criar. Isso ajuda você a lembrar e a evitar duplicatas.",
+            "DICA: Use códigos consistentes. Se você usa siglas oficiais para algumas universidades, use para todas! Isso mantém o padrão.",
+            "DICA: Se você vai criar várias universidades, comece pelas mais importantes ou maiores primeiro.",
+            "DICA: Depois de criar a universidade, o próximo passo geralmente é criar um Professor Administrador para ela. Vá para a seção 'Criando Professores Administradores' deste tutorial!"
+          ]
+        },
+        "viewing": {
+          "title": "VISUALIZANDO Detalhes de uma Universidade",
+          "whatIs": "Visualizar uma universidade significa ver TODAS as informações sobre ela - nome, código, descrição, quantas disciplinas tem, quais professores estão nela, etc. É como abrir uma pasta e ver tudo que tem dentro.",
+          "step1": {
+            "title": "Passo 1: Vá para Lista de Universidades",
+            "desc": "No menu lateral esquerdo, clique em 'Universidades'. Você verá uma tabela com TODAS as universidades que existem no sistema."
+          },
+          "step2": {
+            "title": "Passo 2: Encontre a Universidade que Quer Ver",
+            "desc": "Na tabela, você verá as universidades listadas em linhas. Cada linha mostra: o nome da universidade, quando foi criada, e botões de ações. Se tiver MUITAS universidades e você não está achando a que quer, use a caixinha de busca no topo da tabela. Digite o nome ou código da universidade que procura e a tabela vai filtrar mostrando apenas as que combinam com o que você digitou."
+          },
+          "step3": {
+            "title": "Passo 3: Clique no Nome da Universidade",
+            "desc": "Na tabela, o NOME de cada universidade é um link azul e sublinhado. Clique UMA VEZ no nome da universidade que você quer ver. A página vai mudar e carregar os detalhes."
+          },
+          "step4": {
+            "title": "Passo 4: Explore a Página de Detalhes",
+            "whatYouShouldSee": "Agora você está na página de detalhes da universidade. Veja o que você tem aqui: TOPO: Nome da universidade em letras grandes e em negrito. LOGO ABAIXO: Código da universidade e descrição (se tiver). ESTATÍSTICAS: Caixinhas coloridas mostrando números importantes: Quantas disciplinas esta universidade tem, Quantos professores, O código. ABAS (TABS): Você verá abas clicáveis como 'Disciplinas' e 'Professores'. Clique em cada aba para ver informações diferentes. BOTÕES DE AÇÃO: No canto superior direito, botões como 'Editar' (para modificar a universidade) e 'Nova Disciplina' (para criar uma disciplina nova)."
+          },
+          "step5": {
+            "title": "Passo 5: Veja as Disciplinas da Universidade",
+            "desc": "Clique na aba 'Disciplinas' (se não estiver já selecionada). Você verá uma lista de TODAS as disciplinas que foram criadas nesta universidade. Para cada disciplina, você vê: nome, quantos módulos tem, quantos professores, quando foi criada. Se não aparecer nenhuma disciplina, significa que ainda não criaram disciplinas para esta universidade - isso é normal em universidades novas!"
+          },
+          "step6": {
+            "title": "Passo 6: Veja os Professores da Universidade",
+            "desc": "Clique na aba 'Professores'. Você verá uma lista de todos os professores (administradores e regulares) que pertencem a esta universidade. Para cada professor, você vê: nome completo, tipo (Administrador ou Professor regular), quantas disciplinas leciona."
+          },
+          "tips": [
+            "DICA: A página de detalhes da universidade é como um 'resumo geral' de tudo que acontece naquela universidade. É um ótimo lugar para ter uma visão rápida!",
+            "DICA: Se você quiser EDITAR algo, clique no botão 'Editar' no topo. Se quiser DELETAR a universidade, veja a seção 'Deletando uma Universidade' - mas CUIDADO, deletar é irreversível!",
+            "DICA: Use as abas para navegar entre diferentes informações. Não precisa sair e voltar - tudo está ali nas abas!"
+          ]
+        },
+        "editing": {
+          "title": "EDITANDO uma Universidade Existente",
+          "whatIs": "Editar significa MODIFICAR informações de uma universidade que já foi criada. Por exemplo: corrigir um erro no nome, mudar o código, atualizar a descrição. É como usar uma borracha e escrever de novo.",
+          "when": "Quando editar? Quando você perceber que tem um erro de digitação, quando a universidade mudar de nome oficialmente, quando quiser melhorar a descrição, ou quando precisar corrigir o código.",
+          "step1": {
+            "title": "Passo 1: Vá para Página da Universidade",
+            "desc": "Primeiro, navegue até a universidade que você quer editar. Vá em 'Universidades' no menu lateral, encontre a universidade na lista, e clique no nome dela para abrir a página de detalhes."
+          },
+          "step2": {
+            "title": "Passo 2: Clique no Botão 'Editar'",
+            "desc": "Na página de detalhes da universidade, procure no canto superior direito (perto dos outros botões) um botão que pode estar escrito 'Editar' ou ter um ícone de lápis ✏️. Clique neste botão UMA VEZ.",
+            "whatYouShouldSee": "Uma janela (popup) vai aparecer no centro da tela, bem parecida com a janela de criar universidade. Mas desta vez, os campos já vão estar PREENCHIDOS com as informações atuais da universidade."
+          },
+          "step3": {
+            "title": "Passo 3: Modifique o Que Você Quer Mudar",
+            "desc": "Agora você verá os mesmos campos de quando criou a universidade: 'Nome da Universidade', 'Código da Universidade', e 'Descrição'. A diferença é que agora eles já estão preenchidos. Clique DENTRO do campo que você quer modificar (por exemplo, se quer mudar o nome, clique na caixinha do nome). Você pode: APAGAR tudo e escrever de novo (selecione tudo com Ctrl+A e delete), EDITAR apenas parte (use as setinhas do teclado para posicionar o cursor onde quer mudar), ADICIONAR mais texto (clique onde quer adicionar e digite)."
+          },
+          "step4": {
+            "title": "Passo 4: Salve as Mudanças",
+            "desc": "Depois de fazer todas as mudanças que queria, role para baixo até o final da janela. Você verá dois botões: 'Cancelar' (cinza) e 'Atualizar Universidade' (azul). Se mudou de ideia e NÃO quer salvar as mudanças, clique em 'Cancelar' - tudo volta a ser como era antes. Se quer mesmo salvar as mudanças, clique no botão AZUL 'Atualizar Universidade'.",
+            "whatYouShouldSee": "O botão vai mudar para 'Atualizando...' com círculo girando, aguarde 2-5 segundos, uma mensagem verde vai aparecer dizendo 'Universidade atualizada com sucesso!', a janela vai fechar, e você vai ver as informações já atualizadas na página."
+          },
+          "commonMistakes": [
+            "ERRO: Mudar o código para um que já existe - SOLUÇÃO: Cada código precisa ser único. Se tentar usar um código que outra universidade já usa, vai dar erro. Escolha outro código!",
+            "ERRO: Apagar tudo sem querer - SOLUÇÃO: Se você apagou algo sem querer, antes de salvar, clique em 'Cancelar' para desistir das mudanças. Depois abra a edição de novo e faça com mais cuidado.",
+            "ERRO: Esquecer de clicar em 'Atualizar Universidade' - SOLUÇÃO: Se você fizer mudanças mas fechar a janela sem salvar (clicando fora dela ou no X), as mudanças serão PERDIDAS. Sempre certifique-se de clicar no botão azul 'Atualizar'!"
+          ],
+          "tips": [
+            "DICA: Antes de editar, anote em um papel como está agora (especialmente o código). Assim se você fizer alguma confusão, você sabe como voltar.",
+            "DICA: Você pode editar quantas vezes quiser! Não tenha medo de fazer mudanças - você sempre pode voltar aqui e editar de novo se precisar.",
+            "DICA: Se você mudar o CÓDIGO da universidade, saiba que este código é usado em vários lugares. Informe professores e administradores sobre a mudança!"
+          ]
+        },
+        "deleting": {
+          "title": "DELETANDO uma Universidade - ⚠️ MUITO CUIDADO!",
+          "warning": "⚠️⚠️⚠️ ATENÇÃO MÁXIMA! ⚠️⚠️⚠️ Deletar uma universidade é UMA AÇÃO PERMANENTE E IRREVERSÍVEL! Quando você deleta uma universidade, você também deleta AUTOMATICAMENTE: TODAS as disciplinas da universidade, TODOS os módulos de todas as disciplinas, TODOS os tokens criados, TODOS os arquivos enviados pelos professores, TODAS as configurações de tutores de IA, Todas as atribuições de professores. É como DEMOLIR o prédio inteiro - tudo que estava dentro é destruído também! NÃO HÁ COMO DESFAZER! NÃO HÁ BOTÃO DE 'VOLTAR ATRÁS'!",
+          "when": "Quando deletar? APENAS delete uma universidade se: A universidade foi criada por engano e NUNCA foi usada, A universidade está vazia (sem professores, sem disciplinas, sem módulos), Você tem ABSOLUTA CERTEZA que nunca mais vai precisar dela, Você conversou com todos os envolvidos e eles confirmaram que pode deletar.",
+          "never": "NUNCA delete uma universidade que: Tem professores ativos usando, Tem disciplinas e módulos criados, Tem alunos estudando, Você tem dúvida se deve deletar ou não (se tiver dúvida, NÃO DELETA!).",
+          "alternative": "ALTERNATIVA SEGURA: Em vez de deletar, você pode 'desativar' professores, arquivar disciplinas, ou simplesmente deixar a universidade parada sem usar. Isso mantém o histórico seguro caso precise no futuro!",
+          "step1": {
+            "title": "Passo 1: Vá para Lista de Universidades",
+            "desc": "No menu lateral esquerdo, clique em 'Universidades'. Você verá a tabela com todas as universidades."
+          },
+          "step2": {
+            "title": "Passo 2: Encontre a Universidade que Quer Deletar",
+            "desc": "Procure na tabela a universidade que você (tem CERTEZA ABSOLUTA) que quer deletar. Use a busca se necessário. Verifique NOVAMENTE se é realmente esta universidade - olhe o nome, o código, tudo! Certeza ABSOLUTA?"
+          },
+          "step3": {
+            "title": "Passo 3: Clique no Ícone de Lixeira Vermelha",
+            "desc": "Na última coluna da tabela (coluna 'Ações'), você verá ícones pequenos. Um deles é um ícone de LIXEIRA 🗑️ geralmente na cor VERMELHA. Passe o mouse por cima dele e aguarde 1 segundo - vai aparecer uma dica dizendo 'Deletar' ou 'Delete'. Respire fundo, tenha CERTEZA ABSOLUTA que é isso que quer, e clique no ícone da lixeira.",
+            "whatYouShouldSee": "Uma janela de CONFIRMAÇÃO vai aparecer bem no centro da tela. Esta janela tem o fundo meio escuro/vermelho e uma mensagem de AVISO."
+          },
+          "step4": {
+            "title": "Passo 4: Leia o Aviso com ATENÇÃO",
+            "desc": "Na janela de confirmação, você verá uma mensagem mais ou menos assim: 'Tem certeza que deseja deletar esta universidade? Esta ação NÃO pode ser desfeita.' Ou em inglês: 'Are you sure you want to delete this university? This action cannot be undone.' LEIA ESTA MENSAGEM COM MUITA ATENÇÃO! Este é o ÚLTIMO momento para desistir!"
+          },
+          "step5": {
+            "title": "Passo 5: Confirme ou Cancele",
+            "desc": "Na janela de confirmação, você verá dois botões: Um botão geralmente CINZA ou com borda dizendo 'Cancelar' ou 'Cancel', Um botão VERMELHO dizendo 'Deletar', 'Confirmar', 'Delete', ou 'Confirm'. Se você quer DESISTIR de deletar (isso é o mais seguro!), clique no botão CINZA 'Cancelar'. A janela vai fechar e NADA será deletado - ufa! Se você tem CERTEZA ABSOLUTA que quer deletar, clique no botão VERMELHO.",
+            "whatYouShouldSee": "Se você clicou no botão vermelho para confirmar: O botão vai mostrar 'Deletando...' ou 'Deleting...', Aguarde alguns segundos (pode demorar até 10 segundos se a universidade tiver muito conteúdo), Uma mensagem verde vai aparecer dizendo 'Universidade deletada com sucesso' ou similar, A universidade vai DESAPARECER da lista, TUDO relacionado a ela foi deletado permanentemente."
+          },
+          "commonMistakes": [
+            "ERRO: Deletar a universidade errada - PREVENÇÃO: SEMPRE verifique duas ou três vezes o nome e código antes de clicar em deletar. Se tiver duas universidades com nomes parecidos, tome cuidado REDOBRADO!",
+            "ERRO: Deletar sem avisar os professores - PREVENÇÃO: Antes de deletar, avise TODOS os professores e administradores da universidade que ela será deletada. Dê tempo para eles salvarem o que precisam!",
+            "ERRO: Deletar uma universidade ativa por engano - PREVENÇÃO: Se a universidade tem disciplinas, módulos, professores, NÃO DELETE! Você vai destruir o trabalho de muitas pessoas!",
+            "ERRO: Clicar em deletar só para 'ver o que acontece' - SOLUÇÃO: NUNCA faça isso! Deletar não é brincadeira. Se quiser testar o sistema, crie uma universidade de TESTE e delete aquela, não universidades reais!"
+          ],
+          "troubleshooting": [
+            "PROBLEMA: Deletei a universidade errada - O QUE FAZER: Infelizmente, NÃO HÁ COMO DESFAZER. Os dados foram permanentemente deletados. Você precisará: 1) Criar a universidade novamente, 2) Recriar todas as disciplinas, 3) Recriar todos os módulos, 4) Pedir aos professores para fazer upload dos arquivos novamente. Por isso que deletar é IRREVERSÍVEL e perigoso!",
+            "PROBLEMA: A universidade não deleta (aparece erro) - SOLUÇÃO: Pode haver alguma restrição do sistema. Verifique se há outros dados dependentes. Entre em contato com suporte técnico.",
+            "PROBLEMA: Quero deletar mas estou com medo de fazer errado - SOLUÇÃO: Se você tem QUALQUER dúvida, NÃO DELETE! Peça ajuda a outro super administrador, ou entre em contato com suporte técnico primeiro."
+          },
+          "finalWarning": "LEMB RETE FINAL: Deletar é como queimar um livro - uma vez feito, não tem volta. Se você tem QUALQUER dúvida, NÃO DELETE. É sempre melhor deixar uma universidade parada/vazia do que deletar por engano e perder tudo. Só delete se você tem 100% de certeza, conversou com todos os envolvidos, e não há nenhuma chance de precisar daqueles dados no futuro. Em caso de dúvida, NÃO DELETE!"
+        }
+      }
+    },
+    "adminProfessor": {
+      "title": "Guia do Professor Administrador",
+      "subtitle": "Guia COMPLETO e super detalhado para professores que administram uma universidade. Você vai aprender TUDO passo a passo!",
+      "overview": {
+        "title": "Entendendo Seu Papel - O Que É um Professor Administrador?",
+        "whatIs": "Imagine que o sistema Tutoria é um grande prédio de apartamentos, onde cada apartamento é uma universidade. Se o Super Administrador é o síndico geral do prédio todo, o Professor Administrador é o SÍNDICO DO SEU APARTAMENTO - você cuida de TUDO dentro da sua universidade, mas só da sua. Você não mexe nas outras universidades.",
+        "description": "Como Professor Administrador, você é a pessoa MAIS importante da SUA universidade no sistema. Você pode criar disciplinas, criar módulos, adicionar professores regulares, fazer upload de arquivos, configurar tutores de IA, gerar tokens de acesso - TUDO relacionado à sua universidade você pode fazer!",
+        "keyResponsibilities": "Suas Principais Responsabilidades (O Que Você Faz)",
+        "responsibilities": [
+          "📚 Criar e gerenciar DISCIPLINAS da sua universidade - Por exemplo: 'Matemática 1', 'Programação em Python', etc.",
+          "📖 Criar e gerenciar MÓDULOS dentro das disciplinas - Módulos são como 'capítulos' ou 'unidades' de uma disciplina",
+          "👨‍🏫 Criar contas de PROFESSORES REGULARES - Outros professores que vão ajudar você a dar aula e gerenciar módulos",
+          "🤖 Configurar TUTORES DE IA - O 'cérebro' que vai conversar com os alunos e ajudá-los a estudar",
+          "📁 Fazer UPLOAD DE ARQUIVOS - PDFs, apresentações, apostilas que os alunos vão usar",
+          "🔑 Gerar TOKENS DE ACESSO - São como 'chaves' que dão acesso aos widgets (janelinhas) do tutor de IA",
+          "⚙️ PREPARAR MÓDULOS - Deixar tudo pronto para os alunos começarem a usar",
+          "📊 ACOMPANHAR tudo que acontece na sua universidade"
+        ],
+        "important": "IMPORTANTE: Você tem MUITO PODER dentro da sua universidade! Mas lembre-se: você NÃO pode criar ou editar outras universidades, e NÃO pode criar Super Administradores. Seu poder é limitado à SUA universidade."
+      },
+      "firstSteps": {
+        "title": "Primeiros Passos - Como Começar do ZERO",
+        "whatIs": "Quando você recebe sua conta de Professor Administrador pela primeira vez, o sistema está vazio para você. Seu trabalho é construir TUDO do zero - como construir uma escola nova! Aqui vamos te ensinar a ordem certa de fazer as coisas.",
+        "workflow": {
+          "title": "A Ordem Certa de Fazer as Coisas (Workflow)",
+          "why": "Por que seguir uma ordem? Porque algumas coisas dependem de outras! Por exemplo: você NÃO pode criar um módulo se não tiver uma disciplina primeiro. É como construir uma casa - você não coloca o telhado antes das paredes!",
+          "order": [
+            "1️⃣ PRIMEIRO: Configure sua senha e faça login - Veja a seção 'Configurando Sua Senha' se ainda não fez",
+            "2️⃣ SEGUNDO: Crie suas DISCIPLINAS - Comece pelas disciplinas principais da sua universidade",
+            "3️⃣ TERCEIRO: Crie MÓDULOS para cada disciplina - Cada disciplina pode ter vários módulos (unidades/capítulos)",
+            "4️⃣ QUARTO: Configure o TUTOR DE IA de cada módulo - Defina como ele vai conversar com os alunos",
+            "5️⃣ QUINTO: Faça UPLOAD DE ARQUIVOS nos módulos - PDFs, slides, apostilas, exercícios",
+            "6️⃣ SEXTO: Crie TOKENS DE ACESSO para os módulos - As 'chaves' que dão acesso ao tutor",
+            "7️⃣ SÉTIMO: PREPARE os módulos - Envia tudo para a IA e deixa pronto para os alunos",
+            "8️⃣ OITAVO: Crie contas de PROFESSORES REGULARES (se precisar de ajuda)",
+            "9️⃣ NONO: DISTRIBUA os links dos tokens para os alunos - Pode ser via Moodle, email, etc.",
+            "🔟 DÉCIMO: ACOMPANHE e ATUALIZE conforme necessário"
+          ],
+          "tip": "DICA IMPORTANTE: Você NÃO precisa fazer tudo de uma vez! Pode começar com UMA disciplina só, criar os módulos dela, deixar tudo funcionando, e depois partir para a próxima. É melhor fazer bem feito uma de cada vez do que tentar fazer tudo correndo!"
+        }
+      },
+      "courses": {
+        "title": "Gerenciando DISCIPLINAS - A Base de Tudo",
+        "whatIs": "Disciplinas (também chamadas de 'cursos' ou 'cadeiras') são as MATÉRIAS que você ensina. Por exemplo: 'Matemática Básica', 'Introdução à Programação', 'Física 1', 'História do Brasil'. Cada disciplina é como uma GAVETA onde você vai guardar os módulos (as aulas/unidades) daquela matéria.",
+        "why": "Por que criar disciplinas? Porque você precisa ORGANIZAR seu conteúdo! Imagine se você jogasse todas as aulas de matemática, física e português tudo misturado - seria uma bagunça total! As disciplinas separam e organizam tudo direitinho.",
+        "creating": {
+          "title": "CRIANDO uma Nova Disciplina - Passo a Passo SUPER Detalhado",
+          "beforeStart": "Antes de começar, tenha em mente: Qual o nome da disciplina que vai criar? (exemplo: 'Cálculo 1'), Qual código vai usar? (exemplo: 'MAT101' ou 'CALC1'), Se quiser, já pense numa descrição curta do que a disciplina ensina",
+          "step1": {
+            "title": "Passo 1: Entre no Sistema e Vá para Disciplinas",
+            "desc": "Primeiro, faça login no sistema (se ainda não fez). Depois de entrar, olhe para o lado ESQUERDO da tela - lá está o menu vertical (barra lateral). Procure e clique na palavra 'Disciplinas' ou 'Courses' (se estiver em inglês). Geralmente tem um ícone de livro 📚 ou caderno ao lado. Clique UMA VEZ. A página vai carregar em 1-3 segundos.",
+            "whatYouShouldSee": "Você verá no topo da página o título 'Disciplinas' em letras grandes. Abaixo pode ter uma tabela com disciplinas (se já criou alguma antes) ou uma mensagem 'Nenhuma disciplina encontrada' (se é a primeira vez)."
+          },
+          "step2": {
+            "title": "Passo 2: Clique no Botão AZUL 'Criar Disciplina'",
+            "desc": "No canto superior DIREITO da área de conteúdo (não confunda com o canto da tela toda), você verá um botão grande na cor AZUL com texto branco escrito 'Criar Disciplina' ou 'Create Course'. Pode ter um ícone de + (mais) ao lado. Mova seu mouse até este botão e clique UMA VEZ.",
+            "whatYouShouldSee": "Uma janela (popup/modal) vai aparecer bem NO CENTRO da tela, cobrindo o resto (o fundo fica meio escuro). No topo desta janela está escrito 'Criar Nova Disciplina' ou 'Create New Course'."
+          },
+          "step3": {
+            "title": "Passo 3: Preencha o NOME da Disciplina",
+            "desc": "Dentro da janela você verá campos (caixinhas) para preencher. O PRIMEIRO campo tem uma etiqueta em cima escrito 'Nome da Disciplina *' (o asterisco * vermelho significa que é OBRIGATÓRIO). Clique DENTRO desta caixinha branca - você verá uma linha piscando (cursor). Agora digite o nome COMPLETO da disciplina. Exemplos de nomes bons: 'Cálculo Diferencial e Integral I', 'Programação Orientada a Objetos', 'Introdução à Química Orgânica'. Use letras maiúsculas e minúsculas normalmente, pode usar acentos e espaços. Seja CLARO e DESCRITIVO!",
+            "important": "IMPORTANTE: Este nome vai aparecer para OS ALUNOS! Escolha um nome profissional e que deixe claro sobre o que é a disciplina. Evite abreviações estranhas ou nomes muito curtos tipo 'Mat' ou 'Prog'."
+          },
+          "step4": {
+            "title": "Passo 4: Preencha o CÓDIGO da Disciplina",
+            "desc": "Logo ABAIXO do campo de nome, você verá outro campo obrigatório (com * vermelho) escrito 'Código' ou 'Code *'. Clique dentro. Aqui você digita um CÓDIGO CURTO para identificar a disciplina. Geralmente são de 3 a 8 caracteres. Exemplos: 'MAT101', 'CALC1', 'PROG200', 'QUI-ORG', 'CS101'. Você pode usar letras (A-Z), números (0-9), e hífen (-). Evite usar espaços, @, #, $ e outros símbolos estranhos.",
+            "tip": "DICA: Use códigos que façam sentido! Se é a primeira disciplina de matemática, use 'MAT1' ou 'MAT101'. Se é a segunda, use 'MAT2' ou 'MAT102'. Mantenha um padrão! Exemplo de padrão: MAT = Matemática, FIS = Física, PROG = Programação, e os números indicam o nível (1, 2, 3...) ou (101, 102, 103...)."
+          },
+          "step5": {
+            "title": "Passo 5: Verifique a Universidade (Já Está Selecionada)",
+            "desc": "Mais abaixo você verá um campo 'Universidade' ou 'University'. Este campo já vai estar PREENCHIDO automaticamente com o nome DA SUA universidade - você NÃO precisa mexer nele! O sistema já sabe que você é Professor Administrador de uma universidade específica, então ele seleciona automaticamente. Apenas CONFIRA se está mostrando o nome correto da sua universidade. Se estiver correto (e deve estar!), pode prosseguir para o próximo passo."
+          },
+          "step6": {
+            "title": "Passo 6: Adicione uma DESCRIÇÃO (Opcional mas MUITO Recomendado)",
+            "desc": "Mais abaixo você verá um campo maior escrito 'Descrição' ou 'Description' (este NÃO tem asterisco, então é opcional, mas é BOM preencher!). Clique dentro desta caixa maior (geralmente é um retângulo maior que as outras). Aqui você escreve um texto explicando sobre o que é a disciplina. Pode escrever VÁRIAS LINHAS! Exemplo: 'Esta disciplina aborda os conceitos fundamentais do Cálculo Diferencial e Integral, incluindo limites, derivadas, integrais e aplicações práticas. Os alunos aprenderão a resolver problemas de otimização e calcular áreas e volumes.' Quanto mais detalhes você der, melhor!",
+            "why": "Por que preencher a descrição mesmo sendo opcional? Porque: 1) Os alunos vão ler e saber o que vão aprender, 2) Outros professores vão entender do que se trata, 3) Você mesmo, no futuro, vai lembrar do objetivo da disciplina, 4) Fica mais profissional e organizado!"
+          },
+          "step7": {
+            "title": "Passo 7: REVISE Tudo Antes de Salvar",
+            "desc": "Antes de clicar no botão para salvar, PARE e RELEIA tudo com atenção: 1) O NOME está escrito corretamente? Sem erros de português? 2) O CÓDIGO está certo? Você vai usar este código em vários lugares! 3) A DESCRIÇÃO faz sentido e está completa? 4) Não tem nenhum erro de digitação? Se encontrar algo errado, clique no campo e corrija. Use as setinhas ← → do teclado para mover o cursor, Backspace (←) para apagar para trás, Delete para apagar para frente.",
+            "tip": "DICA: É muito mais fácil corrigir AGORA antes de salvar do que ter que editar depois!"
+          },
+          "step8": {
+            "title": "Passo 8: Clique no Botão AZUL 'Criar Disciplina'",
+            "desc": "No final da janela (pode precisar rolar a página para baixo se sua tela for pequena), você verá DOIS botões lado a lado: Um botão CINZA escrito 'Cancelar' ou 'Cancel', Um botão AZUL escrito 'Criar Disciplina' ou 'Create Course'. DESISTIR? Clique no botão CINZA 'Cancelar' - a janela fecha e NADA é salvo. CONFIRMAR E SALVAR? Clique no botão AZUL 'Criar Disciplina'.",
+            "whatYouShouldSee": "Depois de clicar no azul: 1) O botão muda para 'Criando...' ou 'Creating...' com um círculo girando ⭕, 2) Aguarde de 2 a 5 segundos (não clique em nada!), 3) Uma caixinha/mensagem VERDE aparece no canto superior direito dizendo 'Disciplina criada com sucesso!' ou similar, 4) A janela fecha sozinha automaticamente, 5) Você é REDIRECIONADO para a página de DETALHES da disciplina que acabou de criar."
+          },
+          "step9": {
+            "title": "Passo 9: Você Está na Página da Disciplina Nova!",
+            "whatYouShouldSee": "Agora você está vendo a página de detalhes da disciplina recém-criada. Veja o que tem aqui: TOPO: Nome da disciplina em letras GRANDES e NEGRITO. LOGO ABAIXO: O código e a descrição. BOTÕES: No canto superior direito você vê botões como 'Adicionar Módulo' (AZUL), 'Editar Disciplina' (talvez com ícone de lápis ✏️), 'Ver Universidade'. ABAS (TABS): Você verá abas clicáveis: 'Módulos' - para ver/criar módulos desta disciplina, 'Professores' - para ver quais professores estão atribuídos, 'Estudantes' - para ver alunos (quando tiver). TABELA DE MÓDULOS: No centro, uma tabela mostrando os módulos da disciplina (se você acabou de criar, estará vazia e mostrará 'Nenhum módulo encontrado').",
+            "nextStep": "PRÓXIMO PASSO RECOMENDADO: Agora que você criou a disciplina, o próximo passo é criar MÓDULOS para ela! Vá para a seção 'Criando Módulos' deste tutorial para continuar!"
+          },
+          "commonMistakes": [
+            "ERRO: Deixar o nome ou código em branco - SOLUÇÃO: Os campos com asterisco vermelho (*) são OBRIGATÓRIOS! Você NÃO consegue salvar sem preencher. Preencha o nome E o código antes de clicar em salvar.",
+            "ERRO: Usar o mesmo código de outra disciplina - SOLUÇÃO: Cada disciplina precisa ter um código ÚNICO. Se você tentar usar um código que já existe em outra disciplina da sua universidade, vai dar erro 'Código já existe'. Escolha outro código! Exemplo: se já existe 'MAT1', use 'MAT2', 'MAT1A', 'MAT101', etc.",
+            "ERRO: Escrever o nome muito curto tipo 'Mat' ou 'Calc' - SOLUÇÃO: No campo NOME use o nome COMPLETO e descritivo! O código é que pode ser curto. Nome bom: 'Matemática Aplicada', código: 'MAT1'.",
+            "ERRO: Colocar caracteres estranhos no código como @, #, $, espaços - SOLUÇÃO: Use apenas letras (A-Z), números (0-9) e hífen (-). Nada mais!",
+            "ERRO: Clicar em 'Cancelar' por engano - SOLUÇÃO: Se clicou sem querer, tudo que digitou foi perdido. Não tem problema! Apenas volte e comece de novo. Da próxima vez, tenha mais cuidado ao clicar nos botões - o CINZA cancela, o AZUL salva!",
+            "ERRO: Criar disciplinas duplicadas (mesma disciplina duas vezes) - PREVENÇÃO: Antes de criar, confira na lista se aquela disciplina já existe! Use a caixinha de busca para procurar."
+          ],
+          "troubleshooting": [
+            "PROBLEMA: O botão 'Criar Disciplina' não clica (está cinza/desabilitado) - SOLUÇÃO: Você não preencheu todos os campos obrigatórios! Verifique se preencheu: Nome (com *), Código (com *). A universidade é preenchida automaticamente, você não precisa mexer.",
+            "PROBLEMA: Aparece erro 'Código já existe' ou 'Code already exists' - SOLUÇÃO: Outra disciplina na sua universidade já está usando este código. Você precisa escolher um código DIFERENTE. Tente adicionar um número, letra, ou modificar um pouco. Exemplo: se 'PROG1' já existe, tente 'PROG2', 'PROG1A', 'PROG101', etc.",
+            "PROBLEMA: A janela não abre quando clico em 'Criar Disciplina' - SOLUÇÃO: 1) Espere alguns segundos e tente novamente (às vezes demora), 2) Atualize a página do navegador (aperte F5), 3) Verifique sua internet, 4) Tente fazer logout e login novamente, 5) Tente em outro navegador (Chrome, Firefox, Edge).",
+            "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos antes de fazer qualquer coisa (pode ser internet lenta), 2) NÃO fique clicando várias vezes no botão (isso pode criar disciplinas duplicadas!), 3) Se realmente travou, feche a janela (clique no X) e volte para a lista de disciplinas para verificar se foi criada, 4) Se não foi criada, tente novamente com internet melhor.",
+            "PROBLEMA: Criei mas quero mudar o nome ou código - SOLUÇÃO: Sem problemas! Você pode EDITAR a disciplina depois. Vá para a seção 'Editando Disciplinas' deste tutorial.",
+            "PROBLEMA: Criei a disciplina errada por engano - SOLUÇÃO: Você pode DELETAR a disciplina. Mas CUIDADO: se já tiver módulos dentro, eles serão deletados também! Veja a seção 'Deletando Disciplinas' para aprender como fazer com segurança."
+          ],
+          "tips": [
+            "DICA: Crie as disciplinas UMA POR VEZ, com calma e atenção. Não tente criar 10 disciplinas correndo - você vai errar nomes, códigos, e vai ter que ficar corrigindo depois!",
+            "DICA: Mantenha uma LISTA (pode ser no papel, Excel, ou Word) com todas as disciplinas que você criou, os códigos usados, e uma breve descrição. Isso ajuda MUITO quando você for criar disciplinas novas - você já sabe quais códigos estão livres!",
+            "DICA: Use um PADRÃO de códigos! Exemplo: todas as disciplinas de Matemática começam com MAT (MAT1, MAT2, MAT3), as de Física com FIS (FIS1, FIS2), as de Programação com PROG (PROG1, PROG2). Isso mantém tudo organizado e profissional!",
+            "DICA: Comece criando as disciplinas PRINCIPAIS e mais IMPORTANTES primeiro. Depois vá criando as outras conforme a necessidade. Você não precisa criar todas de uma vez!",
+            "DICA: Depois de criar a disciplina, o PRÓXIMO PASSO normal é criar os MÓDULOS dela. Cada disciplina tem vários módulos (como capítulos de um livro). Vá para a próxima seção 'Criando Módulos' quando estiver pronto!"
+          ]
+        }
+      },
+      "modules": {
+        "title": "Gerenciando MÓDULOS - O Coração do Sistema!",
+        "whatIs": "Módulos são as UNIDADES DE ENSINO ou AULAS dentro de uma disciplina. Pense assim: se a DISCIPLINA é um LIVRO (ex: 'Matemática 1'), os MÓDULOS são os CAPÍTULOS desse livro (ex: 'Capítulo 1: Números e Operações', 'Capítulo 2: Equações', etc.). Cada módulo contém: arquivos (PDFs, slides, exercícios), um TUTOR DE IA configurado, tokens de acesso para os alunos. É aqui que a MÁGICA acontece - é no módulo que os alunos vão interagir com o tutor de IA!",
+        "why": "Por que criar módulos? Porque você precisa DIVIDIR o conteúdo em pedaços menores! Imagine ensinar 'Programação em Python' tudo de uma vez - seria impossível! Mas se você dividir em módulos como: 'Módulo 1: Variáveis e Tipos', 'Módulo 2: Estruturas de Controle', 'Módulo 3: Funções', etc., fica MUITO mais fácil para o aluno aprender aos poucos!",
+        "important": "SUPER IMPORTANTE: O módulo é onde acontece a interação aluno-IA! É aqui que você vai: 1) Definir como o tutor de IA vai 'falar' com os alunos (personalidade), 2) Upload dos materiais de estudo, 3) Gerar o link/token que os alunos vão usar, 4) Preparar tudo para funcionar. Dedique TEMPO e ATENÇÃO aos módulos - eles são o CORAÇÃO do sistema!",
+        "creating": {
+          "title": "CRIANDO um Novo Módulo - Tutorial COMPLETO com TODOS os Detalhes",
+          "beforeStart": {
+            "title": "ANTES de Começar - Se Prepare!",
+            "checklist": [
+              "✅ Você já criou a DISCIPLINA? (se não, volte e crie a disciplina primeiro!)",
+              "✅ Você sabe qual DISCIPLINA vai receber este módulo?",
+              "✅ Você já pensou no NOME do módulo? Ex: 'Introdução às Variáveis'",
+              "✅ Você já pensou no CÓDIGO do módulo? Ex: 'PROG1-M1' (Programação 1 - Módulo 1)",
+              "✅ Você já tem uma ideia de como quer que o tutor de IA converse com os alunos? (pode ser simples!)",
+              "✅ Você já tem os ARQUIVOS (PDFs, slides) prontos para fazer upload? (pode fazer depois também)"
+            ],
+            "tip": "DICA: Não precisa ter TUDO pronto antes! Você pode criar o módulo primeiro e depois ir adicionando arquivos, configurando o tutor, etc. Vá com calma, passo a passo!"
+          },
+          "step1": {
+            "title": "Passo 1: Vá Para a Página de Módulos",
+            "desc": "Olhe para o menu lateral ESQUERDO. Procure e clique em 'Módulos' ou 'Modules' (pode ter um ícone de livro aberto 📖 ao lado). Clique UMA VEZ. A página carrega em 1-3 segundos.",
+            "whatYouShouldSee": "Você verá o título 'Módulos' no topo. Abaixo, uma tabela com os módulos já criados (se tiver algum) ou 'Nenhum módulo encontrado' (se é seu primeiro).",
+            "alternative": "CAMINHO ALTERNATIVO: Você também pode criar um módulo diretamente da página da disciplina! Vá em Disciplinas, clique na disciplina desejada, e na página da disciplina clique no botão 'Adicionar Módulo'. Dá no mesmo!"
+          },
+          "step2": {
+            "title": "Passo 2: Clique no Botão AZUL 'Criar Módulo'",
+            "desc": "No canto superior DIREITO da página, você verá um botão grande AZUL escrito 'Criar Módulo' ou 'Create Module' (pode ter um ícone + ao lado). Clique UMA VEZ neste botão.",
+            "whatYouShouldSee": "Uma janela grande (popup) aparece NO CENTRO da tela. O fundo fica meio escuro. No topo da janela está escrito 'Criar Novo Módulo' ou 'Create New Module'. Esta janela é GRANDE e tem MUITOS campos - não se assuste! Vamos preencher tudo com calma, um por um."
+          },
+          "step3": {
+            "title": "Passo 3: Preencha o NOME do Módulo",
+            "desc": "O PRIMEIRO campo que você vê tem escrito em cima 'Nome do Módulo *' (o * vermelho significa obrigatório). Clique DENTRO da caixinha branca. Digite o nome do módulo de forma CLARA e DESCRITIVA. Exemplos BONS: 'Introdução aos Conceitos Básicos de Programação', 'Equações do Primeiro Grau', 'Estrutura Celular e Funções'. Exemplos RUINS (não faça assim): 'Aula 1', 'Módulo A', 'Mat'. Seja específico! O aluno vai ler este nome e precisa entender sobre o que é o módulo.",
+            "important": "IMPORTANTE: Escolha nomes que FAÇAM SENTIDO para o aluno! Se o módulo é sobre 'Loops em Python', escreva exatamente isso. Não escreva apenas 'Loops' ou 'Laços' - seja completo: 'Estruturas de Repetição (Loops) em Python'."
+          },
+          "step4": {
+            "title": "Passo 4: Preencha o CÓDIGO do Módulo",
+            "desc": "Logo abaixo você vê 'Código do Módulo *' (também obrigatório com *). Clique dentro da caixinha. Digite um código CURTO e ÚNICO para identificar este módulo. Geralmente 5-10 caracteres. Exemplos: 'PROG1-M1' (Programação 1 - Módulo 1), 'MAT1-U1' (Matemática 1 - Unidade 1), 'FIS101-CAP1' (Física 101 - Capítulo 1). Use letras (A-Z), números (0-9), e hífen (-). Evite espaços e símbolos estranhos.",
+            "tip": "DICA DE PADRÃO: Use o código da disciplina + número do módulo. Exemplo: se a disciplina é 'PROG1', os módulos podem ser 'PROG1-M1', 'PROG1-M2', 'PROG1-M3', etc. Se a disciplina é 'MAT101', faça 'MAT101-M1', 'MAT101-M2', etc. Isso mantém tudo organizado e você consegue saber qual módulo pertence a qual disciplina só de olhar o código!"
+          },
+          "step5": {
+            "title": "Passo 5: Selecione a DISCIPLINA",
+            "desc": "Mais abaixo você vê 'Disciplina *' ou 'Course *' com uma caixinha que parece um menu dropdown (caixinha com uma setinha ▼ para baixo). Clique NESTA CAIXINHA. Vai aparecer uma lista com TODAS as disciplinas que você criou. Role a lista se necessário (usando a rodinha do mouse ou as setinhas). Encontre a disciplina CERTA onde este módulo vai ficar. Clique UMA VEZ no nome da disciplina desejada. A caixinha vai mostrar o nome da disciplina selecionada.",
+            "whatIf": "E SE eu não vejo a disciplina que quero? Isso significa que você ainda NÃO criou aquela disciplina! Você precisa PRIMEIRO criar a disciplina, DEPOIS criar os módulos dela. Clique em 'Cancelar', vá criar a disciplina, e depois volte para criar o módulo.",
+            "tip": "DICA: Se você tem MUITAS disciplinas e não está achando, pode DIGITAR na caixinha! Quando você clica na caixinha dropdown, comece a digitar as primeiras letras do nome da disciplina - o sistema filtra e mostra apenas as que combinam!"
+          },
+          "step6": {
+            "title": "Passo 6: Preencha Semestre e Ano (OPCIONAL mas Recomendado)",
+            "desc": "Você verá dois campinhos pequenos lado a lado: 'Semestre' e 'Ano'. Estes NÃO têm asterisco *, então são OPCIONAIS, mas é BOM preencher para organização! SEMESTRE: Digite o número do semestre. Exemplos: '1' (primeiro semestre), '2' (segundo semestre). Alguns lugares usam até '3' ou '4'. ANO: Digite o ano com 4 números. Exemplo: '2024', '2025', etc. Por que preencher? Porque no futuro você vai querer saber 'este módulo é do primeiro semestre de 2024' - fica tudo organizado e você consegue filtrar depois!",
+            "tip": "DICA: Se você está criando módulos para usar AGORA, coloque o semestre e ano ATUAL. Se está criando para usar no futuro, coloque o semestre/ano futuro. Se é um módulo atemporal (que vai usar sempre), pode deixar em branco!"
+          },
+          "step7": {
+            "title": "Passo 7: Adicione uma DESCRIÇÃO (Opcional mas BOM)",
+            "desc": "Mais abaixo você vê um campo grande (textarea) escrito 'Descrição' ou 'Description' (sem asterisco = opcional). Clique dentro e escreva um texto explicando O QUE o aluno vai aprender neste módulo. Pode escrever VÁRIAS LINHAS! Exemplo: 'Neste módulo você aprenderá os conceitos básicos de variáveis em Python, incluindo: tipos de dados (int, float, string, bool), como declarar e usar variáveis, operações básicas, e boas práticas de nomenclatura. Ao final você será capaz de criar programas simples usando variáveis.' Quanto mais detalhes, melhor!",
+            "why": "Por que preencher a descrição? 1) O aluno lê e sabe o que esperar do módulo, 2) Outros professores entendem o objetivo, 3) Você mesmo no futuro lembra o que ensina neste módulo, 4) Fica mais profissional!"
+          },
+          "step8": {
+            "title": "Passo 8: AGORA VEM A PARTE MAIS IMPORTANTE - Configure o TUTOR DE IA!",
+            "desc": "Role a página da janela para baixo. Você verá uma seção grande chamada 'Configuração do Tutor de IA' ou 'AI Tutor Configuration'. Esta seção é CRUCIAL porque aqui você define COMO o tutor de IA vai conversar com seus alunos! Você tem DUAS opções: usar um MODELO PRONTO (templates) ou escrever uma INSTRUÇÃO PERSONALIZADA. Vamos explicar as duas!",
+            "whatIs": "O QUE É O TUTOR DE IA? É um 'professor virtual' que conversa com os alunos via chat. Os alunos fazem perguntas e o tutor responde baseado nos arquivos que você enviou e nas INSTRUÇÕES que você der aqui. Essas instruções são chamadas de 'System Prompt' ou 'Prompt do Sistema' - é como você está 'programando a personalidade' do tutor!",
+            "important": "MUITO IMPORTANTE: O que você escrever aqui define COMO o tutor vai agir! Se você escrever 'Seja paciente e use exemplos do dia a dia', o tutor vai ser assim. Se escrever 'Seja direto e técnico', ele vai ser diferente. Você tem CONTROLE TOTAL!"
+          },
+          "step9": {
+            "title": "Passo 9A: Opção Fácil - Use um MODELO PRONTO (Templates)",
+            "desc": "Na seção de configuração do tutor, você verá 'Modelos Rápidos' ou 'Quick Templates' com vários botões retangulares (cards). Cada card é um modelo pré-configurado. Clique em QUALQUER UM dos cards para ver o que ele faz. Os modelos disponíveis geralmente são: 'Tutor Geral' - para qualquer matéria, bom para começar, 'Tutor de Programação' - especializado em ensinar código e programação, 'Tutor de Matemática e Ciências' - para matérias exatas, 'Assistente de Pesquisa' - para ajudar com trabalhos e pesquisas acadêmicas. Quando você CLICA em um card, o texto daquele modelo é COPIADO automaticamente para a caixa grande de 'Prompt do Sistema' que está logo abaixo. Você pode LER o texto e ver se gosta!",
+            "tip": "DICA PARA INICIANTES: Se você NUNCA fez isso antes e não sabe o que escrever, clique em 'Tutor Geral' e use ele! Funciona bem para a maioria das matérias. Depois, com experiência, você pode criar prompts personalizados."
+          },
+          "step10": {
+            "title": "Passo 9B: Opção Avançada - Escreva um PROMPT PERSONALIZADO",
+            "desc": "Se você quer ter CONTROLE TOTAL de como o tutor age, você pode escrever suas próprias instruções! Na caixa grande 'Configuração do Prompt do Sistema', APAGUE o que tiver (se tiver usado um template) ou comece do zero. Escreva instruções em PORTUGUÊS (ou inglês, tanto faz) dizendo como o tutor deve agir. Estrutura sugerida: 1) Quem ele é: 'Você é um tutor paciente de [matéria]...', 2) Como ele deve ensinar: 'Sempre explique passo a passo', 'Use exemplos práticos', etc, 3) O que ele deve fazer: 'Ajude os alunos a entenderem conceitos', 'Não dê respostas prontas, guie o raciocínio', etc, 4) Tom/estilo: 'Seja amigável e encorajador', 'Use linguagem simples', etc.",
+            "example": "EXEMPLO de um prompt BOM: 'Você é um tutor paciente e amigável de Programação em Python para iniciantes. Seu objetivo é ajudar alunos que nunca programaram antes a entenderem os conceitos. Sempre: 1) Explique os conceitos usando analogias do dia a dia (ex: variáveis são como caixas onde guardamos coisas), 2) Dê exemplos de código SIMPLES e COMENTADOS, 3) Quando o aluno errar, seja encorajador e mostre onde está o erro sem dar a resposta pronta, 4) Use uma linguagem descontraída mas profissional, 5) Divida explicações complexas em pequenos passos. Nunca dê código pronto completo - sempre guie o aluno a pensar e construir o código por conta própria.'",
+            "tip": "DICAS PARA ESCREVER BOM PROMPT: Seja ESPECÍFICO! Quanto mais detalhes, melhor. Pense em COMO VOCÊ daria aula presencialmente e escreva isso. Diga o que o tutor DEVE fazer E o que NÃO DEVE fazer. Use exemplos concretos no próprio prompt. Pode ter 500, 1000 caracteres - quanto mais detalhado, melhor o tutor vai funcionar!"
+          },
+          "step11": {
+            "title": "Passo 10: Selecione o IDIOMA do Tutor de IA",
+            "desc": "Logo abaixo da caixa de prompt, você verá 'Idioma do Tutor de IA' ou 'AI Tutor Language' com um dropdown (caixinha com setinha ▼). Clique nesta caixinha. Você verá opções como: 'Português (Brasil)', 'English (United States)', 'Español'. Escolha o IDIOMA em que você quer que o tutor RESPONDA aos alunos. IMPORTANTE: Isso define o idioma das RESPOSTAS, não das perguntas! Ou seja, mesmo que o aluno pergunte em inglês, se você selecionou 'Português', o tutor vai responder em português.",
+            "tip": "DICA: Se seus alunos são brasileiros e falam português, SEMPRE escolha 'Português (Brasil)'. Se seus alunos são de outro país ou você quer que pratiquem outro idioma, escolha de acordo!"
+          },
+          "step12": {
+            "title": "Passo 11: REVISE Tudo Antes de Salvar!",
+            "desc": "ANTES de clicar em salvar, role a janela TODA de cima para baixo e REVISE: ✅ Nome do módulo está correto? ✅ Código está certo e único? ✅ Disciplina selecionada é a certa? ✅ Semestre/Ano preenchidos (se quisesse)? ✅ Descrição faz sentido? ✅ Prompt do tutor está configurado (ou usou um template)? ✅ Idioma do tutor selecionado? Se algo estiver errado, clique no campo e corrija agora!",
+            "why": "Por que revisar? Porque depois de salvar, algumas coisas podem ser editadas, mas é mais trabalhoso. É MUITO mais fácil acertar tudo agora antes de clicar em criar!"
+          },
+          "step13": {
+            "title": "Passo 12: Clique em 'Criar Módulo' - O Grande Momento!",
+            "desc": "Role até o FINAL da janela. Você verá dois botões: Um CINZA 'Cancelar' e um AZUL 'Criar Módulo'. DESISTIR? Clique no CINZA - tudo que você digitou será perdido. CRIAR O MÓDULO? Clique no AZUL 'Criar Módulo'!",
+            "whatYouShouldSee": "Depois de clicar no azul: 1) O botão muda para 'Criando...' com círculo girando, 2) Aguarde 3-7 segundos (pode demorar um pouco mais que disciplina porque tem mais informação), 3) Mensagem VERDE aparece: 'Módulo criado com sucesso!' ou similar, 4) A janela FECHA sozinha, 5) Você é LEVADO para a página de DETALHES do módulo recém-criado!"
+          },
+          "step14": {
+            "title": "Passo 13: PARABÉNS! Você Está na Página do Novo Módulo!",
+            "whatYouShouldSee": "Agora você vê a página completa do módulo. Tem MUITA coisa aqui: TOPO: Nome do módulo em LETRAS GRANDES. INFORMAÇÕES: Código, disciplina, semestre, ano, descrição, data de criação. BOTÕES NO TOPO: 'Ver Disciplina' (volta pra disciplina), 'Preparar Módulo' (veremos depois!), 'Criar Token' (veremos depois!), 'Editar Módulo' (se precisar mudar algo). SEÇÕES NA PÁGINA: 'Arquivos do Módulo' - onde você faz upload de PDFs, slides, etc (está vazio agora), 'Tokens de Acesso' - onde vão aparecer os tokens que você criar (vazio agora).",
+            "nextSteps": {
+              "title": "PRÓXIMOS PASSOS Recomendados (na ordem!):",
+              "steps": [
+                "1️⃣ MELHORAR o prompt do tutor (opcional) - Se você quiser, pode usar o recurso 'Melhorar com IA' para deixar seu prompt ainda melhor!",
+                "2️⃣ FAZER UPLOAD de ARQUIVOS - PDFs, slides, apostilas, exercícios - tudo que os alunos vão estudar",
+                "3️⃣ CRIAR um TOKEN de acesso - A 'chave' que permite os alunos acessarem o tutor",
+                "4️⃣ PREPARAR o módulo - Envia tudo para a IA e deixa pronto para os alunos usarem",
+                "5️⃣ TESTAR - Use o token para testar se tá funcionando",
+                "6️⃣ DISTRIBUIR - Dê o link do token para os alunos (via Moodle, email, etc)"
+              ]
+            },
+            "tip": "DICA IMPORTANTE: Você NÃO precisa fazer tudo isso AGORA! Pode criar vários módulos primeiro, e depois voltar em cada um para fazer upload de arquivos, criar tokens, etc. Ou pode fazer TUDO em um módulo (completar ele 100%) e depois passar para o próximo. Escolha o que funcionar melhor para você!"
+          },
+          "commonMistakes": [
+            "ERRO: Esquecer de selecionar a disciplina - SOLUÇÃO: O campo 'Disciplina' é OBRIGATÓRIO (tem *). Você PRECISA selecionar. Se tentar salvar sem selecionar, vai dar erro.",
+            "ERRO: Usar código duplicado - SOLUÇÃO: Cada módulo precisa de código ÚNICO. Se já existe outro módulo com aquele código (mesmo sendo de disciplina diferente), vai dar erro. Mude o código!",
+            "ERRO: Deixar o prompt do tutor em branco - SOLUÇÃO: Tecnicamente você PODE criar sem prompt, mas o tutor não vai funcionar direito! SEMPRE configure o prompt - pelo menos use um template!",
+            "ERRO: Escrever prompts muito vagos tipo 'Ajude o aluno' - SOLUÇÃO: Seja ESPECÍFICO! Diga COMO ajudar, em que TOM, com que ABORDAGEM. Quanto mais detalhes, melhor!",
+            "ERRO: Escolher o idioma errado do tutor - SOLUÇÃO: Se seus alunos falam português, escolha 'Português (Brasil)'! Se escolher inglês por engano, o tutor vai responder em inglês mesmo que o aluno pergunte em português.",
+            "ERRO: Criar módulos sem planejar - SOLUÇÃO: Antes de sair criando 50 módulos, PLANEJE! Faça uma lista no papel de quantos módulos cada disciplina vai ter, os nomes, etc. Organize primeiro!"
+          ],
+          "troubleshooting": [
+            "PROBLEMA: Não consigo selecionar disciplina (a lista está vazia) - SOLUÇÃO: Você ainda NÃO criou nenhuma disciplina! Precisa criar disciplinas ANTES de criar módulos. Cancele, vá em Disciplinas, crie pelo menos uma, e depois volte.",
+            "PROBLEMA: O botão 'Criar Módulo' não clica - SOLUÇÃO: Você não preencheu todos os campos obrigatórios (os com *). Verifique: Nome, Código, e Disciplina. Esses 3 são obrigatórios!",
+            "PROBLEMA: A janela não abre quando clico em 'Criar Módulo' - SOLUÇÃO: Espere alguns segundos e tente de novo. Se não abrir, atualize a página (F5) e tente novamente. Verifique sua internet.",
+            "PROBLEMA: Salvei mas quero melhorar o prompt do tutor - SOLUÇÃO: SEM PROBLEMA! Você pode editar depois! Clique em 'Editar Módulo', modifique o prompt, e salve. Você pode até usar o recurso 'Melhorar com IA' que vai deixar seu prompt mais profissional!",
+            "PROBLEMA: Não sei o que escrever no prompt do tutor - SOLUÇÃO: Use um dos TEMPLATES (modelos prontos)! Clique em 'Tutor Geral' ou o que fizer mais sentido para sua matéria. Funciona bem! Depois, com prática, você aprende a fazer personalizados.",
+            "PROBLEMA: Criei o módulo mas ainda não tem alunos usando - SOLUÇÃO: Normal! Você ainda precisa: 1) Fazer upload de arquivos, 2) Criar um token, 3) Preparar o módulo, 4) Dar o link do token para os alunos. Vamos ensinar tudo isso nas próximas seções!"
+          ],
+          "tips": [
+            "DICA: Comece com UM módulo, faça ELE funcionar completamente (upload de arquivos, token, preparação, teste), e SÓ DEPOIS crie os outros! Assim você aprende o processo completo com calma.",
+            "DICA: Mantenha um padrão de nomenclatura! Se seus módulos são: PROG1-M1, PROG1-M2, PROG1-M3, etc., fica fácil saber qual é qual só de olhar o código!",
+            "DICA: Para os PRIMEIRos módulos, use os templates de prompt! Depois que você pegar o jeito e entender como funciona, aí sim comece a fazer prompts personalizados.",
+            "DICA: Teste MUITO o prompt do tutor! Depois de criar, preparar, e ter o token, faça várias perguntas de aluno para ver se o tutor responde do jeito que você quer. Se não gostar, edite o prompt e prepare de novo!",
+            "DICA: Não tenha medo de EDITAR! Você pode voltar no módulo e mudar nome, descrição, prompt, tudo! Nada é permanente (exceto o código que é melhor não mudar depois).",
+            "DICA: Organize seus módulos por ORDEM! Módulo 1, 2, 3... ou por TEMAS. Isso ajuda os alunos a saberem qual fazer primeiro!",
+            "DICA: Depois de criar o módulo, o PRÓXIMO PASSO CRUCIAL é fazer UPLOAD DE ARQUIVOS! Sem arquivos, o tutor de IA não tem material para consultar e vai ficar 'cego'. Vá para a seção 'Upload de Arquivos' a seguir!"
+          ]
+        },
+        "uploadingFiles": {
+          "title": "FAZENDO UPLOAD DE ARQUIVOS - Alimentando o Tutor de IA",
+          "whatIs": "Fazer upload de arquivos significa ENVIAR os materiais de estudo (PDFs, apresentações, apostilas, exercícios) para dentro do módulo. Estes arquivos são a 'COMIDA' do tutor de IA - é de onde ele tira as informações para responder os alunos! Pense assim: o tutor de IA é como um professor, e os arquivos que você faz upload são os livros e apostilas que esse professor vai consultar para dar as respostas.",
+          "why": "Por que fazer upload? SEM arquivos, o tutor de IA fica 'CEGO' - ele não sabe NADA sobre sua matéria específica! Ele pode até responder perguntas gerais, mas não vai saber os detalhes, exemplos, e conteúdo específico que VOCÊ quer ensinar. Com os arquivos, o tutor consegue: Responder perguntas sobre o conteúdo específico dos seus PDFs, Citar trechos dos materiais, Explicar conceitos exatamente como está nos seus slides, Resolver exercícios baseado no que você ensinou.",
+          "important": "SUPER IMPORTANTE: Quanto MELHORES forem seus arquivos, MELHOR o tutor vai funcionar! Se você faz upload de PDFs bem organizados, com explicações claras, exemplos, exercícios, o tutor vai dar respostas EXCELENTES. Se você faz upload de arquivos bagunçados ou muito vagos, o tutor vai ter dificuldade.",
+          "supportedFormats": {
+            "title": "Tipos de Arquivo ACEITOS (Formatos Suportados)",
+            "formats": [
+              "📄 PDF (.pdf) - O MAIS RECOMENDADO! PDFs funcionam perfeitamente. Apostilas, slides exportados como PDF, livros digitais, tudo!",
+              "📝 Word (.doc, .docx) - Documentos do Microsoft Word. Funcionam bem!",
+              "📊 PowerPoint (.ppt, .pptx) - Apresentações. O sistema consegue ler o texto dos slides!",
+              "📃 Texto Simples (.txt) - Arquivos de texto puro. Funcionam, mas são menos usados.",
+              "⚠️ NÃO ACEITA: Imagens soltas (.jpg, .png), vídeos (.mp4, .avi), áudios (.mp3), arquivos compactados (.zip, .rar), executáveis (.exe)"
+            ],
+            "tip": "DICA: Se você tem slides em PowerPoint, a melhor opção é EXPORTAR COMO PDF antes de fazer upload! PDF é mais confiável. No PowerPoint: Arquivo > Salvar Como > escolha 'PDF' no tipo de arquivo."
+          },
+          "maxSize": "TAMANHO MÁXIMO: Cada arquivo pode ter até 50MB (cinquenta megabytes). Isso é BASTANTE - dá para colocar apostilas gigantes, livros completos! Se seu arquivo passar de 50MB, você precisa dividir em partes menores ou comprimi-lo.",
+          "howTo": {
+            "title": "Como Fazer Upload - Passo a Passo COMPLETO",
+            "step1": {
+              "title": "Passo 1: Vá Para a Página do Módulo",
+              "desc": "Primeiro, você precisa estar NA PÁGINA do módulo onde quer fazer upload. Vá em 'Módulos' no menu lateral, encontre o módulo desejado na lista, e clique NO NOME do módulo (o nome é um link azul). Você será levado para a página de detalhes daquele módulo.",
+              "alternative": "ALTERNATIVA: Se você acabou de criar o módulo, você JÁ ESTÁ na página dele! Não precisa navegar."
+            },
+            "step2": {
+              "title": "Passo 2: Role a Página Para Baixo Até 'Arquivos do Módulo'",
+              "desc": "Na página do módulo, role a página para BAIXO (use a rodinha do mouse ou arraste a barra de rolagem no lado direito). Você vai passar pelas informações do módulo (nome, código, descrição) e vai chegar numa seção com o título 'Arquivos do Módulo' ou 'Module Files'. Esta seção mostra todos os arquivos que já foram enviados (se for a primeira vez, estará vazio).",
+              "whatYouShouldSee": "Você verá: Um título 'Arquivos do Módulo', Uma ÁREA RETANGULAR com borda tracejada (---) e um ícone de nuvem ☁️ ou seta para cima ⬆️, Um texto explicativo dizendo algo como 'Clique para selecionar ou arraste o arquivo aqui', Abaixo: 'Formatos suportados: PDF, DOC, DOCX...', 'Tamanho máximo: 50MB'."
+            },
+            "step3": {
+              "title": "Passo 3: Escolha Como Fazer Upload - Duas Formas!",
+              "desc": "Você tem DUAS maneiras de fazer upload: FORMA 1 (Clicando): Clique COM O MOUSE na área retangular com borda tracejada. Vai abrir a janelinha do seu computador para escolher arquivos. FORMA 2 (Arrastando): Abra a pasta do seu computador onde está o arquivo, ARRASTE o arquivo com o mouse e SOLTE em cima da área retangular. Ambas funcionam igual - escolha a que você preferir! Vamos detalhar cada uma."
+            },
+            "step4a": {
+              "title": "Passo 4A: Upload CLICANDO (Forma Tradicional)",
+              "desc": "Clique UMA VEZ na área retangular (onde tem a borda tracejada e o ícone de nuvem). IMEDIATAMENTE vai abrir uma janela do seu sistema operacional (Windows, Mac, Linux) para você escolher um arquivo. Esta janela mostra as pastas e arquivos do seu computador. NAVEGUE até a pasta onde está o arquivo que você quer fazer upload. Para navegar: veja a lista de pastas à esquerda ou no centro, clique duas vezes numa pasta para abrir ela. Procure seu arquivo! Você pode usar a caixinha de 'Pesquisar' ou 'Search' para procurar pelo nome. Quando ENCONTRAR o arquivo, clique UMA VEZ nele para selecioná-lo (ele fica destacado/azul). No canto inferior direito da janela, clique no botão 'Abrir' ou 'Open'. PRONTO! A janela fecha e o upload começa automaticamente!",
+              "tip": "DICA: Se você não está achando seu arquivo, lembre-se onde você salvou! Geralmente está em 'Downloads', 'Documentos', 'Área de Trabalho', ou 'Desktop'. Se ainda não achar, use a pesquisa!"
+            },
+            "step4b": {
+              "title": "Passo 4B: Upload ARRASTANDO (Drag and Drop)",
+              "desc": "Esta forma é mais RÁPIDA mas precisa de prática! Primeiro, abra a PASTA do seu computador onde está o arquivo (pode ser o Windows Explorer, Finder no Mac, etc.). Posicione as janelas do jeito que você consiga ver TANTO a pasta do computador QUANTO a página do navegador ao mesmo tempo (pode colocar lado a lado ou uma menor que a outra). Agora: Clique e SEGURE o botão esquerdo do mouse EM CIMA do arquivo que quer enviar, ARRASTE o mouse (ainda segurando o botão!) até a área retangular tracejada na página do navegador, Quando o mouse estiver em cima da área tracejada, SOLTE o botão do mouse. PRONTO! O arquivo 'cai' ali e o upload começa!",
+              "tip": "DICA: Se você nunca fez isso de arrastar arquivos, pode parecer estranho no começo. Use a FORMA 1 (clicando) que é mais simples! Depois que pegar prática, pode tentar arrastar."
+            },
+            "step5": {
+              "title": "Passo 5: AGUARDE o Upload Acontecer",
+              "whatYouShouldSee": "Depois de selecionar o arquivo (seja clicando ou arrastando): 1) Aparece uma BARRINHA DE PROGRESSO (barra azul ou verde que vai enchendo da esquerda para direita) mostrando o quanto já foi enviado, 2) Pode ter uma PORCENTAGEM tipo '45%', '67%', '89%'..., 3) Pode ter um texto 'Enviando...' ou 'Uploading...', 4) O tempo depende do TAMANHO do arquivo e da sua INTERNET: Arquivo pequeno (1-5MB) = 5 a 15 segundos, Arquivo médio (5-20MB) = 15 a 60 segundos, Arquivo grande (20-50MB) = 1 a 3 minutos.",
+              "important": "MUITO IMPORTANTE: NÃO FECHE A PÁGINA enquanto o upload está acontecendo! NÃO clique em nada! NÃO navegue para outra página! Apenas AGUARDE pacientemente até terminar. Se você fechar ou sair, o upload é CANCELADO e você tem que fazer tudo de novo!"
+            },
+            "step6": {
+              "title": "Passo 6: Upload Concluído - Sucesso!",
+              "whatYouShouldSee": "Quando o upload termina: 1) A barra de progresso desaparece, 2) Aparece uma MENSAGEM VERDE no canto superior direito dizendo 'Arquivo enviado com sucesso!' ou 'File uploaded successfully!' ou similar, 3) O arquivo APARECE na TABELA abaixo da área de upload. Você verá: Nome do arquivo, Tamanho (ex: '2.3 MB', '15.7 MB'), Data/hora que foi enviado, Botões de AÇÕES (olhinho 👁️ para visualizar, lixeira 🗑️ para deletar).",
+              "tip": "DICA: Assim que terminar o upload e ver a mensagem verde, você pode fazer upload de MAIS arquivos! Basta repetir o processo. Pode enviar quantos arquivos quiser (dentro do limite de 50MB cada)."
+            }
+          },
+          "multipleFiles": {
+            "title": "Fazendo Upload de VÁRIOS Arquivos",
+            "desc": "Você pode (e DEVE!) fazer upload de vários arquivos no mesmo módulo! Por exemplo: Apostila principal (PDF), Slides da aula 1 (PDF), Slides da aula 2 (PDF), Lista de exercícios (PDF), Gabarito (PDF), Material complementar (PDF). Para fazer upload de vários: Faça o upload de UM arquivo por vez (espere terminar antes de enviar o próximo!), OU selecione MÚLTIPLOS arquivos de uma vez na janelinha de seleção (segure Ctrl no Windows/Linux ou Cmd no Mac enquanto clica nos arquivos) e todos serão enviados simultaneamente.",
+            "tip": "DICA: Para módulos completos, envie TUDO que os alunos vão precisar! Quanto mais material, melhor o tutor vai funcionar. Não tenha medo de enviar muitos arquivos!"
+          },
+          "managingFiles": {
+            "title": "Gerenciando os Arquivos (Ver, Baixar, Deletar)",
+            "viewing": {
+              "title": "VISUALIZANDO um Arquivo",
+              "desc": "Na tabela de arquivos, clique no ÍCONE DE OLHO 👁️ (botão azul) ao lado do arquivo. Uma nova aba do navegador vai abrir mostrando o conteúdo do arquivo. Você pode LER o arquivo direto no navegador (se for PDF), ou fazer download dele."
+            },
+            "deleting": {
+              "title": "DELETANDO um Arquivo (CUIDADO!)",
+              "desc": "Na tabela, clique no ÍCONE DE LIXEIRA 🗑️ (botão vermelho) ao lado do arquivo que quer deletar. Vai aparecer uma janelinha de CONFIRMAÇÃO perguntando 'Tem certeza que deseja deletar este arquivo?'. Se QUER deletar: clique em 'Confirmar' ou 'Delete' (botão vermelho). Se NÃO QUER: clique em 'Cancelar' (botão cinza).",
+              "warning": "⚠️ ATENÇÃO: Deletar é PERMANENTE! O arquivo é removido do sistema para sempre. Se deletar por engano, você terá que fazer upload de novo. Tenha CERTEZA antes de deletar!",
+              "whenToDelete": "Quando deletar? Quando o arquivo está ERRADO (versão velha, arquivo corrupto), Quando você quer SUBSTITUIR por uma versão atualizada (delete o antigo, envie o novo), Quando o arquivo não é mais necessário."
+            }
+          },
+          "commonMistakes": [
+            "ERRO: Fazer upload de arquivo muito grande (mais de 50MB) - SOLUÇÃO: Vai dar erro dizendo que o arquivo é muito grande. Você precisa: 1) Comprimir o PDF (use ferramentas online como 'ILovePDF' ou 'SmallPDF'), 2) Dividir o arquivo em partes menores, 3) Remover páginas desnecessárias.",
+            "ERRO: Fazer upload de formato não suportado (.jpg, .png, .mp4, .zip) - SOLUÇÃO: Vai dar erro. Converta para um formato aceito (PDF é o melhor!) ou coloque o conteúdo dentro de um documento Word/PowerPoint e depois exporte como PDF.",
+            "ERRO: Fechar a página enquanto o upload está acontecendo - SOLUÇÃO: O upload é CANCELADO! Você perde o progresso e tem que começar de novo. SEMPRE espere até ver a mensagem verde de sucesso antes de sair!",
+            "ERRO: Upload fica travado em 99% e não termina - SOLUÇÃO: Aguarde pelo menos 2-3 minutos (o final pode demorar mais). Se realmente travou, atualize a página (F5) e tente fazer o upload novamente.",
+            "ERRO: Fazer upload de PDF 'protegido' ou com senha - SOLUÇÃO: Pode dar erro. Remova a proteção do PDF antes (use software de PDF ou peça para quem criou tirar a proteção).",
+            "ERRO: Nome do arquivo com caracteres estranhos ou muito longo - SOLUÇÃO: Antes de fazer upload, RENOMEIE o arquivo! Use nome simples, sem acentos, sem símbolos estranhos. Ex: ao invés de 'Matemática_1ª_prova_2º_semestre_versão_FINAL(2).pdf', use 'matematica-1-prova-2024.pdf'."
+          ],
+          "troubleshooting": [
+            "PROBLEMA: A área de upload não aparece - SOLUÇÃO: Certifique-se que você está na página de DETALHES do módulo (não na lista de módulos). Role a página para baixo. Se ainda não aparece, recarregue a página (F5).",
+            "PROBLEMA: Clico na área de upload mas nada acontece - SOLUÇÃO: 1) Tente usar outro navegador (Chrome geralmente funciona melhor), 2) Verifique se seu navegador está atualizado, 3) Desabilite extensões/bloqueadores de pop-up que possam estar impedindo, 4) Tente a opção de arrastar e soltar.",
+            "PROBLEMA: Upload dá erro 'Falha no envio' ou 'Upload failed' - SOLUÇÃO: 1) Verifique sua conexão com internet, 2) Verifique se o arquivo não está corrompido (tente abrir ele no seu computador), 3) Verifique o tamanho (não pode passar de 50MB), 4) Verifique o formato (tem que ser PDF, DOC, DOCX, PPT, PPTX, ou TXT), 5) Tente fazer upload de outro arquivo para ver se o problema é específico daquele arquivo.",
+            "PROBLEMA: Upload demora MUITO (mais de 10 minutos) - SOLUÇÃO: Sua internet pode estar lenta. Verifique a velocidade da sua internet. Tente fazer upload em um horário diferente. Considere comprimir o arquivo para diminuir o tamanho.",
+            "PROBLEMA: Fiz upload mas o arquivo não aparece na lista - SOLUÇÃO: 1) Atualize a página (F5) para ver se aparece, 2) Verifique se o upload realmente terminou (viu a mensagem verde?), 3) Se não terminou, tente fazer novamente.",
+            "PROBLEMA: Quero substituir um arquivo por versão atualizada - SOLUÇÃO: DELETE o arquivo antigo primeiro (ícone de lixeira), depois faça upload do arquivo novo. Infelizmente não dá para 'sobrescrever' direto."
+          ],
+          "bestPractices": {
+            "title": "BOAS PRÁTICAS - Como Fazer Upload da Melhor Forma",
+            "practices": [
+              "✅ ORGANIZE seus arquivos ANTES: Renomeie com nomes claros (ex: '01-introducao.pdf', '02-variaveis.pdf', '03-funcoes.pdf'). Isso ajuda você e o tutor!",
+              "✅ Use SEMPRE PDF quando possível: É o formato mais confiável e universal.",
+              "✅ Envie arquivos BEM FORMATADOS: PDFs com texto claro, não escaneados ruins. Quanto melhor a qualidade, melhor o tutor entende!",
+              "✅ Divida conteúdo grande: Ao invés de um PDF de 200 páginas, divida em vários menores (por capítulo/tema). Fica mais organizado!",
+              "✅ Inclua TUDO que o aluno precisa: Teoria, exemplos, exercícios, gabaritos, materiais complementares.",
+              "✅ TESTE depois do upload: Clique no olhinho para visualizar e conferir se o arquivo foi enviado corretamente.",
+              "✅ Mantenha BACKUPS: Guarde cópias dos arquivos no seu computador! Se algo der errado no sistema, você tem os originais.",
+              "✅ Atualize conforme necessário: Se corrigir erros na apostila, delete a versão antiga e envie a corrigida!"
+            ]
+          },
+          "nextStep": {
+            "title": "PRÓXIMO PASSO Depois do Upload",
+            "desc": "Depois de fazer upload de TODOS os arquivos que o módulo precisa, o próximo passo é: CRIAR UM TOKEN DE ACESSO! O token é a 'chave' que permite os alunos acessarem o tutor de IA deste módulo. Vá para a próxima seção 'Criando Tokens de Acesso' para aprender como fazer!",
+            "tip": "DICA: Você NÃO precisa ter TODOS os arquivos para continuar! Pode fazer upload dos principais agora, criar o token, preparar o módulo, e depois voltar para adicionar mais arquivos conforme for criando."
+          }
+        },
+        "tokens": {
+          "title": "CRIANDO TOKENS DE ACESSO - A Chave para os Alunos!",
+          "whatIs": "Um TOKEN é como uma CHAVE ou SENHA especial que dá acesso ao tutor de IA do seu módulo. É um código único (parecido com uma senha longa e aleatória) que você GERA no sistema e depois DISTRIBUI para os alunos. Quando o aluno usa este token (geralmente clicando num link), ele consegue ACESSAR o widget (janelinha) do tutor e fazer perguntas!",
+          "analogy": "ANALOGIA: Imagine que o módulo é uma CASA. O token é a CHAVE dessa casa. Você (professor) cria cópias da chave e distribui para os alunos. Cada aluno usa a chave para entrar na casa (acessar o tutor). Sem a chave, eles não conseguem entrar!",
+          "why": "Por que criar tokens? Porque é assim que os ALUNOS vão acessar o tutor! Sem token, o tutor existe mas ninguém consegue usar. O token também serve para: CONTROLAR quem tem acesso (só quem tem o token pode usar), RASTREAR uso (você vê quantas vezes o token foi usado), TER SEGURANÇA (tokens podem expirar, ser revogados), INTEGRAR com outras plataformas (colocar o link do token no Moodle, Canvas, Google Classroom, etc).",
+          "important": "SUPER IMPORTANTE: Você cria o token UMA VEZ e distribui para TODOS os alunos! Não precisa criar um token diferente para cada aluno - um token serve para a turma toda! Mas você PODE criar vários tokens para o mesmo módulo se quiser (ex: um para turma A, outro para turma B, um para o Moodle, outro para Google Classroom).",
+          "creating": {
+            "title": "CRIANDO um Token - Passo a Passo COMPLETO",
+            "step1": {
+              "title": "Passo 1: Vá Para a Página do Módulo",
+              "desc": "Navegue até a página de DETALHES do módulo para o qual quer criar o token. Menu lateral > Módulos > Clique no nome do módulo desejado."
+            },
+            "step2": {
+              "title": "Passo 2: Clique no Botão 'Criar Token'",
+              "desc": "No TOPO da página do módulo, você verá vários botões. Procure o botão 'Criar Token' ou 'Create Token' (geralmente é AZUL ou VERDE). Clique UMA VEZ nele.",
+              "whatYouShouldSee": "Uma janela (popup) aparece no centro da tela com o título 'Criar Token de Módulo' ou 'Create Module Token'."
+            },
+            "step3": {
+              "title": "Passo 3: Preencha o NOME do Token",
+              "desc": "O primeiro campo que você vê é 'Nome do Token *' (obrigatório com *). Clique dentro e digite um NOME que ajude você a IDENTIFICAR este token. Exemplos BONS: 'Token Moodle Turma A 2024-1', 'Token Google Classroom Engenharia', 'Token Geral Matemática 1', 'Acesso Alunos Semestre 2'. Seja DESCRITIVO! No futuro você pode ter vários tokens e precisa saber qual é qual.",
+              "important": "IMPORTANTE: Este nome é APENAS para você (professor) se organizar. Os ALUNOS NÃO veem este nome! Então pode escrever o que quiser que faça sentido para você.",
+              "tip": "DICA: Use nomes que incluam: módulo, turma, semestre, ano, ou onde vai usar (Moodle, Canvas, email, etc). Exemplo: 'PROG1-M1-Moodle-2024-S1'."
+            },
+            "step4": {
+              "title": "Passo 4: Verifique o MÓDULO Selecionado",
+              "desc": "Logo abaixo você verá 'Módulo *' com o nome do módulo JÁ PREENCHIDO. Você NÃO precisa mexer aqui - o sistema automaticamente seleciona o módulo onde você está! Apenas CONFIRA se está mostrando o módulo correto. Se estiver certo (e deve estar!), prossiga."
+            },
+            "step5": {
+              "title": "Passo 5: Adicione uma DESCRIÇÃO (Opcional)",
+              "desc": "Você verá um campo 'Descrição' (sem *). É opcional mas BOM preencher! Escreva informações sobre este token. Exemplo: 'Token para uso no ambiente Moodle da disciplina. Válido para o semestre 2024-1. Distribuído via link direto na plataforma.' Quanto mais detalhes, melhor para você lembrar no futuro!",
+              "tip": "DICA: Anote ONDE você vai usar este token na descrição! Ajuda MUITO depois quando você tiver múltiplos tokens."
+            },
+            "step6": {
+              "title": "Passo 6: Defina a VALIDADE (Opcional mas Importante)",
+              "desc": "Você verá um campo 'Expira em (dias)' ou 'Expires in (days)'. Este campo é OPCIONAL. Se você DEIXAR EM BRANCO: O token NUNCA expira - funciona para sempre (ou até você deletar/revogar). Se você PREENCHER com um NÚMERO: O token expira após aquela quantidade de dias. Exemplo: se colocar '180', o token expira em 180 dias (6 meses). Depois de expirar, o token para de funcionar automaticamente.",
+              "whenToUse": "Quando usar expiração? Para tokens de teste (coloque poucos dias, tipo 7 ou 15), Para um semestre específico (coloque ~180 dias), Para um ano letivo (coloque ~365 dias). Quando NÃO usar expiração? Quando é um módulo que vai usar sempre (conteúdo atemporal), Quando você quer controle manual (prefere revogar manualmente quando quiser).",
+              "tip": "DICA PARA INICIANTES: Deixe EM BRANCO (sem expiração) para não ter dor de cabeça! Você pode revogar manualmente se precisar."
+            },
+            "step7": {
+              "title": "Passo 7: Configure as PERMISSÕES - CRUCIAL!",
+              "desc": "Agora vem uma parte MUITO IMPORTANTE! Você verá uma seção 'Permissões' ou 'Permissions' com DUAS caixinhas de seleção (checkboxes): 1) 'Permitir Chat' ou 'Allow Chat' (geralmente JÁ MARCADA por padrão), 2) 'Permitir Acesso a Arquivos' ou 'Allow File Access'. Vamos entender cada uma:",
+              "chatPermission": {
+                "title": "'Permitir Chat' - A Permissão Principal",
+                "desc": "Se esta caixinha estiver MARCADA (✓): Os alunos podem CONVERSAR com o tutor de IA - fazer perguntas, receber respostas, ter uma conversa. Esta é a função PRINCIPAL do sistema! Se esta caixinha estiver DESMARCADA (sem ✓): Os alunos NÃO podem conversar com o tutor. O token não serve para quase nada.",
+                "recommendation": "RECOMENDAÇÃO: SEMPRE deixe MARCADA! É para isso que o sistema existe! A ÚNICA razão para desmarcar seria se você quer criar um token apenas para download de arquivos (raro)."
+              },
+              "filePermission": {
+                "title": "'Permitir Acesso a Arquivos' - Permissão de Download",
+                "desc": "Se esta caixinha estiver MARCADA (✓): Os alunos podem BAIXAR os arquivos que você fez upload no módulo (PDFs, slides, apostilas). Eles veem um botão de download no widget. Se esta caixinha estiver DESMARCADA (sem ✓): Os alunos NÃO podem baixar os arquivos. Eles só podem conversar com o tutor, mas não acessar os arquivos diretamente.",
+                "recommendation": "RECOMENDAÇÃO: Geralmente MARQUE também! Se você fez upload de apostilas e slides, deixe os alunos baixarem! MAS: Se você NÃO quer que baixem (por exemplo: material é só para a IA consultar, não para o aluno ler), pode DESMARCAR."
+              },
+              "tip": "DICA: Na maioria dos casos, deixe AMBAS marcadas! Chat (óbvio) + Arquivos (para os alunos terem o material). As duas juntas fazem o sistema completo!"
+            },
+            "step8": {
+              "title": "Passo 8: REVISE Antes de Criar",
+              "desc": "Antes de clicar no botão de criar, revise tudo: ✅ Nome do token está descritivo? ✅ Módulo está correto? ✅ Descrição preenchida (opcional mas bom)? ✅ Expiração configurada como você quer (ou em branco)? ✅ Permissões marcadas corretas (Chat e Arquivos geralmente ambas SIM)? Tudo certo? Vamos criar!"
+            },
+            "step9": {
+              "title": "Passo 9: Clique em 'Criar Token'",
+              "desc": "No final da janela você vê dois botões: CINZA 'Cancelar' e AZUL 'Criar Token'. Clique no AZUL 'Criar Token'!",
+              "whatYouShouldSee": "O botão muda para 'Criando...' por 1-3 segundos. Depois: Mensagem VERDE aparece: 'Token criado com sucesso!', A janela FECHA, Você continua na página do módulo."
+            },
+            "step10": {
+              "title": "Passo 10: Veja o Token Criado na Lista!",
+              "desc": "Role a página para baixo até a seção 'Tokens de Acesso' ou 'Access Tokens'. Agora você verá uma TABELA com o token que acabou de criar! A tabela mostra: NOME do token, MÓDULO, O TOKEN em si (uma sequência longa de caracteres tipo 'eyJhbGci...'), PERMISSÕES (Chat: Permitido/Bloqueado, Arquivos: Permitido/Bloqueado), DATA DE EXPIRAÇÃO (se tiver, ou 'Nunca'), STATUS (Ativo/Inativo), BOTÕES DE AÇÃO (olhinho 👁️ para ver detalhes, copiar 📋, revogar ⛔).",
+              "important": "IMPORTANTE: Aquela sequência longa e estranha de caracteres É O TOKEN! Mas você NÃO vai distribuir o token cru assim para os alunos. Você vai usar um LINK especial (URL). Veja o próximo passo!"
+            }
+          },
+          "copyingToken": {
+            "title": "COPIANDO o Link do Token Para Distribuir",
+            "whatIs": "Depois de criar o token, você precisa COPIAR o LINK (URL) do token para poder ENVIAR para os alunos. O link já vem montado automaticamente pelo sistema - você só precisa copiar!",
+            "howTo": {
+              "title": "Como Copiar o Link - Super Fácil!",
+              "step1": {
+                "title": "Método 1: Clicar no Ícone de COPIAR",
+                "desc": "Na tabela de tokens, na linha do token que você criou, procure o ícone de COPIAR 📋 (geralmente azul). Clique UMA VEZ neste ícone. PRONTO! O link foi COPIADO para a área de transferência do seu computador! Você verá uma mensagenzinha verde dizendo 'Token copiado!' ou 'Token copied!'. Agora você pode COLAR este link onde quiser: email, Moodle, WhatsApp, documento, etc. Para colar: Ctrl+V (Windows/Linux) ou Cmd+V (Mac)."
+              },
+              "step2": {
+                "title": "Método 2: Ver Detalhes e Copiar Manualmente",
+                "desc": "Clique no ícone de OLHO 👁️ ao lado do token. Uma janela aparece mostrando TODOS os detalhes do token. No meio da janela você verá uma caixa com o LINK COMPLETO (uma URL que começa com http:// ou https://). Você pode: CLICAR no botão 'Copiar Token' que está ali, OU selecionar o texto do link (arraste o mouse sobre ele), clicar com botão direito, e escolher 'Copiar'."
+              }
+            },
+            "whatLinkLooksLike": "O link vai ser algo mais ou menos assim: 'https://seu-sistema.com/widget?token=eyJhbGciOiJI...' (uma URL longa). Este é o link que os ALUNOS vão usar!"
+          },
+          "distributingToken": {
+            "title": "DISTRIBUINDO o Token Para os Alunos - Como Enviar",
+            "methods": [
+              {
+                "name": "1. Via MOODLE (Plataforma de Ensino)",
+                "desc": "Se sua universidade usa Moodle: Entre no Moodle como professor, Vá para a DISCIPLINA/CURSO no Moodle, Adicione um novo RECURSO ou ATIVIDADE, Escolha tipo 'URL' ou 'Link Externo' ou 'HTML', Cole o LINK do token que você copiou, Dê um nome tipo 'Tutor de IA - Módulo 1', Salve. PRONTO! Os alunos vão ver o link no Moodle, clicar, e acessar o tutor!"
+              },
+              {
+                "name": "2. Via EMAIL",
+                "desc": "Mande um email para todos os alunos da turma com o link. Exemplo de email: 'Olá alunos! Para acessar o tutor de IA do Módulo 1 - Introdução à Programação, clique no link abaixo: [COLE O LINK AQUI]. Bons estudos!'"
+              },
+              {
+                "name": "3. Via GOOGLE CLASSROOM",
+                "desc": "Se usa Google Classroom: Crie um novo POST ou ATIVIDADE, No texto, cole o link do token, Ou use a opção 'Adicionar Link', Publique para os alunos."
+              },
+              {
+                "name": "4. Via WHATSAPP / TELEGRAM (Grupos da Turma)",
+                "desc": "Se tem grupo de WhatsApp ou Telegram da turma: Mande uma mensagem no grupo com o link. Exemplo: 'Pessoal, link do tutor de IA: [LINK]. Qualquer dúvida sobre o módulo, usem o tutor!'"
+              },
+              {
+                "name": "5. Em DOCUMENTOS / SLIDES",
+                "desc": "Cole o link em: Syllabus da disciplina (documento com cronograma), Slides das aulas (coloque no último slide), Apostilas em PDF (no início ou fim)."
+              },
+              {
+                "name": "6. QR CODE (Modo Avançado)",
+                "desc": "Você pode transformar o link em QR CODE! Use sites como 'QRCode Monkey' ou 'QR Code Generator', cole o link, gere o QR Code, coloque o QR em slides, apostilas, provas. Alunos podem escanear com celular e acessar direto!"
+              }
+            ],
+            "tip": "DICA: Use MÚLTIPLOS métodos! Coloque no Moodle E mande email E mande no WhatsApp. Assim você garante que TODO MUNDO recebe!"
+          },
+          "revokingToken": {
+            "title": "REVOGANDO um Token - Desativando o Acesso",
+            "whatIs": "Revogar significa DESATIVAR um token. Quando você revoga, o token para de funcionar imediatamente. Qualquer aluno que tentar usar aquele link vai receber uma mensagem de erro dizendo que o token está inválido.",
+            "whenToRevoke": "Quando revogar? Quando o semestre/curso acabou e você não quer mais que usem, Quando você criou um token de TESTE e quer desativar, Quando o token vazou para pessoas que não deviam ter acesso, Quando você quer forçar os alunos a usarem um token NOVO que você criou.",
+            "howTo": {
+              "title": "Como Revogar",
+              "desc": "Na tabela de tokens, clique no ícone de DETALHES (olhinho 👁️) do token que quer revogar. Na janela que abre, procure o botão VERMELHO 'Revogar Token' ou 'Revoke Token'. Clique nele. Vai aparecer confirmação: 'Tem certeza? Esta ação não pode ser desfeita.' Se tem certeza: clique 'Confirmar'. O token é IMEDIATAMENTE desativado! O STATUS muda para 'Inativo'. Qualquer aluno tentando usar o link vai receber erro."
+            },
+            "warning": "⚠️ CUIDADO: Revogar é irreversível! Se revogar por engano, você terá que CRIAR UM NOVO TOKEN e redistribuir o link novo para os alunos. É trabalhoso! Tenha certeza antes de revogar!"
+          },
+          "commonMistakes": [
+            "ERRO: Esquecer de marcar 'Permitir Chat' - SOLUÇÃO: Se você criou o token sem marcar chat, os alunos NÃO vão conseguir conversar! Delete o token e crie outro COM chat marcado.",
+            "ERRO: Copiar o TOKEN em si (a sequência de caracteres) ao invés do LINK - SOLUÇÃO: NÃO distribua o token cru (tipo 'eyJhbGci...')! Distribua o LINK COMPLETO (que começa com http:// ou https://). Use o botão de copiar!",
+            "ERRO: Criar vários tokens desnecessariamente - SOLUÇÃO: Um token serve para TODOS os alunos! Não precisa criar um token para cada aluno! Crie UM token e distribua para a turma toda (ou um por turma se tiver várias).",
+            "ERRO: Revogar token sem avisar os alunos - SOLUÇÃO: Se você revogar um token, AVISE OS ALUNOS! Senão eles vão ficar tentando usar e não vai funcionar, vão achar que é bug.",
+            "ERRO: Não testar o token antes de distribuir - SOLUÇÃO: SEMPRE teste! Depois de criar o token, abra o link você mesmo, veja se o widget abre, faça uma pergunta de teste. Só depois distribua!",
+            "ERRO: Perder o link do token - SOLUÇÃO: Não tem problema! O link fica salvo no sistema. Vá na página do módulo, role até tokens, e copie de novo!"
+          ],
+          "troubleshooting": [
+            "PROBLEMA: Não vejo o botão 'Criar Token' - SOLUÇÃO: Certifique-se que você está na página de DETALHES do módulo (não na lista). O botão fica no topo da página do módulo específico.",
+            "PROBLEMA: Criei o token mas ele não aparece na lista - SOLUÇÃO: Role a página para BAIXO até a seção 'Tokens de Acesso'. Se ainda não aparece, atualize a página (F5).",
+            "PROBLEMA: Clico no botão copiar mas não copia - SOLUÇÃO: Alguns navegadores bloqueiam cópia. Tente: 1) Dar permissão de clipboard para o site, 2) Clicar no olhinho, selecionar o link manualmente e copiar (Ctrl+C), 3) Usar outro navegador.",
+            "PROBLEMA: O link do token não funciona quando os alunos tentam usar - SOLUÇÃO: 1) Verifique se o token está ATIVO (não revogado), 2) Verifique se não expirou, 3) Verifique se você distribuiu o LINK COMPLETO (não só o token cru), 4) Verifique se a permissão de Chat está marcada, 5) Verifique se o módulo foi PREPARADO (próxima seção!).",
+            "PROBLEMA: Quero editar um token que já criei - SOLUÇÃO: Atualmente não dá para editar. Se precisa mudar algo, você tem que: 1) Revogar o token antigo, 2) Criar um novo token com as configurações certas, 3) Distribuir o novo link."
+          ],
+          "tips": [
+            "DICA: Crie nomes de tokens bem descritivos! Você vai agradecer no futuro quando tiver 20 tokens e precisar saber qual é qual.",
+            "DICA: Use expiração apenas se REALMENTE precisar. Token sem expiração é mais simples de gerenciar.",
+            "DICA: Mantenha uma PLANILHA com seus tokens! Anote: nome do módulo, nome do token, link, data de criação, onde foi distribuído. Ajuda MUITO!",
+            "DICA: Sempre TESTE o token você mesmo antes de mandar para os alunos! Abra o link, veja se funciona, faça uma pergunta.",
+            "DICA: Monitore o uso! O sistema mostra quantas vezes o token foi usado. Se ninguém está usando, pode ser que os alunos não receberam o link.",
+            "DICA: O próximo passo CRUCIAL depois de criar o token é PREPARAR O MÓDULO! Sem preparar, o token existe mas o tutor não funciona direito. Vá para a próxima seção 'Preparando Módulos'!"
+          ]
+        },
+        "preparingModules": {
+          "title": "PREPARANDO MÓDULOS - Ativando o Tutor de IA!",
+          "whatIs": "PREPARAR um módulo é o processo de ENVIAR todos os arquivos que você fez upload para a INTELIGÊNCIA ARTIFICIAL (OpenAI) e ATIVAR o tutor. É como 'ligar' o cérebro do tutor! Até você preparar, o tutor não funciona - ele não tem acesso aos seus arquivos, não sabe sobre o que responder. Preparar é fazer a CONEXÃO entre seus arquivos e a IA.",
+          "analogy": "ANALOGIA: Você criou o módulo (construiu uma escola), fez upload de arquivos (colocou livros na biblioteca), criou token (fez chaves da porta). Mas o PROFESSOR (tutor de IA) ainda não LEMBR dos livros! Preparar é fazer o professor LER todos os livros da biblioteca para poder dar aula. Sem preparar, o professor está lá mas não sabe ensinar porque não leu os livros!",
+          "why": "Por que preparar? SEM preparar: O widget abre mas o tutor NÃO FUNCIONA direito, O tutor não tem acesso aos seus PDFs, apostilas, O tutor não sabe os detalhes da sua matéria, Pode dar respostas genéricas ou erros. COM módulo preparado: O tutor TEM ACESSO a todos os seus arquivos!, O tutor consegue responder baseado NO SEU CONTEÚDO!, O tutor cita trechos dos seus PDFs!, TUDO FUNCIONA PERFEITAMENTE!",
+          "important": "SUPER IMPORTANTE: Você precisa preparar APENAS UMA VEZ (ou sempre que mudar algo). Depois que preparar, o módulo fica pronto! Mas SE VOCÊ ADICIONAR ARQUIVOS NOVOS ou MUDAR O PROMPT DO TUTOR, você precisa PREPARAR DE NOVO para atualizar!",
+          "whenToPrepare": "Quando preparar? DEPOIS de criar o módulo, configurar o tutor, fazer upload dos arquivos, e criar o token. Preparar é um dos ÚLTIMOS passos! SEMPRE QUE você: Adicionar arquivos novos, Deletar arquivos, Modificar o prompt do tutor de IA. Você precisa PREPARAR DE NOVO para atualizar!",
+          "requirements": {
+            "title": "REQUISITOS Para Preparar (O Que Você PRECISA Ter Pronto)",
+            "list": [
+              "✅ Módulo criado e configurado",
+              "✅ Prompt do tutor de IA configurado (pelo menos com template)",
+              "✅ PELO MENOS UM ARQUIVO enviado (PDF, DOC, etc). Pode preparar sem arquivos mas NÃO é recomendado!",
+              "✅ PELO MENOS UM TOKEN criado e ATIVO (com permissão de Chat marcada)"
+            ],
+            "tip": "DICA: Se você não tem arquivos ainda, tecnicamente pode preparar mesmo assim, mas o tutor vai funcionar MAL! Sempre envie arquivos ANTES de preparar!"
+          },
+          "howTo": {
+            "title": "Como PREPARAR um Módulo - Passo a Passo",
+            "step1": {
+              "title": "Passo 1: Vá Para a Página do Módulo",
+              "desc": "Navegue até a página de DETALHES do módulo que quer preparar. Menu lateral > Módulos > Clique no nome do módulo."
+            },
+            "step2": {
+              "title": "Passo 2: Verifique os Pré-Requisitos",
+              "desc": "Antes de preparar, role a página e CONFIRA: Seção 'Arquivos do Módulo': Tem pelo menos 1 arquivo? (Recomendado ter vários!), Seção 'Tokens de Acesso': Tem pelo menos 1 token ativo? Se tiver tudo OK, pode preparar! Se estiver faltando algo, volte e complete (adicione arquivos ou crie token)."
+            },
+            "step3": {
+              "title": "Passo 3: Clique no Botão 'Preparar Módulo'",
+              "desc": "No TOPO da página do módulo, você verá vários botões. Procure o botão 'Preparar Módulo' ou 'Prepare Module' (geralmente é VERDE ou LARANJA, pode ter um ícone de engrenagem ⚙️ ou foguete 🚀). Clique UMA VEZ neste botão.",
+              "whatYouShouldSee": "O botão IMEDIATAMENTE muda para 'Preparando...' ou 'Preparing...' com um ícone girando ⭕. O botão fica DESABILITADO (você não pode clicar de novo)."
+            },
+            "step4": {
+              "title": "Passo 4: AGUARDE o Processo (Pode Demorar!)",
+              "desc": "Agora o sistema está: Pegando TODOS os seus arquivos (PDFs, docs, etc), Enviando para a OpenAI (empresa de Inteligência Artificial), Criando um 'Assistente' de IA personalizado com seu prompt, Fazendo a IA 'ler' e 'entender' todos os arquivos, Conectando tudo e deixando pronto. Este processo pode demorar:",
+              "timeEstimates": "TEMPO DE ESPERA (aproximado): Poucos arquivos pequenos (2-3 PDFs, 10-20 páginas cada): 30 segundos a 1 minuto, Vários arquivos médios (5-10 PDFs, 50-100 páginas no total): 1 a 3 minutos, Muitos arquivos grandes (10-20 PDFs, centenas de páginas): 3 a 5 minutos, Arquivos MUITO grandes ou MUITOS arquivos: Pode chegar a 10 minutos!",
+              "important": "SUPER IMPORTANTE: NÃO FECHE A PÁGINA! NÃO navegue para outro lugar! NÃO clique em nada! Apenas AGUARDE pacientemente. A página vai ficar mostrando 'Preparando...' e você vai ver o ícone girando. É NORMAL demorar! Não é bug, é o sistema trabalhando. Se você fechar, o processo é CANCELADO e você tem que começar de novo!",
+              "tip": "DICA: Enquanto espera, você pode deixar a página aberta e fazer outra coisa no computador (abrir outra aba, outro programa). Só não FECHE a aba onde está preparando!"
+            },
+            "step5": {
+              "title": "Passo 5: SUCESSO! Módulo Preparado",
+              "whatYouShouldSee": "Quando o processo termina: O botão para de girar e volta ao normal, Aparece uma MENSAGEM VERDE no canto superior direito dizendo 'Módulo preparado com sucesso!' ou 'Module prepared successfully!' ou similar, O botão pode mudar para 'Módulo Preparado' ou 'Module Prepared' (mostrando que já foi feito). PRONTO! O módulo está 100% funcional agora! Os alunos podem usar o token e o tutor vai funcionar PERFEITAMENTE!"
+            }
+          },
+          "testing": {
+            "title": "TESTANDO o Módulo Depois de Preparar - SEMPRE Faça Isso!",
+            "why": "Por que testar? Para ter CERTEZA que tudo está funcionando ANTES de mandar para os alunos! Imagine mandar o link para 100 alunos e descobrir que não funciona - desastre!",
+            "howTo": {
+              "title": "Como Testar",
+              "step1": {
+                "title": "1. Copie o Link do Token",
+                "desc": "Na seção 'Tokens de Acesso' da página do módulo, copie o link do token (clique no ícone de copiar 📋)."
+              },
+              "step2": {
+                "title": "2. Abra o Link Numa Nova Aba",
+                "desc": "Cole o link na barra de endereços do navegador (ou Ctrl+clique para abrir em nova aba). Aperte Enter."
+              },
+              "step3": {
+                "title": "3. O Widget Deve Abrir",
+                "desc": "Você deve ver o WIDGET (uma janelinha/interface do tutor de IA) carregar na tela. Pode demorar alguns segundos para aparecer."
+              },
+              "step4": {
+                "title": "4. Faça Uma Pergunta de Teste",
+                "desc": "Na caixinha de texto do widget, digite uma pergunta relacionada ao conteúdo que está nos seus PDFs. Exemplo: Se seus PDFs são sobre Python, pergunte 'O que é uma variável em Python?'. Aperte Enter ou clique em enviar."
+              },
+              "step5": {
+                "title": "5. Veja Se o Tutor Responde Corretamente",
+                "desc": "O tutor deve responder em alguns segundos (5-15 segundos). A resposta deve: Estar em PORTUGUÊS (se você configurou idioma português), Mencionar conceitos que ESTÃO nos seus arquivos, Ser coerente e útil. Se a resposta está boa, SUCESSO! Tudo funcionando!"
+              },
+              "step6": {
+                "title": "6. Teste Mais Algumas Perguntas",
+                "desc": "Faça mais 2-3 perguntas diferentes para testar bem: Uma pergunta sobre um conceito básico, Uma pergunta específica sobre algo que você sabe que está num PDF específico, Uma pergunta que exige o tutor combinar info de vários arquivos. Se todas responderam bem, PERFEITO! Pode distribuir o link para os alunos com confiança!"
+              }
+            }
+          },
+          "repreparing": {
+            "title": "Quando PREPARAR DE NOVO (Re-preparar)",
+            "situations": [
+              "Situação 1: Você ADICIONOU novos arquivos - O que fazer: Vá na página do módulo e clique 'Preparar Módulo' de novo! O sistema vai adicionar os arquivos novos ao tutor.",
+              "Situação 2: Você DELETOU arquivos - O que fazer: Prepare de novo para o tutor 'esquecer' aqueles arquivos.",
+              "Situação 3: Você MUDOU o PROMPT do tutor - O que fazer: Prepare de novo para atualizar a 'personalidade' do tutor com as novas instruções.",
+              "Situação 4: Você substituiu um arquivo (deletou o antigo e enviou nova versão) - O que fazer: Prepare de novo!"
+            ],
+            "tip": "DICA: Re-preparar geralmente é MAIS RÁPIDO que a preparação inicial (demora menos tempo)."
+          },
+          "commonMistakes": [
+            "ERRO: Distribuir o link do token SEM preparar o módulo - SOLUÇÃO: O widget abre mas o tutor NÃO funciona! Os alunos vão reclamar. SEMPRE prepare ANTES de distribuir!",
+            "ERRO: Fechar a página enquanto está preparando - SOLUÇÃO: O processo é CANCELADO! Você perde o progresso. Tem que preparar de novo. NUNCA feche enquanto tiver 'Preparando...' rodando!",
+            "ERRO: Tentar preparar sem ter token ativo - SOLUÇÃO: Vai dar erro! Você PRECISA ter pelo menos UM token ativo com permissão de Chat. Crie o token primeiro, depois prepare.",
+            "ERRO: Preparar sem ter arquivos - SOLUÇÃO: Tecnicamente funciona mas o tutor vai ser INÚTIL! Ele não vai saber sobre sua matéria. SEMPRE envie arquivos ANTES de preparar!",
+            "ERRO: Adicionar arquivos novos e esquecer de re-preparar - SOLUÇÃO: Os novos arquivos NÃO vão estar disponíveis para o tutor! Os alunos vão perguntar sobre conteúdo do arquivo novo e o tutor vai dizer que não sabe. Sempre RE-PREPARE depois de adicionar arquivos!",
+            "ERRO: Clicar no botão preparar VÁRIAS VEZES - SOLUÇÃO: NÃO faça isso! Clique UMA VEZ e aguarde! Clicar várias vezes pode causar problemas."
+          ],
+          "troubleshooting": [
+            "PROBLEMA: Botão 'Preparar Módulo' não aparece - SOLUÇÃO: Confira: 1) Você está na página do MÓDULO (não da disciplina)?, 2) Você já criou pelo menos um token?, 3) Recarregue a página (F5).",
+            "PROBLEMA: Erro 'Nenhum token disponível' - SOLUÇÃO: Você precisa criar pelo menos UM token ATIVO antes de preparar. Vá na seção de tokens, crie um, e depois volte para preparar.",
+            "PROBLEMA: Erro 'Token inválido' - SOLUÇÃO: O token precisa estar ATIVO e ter permissão de CHAT marcada. Verifique o token, se estiver revogado ou sem permissão de chat, crie um novo.",
+            "PROBLEMA: Fica preparando para sempre (mais de 10 minutos) - SOLUÇÃO: Algo travou. 1) Aguarde pelo menos 15 minutos para ter certeza, 2) Se realmente travou, atualize a página (F5), 3) Tente preparar novamente, 4) Se continuar travando, pode ser problema nos arquivos (arquivo corrompido). Verifique se consegue abrir todos os PDFs no seu computador.",
+            "PROBLEMA: Preparou mas o tutor não responde bem ou diz que não sabe - SOLUÇÃO: 1) Verifique se os arquivos estão legíveis (não são PDFs escaneados ruins), 2) Verifique se o prompt do tutor está bem configurado, 3) Tente RE-PREPARAR de novo, 4) Se ainda não funcionar, pode ser que os PDFs não tenham texto (só imagens). Converta para PDFs com texto reconhecido (OCR).",
+            "PROBLEMA: Erro genérico ao preparar - SOLUÇÃO: 1) Verifique sua internet, 2) Recarregue a página e tente de novo, 3) Tente remover arquivos muito grandes ou muitos arquivos (prepare em partes), 4) Se nada funcionar, entre em contato com suporte."
+          ],
+          "finalChecklist": {
+            "title": "CHECKLIST FINAL - Antes de Liberar Para os Alunos",
+            "list": [
+              "✅ Módulo criado com nome, código, descrição",
+              "✅ Prompt do tutor configurado (template ou personalizado)",
+              "✅ Idioma do tutor configurado (Português se seus alunos são brasileiros)",
+              "✅ Arquivos enviados (pelo menos os principais - apostilas, slides)",
+              "✅ Token criado com nome descritivo",
+              "✅ Permissões do token corretas (Chat SIM, Arquivos geralmente SIM)",
+              "✅ Módulo PREPARADO (apertou o botão e esperou até terminar)",
+              "✅ TESTADO (abriu o link, fez perguntas, tutor respondeu bem)",
+              "✅ Link do token COPIADO e pronto para distribuir",
+              "✅ Plano de distribuição definido (Moodle? Email? WhatsApp? Todos?)"
+            ],
+            "congrats": "SE TUDO ESTÁ ✅: PARABÉNS!!! Você completou TODO o processo! Seu módulo está 100% funcional e pronto para os alunos usarem! Agora é só distribuir o link e acompanhar! 🎉🚀"
+          },
+          "whatNext": {
+            "title": "O Que Fazer DEPOIS (Acompanhamento)",
+            "tips": [
+              "📊 Monitore o uso: Veja quantas vezes o token foi usado. Se poucos alunos estão usando, lembre eles!",
+              "💬 Peça feedback: Pergunte aos alunos se o tutor está ajudando, se as respostas estão boas.",
+              "🔄 Atualize conforme necessário: Se criar material novo, adicione no módulo e re-prepare!",
+              "🐛 Fique atento a problemas: Se alunos reportarem que o tutor respondeu algo errado, verifique o prompt e os arquivos.",
+              "📚 Crie mais módulos: Agora que você sabe o processo, crie os outros módulos da sua disciplina!",
+              "🎓 Aproveite: Você automatizou parte do trabalho de professor! O tutor responde dúvidas 24/7 enquanto você descansa! 😊"
+            ]
+          }
+        }
+      }
+    },
+    "regularProfessor": {
+      "title": "Guia do Professor Regular",
+      "subtitle": "Guia super detalhado para professores regulares. Este guia é MUITO similar ao guia de Professor Administrador, mas você terá algumas diferenças de acesso!",
+      "note": "NOTA: Como Professor Regular, você pode fazer QUASE TUDO que o Professor Administrador faz, EXCETO: Criar outros professores, Ver todas as disciplinas da universidade (só vê as suas). Para criar módulos, fazer upload de arquivos, configurar tutores de IA, criar tokens, preparar módulos - É TUDO IGUAL! Siga os mesmos tutoriais da seção 'Professor Administrador' acima. Todas as instruções de módulos, arquivos, tokens e preparação se aplicam a você também!"
+    }
   }
 }

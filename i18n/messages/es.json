@@ -953,6 +953,7 @@
   },
   "sidebar": {
     "dashboard": "Panel",
+    "tutorials": "Tutoriales y Guías",
     "universities": "Universidades",
     "myUniversity": "Mi universidad",
     "moduleTokens": "Tokens de módulos",
@@ -1032,5 +1033,727 @@
     "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo o vuelve a la página de inicio.",
     "tryAgain": "Intentar de nuevo",
     "homePage": "Página de inicio"
+  },
+  "tutorials": {
+    "title": "Tutoriales y Guías del Sistema",
+    "description": "Guías completas para ayudarte a dominar la plataforma Tutoria",
+    "tableOfContents": "Tabla de Contenidos",
+    "quickLinks": "Enlaces Rápidos",
+    "gettingStarted": "Comenzando",
+    "overview": "Resumen",
+    "searchPlaceholder": "Buscar tutoriales...",
+    "adminProfessor": {
+      "title": "Guía del Profesor Administrador",
+      "subtitle": "¡Guía COMPLETA y súper detallada para profesores que administran una universidad. Aprenderás TODO paso a paso!",
+      "overview": {
+        "title": "Entendiendo Tu Rol - ¿Qué es un Profesor Administrador?",
+        "whatIs": "Imagina que el sistema Tutoria es un gran edificio de apartamentos, donde cada apartamento es una universidad. Si el Super Administrador es el administrador general del edificio entero, el Profesor Administrador es el ADMINISTRADOR DE TU APARTAMENTO - cuidas TODO dentro de tu universidad, pero solo de la tuya. No tocas otras universidades.",
+        "keyResponsibilities": "Responsabilidades Clave",
+        "responsibilities": [
+          "📚 Crear y gestionar CURSOS de TU universidad - Por ejemplo: 'Matemáticas 1', 'Programación Python', etc.",
+          "📖 Crear y gestionar MÓDULOS dentro de cursos - Los módulos son como 'capítulos' o 'unidades' de un curso",
+          "👨‍🏫 Crear cuentas de PROFESORES REGULARES - Otros profesores que te ayudarán a enseñar y gestionar módulos",
+          "🤖 Configurar TUTORES IA - El 'cerebro' que conversará con los estudiantes y los ayudará a estudiar"
+        ]
+      },
+      "workflow": {
+        "title": "Flujo de Trabajo Completo - Tu Viaje Paso a Paso",
+        "whatIs": "Este es el camino COMPLETO que seguirás de principio a fin. ¡Piensa en esto como una RECETA - necesitas seguir los pasos en orden para que todo funcione!",
+        "steps": [
+          {
+            "number": "1",
+            "title": "Establecer Tu Contraseña",
+            "desc": "¿Primera vez? Recibiste un ENLACE del Super Admin. Haz clic en el enlace y crea TU contraseña. ¡Después de esto, podrás iniciar sesión cuando quieras!"
+          },
+          {
+            "number": "2",
+            "title": "Crear Cursos (Disciplinas)",
+            "desc": "Entra al sistema y crea las DISCIPLINAS de tu universidad. Ejemplo: 'Introducción a la Programación', 'Matemáticas Avanzadas', etc."
+          },
+          {
+            "number": "3",
+            "title": "Crear Módulos",
+            "desc": "Dentro de cada disciplina, crea MÓDULOS (como capítulos). Ejemplo: En 'Programación', puedes tener Módulo 1: 'Variables y Tipos de Datos', Módulo 2: 'Bucles', etc."
+          },
+          {
+            "number": "4",
+            "title": "Configurar el Tutor IA",
+            "desc": "Dile a la IA CÓMO debe comportarse. Es como dar 'instrucciones de personalidad' a un tutor. Ejemplo: 'Eres un profesor paciente de matemáticas que explica paso a paso'."
+          },
+          {
+            "number": "5",
+            "title": "Subir Archivos (PDFs, Presentaciones, etc.)",
+            "desc": "¡Sube los MATERIALES DE ESTUDIO DEL MÓDULO! PDFs, PowerPoints, documentos Word, etc. ¡La IA LEERÁ estos archivos para responder preguntas de los estudiantes!"
+          },
+          {
+            "number": "6",
+            "title": "Crear Tokens (Llaves para Estudiantes)",
+            "desc": "Crea 'LLAVES' (tokens) que los estudiantes usarán para ACCEDER al tutor IA. Piensa en esto como crear contraseñas que darás a los estudiantes."
+          },
+          {
+            "number": "7",
+            "title": "Preparar el Módulo",
+            "desc": "¡Haz clic en 'Preparar Módulo' - Esto envía TODOS LOS ARCHIVOS a la IA y hace que todo esté LISTO para que los estudiantes lo usen!"
+          },
+          {
+            "number": "8",
+            "title": "Crear Profesores Regulares (Opcional)",
+            "desc": "Si quieres, crea cuentas para OTROS PROFESORES que te ayudarán a gestionar módulos y cursos. Tendrán MENOS permisos que tú."
+          },
+          {
+            "number": "9",
+            "title": "Distribuir Tokens a Estudiantes",
+            "desc": "¡Copia los tokens (llaves) y pégalos en Moodle, envía por correo, WhatsApp, o donde sea que te comuniques con los estudiantes!"
+          },
+          {
+            "number": "10",
+            "title": "Monitorear y Actualizar",
+            "desc": "¡Vigila cómo los estudiantes lo están usando! Puedes agregar más archivos, mejorar el tutor IA, crear más tokens, etc."
+          }
+        ],
+        "tip": "💡 CONSEJO: ¡No intentes hacer todo de una vez! Ve paso a paso. Crea 1 disciplina primero, luego 1 módulo, configura la IA, sube 1 archivo, crea 1 token, y PRUEBA todo antes de crear más!"
+      },
+      "creatingCourses": {
+        "title": "CÓMO CREAR CURSOS (DISCIPLINAS) - TUTORIAL COMPLETO",
+        "whatIs": "Un CURSO (o DISCIPLINA) es como un LIBRO GRANDE en una biblioteca. Dentro de este libro, tendrás varios CAPÍTULOS (que son los módulos). Por ejemplo: 'Introducción a la Programación' es un CURSO. Dentro puedes tener Módulo 1, Módulo 2, Módulo 3, etc.",
+        "why": "¡Necesitas crear cursos ANTES de crear módulos! Es como: necesitas crear el LIBRO antes de poder escribir los CAPÍTULOS dentro de él.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "ABRE el MENÚ LATERAL (lado izquierdo de la pantalla)",
+            "desc": "Mira el lado izquierdo de la pantalla. Hay un MENÚ con varias opciones. Encuentra la opción que dice 'CURSOS' o 'Cursos'. Usualmente tiene un ícono de LIBRO 📚 al lado."
+          },
+          {
+            "number": "2",
+            "title": "HAZ CLIC en 'Cursos'",
+            "desc": "Haz clic en 'Cursos'. Verás que se abre una NUEVA PÁGINA con una LISTA de todos los cursos (si ya creaste alguno). Si es tu PRIMERA VEZ, la lista estará VACÍA."
+          },
+          {
+            "number": "3",
+            "title": "HAZ CLIC en el botón 'CREAR CURSO'",
+            "desc": "Mira en la parte SUPERIOR DERECHA de la pantalla. Hay un botón AZUL con texto blanco que dice 'CREAR CURSO' o 'Crear Curso'. ¡HAZ CLIC en este botón!"
+          },
+          {
+            "number": "4",
+            "title": "COMPLETA el NOMBRE DEL CURSO",
+            "desc": "Se abrirá un FORMULARIO (una caja con varios campos para completar). El PRIMER campo es 'Nombre del Curso'. Escribe el NOMBRE del curso que quieres crear. Ejemplo: 'Introducción a Ciencias de la Computación' o 'Matemáticas Avanzadas' o 'Estructuras de Datos'."
+          },
+          {
+            "number": "5",
+            "title": "COMPLETA el CÓDIGO DEL CURSO",
+            "desc": "El SEGUNDO campo es 'Código del Curso' o 'Código'. Esto es una ABREVIACIÓN o CÓDIGO CORTO para el curso. Ejemplo: Si el curso es 'Introducción a Ciencias de la Computación', el código podría ser 'CS101' o 'COMP100'. ¡Usa algo CORTO y fácil de recordar!"
+          },
+          {
+            "number": "6",
+            "title": "COMPLETA la DESCRIPCIÓN (OPCIONAL - ¡pero RECOMENDADO!)",
+            "desc": "El TERCER campo es 'Descripción'. ¡Esto es OPCIONAL (puedes dejarlo en blanco), pero ALTAMENTE RECOMENDAMOS completarlo! Escribe de qué TRATA el curso. Ejemplo: 'Este curso enseña los fundamentos de programación usando Python, cubriendo variables, bucles, funciones y estructuras de datos básicas.' Esto ayuda a OTROS PROFESORES y ESTUDIANTES a entender de qué trata el curso."
+          },
+          {
+            "number": "7",
+            "title": "VERIFICA que TU UNIVERSIDAD esté SELECCIONADA",
+            "desc": "Debe haber un campo llamado 'Universidad'. Usualmente TU universidad ya está AUTOMÁTICAMENTE SELECCIONADA (porque eres un Profesor Administrador de esta universidad). ¡Solo VERIFICA que sea correcta!"
+          },
+          {
+            "number": "8",
+            "title": "HAZ CLIC en 'CREAR CURSO' o 'Crear'",
+            "desc": "Después de completar todo, busca un BOTÓN AZUL en la parte inferior del formulario que dice 'CREAR CURSO' o 'Crear'. ¡HAZ CLIC en este botón!"
+          },
+          {
+            "number": "9",
+            "title": "ESPERA la CONFIRMACIÓN",
+            "desc": "El sistema GUARDARÁ tu curso. Verás un MENSAJE VERDE en la parte superior diciendo algo como '¡Curso creado exitosamente!' o serás REDIRIGIDO a la PÁGINA DEL CURSO (donde puedes ver detalles del curso que acabas de crear)."
+          }
+        ],
+        "whatYouShouldSee": "Después de crear el curso, deberías ver la PÁGINA DE DETALLES DEL CURSO con PESTAÑAS: 'Módulos', 'Profesores', 'Estudiantes'. La pestaña 'Módulos' estará VACÍA (¡porque aún no has creado módulos!). También verás botones como 'AGREGAR MÓDULO', 'EDITAR CURSO', etc.",
+        "commonMistakes": [
+          {
+            "mistake": "¡Olvidé completar el Nombre del Curso y el sistema no me deja guardar!",
+            "solution": "El campo 'Nombre del Curso' es OBLIGATORIO (tiene un asterisco * al lado). ¡DEBES completarlo! Sin nombre, no puedes crear el curso."
+          },
+          {
+            "mistake": "¡Olvidé completar el Código del Curso y el sistema no me deja guardar!",
+            "solution": "¡El campo 'Código del Curso' también es OBLIGATORIO! Necesitas crear un CÓDIGO para el curso. Puede ser algo simple como 'MAT101' o 'CS1'."
+          },
+          {
+            "mistake": "¡Creé el curso pero no lo encuentro en la lista!",
+            "solution": "Después de crear, usualmente eres REDIRIGIDO a la página del curso. Para ver la LISTA de todos los cursos, haz clic en 'Cursos' en el menú izquierdo nuevamente. ¡Tu curso debería aparecer ahí!"
+          },
+          {
+            "mistake": "¡Ingresé un código que ya está siendo usado por otro curso!",
+            "solution": "¡Cada curso necesita un código ÚNICO! Si recibes un error diciendo que el código ya existe, elige un código DIFERENTE. Ejemplo: En lugar de 'CS101', intenta 'CS101-2024' o 'CS101-A'."
+          },
+          {
+            "mistake": "¡Creé el curso pero quiero cambiar el nombre!",
+            "solution": "¡No hay problema! Ve a la página del curso (haz clic en 'Cursos' en el menú, luego haz clic en el nombre del curso). Haz clic en el botón 'EDITAR CURSO' (usualmente en la parte superior derecha). Cambia lo que quieras y haz clic en 'GUARDAR CAMBIOS'."
+          },
+          {
+            "mistake": "¡Creé un curso por error y quiero eliminarlo!",
+            "solution": "Ve a la página de CURSOS (haz clic en 'Cursos' en el menú izquierdo). Encuentra el curso que quieres eliminar en la lista. Haz clic en el ÍCONO ROJO DE ELIMINAR (usualmente un bote de basura 🗑️) en el lado derecho de la fila. Confirma la eliminación. ⚠️ ADVERTENCIA: ¡Esto ELIMINARÁ TODOS LOS MÓDULOS del curso también!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "¡El botón 'CREAR CURSO' no aparece!",
+            "solution": "¡Asegúrate de que eres un PROFESOR ADMINISTRADOR! Solo los profesores administradores pueden crear cursos. Si eres un profesor REGULAR, NO verás este botón. Habla con tu Profesor Administrador o Super Administrador."
+          },
+          {
+            "problem": "¡Completé todo pero cuando hago clic en 'Crear' no pasa nada!",
+            "solution": "¡Verifica que TODOS los campos OBLIGATORIOS estén completados (los que tienen asterisco *)! También verifica si hay MENSAJES DE ERROR en ROJO debajo de los campos. Si hay un mensaje de error, lee lo que dice y corrígelo!"
+          },
+          {
+            "problem": "¡El sistema dice 'Error al crear curso'!",
+            "solution": "Esto puede pasar por varias razones: 1) Tu internet se desconectó - verifica tu conexión e intenta de nuevo. 2) El código del curso ya está siendo usado - intenta otro código. 3) Error del sistema - espera unos minutos e intenta de nuevo. Si persiste, contacta soporte técnico."
+          },
+          {
+            "problem": "¡Creé el curso pero no sé cómo agregarle módulos!",
+            "solution": "¡Genial! ¡Completaste el primer paso! Ahora ve a la sección 'CÓMO CREAR MÓDULOS' más abajo en este tutorial. ¡Ahí aprenderás cómo crear módulos DENTRO de este curso que acabas de crear!"
+          },
+          {
+            "problem": "¡Creé un curso para la universidad equivocada!",
+            "solution": "Como Profesor Administrador, ¡solo puedes crear cursos para TU universidad! Si apareció la universidad equivocada, algo está mal con tu cuenta. Contacta al Super Administrador para verificar la configuración de tu cuenta."
+          },
+          {
+            "problem": "¡No sé qué escribir en la Descripción!",
+            "solution": "¡La descripción es OPCIONAL! Pero si quieres completarla, escribe algo simple como: 'Este curso cubre los fundamentos de [materia]' o 'Los estudiantes aprenderán sobre [temas]'. ¡No tiene que ser perfecto! Puedes cambiarlo después."
+          }
+        ],
+        "tips": [
+          "💡 ¡Usa NOMBRES DESCRIPTIVOS! En lugar de 'Matemáticas', usa 'Introducción al Cálculo Diferencial' o 'Álgebra Lineal I'. ¡Esto ayuda a identificar el curso después!",
+          "💡 ¡Crea CÓDIGOS CON UN PATRÓN! Ejemplo: CS101, CS102, CS103 para cursos de Ciencias de la Computación. ¡Esto facilita la organización!",
+          "💡 ¡COMPLETA LA DESCRIPCIÓN aunque sea opcional! ¡Tu yo futuro te lo agradecerá cuando tengas 20 cursos y no puedas recordar de qué trata cada uno!",
+          "💡 ¡COMIENZA SIMPLE! Crea 1 o 2 cursos primero, crea módulos para ellos, PRUEBA todo, ¡LUEGO crea más cursos! ¡No intentes crear 10 cursos de una vez el primer día!",
+          "💡 Si no estás seguro del nombre del curso, ¡CRÉALO de todos modos! ¡Puedes CAMBIAR el nombre después editando el curso!"
+        ]
+      },
+      "creatingModules": {
+        "title": "CÓMO CREAR MÓDULOS - TUTORIAL COMPLETO CON TUTOR IA",
+        "whatIs": "Un MÓDULO es como un CAPÍTULO o UNIDAD dentro de un curso. Por ejemplo: si tienes un curso llamado 'Introducción a la Programación', puedes tener: Módulo 1: 'Variables y Tipos de Datos', Módulo 2: 'Bucles y Condiciones', Módulo 3: 'Funciones', etc. ¡Cada módulo es una PARTE ESPECÍFICA del contenido!",
+        "why": "¡Los módulos son donde los ESTUDIANTES interactuarán con el TUTOR IA! Cada módulo tiene: 1) Archivos (PDFs, presentaciones, etc.), 2) Un Tutor IA configurado para ayudar a los estudiantes con ESTE tema específico, 3) Tokens (llaves) que los estudiantes usan para acceder al contenido.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "ABRE el MENÚ LATERAL y haz clic en 'MÓDULOS' o ve al PANEL",
+            "desc": "Puedes crear un módulo de 2 maneras: 1) Haz clic en 'Módulos' en el menú izquierdo, luego haz clic en 'CREAR MÓDULO'. O 2) En el PANEL (página de inicio), haz clic en el botón 'CREAR MÓDULO'. ¡Elige el que sea más fácil para ti!"
+          },
+          {
+            "number": "2",
+            "title": "COMPLETA el NOMBRE DEL MÓDULO",
+            "desc": "El PRIMER campo es 'Nombre del Módulo'. Escribe un NOMBRE DESCRIPTIVO para este módulo. Ejemplo: 'Introducción a Variables en Python' o 'Álgebra Lineal - Unidad 1: Matrices' o 'Módulo 1: Fundamentos de Química'. ¡Sé ESPECÍFICO! No solo escribas 'Módulo 1' - ¡di de qué TRATA este módulo!"
+          },
+          {
+            "number": "3",
+            "title": "COMPLETA el CÓDIGO DEL MÓDULO",
+            "desc": "El SEGUNDO campo es 'Código del Módulo' o 'Código'. Esto es una ABREVIACIÓN o identificador corto. Ejemplo: 'CS101-M1' (significa Ciencias de la Computación 101, Módulo 1) o 'MAT-S1' (Matemáticas, Semana 1). ¡Usa algo que tenga sentido para TI y sea fácil de encontrar después!"
+          },
+          {
+            "number": "4",
+            "title": "SELECCIONA el CURSO (Disciplina) al que pertenece este módulo",
+            "desc": "Hay un MENÚ DESPLEGABLE (una caja donde haces clic y aparece una lista) llamado 'Curso'. Haz clic en él y SELECCIONA a qué CURSO pertenece este módulo. Ejemplo: Si estás creando un módulo sobre 'Variables en Python', selecciona el curso 'Introducción a la Programación'. ¡DEBES seleccionar un curso! ¡Cada módulo necesita estar dentro de un curso!"
+          },
+          {
+            "number": "5",
+            "title": "COMPLETA SEMESTRE y AÑO (OPCIONAL)",
+            "desc": "Hay dos campos OPCIONALES: 'Semestre' y 'Año'. Si quieres ORGANIZAR por semestre, ¡complétalos! Ejemplo: Semestre = 1, Año = 2024. Si no te importa esto, ¡solo DÉJALO EN BLANCO! No es obligatorio."
+          },
+          {
+            "number": "6",
+            "title": "COMPLETA la DESCRIPCIÓN (OPCIONAL pero RECOMENDADO)",
+            "desc": "Hay un campo de 'Descripción'. ¡Esto es OPCIONAL, pero RECOMENDAMOS completarlo! Escribe de qué trata ESTE MÓDULO. Ejemplo: 'Este módulo enseña cómo usar variables en Python, cubriendo enteros, cadenas, flotantes y convenciones de nomenclatura de variables.' ¡Esto te ayuda a RECORDAR después y ayuda a los ESTUDIANTES a saber qué aprenderán!"
+          },
+          {
+            "number": "7",
+            "title": "¡AHORA VIENE LA PARTE IMPORTANTE: CONFIGURA EL TUTOR IA!",
+            "desc": "Desplázate un poco hacia abajo. Verás una sección llamada 'Configuración del Tutor IA' o 'Configuración del Prompt del Sistema'. ¡AQUÍ ES DONDE OCURRE LA MAGIA! ¡Aquí es donde le dirás a la IA CÓMO debe comportarse al ayudar a los estudiantes!"
+          },
+          {
+            "number": "8",
+            "title": "ELIGE: ¿Plantilla Rápida O Prompt Personalizado?",
+            "desc": "Tienes 2 OPCIONES: 1) Usar una PLANTILLA RÁPIDA: Haz clic en uno de los botones listos como 'Tutor General', 'Tutor de Programación', 'Tutor de Matemáticas y Ciencias'. ¡Estos son prompts LISTOS PARA USAR! 2) Escribir TU PROPIO PROMPT PERSONALIZADO: Si quieres algo más específico, escríbelo tú mismo en el cuadro de texto grande!"
+          },
+          {
+            "number": "9",
+            "title": "ENTENDIENDO PROMPTS DEL SISTEMA - ¿QUÉ ES ESTO?",
+            "desc": "El PROMPT DEL SISTEMA es como dar 'INSTRUCCIONES DE PERSONALIDAD' a la IA. Ejemplo de un BUEN prompt: 'Eres un tutor de Programación Python paciente y amigable para principiantes. Siempre explica paso a paso, usa ejemplos cotidianos y haz preguntas guía en lugar de dar respuestas directas.' Ejemplo de un MAL prompt: 'Ayuda a los estudiantes.' (¡demasiado vago!). ¡Sé ESPECÍFICO sobre CÓMO quieres que la IA enseñe!"
+          },
+          {
+            "number": "10",
+            "title": "ESCRIBE o SELECCIONA tu Prompt del Sistema",
+            "desc": "Si elegiste una PLANTILLA, ¡ya está completada! Puedes LEER lo que dice y EDITAR si quieres. Si estás escribiendo desde cero, aquí hay una FÓRMULA SIMPLE: 'Eres un tutor [tipo] para [materia]. Tu estilo de enseñanza es [cómo enseñas]. Cuando los estudiantes hacen preguntas, debes [qué hacer]. Ejemplo: 'Eres un tutor amigable de Matemáticas para estudiantes de secundaria. Tu estilo de enseñanza es paciente y paso a paso. Cuando los estudiantes hacen preguntas, debes guiarlos a la respuesta en lugar de solo darla.'"
+          },
+          {
+            "number": "11",
+            "title": "SELECCIONA el IDIOMA DEL TUTOR IA",
+            "desc": "Debajo del prompt, hay un DESPLEGABLE llamado 'Idioma del Tutor IA' o similar. Esto define en qué IDIOMA responderá la IA. Por ejemplo, si seleccionas 'Portugués', ¡la IA SIEMPRE responderá en portugués, incluso si el estudiante pregunta en inglés! ¡Selecciona el idioma que hablan tus ESTUDIANTES!"
+          },
+          {
+            "number": "12",
+            "title": "Opcional: Usa 'MEJORAR CON IA' (después de guardar)",
+            "desc": "Después de GUARDAR el módulo (siguiente paso), puedes volver y hacer clic en 'MEJORAR CON IA'. ¡El sistema usará IA para REESCRIBIR tu prompt y hacerlo MEJOR! Tienes 3 intentos para mejorar cada 72 horas. ¡Esto es OPCIONAL pero puede ayudar mucho!"
+          },
+          {
+            "number": "13",
+            "title": "VERIFICA todo y HAZ CLIC en 'CREAR MÓDULO'",
+            "desc": "Desplázate hasta el FINAL del formulario. Asegúrate de que: 1) Nombre del Módulo está completo, 2) Código del Módulo está completo, 3) Curso está seleccionado, 4) Prompt del Sistema tiene algo escrito. Luego haz clic en el GRAN BOTÓN AZUL que dice 'CREAR MÓDULO' o 'Crear'."
+          },
+          {
+            "number": "14",
+            "title": "ESPERA la CONFIRMACIÓN y VE A LA PÁGINA DEL MÓDULO",
+            "desc": "El sistema GUARDARÁ tu módulo. Verás un MENSAJE DE ÉXITO VERDE o serás REDIRIGIDO a la PÁGINA DE DETALLES DEL MÓDULO. Esta página muestra: Archivos, Tokens, Información del Módulo, etc. ¡FELICITACIONES! ¡Creaste un módulo!"
+          }
+        ],
+        "whatYouShouldSee": "Después de crear el módulo, deberías ver la PÁGINA DE DETALLES DEL MÓDULO con varias secciones: 1) INFORMACIÓN DEL MÓDULO (nombre, código, curso, descripción), 2) sección de ARCHIVOS (vacía por ahora), 3) sección de TOKENS DE ACCESO (vacía por ahora), 4) Botones como 'SUBIR ARCHIVO', 'CREAR TOKEN', 'PREPARAR MÓDULO', etc.",
+        "commonMistakes": [
+          {
+            "mistake": "¡Olvidé seleccionar un Curso y el sistema no me deja guardar!",
+            "solution": "¡El campo 'Curso' es OBLIGATORIO! DEBES seleccionar a qué curso pertenece este módulo. Haz clic en el desplegable de Curso y selecciona uno. Si no tienes cursos, ¡necesitas CREAR UN CURSO PRIMERO! (Regresa a la sección 'Cómo Crear Cursos')"
+          },
+          {
+            "mistake": "Dejé el Prompt del Sistema vacío - ¿es un problema?",
+            "solution": "¡NO es obligatorio, pero ALTAMENTE RECOMENDADO! Si lo dejas vacío, el Tutor IA no tendrá instrucciones específicas. ¡Es como contratar un profesor y no decirle qué enseñar! Complétalo con algo simple, o usa una de las PLANTILLAS RÁPIDAS!"
+          },
+          {
+            "mistake": "¡No sé qué escribir en el Prompt del Sistema!",
+            "solution": "¡Usa una PLANTILLA RÁPIDA! Haz clic en uno de los botones listos como 'Tutor General', 'Tutor de Programación' o 'Tutor de Matemáticas y Ciencias'. ¡Ya están BIEN ESCRITOS! Puedes usarlos tal cual o EDITARLOS para que coincidan con tu estilo!"
+          },
+          {
+            "mistake": "¡Seleccioné el Curso equivocado y quiero cambiarlo!",
+            "solution": "⚠️ IMPORTANTE: ¡NO PUEDES cambiar el curso después de crear el módulo! Si seleccionaste el curso equivocado, necesitarás: 1) ELIMINAR este módulo (de la lista de módulos), 2) CREAR UN NUEVO módulo con el curso correcto. ¡Esta es una limitación del sistema para mantener la integridad de los datos!"
+          },
+          {
+            "mistake": "¡Mi Prompt del Sistema es demasiado largo y el sistema se queja!",
+            "solution": "Los Prompts del Sistema pueden ser largos, ¡pero no DEMASIADO largos! Si escribiste varios párrafos, intenta RESUMIR. Enfócate en: QUIÉN es la IA, CÓMO debe enseñar, QUÉ debe/no debe hacer. ¡Si aún es demasiado largo, contacta soporte o intenta condensarlo!"
+          },
+          {
+            "mistake": "¡Creé el módulo pero no veo archivos ni estudiantes!",
+            "solution": "¡Eso es NORMAL! ¡Acabas de crear un módulo VACÍO! Ahora necesitas: 1) SUBIR ARCHIVOS (siguiente sección), 2) CREAR TOKENS (sección después de esa), 3) PREPARAR el módulo, 4) Compartir tokens con estudiantes. ¡Sigue el flujo de trabajo completo!"
+          },
+          {
+            "mistake": "¡Seleccioné el Idioma del Tutor IA equivocado!",
+            "solution": "¡No hay problema! Haz clic en 'EDITAR MÓDULO' (botón en la página del módulo), desplázate hasta 'Idioma del Tutor IA', cámbialo y haz clic en 'GUARDAR CAMBIOS'. ¡Fácil!"
+          },
+          {
+            "mistake": "Quiero usar la función 'Mejorar con IA' pero el botón no aparece!",
+            "solution": "El botón 'Mejorar con IA' solo aparece DESPUÉS de que hayas guardado el módulo Y tengas un Prompt del Sistema escrito. Ve a la página del módulo, haz clic en 'EDITAR MÓDULO', escribe o pega un prompt, GUARDA, ¡entonces el botón 'Mejorar con IA' debería aparecer!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "El desplegable de 'Curso' está vacío - ¡no tengo cursos para seleccionar!",
+            "solution": "¡Necesitas CREAR UN CURSO PRIMERO! Los módulos deben pertenecer a un curso. Ve a 'Cursos' en el menú izquierdo y crea al menos un curso. ¡Luego regresa y crea el módulo!"
+          },
+          {
+            "problem": "¡Hice clic en 'Crear Módulo' pero no pasa nada!",
+            "solution": "¡Verifica si hay MENSAJES DE ERROR en ROJO debajo de los campos! Errores comunes: 1) Nombre del Módulo está vacío, 2) Código del Módulo está vacío, 3) No hay Curso seleccionado. ¡Corrige los errores e intenta de nuevo!"
+          },
+          {
+            "problem": "¡El sistema dice 'El código del módulo ya existe'!",
+            "solution": "¡Cada módulo necesita un código ÚNICO! No puedes tener dos módulos con el mismo código. Cambia el código a otra cosa. Ejemplo: En lugar de 'M1', usa 'M1-2024' o 'CS101-M1-SecciónA'."
+          },
+          {
+            "problem": "¡Guardé el módulo pero mi Prompt del Sistema desapareció!",
+            "solution": "¡Esto no debería pasar! Si pasó, es un bug. Ve a 'EDITAR MÓDULO', escribe el prompt de nuevo y guarda. ¡Si sigue desapareciendo, contacta soporte técnico!"
+          },
+          {
+            "problem": "¡No entiendo qué es un 'Prompt del Sistema'!",
+            "solution": "Piensa en esto como INSTRUCCIONES que le das a un tutor privado. Ejemplo: Contratas un tutor y le dices: 'Estás enseñando Cálculo a estudiantes universitarios de primer año. Sé paciente, explica paso a paso y usa ejemplos del mundo real.' ¡Eso es básicamente lo que es el Prompt del Sistema - instrucciones para la IA sobre CÓMO enseñar!"
+          },
+          {
+            "problem": "¿Puedo crear un módulo sin configurar el Tutor IA?",
+            "solution": "¡SÍ! Es opcional. Pero si no lo configuras, la IA no tendrá instrucciones específicas. Seguirá funcionando, pero no tendrá la PERSONALIDAD o ESTILO DE ENSEÑANZA que quieres. ¡RECOMENDAMOS FUERTEMENTE configurarlo!"
+          }
+        ],
+        "tips": [
+          "💡 ¡COMIENZA CON UNA PLANTILLA! No intentes escribir el Prompt del Sistema perfecto desde cero. ¡Usa una Plantilla Rápida y EDÍTALA para que coincida con tu estilo!",
+          "💡 ¡Sé ESPECÍFICO en tu Prompt del Sistema! En lugar de 'Ayuda a los estudiantes', escribe 'Eres un tutor paciente que explica paso a paso y hace preguntas guía.'",
+          "💡 ¡PRUEBA tu Tutor IA! Después de crear el módulo, subir archivos y prepararlo, prueba haciendo preguntas como lo harían los estudiantes. ¡Ve si la IA responde como quieres!",
+          "💡 ¡Usa la función 'MEJORAR CON IA'! Después de guardar tu módulo, edítalo y haz clic en 'Mejorar con IA'. ¡El sistema a menudo hace tu prompt mucho mejor!",
+          "💡 ¡ORGANIZA tus módulos! Usa códigos como 'CS101-S1' (Semana 1), 'CS101-S2' (Semana 2). ¡Esto facilita encontrar y ordenar después!",
+          "💡 ¡No crees TODOS los módulos de una vez! Crea 1 módulo, sube archivos, prueba con estudiantes, VE CÓMO VA, luego crea más. ¡De esta manera aprendes qué funciona mejor!",
+          "💡 ¡El campo Descripción es para HUMANOS, el Prompt del Sistema es para la IA! Descripción = qué aprenderán los estudiantes. Prompt del Sistema = cómo debe enseñar la IA!"
+        ]
+      },
+      "uploadingFiles": {
+        "title": "CÓMO SUBIR ARCHIVOS A MÓDULOS - Tutorial Completo",
+        "whatIs": "¡Subir ARCHIVOS es como poner LIBROS, NOTAS y MATERIALES en una BIBLIOTECA para que la IA los lea! Los archivos que subes (PDFs, PowerPoints, documentos Word, etc.) son lo que el TUTOR IA usará para RESPONDER preguntas de los estudiantes! Piensa en esto así: la IA es un bibliotecario súper inteligente, ¡y los archivos son los libros que puede consultar!",
+        "why": "¿POR QUÉ subir archivos? ¡Porque la IA necesita CONTENIDO con el que trabajar! Si no subes archivos, la IA solo tendrá su conocimiento general. ¡Pero si subes TUS diapositivas de clase, TUS notas, TUS PDFs, la IA puede responder preguntas ESPECÍFICAMENTE sobre el contenido de TU curso!",
+        "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 50MB por archivo.",
+        "steps": [
+          {
+            "number": "1",
+            "title": "VE A la PÁGINA DEL MÓDULO",
+            "desc": "Primero, necesitas IR AL MÓDULO donde quieres subir archivos. Haz clic en 'Módulos' en el menú izquierdo, luego haz clic en el NOMBRE del módulo que quieres. Verás la PÁGINA DE DETALLES DEL MÓDULO."
+          },
+          {
+            "number": "2",
+            "title": "ENCUENTRA la sección 'ARCHIVOS' o 'Archivos del Módulo'",
+            "desc": "Desplázate un poco hacia abajo en la página del módulo. Verás una sección titulada 'ARCHIVOS' o 'Archivos del Módulo' o algo similar. Aquí es donde aparecen todos los archivos subidos."
+          },
+          {
+            "number": "3",
+            "title": "HAZ CLIC en el botón 'SUBIR ARCHIVO'",
+            "desc": "Busca un BOTÓN (usualmente AZUL) que diga 'SUBIR ARCHIVO' o 'Subir Archivo' o 'Agregar Archivo'. ¡Haz clic en él! Aparecerá un DIÁLOGO DE SUBIDA DE ARCHIVO (ya sea un popup o un formulario en línea)."
+          },
+          {
+            "number": "4",
+            "title": "ELIGE TU ARCHIVO - Método 1: HAZ CLIC para seleccionar",
+            "desc": "Verás una caja que dice algo como 'Haz clic para seleccionar o arrastra el archivo aquí'. HAZ CLIC en esta caja. Se abrirá una ventana de EXPLORADOR DE ARCHIVOS (la misma ventana que usas para abrir archivos normalmente). NAVEGA a donde esté guardado tu archivo en tu computadora, SELECCIONA el archivo y haz clic en 'ABRIR'."
+          },
+          {
+            "number": "5",
+            "title": "ELIGE TU ARCHIVO - Método 2: ARRASTRA Y SUELTA (¡más fácil!)",
+            "desc": "Método alternativo: En lugar de hacer clic, puedes ARRASTRAR el archivo desde tu computadora (desde una ventana de carpetas) y SOLTARLO directamente en la caja de subida! ¡Esto suele ser más fácil si puedes ver ambas ventanas al mismo tiempo!"
+          },
+          {
+            "number": "6",
+            "title": "ESPERA a que se complete la subida",
+            "desc": "Después de seleccionar el archivo, verás una BARRA DE PROGRESO (una línea que se llena) mostrando el progreso de la subida. ¡ESPERA hasta que llegue al 100%! ¡No cierres la página ni hagas clic en otro lugar mientras se está subiendo! Para archivos grandes (como un PDF de 40MB), esto puede tomar de 30 segundos a unos minutos dependiendo de la velocidad de tu internet."
+          }
+        ],
+        "whatYouShouldSee": "Después de subir: Deberías ver el ARCHIVO aparecer en la LISTA DE ARCHIVOS con: 1) Nombre del archivo, 2) Tamaño del archivo (como '2.5 MB'), 3) Fecha/hora de subida, 4) Acciones (botones DESCARGAR y ELIMINAR). ¡Si ves tu archivo en la lista, ÉXITO!",
+        "commonMistakes": [
+          {
+            "mistake": "¡Seleccioné un archivo pero dice 'Tipo de archivo no soportado'!",
+            "solution": "¡Verifica la extensión del archivo! Solo se permiten estos tipos: PDF, DOC, DOCX, TXT, PPT, PPTX. Si tienes un tipo de archivo diferente (como .jpg, .png, .mp4, .zip), ¡necesitas CONVERTIRLO primero! Para imágenes, crea un PDF con las imágenes dentro. Para videos, no puedes subirlos directamente - considera proporcionar un enlace en un archivo de texto/PDF en su lugar."
+          },
+          {
+            "mistake": "¡Mi archivo es demasiado grande y no se sube!",
+            "solution": "¡El tamaño máximo de archivo es 50MB! Si tu archivo es más grande: 1) DIVÍDELO en partes más pequeñas (como dividir un PDF de 100MB en dos PDFs de 50MB), 2) COMPRIME el PDF (usa herramientas en línea como 'smallpdf.com' o 'ilovepdf.com' para reducir el tamaño), 3) Elimina imágenes/páginas innecesarias para reducir el tamaño."
+          },
+          {
+            "mistake": "¡La subida comenzó pero se quedó atascada al 50% y no continúa!",
+            "solution": "¡Esto usualmente significa problemas de conexión a internet! 1) Verifica tu conexión a internet, 2) ACTUALIZA la página (no te preocupes, no perderás el módulo), 3) Intenta subir de nuevo. ¡Si sigue pasando, intenta subir en otro momento o desde otra ubicación con mejor internet!"
+          },
+          {
+            "mistake": "¡Subí el archivo equivocado y quiero eliminarlo!",
+            "solution": "¡Fácil! Encuentra el archivo en la LISTA DE ARCHIVOS. En el lado derecho de la fila del archivo, verás BOTONES DE ACCIÓN. Haz clic en el ÍCONO ROJO DE ELIMINAR (🗑️ bote de basura). Aparecerá una confirmación preguntando '¿Estás seguro?'. Haz clic en SÍ o CONFIRMAR. ¡El archivo será ELIMINADO!"
+          },
+          {
+            "mistake": "¡Subí un archivo pero la IA no lo está usando al responder preguntas!",
+            "solution": "¿PREPARASTE EL MÓDULO después de subir? ¡Subir archivos NO es suficiente! Necesitas hacer clic en 'PREPARAR MÓDULO' (ver la sección 'Cómo Preparar Módulos' más abajo) para enviar todos los archivos al sistema de IA. ¡Solo entonces la IA podrá usarlos!"
+          },
+          {
+            "mistake": "¡No encuentro el botón 'Subir Archivo'!",
+            "solution": "Asegúrate de que estás en la PÁGINA DE DETALLES DEL MÓDULO (no en la lista de módulos). El botón de subir solo aparece en páginas de módulos individuales. ¡Si aún no lo ves, puede que no tengas permiso - verifica si eres un Profesor Administrador o si estás asignado a este módulo!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "¡Cada vez que intento subir, dice 'Error al subir archivo'!",
+            "solution": "Varias causas posibles: 1) Tu internet se desconectó a mitad de la subida - verifica la conexión e intenta de nuevo, 2) El archivo está corrupto - intenta abrir el archivo en tu computadora primero para asegurarte de que no esté dañado, 3) El servidor está caído - espera unos minutos e intenta de nuevo, 4) El nombre del archivo tiene caracteres especiales - intenta renombrar el archivo a algo simple (como 'clase1.pdf' en lugar de 'Clase #1 - Introducción @2024!.pdf')."
+          },
+          {
+            "problem": "¡Subí varios archivos pero solo algunos aparecen en la lista!",
+            "solution": "¿Terminaron de subirse todos? ¡Verifica que ESPERASTE a que cada subida se completara (100%) antes de subir el siguiente! Si inicias varias subidas a la vez, algunas pueden fallar. ¡Sube UNO A LA VEZ para estar seguro!"
+          },
+          {
+            "problem": "¿Puedo subir el mismo archivo a varios módulos?",
+            "solution": "¡SÍ! Si tienes un archivo que es relevante para varios módulos, necesitas subirlo POR SEPARADO a cada módulo. Los archivos no se comparten entre módulos - cada módulo tiene su propia biblioteca de archivos independiente."
+          },
+          {
+            "problem": "¡Subí archivos pero los estudiantes dicen que no pueden verlos!",
+            "solution": "Verifica dos cosas: 1) ¿PREPARASTE EL MÓDULO? (Ver siguiente sección), 2) ¿El token que diste a los estudiantes tiene permiso de 'Permitir Acceso a Archivos'? ¡Si el token no permite acceso a archivos, los estudiantes pueden chatear pero no pueden descargar archivos!"
+          },
+          {
+            "problem": "¿Puedo subir carpetas/varios archivos a la vez?",
+            "solution": "¡No! Actualmente solo puedes subir UN ARCHIVO A LA VEZ. Si tienes 10 archivos, necesitas subirlos uno por uno. Esto asegura que cada archivo se procese correctamente. ¡Tómate tu tiempo - puedes subirlos todos en una sesión!"
+          }
+        ],
+        "tips": [
+          "💡 ¡Usa NOMBRES DE ARCHIVO DESCRIPTIVOS! En lugar de 'doc1.pdf', usa 'Semana1-Introduccion-A-Programacion.pdf'. ¡Esto facilita encontrar archivos después!",
+          "💡 ¡ORGANIZA archivos por tema o semana! Si tienes 'Semana 1 Clase.pdf', 'Semana 1 Ejercicios.pdf', 'Semana 1 Soluciones.pdf', aparecerán juntos en la lista (usualmente alfabéticamente)!",
+          "💡 ¡Sube archivos ANTES de preparar el módulo! Es más eficiente subir TODOS tus archivos primero, LUEGO hacer clic en 'Preparar Módulo' una vez. ¡Esto ahorra tiempo!",
+          "💡 ¡Puedes DESCARGAR tus propios archivos! Haz clic en el ícono DESCARGAR junto a cualquier archivo para obtener una copia de vuelta. ¡Esto es útil si necesitas verificar qué versión subiste!",
+          "💡 ¡Actualiza REGULARMENTE archivos antiguos! Si tienes una versión actualizada de una clase, ELIMINA la antigua y SUBE la nueva. ¡Luego RE-PREPARA el módulo para que la IA use la última versión!",
+          "💡 ¡No subas TODO de una vez! Comienza con los archivos más importantes (como las diapositivas principales de clase y lecturas requeridas). ¡Siempre puedes agregar más archivos después!"
+        ]
+      },
+      "creatingTokens": {
+        "title": "CÓMO CREAR TOKENS (Llaves de Acceso para Estudiantes) - TUTORIAL COMPLETO",
+        "whatIs": "Un TOKEN es como una LLAVE ESPECIAL o CONTRASEÑA que los estudiantes usan para ACCEDER al tutor IA! Piensa en esto así: Tienes una HABITACIÓN (el módulo) con un tutor IA adentro. ¡El TOKEN es la LLAVE que abre la puerta a esa habitación! Cada módulo puede tener MÚLTIPLES tokens (múltiples llaves) que das a diferentes grupos de estudiantes.",
+        "why": "¿POR QUÉ crear tokens? ¡Porque necesitas una forma de CONTROLAR quién puede acceder a tu módulo! No quieres que todo internet use tu tutor IA - ¡solo quieres a TUS estudiantes! Los tokens también te permiten: 1) Controlar qué pueden hacer los estudiantes (¿solo chatear? ¿o también descargar archivos?), 2) Establecer fechas de expiración (para que el token deje de funcionar después de que termine el semestre), 3) Rastrear uso (ver cuántas veces se usó el token).",
+        "steps": [
+          {
+            "number": "1",
+            "title": "VE A la página 'Tokens de Módulos'",
+            "desc": "Haz clic en 'TOKENS DE MÓDULOS' o 'Tokens de Módulos' en el MENÚ IZQUIERDO. Verás una página mostrando TODOS tus tokens (si tienes alguno). Si es tu primera vez, la lista estará VACÍA."
+          },
+          {
+            "number": "2",
+            "title": "HAZ CLIC en 'Generar Token' o 'Crear Token'",
+            "desc": "Busca un BOTÓN AZUL en la PARTE SUPERIOR DERECHA que diga 'GENERAR TOKEN' o 'Crear Token' o 'Nuevo Token'. ¡HAZ CLIC en él! Se abrirá un FORMULARIO (cuadro de diálogo) donde completarás los detalles del token."
+          },
+          {
+            "number": "3",
+            "title": "SELECCIONA para qué MÓDULO es este token",
+            "desc": "El PRIMER campo usualmente es 'Módulo' o 'Seleccionar Módulo'. Haz clic en el DESPLEGABLE y SELECCIONA qué módulo desbloqueará este token. ¡Por ejemplo, si quieres que los estudiantes accedan a tu módulo 'Introducción a Python - Semana 1', selecciona ese módulo de la lista!"
+          },
+          {
+            "number": "4",
+            "title": "DALE al token un NOMBRE",
+            "desc": "El segundo campo es 'Nombre del Token'. ¡Dale un nombre DESCRIPTIVO para que sepas para qué es después! Ejemplo: 'Otoño 2024 - Sección A', 'Widget Moodle - CS101', 'Token Grupo WhatsApp'. No solo escribas 'Token 1' - ¡sé específico sobre DÓNDE o QUIÉN usará este token!"
+          },
+          {
+            "number": "5",
+            "title": "AGREGA una descripción (OPCIONAL pero recomendado)",
+            "desc": "Usualmente hay un campo de 'Descripción'. ¡Esto es OPCIONAL pero útil! Escribe algo como: 'Token para estudiantes de CS101 inscritos en el curso de Moodle' o 'Para estudiantes de tutoría privada'. ¡Esto te ayuda a recordar el propósito de cada token después!"
+          },
+          {
+            "number": "6",
+            "title": "ESTABLECE expiración (OPCIONAL)",
+            "desc": "Hay un campo llamado 'Expira en (días)' o 'Expiración'. ¡Esto es OPCIONAL! Si lo DEJAS VACÍO, el token NUNCA EXPIRARÁ (funciona para siempre). Si lo COMPLETAS, ingresa un NÚMERO de días. Ejemplo: '120' significa que el token funcionará por 120 días desde hoy, luego automáticamente dejará de funcionar. ¡Bueno para cursos basados en semestres!"
+          },
+          {
+            "number": "7",
+            "title": "CONFIGURA PERMISOS - ¿Permitir Chat?",
+            "desc": "Verás una CASILLA DE VERIFICACIÓN o INTERRUPTOR que dice 'Permitir Chat' o 'Permiso de Chat'. Si MARCAS ESTO (lo activas), los estudiantes pueden HACER PREGUNTAS al tutor IA. Si lo DESMARCAS (lo desactivas), los estudiantes solo pueden acceder a archivos pero no pueden chatear. ¡LA MAYORÍA DEL TIEMPO quieres esto ACTIVADO!"
+          },
+          {
+            "number": "8",
+            "title": "CONFIGURA PERMISOS - ¿Permitir Acceso a Archivos?",
+            "desc": "Otra CASILLA/INTERRUPTOR dice 'Permitir Acceso a Archivos' o 'Permiso de Archivos'. Si MARCAS ESTO, los estudiantes pueden DESCARGAR los archivos que subiste al módulo. Si lo DESMARCAS, los estudiantes pueden preguntarle a la IA sobre los archivos, pero no pueden descargarlos directamente. ¡Típicamente también quieres esto ACTIVADO!"
+          },
+          {
+            "number": "9",
+            "title": "HAZ CLIC en 'Crear Token' o 'Generar'",
+            "desc": "Después de completar todo, busca el BOTÓN AZUL en la parte inferior que diga 'CREAR TOKEN' o 'Generar' o 'Guardar'. ¡HAZ CLIC en él! El sistema creará tu token."
+          },
+          {
+            "number": "10",
+            "title": "¡COPIA el token!",
+            "desc": "Después de crear, verás el STRING DEL TOKEN (un texto largo como 'abc123xyz456...'). Debe haber un botón 'COPIAR' o 'Copiar Token'. ¡HAZ CLIC en él para copiar el token a tu portapapeles! ¡Necesitarás esto para compartir con los estudiantes!"
+          }
+        ],
+        "whatYouShouldSee": "Después de crear el token: Deberías ver el token en la LISTA DE TOKENS con: Nombre, Módulo, Estado (Activo), Fecha de expiración (o 'Nunca'), Permisos (Chat/Archivos), y Acciones. El string del token en sí usualmente está OCULTO por seguridad, pero puedes VERLO o COPIARLO haciendo clic en los íconos de ver/copiar.",
+        "distribution": {
+          "title": "CÓMO DISTRIBUIR TOKENS A ESTUDIANTES",
+          "methods": [
+            {
+              "method": "📚 MOODLE (u otro LMS)",
+              "desc": "¡MEJOR MÉTODO para la mayoría de profesores! En Moodle: 1) Crea un recurso 'Herramienta Externa' o 'URL', 2) Pega la URL del widget con tu token: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ, 3) ¡Los estudiantes hacen clic en él dentro de Moodle y el widget se abre!"
+            },
+            {
+              "method": "📧 CORREO ELECTRÓNICO",
+              "desc": "Envía un correo a todos los estudiantes con: 'Haz clic en este enlace para acceder al tutor IA: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes hacen clic en el enlace y el widget se abre en su navegador!"
+            },
+            {
+              "method": "📱 WHATSAPP / TELEGRAM",
+              "desc": "Publica el enlace del widget en tu grupo de WhatsApp/Telegram de clase: 'Enlace del Tutor IA: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes pueden guardarlo y acceder en cualquier momento!"
+            },
+            {
+              "method": "🌐 GOOGLE CLASSROOM",
+              "desc": "¡Publica un 'Anuncio' o 'Material' en Google Classroom con la URL del widget! ¡Los estudiantes pueden acceder directamente desde Classroom!"
+            },
+            {
+              "method": "📱 CÓDIGO QR (avanzado)",
+              "desc": "Usa un sitio web generador de códigos QR (como qr-code-generator.com) para convertir la URL del widget en un CÓDIGO QR. Pon el código QR en diapositivas, impresiones o muéstralo en pantalla. ¡Los estudiantes escanean con sus teléfonos para acceder!"
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "¡Creé el token pero los estudiantes dicen que no funciona!",
+            "solution": "Verifica estas cosas: 1) ¿PREPARASTE EL MÓDULO? ¡Los tokens solo funcionan después de que el módulo está preparado! 2) ¿Está 'Permitir Chat' habilitado? ¡Si no, los estudiantes no pueden hacer preguntas! 3) ¿Copiaste el string COMPLETO del token? A veces las personas copian solo parte de él. 4) ¿Ha expirado el token? ¡Verifica la fecha de expiración!"
+          },
+          {
+            "mistake": "¡Olvidé copiar el token después de crearlo!",
+            "solution": "¡No hay problema! Ve a la página de TOKENS DE MÓDULOS, encuentra tu token en la lista y haz clic en el ícono VER (👁️ ojo) o ícono COPIAR (📋 portapapeles) para ver/copiar el token de nuevo!"
+          },
+          {
+            "mistake": "¡Los estudiantes pueden chatear pero dicen que no pueden descargar archivos!",
+            "solution": "Verifica los PERMISOS del token! Ve a Tokens de Módulos, encuentra tu token y haz clic en EDITAR. Asegúrate de que 'Permitir Acceso a Archivos' esté MARCADO (activado). Si estaba desactivado, actívalo y guarda. ¡Los estudiantes ahora deberían poder descargar archivos!"
+          },
+          {
+            "mistake": "¡Quiero crear tokens separados para diferentes secciones del mismo curso!",
+            "solution": "¡GRAN IDEA! ¡Crea MÚLTIPLES tokens para el MISMO MÓDULO con diferentes nombres! Ejemplo: 'Sección A - Clase Matutina', 'Sección B - Clase Vespertina'. ¡De esta manera puedes rastrear qué sección usa más la IA, y puedes revocar el acceso de una sección sin afectar a la otra!"
+          },
+          {
+            "mistake": "¡El token expiró y los estudiantes ya no pueden acceder!",
+            "solution": "Tienes 2 opciones: 1) CREAR UN NUEVO TOKEN (más fácil) - crea un nuevo token para el mismo módulo y comparte el nuevo enlace con los estudiantes, 2) EDITAR EL TOKEN EXISTENTE (si el sistema lo permite) - ¡pero usualmente es más fácil crear un token nuevo!"
+          },
+          {
+            "mistake": "¡Quiero evitar que los estudiantes usen la IA pero conservar el token para después!",
+            "solution": "¡Puedes DESACTIVAR o ELIMINAR el token! Ve a Tokens de Módulos, encuentra el token y haz clic en el ícono ELIMINAR. Esto inmediatamente evita que el token funcione. Los estudiantes que intenten usarlo verán un error. ¡Puedes crear un nuevo token en cualquier momento para volver a habilitar el acceso!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "¡No puedo crear un token porque no hay módulos en el desplegable!",
+            "solution": "¡Necesitas CREAR UN MÓDULO PRIMERO! Los tokens están vinculados a módulos. Si no tienes módulos, ve a crear uno primero (ver sección 'Cómo Crear Módulos'), ¡LUEGO regresa y crea un token para ese módulo!"
+          },
+          {
+            "problem": "¡El botón 'Generar Token' no aparece!",
+            "solution": "¡Verifica tus permisos! ¿Eres un Profesor Administrador o un Profesor Regular asignado a este curso? Si eres un Profesor Regular pero no estás asignado a ningún curso, no verás el botón. ¡Contacta a tu Profesor Administrador!"
+          },
+          {
+            "problem": "¿Puedo usar el mismo token para varios módulos?",
+            "solution": "¡NO! ¡Cada token es para UN MÓDULO ESPECÍFICO! Si tienes 5 módulos, necesitas 5 tokens (o los que quieras por módulo). ¡Esto es intencional - te permite controlar el acceso por módulo!"
+          },
+          {
+            "problem": "¡Los estudiantes se quejan de que el widget es demasiado lento!",
+            "solution": "Esto usualmente NO está relacionado con el token - es porque: 1) El internet del estudiante es lento, 2) El sistema de IA está sobrecargado (raro), 3) El módulo tiene archivos ENORMES y la IA los está procesando (pasa con PDFs muy grandes). ¡Desafortunadamente no puedes controlar esto desde el lado del token!"
+          },
+          {
+            "problem": "¿Puedo ver cuántas veces se usó un token?",
+            "solution": "¡SÍ! En la lista de Tokens de Módulos, deberías ver una columna como 'Contador de Uso' o 'Solicitudes' que muestra cuántas veces se usó el token. ¡Haz clic en VER para un token para ver estadísticas detalladas!"
+          }
+        ],
+        "tips": [
+          "💡 ¡Usa NOMBRES DESCRIPTIVOS! '¡Otoño 2024 Moodle Sección A' es mucho mejor que 'Token 1'!",
+          "💡 ¡Establece FECHAS DE EXPIRACIÓN para cursos basados en semestres! Ejemplo: Si tu semestre termina en 120 días, establece la expiración a 120 días. ¡Esto evita que los estudiantes lo usen en semestres futuros con contenido diferente!",
+          "💡 ¡Crea TOKENS DE RESPALDO! Haz 2 tokens para el mismo módulo - uno PRIMARIO (comparte con estudiantes) y uno DE RESPALDO (mantén en secreto). ¡Si necesitas revocar el primario, tienes un respaldo listo!",
+          "💡 ¡Prueba el token TÚ MISMO antes de compartir con estudiantes! Copia la URL del widget y ábrela en tu navegador. ¡Haz una pregunta a la IA para asegurarte de que todo funciona!",
+          "💡 ¡MONITOREA el uso del token! Verifica el contador de uso periódicamente. Si un token tiene 0 usos después de una semana, quizás los estudiantes no recibieron el enlace o no saben cómo usarlo - ¡consulta con ellos!",
+          "💡 Para CLASES GRANDES, ¡usa integración con LMS (Moodle/Canvas)! No envíes enlaces individuales - incrusta el widget en tu LMS para que los estudiantes accedan donde ya están cómodos!",
+          "💡 ¡Mantén una HOJA DE CÁLCULO o NOTA de qué tokens creaste para qué propósito! Con muchos módulos y tokens, es fácil olvidar cuál es cuál!"
+        ]
+      },
+      "preparingModules": {
+        "title": "CÓMO PREPARAR MÓDULOS - ¡Haciendo que Todo esté LISTO para Estudiantes!",
+        "whatIs": "¡PREPARAR UN MÓDULO es el PASO FINAL antes de que los estudiantes puedan usar tu tutor IA! Piensa en esto así: Ya 1) Creaste la habitación (módulo), 2) Pusiste libros adentro (subiste archivos), 3) Hiciste llaves (tokens)... ¡pero el tutor IA aún no ha LEÍDO los libros! 'Preparar' = Enviar TODOS tus archivos al sistema de OpenAI y crear el ASISTENTE IA REAL que chateará con los estudiantes!",
+        "why": "¿POR QUÉ es esto necesario? ¡Porque subir archivos a Tutoria NO es lo mismo que hacerlos disponibles para la IA! Cuando 'Preparas', el sistema: 1) Envía todos tus archivos a OpenAI, 2) Crea un asistente IA especializado con tu Prompt del Sistema, 3) Vincula todo para que los estudiantes puedan usarlo. ¡Sin preparar, la IA no tiene NADA con qué trabajar!",
+        "prerequisites": {
+          "title": "ANTES DE PREPARAR - Lista de verificación",
+          "items": [
+            "✅ ¡DEBES haber creado al menos UN TOKEN con permiso de 'Permitir Chat'! (El sistema necesita un token para crear el asistente IA)",
+            "✅ DEBERÍAS haber subido archivos al módulo (opcional pero altamente recomendado - de lo contrario la IA solo tiene conocimiento general)",
+            "✅ DEBERÍAS haber configurado un Prompt del Sistema (opcional pero recomendado - esto le dice a la IA cómo comportarse)"
+          ]
+        },
+        "steps": [
+          {
+            "number": "1",
+            "title": "VE A la PÁGINA DEL MÓDULO",
+            "desc": "Haz clic en 'Módulos' en el menú izquierdo, luego haz clic en el NOMBRE del módulo que quieres preparar. Verás la página de detalles del módulo con archivos, tokens, etc."
+          },
+          {
+            "number": "2",
+            "title": "ASEGÚRATE de tener al menos 1 token creado!",
+            "desc": "Mira la sección 'TOKENS DE ACCESO' en la página del módulo. ¡Deberías ver al menos UN token en la lista! Si la lista está VACÍA, ve a crear un token primero (ver la sección anterior). ¡NO PUEDES preparar sin un token!"
+          },
+          {
+            "number": "3",
+            "title": "ENCUENTRA el botón 'PREPARAR MÓDULO'",
+            "desc": "Mira en la PARTE SUPERIOR de la página del módulo, cerca del botón 'Editar Módulo'. Deberías ver un botón que dice 'PREPARAR MÓDULO' o 'Preparar'. Usualmente es VERDE o AZUL."
+          },
+          {
+            "number": "4",
+            "title": "HAZ CLIC en 'Preparar Módulo'",
+            "desc": "¡Haz clic en el botón! El sistema iniciará el proceso de preparación. Verás un indicador de CARGA (círculo giratorio o similar)."
+          },
+          {
+            "number": "5",
+            "title": "ESPERA a que se complete el proceso",
+            "desc": "¡Esto usualmente toma 5-30 SEGUNDOS dependiendo de cuántos archivos tengas! El sistema está: 1) Subiendo todos los archivos a OpenAI, 2) Creando un asistente IA, 3) Configurando todo. ¡NO CIERRES LA PÁGINA mientras esto está pasando! Solo espera pacientemente!"
+          }
+        ],
+        "whatYouShouldSee": "Después de una preparación exitosa: Deberías ver un MENSAJE DE ÉXITO VERDE que dice algo como '¡Módulo preparado exitosamente!' o 'Los archivos han sido subidos a OpenAI y el asistente está listo'. ¡El módulo ahora está EN VIVO y los estudiantes pueden usarlo!",
+        "testing": {
+          "title": "CÓMO PROBAR si funcionó",
+          "steps": [
+            {
+              "number": "1",
+              "desc": "Copia uno de tus TOKENS de módulo (de la sección Tokens de Acceso)"
+            },
+            {
+              "number": "2",
+              "desc": "Abre una NUEVA PESTAÑA O VENTANA del navegador"
+            },
+            {
+              "number": "3",
+              "desc": "Pega esta URL (reemplazando TU_TOKEN_AQUÍ con tu token real): https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ"
+            },
+            {
+              "number": "4",
+              "desc": "Presiona ENTER. ¡El widget del tutor IA debería ABRIRSE!"
+            },
+            {
+              "number": "5",
+              "desc": "¡Haz una pregunta relacionada con tus archivos subidos! Ejemplo: Si subiste un PDF sobre variables de Python, pregunta '¿Cuáles son los diferentes tipos de variables en Python?'"
+            },
+            {
+              "number": "6",
+              "desc": "Verifica si la IA responde usando información de TUS archivos (no solo conocimiento general). ¡Si menciona cosas específicas de tus PDFs, ÉXITO! ¡Está funcionando!"
+            }
+          ]
+        },
+        "commonMistakes": [
+          {
+            "mistake": "¡Hice clic en 'Preparar Módulo' pero dice 'No hay tokens disponibles'!",
+            "solution": "¡Necesitas CREAR UN TOKEN PRIMERO! Ve a la página 'Tokens de Módulos' (o la sección Tokens de Acceso en la página del módulo), crea un token con 'Permitir Chat' habilitado, ¡LUEGO intenta preparar de nuevo!"
+          },
+          {
+            "mistake": "¡Dice 'Token inválido' cuando intento preparar!",
+            "solution": "¡El token necesita tener el permiso 'Permitir Chat' HABILITADO! Verifica tu token - si 'Permitir Chat' está DESACTIVADO, actívalo, guarda el token e intenta preparar de nuevo!"
+          },
+          {
+            "mistake": "¡La preparación se completó pero la IA no sabe sobre mis archivos!",
+            "solution": "¿Subiste los archivos ANTES de preparar? ¡Si subiste archivos DESPUÉS de preparar, la IA no los tendrá! Necesitas RE-PREPARAR el módulo: ¡Solo haz clic en 'Preparar Módulo' de nuevo! ¡Esto actualizará la IA con los nuevos archivos!"
+          },
+          {
+            "mistake": "¡Hice cambios al Prompt del Sistema y quiero que la IA use la nueva versión!",
+            "solution": "¡RE-PREPARA EL MÓDULO! Cuando cambias el Prompt del Sistema, necesitas preparar de nuevo para que los cambios tengan efecto. ¡Haz clic en 'Preparar Módulo' y actualizará el asistente IA!"
+          },
+          {
+            "mistake": "¡La preparación se quedó atascada y nunca se completó!",
+            "solution": "Espera 2-3 minutos para estar seguro. Si aún está atascada: 1) ACTUALIZA la página, 2) Intenta hacer clic en 'Preparar Módulo' de nuevo. Si falla repetidamente, podría ser un problema temporal del servidor - espera 10-15 minutos e intenta de nuevo, o contacta soporte si persiste!"
+          },
+          {
+            "mistake": "¿Puedo preparar el módulo varias veces?",
+            "solution": "¡SÍ! Puedes (y deberías) RE-PREPARAR cuando: 1) Agregues nuevos archivos, 2) Elimines archivos, 3) Cambies el Prompt del Sistema. ¡Re-preparar actualiza todo! ¡No hace daño preparar varias veces!"
+          }
+        ],
+        "troubleshooting": [
+          {
+            "problem": "¡El botón 'Preparar Módulo' no es visible!",
+            "solution": "Posibles razones: 1) No estás en la PÁGINA DE DETALLES DEL MÓDULO - asegúrate de haber hecho clic en un módulo individual, 2) No tienes permiso - ¿eres un Profesor Administrador o estás asignado a este módulo? 3) El módulo ya se está preparando - ¡espera a que termine!"
+          },
+          {
+            "problem": "¡La preparación falló con error 'Error de OpenAI'!",
+            "solution": "Esto usualmente significa: 1) El sistema de OpenAI está temporalmente caído (raro) - espera e intenta de nuevo después, 2) Uno de tus archivos está corrupto o es incompatible - intenta eliminar archivos uno por uno y preparar de nuevo para identificar el archivo problemático, 3) ¡Contacta soporte si sigue pasando!"
+          },
+          {
+            "problem": "¿Cuánto tiempo usualmente toma la preparación?",
+            "solution": "NORMAL: 5-30 segundos para módulos con unos pocos archivos. MÁS LARGO: 30-60 segundos para módulos con muchos archivos grandes (como 10 PDFs de 40MB cada uno). Si toma más de 2 minutos, algo podría estar mal - ¡verifica tu conexión a internet!"
+          },
+          {
+            "problem": "¡Eliminé un archivo y re-preparé pero la IA aún menciona ese archivo!",
+            "solution": "Esto no debería pasar, pero si pasa: 1) Intenta preparar de nuevo (a veces necesita 2 intentos), 2) Verifica si el archivo está REALMENTE eliminado (actualiza la página y verifica la lista de archivos), 3) Si persiste, podría ser un problema de caché de IA - espera 5-10 minutos y prueba de nuevo!"
+          },
+          {
+            "problem": "¿Preparar cuesta dinero o usa créditos?",
+            "solution": "¡Eso depende de la configuración de tu institución! Algunos sistemas tienen preparaciones ilimitadas, otros podrían tener cuotas. Verifica con tu Super Administrador o la persona que configuró tu cuenta de Tutoria. ¡USUALMENTE no hay límite para profesores!"
+          }
+        ],
+        "tips": [
+          "💡 ¡PREPARA TEMPRANO! ¡No esperes hasta el día antes de que comiencen las clases! Prepara con una semana de anticipación y PRUEBA a fondo para que tengas tiempo de arreglar problemas!",
+          "💡 ¡RE-PREPARA después de CUALQUIER cambio! ¿Cambiaste el Prompt del Sistema? Re-prepara. ¿Agregaste archivos? Re-prepara. ¡Esto asegura que los estudiantes siempre tengan la última versión!",
+          "💡 ¡PRUEBA TÚ MISMO antes de compartir con estudiantes! Después de preparar, ¡usa el widget tú mismo! Haz preguntas, descarga archivos, ¡asegúrate de que todo funcione!",
+          "💡 Si estás actualizando archivos a mitad de semestre, ¡DILE A LOS ESTUDIANTES! Envía un mensaje como '¡Actualicé los materiales de estudio - el tutor IA ahora tiene la última versión!' para que sepan hacer preguntas sobre el nuevo contenido!",
+          "💡 ¡Mantén un REGISTRO DE PREPARACIÓN! Anota cuándo preparaste cada módulo (como 'CS101-S1: Preparado el 15 de enero de 2024 con 5 PDFs'). ¡Esto ayuda a rastrear qué está actualizado!",
+          "💡 ¡No SOBRE-PREPARES! ¡No necesitas preparar cada hora! Solo re-prepara cuando hagas cambios reales. ¡Preparar 50 veces en un día no lo hace mejor!",
+          "💡 Si tienes 10 módulos, ¡necesitas preparar cada uno POR SEPARADO! Preparar el Módulo 1 no prepara automáticamente los Módulos 2-10. ¡Hazlos uno por uno!"
+        ],
+        "finalChecklist": {
+          "title": "LISTA DE VERIFICACIÓN FINAL - ¿Mi Módulo está REALMENTE Listo para Estudiantes?",
+          "items": [
+            "✅ ¿Módulo creado con buen nombre y descripción?",
+            "✅ ¿Prompt del Sistema configurado (la IA sabe cómo enseñar)?",
+            "✅ ¿Archivos subidos (diapositivas de clase, notas, lecturas)?",
+            "✅ ¿Al menos 1 token creado con permisos apropiados?",
+            "✅ ¿Módulo PREPARADO (hiciste clic en el botón Preparar y viste éxito)?",
+            "✅ ¿PROBASTE el widget tú mismo (hiciste preguntas, descargaste archivos)?",
+            "✅ ¿Enlace del widget compartido con estudiantes (Moodle, correo, WhatsApp, etc.)?",
+            "✅ ¿Los estudiantes saben CÓMO usar el tutor IA (quizás proporcionar instrucciones)?",
+            "✅ ¿Estás monitoreando el uso (revisando estadísticas de tokens ocasionalmente)?",
+            "✅ ¿Tienes un plan para actualizar contenido y re-preparar según sea necesario?"
+          ]
+        }
+      },
+      "regularProfessor": {
+        "title": "Guía para Profesores Regulares",
+        "subtitle": "Guía súper detallada para profesores regulares. ¡Esta guía es MUY similar a la guía del Profesor Administrador, pero tendrás algunas diferencias de acceso!",
+        "note": "NOTA: Como Profesor Regular, puedes hacer CASI TODO lo que hace un Profesor Administrador, EXCEPTO: Crear otros profesores, Ver todos los cursos de la universidad (solo ves los tuyos). Para crear módulos, subir archivos, configurar tutores IA, crear tokens, preparar módulos - ¡ES TODO IGUAL! Sigue los mismos tutoriales de la sección 'Profesor Administrador' arriba."
+      }
+    }
   }
 }
