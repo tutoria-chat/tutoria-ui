@@ -15,8 +15,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('pt-br');
   const [messages, setMessages] = useState<any>({});
 
-  useEffect(() => {
-    // Load locale from user preferences or localStorage
+  // Function to get locale from localStorage
+  const getLocaleFromStorage = (): Locale => {
     const storedUser = localStorage.getItem('tutoria_user');
     let initialLocale: Locale = 'pt-br';
 
@@ -37,7 +37,34 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       initialLocale = storedLocale;
     }
 
-    setLocaleState(initialLocale);
+    return initialLocale;
+  };
+
+  useEffect(() => {
+    // Load initial locale
+    setLocaleState(getLocaleFromStorage());
+
+    // Listen for storage changes (when user logs in or updates preferences)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'tutoria_user' || e.key === 'tutoria_locale') {
+        const newLocale = getLocaleFromStorage();
+        setLocaleState(newLocale);
+      }
+    };
+
+    // Listen for custom event when user logs in or updates preferences
+    const handleUserUpdate = () => {
+      const newLocale = getLocaleFromStorage();
+      setLocaleState(newLocale);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('tutoria_user_updated', handleUserUpdate);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('tutoria_user_updated', handleUserUpdate);
+    };
   }, []);
 
   useEffect(() => {

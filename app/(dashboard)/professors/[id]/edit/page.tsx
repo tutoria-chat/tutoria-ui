@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -17,6 +18,8 @@ export default function EditProfessorPage() {
   const router = useRouter();
   const params = useParams();
   const professorId = Number(params.id);
+  const t = useTranslations('professors.edit');
+  const tCommon = useTranslations('common');
 
   const [professor, setProfessor] = useState<Professor | null>(null);
   const [formData, setFormData] = useState<ProfessorUpdate>({
@@ -42,7 +45,7 @@ export default function EditProfessorPage() {
       });
     } catch (error) {
       console.error('Falha ao carregar professor:', error);
-      setErrors({ load: 'Erro ao carregar dados do professor.' });
+      setErrors({ load: t('loadError') });
     } finally {
       setIsLoadingData(false);
     }
@@ -53,9 +56,9 @@ export default function EditProfessorPage() {
   }, [loadProfessor]);
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Professores', href: '/professors' },
-    { label: professor ? `${professor.first_name} ${professor.last_name}` : 'Carregando...', href: `/professors/${professorId}` },
-    { label: 'Editar', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.professors'), href: '/professors' },
+    { label: professor ? `${professor.first_name} ${professor.last_name}` : tCommon('loading'), href: `/professors/${professorId}` },
+    { label: t('breadcrumb'), isCurrentPage: true }
   ];
 
   const handleChange = (field: keyof ProfessorUpdate, value: string | boolean) => {
@@ -69,17 +72,17 @@ export default function EditProfessorPage() {
     const newErrors: Record<string, string> = {};
 
     if (!formData.email?.trim()) {
-      newErrors.email = 'Email é obrigatório';
+      newErrors.email = t('emailRequired');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+      newErrors.email = t('emailInvalid');
     }
 
     if (!formData.first_name?.trim()) {
-      newErrors.first_name = 'Nome é obrigatório';
+      newErrors.first_name = t('firstNameRequired');
     }
 
     if (!formData.last_name?.trim()) {
-      newErrors.last_name = 'Sobrenome é obrigatório';
+      newErrors.last_name = t('lastNameRequired');
     }
 
     setErrors(newErrors);
@@ -97,7 +100,7 @@ export default function EditProfessorPage() {
       router.push('/professors');
     } catch (error) {
       console.error('Falha ao atualizar professor:', error);
-      setErrors({ submit: 'Erro ao atualizar professor. Tente novamente.' });
+      setErrors({ submit: t('updateError') });
     } finally {
       setIsLoading(false);
     }
@@ -117,7 +120,7 @@ export default function EditProfessorPage() {
         <p className="text-destructive">{errors.load}</p>
         <Button onClick={() => router.push('/professors')}>
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Voltar para Professores
+          {t('backToProfessors')}
         </Button>
       </div>
     );
@@ -127,24 +130,24 @@ export default function EditProfessorPage() {
     <AdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Editar Professor"
-          description={`Atualize as informações de ${professor?.first_name} ${professor?.last_name}`}
+          title={t('title')}
+          description={t('description', { name: `${professor?.first_name} ${professor?.last_name}` })}
           breadcrumbs={breadcrumbs}
         />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <Card className="max-w-2xl">
             <CardHeader>
-              <CardTitle>Informações do Professor</CardTitle>
+              <CardTitle>{t('professorInfo')}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="first_name">Nome</Label>
+                <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
                 <Input
                   id="first_name"
                   value={formData.first_name}
                   onChange={(e) => handleChange('first_name', e.target.value)}
-                  placeholder="Nome do professor"
+                  placeholder={t('firstNamePlaceholder')}
                   disabled={isLoading}
                 />
                 {errors.first_name && (
@@ -153,12 +156,12 @@ export default function EditProfessorPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="last_name">Sobrenome</Label>
+                <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
                 <Input
                   id="last_name"
                   value={formData.last_name}
                   onChange={(e) => handleChange('last_name', e.target.value)}
-                  placeholder="Sobrenome do professor"
+                  placeholder={t('lastNamePlaceholder')}
                   disabled={isLoading}
                 />
                 {errors.last_name && (
@@ -167,13 +170,13 @@ export default function EditProfessorPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
-                  placeholder="email@universidade.edu.br"
+                  placeholder={t('emailPlaceholder')}
                   disabled={isLoading}
                 />
                 {errors.email && (
@@ -183,9 +186,9 @@ export default function EditProfessorPage() {
 
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="is_admin">Professor Administrador</Label>
+                  <Label htmlFor="is_admin">{t('adminProfessorLabel')}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Administradores podem gerenciar disciplinas e atribuir professores
+                    {t('adminDescription')}
                   </p>
                 </div>
                 <Switch
@@ -211,11 +214,11 @@ export default function EditProfessorPage() {
               onClick={() => router.push('/professors')}
               disabled={isLoading}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Salvar Alterações
+              {t('saveChanges')}
             </Button>
           </div>
         </form>

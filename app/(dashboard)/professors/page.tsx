@@ -2,21 +2,32 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { AdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import type { Professor, TableColumn, BreadcrumbItem, User } from '@/lib/types';
+import type { Professor, TableColumn, BreadcrumbItem, User, UserResponse } from '@/lib/types';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function ProfessorsPage() {
+  const router = useRouter();
   const t = useTranslations('professors');
+  const tCommon = useTranslations('common');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +36,10 @@ export default function ProfessorsPage() {
   const [sortColumn, setSortColumn] = useState<string | null>('first_name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
+
+  // Confirm dialogs
+  const { confirm, dialog } = useConfirmDialog();
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -46,7 +61,7 @@ export default function ProfessorsPage() {
       setCurrentUser(user);
     } catch (error: any) {
       console.error('Error loading current user:', error);
-      toast.error('Error loading user information');
+      toast.error(t('loadUserError'));
     }
   };
 
@@ -54,20 +69,20 @@ export default function ProfessorsPage() {
     setLoading(true);
     try {
       // Use unified Users endpoint to get professors
-      const users = await apiClient.getUsersByType('professor');
+      const users: UserResponse[] = await apiClient.getUsersByType('professor');
       // Map UserResponse to Professor interface
-      const profs: Professor[] = users.map((user: any) => ({
+      const profs: Professor[] = users.map((user: UserResponse) => ({
         id: user.user_id,
         username: user.username,
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         is_active: user.is_active,
-        is_admin: user.is_admin,
-        university_id: user.university_id,
+        is_admin: user.is_admin || false,
+        university_id: user.university_id || 0,
         university_name: user.university_name,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        created_at: user.created_at || new Date().toISOString(),
+        updated_at: user.updated_at || new Date().toISOString(),
         last_login_at: user.last_login_at,
         language_preference: user.language_preference,
         theme_preference: user.theme_preference,
@@ -75,50 +90,79 @@ export default function ProfessorsPage() {
       setProfessors(profs);
     } catch (error: any) {
       console.error('Error loading professors:', error);
-      toast.error(t('loadError') || 'Error loading professors');
+      toast.error(t('loadError'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeactivate = async (id: number) => {
-    if (!confirm(t('deactivateConfirm') || 'Are you sure you want to deactivate this professor?')) {
-      return;
-    }
-
-    try {
-      await apiClient.deactivateUser(id);
-      toast.success(t('deactivateSuccess') || 'Professor deactivated successfully');
-      loadProfessors();
-    } catch (error: any) {
-      console.error('Error deactivating professor:', error);
-      toast.error(error.message || t('deactivateError') || 'Error deactivating professor');
-    }
+    confirm({
+      title: t('deactivateConfirm'),
+      description: t('deactivateConfirm'),
+      variant: 'destructive',
+      confirmText: t('deactivate'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deactivateUser(id);
+          toast.success(t('deactivateSuccess'));
+          loadProfessors();
+        } catch (error: any) {
+          console.error('Error deactivating professor:', error);
+          toast.error(error.message || t('deactivateError'));
+        }
+      }
+    });
   };
 
   const handleActivate = async (id: number) => {
     try {
       await apiClient.activateUser(id);
-      toast.success(t('activateSuccess') || 'Professor activated successfully');
+      toast.success(t('activateSuccess'));
       loadProfessors();
     } catch (error: any) {
       console.error('Error activating professor:', error);
-      toast.error(error.message || t('activateError') || 'Error activating professor');
+      toast.error(error.message || t('activateError'));
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm') || 'Are you sure you want to permanently delete this professor? This action cannot be undone.')) {
-      return;
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deleteUserPermanently(id);
+          toast.success(t('deleteSuccess'));
+          loadProfessors();
+        } catch (error: any) {
+          console.error('Error deleting professor:', error);
+          toast.error(error.message || t('deleteError'));
+        }
+      }
+    });
+  };
 
-    try {
-      await apiClient.deleteUserPermanently(id);
-      toast.success(t('deleteSuccess') || 'Professor deleted permanently');
-      loadProfessors();
-    } catch (error: any) {
-      console.error('Error deleting professor:', error);
-      toast.error(error.message || t('deleteError') || 'Error deleting professor');
+  const handleAddProfessor = () => {
+    // If super admin, show dialog to choose type
+    if (currentUser?.role === 'super_admin') {
+      setShowProfessorTypeDialog(true);
+    } else {
+      // If admin professor, go directly to create regular professor
+      router.push('/professors/create');
+    }
+  };
+
+  const handleSelectProfessorType = (type: 'regular' | 'admin') => {
+    setShowProfessorTypeDialog(false);
+    if (type === 'admin') {
+      router.push('/professors/create-admin');
+    } else {
+      router.push('/professors/create');
     }
   };
 
@@ -275,11 +319,9 @@ export default function ProfessorsPage() {
           breadcrumbs={breadcrumbs}
           actions={
             currentUser?.is_admin && (
-              <Button asChild>
-                <Link href="/professors/create">
-                  <Plus className="mr-2 h-4 w-4" />
-                  {t('addButton')}
-                </Link>
+              <Button onClick={handleAddProfessor}>
+                <Plus className="mr-2 h-4 w-4" />
+                {t('addButton')}
               </Button>
             )
           }
@@ -351,6 +393,56 @@ export default function ProfessorsPage() {
           }}
           emptyMessage={t('emptyMessage') || 'No professors found'}
         />
+
+        {/* Professor Type Selection Dialog */}
+        <Dialog open={showProfessorTypeDialog} onOpenChange={setShowProfessorTypeDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('selectTypeDialog.title')}</DialogTitle>
+              <DialogDescription>
+                {t('selectTypeDialog.description')}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <Button
+                variant="outline"
+                className="h-auto flex-col items-start p-4 hover:bg-blue-50 hover:border-blue-500"
+                onClick={() => handleSelectProfessorType('regular')}
+              >
+                <div className="flex items-center space-x-3 mb-2">
+                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-base">{t('selectTypeDialog.regularProfessor')}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground text-left">
+                  {t('selectTypeDialog.regularDescription')}
+                </p>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="h-auto flex-col items-start p-4 hover:bg-purple-50 hover:border-purple-500"
+                onClick={() => handleSelectProfessorType('admin')}
+              >
+                <div className="flex items-center space-x-3 mb-2">
+                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <Shield className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-base">{t('selectTypeDialog.adminProfessor')}</div>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground text-left">
+                  {t('selectTypeDialog.adminDescription')}
+                </p>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+        {dialog}
       </div>
     </AdminOnly>
   );

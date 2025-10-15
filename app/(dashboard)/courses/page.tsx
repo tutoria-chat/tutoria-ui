@@ -14,18 +14,24 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function CoursesPage() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('courses');
+  const tCommon = useTranslations('common');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   // Check for university_id from URL query parameter
   const urlUniversityId = searchParams.get('university_id');
@@ -155,18 +161,23 @@ export default function CoursesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.deleteCourse(id);
-      window.location.reload();
-    } catch (error) {
-      console.error('Erro ao deletar disciplina:', error);
-      alert(t('deleteError'));
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteCourse(id);
+          window.location.reload();
+        } catch (error) {
+          console.error('Erro ao deletar disciplina:', error);
+          toast.error(t('deleteError'));
+        }
+      }
+    });
   };
 
   const handleSortChange = (column: string) => {
@@ -242,6 +253,7 @@ export default function CoursesPage() {
         emptyMessage={t('emptyMessage')}
         onRowClick={(course) => router.push(`/courses/${course.id}`)}
       />
+      {dialog}
     </div>
   );
 }

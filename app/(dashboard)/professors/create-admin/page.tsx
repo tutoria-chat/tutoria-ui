@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,8 @@ import { toast } from 'sonner';
 
 export default function CreateAdminProfessorPage() {
   const router = useRouter();
+  const t = useTranslations('professors.createAdmin');
+  const tCommon = useTranslations('common');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [resetLink, setResetLink] = useState('');
@@ -37,8 +40,8 @@ export default function CreateAdminProfessorPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { label: 'Professores', href: '/professors' },
-    { label: 'Criar Professor Administrador', isCurrentPage: true }
+    { label: tCommon('breadcrumbs.professors'), href: '/professors' },
+    { label: t('breadcrumbCreate'), isCurrentPage: true }
   ];
 
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function CreateAdminProfessorPage() {
       setUniversities(universities);
     } catch (error: any) {
       console.error('Error loading universities:', error);
-      toast.error('Erro ao carregar universidades');
+      toast.error(t('errorLoadingUniversities'));
     } finally {
       setLoadingUniversities(false);
     }
@@ -62,18 +65,18 @@ export default function CreateAdminProfessorPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.username.trim()) newErrors.username = 'Nome de usuário é obrigatório';
-    if (!formData.email.trim()) newErrors.email = 'Email é obrigatório';
-    if (!formData.first_name.trim()) newErrors.first_name = 'Primeiro nome é obrigatório';
-    if (!formData.last_name.trim()) newErrors.last_name = 'Sobrenome é obrigatório';
-    if (!formData.password.trim()) newErrors.password = 'Senha temporária é obrigatória';
-    if (formData.password.length < 6) newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
-    if (!formData.university_id) newErrors.university_id = 'Universidade é obrigatória';
+    if (!formData.username.trim()) newErrors.username = t('usernameRequired');
+    if (!formData.email.trim()) newErrors.email = t('emailRequired');
+    if (!formData.first_name.trim()) newErrors.first_name = t('firstNameRequired');
+    if (!formData.last_name.trim()) newErrors.last_name = t('lastNameRequired');
+    if (!formData.password.trim()) newErrors.password = t('passwordRequired');
+    if (formData.password.length < 6) newErrors.password = t('passwordMinLength');
+    if (!formData.university_id) newErrors.university_id = t('universityRequired');
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (formData.email && !emailRegex.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+      newErrors.email = t('emailInvalid');
     }
 
     setErrors(newErrors);
@@ -84,7 +87,7 @@ export default function CreateAdminProfessorPage() {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Por favor, corrija os erros no formulário');
+      toast.error(t('fixFormErrors'));
       return;
     }
 
@@ -106,10 +109,10 @@ export default function CreateAdminProfessorPage() {
       setResetLink(link);
 
       setShowSuccess(true);
-      toast.success('Professor administrador criado com sucesso!');
+      toast.success(t('adminCreatedSuccess'));
     } catch (error: any) {
       console.error('Error creating admin professor:', error);
-      toast.error(error.message || 'Erro ao criar professor administrador');
+      toast.error(error.message || t('errorCreatingAdmin'));
     } finally {
       setLoading(false);
     }
@@ -119,10 +122,10 @@ export default function CreateAdminProfessorPage() {
     try {
       await navigator.clipboard.writeText(resetLink);
       setCopiedLink(true);
-      toast.success('Link copiado para a área de transferência!');
+      toast.success(t('linkCopied'));
       setTimeout(() => setCopiedLink(false), 2000);
     } catch (error) {
-      toast.error('Erro ao copiar link');
+      toast.error(t('errorCopyingLink'));
     }
   };
 
@@ -136,8 +139,8 @@ export default function CreateAdminProfessorPage() {
       <SuperAdminOnly>
         <div className="space-y-6">
           <PageHeader
-            title="Professor Administrador Criado!"
-            description="Compartilhe o link de configuração com o novo professor administrador"
+            title={t('successTitle')}
+            description={t('successDescription')}
             breadcrumbs={breadcrumbs}
           />
 
@@ -145,22 +148,22 @@ export default function CreateAdminProfessorPage() {
             <CardHeader>
               <CardTitle className="text-green-900 flex items-center">
                 <Shield className="mr-2 h-5 w-5" />
-                ✅ Professor Administrador Criado com Sucesso
+                {t('successCardTitle')}
               </CardTitle>
               <CardDescription className="text-green-700">
-                O professor administrador <strong>{newUser?.first_name} {newUser?.last_name}</strong> foi criado.
+                {t('successCardDescription', { firstName: newUser?.first_name, lastName: newUser?.last_name })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-sm font-medium text-green-900">Nome de Usuário</Label>
+                <Label className="text-sm font-medium text-green-900">{t('usernameDisplay')}</Label>
                 <div className="mt-1 p-2 bg-white rounded border border-green-200">
                   <code className="text-sm">{formData.username}</code>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">Email</Label>
+                <Label className="text-sm font-medium text-green-900">{t('emailDisplay')}</Label>
                 <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
                   <code className="text-sm">{formData.email}</code>
@@ -168,7 +171,7 @@ export default function CreateAdminProfessorPage() {
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">Universidade</Label>
+                <Label className="text-sm font-medium text-green-900">{t('universityDisplay')}</Label>
                 <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
                   <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
                   <code className="text-sm">{getUniversityName()}</code>
@@ -179,21 +182,21 @@ export default function CreateAdminProfessorPage() {
 
           <Card className="border-blue-200 bg-blue-50">
             <CardHeader>
-              <CardTitle className="text-blue-900">🔗 Link de Configuração de Senha</CardTitle>
+              <CardTitle className="text-blue-900">{t('resetLinkTitle')}</CardTitle>
               <CardDescription className="text-blue-700">
-                Compartilhe este link com o novo professor administrador para que ele possa definir sua senha.
+                {t('resetLinkDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Alert className="bg-amber-50 border-amber-200">
                 <AlertCircle className="h-4 w-4 text-amber-600" />
                 <AlertDescription className="text-amber-900">
-                  <strong>⏱️ Este link expira em 72 horas.</strong> Certifique-se de compartilhar com o usuário o mais rápido possível.
+                  <strong>{t('linkExpiresWarning')}</strong> {t('shareQuickly')}
                 </AlertDescription>
               </Alert>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900">Link de Configuração</Label>
+                <Label className="text-sm font-medium text-blue-900">{t('setupLinkLabel')}</Label>
                 <div className="flex space-x-2">
                   <Input
                     value={resetLink}
@@ -208,12 +211,12 @@ export default function CreateAdminProfessorPage() {
                     {copiedLink ? (
                       <>
                         <Check className="mr-2 h-4 w-4 text-green-600" />
-                        Copiado!
+                        {t('copied')}
                       </>
                     ) : (
                       <>
                         <Copy className="mr-2 h-4 w-4" />
-                        Copiar Link
+                        {t('copyLink')}
                       </>
                     )}
                   </Button>
@@ -221,11 +224,11 @@ export default function CreateAdminProfessorPage() {
               </div>
 
               <div className="p-4 bg-white rounded border border-blue-200">
-                <p className="text-sm text-blue-900 font-medium mb-2">📋 Como compartilhar:</p>
+                <p className="text-sm text-blue-900 font-medium mb-2">{t('howToShare')}</p>
                 <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                  <li>Envie via email para <strong>{formData.email}</strong></li>
-                  <li>Compartilhe via Slack, Teams ou WhatsApp</li>
-                  <li>Entregue pessoalmente em formato digital seguro</li>
+                  <li>{t('shareViaEmail', { email: formData.email })}</li>
+                  <li>{t('shareViaMessaging')}</li>
+                  <li>{t('shareInPerson')}</li>
                 </ul>
               </div>
             </CardContent>
@@ -233,7 +236,7 @@ export default function CreateAdminProfessorPage() {
 
           <div className="flex space-x-4">
             <Button onClick={() => router.push('/professors')} variant="outline">
-              Voltar para Lista
+              {t('backToList')}
             </Button>
             <Button onClick={() => {
               setShowSuccess(false);
@@ -248,7 +251,7 @@ export default function CreateAdminProfessorPage() {
               setResetLink('');
               setNewUser(null);
             }}>
-              Criar Outro Professor Administrador
+              {t('createAnother')}
             </Button>
           </div>
         </div>
@@ -260,35 +263,35 @@ export default function CreateAdminProfessorPage() {
     <SuperAdminOnly>
       <div className="space-y-6">
         <PageHeader
-          title="Criar Professor Administrador"
-          description="Crie uma nova conta de professor administrador com acesso de gestão à universidade"
+          title={t('title')}
+          description={t('description')}
           breadcrumbs={breadcrumbs}
         />
 
         <Alert className="border-amber-200 bg-amber-50">
           <Shield className="h-4 w-4 text-amber-600" />
           <AlertDescription className="text-amber-900">
-            <strong>⚠️ Permissões:</strong> Professores administradores podem gerenciar cursos, módulos e criar professores regulares em sua universidade.
+            {t('securityWarning')}
           </AlertDescription>
         </Alert>
 
         <form onSubmit={handleSubmit}>
           <Card>
             <CardHeader>
-              <CardTitle>Informações do Professor Administrador</CardTitle>
+              <CardTitle>{t('professorInfoTitle')}</CardTitle>
               <CardDescription>
-                Preencha os dados do novo professor administrador. Um link de configuração de senha será gerado após a criação.
+                {t('professorInfoDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="university_id">Universidade *</Label>
+                <Label htmlFor="university_id">{t('universityLabel')}</Label>
                 <Select
                   id="university_id"
                   value={formData.university_id}
                   onValueChange={(value) => setFormData({ ...formData, university_id: value })}
                   disabled={loadingUniversities}
-                  placeholder={loadingUniversities ? "Carregando..." : "Selecione a universidade"}
+                  placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')}
                 >
                   {universities.map((university) => (
                     <SelectItem key={university.id} value={String(university.id)}>
@@ -303,12 +306,12 @@ export default function CreateAdminProfessorPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">Primeiro Nome *</Label>
+                  <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
                   <Input
                     id="first_name"
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                    placeholder="Ex: João"
+                    placeholder={t('firstNamePlaceholder')}
                   />
                   {errors.first_name && (
                     <p className="text-sm text-destructive">{errors.first_name}</p>
@@ -316,12 +319,12 @@ export default function CreateAdminProfessorPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">Sobrenome *</Label>
+                  <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
                   <Input
                     id="last_name"
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                    placeholder="Ex: Silva"
+                    placeholder={t('lastNamePlaceholder')}
                   />
                   {errors.last_name && (
                     <p className="text-sm text-destructive">{errors.last_name}</p>
@@ -330,29 +333,29 @@ export default function CreateAdminProfessorPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="username">Nome de Usuário *</Label>
+                <Label htmlFor="username">{t('usernameLabel')}</Label>
                 <Input
                   id="username"
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                  placeholder="Ex: joao.silva"
+                  placeholder={t('usernamePlaceholder')}
                 />
                 {errors.username && (
                   <p className="text-sm text-destructive">{errors.username}</p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Será usado para login. Use apenas letras, números, pontos e underscores.
+                  {t('usernameHint')}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
+                <Label htmlFor="email">{t('emailLabel')}</Label>
                 <Input
                   id="email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="Ex: joao.silva@universidade.edu.br"
+                  placeholder={t('emailPlaceholder')}
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive">{errors.email}</p>
@@ -360,19 +363,19 @@ export default function CreateAdminProfessorPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Senha Temporária *</Label>
+                <Label htmlFor="password">{t('tempPasswordLabel')}</Label>
                 <Input
                   id="password"
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  placeholder="Mínimo 6 caracteres"
+                  placeholder={t('passwordPlaceholder')}
                 />
                 {errors.password && (
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
                 <p className="text-sm text-muted-foreground">
-                  Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.
+                  {t('passwordHint')}
                 </p>
               </div>
             </CardContent>
@@ -385,10 +388,10 @@ export default function CreateAdminProfessorPage() {
               onClick={() => router.push('/professors')}
               disabled={loading}
             >
-              Cancelar
+              {t('cancel')}
             </Button>
             <Button type="submit" disabled={loading || loadingUniversities}>
-              {loading ? 'Criando...' : 'Criar Professor Administrador'}
+              {loading ? t('creating') : t('createButton')}
             </Button>
           </div>
         </form>

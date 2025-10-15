@@ -14,18 +14,24 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import type { Module, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function ModulesPage() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('modules');
+  const tCommon = useTranslations('common');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   // Helper function to check if user can edit/delete a module
   // Note: For regular professors, the API already filters modules to show only those in assigned courses
@@ -185,18 +191,23 @@ export default function ModulesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.deleteModule(id);
-      window.location.reload();
-    } catch (error) {
-      console.error('Erro ao deletar módulo:', error);
-      alert(t('deleteError'));
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteModule(id);
+          window.location.reload();
+        } catch (error) {
+          console.error('Erro ao deletar módulo:', error);
+          toast.error(t('deleteError'));
+        }
+      }
+    });
   };
 
   const handleSortChange = (column: string) => {
@@ -270,6 +281,7 @@ export default function ModulesPage() {
         emptyMessage={t('emptyMessage')}
         onRowClick={(module) => router.push(`/modules/${module.id}`)}
       />
+      {dialog}
     </div>
   );
 }
