@@ -28,6 +28,8 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function CourseDetailsPage() {
   const params = useParams();
@@ -50,6 +52,9 @@ export default function CourseDetailsPage() {
   const [semesterFilter, setSemesterFilter] = useState<string>('all');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   // Filter modules
   const modules = allModules.filter(module => {
@@ -111,18 +116,23 @@ export default function CourseDetailsPage() {
   };
 
   const handleDeleteModule = async (moduleId: number) => {
-    if (!confirm(tModules('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.delete(`/modules/${moduleId}`);
-      refetchModules();
-    } catch (error) {
-      console.error('Erro ao deletar módulo:', error);
-      alert(tModules('deleteError'));
-    }
+    confirm({
+      title: tModules('deleteConfirm'),
+      description: tModules('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.delete(`/modules/${moduleId}`);
+          refetchModules();
+        } catch (error) {
+          console.error('Erro ao deletar módulo:', error);
+          toast.error(tModules('deleteError'));
+        }
+      }
+    });
   };
 
   const moduleColumns: TableColumn<Module>[] = [
@@ -484,6 +494,7 @@ export default function CourseDetailsPage() {
           </Card>
         )}
       </div>
+      {dialog}
     </div>
   );
 }

@@ -33,6 +33,7 @@ export interface UserResponse {
   is_active: boolean;
   is_admin?: boolean;
   university_id?: number;
+  university_name?: string; // Included when joined with university table
   language_preference?: string;
   theme_preference?: string;
   created_at?: string;

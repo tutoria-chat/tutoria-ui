@@ -464,6 +464,7 @@
     "searchPlaceholder": "Search professors...",
     "emptyMessage": "No professors found",
     "loadError": "Error loading professors",
+    "loadUserError": "Error loading user information",
     "deactivateConfirm": "Are you sure you want to deactivate this professor?",
     "deactivateSuccess": "Professor deactivated successfully",
     "deactivateError": "Error deactivating professor",

@@ -25,12 +25,18 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import type { University, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function UniversityDetailsPage() {
   const params = useParams();
   const { user } = useAuth();
   const universityId = params.id as string;
   const t = useTranslations('universities.detail');
+  const tCommon = useTranslations('common');
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   // For professors, ensure they can only access their own university
   React.useEffect(() => {
@@ -50,8 +56,6 @@ export default function UniversityDetailsPage() {
   const professors = professorsResponse?.items || [];
 
   const [activeTab, setActiveTab] = useState<'courses' | 'professors'>('courses');
-
-  const tCommon = useTranslations('common');
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('breadcrumb'), href: '/universities' },
@@ -165,18 +169,23 @@ export default function UniversityDetailsPage() {
   ];
 
   const handleDeleteCourse = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.deleteCourse(id);
-      window.location.reload();
-    } catch (error) {
-      console.error('Erro ao deletar disciplina:', error);
-      alert(t('deleteError'));
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteCourse(id);
+          window.location.reload();
+        } catch (error) {
+          console.error('Erro ao deletar disciplina:', error);
+          toast.error(t('deleteError'));
+        }
+      }
+    });
   };
 
   if (universityLoading) {
@@ -327,6 +336,7 @@ export default function UniversityDetailsPage() {
           </CardContent>
         </Card>
       )}
+      {dialog}
     </div>
   );
 }

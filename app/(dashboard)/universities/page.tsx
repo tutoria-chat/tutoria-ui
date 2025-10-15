@@ -13,11 +13,14 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function UniversitiesPage() {
   const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations('universities');
+  const tCommon = useTranslations('common');
 
   // For professors, redirect to their university page instead of showing list
   React.useEffect(() => {
@@ -34,6 +37,9 @@ export default function UniversitiesPage() {
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -107,18 +113,23 @@ export default function UniversitiesPage() {
   ];
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.deleteUniversity(id);
-      window.location.reload();
-    } catch (error) {
-      console.error('Erro ao deletar universidade:', error);
-      alert(t('deleteError'));
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteUniversity(id);
+          window.location.reload();
+        } catch (error) {
+          console.error('Erro ao deletar universidade:', error);
+          toast.error(t('deleteError'));
+        }
+      }
+    });
   };
 
   const handleSortChange = (column: string) => {
@@ -216,6 +227,7 @@ export default function UniversitiesPage() {
         emptyMessage={t('emptyMessage')}
         onRowClick={(university) => router.push(`/universities/${university.id}`)}
       />
+      {dialog}
     </div>
   );
 }

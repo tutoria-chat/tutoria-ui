@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import type { BreadcrumbItem } from '@/lib/types';
+import { toast } from 'sonner';
 
 // Mock analytics data
 const mockStats = {
@@ -87,7 +88,7 @@ export default function SystemStatsPage() {
 
   const handleExport = () => {
     // Simular export de dados
-    alert('As estatísticas do sistema seriam exportadas para CSV em uma aplicação real');
+    toast.info('As estatísticas do sistema seriam exportadas para CSV em uma aplicação real');
   };
 
   return (

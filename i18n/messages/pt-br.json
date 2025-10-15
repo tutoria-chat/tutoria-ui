@@ -464,6 +464,7 @@
     "searchPlaceholder": "Buscar professores...",
     "emptyMessage": "Nenhum professor encontrado",
     "loadError": "Erro ao carregar professores",
+    "loadUserError": "Erro ao carregar informações do usuário",
     "deactivateConfirm": "Tem certeza que deseja desativar este professor?",
     "deactivateSuccess": "Professor desativado com sucesso",
     "deactivateError": "Erro ao desativar professor",

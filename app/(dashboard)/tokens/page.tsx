@@ -15,6 +15,7 @@ import { formatDateShort } from '@/lib/utils';
 import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function TokensPage() {
   const { user } = useAuth();
@@ -33,6 +34,9 @@ export default function TokensPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<TokenModalMode>('create');
   const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
+
+  // Confirm dialog
+  const { confirm, dialog } = useConfirmDialog();
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -54,19 +58,24 @@ export default function TokensPage() {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) {
-      return;
-    }
-
-    try {
-      const { apiClient } = await import('@/lib/api');
-      await apiClient.deleteModuleToken(id);
-      refetch();
-      toast.success(t('deleteSuccess'));
-    } catch (error) {
-      console.error('Erro ao deletar token:', error);
-      toast.error(t('deleteError'));
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: t('columns.actions'),
+      cancelText: 'Cancel',
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteModuleToken(id);
+          refetch();
+          toast.success(t('deleteSuccess'));
+        } catch (error) {
+          console.error('Erro ao deletar token:', error);
+          toast.error(t('deleteError'));
+        }
+      }
+    });
   };
 
   const handleCopyToken = async (token: string) => {
@@ -342,6 +351,7 @@ export default function TokensPage() {
           onSuccess={handleModalSuccess}
           token={selectedToken}
         />
+        {dialog}
       </div>
     </ProfessorOnly>
   );

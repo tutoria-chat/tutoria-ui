@@ -21,11 +21,13 @@ import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import type { Professor, TableColumn, BreadcrumbItem, User } from '@/lib/types';
+import type { Professor, TableColumn, BreadcrumbItem, User, UserResponse } from '@/lib/types';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function ProfessorsPage() {
   const router = useRouter();
   const t = useTranslations('professors');
+  const tCommon = useTranslations('common');
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +37,9 @@ export default function ProfessorsPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
+
+  // Confirm dialogs
+  const { confirm, dialog } = useConfirmDialog();
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -56,7 +61,7 @@ export default function ProfessorsPage() {
       setCurrentUser(user);
     } catch (error: any) {
       console.error('Error loading current user:', error);
-      toast.error('Error loading user information');
+      toast.error(t('loadUserError'));
     }
   };
 
@@ -64,20 +69,20 @@ export default function ProfessorsPage() {
     setLoading(true);
     try {
       // Use unified Users endpoint to get professors
-      const users = await apiClient.getUsersByType('professor');
+      const users: UserResponse[] = await apiClient.getUsersByType('professor');
       // Map UserResponse to Professor interface
-      const profs: Professor[] = users.map((user: any) => ({
+      const profs: Professor[] = users.map((user: UserResponse) => ({
         id: user.user_id,
         username: user.username,
         email: user.email,
         first_name: user.first_name,
         last_name: user.last_name,
         is_active: user.is_active,
-        is_admin: user.is_admin,
-        university_id: user.university_id,
+        is_admin: user.is_admin || false,
+        university_id: user.university_id || 0,
         university_name: user.university_name,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        created_at: user.created_at || new Date().toISOString(),
+        updated_at: user.updated_at || new Date().toISOString(),
         last_login_at: user.last_login_at,
         language_preference: user.language_preference,
         theme_preference: user.theme_preference,
@@ -85,51 +90,61 @@ export default function ProfessorsPage() {
       setProfessors(profs);
     } catch (error: any) {
       console.error('Error loading professors:', error);
-      toast.error(t('loadError') || 'Error loading professors');
+      toast.error(t('loadError'));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeactivate = async (id: number) => {
-    if (!confirm(t('deactivateConfirm') || 'Are you sure you want to deactivate this professor?')) {
-      return;
-    }
-
-    try {
-      await apiClient.deactivateUser(id);
-      toast.success(t('deactivateSuccess') || 'Professor deactivated successfully');
-      loadProfessors();
-    } catch (error: any) {
-      console.error('Error deactivating professor:', error);
-      toast.error(error.message || t('deactivateError') || 'Error deactivating professor');
-    }
+    confirm({
+      title: t('deactivateConfirm'),
+      description: t('deactivateConfirm'),
+      variant: 'destructive',
+      confirmText: t('deactivate'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deactivateUser(id);
+          toast.success(t('deactivateSuccess'));
+          loadProfessors();
+        } catch (error: any) {
+          console.error('Error deactivating professor:', error);
+          toast.error(error.message || t('deactivateError'));
+        }
+      }
+    });
   };
 
   const handleActivate = async (id: number) => {
     try {
       await apiClient.activateUser(id);
-      toast.success(t('activateSuccess') || 'Professor activated successfully');
+      toast.success(t('activateSuccess'));
       loadProfessors();
     } catch (error: any) {
       console.error('Error activating professor:', error);
-      toast.error(error.message || t('activateError') || 'Error activating professor');
+      toast.error(error.message || t('activateError'));
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm') || 'Are you sure you want to permanently delete this professor? This action cannot be undone.')) {
-      return;
-    }
-
-    try {
-      await apiClient.deleteUserPermanently(id);
-      toast.success(t('deleteSuccess') || 'Professor deleted permanently');
-      loadProfessors();
-    } catch (error: any) {
-      console.error('Error deleting professor:', error);
-      toast.error(error.message || t('deleteError') || 'Error deleting professor');
-    }
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirm'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deleteUserPermanently(id);
+          toast.success(t('deleteSuccess'));
+          loadProfessors();
+        } catch (error: any) {
+          console.error('Error deleting professor:', error);
+          toast.error(error.message || t('deleteError'));
+        }
+      }
+    });
   };
 
   const handleAddProfessor = () => {
@@ -427,6 +442,7 @@ export default function ProfessorsPage() {
             </div>
           </DialogContent>
         </Dialog>
+        {dialog}
       </div>
     </AdminOnly>
   );

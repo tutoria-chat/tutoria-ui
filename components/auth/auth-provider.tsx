@@ -81,6 +81,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   };
 
                   localStorage.setItem('tutoria_user', JSON.stringify(user));
+
+                  // Dispatch custom event to notify language provider of user update
+                  window.dispatchEvent(new CustomEvent('tutoria_user_updated'));
+
                   setUser(user);
                 } catch (error) {
                   console.error('Failed to refresh user data:', error);
@@ -153,6 +157,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (response.refresh_token) {
             localStorage.setItem('tutoria_refresh_token', response.refresh_token);
           }
+
+          // Dispatch custom event to notify language provider of user update
+          window.dispatchEvent(new CustomEvent('tutoria_user_updated'));
         }
 
         setUser(user);
