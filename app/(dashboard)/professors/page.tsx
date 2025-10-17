@@ -396,7 +396,7 @@ export default function ProfessorsPage() {
 
         {/* Professor Type Selection Dialog */}
         <Dialog open={showProfessorTypeDialog} onOpenChange={setShowProfessorTypeDialog}>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{t('selectTypeDialog.title')}</DialogTitle>
               <DialogDescription>

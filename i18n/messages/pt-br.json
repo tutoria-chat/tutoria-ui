@@ -2,7 +2,7 @@
   "auth": {
     "login": {
       "title": "Bem-vindo ao Tutoria",
-      "description": "Digite suas credenciais para acessar sua conta",
+      "description": "Acesse sua conta institucional",
       "emailLabel": "Usuário / E-mail",
       "emailPlaceholder": "Digite seu usuário ou e-mail",
       "passwordLabel": "Senha",
@@ -11,8 +11,12 @@
       "submitting": "Entrando...",
       "forgotPassword": "Esqueceu sua senha?",
       "copyright": "© 2025 Tutoria. All rights reserved.",
-      "loginFailed": "Login failed. Please try again.",
-      "unexpectedError": "An unexpected error occurred. Please try again."
+      "loginFailed": "Credenciais inválidas. Tente novamente.",
+      "unexpectedError": "Ocorreu um erro inesperado. Tente novamente.",
+      "instructionsTitle": "Como fazer login:",
+      "instructionUsername": "Use seu <strong>nome de usuário</strong> ou <strong>e-mail institucional</strong>",
+      "instructionPassword": "Digite sua <strong>senha</strong> fornecida pelo administrador",
+      "instructionFirstAccess": "Se é seu primeiro acesso, use o link de configuração de senha que recebeu"
     }
   },
   "dashboard": {
@@ -365,6 +369,82 @@
       "noFilesYet": "Nenhum arquivo enviado ainda"
     }
   },
+  "aiModels": {
+    "selectModel": "Selecionar Modelo de IA",
+    "currentModel": "Modelo Atual",
+    "noModelSelected": "Nenhum modelo selecionado",
+    "changeModel": "Trocar Modelo",
+    "selectModelButton": "Selecionar Modelo de IA",
+    "modelDetails": "Detalhes do Modelo",
+    "provider": "Provedor",
+    "maxTokens": "Tokens Máximos",
+    "costPer1M": "Custo por 1M tokens",
+    "input": "Entrada",
+    "output": "Saída",
+    "deprecated": "Descontinuado",
+    "tier": "Nível",
+    "tierBasic": "Básico",
+    "tierStandard": "Padrão",
+    "tierPremium": "Premium",
+    "tierLabel": "Nível {tier}",
+    "models": {
+      "gpt-4-turbo": {
+        "name": "GPT-4 Turbo",
+        "description": "Modelo GPT-4 mais capaz com suporte a visão e janela de contexto de 128K",
+        "excellsAt": "Raciocínio complexo, tarefas multi-etapas, análise de documentos"
+      },
+      "gpt-4o": {
+        "name": "GPT-4o",
+        "description": "Mais rápido e acessível que GPT-4 Turbo com as mesmas capacidades",
+        "excellsAt": "Uso geral, bom equilíbrio entre velocidade e qualidade"
+      },
+      "gpt-4": {
+        "name": "GPT-4",
+        "description": "Modelo GPT-4 original (legado, janela de contexto menor)",
+        "excellsAt": "Suporte legado apenas"
+      },
+      "gpt-4.1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "GPT-4 aprimorado com raciocínio melhorado e alucinações reduzidas",
+        "excellsAt": "Raciocínio confiável, verificação de fatos, documentação técnica"
+      },
+      "gpt-5": {
+        "name": "GPT-5",
+        "description": "Modelo OpenAI de próxima geração com capacidades revolucionárias",
+        "excellsAt": "Tarefas de IA de ponta, pesquisa, problemas mais complexos"
+      },
+      "gpt-3.5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Modelo rápido e econômico adequado para tarefas simples",
+        "excellsAt": "Perguntas e respostas simples, aplicações de alto volume, tutoria básica"
+      },
+      "claude-3-5-sonnet-20241022": {
+        "name": "Claude 3.5 Sonnet",
+        "description": "Modelo Claude mais inteligente com excelente raciocínio e capacidades de codificação",
+        "excellsAt": "Análise complexa, escrita criativa, resolução avançada de problemas"
+      },
+      "claude-4-opus": {
+        "name": "Claude 4 Opus",
+        "description": "Claude de próxima geração com capacidades multimodais e raciocínio aprimorados",
+        "excellsAt": "Tarefas de raciocínio mais complexas, pesquisa, análise avançada"
+      },
+      "claude-4.5-sonnet": {
+        "name": "Claude 4.5 Sonnet",
+        "description": "Modelo Claude mais recente com velocidade e inteligência melhoradas",
+        "excellsAt": "Desempenho equilibrado para tarefas complexas, melhor modelo geral"
+      },
+      "claude-3-opus-20240229": {
+        "name": "Claude 3 Opus",
+        "description": "Modelo Claude 3 mais poderoso (geração anterior)",
+        "excellsAt": "Suporte legado - use Claude 4/4.5 para novos projetos"
+      },
+      "claude-3-haiku-20240307": {
+        "name": "Claude 3 Haiku",
+        "description": "Modelo Claude mais rápido e econômico",
+        "excellsAt": "Aplicações críticas de velocidade, tarefas simples de alto volume"
+      }
+    }
+  },
   "universities": {
     "title": "Universidades",
     "description": "Gerencie universidades e seus programas acadêmicos",
@@ -387,7 +467,8 @@
       "stats": {
         "courses": "Disciplinas",
         "professors": "Professores",
-        "code": "Código"
+        "code": "Código",
+        "subscription": "Assinatura"
       },
       "tabs": {
         "courses": "Disciplinas",
@@ -435,14 +516,27 @@
       "breadcrumbEdit": "Editar",
       "back": "Voltar",
       "universityInfo": "Informações da Universidade",
+      "contactInfo": "Informações de Contato",
       "nameLabel": "Nome da Universidade *",
       "namePlaceholder": "Ex: Universidade Federal de São Paulo",
       "nameRequired": "Nome da universidade é obrigatório",
-      "codeLabel": "Código da Universidade *",
-      "codePlaceholder": "Ex: UNIFESP",
-      "codeRequired": "Código da universidade é obrigatório",
+      "codeLabel": "Nome Fantasia *",
+      "codePlaceholder": "Ex: USP, UNIFESP, BYU",
+      "codeRequired": "Nome fantasia é obrigatório",
       "descriptionLabel": "Descrição",
       "descriptionPlaceholder": "Descrição da universidade (opcional)",
+      "addressLabel": "Endereço",
+      "addressPlaceholder": "Ex: Rua da Reitoria, 374 - Butantã, São Paulo - SP",
+      "taxIdLabel": "CNPJ",
+      "taxIdPlaceholder": "Ex: 00.000.000/0000-00",
+      "contactEmailLabel": "E-mail de Contato",
+      "contactEmailPlaceholder": "Ex: contato@universidade.edu.br",
+      "contactPhoneLabel": "Telefone de Contato",
+      "contactPhonePlaceholder": "Ex: (11) 3091-3300",
+      "contactPersonLabel": "Pessoa de Contato",
+      "contactPersonPlaceholder": "Ex: João Silva - Coordenador",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "Ex: https://www.universidade.edu.br",
       "create": "Criar Universidade",
       "update": "Atualizar Universidade",
       "cancel": "Cancelar",
@@ -453,6 +547,18 @@
       "loadError": "Erro ao carregar dados da universidade.",
       "loadErrorTitle": "Erro",
       "loadErrorDescription": "Não foi possível carregar os dados da universidade"
+    },
+    "subscription": {
+      "title": "Plano de Assinatura",
+      "tierLabel": "Nível de Assinatura",
+      "selectPlaceholder": "Selecione o nível de assinatura",
+      "tierBasic": "Básico",
+      "tierStandard": "Padrão",
+      "tierPremium": "Premium",
+      "tierBasicDesc": "Acesso a modelos básicos de IA",
+      "tierStandardDesc": "Acesso a modelos padrão de IA",
+      "tierPremiumDesc": "Acesso a todos os modelos de IA",
+      "tierHelpText": "O nível de assinatura controla quais modelos de IA esta universidade pode acessar"
     }
   },
   "professors": {
@@ -795,6 +901,24 @@
     "invalidLinkTitle": "Link Inválido",
     "invalidLinkDesc": "Este link de redefinição de senha é inválido ou expirou. Por favor, entre em contato com seu administrador para obter um novo link."
   },
+  "welcome": {
+    "title": "Bem-vindo ao Tutoria!",
+    "description": "Sua conta foi criada com sucesso",
+    "verifying": "Verificando suas credenciais...",
+    "welcomeMessage": "Olá! Seja bem-vindo!",
+    "welcomeSubtext": "Sua conta foi criada e suas credenciais estão prontas. Por favor, revise-as abaixo.",
+    "yourCredentials": "Suas Credenciais de Acesso",
+    "fullName": "Nome Completo",
+    "username": "Nome de Usuário",
+    "email": "E-mail",
+    "nextSteps": "Próximo passo: Clique no botão abaixo para criar sua senha personalizada. Você precisará do seu nome de usuário e da nova senha para fazer login.",
+    "continueButton": "Continuar para Criar Senha",
+    "securityNote": "Por segurança, este link expira em 1 hora. Se precisar de assistência, entre em contato com seu administrador.",
+    "errorTitle": "Link Inválido ou Expirado",
+    "errorDescription": "Este link de boas-vindas é inválido ou já expirou. Entre em contato com o administrador para obter um novo link.",
+    "invalidLink": "Link de boas-vindas inválido",
+    "tokenInvalid": "Token de verificação inválido ou expirado"
+  },
   "superAdmins": {
     "title": "Gerenciamento de Super Administradores",
     "description": "Gerencie contas de super administrador e suas permissões",
@@ -876,16 +1000,17 @@
       "usernameLabel": "Nome de Usuário *",
       "usernamePlaceholder": "Ex: joao.silva",
       "usernameRequired": "Nome de usuário é obrigatório",
-      "usernameHint": "Será usado para login. Use apenas letras, números, pontos e underscores.",
+      "usernameHint": "🔑 Usado para fazer login no sistema. Use apenas letras, números, pontos (.) e underscores (_). Exemplo: joao.silva ou j.silva",
       "emailLabel": "Email *",
       "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
       "emailRequired": "Email é obrigatório",
       "emailInvalid": "Email inválido",
+      "emailHint": "📧 Email institucional ou pessoal do super administrador. Será usado para recuperação de senha e notificações do sistema.",
       "passwordLabel": "Senha Temporária *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordRequired": "Senha temporária é obrigatória",
       "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-      "passwordHint": "Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.",
+      "passwordHint": "🔐 Esta é apenas uma senha temporária para gerar o link seguro. O usuário criará sua própria senha pessoal ao acessar o link.",
       "cancel": "Cancelar",
       "submit": "Criar Super Administrador",
       "submitting": "Criando...",
@@ -972,6 +1097,38 @@
     "title": "Configurações do Perfil",
     "description": "Personalize sua experiência no TutorIA",
     "userLabel": "Usuário",
+    "profileSection": "Informações do Perfil",
+    "firstNameLabel": "Nome",
+    "firstNamePlaceholder": "Digite seu primeiro nome",
+    "lastNameLabel": "Sobrenome",
+    "lastNamePlaceholder": "Digite seu sobrenome",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "Digite seu e-mail",
+    "usernameLabel": "Nome de usuário",
+    "usernameReadonly": "O nome de usuário não pode ser alterado",
+    "governmentIdLabel": "CPF/Documento",
+    "governmentIdPlaceholder": "Ex: 000.000.000-00",
+    "externalIdLabel": "Matrícula/ID Externo",
+    "externalIdPlaceholder": "Ex: 20231234567",
+    "birthdateLabel": "Data de Nascimento",
+    "governmentIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
+    "externalIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
+    "passwordSection": "Alterar Senha",
+    "currentPasswordLabel": "Senha Atual",
+    "currentPasswordPlaceholder": "Digite sua senha atual",
+    "newPasswordLabel": "Nova Senha",
+    "newPasswordPlaceholder": "Digite sua nova senha",
+    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordPlaceholder": "Confirme sua nova senha",
+    "passwordMismatch": "As senhas não coincidem",
+    "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+    "currentPasswordRequired": "Senha atual é obrigatória",
+    "newPasswordRequired": "Nova senha é obrigatória",
+    "changePasswordButton": "Alterar Senha",
+    "changingPassword": "Alterando senha...",
+    "passwordChangeSuccess": "Senha alterada com sucesso!",
+    "passwordChangeError": "Erro ao alterar senha. Verifique sua senha atual.",
+    "preferencesSection": "Preferências",
     "themeLabel": "Tema da Interface",
     "themeSystem": "Sistema (Automático)",
     "themeLight": "Claro",
@@ -988,6 +1145,8 @@
     "save": "Salvar Configurações",
     "saving": "Salvando...",
     "saveSuccess": "Configurações salvas com sucesso!",
+    "profileUpdateSuccess": "Perfil atualizado com sucesso!",
+    "profileUpdateError": "Erro ao atualizar perfil",
     "languageChangeInfo": "A página será recarregada para aplicar o novo idioma",
     "saveError": "Erro ao salvar configurações"
   },

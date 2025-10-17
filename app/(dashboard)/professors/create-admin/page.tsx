@@ -35,6 +35,7 @@ export default function CreateAdminProfessorPage() {
     last_name: '',
     password: '',
     university_id: '',
+    language_preference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -103,9 +104,10 @@ export default function CreateAdminProfessorPage() {
 
       setNewUser(response);
 
-      // Generate reset link (in production, backend would return this)
-      const resetToken = 'temp-token-' + Math.random().toString(36).substring(7);
-      const link = `${window.location.origin}/setup-password?token=${resetToken}&username=${formData.username}`;
+      // Request password reset token from backend using username + user_type
+      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'professor');
+      const resetToken = resetResponse.reset_token;
+      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
       setResetLink(link);
 
       setShowSuccess(true);
@@ -247,6 +249,7 @@ export default function CreateAdminProfessorPage() {
                 last_name: '',
                 password: '',
                 university_id: '',
+                language_preference: 'pt-br',
               });
               setResetLink('');
               setNewUser(null);
@@ -376,6 +379,23 @@ export default function CreateAdminProfessorPage() {
                 )}
                 <p className="text-sm text-muted-foreground">
                   {t('passwordHint')}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Select
+                  id="language_preference"
+                  value={formData.language_preference}
+                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                  placeholder={t('languagePlaceholder')}
+                >
+                  <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
+                  <SelectItem value="en">{t('languageEnglish')}</SelectItem>
+                  <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {t('languageHint')}
                 </p>
               </div>
             </CardContent>

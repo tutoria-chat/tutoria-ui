@@ -28,6 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/components/auth/auth-provider';
 import { RoleGuard, SuperAdminOnly, AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import type { NavigationItem } from '@/lib/types';
+import { FEATURE_FLAGS } from '@/lib/constants';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -47,12 +48,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       href: '/dashboard',
       icon: Home,
     },
-    {
+    // Tutorials link - controlled by feature flag
+    ...(FEATURE_FLAGS.TUTORIALS_ENABLED ? [{
       label: t('tutorials'),
       href: '/tutorials',
       icon: BookOpen,
-      roles: ['super_admin', 'professor'],
-    },
+      roles: ['super_admin', 'professor'] as const,
+    }] : []),
     {
       label: t('universities'),
       href: '/universities',

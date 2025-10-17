@@ -2,7 +2,7 @@
   "auth": {
     "login": {
       "title": "Bienvenido a Tutoria",
-      "description": "Ingresa tus credenciales para acceder a tu cuenta",
+      "description": "Acceda a su cuenta institucional",
       "emailLabel": "Usuario / Correo electrónico",
       "emailPlaceholder": "Ingresa tu usuario o correo electrónico",
       "passwordLabel": "Contraseña",
@@ -11,8 +11,12 @@
       "submitting": "Iniciando sesión...",
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "copyright": "© 2025 Tutoria. Todos los derechos reservados.",
-      "loginFailed": "Error al iniciar sesión. Por favor, intenta de nuevo.",
-      "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo."
+      "loginFailed": "Credenciales inválidas. Por favor, intenta de nuevo.",
+      "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo.",
+      "instructionsTitle": "Cómo iniciar sesión:",
+      "instructionUsername": "Use su <strong>nombre de usuario</strong> o <strong>correo institucional</strong>",
+      "instructionPassword": "Ingrese su <strong>contraseña</strong> proporcionada por el administrador",
+      "instructionFirstAccess": "Si es su primer acceso, use el enlace de configuración de contraseña que recibió"
     }
   },
   "dashboard": {
@@ -365,6 +369,82 @@
       "noFilesYet": "Aún no se han subido archivos"
     }
   },
+  "aiModels": {
+    "selectModel": "Seleccionar Modelo de IA",
+    "currentModel": "Modelo Actual",
+    "noModelSelected": "Ningún modelo seleccionado",
+    "changeModel": "Cambiar Modelo",
+    "selectModelButton": "Seleccionar Modelo de IA",
+    "modelDetails": "Detalles del Modelo",
+    "provider": "Proveedor",
+    "maxTokens": "Tokens Máximos",
+    "costPer1M": "Costo por 1M tokens",
+    "input": "Entrada",
+    "output": "Salida",
+    "deprecated": "Descontinuado",
+    "tier": "Nivel",
+    "tierBasic": "Básico",
+    "tierStandard": "Estándar",
+    "tierPremium": "Premium",
+    "tierLabel": "Nivel {tier}",
+    "models": {
+      "gpt-4-turbo": {
+        "name": "GPT-4 Turbo",
+        "description": "Modelo GPT-4 más capaz con soporte de visión y ventana de contexto de 128K",
+        "excellsAt": "Razonamiento complejo, tareas de múltiples pasos, análisis de documentos"
+      },
+      "gpt-4o": {
+        "name": "GPT-4o",
+        "description": "Más rápido y asequible que GPT-4 Turbo con las mismas capacidades",
+        "excellsAt": "Propósito general, buen equilibrio de velocidad y calidad"
+      },
+      "gpt-4": {
+        "name": "GPT-4",
+        "description": "Modelo GPT-4 original (legado, ventana de contexto más pequeña)",
+        "excellsAt": "Solo soporte legacy"
+      },
+      "gpt-4.1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "GPT-4 mejorado con razonamiento mejorado y alucinaciones reducidas",
+        "excellsAt": "Razonamiento confiable, verificación de hechos, documentación técnica"
+      },
+      "gpt-5": {
+        "name": "GPT-5",
+        "description": "Modelo OpenAI de próxima generación con capacidades revolucionarias",
+        "excellsAt": "Tareas de IA de vanguardia, investigación, problemas más complejos"
+      },
+      "gpt-3.5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Modelo rápido y económico adecuado para tareas simples",
+        "excellsAt": "Preguntas y respuestas simples, aplicaciones de alto volumen, tutoría básica"
+      },
+      "claude-3-5-sonnet-20241022": {
+        "name": "Claude 3.5 Sonnet",
+        "description": "Modelo Claude más inteligente con excelente razonamiento y capacidades de codificación",
+        "excellsAt": "Análisis complejo, escritura creativa, resolución avanzada de problemas"
+      },
+      "claude-4-opus": {
+        "name": "Claude 4 Opus",
+        "description": "Claude de próxima generación con capacidades multimodales y razonamiento mejorados",
+        "excellsAt": "Tareas de razonamiento más complejas, investigación, análisis avanzado"
+      },
+      "claude-4.5-sonnet": {
+        "name": "Claude 4.5 Sonnet",
+        "description": "Modelo Claude más reciente con velocidad e inteligencia mejoradas",
+        "excellsAt": "Rendimiento equilibrado para tareas complejas, mejor modelo general"
+      },
+      "claude-3-opus-20240229": {
+        "name": "Claude 3 Opus",
+        "description": "Modelo Claude 3 más potente (generación anterior)",
+        "excellsAt": "Soporte legacy - usa Claude 4/4.5 para nuevos proyectos"
+      },
+      "claude-3-haiku-20240307": {
+        "name": "Claude 3 Haiku",
+        "description": "Modelo Claude más rápido y económico",
+        "excellsAt": "Aplicaciones críticas de velocidad, tareas simples de alto volumen"
+      }
+    }
+  },
   "universities": {
     "title": "Universidades",
     "description": "Gestiona universidades y sus programas académicos",
@@ -387,7 +467,8 @@
       "stats": {
         "courses": "Cursos",
         "professors": "Profesores",
-        "code": "Código"
+        "code": "Código",
+        "subscription": "Suscripción"
       },
       "tabs": {
         "courses": "Cursos",
@@ -435,14 +516,27 @@
       "breadcrumbEdit": "Editar",
       "back": "Volver",
       "universityInfo": "Información de la universidad",
+      "contactInfo": "Información de contacto",
       "nameLabel": "Nombre de la universidad *",
       "namePlaceholder": "Ej: Universidad Federal de São Paulo",
       "nameRequired": "El nombre de la universidad es requerido",
-      "codeLabel": "Código de la universidad *",
-      "codePlaceholder": "Ej: UNIFESP",
-      "codeRequired": "El código de la universidad es requerido",
+      "codeLabel": "Nombre de fantasía *",
+      "codePlaceholder": "Ej: USP, UNIFESP, BYU",
+      "codeRequired": "El nombre de fantasía es requerido",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Descripción de la universidad (opcional)",
+      "addressLabel": "Dirección",
+      "addressPlaceholder": "Ej: Calle de la Rectoría, 374 - Ciudad Universitaria",
+      "taxIdLabel": "Número de identificación fiscal",
+      "taxIdPlaceholder": "Ej: 00.000.000/0000-00",
+      "contactEmailLabel": "Correo electrónico de contacto",
+      "contactEmailPlaceholder": "Ej: contacto@universidad.edu",
+      "contactPhoneLabel": "Teléfono de contacto",
+      "contactPhonePlaceholder": "Ej: (11) 3091-3300",
+      "contactPersonLabel": "Persona de contacto",
+      "contactPersonPlaceholder": "Ej: Juan Silva - Coordinador",
+      "websiteLabel": "Sitio web",
+      "websitePlaceholder": "Ej: https://www.universidad.edu",
       "create": "Crear universidad",
       "update": "Actualizar universidad",
       "cancel": "Cancelar",
@@ -453,6 +547,18 @@
       "loadError": "Error al cargar los datos de la universidad.",
       "loadErrorTitle": "Error",
       "loadErrorDescription": "No se pudieron cargar los datos de la universidad"
+    },
+    "subscription": {
+      "title": "Plan de Suscripción",
+      "tierLabel": "Nivel de Suscripción",
+      "selectPlaceholder": "Seleccione el nivel de suscripción",
+      "tierBasic": "Básico",
+      "tierStandard": "Estándar",
+      "tierPremium": "Premium",
+      "tierBasicDesc": "Acceso a modelos básicos de IA",
+      "tierStandardDesc": "Acceso a modelos estándar de IA",
+      "tierPremiumDesc": "Acceso a todos los modelos de IA",
+      "tierHelpText": "El nivel de suscripción controla qué modelos de IA puede acceder esta universidad"
     }
   },
   "professors": {
@@ -795,6 +901,24 @@
     "invalidLinkTitle": "Enlace Inválido",
     "invalidLinkDesc": "Este enlace de restablecimiento de contraseña es inválido o ha expirado. Por favor, contacta a tu administrador para obtener un nuevo enlace."
   },
+  "welcome": {
+    "title": "¡Bienvenido a Tutoria!",
+    "description": "Tu cuenta ha sido creada exitosamente",
+    "verifying": "Verificando tus credenciales...",
+    "welcomeMessage": "¡Hola! ¡Bienvenido!",
+    "welcomeSubtext": "Tu cuenta ha sido creada y tus credenciales están listas. Por favor, revísalas a continuación.",
+    "yourCredentials": "Tus Credenciales de Acceso",
+    "fullName": "Nombre Completo",
+    "username": "Nombre de Usuario",
+    "email": "Correo Electrónico",
+    "nextSteps": "Próximo paso: Haz clic en el botón a continuación para crear tu contraseña personalizada. Necesitarás tu nombre de usuario y la nueva contraseña para iniciar sesión.",
+    "continueButton": "Continuar para Crear Contraseña",
+    "securityNote": "Por seguridad, este enlace expira en 1 hora. Si necesitas asistencia, contacta a tu administrador.",
+    "errorTitle": "Enlace Inválido o Expirado",
+    "errorDescription": "Este enlace de bienvenida es inválido o ya ha expirado. Contacta a tu administrador para obtener un nuevo enlace.",
+    "invalidLink": "Enlace de bienvenida inválido",
+    "tokenInvalid": "Token de verificación inválido o expirado"
+  },
   "superAdmins": {
     "title": "Gestión de Super Administradores",
     "description": "Gestiona cuentas de super administrador y sus permisos",
@@ -876,16 +1000,17 @@
       "usernameLabel": "Nombre de Usuario *",
       "usernamePlaceholder": "ej., juan.silva",
       "usernameRequired": "El nombre de usuario es requerido",
-      "usernameHint": "Se usará para iniciar sesión. Usa solo letras, números, puntos y guiones bajos.",
+      "usernameHint": "🔑 Usado para iniciar sesión en el sistema. Usa solo letras, números, puntos (.) y guiones bajos (_). Ejemplo: juan.silva o j.silva",
       "emailLabel": "Correo Electrónico *",
       "emailPlaceholder": "ej., juan.silva@universidad.edu",
       "emailRequired": "El correo electrónico es requerido",
       "emailInvalid": "Correo electrónico inválido",
+      "emailHint": "📧 Correo institucional o personal del super administrador. Se usará para recuperación de contraseña y notificaciones del sistema.",
       "passwordLabel": "Contraseña Temporal *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordRequired": "La contraseña temporal es requerida",
       "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-      "passwordHint": "Esta contraseña se usará para generar el enlace de configuración. El usuario definirá su propia contraseña.",
+      "passwordHint": "🔐 Esta es solo una contraseña temporal para generar el enlace seguro. El usuario creará su propia contraseña personal al acceder al enlace.",
       "cancel": "Cancelar",
       "submit": "Crear Super Administrador",
       "submitting": "Creando...",
@@ -972,6 +1097,38 @@
     "title": "Configuración del perfil",
     "description": "Personaliza tu experiencia en TutorIA",
     "userLabel": "Usuario",
+    "profileSection": "Información del perfil",
+    "firstNameLabel": "Nombre",
+    "firstNamePlaceholder": "Ingresa tu nombre",
+    "lastNameLabel": "Apellido",
+    "lastNamePlaceholder": "Ingresa tu apellido",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "Ingresa tu correo electrónico",
+    "usernameLabel": "Nombre de usuario",
+    "usernameReadonly": "El nombre de usuario no se puede cambiar",
+    "governmentIdLabel": "Documento de identidad",
+    "governmentIdPlaceholder": "Ej: 00.000.000-0",
+    "externalIdLabel": "Matrícula/ID Externo",
+    "externalIdPlaceholder": "Ej: EST20231234",
+    "birthdateLabel": "Fecha de nacimiento",
+    "governmentIdReadonly": "Este campo se importa del sistema externo y no se puede cambiar",
+    "externalIdReadonly": "Este campo se importa del sistema externo y no se puede cambiar",
+    "passwordSection": "Cambiar contraseña",
+    "currentPasswordLabel": "Contraseña actual",
+    "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+    "newPasswordLabel": "Nueva contraseña",
+    "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+    "confirmPasswordLabel": "Confirmar nueva contraseña",
+    "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
+    "currentPasswordRequired": "La contraseña actual es obligatoria",
+    "newPasswordRequired": "La nueva contraseña es obligatoria",
+    "changePasswordButton": "Cambiar contraseña",
+    "changingPassword": "Cambiando contraseña...",
+    "passwordChangeSuccess": "¡Contraseña cambiada exitosamente!",
+    "passwordChangeError": "Error al cambiar la contraseña. Verifica tu contraseña actual.",
+    "preferencesSection": "Preferencias",
     "themeLabel": "Tema de la interfaz",
     "themeSystem": "Sistema (Automático)",
     "themeLight": "Claro",
@@ -988,6 +1145,8 @@
     "save": "Guardar configuración",
     "saving": "Guardando...",
     "saveSuccess": "¡Configuración guardada exitosamente!",
+    "profileUpdateSuccess": "¡Perfil actualizado exitosamente!",
+    "profileUpdateError": "Error al actualizar el perfil",
     "languageChangeInfo": "La página se recargará para aplicar el nuevo idioma",
     "saveError": "Error al guardar la configuración"
   },

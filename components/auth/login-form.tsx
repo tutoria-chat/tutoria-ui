@@ -9,13 +9,15 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAuth } from './auth-provider';
+import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+  const t = useTranslations('auth.login');
+
   const { login } = useAuth();
   const router = useRouter();
 
@@ -30,10 +32,10 @@ export function LoginForm() {
       if (result.success) {
         router.push('/dashboard');
       } else {
-        setError(result.error || 'Login failed. Please try again.');
+        setError(result.error || t('loginFailed'));
       }
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(t('unexpectedError'));
     } finally {
       setIsLoading(false);
     }
@@ -53,21 +55,31 @@ export function LoginForm() {
           />
         </div>
         <CardTitle className="text-2xl font-bold text-center">
-          Bem-vindo ao Tutoria
+          {t('title')}
         </CardTitle>
-        <CardDescription className="text-center">
-          Digite suas credenciais para acessar sua conta
+        <CardDescription className="text-center text-base">
+          {t('description')}
         </CardDescription>
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-sm">
+          <p className="text-blue-900 dark:text-blue-100 font-medium mb-1">
+            {t('instructionsTitle')}
+          </p>
+          <ul className="text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">
+            <li dangerouslySetInnerHTML={{ __html: t('instructionUsername') }} />
+            <li dangerouslySetInnerHTML={{ __html: t('instructionPassword') }} />
+            <li dangerouslySetInnerHTML={{ __html: t('instructionFirstAccess') }} />
+          </ul>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="email">Usuário / E-mail</FormLabel>
+              <FormLabel htmlFor="email">{t('emailLabel')}</FormLabel>
               <Input
                 id="email"
                 type="text"
-                placeholder="Digite seu usuário ou e-mail"
+                placeholder={t('emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -78,11 +90,11 @@ export function LoginForm() {
 
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="password">Senha</FormLabel>
+              <FormLabel htmlFor="password">{t('passwordLabel')}</FormLabel>
               <Input
                 id="password"
                 type="password"
-                placeholder="Digite sua senha"
+                placeholder={t('passwordPlaceholder')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -97,12 +109,12 @@ export function LoginForm() {
             </FormMessage>
           )}
 
-          <Button 
-            type="submit" 
-            className="w-full" 
+          <Button
+            type="submit"
+            className="w-full"
             disabled={isLoading}
           >
-            {isLoading ? 'Entrando...' : 'Entrar'}
+            {isLoading ? t('submitting') : t('submitButton')}
           </Button>
         </form>
 
@@ -134,7 +146,7 @@ export function LoginForm() {
         </div> */}
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
-          <p>© 2025 Tutoria. All rights reserved.</p>
+          <p>{t('copyright')}</p>
         </div>
       </CardContent>
     </Card>

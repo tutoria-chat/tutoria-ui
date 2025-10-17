@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
@@ -16,10 +17,18 @@ import type { UniversityCreate, BreadcrumbItem } from '@/lib/types';
 export default function CreateUniversityPage() {
   const router = useRouter();
   const t = useTranslations('universities.form');
+  const tTiers = useTranslations('universities.subscription');
   const [formData, setFormData] = useState<UniversityCreate>({
     name: '',
     code: '',
     description: '',
+    address: '',
+    tax_id: '',
+    contact_email: '',
+    contact_phone: '',
+    contact_person: '',
+    website: '',
+    subscription_tier: 3,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +38,7 @@ export default function CreateUniversityPage() {
     { label: t('breadcrumbCreate'), isCurrentPage: true }
   ];
 
-  const handleChange = (field: keyof UniversityCreate, value: string) => {
+  const handleChange = (field: keyof UniversityCreate, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -106,6 +115,7 @@ export default function CreateUniversityPage() {
                   onChange={(e) => handleChange('name', e.target.value)}
                   placeholder={t('namePlaceholder')}
                   className={errors.name ? 'border-destructive' : ''}
+                  maxLength={255}
                 />
                 {errors.name && (
                   <p className="text-sm text-destructive mt-1">{errors.name}</p>
@@ -123,6 +133,7 @@ export default function CreateUniversityPage() {
                   onChange={(e) => handleChange('code', e.target.value)}
                   placeholder={t('codePlaceholder')}
                   className={errors.code ? 'border-destructive' : ''}
+                  maxLength={50}
                   required
                 />
                 {errors.code && (
@@ -141,6 +152,136 @@ export default function CreateUniversityPage() {
                   placeholder={t('descriptionPlaceholder')}
                   rows={4}
                 />
+              </div>
+
+              {/* Subscription Tier Section */}
+              <div className="pt-6 border-t">
+                <h3 className="text-lg font-medium mb-4">{tTiers('title')}</h3>
+                <div>
+                  <label htmlFor="subscription_tier" className="block text-sm font-medium mb-1">
+                    {tTiers('tierLabel')}
+                  </label>
+                  <Select
+                    value={formData.subscription_tier?.toString() || '3'}
+                    onValueChange={(value) => handleChange('subscription_tier', parseInt(value))}
+                  >
+                    <SelectTrigger id="subscription_tier" className="w-full">
+                      <SelectValue placeholder={tTiers('selectPlaceholder')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">
+                        <div className="flex flex-col">
+                          <span className="font-medium">{tTiers('tierBasic')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierBasicDesc')}</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="2">
+                        <div className="flex flex-col">
+                          <span className="font-medium">{tTiers('tierStandard')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierStandardDesc')}</span>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="3">
+                        <div className="flex flex-col">
+                          <span className="font-medium">{tTiers('tierPremium')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierPremiumDesc')}</span>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-sm text-muted-foreground mt-2">{tTiers('tierHelpText')}</p>
+                </div>
+              </div>
+
+              {/* Contact Information Section */}
+              <div className="pt-6 border-t">
+                <h3 className="text-lg font-medium mb-4">{t('contactInfo')}</h3>
+
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="address" className="block text-sm font-medium mb-1">
+                      {t('addressLabel')}
+                    </label>
+                    <Input
+                      id="address"
+                      type="text"
+                      value={formData.address}
+                      onChange={(e) => handleChange('address', e.target.value)}
+                      placeholder={t('addressPlaceholder')}
+                      maxLength={500}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="tax_id" className="block text-sm font-medium mb-1">
+                      {t('taxIdLabel')}
+                    </label>
+                    <Input
+                      id="tax_id"
+                      type="text"
+                      value={formData.tax_id}
+                      onChange={(e) => handleChange('tax_id', e.target.value)}
+                      placeholder={t('taxIdPlaceholder')}
+                      maxLength={20}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact_email" className="block text-sm font-medium mb-1">
+                      {t('contactEmailLabel')}
+                    </label>
+                    <Input
+                      id="contact_email"
+                      type="email"
+                      value={formData.contact_email}
+                      onChange={(e) => handleChange('contact_email', e.target.value)}
+                      placeholder={t('contactEmailPlaceholder')}
+                      maxLength={255}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact_phone" className="block text-sm font-medium mb-1">
+                      {t('contactPhoneLabel')}
+                    </label>
+                    <Input
+                      id="contact_phone"
+                      type="tel"
+                      value={formData.contact_phone}
+                      onChange={(e) => handleChange('contact_phone', e.target.value)}
+                      placeholder={t('contactPhonePlaceholder')}
+                      maxLength={50}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="contact_person" className="block text-sm font-medium mb-1">
+                      {t('contactPersonLabel')}
+                    </label>
+                    <Input
+                      id="contact_person"
+                      type="text"
+                      value={formData.contact_person}
+                      onChange={(e) => handleChange('contact_person', e.target.value)}
+                      placeholder={t('contactPersonPlaceholder')}
+                      maxLength={200}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="website" className="block text-sm font-medium mb-1">
+                      {t('websiteLabel')}
+                    </label>
+                    <Input
+                      id="website"
+                      type="url"
+                      value={formData.website}
+                      onChange={(e) => handleChange('website', e.target.value)}
+                      placeholder={t('websitePlaceholder')}
+                      maxLength={255}
+                    />
+                  </div>
+                </div>
               </div>
 
               {errors.submit && (

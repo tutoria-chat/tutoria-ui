@@ -34,6 +34,7 @@ export default function UniversityDetailsPage() {
   const universityId = params.id as string;
   const t = useTranslations('universities.detail');
   const tCommon = useTranslations('common');
+  const tTiers = useTranslations('universities.subscription');
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
@@ -217,7 +218,7 @@ export default function UniversityDetailsPage() {
       />
 
       {/* University Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('stats.courses')}</CardTitle>
@@ -243,6 +244,20 @@ export default function UniversityDetailsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{university.code}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('stats.subscription')}</CardTitle>
+            <GraduationCap className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {university.subscription_tier === 1 ? tTiers('tierBasic') :
+               university.subscription_tier === 2 ? tTiers('tierStandard') :
+               tTiers('tierPremium')}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">{tTiers('tierLabel')}</p>
           </CardContent>
         </Card>
       </div>

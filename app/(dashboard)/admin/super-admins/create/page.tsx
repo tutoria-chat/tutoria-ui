@@ -82,7 +82,7 @@ export default function CreateSuperAdminPage() {
       // Request password reset token from backend using username + user_type
       const resetResponse = await apiClient.requestPasswordReset(formData.username, 'super_admin');
       const resetToken = resetResponse.reset_token;
-      const link = `${window.location.origin}/setup-password?token=${resetToken}&username=${formData.username}`;
+      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
       setResetLink(link);
 
       setShowSuccess(true);
@@ -304,6 +304,9 @@ export default function CreateSuperAdminPage() {
                 {errors.email && (
                   <p className="text-sm text-destructive">{errors.email}</p>
                 )}
+                <p className="text-sm text-muted-foreground">
+                  {t('emailHint')}
+                </p>
               </div>
 
               <div className="space-y-2">

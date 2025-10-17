@@ -1,0 +1,5 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- OpenAI inspired circular design -->
+  <circle cx="60" cy="60" r="50" fill="#10A37F"/>
+  <path d="M60 25 L75 45 L95 35 L85 55 L105 60 L85 65 L95 85 L75 75 L60 95 L45 75 L25 85 L35 65 L15 60 L35 55 L25 35 L45 45 Z" fill="white"/>
+</svg>

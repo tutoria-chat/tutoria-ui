@@ -2,7 +2,7 @@
   "auth": {
     "login": {
       "title": "Welcome to Tutoria",
-      "description": "Enter your credentials to access your account",
+      "description": "Access your institutional account",
       "emailLabel": "Username / Email",
       "emailPlaceholder": "Enter your username or email",
       "passwordLabel": "Password",
@@ -11,8 +11,12 @@
       "submitting": "Signing in...",
       "forgotPassword": "Forgot your password?",
       "copyright": "© 2025 Tutoria. All rights reserved.",
-      "loginFailed": "Login failed. Please try again.",
-      "unexpectedError": "An unexpected error occurred. Please try again."
+      "loginFailed": "Invalid credentials. Please try again.",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "instructionsTitle": "How to log in:",
+      "instructionUsername": "Use your <strong>username</strong> or <strong>institutional email</strong>",
+      "instructionPassword": "Enter your <strong>password</strong> provided by the administrator",
+      "instructionFirstAccess": "If this is your first access, use the password setup link you received"
     }
   },
   "dashboard": {
@@ -367,6 +371,82 @@
       "noFilesYet": "No files uploaded yet"
     }
   },
+  "aiModels": {
+    "selectModel": "Select AI Model",
+    "currentModel": "Current Model",
+    "noModelSelected": "No model selected",
+    "changeModel": "Change Model",
+    "selectModelButton": "Select AI Model",
+    "modelDetails": "Model Details",
+    "provider": "Provider",
+    "maxTokens": "Max Tokens",
+    "costPer1M": "Cost per 1M tokens",
+    "input": "Input",
+    "output": "Output",
+    "deprecated": "Deprecated",
+    "tier": "Tier",
+    "tierBasic": "Basic",
+    "tierStandard": "Standard",
+    "tierPremium": "Premium",
+    "tierLabel": "Tier {tier}",
+    "models": {
+      "gpt-4-turbo": {
+        "name": "GPT-4 Turbo",
+        "description": "Most capable GPT-4 model with vision support and 128K context window",
+        "excellsAt": "Complex reasoning, multi-step tasks, document analysis"
+      },
+      "gpt-4o": {
+        "name": "GPT-4o",
+        "description": "Faster and more affordable than GPT-4 Turbo with same capabilities",
+        "excellsAt": "General purpose, good balance of speed and quality"
+      },
+      "gpt-4": {
+        "name": "GPT-4",
+        "description": "Original GPT-4 model (legacy, smaller context window)",
+        "excellsAt": "Legacy support only"
+      },
+      "gpt-4.1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "Enhanced GPT-4 with improved reasoning and reduced hallucinations",
+        "excellsAt": "Reliable reasoning, fact-checking, technical documentation"
+      },
+      "gpt-5": {
+        "name": "GPT-5",
+        "description": "Next-generation OpenAI model with breakthrough capabilities",
+        "excellsAt": "Cutting-edge AI tasks, research, most complex problems"
+      },
+      "gpt-3.5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Fast and economical model suitable for simple tasks",
+        "excellsAt": "Simple Q&A, high-volume applications, basic tutoring"
+      },
+      "claude-3-5-sonnet-20241022": {
+        "name": "Claude 3.5 Sonnet",
+        "description": "Most intelligent Claude model with excellent reasoning and coding capabilities",
+        "excellsAt": "Complex analysis, creative writing, advanced problem solving"
+      },
+      "claude-4-opus": {
+        "name": "Claude 4 Opus",
+        "description": "Next-generation Claude with enhanced reasoning and multimodal capabilities",
+        "excellsAt": "Most complex reasoning tasks, research, advanced analysis"
+      },
+      "claude-4.5-sonnet": {
+        "name": "Claude 4.5 Sonnet",
+        "description": "Latest Claude model with improved speed and intelligence",
+        "excellsAt": "Balanced performance for complex tasks, best all-around model"
+      },
+      "claude-3-opus-20240229": {
+        "name": "Claude 3 Opus",
+        "description": "Most powerful Claude 3 model (previous generation)",
+        "excellsAt": "Legacy support - use Claude 4/4.5 for new projects"
+      },
+      "claude-3-haiku-20240307": {
+        "name": "Claude 3 Haiku",
+        "description": "Fastest and most economical Claude model",
+        "excellsAt": "Speed-critical applications, high-volume simple tasks"
+      }
+    }
+  },
   "universities": {
     "title": "Universities",
     "description": "Manage universities and their academic programs",
@@ -389,7 +469,8 @@
       "stats": {
         "courses": "Courses",
         "professors": "Professors",
-        "code": "Code"
+        "code": "Code",
+        "subscription": "Subscription"
       },
       "tabs": {
         "courses": "Courses",
@@ -437,14 +518,27 @@
       "breadcrumbEdit": "Edit",
       "back": "Back",
       "universityInfo": "University Information",
+      "contactInfo": "Contact Information",
       "nameLabel": "University Name *",
       "namePlaceholder": "Ex: Federal University of São Paulo",
       "nameRequired": "University name is required",
-      "codeLabel": "University Code *",
-      "codePlaceholder": "Ex: UNIFESP",
-      "codeRequired": "University code is required",
+      "codeLabel": "Fantasy Name *",
+      "codePlaceholder": "Ex: USP, UNIFESP, BYU",
+      "codeRequired": "Fantasy name is required",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "University description (optional)",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Ex: 123 University Ave, City, State",
+      "taxIdLabel": "Tax ID",
+      "taxIdPlaceholder": "Ex: 00-0000000",
+      "contactEmailLabel": "Contact Email",
+      "contactEmailPlaceholder": "Ex: contact@university.edu",
+      "contactPhoneLabel": "Contact Phone",
+      "contactPhonePlaceholder": "Ex: (123) 456-7890",
+      "contactPersonLabel": "Contact Person",
+      "contactPersonPlaceholder": "Ex: John Doe - Coordinator",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "Ex: https://www.university.edu",
       "create": "Create University",
       "update": "Update University",
       "cancel": "Cancel",
@@ -455,6 +549,18 @@
       "loadError": "Error loading university data.",
       "loadErrorTitle": "Error",
       "loadErrorDescription": "Could not load university data"
+    },
+    "subscription": {
+      "title": "Subscription Plan",
+      "tierLabel": "Subscription Tier",
+      "selectPlaceholder": "Select subscription tier",
+      "tierBasic": "Basic",
+      "tierStandard": "Standard",
+      "tierPremium": "Premium",
+      "tierBasicDesc": "Access to basic AI models",
+      "tierStandardDesc": "Access to standard AI models",
+      "tierPremiumDesc": "Access to all AI models",
+      "tierHelpText": "The subscription tier controls which AI models this university can access"
     }
   },
   "professors": {
@@ -797,6 +903,24 @@
     "invalidLinkTitle": "Invalid Link",
     "invalidLinkDesc": "This password reset link is invalid or has expired. Please contact your administrator for a new link."
   },
+  "welcome": {
+    "title": "Welcome to Tutoria!",
+    "description": "Your account has been successfully created",
+    "verifying": "Verifying your credentials...",
+    "welcomeMessage": "Hello! Welcome!",
+    "welcomeSubtext": "Your account has been created and your credentials are ready. Please review them below.",
+    "yourCredentials": "Your Access Credentials",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "nextSteps": "Next step: Click the button below to create your personalized password. You will need your username and new password to log in.",
+    "continueButton": "Continue to Create Password",
+    "securityNote": "For security, this link expires in 1 hour. If you need assistance, contact your administrator.",
+    "errorTitle": "Invalid or Expired Link",
+    "errorDescription": "This welcome link is invalid or has already expired. Contact your administrator for a new link.",
+    "invalidLink": "Invalid welcome link",
+    "tokenInvalid": "Invalid or expired verification token"
+  },
   "superAdmins": {
     "title": "Super Administrators Management",
     "description": "Manage super administrator accounts and their permissions",
@@ -878,16 +1002,17 @@
       "usernameLabel": "Username *",
       "usernamePlaceholder": "e.g., john.smith",
       "usernameRequired": "Username is required",
-      "usernameHint": "Will be used for login. Use only letters, numbers, dots and underscores.",
+      "usernameHint": "🔑 Used to log into the system. Use only letters, numbers, dots (.) and underscores (_). Example: john.smith or j.smith",
       "emailLabel": "Email *",
       "emailPlaceholder": "e.g., john.smith@university.edu",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
+      "emailHint": "📧 Institutional or personal email of the super administrator. Will be used for password recovery and system notifications.",
       "passwordLabel": "Temporary Password *",
       "passwordPlaceholder": "Minimum 6 characters",
       "passwordRequired": "Temporary password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "passwordHint": "This password will be used to generate the setup link. The user will set their own password.",
+      "passwordHint": "🔐 This is only a temporary password to generate the secure link. The user will create their own personal password when accessing the link.",
       "cancel": "Cancel",
       "submit": "Create Super Administrator",
       "submitting": "Creating...",
@@ -974,6 +1099,38 @@
     "title": "Profile Settings",
     "description": "Customize your TutorIA experience",
     "userLabel": "User",
+    "profileSection": "Profile Information",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email",
+    "usernameLabel": "Username",
+    "usernameReadonly": "Username cannot be changed",
+    "governmentIdLabel": "Government ID/SSN",
+    "governmentIdPlaceholder": "Ex: 000-00-0000",
+    "externalIdLabel": "External ID/Registration",
+    "externalIdPlaceholder": "Ex: STU20231234",
+    "birthdateLabel": "Birthdate",
+    "governmentIdReadonly": "This field is imported from the external system and cannot be changed",
+    "externalIdReadonly": "This field is imported from the external system and cannot be changed",
+    "passwordSection": "Change Password",
+    "currentPasswordLabel": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Confirm your new password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "changePasswordButton": "Change Password",
+    "changingPassword": "Changing password...",
+    "passwordChangeSuccess": "Password changed successfully!",
+    "passwordChangeError": "Error changing password. Please check your current password.",
+    "preferencesSection": "Preferences",
     "themeLabel": "Interface Theme",
     "themeSystem": "System (Automatic)",
     "themeLight": "Light",
@@ -990,6 +1147,8 @@
     "save": "Save Settings",
     "saving": "Saving...",
     "saveSuccess": "Settings saved successfully!",
+    "profileUpdateSuccess": "Profile updated successfully!",
+    "profileUpdateError": "Error updating profile",
     "languageChangeInfo": "The page will reload to apply the new language",
     "saveError": "Error saving settings"
   },

@@ -14,6 +14,7 @@ import type {
   ModuleCreate,
   ModuleUpdate,
   ModuleWithDetails,
+  AIModel,
   File,
   FileResponse,
   Professor,
@@ -420,6 +421,15 @@ class TutoriaAPIClient {
 
   async deleteModule(id: number): Promise<void> {
     return this.delete(`/modules/${id}`);
+  }
+
+  // AI Model endpoints
+  async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
+    return this.get('/ai-models/', params);
+  }
+
+  async getAIModel(id: number): Promise<AIModel> {
+    return this.get(`/ai-models/${id}`);
   }
 
   // File endpoints
