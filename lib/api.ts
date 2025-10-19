@@ -14,6 +14,7 @@ import type {
   ModuleCreate,
   ModuleUpdate,
   ModuleWithDetails,
+  AIModel,
   File,
   FileResponse,
   Professor,
@@ -209,7 +210,9 @@ class TutoriaAPIClient {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        // Backend uses 'detail' (FastAPI standard) or 'message' for error messages
+        const errorMessage = errorData.detail || errorData.message || `HTTP error! status: ${response.status}`;
+        throw new Error(errorMessage);
       }
 
       return await response.json();
@@ -303,7 +306,7 @@ class TutoriaAPIClient {
     return this.post('/auth/reset-password-request', { username, user_type: userType });
   }
 
-  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; language_preference: string; user_type: string }> {
+  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; first_name: string; last_name: string; email: string; language_preference: string; user_type: string }> {
     return this.get('/auth/verify-reset-token', { username, reset_token: token });
   }
 
@@ -343,7 +346,7 @@ class TutoriaAPIClient {
     return this.get(`/auth/users/${userId}`);
   }
 
-  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string }): Promise<UserResponse> {
+  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
     return this.put(`/auth/users/${userId}`, data);
   }
 
@@ -422,6 +425,15 @@ class TutoriaAPIClient {
     return this.delete(`/modules/${id}`);
   }
 
+  // AI Model endpoints
+  async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
+    return this.get('/ai-models/', params);
+  }
+
+  async getAIModel(id: number): Promise<AIModel> {
+    return this.get(`/ai-models/${id}`);
+  }
+
   // File endpoints
   async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
     return this.get('/files/', params);
@@ -458,7 +470,54 @@ class TutoriaAPIClient {
   }
 
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
-    return this.post('/professors/', data);
+    // Use the unified /auth/users/create endpoint
+    interface BackendUserResponse {
+      user_id: number;
+      username: string;
+      email: string;
+      first_name: string;
+      last_name: string;
+      user_type: 'super_admin' | 'professor' | 'student';
+      is_active: boolean;
+      is_admin?: boolean;
+      university_id?: number;
+      university_name?: string;
+      created_at: string;
+      updated_at: string;
+      last_login_at?: string | null;
+      language_preference?: string;
+      theme_preference?: string;
+    }
+
+    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+      username: data.username,
+      email: data.email,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      password: data.password,
+      user_type: 'professor',
+      university_id: data.university_id,
+      is_admin: data.is_admin,
+      language_preference: data.language_preference || 'pt-br',
+    });
+
+    // Map backend UserResponse to Professor interface
+    return {
+      id: response.user_id,
+      username: response.username,
+      email: response.email,
+      first_name: response.first_name,
+      last_name: response.last_name,
+      university_id: response.university_id || 0,
+      university_name: response.university_name,
+      is_admin: response.is_admin || false,
+      is_active: response.is_active,
+      created_at: response.created_at,
+      updated_at: response.updated_at,
+      last_login_at: response.last_login_at,
+      language_preference: response.language_preference,
+      theme_preference: response.theme_preference,
+    };
   }
 
   async getProfessor(id: number): Promise<Professor> {
@@ -467,6 +526,14 @@ class TutoriaAPIClient {
 
   async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
     return this.put(`/professors/${id}`, data);
+  }
+
+  async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
+    return this.put(`/professors/${id}/password`, { new_password: newPassword });
+  }
+
+  async getProfessorCourses(id: number): Promise<{ course_ids: number[] }> {
+    return this.get(`/professors/${id}/courses`);
   }
 
   async deleteProfessor(id: number): Promise<void> {

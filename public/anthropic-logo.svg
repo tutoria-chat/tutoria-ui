@@ -1,0 +1,6 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Anthropic inspired design -->
+  <rect width="120" height="120" rx="20" fill="#D97757"/>
+  <path d="M40 80 L60 30 L80 80" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M45 65 L75 65" stroke="white" stroke-width="8" stroke-linecap="round"/>
+</svg>

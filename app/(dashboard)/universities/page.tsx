@@ -22,12 +22,12 @@ export default function UniversitiesPage() {
   const t = useTranslations('universities');
   const tCommon = useTranslations('common');
 
-  // For professors, redirect to their university page instead of showing list
+  // For professors, redirect to dashboard instead of showing universities list
   React.useEffect(() => {
-    if (user && user.role !== 'super_admin' && user.university_id) {
-      window.location.href = `/universities/${user.university_id}`;
+    if (user && user.role !== 'super_admin') {
+      router.push('/dashboard');
     }
-  }, [user]);
+  }, [user, router]);
 
   // API call to get universities (only for super_admin)
   const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/universities/');
@@ -87,26 +87,24 @@ export default function UniversitiesPage() {
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          
-          <SuperAdminOnly>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-            >
-              <Link href={`/universities/${university.id}/edit`}>
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDelete(university.id)}
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          </SuperAdminOnly>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+          >
+            <Link href={`/universities/${university.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDelete(university.id)}
+          >
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
         </div>
       )
     }
@@ -174,34 +172,33 @@ export default function UniversitiesPage() {
   const paginatedUniversities = sortedUniversities.slice(startIndex, startIndex + limit);
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t('title')}
-        description={t('description')}
-        breadcrumbs={breadcrumbs}
-        actions={
-          <div className="flex gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/courses">
-                {t('viewAllCourses')}
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/modules">
-                {t('viewAllModules')}
-              </Link>
-            </Button>
-            <SuperAdminOnly>
+    <SuperAdminOnly>
+      <div className="space-y-6">
+        <PageHeader
+          title={t('title')}
+          description={t('description')}
+          breadcrumbs={breadcrumbs}
+          actions={
+            <div className="flex gap-2">
+              <Button variant="outline" asChild>
+                <Link href="/courses">
+                  {t('viewAllCourses')}
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/modules">
+                  {t('viewAllModules')}
+                </Link>
+              </Button>
               <Button asChild>
                 <Link href="/universities/create">
                   <Plus className="mr-2 h-4 w-4" />
                   {t('createButton')}
                 </Link>
               </Button>
-            </SuperAdminOnly>
-          </div>
-        }
-      />
+            </div>
+          }
+        />
 
       <DataTable
         data={paginatedUniversities}
@@ -229,5 +226,6 @@ export default function UniversitiesPage() {
       />
       {dialog}
     </div>
+    </SuperAdminOnly>
   );
 }

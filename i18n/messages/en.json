@@ -1,8 +1,13 @@
 {
+  "pages": {
+    "login": "Login"
+  },
   "auth": {
+    "loginPage": "Login",
     "login": {
+      "pageTitle": "Login",
       "title": "Welcome to Tutoria",
-      "description": "Enter your credentials to access your account",
+      "description": "Access your institutional account",
       "emailLabel": "Username / Email",
       "emailPlaceholder": "Enter your username or email",
       "passwordLabel": "Password",
@@ -11,8 +16,12 @@
       "submitting": "Signing in...",
       "forgotPassword": "Forgot your password?",
       "copyright": "© 2025 Tutoria. All rights reserved.",
-      "loginFailed": "Login failed. Please try again.",
-      "unexpectedError": "An unexpected error occurred. Please try again."
+      "loginFailed": "Invalid credentials. Please try again.",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
+      "instructionsTitle": "How to log in:",
+      "instructionUsername": "Use your <strong>username</strong> or <strong>institutional email</strong>",
+      "instructionPassword": "Enter your <strong>password</strong> provided by the administrator",
+      "instructionFirstAccess": "If this is your first access, use the password setup link you received"
     }
   },
   "dashboard": {
@@ -84,7 +93,9 @@
       "update": "Update Course",
       "creating": "Creating...",
       "updating": "Updating...",
-      "saveError": "Failed to save course. Please try again."
+      "saveError": "Failed to save course. Please try again.",
+      "validationError": "Validation Error",
+      "validationErrorDesc": "Please check the form fields and fix the errors before saving."
     },
     "edit": {
       "title": "Edit Course",
@@ -196,10 +207,12 @@
       "codeLabel": "Module Code *",
       "codePlaceholder": "e.g., CS101, MAT201, PHY301",
       "codeRequired": "Module code is required",
-      "yearLabel": "Year",
+      "yearLabel": "Year *",
       "yearPlaceholder": "e.g., 2024",
-      "semesterLabel": "Semester",
+      "yearRequired": "Year is required",
+      "semesterLabel": "Semester *",
       "semesterPlaceholder": "e.g., 1, 2...",
+      "semesterRequired": "Semester is required",
       "courseLabel": "Course *",
       "coursePreselected": "Preselected",
       "loadingCourses": "Loading courses...",
@@ -214,6 +227,7 @@
       "improveWithAI": "Improve with AI",
       "improving": "Improving...",
       "promptExplanation": "What is this? Think of this as the \"personality instructions\" for the AI tutor. For example: \"You are a patient programming teacher who uses everyday examples\" or \"You are a math tutor who always solves step by step\". This defines how the tutor will respond to students' questions in this specific module.",
+      "promptImprovementHint": "💡 Don't like your prompt? After creating this module, you can improve it a few times using AI!",
       "systemPromptPlaceholder": "Define how the AI tutor should behave, its expertise level, teaching style, and interaction guidelines...",
       "charactersCount": "{count} characters",
       "configured": "✓ Configured",
@@ -226,12 +240,15 @@
       "promptTip5": "• Consider target audience and their level",
       "tutorLanguageLabel": "AI Tutor Language",
       "tutorLanguageHint": "Important: Select which language the AI tutor should respond to student questions in. This defines the response language, regardless of the question language.",
+      "modelSelectionHint": "🧠 Each AI model has different strengths, costs, and capabilities. Choose the one that best fits your module's needs - you can change it later if needed!",
       "cancel": "Cancel",
       "create": "Create Module",
       "update": "Update Module",
       "creating": "Creating...",
       "updating": "Updating...",
       "saveError": "Failed to save module. Please try again.",
+      "validationError": "Validation Error",
+      "validationErrorDesc": "Please check the form fields and fix the errors before saving.",
       "improvePromptNoContent": "Write a prompt first",
       "improvePromptNoContentDesc": "You need an initial prompt to improve.",
       "improvePromptSaveFirst": "Save the module first",
@@ -354,6 +371,8 @@
       "loadError": "Error loading module data.",
       "loadErrorDesc": "Could not load module data",
       "updateError": "Error updating module. Please try again.",
+      "updateSuccess": "Module updated successfully",
+      "updateSuccessDesc": "Your changes have been saved.",
       "deleteFileConfirm": "Are you sure you want to delete this file?",
       "fileUploadClick": "Click to select or drag the file here",
       "fileUploadFormats": "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
@@ -365,6 +384,100 @@
       "actionsColumn": "Actions",
       "confirmDelete": "Are you sure you want to delete this file?",
       "noFilesYet": "No files uploaded yet"
+    }
+  },
+  "aiModels": {
+    "selectModel": "Select AI Model",
+    "currentModel": "Current Model",
+    "noModelSelected": "No model selected",
+    "modelRequired": "AI Model is required",
+    "changeModel": "Change Model",
+    "selectModelButton": "Select AI Model",
+    "modelDetails": "Model Details",
+    "provider": "Provider",
+    "maxTokens": "Max Tokens",
+    "costPer1M": "Cost per 1M tokens",
+    "input": "Input",
+    "output": "Output",
+    "deprecated": "Deprecated",
+    "comingSoon": "Coming Soon!",
+    "pricePerMillion": "per 1M tokens",
+    "tier": "Tier",
+    "tierBasic": "Basic",
+    "tierStandard": "Standard",
+    "tierPremium": "Premium",
+    "tierLabel": "Tier {tier}",
+    "models": {
+      "gpt-4-turbo": {
+        "name": "GPT-4 Turbo",
+        "description": "Most capable GPT-4 model with vision support and 128K context window",
+        "excellsAt": "Complex reasoning, multi-step tasks, document analysis"
+      },
+      "gpt-4-1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "Enhanced GPT-4 Turbo with improved performance and efficiency",
+        "excellsAt": "Complex reasoning, multi-step tasks, document analysis with better speed"
+      },
+      "gpt-4o": {
+        "name": "GPT-4o",
+        "description": "Faster and more affordable than GPT-4 Turbo with same capabilities",
+        "excellsAt": "General purpose, good balance of speed and quality"
+      },
+      "gpt-4": {
+        "name": "GPT-4",
+        "description": "Original GPT-4 model (legacy, smaller context window)",
+        "excellsAt": "Legacy support only"
+      },
+      "gpt-4_1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "Enhanced GPT-4 with improved reasoning and reduced hallucinations",
+        "excellsAt": "Reliable reasoning, fact-checking, technical documentation"
+      },
+      "gpt-5": {
+        "name": "GPT-5",
+        "description": "Next-generation OpenAI model with breakthrough capabilities",
+        "excellsAt": "Cutting-edge AI tasks, research, most complex problems"
+      },
+      "gpt-3_5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Fast and economical model suitable for simple tasks",
+        "excellsAt": "Simple Q&A, high-volume applications, basic tutoring"
+      },
+      "gpt-3-5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Fast and economical model suitable for simple tasks",
+        "excellsAt": "Simple Q&A, high-volume applications, basic tutoring"
+      },
+      "claude-sonnet-4-5": {
+        "name": "Claude Sonnet 4.5",
+        "description": "Best coding model in the world, strongest for building complex agents",
+        "excellsAt": "Coding, complex agents, computer use, advanced problem solving"
+      },
+      "claude-haiku-4-5": {
+        "name": "Claude Haiku 4.5",
+        "description": "Latest small model - fast and economical",
+        "excellsAt": "High-volume simple tasks, speed-critical applications"
+      },
+      "claude-opus-4-1": {
+        "name": "Claude Opus 4.1",
+        "description": "Most powerful Claude model for complex reasoning",
+        "excellsAt": "Most complex reasoning tasks, research, advanced analysis"
+      },
+      "claude-3-7-sonnet-20250219": {
+        "name": "Claude 3.7 Sonnet",
+        "description": "First Claude model with extended thinking for step-by-step reasoning",
+        "excellsAt": "Complex problems requiring careful reasoning"
+      },
+      "claude-3-5-haiku-20241022": {
+        "name": "Claude 3.5 Haiku",
+        "description": "Legacy Claude 3.5 small model",
+        "excellsAt": "Legacy support - use Claude Haiku 4.5 for new projects"
+      },
+      "claude-3-haiku-20240307": {
+        "name": "Claude 3 Haiku",
+        "description": "Oldest Claude 3 small model",
+        "excellsAt": "Legacy support only - use Claude Haiku 4.5 for new projects"
+      }
     }
   },
   "universities": {
@@ -389,11 +502,23 @@
       "stats": {
         "courses": "Courses",
         "professors": "Professors",
-        "code": "Code"
+        "code": "Code",
+        "subscription": "Subscription"
       },
       "tabs": {
         "courses": "Courses",
         "professors": "Professors"
+      },
+      "info": {
+        "title": "University Information",
+        "description": "Contact and administrative details",
+        "code": "University Code",
+        "contactEmail": "Contact Email",
+        "contactPhone": "Contact Phone",
+        "contactPerson": "Contact Person",
+        "website": "Website",
+        "address": "Address",
+        "taxId": "Tax ID / CNPJ"
       },
       "courseColumns": {
         "name": "Course",
@@ -410,7 +535,8 @@
         "admin": "Administrator",
         "professor": "Professor",
         "courses": "Courses",
-        "coursesCount": "{count} courses"
+        "coursesCount": "{count} courses",
+        "actions": "Actions"
       },
       "coursesTab": {
         "title": "Courses",
@@ -437,14 +563,27 @@
       "breadcrumbEdit": "Edit",
       "back": "Back",
       "universityInfo": "University Information",
+      "contactInfo": "Contact Information",
       "nameLabel": "University Name *",
       "namePlaceholder": "Ex: Federal University of São Paulo",
       "nameRequired": "University name is required",
-      "codeLabel": "University Code *",
-      "codePlaceholder": "Ex: UNIFESP",
-      "codeRequired": "University code is required",
+      "codeLabel": "Fantasy Name *",
+      "codePlaceholder": "Ex: USP, UNIFESP, BYU",
+      "codeRequired": "Fantasy name is required",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "University description (optional)",
+      "addressLabel": "Address",
+      "addressPlaceholder": "Ex: 123 University Ave, City, State",
+      "taxIdLabel": "Tax ID",
+      "taxIdPlaceholder": "Ex: 00-0000000",
+      "contactEmailLabel": "Contact Email",
+      "contactEmailPlaceholder": "Ex: contact@university.edu",
+      "contactPhoneLabel": "Contact Phone",
+      "contactPhonePlaceholder": "Ex: (123) 456-7890",
+      "contactPersonLabel": "Contact Person",
+      "contactPersonPlaceholder": "Ex: John Doe - Coordinator",
+      "websiteLabel": "Website",
+      "websitePlaceholder": "Ex: https://www.university.edu",
       "create": "Create University",
       "update": "Update University",
       "cancel": "Cancel",
@@ -455,6 +594,18 @@
       "loadError": "Error loading university data.",
       "loadErrorTitle": "Error",
       "loadErrorDescription": "Could not load university data"
+    },
+    "subscription": {
+      "title": "Subscription Plan",
+      "tierLabel": "Subscription Tier",
+      "selectPlaceholder": "Select subscription tier",
+      "tierBasic": "Basic",
+      "tierStandard": "Standard",
+      "tierPremium": "Premium",
+      "tierBasicDesc": "Access to basic AI models",
+      "tierStandardDesc": "Access to standard AI models",
+      "tierPremiumDesc": "Access to all AI models",
+      "tierHelpText": "The subscription tier controls which AI models this university can access"
     }
   },
   "professors": {
@@ -574,7 +725,15 @@
       "linkCopied": "Link copied to clipboard!",
       "errorCopyingLink": "Error copying link",
       "errorLoadingUniversities": "Error loading universities",
-      "errorLoadingCourses": "Error loading courses"
+      "errorLoadingCourses": "Error loading courses",
+      "languageLabel": "Preferred Language",
+      "languagePlaceholder": "Select language",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (United States)",
+      "languageSpanish": "Español",
+      "languageHint": "The professor's interface will be displayed in this language",
+      "universityPreselected": "University pre-selected from URL",
+      "universityLockedForAdmin": "University is locked to your institution as an admin professor"
     },
     "createAdmin": {
       "title": "Create Admin Professor",
@@ -634,7 +793,13 @@
       "errorCreatingAdmin": "Error creating admin professor",
       "linkCopied": "Link copied to clipboard!",
       "errorCopyingLink": "Error copying link",
-      "errorLoadingUniversities": "Error loading universities"
+      "errorLoadingUniversities": "Error loading universities",
+      "languageLabel": "Preferred Language",
+      "languagePlaceholder": "Select language",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (United States)",
+      "languageSpanish": "Español",
+      "languageHint": "The admin professor's interface will be displayed in this language"
     },
     "edit": {
       "title": "Edit Professor",
@@ -642,24 +807,47 @@
       "breadcrumb": "Edit",
       "back": "Back",
       "professorInfo": "Professor Information",
+      "professorInfoDescription": "Update the professor's basic information",
       "firstNameLabel": "First Name",
       "firstNamePlaceholder": "Professor first name",
       "lastNameLabel": "Last Name",
       "lastNamePlaceholder": "Professor last name",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "Enter username",
+      "usernameRequired": "Username is required",
       "emailLabel": "Email",
       "emailPlaceholder": "email@university.edu",
       "adminProfessorLabel": "Admin Professor",
       "adminDescription": "Administrators can manage courses and assign professors",
+      "assignedCourses": "Assigned Courses",
+      "assignedCoursesDescription": "Select which courses this professor can access",
+      "noCoursesAvailable": "No courses available for this university",
+      "errorLoadingCourses": "Error loading courses",
+      "passwordReset": "Password Reset",
+      "passwordResetDescription": "Reset the professor's password",
+      "enablePasswordReset": "Enable password reset",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
+      "passwordResetSuccess": "Password reset successfully",
+      "passwordResetError": "Error resetting password",
+      "passwordResetInfo": "The professor will be able to login with this new password immediately. Consider sending them a password reset link instead for better security.",
       "cancel": "Cancel",
       "saveChanges": "Save Changes",
       "saving": "Saving...",
+      "updateSuccess": "Professor updated successfully",
       "firstNameRequired": "First name is required",
       "lastNameRequired": "Last name is required",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
       "loadError": "Error loading professor data.",
       "updateError": "Error updating professor. Please try again.",
-      "backToProfessors": "Back to Professors"
+      "backToProfessors": "Back to Professors",
+      "languageLabel": "Preferred Language",
+      "languagePlaceholder": "Select language",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (United States)",
+      "languageSpanish": "Español",
+      "languageHint": "The professor's interface will be displayed in this language"
     }
   },
   "students": {
@@ -708,7 +896,15 @@
     "deleteSuccess": "Token deleted successfully",
     "deleteError": "Error deleting token. Please try again.",
     "copySuccess": "Token copied to clipboard!",
+    "copyWidgetUrlSuccess": "Widget URL copied to clipboard!",
     "copyError": "Failed to copy token. Please try again.",
+    "actions": {
+      "view": "View token details",
+      "edit": "Edit token",
+      "openWidget": "Open widget in new tab",
+      "copyWidgetUrl": "Copy widget URL",
+      "delete": "Delete token"
+    },
     "modal": {
       "createTitle": "Create Module Token",
       "editTitle": "Edit Module Token",
@@ -797,6 +993,24 @@
     "invalidLinkTitle": "Invalid Link",
     "invalidLinkDesc": "This password reset link is invalid or has expired. Please contact your administrator for a new link."
   },
+  "welcome": {
+    "title": "Welcome to Tutoria!",
+    "description": "Your account has been successfully created",
+    "verifying": "Verifying your credentials...",
+    "welcomeMessage": "Hello! Welcome!",
+    "welcomeSubtext": "Your account has been created and your credentials are ready. Please review them below.",
+    "yourCredentials": "Your Access Credentials",
+    "fullName": "Full Name",
+    "username": "Username",
+    "email": "Email",
+    "nextSteps": "Next step: Click the button below to create your personalized password. You will need your username and new password to log in.",
+    "continueButton": "Continue to Create Password",
+    "securityNote": "For security, this link expires in 1 hour. If you need assistance, contact your administrator.",
+    "errorTitle": "Invalid or Expired Link",
+    "errorDescription": "This welcome link is invalid or has already expired. Contact your administrator for a new link.",
+    "invalidLink": "Invalid welcome link",
+    "tokenInvalid": "Invalid or expired verification token"
+  },
   "superAdmins": {
     "title": "Super Administrators Management",
     "description": "Manage super administrator accounts and their permissions",
@@ -878,16 +1092,17 @@
       "usernameLabel": "Username *",
       "usernamePlaceholder": "e.g., john.smith",
       "usernameRequired": "Username is required",
-      "usernameHint": "Will be used for login. Use only letters, numbers, dots and underscores.",
+      "usernameHint": "🔑 Used to log into the system. Use only letters, numbers, dots (.) and underscores (_). Example: john.smith or j.smith",
       "emailLabel": "Email *",
       "emailPlaceholder": "e.g., john.smith@university.edu",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
+      "emailHint": "📧 Institutional or personal email of the super administrator. Will be used for password recovery and system notifications.",
       "passwordLabel": "Temporary Password *",
       "passwordPlaceholder": "Minimum 6 characters",
       "passwordRequired": "Temporary password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "passwordHint": "This password will be used to generate the setup link. The user will set their own password.",
+      "passwordHint": "🔐 This is only a temporary password to generate the secure link. The user will create their own personal password when accessing the link.",
       "cancel": "Cancel",
       "submit": "Create Super Administrator",
       "submitting": "Creating...",
@@ -970,10 +1185,76 @@
     "settings": "Settings",
     "logout": "Logout"
   },
+  "changePassword": {
+    "breadcrumbDashboard": "Dashboard",
+    "breadcrumbChangePassword": "Change Password",
+    "title": "Change Password",
+    "description": "Update your account password for enhanced security",
+    "securityWarning": "Security Notice:",
+    "securityMessage": "Choose a strong password with at least 8 characters, including uppercase, lowercase, numbers, and symbols.",
+    "formTitle": "Password Update",
+    "formDescription": "Enter your current password and choose a new one to update your account credentials.",
+    "currentPasswordLabel": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password (min. 8 characters)",
+    "passwordHint": "Password must be at least 8 characters long",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Re-enter your new password",
+    "cancel": "Cancel",
+    "submit": "Change Password",
+    "submitting": "Changing password...",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match",
+    "formError": "Please fix the errors before submitting",
+    "passwordChangeSuccess": "Password changed successfully! Redirecting...",
+    "passwordChangeError": "Failed to change password. Please verify your current password.",
+    "successTitle": "Password Changed Successfully",
+    "successDescription": "Your password has been updated. You will be redirected to the dashboard shortly.",
+    "successDescriptionRelogin": "Your password has been updated. You will need to log in again for security.",
+    "reloginNotice": "For security, you will need to log in again with your new password.",
+    "backToDashboard": "Back to Dashboard"
+  },
   "settings": {
     "title": "Profile Settings",
     "description": "Customize your TutorIA experience",
     "userLabel": "User",
+    "profileSection": "Profile Information",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Enter your email",
+    "usernameLabel": "Username",
+    "usernameReadonly": "Username cannot be changed",
+    "governmentIdLabel": "Government ID/SSN",
+    "governmentIdPlaceholder": "Ex: 000-00-0000",
+    "externalIdLabel": "External ID/Registration",
+    "externalIdPlaceholder": "Ex: STU20231234",
+    "birthdateLabel": "Birthdate",
+    "governmentIdReadonly": "This field is imported from the external system and cannot be changed",
+    "externalIdReadonly": "This field is imported from the external system and cannot be changed",
+    "passwordSection": "Change Password",
+    "passwordLabel": "Password",
+    "passwordChangeHint": "Click the button above to change your password on a dedicated page",
+    "currentPasswordLabel": "Current Password",
+    "currentPasswordPlaceholder": "Enter your current password",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "Enter your new password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Confirm your new password",
+    "passwordMismatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "changePasswordButton": "Change Password",
+    "changingPassword": "Changing password...",
+    "passwordChangeSuccess": "Password changed successfully!",
+    "passwordChangeError": "Error changing password. Please check your current password.",
+    "preferencesSection": "Preferences",
     "themeLabel": "Interface Theme",
     "themeSystem": "System (Automatic)",
     "themeLight": "Light",
@@ -990,6 +1271,8 @@
     "save": "Save Settings",
     "saving": "Saving...",
     "saveSuccess": "Settings saved successfully!",
+    "profileUpdateSuccess": "Profile updated successfully!",
+    "profileUpdateError": "Error updating profile",
     "languageChangeInfo": "The page will reload to apply the new language",
     "saveError": "Error saving settings"
   },
@@ -1023,7 +1306,93 @@
     "loading": "Loading...",
     "noData": "No data available",
     "error": "Error",
-    "success": "Success"
+    "success": "Success",
+    "passwordSetup": {
+      "title": "Setting Up Your Password",
+      "description": "When you receive a password setup link:",
+      "steps": [
+        "Click the link provided by your administrator",
+        "You'll be taken to the password setup page (/setup-password)",
+        "Your username will be pre-filled",
+        "Enter your new password (minimum 6 characters)",
+        "Confirm your password by entering it again",
+        "Click 'Set Password'",
+        "You'll be redirected to the login page",
+        "Log in with your username and new password"
+      ],
+      "note": "Note: Password setup links expire in 72 hours. If your link has expired, contact your administrator for a new one."
+    },
+    "passwordValidation": {
+      "minLength": "Password must be at least 8 characters long",
+      "uppercase": "Password must contain at least one uppercase letter",
+      "lowercase": "Password must contain at least one lowercase letter",
+      "number": "Password must contain at least one number",
+      "allRequirementsMet": "Password meets all security requirements",
+      "validWithRecommendation": "Password is valid. Consider adding special characters for extra security"
+    },
+    "profileSettings": {
+      "title": "Profile Settings",
+      "description": "Customize your Tutoria experience at /settings.",
+      "theme": {
+        "title": "Interface Theme",
+        "description": "Choose how Tutoria looks:",
+        "options": [
+          "System (Automatic): Matches your device's theme setting",
+          "Light: Always use light mode",
+          "Dark: Always use dark mode"
+        ]
+      },
+      "language": {
+        "title": "Interface Language",
+        "description": "Select your preferred language:",
+        "options": [
+          "English (United States)",
+          "Español (Spanish)",
+          "Português (Brasil)"
+        ],
+        "note": "The page will reload when you change the language."
+      }
+    },
+    "navigation": {
+      "title": "Navigating the System",
+      "sidebar": {
+        "title": "Sidebar Navigation",
+        "description": "The left sidebar provides access to main features:",
+        "common": [
+          "Dashboard: Your home page with quick actions",
+          "Module Tokens: View and manage access tokens"
+        ],
+        "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
+      },
+      "breadcrumbs": {
+        "title": "Breadcrumbs",
+        "description": "At the top of most pages, breadcrumbs show your current location and allow quick navigation back to parent pages."
+      },
+      "quickLinks": {
+        "title": "Quick Links",
+        "description": "Many pages include quick link buttons to related features (e.g., 'View Course' from a module page)."
+      }
+    },
+    "search": {
+      "title": "Using Search",
+      "description": "Most list pages (Courses, Modules, etc.) include a search box. Search looks through names, descriptions, and codes.",
+      "tips": [
+        "Use specific keywords for better results",
+        "Search is case-insensitive",
+        "Results update as you type",
+        "Combine search with sorting for best results"
+      ]
+    },
+    "tables": {
+      "title": "Working with Data Tables",
+      "features": {
+        "search": "Search: Filter results by keyword",
+        "sorting": "Sorting: Click column headers to sort (click again to reverse)",
+        "pagination": "Pagination: Navigate large datasets with page controls",
+        "rowsPerPage": "Rows per page: Change how many items are displayed",
+        "actions": "Actions: Quick buttons for View, Edit, Delete operations"
+      }
+    }
   },
   "errors": {
     "pageNotFound": "Page not found",
@@ -2493,86 +2862,6 @@
           "Share successful AI tutor prompts with your colleagues",
           "Keep a backup of your system prompts for reuse in future semesters"
         ]
-      }
-    },
-    "common": {
-      "passwordSetup": {
-        "title": "Setting Up Your Password",
-        "description": "When you receive a password setup link:",
-        "steps": [
-          "Click the link provided by your administrator",
-          "You'll be taken to the password setup page (/setup-password)",
-          "Your username will be pre-filled",
-          "Enter your new password (minimum 6 characters)",
-          "Confirm your password by entering it again",
-          "Click 'Set Password'",
-          "You'll be redirected to the login page",
-          "Log in with your username and new password"
-        ],
-        "note": "Note: Password setup links expire in 72 hours. If your link has expired, contact your administrator for a new one."
-      },
-      "profileSettings": {
-        "title": "Profile Settings",
-        "description": "Customize your Tutoria experience at /settings.",
-        "theme": {
-          "title": "Interface Theme",
-          "description": "Choose how Tutoria looks:",
-          "options": [
-            "System (Automatic): Matches your device's theme setting",
-            "Light: Always use light mode",
-            "Dark: Always use dark mode"
-          ]
-        },
-        "language": {
-          "title": "Interface Language",
-          "description": "Select your preferred language:",
-          "options": [
-            "English (United States)",
-            "Español (Spanish)",
-            "Português (Brasil)"
-          ],
-          "note": "The page will reload when you change the language."
-        }
-      },
-      "navigation": {
-        "title": "Navigating the System",
-        "sidebar": {
-          "title": "Sidebar Navigation",
-          "description": "The left sidebar provides access to main features:",
-          "common": [
-            "Dashboard: Your home page with quick actions",
-            "Module Tokens: View and manage access tokens"
-          ],
-          "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
-        },
-        "breadcrumbs": {
-          "title": "Breadcrumbs",
-          "description": "At the top of most pages, breadcrumbs show your current location and allow quick navigation back to parent pages."
-        },
-        "quickLinks": {
-          "title": "Quick Links",
-          "description": "Many pages include quick link buttons to related features (e.g., 'View Course' from a module page)."
-        }
-      },
-      "search": {
-        "title": "Using Search",
-        "description": "Most list pages (Courses, Modules, etc.) include a search box. Search looks through names, descriptions, and codes.",
-        "tips": [
-          "Use specific keywords for better results",
-          "Search is case-insensitive",
-          "Results update as you type",
-          "Combine search with sorting for best results"
-        ]
-      },
-      "tables": {
-        "title": "Working with Data Tables",
-        "features": {
-          "search": "Search: Filter results by keyword",
-          "sorting": "Sorting: Click column headers to sort (click again to reverse)",
-          "pagination": "Pagination: Navigate large datasets with page controls",
-          "rowsPerPage": "Rows per page: Change how many items are displayed",
-          "actions": "Actions: Quick buttons for View, Edit, Delete operations"
-        }
       }
     }
   }

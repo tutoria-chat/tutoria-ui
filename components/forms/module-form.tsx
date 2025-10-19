@@ -5,16 +5,17 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectItem } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
-import { Bot, FileText, Lightbulb, Sparkles, Loader2 } from 'lucide-react';
+import { Bot, FileText, Lightbulb, Sparkles, Loader2, Cpu } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Module, ModuleCreate, ModuleUpdate, Course } from '@/lib/types';
+import type { Module, ModuleCreate, ModuleUpdate, Course, AIModel } from '@/lib/types';
+import { AIModelSelector } from '@/components/modules/ai-model-selector';
+import Image from 'next/image';
 
 interface ModuleFormProps {
   module?: Module;
@@ -27,6 +28,7 @@ interface ModuleFormProps {
 export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = false }: ModuleFormProps) {
   const { user } = useAuth();
   const t = useTranslations('modules.form');
+  const tAI = useTranslations('aiModels');
   const [formData, setFormData] = useState({
     name: module?.name || '',
     description: module?.description || '',
@@ -36,12 +38,15 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     course_id: module?.course_id || courseId || '',
     system_prompt: module?.system_prompt || '',
     tutor_language: module?.tutor_language || 'pt-br',
+    ai_model_id: module?.ai_model_id || undefined,
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
+  const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(module?.ai_model || null);
+  const [showModelSelector, setShowModelSelector] = useState(false);
 
   // Predefined system prompt templates
   const promptTemplates = [
@@ -109,6 +114,15 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     if (!formData.course_id) {
       newErrors.course_id = t('courseRequired');
     }
+    if (!formData.year) {
+      newErrors.year = t('yearRequired');
+    }
+    if (!formData.semester) {
+      newErrors.semester = t('semesterRequired');
+    }
+    if (!formData.ai_model_id) {
+      newErrors.ai_model_id = tAI('modelRequired');
+    }
 
     // For regular professors, the API already filters courses to show only assigned ones
     // So if they selected a course, it must be one they're assigned to
@@ -117,6 +131,19 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
+      // Show toast notification for validation errors
+      toast.error(t('validationError'), {
+        description: t('validationErrorDesc'),
+      });
+
+      // Scroll to first error field
+      const firstErrorField = Object.keys(newErrors)[0];
+      const errorElement = document.getElementById(firstErrorField);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        errorElement.focus();
+      }
+
       return;
     }
 
@@ -130,6 +157,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
         course_id: Number(formData.course_id),
         system_prompt: formData.system_prompt.trim() || undefined,
         tutor_language: formData.tutor_language,
+        ai_model_id: formData.ai_model_id ? Number(formData.ai_model_id) : undefined,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -254,6 +282,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     className={errors.year ? 'border-destructive' : ''}
                     min="2020"
                     max="2030"
+                    required
                   />
                   {errors.year && <FormMessage>{errors.year}</FormMessage>}
                 </FormItem>
@@ -271,6 +300,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     disabled={isLoading}
                     className={errors.semester ? 'border-destructive' : ''}
                     min="1"
+                    required
                   />
                   {errors.semester && <FormMessage>{errors.semester}</FormMessage>}
                 </FormItem>
@@ -338,6 +368,56 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                 </div>
               </div>
 
+              {/* AI Model Selection */}
+              <FormField>
+                <FormItem>
+                  <div className="flex items-center justify-between mb-2">
+                    <FormLabel>
+                      <div className="flex items-center gap-2">
+                        <Cpu className="h-4 w-4" />
+                        {tAI('selectModel')}
+                      </div>
+                    </FormLabel>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowModelSelector(true)}
+                    >
+                      {selectedAIModel ? tAI('changeModel') : tAI('selectModelButton')}
+                    </Button>
+                  </div>
+                  <div className="mb-3 p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-md">
+                    <p className="text-sm text-green-900 dark:text-green-100">
+                      {t('modelSelectionHint')}
+                    </p>
+                  </div>
+                  {selectedAIModel ? (
+                    <div className="p-3 border rounded-md bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={selectedAIModel.provider === 'openai' ? '/openai-logo.svg' : '/anthropic-logo.svg'}
+                          alt={selectedAIModel.provider}
+                          width={24}
+                          height={24}
+                        />
+                        <div>
+                          <span className="font-medium">{selectedAIModel.display_name}</span>
+                          <p className="text-xs text-muted-foreground mt-0.5">
+                            {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className={`text-sm ${errors.ai_model_id ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {tAI('noModelSelected')}
+                    </p>
+                  )}
+                  {errors.ai_model_id && <FormMessage>{errors.ai_model_id}</FormMessage>}
+                </FormItem>
+              </FormField>
+
               {/* Prompt Templates */}
               <div>
                 <div className="flex items-center space-x-2 mb-3">
@@ -403,6 +483,13 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                       {t('promptExplanation')}
                     </p>
                   </div>
+                  {!module && (
+                    <div className="mb-3 p-3 bg-purple-50 dark:bg-purple-950 border border-purple-200 dark:border-purple-800 rounded-md">
+                      <p className="text-sm text-purple-900 dark:text-purple-100">
+                        {t('promptImprovementHint')}
+                      </p>
+                    </div>
+                  )}
                   <Textarea
                     id="system_prompt"
                     placeholder={t('systemPromptPlaceholder')}
@@ -492,6 +579,16 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
         </CardContent>
       </Card>
 
+      {/* AI Model Selector Modal */}
+      <AIModelSelector
+        open={showModelSelector}
+        onClose={() => setShowModelSelector(false)}
+        selectedModelId={selectedAIModel?.id}
+        onSelectModel={(model) => {
+          setSelectedAIModel(model);
+          handleInputChange('ai_model_id', String(model.id));
+        }}
+      />
     </div>
   );
 }

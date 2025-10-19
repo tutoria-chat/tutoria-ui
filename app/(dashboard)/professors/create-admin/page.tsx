@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,17 +9,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectItem } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Copy, Check, Mail, AlertCircle, Building2 } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
+import { validatePasswordStrength } from '@/lib/utils';
 
 export default function CreateAdminProfessorPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const t = useTranslations('professors.createAdmin');
   const tCommon = useTranslations('common');
+  const tPwValidation = useTranslations('common.passwordValidation');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [resetLink, setResetLink] = useState('');
@@ -27,6 +30,7 @@ export default function CreateAdminProfessorPage() {
   const [newUser, setNewUser] = useState<any>(null);
   const [universities, setUniversities] = useState<any[]>([]);
   const [loadingUniversities, setLoadingUniversities] = useState(true);
+  const [passwordValidation, setPasswordValidation] = useState(validatePasswordStrength(''));
 
   const [formData, setFormData] = useState({
     username: '',
@@ -35,6 +39,7 @@ export default function CreateAdminProfessorPage() {
     last_name: '',
     password: '',
     university_id: '',
+    language_preference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -45,8 +50,37 @@ export default function CreateAdminProfessorPage() {
   ];
 
   useEffect(() => {
-    loadUniversities();
-  }, []);
+    const universityIdFromUrl = searchParams.get('university_id');
+    if (universityIdFromUrl) {
+      // If university_id in URL, load that specific university first
+      loadUniversityById(parseInt(universityIdFromUrl));
+    } else {
+      // Otherwise load all universities
+      loadUniversities();
+    }
+  }, [searchParams]);
+
+  // Validate password whenever it changes
+  useEffect(() => {
+    setPasswordValidation(validatePasswordStrength(formData.password));
+  }, [formData.password]);
+
+  const loadUniversityById = async (universityId: number) => {
+    setLoadingUniversities(true);
+    try {
+      const university = await apiClient.getUniversity(universityId);
+      // Set the selected university and also add it to the list
+      setUniversities([university]);
+      setFormData(prev => ({ ...prev, university_id: String(university.id) }));
+    } catch (error: any) {
+      console.error('Error loading university:', error);
+      toast.error(t('errorLoadingUniversities'));
+      // Fallback to loading all universities
+      loadUniversities();
+    } finally {
+      setLoadingUniversities(false);
+    }
+  };
 
   const loadUniversities = async () => {
     try {
@@ -103,9 +137,10 @@ export default function CreateAdminProfessorPage() {
 
       setNewUser(response);
 
-      // Generate reset link (in production, backend would return this)
-      const resetToken = 'temp-token-' + Math.random().toString(36).substring(7);
-      const link = `${window.location.origin}/setup-password?token=${resetToken}&username=${formData.username}`;
+      // Request password reset token from backend using username + user_type
+      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'professor');
+      const resetToken = resetResponse.reset_token;
+      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
       setResetLink(link);
 
       setShowSuccess(true);
@@ -144,35 +179,35 @@ export default function CreateAdminProfessorPage() {
             breadcrumbs={breadcrumbs}
           />
 
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950">
             <CardHeader>
-              <CardTitle className="text-green-900 flex items-center">
+              <CardTitle className="text-green-900 dark:text-green-100 flex items-center">
                 <Shield className="mr-2 h-5 w-5" />
                 {t('successCardTitle')}
               </CardTitle>
-              <CardDescription className="text-green-700">
+              <CardDescription className="text-green-700 dark:text-green-300">
                 {t('successCardDescription', { firstName: newUser?.first_name, lastName: newUser?.last_name })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label className="text-sm font-medium text-green-900">{t('usernameDisplay')}</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200">
+                <Label className="text-sm font-medium text-green-900 dark:text-green-100">{t('usernameDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900 rounded border border-green-200 dark:border-green-700">
                   <code className="text-sm">{formData.username}</code>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">{t('emailDisplay')}</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
+                <Label className="text-sm font-medium text-green-900 dark:text-green-100">{t('emailDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900 rounded border border-green-200 dark:border-green-700 flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
                   <code className="text-sm">{formData.email}</code>
                 </div>
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-green-900">{t('universityDisplay')}</Label>
-                <div className="mt-1 p-2 bg-white rounded border border-green-200 flex items-center">
+                <Label className="text-sm font-medium text-green-900 dark:text-green-100">{t('universityDisplay')}</Label>
+                <div className="mt-1 p-2 bg-white dark:bg-green-900 rounded border border-green-200 dark:border-green-700 flex items-center">
                   <Building2 className="h-4 w-4 mr-2 text-muted-foreground" />
                   <code className="text-sm">{getUniversityName()}</code>
                 </div>
@@ -180,28 +215,28 @@ export default function CreateAdminProfessorPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-blue-200 bg-blue-50">
+          <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
             <CardHeader>
-              <CardTitle className="text-blue-900">{t('resetLinkTitle')}</CardTitle>
-              <CardDescription className="text-blue-700">
+              <CardTitle className="text-blue-900 dark:text-blue-100">{t('resetLinkTitle')}</CardTitle>
+              <CardDescription className="text-blue-700 dark:text-blue-300">
                 {t('resetLinkDescription')}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Alert className="bg-amber-50 border-amber-200">
-                <AlertCircle className="h-4 w-4 text-amber-600" />
-                <AlertDescription className="text-amber-900">
+              <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950 dark:border-amber-800">
+                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                <AlertDescription className="text-amber-900 dark:text-amber-100">
                   <strong>{t('linkExpiresWarning')}</strong> {t('shareQuickly')}
                 </AlertDescription>
               </Alert>
 
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900">{t('setupLinkLabel')}</Label>
+                <Label className="text-sm font-medium text-blue-900 dark:text-blue-100">{t('setupLinkLabel')}</Label>
                 <div className="flex space-x-2">
                   <Input
                     value={resetLink}
                     readOnly
-                    className="bg-white font-mono text-sm"
+                    className="bg-white dark:bg-blue-900 font-mono text-sm"
                   />
                   <Button
                     onClick={handleCopyLink}
@@ -210,7 +245,7 @@ export default function CreateAdminProfessorPage() {
                   >
                     {copiedLink ? (
                       <>
-                        <Check className="mr-2 h-4 w-4 text-green-600" />
+                        <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
                         {t('copied')}
                       </>
                     ) : (
@@ -223,9 +258,9 @@ export default function CreateAdminProfessorPage() {
                 </div>
               </div>
 
-              <div className="p-4 bg-white rounded border border-blue-200">
-                <p className="text-sm text-blue-900 font-medium mb-2">{t('howToShare')}</p>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <div className="p-4 bg-white dark:bg-blue-900 rounded border border-blue-200 dark:border-blue-700">
+                <p className="text-sm text-blue-900 dark:text-blue-100 font-medium mb-2">{t('howToShare')}</p>
+                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
                   <li>{t('shareViaEmail', { email: formData.email })}</li>
                   <li>{t('shareViaMessaging')}</li>
                   <li>{t('shareInPerson')}</li>
@@ -247,6 +282,7 @@ export default function CreateAdminProfessorPage() {
                 last_name: '',
                 password: '',
                 university_id: '',
+                language_preference: 'pt-br',
               });
               setResetLink('');
               setNewUser(null);
@@ -287,17 +323,20 @@ export default function CreateAdminProfessorPage() {
               <div className="space-y-2">
                 <Label htmlFor="university_id">{t('universityLabel')}</Label>
                 <Select
-                  id="university_id"
                   value={formData.university_id}
                   onValueChange={(value) => setFormData({ ...formData, university_id: value })}
                   disabled={loadingUniversities}
-                  placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')}
                 >
-                  {universities.map((university) => (
-                    <SelectItem key={university.id} value={String(university.id)}>
-                      {university.name}
-                    </SelectItem>
-                  ))}
+                  <SelectTrigger>
+                    <SelectValue placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {universities.map((university) => (
+                      <SelectItem key={university.id} value={String(university.id)}>
+                        {university.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
                 {errors.university_id && (
                   <p className="text-sm text-destructive">{errors.university_id}</p>
@@ -312,6 +351,7 @@ export default function CreateAdminProfessorPage() {
                     value={formData.first_name}
                     onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                     placeholder={t('firstNamePlaceholder')}
+                    autoComplete="off"
                   />
                   {errors.first_name && (
                     <p className="text-sm text-destructive">{errors.first_name}</p>
@@ -325,6 +365,7 @@ export default function CreateAdminProfessorPage() {
                     value={formData.last_name}
                     onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                     placeholder={t('lastNamePlaceholder')}
+                    autoComplete="off"
                   />
                   {errors.last_name && (
                     <p className="text-sm text-destructive">{errors.last_name}</p>
@@ -339,6 +380,7 @@ export default function CreateAdminProfessorPage() {
                   value={formData.username}
                   onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   placeholder={t('usernamePlaceholder')}
+                  autoComplete="off"
                 />
                 {errors.username && (
                   <p className="text-sm text-destructive">{errors.username}</p>
@@ -356,6 +398,7 @@ export default function CreateAdminProfessorPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder={t('emailPlaceholder')}
+                  autoComplete="off"
                 />
                 {errors.email && (
                   <p className="text-sm text-destructive">{errors.email}</p>
@@ -370,12 +413,41 @@ export default function CreateAdminProfessorPage() {
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   placeholder={t('passwordPlaceholder')}
+                  autoComplete="new-password"
                 />
                 {errors.password && (
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
+                {formData.password && (
+                  <Alert className={passwordValidation.isValid ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950' : 'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950'}>
+                    <AlertCircle className={`h-4 w-4 ${passwordValidation.isValid ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'}`} />
+                    <AlertDescription className={passwordValidation.isValid ? 'text-green-900 dark:text-green-100' : 'text-amber-900 dark:text-amber-100'}>
+                      {tPwValidation(passwordValidation.messageKey)}
+                    </AlertDescription>
+                  </Alert>
+                )}
                 <p className="text-sm text-muted-foreground">
                   {t('passwordHint')}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Select
+                  value={formData.language_preference}
+                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('languagePlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
+                    <SelectItem value="en">{t('languageEnglish')}</SelectItem>
+                    <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-muted-foreground">
+                  {t('languageHint')}
                 </p>
               </div>
             </CardContent>

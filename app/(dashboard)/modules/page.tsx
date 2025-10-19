@@ -232,13 +232,13 @@ export default function ModulesPage() {
   const paginatedModules = modules;
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t('title')}
-        description={t('descriptionSimple')}
-        breadcrumbs={breadcrumbs}
-        actions={
-          <ProfessorOnly>
+    <ProfessorOnly>
+      <div className="space-y-6">
+        <PageHeader
+          title={t('title')}
+          description={t('descriptionSimple')}
+          breadcrumbs={breadcrumbs}
+          actions={
             <div className="flex items-center space-x-2">
               <Button variant="outline" asChild>
                 <Link href="/courses">
@@ -253,9 +253,8 @@ export default function ModulesPage() {
                 </Link>
               </Button>
             </div>
-          </ProfessorOnly>
-        }
-      />
+          }
+        />
 
       <DataTable
         data={paginatedModules}
@@ -283,5 +282,6 @@ export default function ModulesPage() {
       />
       {dialog}
     </div>
+    </ProfessorOnly>
   );
 }

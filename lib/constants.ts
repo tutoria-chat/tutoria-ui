@@ -48,3 +48,7 @@ export const VALIDATION = {
   MIN_PASSWORD_LENGTH: 8,
   MAX_INPUT_LENGTH: 255,
 } as const;
+
+export const FEATURE_FLAGS = {
+  TUTORIALS_ENABLED: process.env.NEXT_PUBLIC_TUTORIALS_ENABLED === 'true',
+} as const;

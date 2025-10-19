@@ -12,6 +12,9 @@ export interface User {
   is_active: boolean;
   university_id?: number;
   is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
+  government_id?: string; // CPF (Brazil), SSN (US), etc.
+  external_id?: string; // Student registration ID, employee ID, etc.
+  birthdate?: string; // ISO date string
   assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
   created_at: string;
   updated_at: string;
@@ -34,6 +37,9 @@ export interface UserResponse {
   is_admin?: boolean;
   university_id?: number;
   university_name?: string; // Included when joined with university table
+  government_id?: string;
+  external_id?: string;
+  birthdate?: string;
   language_preference?: string;
   theme_preference?: string;
   created_at?: string;
@@ -63,8 +69,15 @@ export interface AuthResult {
 export interface University {
   id: number;
   name: string;
-  code: string;
+  code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
+  address?: string;
+  tax_id?: string; // CNPJ in Brazil, Tax ID in other countries
+  contact_email?: string;
+  contact_phone?: string;
+  contact_person?: string;
+  website?: string;
+  subscription_tier: number; // 1 = Basic, 2 = Standard, 3 = Premium
   created_at: string;
   updated_at: string;
   courses_count?: number;
@@ -74,14 +87,28 @@ export interface University {
 
 export interface UniversityCreate {
   name: string;
-  code: string;
+  code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
+  address?: string;
+  tax_id?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_person?: string;
+  website?: string;
+  subscription_tier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
 }
 
 export interface UniversityUpdate {
   name: string;
   code: string;
   description?: string;
+  address?: string;
+  tax_id?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_person?: string;
+  website?: string;
+  subscription_tier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
 }
 
 export interface UniversityWithCourses extends University {
@@ -123,6 +150,27 @@ export interface CourseWithDetails extends Course {
   students: Student[];
 }
 
+// AI Model Types
+export interface AIModel {
+  id: number;
+  model_name: string;
+  display_name: string;
+  provider: 'openai' | 'anthropic';
+  max_tokens: number;
+  supports_vision: boolean;
+  supports_function_calling: boolean;
+  input_cost_per_1m?: number;
+  output_cost_per_1m?: number;
+  required_tier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
+  is_active: boolean;
+  is_deprecated: boolean;
+  deprecation_date?: string;
+  description?: string;
+  recommended_for?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
 // Module Types
 export interface Module {
   id: number;
@@ -136,6 +184,8 @@ export interface Module {
   course_name?: string;
   university_id?: number;
   tutor_language?: string; // Language for AI tutor responses (pt-br, en, es)
+  ai_model_id?: number; // Selected AI model
+  ai_model?: AIModel; // Populated AI model details
   created_at: string;
   updated_at: string;
   files_count?: number;
@@ -151,6 +201,7 @@ export interface ModuleCreate {
   year?: number;
   course_id: number;
   tutor_language?: string;
+  ai_model_id?: number;
 }
 
 export interface ModuleUpdate {
@@ -162,6 +213,7 @@ export interface ModuleUpdate {
   year?: number;
   course_id?: number;
   tutor_language?: string;
+  ai_model_id?: number;
 }
 
 export interface ModuleWithDetails extends Module {
@@ -220,12 +272,14 @@ export interface Professor {
 }
 
 export interface ProfessorCreate {
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
   password: string;
   university_id: number;
   is_admin: boolean;
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface ProfessorUpdate {
@@ -375,6 +429,7 @@ export interface PaginationParams {
   limit?: number;
   sort?: string;
   order?: 'asc' | 'desc';
+  search?: string;
 }
 
 export interface PaginatedResponse<T> {

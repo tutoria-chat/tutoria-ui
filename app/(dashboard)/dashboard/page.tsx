@@ -115,14 +115,14 @@ export default function DashboardPage() {
               </Button>
             </ProfessorOnly>
 
-            <ProfessorOnly>
+            <AdminOnly>
               <Button asChild variant="outline" className="h-40 p-6 flex flex-col items-center justify-center space-y-4 text-lg">
                 <Link href="/tokens">
                   <Key className="h-12 w-12" />
                   <span className="text-lg font-semibold">{t('quickActions.manageTokens')}</span>
                 </Link>
               </Button>
-            </ProfessorOnly>
+            </AdminOnly>
           </div>
         </CardContent>
       </Card>
