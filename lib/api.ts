@@ -528,6 +528,10 @@ class TutoriaAPIClient {
     return this.put(`/professors/${id}`, data);
   }
 
+  async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
+    return this.put(`/professors/${id}/password`, { new_password: newPassword });
+  }
+
   async getProfessorCourses(id: number): Promise<{ course_ids: number[] }> {
     return this.get(`/professors/${id}/courses`);
   }

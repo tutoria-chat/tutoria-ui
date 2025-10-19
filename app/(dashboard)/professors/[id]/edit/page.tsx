@@ -85,9 +85,8 @@ export default function EditProfessorPage() {
   const loadCourses = async (universityId: number) => {
     setIsLoadingCourses(true);
     try {
-      const data = await apiClient.getCoursesByUniversity(universityId);
-      const coursesArray = Array.isArray(data) ? data : (data.items || []);
-      setCourses(coursesArray);
+      const courses = await apiClient.getCoursesByUniversity(universityId);
+      setCourses(courses);
     } catch (error) {
       console.error('Error loading courses:', error);
       toast.error(t('errorLoadingCourses'));

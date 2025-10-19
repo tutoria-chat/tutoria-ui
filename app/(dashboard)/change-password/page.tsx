@@ -78,9 +78,11 @@ export default function ChangePasswordPage() {
       });
       setErrors({});
 
-      // Redirect to dashboard after 2 seconds
+      // Security best practice: Clear all tokens and force re-login after password change
       setTimeout(() => {
-        router.push('/dashboard');
+        apiClient.clearToken();
+        localStorage.clear();
+        router.push('/login?message=password_changed');
       }, 2000);
     } catch (error: any) {
       console.error('Error changing password:', error);
@@ -106,14 +108,16 @@ export default function ChangePasswordPage() {
               {t('successTitle')}
             </CardTitle>
             <CardDescription className="text-green-700 dark:text-green-200">
-              {t('successDescription')}
+              {t('successDescriptionRelogin') || t('successDescription')}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => router.push('/dashboard')} variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              {t('backToDashboard')}
-            </Button>
+            <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+              <Lock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <AlertDescription className="text-blue-900 dark:text-blue-100 text-sm">
+                {t('reloginNotice') || 'For security, you will need to log in again with your new password.'}
+              </AlertDescription>
+            </Alert>
           </CardContent>
         </Card>
       </div>

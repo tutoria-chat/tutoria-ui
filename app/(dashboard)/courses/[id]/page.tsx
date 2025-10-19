@@ -373,32 +373,49 @@ export default function CourseDetailsPage() {
       {/* Tabs */}
       <div className="border-b border-border">
         <nav className="-mb-px flex space-x-8">
-          {[
-            { key: 'modules', label: t('tabs.modules'), count: modules?.length || 0 },
-            { key: 'professors', label: t('tabs.professors'), count: professors?.length || 0, adminOnly: true },
-            { key: 'students', label: t('tabs.students'), count: course.students_count || 0 }
-          ].filter(tab => {
-            // Only show professors tab to admin professors and super admins
-            if (tab.key === 'professors') {
-              return user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
-            }
-            return true;
-          }).map((tab) => (
+          <button
+            onClick={() => setActiveTab('modules')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'modules'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+            }`}
+          >
+            {t('tabs.modules')}
+            <Badge variant="secondary" className="ml-2">
+              {modules?.length || 0}
+            </Badge>
+          </button>
+
+          <AdminOnly>
             <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab('professors')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
-                activeTab === tab.key
+                activeTab === 'professors'
                   ? 'border-primary text-primary'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
               }`}
             >
-              {tab.label}
+              {t('tabs.professors')}
               <Badge variant="secondary" className="ml-2">
-                {tab.count}
+                {professors?.length || 0}
               </Badge>
             </button>
-          ))}
+          </AdminOnly>
+
+          <button
+            onClick={() => setActiveTab('students')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'students'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+            }`}
+          >
+            {t('tabs.students')}
+            <Badge variant="secondary" className="ml-2">
+              {course.students_count || 0}
+            </Badge>
+          </button>
         </nav>
       </div>
 

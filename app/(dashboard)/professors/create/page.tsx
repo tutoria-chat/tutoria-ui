@@ -121,8 +121,7 @@ export default function CreateProfessorPage() {
     setLoadingUniversities(true);
     try {
       const data = await apiClient.getUniversities({ search, limit: 10 });
-      const universities = Array.isArray(data) ? data : (data.items || []);
-      setUniversities(universities);
+      setUniversities(data.items);
     } catch (error: any) {
       console.error('Error searching universities:', error);
       toast.error(t('errorLoadingUniversities'));
@@ -134,10 +133,8 @@ export default function CreateProfessorPage() {
   const loadCourses = async (universityId: number) => {
     setLoadingCourses(true);
     try {
-      const data = await apiClient.getCoursesByUniversity(universityId);
-      // Handle both array and paginated response
-      const coursesArray = Array.isArray(data) ? data : (data.items || []);
-      setCourses(coursesArray);
+      const courses = await apiClient.getCoursesByUniversity(universityId);
+      setCourses(courses);
     } catch (error: any) {
       console.error('Error loading courses:', error);
       toast.error(t('errorLoadingCourses'));

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useTranslations } from 'next-intl';
 import { apiClient } from '@/lib/api';
 import { AIModel } from '@/lib/types';
@@ -11,6 +12,9 @@ import { Check, Sparkles, Zap, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useAuth } from '@/components/auth/auth-provider';
+
+// Maximum cost per 1M tokens that non-admin users can access (in USD)
+const MAX_NON_ADMIN_MODEL_COST = 8;
 
 interface AIModelSelectorProps {
   open: boolean;
@@ -104,7 +108,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
 
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <LoadingSpinner size="lg" className="text-primary" />
           </div>
         ) : (
           <div className="space-y-8">
@@ -120,7 +124,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                     const translation = getModelTranslation(model.model_name);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.is_deprecated;
-                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > 8;
+                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > MAX_NON_ADMIN_MODEL_COST;
 
                     return (
                       <button
@@ -202,7 +206,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                     const translation = getModelTranslation(model.model_name);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.is_deprecated;
-                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > 8;
+                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > MAX_NON_ADMIN_MODEL_COST;
 
                     return (
                       <button

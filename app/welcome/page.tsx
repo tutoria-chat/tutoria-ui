@@ -56,12 +56,16 @@ function WelcomeForm() {
           setLocale(response.language_preference as Locale);
         }
 
-        // Get additional user info from the backend
-        // For now, we'll extract what we can from the verify response
+        // Sanitize username by removing special characters if used as fallback
+        const sanitizeUsername = (username: string): string => {
+          return username.replace(/[<>\"'&]/g, '');
+        };
+
+        // Get user info from verified backend response
         setUserInfo({
-          first_name: (response as any).first_name || username.split('@')[0],
-          last_name: (response as any).last_name || '',
-          email: (response as any).email || '',
+          first_name: response.first_name || sanitizeUsername(usernameParam.split('@')[0]),
+          last_name: response.last_name || '',
+          email: response.email || '',
           user_type: response.user_type || 'professor',
         });
       } catch (error) {
