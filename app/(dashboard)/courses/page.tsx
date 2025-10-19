@@ -9,7 +9,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AdminProfessorOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
@@ -136,25 +136,23 @@ export default function CoursesPage() {
             </Link>
           </Button>
 
-          <AdminProfessorOnly>
-            <Button
-              variant="ghost"
-              size="sm"
-              asChild
-            >
-              <Link href={`/courses/${course.id}/edit`}>
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+          >
+            <Link href={`/courses/${course.id}/edit`}>
+              <Edit className="h-4 w-4" />
+            </Link>
+          </Button>
 
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDelete(course.id)}
-            >
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          </AdminProfessorOnly>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleDelete(course.id)}
+          >
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
         </div>
       )
     }
@@ -202,32 +200,29 @@ export default function CoursesPage() {
   const paginatedCourses = courses;
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t('title')}
-        description={t('descriptionSimple')}
-        breadcrumbs={breadcrumbs}
-        actions={
-          <div className="flex items-center space-x-2">
-            <ProfessorOnly>
+    <ProfessorOnly>
+      <div className="space-y-6">
+        <PageHeader
+          title={t('title')}
+          description={t('descriptionSimple')}
+          breadcrumbs={breadcrumbs}
+          actions={
+            <div className="flex items-center space-x-2">
               <Button variant="outline" asChild>
                 <Link href="/modules">
                   <BookOpen className="mr-2 h-4 w-4" />
                   {t('viewModules')}
                 </Link>
               </Button>
-            </ProfessorOnly>
-            <AdminProfessorOnly>
               <Button asChild>
                 <Link href="/courses/create">
                   <Plus className="mr-2 h-4 w-4" />
                   {t('createButton')}
                 </Link>
               </Button>
-            </AdminProfessorOnly>
-          </div>
-        }
-      />
+            </div>
+          }
+        />
 
       <DataTable
         data={paginatedCourses}
@@ -255,5 +250,6 @@ export default function CoursesPage() {
       />
       {dialog}
     </div>
+    </ProfessorOnly>
   );
 }

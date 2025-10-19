@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -230,37 +230,54 @@ export default function ProfessorsPage() {
     {
       key: 'actions',
       label: t('columns.actions') || 'Actions',
-      width: '150px',
-      render: (_, professor) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDeactivate(professor.id)}
-            title={t('deactivate') || 'Deactivate'}
-          >
-            <Ban className="h-4 w-4 text-amber-600" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleActivate(professor.id)}
-            title={t('activate') || 'Activate'}
-          >
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </Button>
-          {currentUser?.role === 'super_admin' && (
+      width: '200px',
+      render: (_, professor) => {
+        // Only super admins can deactivate/reactivate admin professors
+        const canManageActivation = !professor.is_admin || currentUser?.role === 'super_admin';
+
+        return (
+          <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleDelete(professor.id)}
-              title={t('delete') || 'Delete'}
+              onClick={() => router.push(`/professors/${professor.id}/edit`)}
+              title={tCommon('buttons.edit') || 'Edit'}
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
+              <Edit className="h-4 w-4 text-blue-600" />
             </Button>
-          )}
-        </div>
-      )
+            {canManageActivation && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDeactivate(professor.id)}
+                  title={t('deactivate') || 'Deactivate'}
+                >
+                  <Ban className="h-4 w-4 text-amber-600" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleActivate(professor.id)}
+                  title={t('activate') || 'Activate'}
+                >
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                </Button>
+              </>
+            )}
+            {currentUser?.role === 'super_admin' && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleDelete(professor.id)}
+                title={t('delete') || 'Delete'}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            )}
+          </div>
+        );
+      }
     }
   ];
 
@@ -396,48 +413,44 @@ export default function ProfessorsPage() {
 
         {/* Professor Type Selection Dialog */}
         <Dialog open={showProfessorTypeDialog} onOpenChange={setShowProfessorTypeDialog}>
-          <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>{t('selectTypeDialog.title')}</DialogTitle>
               <DialogDescription>
                 {t('selectTypeDialog.description')}
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-1 gap-4 py-4">
               <Button
                 variant="outline"
-                className="h-auto flex-col items-start p-4 hover:bg-blue-50 hover:border-blue-500"
+                className="h-auto flex items-start justify-start p-4 hover:bg-blue-50 hover:border-blue-500 dark:hover:bg-blue-950"
                 onClick={() => handleSelectProfessorType('regular')}
               >
-                <div className="flex items-center space-x-3 mb-2">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Users className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-base">{t('selectTypeDialog.regularProfessor')}</div>
-                  </div>
+                <div className="h-12 w-12 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
+                  <Users className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 </div>
-                <p className="text-sm text-muted-foreground text-left">
-                  {t('selectTypeDialog.regularDescription')}
-                </p>
+                <div className="ml-4 text-left flex-1">
+                  <div className="font-semibold text-base mb-1">{t('selectTypeDialog.regularProfessor')}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('selectTypeDialog.regularDescription')}
+                  </p>
+                </div>
               </Button>
 
               <Button
                 variant="outline"
-                className="h-auto flex-col items-start p-4 hover:bg-purple-50 hover:border-purple-500"
+                className="h-auto flex items-start justify-start p-4 hover:bg-purple-50 hover:border-purple-500 dark:hover:bg-purple-950"
                 onClick={() => handleSelectProfessorType('admin')}
               >
-                <div className="flex items-center space-x-3 mb-2">
-                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
-                    <Shield className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-base">{t('selectTypeDialog.adminProfessor')}</div>
-                  </div>
+                <div className="h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
+                  <Shield className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                 </div>
-                <p className="text-sm text-muted-foreground text-left">
-                  {t('selectTypeDialog.adminDescription')}
-                </p>
+                <div className="ml-4 text-left flex-1">
+                  <div className="font-semibold text-base mb-1">{t('selectTypeDialog.adminProfessor')}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {t('selectTypeDialog.adminDescription')}
+                  </p>
+                </div>
               </Button>
             </div>
           </DialogContent>

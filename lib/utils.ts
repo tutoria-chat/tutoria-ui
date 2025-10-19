@@ -88,3 +88,60 @@ export function formatCurrency(amount: number, currency = 'USD'): string {
     currency,
   }).format(amount);
 }
+
+export interface PasswordValidationResult {
+  isValid: boolean;
+  messageKey: string;
+  hasMinLength: boolean;
+  hasUppercase: boolean;
+  hasLowercase: boolean;
+  hasNumber: boolean;
+  hasSpecialChar: boolean;
+}
+
+/**
+ * Validate password strength against security requirements.
+ *
+ * Requirements:
+ * - At least 8 characters
+ * - At least 1 uppercase letter
+ * - At least 1 lowercase letter
+ * - At least 1 number
+ * - Special characters are recommended but not required
+ *
+ * @returns PasswordValidationResult with messageKey for translation (use with t('common.passwordValidation.{key}'))
+ */
+export function validatePasswordStrength(password: string): PasswordValidationResult {
+  const hasMinLength = password.length >= 8;
+  const hasUppercase = /[A-Z]/.test(password);
+  const hasLowercase = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  const isValid = hasMinLength && hasUppercase && hasLowercase && hasNumber;
+
+  let messageKey = '';
+  if (!hasMinLength) {
+    messageKey = 'minLength';
+  } else if (!hasUppercase) {
+    messageKey = 'uppercase';
+  } else if (!hasLowercase) {
+    messageKey = 'lowercase';
+  } else if (!hasNumber) {
+    messageKey = 'number';
+  } else if (hasSpecialChar) {
+    messageKey = 'allRequirementsMet';
+  } else {
+    messageKey = 'validWithRecommendation';
+  }
+
+  return {
+    isValid,
+    messageKey,
+    hasMinLength,
+    hasUppercase,
+    hasLowercase,
+    hasNumber,
+    hasSpecialChar,
+  };
+}

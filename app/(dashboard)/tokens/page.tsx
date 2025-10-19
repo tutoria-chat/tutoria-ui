@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy } from 'lucide-react';
+import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link } from 'lucide-react';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
@@ -16,6 +16,7 @@ import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
+import { APP_CONFIG } from '@/lib/constants';
 
 export default function TokensPage() {
   const { user } = useAuth();
@@ -86,6 +87,22 @@ export default function TokensPage() {
       console.error('Erro ao copiar token:', error);
       toast.error(t('copyError'));
     }
+  };
+
+  const handleCopyWidgetUrl = async (token: string) => {
+    try {
+      const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
+      await navigator.clipboard.writeText(widgetUrl);
+      toast.success(t('copyWidgetUrlSuccess'));
+    } catch (error) {
+      console.error('Erro ao copiar URL do widget:', error);
+      toast.error(t('copyError'));
+    }
+  };
+
+  const handleOpenWidget = (token: string) => {
+    const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
+    window.open(widgetUrl, '_blank');
   };
 
   const handleSortChange = (column: string) => {
@@ -175,13 +192,14 @@ export default function TokensPage() {
     {
       key: 'actions',
       label: t('columns.actions'),
-      width: '120px',
+      width: '180px',
       render: (_, token) => (
         <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => handleOpenModal('view', token)}
+            title={t('actions.view')}
           >
             <Eye className="h-4 w-4" />
           </Button>
@@ -190,28 +208,34 @@ export default function TokensPage() {
             variant="ghost"
             size="sm"
             onClick={() => handleOpenModal('edit', token)}
+            title={t('actions.edit')}
           >
             <Edit className="h-4 w-4" />
           </Button>
 
-          {/* TODO: Add Widget Redirect Button */}
-          {/*
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => {
-              const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
-              window.open(widgetUrl, '_blank');
-            }}
+            onClick={() => handleOpenWidget(token.token)}
+            title={t('actions.openWidget')}
           >
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-4 w-4 text-blue-500" />
           </Button>
-          */}
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleCopyWidgetUrl(token.token)}
+            title={t('actions.copyWidgetUrl')}
+          >
+            <Link className="h-4 w-4 text-green-500" />
+          </Button>
 
           <Button
             variant="ghost"
             size="sm"
             onClick={() => handleDelete(token.id)}
+            title={t('actions.delete')}
           >
             <Trash2 className="h-4 w-4 text-destructive" />
           </Button>

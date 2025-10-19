@@ -1,6 +1,11 @@
 {
+  "pages": {
+    "login": "Login"
+  },
   "auth": {
+    "loginPage": "Login",
     "login": {
+      "pageTitle": "Login",
       "title": "Bem-vindo ao Tutoria",
       "description": "Acesse sua conta institucional",
       "emailLabel": "Usuário / E-mail",
@@ -87,7 +92,9 @@
       "update": "Atualizar Disciplina",
       "creating": "Criando...",
       "updating": "Atualizando...",
-      "saveError": "Falha ao salvar a disciplina. Tente novamente."
+      "saveError": "Falha ao salvar a disciplina. Tente novamente.",
+      "validationError": "Erro de Validação",
+      "validationErrorDesc": "Por favor, verifique os campos do formulário e corrija os erros antes de salvar."
     },
     "edit": {
       "title": "Editar Disciplina",
@@ -199,10 +206,12 @@
       "codeLabel": "Código do Módulo *",
       "codePlaceholder": "ex: CS101, MAT201, FIS301",
       "codeRequired": "Código do módulo é obrigatório",
-      "yearLabel": "Ano",
+      "yearLabel": "Ano *",
       "yearPlaceholder": "ex: 2024",
-      "semesterLabel": "Semestre",
+      "yearRequired": "O ano é obrigatório",
+      "semesterLabel": "Semestre *",
       "semesterPlaceholder": "ex: 1, 2...",
+      "semesterRequired": "O semestre é obrigatório",
       "courseLabel": "Disciplina *",
       "coursePreselected": "Pré-selecionado",
       "loadingCourses": "Carregando disciplinas...",
@@ -217,6 +226,7 @@
       "improveWithAI": "Melhorar com IA",
       "improving": "Melhorando...",
       "promptExplanation": "O que é isso? Pense nisso como as \"instruções de personalidade\" para o tutor IA. Por exemplo: \"Você é um professor paciente de programação que usa exemplos do dia a dia\" ou \"Você é um tutor de matemática que sempre resolve passo a passo\". Isso define como o tutor vai responder às perguntas dos alunos neste módulo específico.",
+      "promptImprovementHint": "💡 Não gostou do seu prompt? Depois de criar este módulo, você pode melhorá-lo algumas vezes usando IA!",
       "systemPromptPlaceholder": "Defina como o tutor IA deve se comportar, seu nível de expertise, estilo de ensino e diretrizes de interação...",
       "charactersCount": "{count} caracteres",
       "configured": "✓ Configurado",
@@ -229,11 +239,14 @@
       "promptTip5": "• Considere o público-alvo e seu nível",
       "tutorLanguageLabel": "Idioma do Tutor IA",
       "tutorLanguageHint": "Importante: Selecione em qual idioma o tutor IA deve responder às perguntas dos alunos. Isso define o idioma das respostas, independentemente do idioma da pergunta.",
+      "modelSelectionHint": "🧠 Cada modelo de IA tem diferentes pontos fortes, custos e capacidades. Escolha o que melhor se adequa às necessidades do seu módulo - você pode mudá-lo depois se precisar!",
       "cancel": "Cancelar",
       "update": "Atualizar Módulo",
       "creating": "Criando...",
       "updating": "Atualizando...",
       "saveError": "Falha ao salvar módulo. Tente novamente.",
+      "validationError": "Erro de Validação",
+      "validationErrorDesc": "Por favor, verifique os campos do formulário e corrija os erros antes de salvar.",
       "improvePromptNoContent": "Escreva um prompt primeiro",
       "improvePromptNoContentDesc": "Você precisa ter um prompt inicial para melhorar.",
       "improvePromptSaveFirst": "Salve o módulo primeiro",
@@ -356,6 +369,8 @@
       "loadError": "Erro ao carregar dados do módulo.",
       "loadErrorDesc": "Não foi possível carregar os dados do módulo",
       "updateError": "Erro ao atualizar módulo. Tente novamente.",
+      "updateSuccess": "Módulo atualizado com sucesso",
+      "updateSuccessDesc": "Suas alterações foram salvas.",
       "deleteFileConfirm": "Tem certeza que deseja deletar este arquivo?",
       "fileUploadClick": "Clique para selecionar ou arraste o arquivo aqui",
       "fileUploadFormats": "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
@@ -373,6 +388,7 @@
     "selectModel": "Selecionar Modelo de IA",
     "currentModel": "Modelo Atual",
     "noModelSelected": "Nenhum modelo selecionado",
+    "modelRequired": "Modelo de IA é obrigatório",
     "changeModel": "Trocar Modelo",
     "selectModelButton": "Selecionar Modelo de IA",
     "modelDetails": "Detalhes do Modelo",
@@ -382,6 +398,8 @@
     "input": "Entrada",
     "output": "Saída",
     "deprecated": "Descontinuado",
+    "comingSoon": "Em Breve!",
+    "pricePerMillion": "por 1M tokens",
     "tier": "Nível",
     "tierBasic": "Básico",
     "tierStandard": "Padrão",
@@ -393,6 +411,11 @@
         "description": "Modelo GPT-4 mais capaz com suporte a visão e janela de contexto de 128K",
         "excellsAt": "Raciocínio complexo, tarefas multi-etapas, análise de documentos"
       },
+      "gpt-4-1-turbo": {
+        "name": "GPT-4.1 Turbo",
+        "description": "GPT-4 Turbo aprimorado com melhor desempenho e eficiência",
+        "excellsAt": "Raciocínio complexo, tarefas multi-etapas, análise de documentos com melhor velocidade"
+      },
       "gpt-4o": {
         "name": "GPT-4o",
         "description": "Mais rápido e acessível que GPT-4 Turbo com as mesmas capacidades",
@@ -403,7 +426,7 @@
         "description": "Modelo GPT-4 original (legado, janela de contexto menor)",
         "excellsAt": "Suporte legado apenas"
       },
-      "gpt-4.1-turbo": {
+      "gpt-4_1-turbo": {
         "name": "GPT-4.1 Turbo",
         "description": "GPT-4 aprimorado com raciocínio melhorado e alucinações reduzidas",
         "excellsAt": "Raciocínio confiável, verificação de fatos, documentação técnica"
@@ -413,35 +436,45 @@
         "description": "Modelo OpenAI de próxima geração com capacidades revolucionárias",
         "excellsAt": "Tarefas de IA de ponta, pesquisa, problemas mais complexos"
       },
-      "gpt-3.5-turbo": {
+      "gpt-3_5-turbo": {
         "name": "GPT-3.5 Turbo",
         "description": "Modelo rápido e econômico adequado para tarefas simples",
         "excellsAt": "Perguntas e respostas simples, aplicações de alto volume, tutoria básica"
       },
-      "claude-3-5-sonnet-20241022": {
-        "name": "Claude 3.5 Sonnet",
-        "description": "Modelo Claude mais inteligente com excelente raciocínio e capacidades de codificação",
-        "excellsAt": "Análise complexa, escrita criativa, resolução avançada de problemas"
+      "gpt-3-5-turbo": {
+        "name": "GPT-3.5 Turbo",
+        "description": "Modelo rápido e econômico adequado para tarefas simples",
+        "excellsAt": "Perguntas e respostas simples, aplicações de alto volume, tutoria básica"
       },
-      "claude-4-opus": {
-        "name": "Claude 4 Opus",
-        "description": "Claude de próxima geração com capacidades multimodais e raciocínio aprimorados",
+      "claude-sonnet-4-5": {
+        "name": "Claude Sonnet 4.5",
+        "description": "Melhor modelo de programação do mundo, mais forte para criar agentes complexos",
+        "excellsAt": "Programação, agentes complexos, uso de computadores, resolução avançada de problemas"
+      },
+      "claude-haiku-4-5": {
+        "name": "Claude Haiku 4.5",
+        "description": "Último modelo pequeno - rápido e econômico",
+        "excellsAt": "Tarefas simples de alto volume, aplicações críticas de velocidade"
+      },
+      "claude-opus-4-1": {
+        "name": "Claude Opus 4.1",
+        "description": "Modelo Claude mais poderoso para raciocínio complexo",
         "excellsAt": "Tarefas de raciocínio mais complexas, pesquisa, análise avançada"
       },
-      "claude-4.5-sonnet": {
-        "name": "Claude 4.5 Sonnet",
-        "description": "Modelo Claude mais recente com velocidade e inteligência melhoradas",
-        "excellsAt": "Desempenho equilibrado para tarefas complexas, melhor modelo geral"
+      "claude-3-7-sonnet-20250219": {
+        "name": "Claude 3.7 Sonnet",
+        "description": "Primeiro modelo Claude com pensamento estendido para raciocínio passo a passo",
+        "excellsAt": "Problemas complexos que requerem raciocínio cuidadoso"
       },
-      "claude-3-opus-20240229": {
-        "name": "Claude 3 Opus",
-        "description": "Modelo Claude 3 mais poderoso (geração anterior)",
-        "excellsAt": "Suporte legado - use Claude 4/4.5 para novos projetos"
+      "claude-3-5-haiku-20241022": {
+        "name": "Claude 3.5 Haiku",
+        "description": "Modelo pequeno Claude 3.5 legado",
+        "excellsAt": "Suporte legado - use Claude Haiku 4.5 para novos projetos"
       },
       "claude-3-haiku-20240307": {
         "name": "Claude 3 Haiku",
-        "description": "Modelo Claude mais rápido e econômico",
-        "excellsAt": "Aplicações críticas de velocidade, tarefas simples de alto volume"
+        "description": "Modelo pequeno Claude 3 mais antigo",
+        "excellsAt": "Apenas suporte legado - use Claude Haiku 4.5 para novos projetos"
       }
     }
   },
@@ -474,6 +507,17 @@
         "courses": "Disciplinas",
         "professors": "Professores"
       },
+      "info": {
+        "title": "Informações da Universidade",
+        "description": "Detalhes de contato e administrativos",
+        "code": "Código da Universidade",
+        "contactEmail": "E-mail de Contato",
+        "contactPhone": "Telefone de Contato",
+        "contactPerson": "Pessoa de Contato",
+        "website": "Website",
+        "address": "Endereço",
+        "taxId": "CNPJ / Identificação Fiscal"
+      },
       "courseColumns": {
         "name": "Disciplina",
         "modules": "Módulos",
@@ -489,7 +533,8 @@
         "admin": "Administrador",
         "professor": "Professor",
         "courses": "Disciplinas",
-        "coursesCount": "{count} disciplinas"
+        "coursesCount": "{count} disciplinas",
+        "actions": "Ações"
       },
       "coursesTab": {
         "title": "Disciplinas",
@@ -678,7 +723,15 @@
       "linkCopied": "Link copiado para a área de transferência!",
       "errorCopyingLink": "Erro ao copiar link",
       "errorLoadingUniversities": "Erro ao carregar universidades",
-      "errorLoadingCourses": "Erro ao carregar disciplinas"
+      "errorLoadingCourses": "Erro ao carregar disciplinas",
+      "languageLabel": "Idioma Preferido",
+      "languagePlaceholder": "Selecione o idioma",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (Estados Unidos)",
+      "languageSpanish": "Español",
+      "languageHint": "A interface do professor será exibida neste idioma",
+      "universityPreselected": "Universidade pré-selecionada pela URL",
+      "universityLockedForAdmin": "Universidade bloqueada para sua instituição como professor administrador"
     },
     "createAdmin": {
       "title": "Criar Professor Administrador",
@@ -738,7 +791,13 @@
       "errorCreatingAdmin": "Erro ao criar professor administrador",
       "linkCopied": "Link copiado para a área de transferência!",
       "errorCopyingLink": "Erro ao copiar link",
-      "errorLoadingUniversities": "Erro ao carregar universidades"
+      "errorLoadingUniversities": "Erro ao carregar universidades",
+      "languageLabel": "Idioma Preferido",
+      "languagePlaceholder": "Selecione o idioma",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (Estados Unidos)",
+      "languageSpanish": "Español",
+      "languageHint": "A interface do professor administrador será exibida neste idioma"
     },
     "edit": {
       "title": "Editar Professor",
@@ -746,24 +805,47 @@
       "breadcrumb": "Editar",
       "back": "Voltar",
       "professorInfo": "Informações do Professor",
+      "professorInfoDescription": "Atualize as informações básicas do professor",
       "firstNameLabel": "Nome",
       "firstNamePlaceholder": "Nome do professor",
       "lastNameLabel": "Sobrenome",
       "lastNamePlaceholder": "Sobrenome do professor",
+      "usernameLabel": "Nome de usuário",
+      "usernamePlaceholder": "Digite o nome de usuário",
+      "usernameRequired": "Nome de usuário é obrigatório",
       "emailLabel": "Email",
       "emailPlaceholder": "email@universidade.edu.br",
       "adminProfessorLabel": "Professor Administrador",
       "adminDescription": "Administradores podem gerenciar disciplinas e atribuir professores",
+      "assignedCourses": "Disciplinas Atribuídas",
+      "assignedCoursesDescription": "Selecione quais disciplinas este professor pode acessar",
+      "noCoursesAvailable": "Nenhuma disciplina disponível para esta universidade",
+      "errorLoadingCourses": "Erro ao carregar disciplinas",
+      "passwordReset": "Redefinir Senha",
+      "passwordResetDescription": "Redefina a senha do professor",
+      "enablePasswordReset": "Habilitar redefinição de senha",
+      "newPasswordLabel": "Nova Senha",
+      "newPasswordPlaceholder": "Digite a nova senha",
+      "passwordResetSuccess": "Senha redefinida com sucesso",
+      "passwordResetError": "Erro ao redefinir senha",
+      "passwordResetInfo": "O professor poderá fazer login com esta nova senha imediatamente. Considere enviar um link de redefinição de senha para maior segurança.",
       "cancel": "Cancelar",
       "saveChanges": "Salvar Alterações",
       "saving": "Salvando...",
+      "updateSuccess": "Professor atualizado com sucesso",
       "firstNameRequired": "Nome é obrigatório",
       "lastNameRequired": "Sobrenome é obrigatório",
       "emailRequired": "Email é obrigatório",
       "emailInvalid": "Email inválido",
       "loadError": "Erro ao carregar dados do professor.",
       "updateError": "Erro ao atualizar professor. Tente novamente.",
-      "backToProfessors": "Voltar para Professores"
+      "backToProfessors": "Voltar para Professores",
+      "languageLabel": "Idioma Preferido",
+      "languagePlaceholder": "Selecione o idioma",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "English (Estados Unidos)",
+      "languageSpanish": "Español",
+      "languageHint": "A interface do professor será exibida neste idioma"
     }
   },
   "students": {
@@ -812,7 +894,15 @@
     "deleteSuccess": "Token deletado com sucesso",
     "deleteError": "Erro ao deletar token. Tente novamente.",
     "copySuccess": "Token copiado para a área de transferência!",
+    "copyWidgetUrlSuccess": "URL do widget copiada para a área de transferência!",
     "copyError": "Falha ao copiar o token. Tente novamente.",
+    "actions": {
+      "view": "Ver detalhes do token",
+      "edit": "Editar token",
+      "openWidget": "Abrir widget em nova aba",
+      "copyWidgetUrl": "Copiar URL do widget",
+      "delete": "Deletar token"
+    },
     "modal": {
       "createTitle": "Criar Token de Módulo",
       "editTitle": "Editar Token de Módulo",
@@ -1093,6 +1183,36 @@
     "settings": "Configurações",
     "logout": "Sair"
   },
+  "changePassword": {
+    "breadcrumbDashboard": "Painel",
+    "breadcrumbChangePassword": "Alterar Senha",
+    "title": "Alterar Senha",
+    "description": "Atualize a senha da sua conta para maior segurança",
+    "securityWarning": "Aviso de Segurança:",
+    "securityMessage": "Escolha uma senha forte com pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e símbolos.",
+    "formTitle": "Atualização de Senha",
+    "formDescription": "Digite sua senha atual e escolha uma nova para atualizar suas credenciais.",
+    "currentPasswordLabel": "Senha Atual",
+    "currentPasswordPlaceholder": "Digite sua senha atual",
+    "newPasswordLabel": "Nova Senha",
+    "newPasswordPlaceholder": "Digite sua nova senha (mín. 8 caracteres)",
+    "passwordHint": "A senha deve ter pelo menos 8 caracteres",
+    "confirmPasswordLabel": "Confirmar Nova Senha",
+    "confirmPasswordPlaceholder": "Digite novamente sua nova senha",
+    "cancel": "Cancelar",
+    "submit": "Alterar Senha",
+    "submitting": "Alterando senha...",
+    "currentPasswordRequired": "Senha atual é obrigatória",
+    "newPasswordRequired": "Nova senha é obrigatória",
+    "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+    "passwordMismatch": "As senhas não coincidem",
+    "formError": "Por favor, corrija os erros antes de enviar",
+    "passwordChangeSuccess": "Senha alterada com sucesso! Redirecionando...",
+    "passwordChangeError": "Falha ao alterar senha. Verifique sua senha atual.",
+    "successTitle": "Senha Alterada com Sucesso",
+    "successDescription": "Sua senha foi atualizada. Você será redirecionado para o painel em breve.",
+    "backToDashboard": "Voltar ao Painel"
+  },
   "settings": {
     "title": "Configurações do Perfil",
     "description": "Personalize sua experiência no TutorIA",
@@ -1114,6 +1234,8 @@
     "governmentIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
     "externalIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
     "passwordSection": "Alterar Senha",
+    "passwordLabel": "Senha",
+    "passwordChangeHint": "Clique no botão acima para alterar sua senha em uma página dedicada",
     "currentPasswordLabel": "Senha Atual",
     "currentPasswordPlaceholder": "Digite sua senha atual",
     "newPasswordLabel": "Nova Senha",
@@ -1195,6 +1317,14 @@
         "Faça login com seu nome de usuário e nova senha"
       ],
       "note": "Nota: Links de configuração de senha expiram em 72 horas. Se seu link expirou, entre em contato com seu administrador para obter um novo."
+    },
+    "passwordValidation": {
+      "minLength": "A senha deve ter pelo menos 8 caracteres",
+      "uppercase": "A senha deve conter pelo menos uma letra maiúscula",
+      "lowercase": "A senha deve conter pelo menos uma letra minúscula",
+      "number": "A senha deve conter pelo menos um número",
+      "allRequirementsMet": "A senha atende a todos os requisitos de segurança",
+      "validWithRecommendation": "A senha é válida. Considere adicionar caracteres especiais para maior segurança"
     },
     "profileSettings": {
       "title": "Configurações do Perfil",

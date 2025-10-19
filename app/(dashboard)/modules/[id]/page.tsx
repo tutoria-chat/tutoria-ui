@@ -27,8 +27,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
-import { ProfessorOnly } from '@/components/auth/role-guard';
+import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { TokenModal } from '@/components/tokens/token-modal';
+import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
@@ -38,6 +39,7 @@ import type { Module, File as FileType, ModuleAccessToken, TableColumn, Breadcru
 export default function ModuleDetailsPage() {
   const params = useParams();
   const router = useRouter();
+  const { user } = useAuth();
   const moduleId = Number(params.id);
   const t = useTranslations('modules.detail');
   const tCommon = useTranslations('common');
@@ -54,7 +56,6 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
-  const [isPreparing, setIsPreparing] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -158,53 +159,6 @@ export default function ModuleDetailsPage() {
       toast.error(t('downloadError'), {
         description: t('downloadErrorDesc'),
       });
-    }
-  };
-
-  const handlePrepareModule = async () => {
-    if (!tokens || tokens.length === 0) {
-      toast.error(t('prepareNoTokens'), {
-        description: t('prepareNoTokensDesc'),
-      });
-      return;
-    }
-
-    const activeToken = tokens.find(t => t.is_active && t.allow_chat);
-    if (!activeToken) {
-      toast.error(t('prepareInvalidToken'), {
-        description: t('prepareInvalidTokenDesc'),
-      });
-      return;
-    }
-
-    setIsPreparing(true);
-    try {
-      // Call the widget chat endpoint to trigger file upload to OpenAI
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/widget/chat?module_token=${activeToken.token}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: 'Preparar arquivos',
-          student_id: null
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(t('prepareError'));
-      }
-
-      toast.success(t('prepareSuccess'), {
-        description: t('prepareSuccessDesc'),
-      });
-    } catch (error) {
-      console.error('Erro ao preparar módulo:', error);
-      toast.error(t('prepareError'), {
-        description: t('prepareErrorDesc'),
-      });
-    } finally {
-      setIsPreparing(false);
     }
   };
 
@@ -380,10 +334,41 @@ export default function ModuleDetailsPage() {
   }
 
   if (moduleError || !module) {
+    // Smart back navigation based on user role and context
+    const getBackUrl = () => {
+      // Try to use the browser's history first
+      if (typeof window !== 'undefined' && window.history.length > 1) {
+        const referrer = document.referrer;
+        // If came from within our app (not external), use browser back
+        if (referrer && referrer.includes(window.location.origin)) {
+          // Check if referrer was a course page or university page
+          const courseMatch = referrer.match(/\/courses\/(\d+)/);
+          const universityMatch = referrer.match(/\/universities\/(\d+)/);
+
+          if (courseMatch) {
+            return `/courses/${courseMatch[1]}`;
+          }
+          if (universityMatch) {
+            return `/universities/${universityMatch[1]}`;
+          }
+        }
+      }
+
+      // Fallback based on user role
+      if (user?.role === 'super_admin') {
+        return '/modules';
+      } else if (user?.university_id) {
+        return `/universities/${user.university_id}`;
+      }
+
+      // Last resort fallback
+      return '/dashboard';
+    };
+
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <p className="text-destructive">{tCommon('error')}</p>
-        <Button onClick={() => router.push('/modules')}>
+        <Button onClick={() => router.push(getBackUrl())}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           {tCommon('buttons.back')}
         </Button>
@@ -408,27 +393,12 @@ export default function ModuleDetailsPage() {
                   </Link>
                 </Button>
               )}
-              <Button
-                variant="outline"
-                onClick={handlePrepareModule}
-                disabled={isPreparing || !tokens || tokens.length === 0}
-              >
-                {isPreparing ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('preparing')}
-                  </>
-                ) : (
-                  <>
-                    <Bot className="mr-2 h-4 w-4" />
-                    {t('prepareModule')}
-                  </>
-                )}
-              </Button>
-              <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
-                <Key className="mr-2 h-4 w-4" />
-                {t('createToken')}
-              </Button>
+              <AdminOnly>
+                <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
+                  <Key className="mr-2 h-4 w-4" />
+                  {t('createToken')}
+                </Button>
+              </AdminOnly>
               <Button asChild>
                 <Link href={`/modules/${moduleId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
@@ -501,13 +471,15 @@ export default function ModuleDetailsPage() {
               <FileText className="h-8 w-8 text-blue-500" />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold">{module.tokens_count || 0}</p>
-                <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
+            <AdminOnly>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-2xl font-bold">{module.tokens_count || 0}</p>
+                  <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
+                </div>
+                <BookOpen className="h-8 w-8 text-purple-500" />
               </div>
-              <BookOpen className="h-8 w-8 text-purple-500" />
-            </div>
+            </AdminOnly>
           </CardContent>
         </Card>
       </div>
@@ -578,7 +550,7 @@ export default function ModuleDetailsPage() {
       </Card>
 
       {/* Module Tokens */}
-      <ProfessorOnly>
+      <AdminOnly>
         <Card>
           <CardHeader>
             <CardTitle>{t('moduleTokens')}</CardTitle>
@@ -595,7 +567,7 @@ export default function ModuleDetailsPage() {
             />
           </CardContent>
         </Card>
-      </ProfessorOnly>
+      </AdminOnly>
 
       {/* Token Creation Modal */}
       <TokenModal

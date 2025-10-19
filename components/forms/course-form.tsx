@@ -5,11 +5,12 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectItem } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
+import { toast } from 'sonner';
 import type { Course, CourseCreate, CourseUpdate, University } from '@/lib/types';
 
 interface CourseFormProps {
@@ -67,8 +68,21 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     }
     
     setErrors(newErrors);
-    
+
     if (Object.keys(newErrors).length > 0) {
+      // Show toast notification for validation errors
+      toast.error(t('validationError'), {
+        description: t('validationErrorDesc'),
+      });
+
+      // Scroll to first error field
+      const firstErrorField = Object.keys(newErrors)[0];
+      const errorElement = document.getElementById(firstErrorField);
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        errorElement.focus();
+      }
+
       return;
     }
 
@@ -148,13 +162,17 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                   value={String(formData.university_id)}
                   onValueChange={(value) => handleInputChange('university_id', value)}
                   disabled={isLoading || loadingUniversities}
-                  placeholder={loadingUniversities ? t('loadingUniversities') : t('universityPlaceholder')}
                 >
-                  {universities.map((university) => (
-                    <SelectItem key={university.id} value={String(university.id)}>
-                      {university.name}
-                    </SelectItem>
-                  ))}
+                  <SelectTrigger>
+                    <SelectValue placeholder={loadingUniversities ? t('loadingUniversities') : t('universityPlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {universities.map((university) => (
+                      <SelectItem key={university.id} value={String(university.id)}>
+                        {university.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
               ) : (
                 <Input

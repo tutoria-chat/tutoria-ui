@@ -33,7 +33,9 @@ export default function CreateModulePage() {
         semester: data.semester,
         year: data.year,
         course_id: data.course_id,
-        description: data.description
+        description: data.description,
+        ai_model_id: data.ai_model_id,
+        tutor_language: data.tutor_language
       });
 
       // Redirecionar para a página de detalhes do módulo para upload de arquivos

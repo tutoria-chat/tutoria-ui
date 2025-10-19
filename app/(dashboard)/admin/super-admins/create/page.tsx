@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectItem } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Copy, Check, Mail, AlertCircle } from 'lucide-react';
@@ -329,14 +329,17 @@ export default function CreateSuperAdminPage() {
               <div className="space-y-2">
                 <Label htmlFor="language_preference">{t('languageLabel')}</Label>
                 <Select
-                  id="language_preference"
                   value={formData.language_preference}
                   onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
-                  placeholder={t('languagePlaceholder')}
                 >
-                  <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
-                  <SelectItem value="en">{t('languageEnglish')}</SelectItem>
-                  <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                  <SelectTrigger>
+                    <SelectValue placeholder={t('languagePlaceholder')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pt-br">{t('languagePortuguese')}</SelectItem>
+                    <SelectItem value="en">{t('languageEnglish')}</SelectItem>
+                    <SelectItem value="es">{t('languageSpanish')}</SelectItem>
+                  </SelectContent>
                 </Select>
                 <p className="text-sm text-muted-foreground">
                   {t('languageHint')}

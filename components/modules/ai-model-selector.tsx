@@ -10,6 +10,7 @@ import { AIModel } from '@/lib/types';
 import { Check, Sparkles, Zap, DollarSign } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useAuth } from '@/components/auth/auth-provider';
 
 interface AIModelSelectorProps {
   open: boolean;
@@ -20,9 +21,12 @@ interface AIModelSelectorProps {
 
 export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel }: AIModelSelectorProps) {
   const t = useTranslations('aiModels');
+  const { user } = useAuth();
   const [models, setModels] = useState<AIModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedModel, setSelectedModel] = useState<AIModel | null>(null);
+
+  const isSuperAdmin = user?.role === 'super_admin';
 
   useEffect(() => {
     if (open) {
@@ -81,7 +85,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="!max-w-[1800px] !w-[96vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Sparkles className="h-6 w-6 text-primary" />
@@ -111,19 +115,20 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                   <Image src="/openai-logo.svg" alt="OpenAI" width={32} height={32} />
                   <h3 className="text-lg font-semibold">OpenAI Models</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {openaiModels.map((model) => {
                     const translation = getModelTranslation(model.model_name);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.is_deprecated;
+                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > 8;
 
                     return (
                       <button
                         key={model.id}
-                        onClick={() => !isDeprecated && handleSelectModel(model)}
-                        disabled={isDeprecated}
+                        onClick={() => !isDeprecated && !isExpensive && handleSelectModel(model)}
+                        disabled={isDeprecated || isExpensive}
                         className={cn(
-                          "relative p-4 rounded-lg border-2 text-left transition-all",
+                          "relative p-6 rounded-lg border-2 text-left transition-all min-h-[200px]",
                           "hover:border-primary hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed",
                           isSelected ? "border-primary bg-primary/5 shadow-lg" : "border-border"
                         )}
@@ -134,13 +139,19 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                           </div>
                         )}
 
-                        {isDeprecated && (
+                        {isExpensive && (
+                          <Badge variant="default" className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                            {t('comingSoon')}
+                          </Badge>
+                        )}
+
+                        {!isExpensive && isDeprecated && (
                           <Badge variant="destructive" className="absolute top-2 right-2">
                             {t('deprecated')}
                           </Badge>
                         )}
 
-                        {!isDeprecated && model.required_tier && (
+                        {!isExpensive && !isDeprecated && model.required_tier && (
                           <Badge
                             variant={model.required_tier === 3 ? "default" : model.required_tier === 2 ? "secondary" : "outline"}
                             className="absolute top-2 right-2"
@@ -149,26 +160,26 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                           </Badge>
                         )}
 
-                        <h4 className="font-bold text-base mb-2">{translation.name}</h4>
+                        <h4 className="font-bold text-lg mb-3 pr-20">{translation.name}</h4>
 
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
                           {translation.description}
                         </p>
 
-                        <div className="flex items-center gap-1 text-xs text-primary mb-2">
-                          <Zap className="h-3 w-3" />
-                          <span className="line-clamp-1">{translation.excellsAt}</span>
+                        <div className="flex items-center gap-2 text-xs text-primary mb-3">
+                          <Zap className="h-4 w-4" />
+                          <span className="line-clamp-2 leading-relaxed">{translation.excellsAt}</span>
                         </div>
 
                         <div className="flex items-center gap-3 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Sparkles className="h-3 w-3" />
-                            {(model.max_tokens / 1000).toFixed(0)}K
+                            {(Number(model.max_tokens) / 1000).toFixed(0)}K
                           </div>
-                          {model.input_cost_per_1m && (
+                          {isSuperAdmin && model.input_cost_per_1m && (
                             <div className="flex items-center gap-1">
                               <DollarSign className="h-3 w-3" />
-                              ${model.input_cost_per_1m.toFixed(2)}
+                              <span>${Number(model.input_cost_per_1m).toFixed(2)} {t('pricePerMillion')}</span>
                             </div>
                           )}
                         </div>
@@ -186,19 +197,20 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                   <Image src="/anthropic-logo.svg" alt="Anthropic" width={32} height={32} />
                   <h3 className="text-lg font-semibold">Anthropic Claude Models</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {anthropicModels.map((model) => {
                     const translation = getModelTranslation(model.model_name);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.is_deprecated;
+                    const isExpensive = !isSuperAdmin && Number(model.input_cost_per_1m) > 8;
 
                     return (
                       <button
                         key={model.id}
-                        onClick={() => !isDeprecated && handleSelectModel(model)}
-                        disabled={isDeprecated}
+                        onClick={() => !isDeprecated && !isExpensive && handleSelectModel(model)}
+                        disabled={isDeprecated || isExpensive}
                         className={cn(
-                          "relative p-4 rounded-lg border-2 text-left transition-all",
+                          "relative p-6 rounded-lg border-2 text-left transition-all min-h-[200px]",
                           "hover:border-primary hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed",
                           isSelected ? "border-primary bg-primary/5 shadow-lg" : "border-border"
                         )}
@@ -209,13 +221,19 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                           </div>
                         )}
 
-                        {isDeprecated && (
+                        {isExpensive && (
+                          <Badge variant="default" className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                            {t('comingSoon')}
+                          </Badge>
+                        )}
+
+                        {!isExpensive && isDeprecated && (
                           <Badge variant="destructive" className="absolute top-2 right-2">
                             {t('deprecated')}
                           </Badge>
                         )}
 
-                        {!isDeprecated && model.required_tier && (
+                        {!isExpensive && !isDeprecated && model.required_tier && (
                           <Badge
                             variant={model.required_tier === 3 ? "default" : model.required_tier === 2 ? "secondary" : "outline"}
                             className="absolute top-2 right-2"
@@ -224,26 +242,26 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                           </Badge>
                         )}
 
-                        <h4 className="font-bold text-base mb-2">{translation.name}</h4>
+                        <h4 className="font-bold text-lg mb-3 pr-20">{translation.name}</h4>
 
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
                           {translation.description}
                         </p>
 
-                        <div className="flex items-center gap-1 text-xs text-primary mb-2">
-                          <Zap className="h-3 w-3" />
-                          <span className="line-clamp-1">{translation.excellsAt}</span>
+                        <div className="flex items-center gap-2 text-xs text-primary mb-3">
+                          <Zap className="h-4 w-4" />
+                          <span className="line-clamp-2 leading-relaxed">{translation.excellsAt}</span>
                         </div>
 
                         <div className="flex items-center gap-3 text-xs text-muted-foreground">
                           <div className="flex items-center gap-1">
                             <Sparkles className="h-3 w-3" />
-                            {(model.max_tokens / 1000).toFixed(0)}K
+                            {(Number(model.max_tokens) / 1000).toFixed(0)}K
                           </div>
-                          {model.input_cost_per_1m && (
+                          {isSuperAdmin && model.input_cost_per_1m && (
                             <div className="flex items-center gap-1">
                               <DollarSign className="h-3 w-3" />
-                              ${model.input_cost_per_1m.toFixed(2)}
+                              <span>${Number(model.input_cost_per_1m).toFixed(2)} {t('pricePerMillion')}</span>
                             </div>
                           )}
                         </div>

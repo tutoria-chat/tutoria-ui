@@ -27,7 +27,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/components/auth/auth-provider';
 import { RoleGuard, SuperAdminOnly, AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
-import type { NavigationItem } from '@/lib/types';
+import type { NavigationItem, UserRole } from '@/lib/types';
 import { FEATURE_FLAGS } from '@/lib/constants';
 
 interface SidebarProps {
@@ -53,7 +53,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('tutorials'),
       href: '/tutorials',
       icon: BookOpen,
-      roles: ['super_admin', 'professor'] as const,
+      roles: ['super_admin', 'professor'] as UserRole[],
     }] : []),
     {
       label: t('universities'),
@@ -72,6 +72,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       href: '/tokens',
       icon: Key,
       roles: ['super_admin', 'professor'],
+      requiresAdmin: true, // Only admin professors
     },
   ];
 
@@ -194,8 +195,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
               ))}
           </nav>
 
-          {/* Admin Section */}
-          <SuperAdminOnly>
+          {/* Admin Section - Shows for Super Admins and Admin Professors */}
+          <AdminOnly>
             <div className="mt-8">
               <div className="mx-3 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
               <div className="px-3 py-2">
@@ -233,7 +234,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 </div>
               </div>
             </div>
-          </SuperAdminOnly>
+          </AdminOnly>
         </div>
 
         {/* Footer */}

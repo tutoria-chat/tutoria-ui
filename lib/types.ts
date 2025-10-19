@@ -95,6 +95,7 @@ export interface UniversityCreate {
   contact_phone?: string;
   contact_person?: string;
   website?: string;
+  subscription_tier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
 }
 
 export interface UniversityUpdate {
@@ -271,12 +272,14 @@ export interface Professor {
 }
 
 export interface ProfessorCreate {
+  username: string;
   email: string;
   first_name: string;
   last_name: string;
   password: string;
   university_id: number;
   is_admin: boolean;
+  language_preference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface ProfessorUpdate {

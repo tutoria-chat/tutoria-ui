@@ -23,7 +23,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { Loading } from '@/components/ui/loading-spinner';
-import { AdminProfessorOnly, ProfessorOnly } from '@/components/auth/role-guard';
+import { AdminProfessorOnly, ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
@@ -353,17 +353,20 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('professors')}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold">{professors.length}</p>
-                  <p className="text-sm text-muted-foreground">{t('professors')}</p>
+          {/* Professors Card - Admin only */}
+          <AdminOnly>
+            <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('professors')}>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold">{professors.length}</p>
+                    <p className="text-sm text-muted-foreground">{t('professors')}</p>
+                  </div>
+                  <Users className="h-8 w-8 text-purple-500" />
                 </div>
-                <Users className="h-8 w-8 text-purple-500" />
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </AdminOnly>
         </div>
       </div>
 
@@ -372,9 +375,15 @@ export default function CourseDetailsPage() {
         <nav className="-mb-px flex space-x-8">
           {[
             { key: 'modules', label: t('tabs.modules'), count: modules?.length || 0 },
-            { key: 'professors', label: t('tabs.professors'), count: professors?.length || 0 },
+            { key: 'professors', label: t('tabs.professors'), count: professors?.length || 0, adminOnly: true },
             { key: 'students', label: t('tabs.students'), count: course.students_count || 0 }
-          ].map((tab) => (
+          ].filter(tab => {
+            // Only show professors tab to admin professors and super admins
+            if (tab.key === 'professors') {
+              return user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
+            }
+            return true;
+          }).map((tab) => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
@@ -449,23 +458,26 @@ export default function CourseDetailsPage() {
           </Card>
         )}
 
-        {activeTab === 'professors' && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('professorsTab.title')}</CardTitle>
-              <CardDescription>
-                {t('professorsTab.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable
-                data={professors || []}
-                columns={professorColumns}
-                emptyMessage={t('professorsTab.emptyMessage')}
-              />
-            </CardContent>
-          </Card>
-        )}
+        {/* Professors Tab - Admin only */}
+        <AdminOnly>
+          {activeTab === 'professors' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('professorsTab.title')}</CardTitle>
+                <CardDescription>
+                  {t('professorsTab.description')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DataTable
+                  data={professors || []}
+                  columns={professorColumns}
+                  emptyMessage={t('professorsTab.emptyMessage')}
+                />
+              </CardContent>
+            </Card>
+          )}
+        </AdminOnly>
 
         {activeTab === 'students' && (
           <Card>
