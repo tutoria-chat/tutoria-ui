@@ -23,7 +23,7 @@ export default function TokensPage() {
   const t = useTranslations('tokens');
 
   // Build API URL with university filter for professors
-  const universityFilter = user?.university_id && user.role !== 'super_admin' ? `?university_id=${user.university_id}` : '';
+  const universityFilter = user?.universityId && user.role !== 'super_admin' ? `?university_id=${user.universityId}` : '';
   const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -157,7 +157,7 @@ export default function TokensPage() {
       )
     },
     {
-      key: 'allow_chat',
+      key: 'allowChat',
       label: t('columns.chat'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -166,7 +166,7 @@ export default function TokensPage() {
       )
     },
     {
-      key: 'allow_file_access',
+      key: 'allowFileAccess',
       label: t('columns.files'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -181,7 +181,7 @@ export default function TokensPage() {
       render: (value) => value ? formatDateShort(value as string) : t('columns.never')
     },
     {
-      key: 'is_active',
+      key: 'isActive',
       label: t('columns.status'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -249,7 +249,7 @@ export default function TokensPage() {
   const filteredTokens = tokens.filter(token => {
     const matchesSearch = token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (token.description && token.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (token.module_name && token.module_name.toLowerCase().includes(searchTerm.toLowerCase()));
+      (token.moduleName && token.moduleName.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesSearch;
   });
 
@@ -271,10 +271,10 @@ export default function TokensPage() {
 
   const stats = {
     total: filteredTokens.length,
-    active: filteredTokens.filter(t => t.is_active).length,
+    active: filteredTokens.filter(t => t.isActive).length,
     expiringSoon: filteredTokens.filter(t => {
-      if (!t.expires_at) return false;
-      const daysUntilExpiry = Math.floor((new Date(t.expires_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+      if (!t.expiresAt) return false;
+      const daysUntilExpiry = Math.floor((new Date(t.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
       return daysUntilExpiry <= 30 && daysUntilExpiry > 0;
     }).length
   };

@@ -63,7 +63,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     },
     {
       label: t('myUniversity'),
-      href: user.university_id ? `/universities/${user.university_id}` : '/universities',
+      href: user.universityId ? `/universities/${user.universityId}` : '/universities',
       icon: Building2,
       roles: ['professor'],
     },
@@ -120,7 +120,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
     // If requiresAdmin is true, check if user is admin
     if (item.requiresAdmin && user.role === 'professor') {
-      return user.is_admin === true;
+      return user.isAdmin === true;
     }
 
     return true;

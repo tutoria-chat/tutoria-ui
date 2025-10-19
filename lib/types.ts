@@ -1,50 +1,51 @@
 // Core API Types for Tutoria Platform
+// IMPORTANT: All properties use camelCase to match C# API JSON serialization
 
 // User Authentication Types
 export interface User {
-  id: number; // Maps to user_id from backend
+  id: number; // Maps to userId from backend
   username?: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  user_type: UserRole; // 'super_admin', 'professor', or 'student'
-  role: UserRole; // Alias for user_type (for backwards compatibility)
-  is_active: boolean;
-  university_id?: number;
-  is_admin?: boolean; // Only for professors: true = admin professor, false = regular professor
-  government_id?: string; // CPF (Brazil), SSN (US), etc.
-  external_id?: string; // Student registration ID, employee ID, etc.
+  firstName: string;
+  lastName: string;
+  userType: UserRole; // 'super_admin', 'professor', or 'student'
+  role: UserRole; // Alias for userType (for backwards compatibility)
+  isActive: boolean;
+  universityId?: number;
+  isAdmin?: boolean; // Only for professors: true = admin professor, false = regular professor
+  governmentId?: string; // CPF (Brazil), SSN (US), etc.
+  externalId?: string; // Student registration ID, employee ID, etc.
   birthdate?: string; // ISO date string
-  assigned_courses?: number[]; // For professors: list of course IDs they're assigned to
-  created_at: string;
-  updated_at: string;
-  last_login_at?: string | null;
-  theme_preference?: string; // 'system' | 'light' | 'dark'
-  language_preference?: string; // 'pt-br' | 'en' | 'es'
+  assignedCourses?: number[]; // For professors: list of course IDs they're assigned to
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string | null;
+  themePreference?: string; // 'system' | 'light' | 'dark'
+  languagePreference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export type UserRole = 'super_admin' | 'professor' | 'student';
 
 // Backend UserResponse type (matches API schema)
 export interface UserResponse {
-  user_id: number;
+  userId: number;
   username: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  user_type: UserRole;
-  is_active: boolean;
-  is_admin?: boolean;
-  university_id?: number;
-  university_name?: string; // Included when joined with university table
-  government_id?: string;
-  external_id?: string;
+  firstName: string;
+  lastName: string;
+  userType: UserRole;
+  isActive: boolean;
+  isAdmin?: boolean;
+  universityId?: number;
+  universityName?: string; // Included when joined with university table
+  governmentId?: string;
+  externalId?: string;
   birthdate?: string;
-  language_preference?: string;
-  theme_preference?: string;
-  created_at?: string;
-  updated_at?: string;
-  last_login_at?: string | null;
+  languagePreference?: string;
+  themePreference?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  lastLoginAt?: string | null;
 }
 
 export interface LoginCredentials {
@@ -53,10 +54,10 @@ export interface LoginCredentials {
 }
 
 export interface TokenResponse {
-  access_token: string;
-  refresh_token?: string;
-  token_type: string;
-  expires_in?: number;
+  accessToken: string;
+  refreshToken?: string;
+  tokenType: string;
+  expiresIn?: number;
 }
 
 export interface AuthResult {
@@ -72,17 +73,17 @@ export interface University {
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
   address?: string;
-  tax_id?: string; // CNPJ in Brazil, Tax ID in other countries
-  contact_email?: string;
-  contact_phone?: string;
-  contact_person?: string;
+  taxId?: string; // CNPJ in Brazil, Tax ID in other countries
+  contactEmail?: string;
+  contactPhone?: string;
+  contactPerson?: string;
   website?: string;
-  subscription_tier: number; // 1 = Basic, 2 = Standard, 3 = Premium
-  created_at: string;
-  updated_at: string;
-  courses_count?: number;
-  professors_count?: number;
-  students_count?: number;
+  subscriptionTier: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  createdAt: string;
+  updatedAt: string;
+  coursesCount?: number;
+  professorsCount?: number;
+  studentsCount?: number;
 }
 
 export interface UniversityCreate {
@@ -90,12 +91,12 @@ export interface UniversityCreate {
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
   address?: string;
-  tax_id?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  contact_person?: string;
+  taxId?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactPerson?: string;
   website?: string;
-  subscription_tier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
 }
 
 export interface UniversityUpdate {
@@ -103,12 +104,12 @@ export interface UniversityUpdate {
   code: string;
   description?: string;
   address?: string;
-  tax_id?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  contact_person?: string;
+  taxId?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  contactPerson?: string;
   website?: string;
-  subscription_tier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
 }
 
 export interface UniversityWithCourses extends University {
@@ -121,20 +122,20 @@ export interface Course {
   name: string;
   code: string;
   description?: string;
-  university_id: number;
-  university_name?: string;
-  created_at: string;
-  updated_at: string;
-  modules_count?: number;
-  professors_count?: number;
-  students_count?: number;
+  universityId: number;
+  universityName?: string;
+  createdAt: string;
+  updatedAt: string;
+  modulesCount?: number;
+  professorsCount?: number;
+  studentsCount?: number;
 }
 
 export interface CourseCreate {
   name: string;
   code: string;
   description?: string;
-  university_id: number;
+  universityId: number;
 }
 
 export interface CourseUpdate {
@@ -153,22 +154,22 @@ export interface CourseWithDetails extends Course {
 // AI Model Types
 export interface AIModel {
   id: number;
-  model_name: string;
-  display_name: string;
+  modelName: string;
+  displayName: string;
   provider: 'openai' | 'anthropic';
-  max_tokens: number;
-  supports_vision: boolean;
-  supports_function_calling: boolean;
-  input_cost_per_1m?: number;
-  output_cost_per_1m?: number;
-  required_tier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
-  is_active: boolean;
-  is_deprecated: boolean;
-  deprecation_date?: string;
+  maxTokens: number;
+  supportsVision: boolean;
+  supportsFunctionCalling: boolean;
+  inputCostPer1m?: number;
+  outputCostPer1m?: number;
+  requiredTier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
+  isActive: boolean;
+  isDeprecated: boolean;
+  deprecationDate?: string;
   description?: string;
-  recommended_for?: string;
-  created_at: string;
-  updated_at?: string;
+  recommendedFor?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 // Module Types
@@ -177,43 +178,43 @@ export interface Module {
   name: string;
   code?: string;
   description?: string;
-  system_prompt?: string;
+  systemPrompt?: string;
   semester?: number;
   year?: number;
-  course_id: number;
-  course_name?: string;
-  university_id?: number;
-  tutor_language?: string; // Language for AI tutor responses (pt-br, en, es)
-  ai_model_id?: number; // Selected AI model
-  ai_model?: AIModel; // Populated AI model details
-  created_at: string;
-  updated_at: string;
-  files_count?: number;
-  tokens_count?: number;
+  courseId: number;
+  courseName?: string;
+  universityId?: number;
+  tutorLanguage?: string; // Language for AI tutor responses (pt-br, en, es)
+  aiModelId?: number; // Selected AI model
+  aiModel?: AIModel; // Populated AI model details
+  createdAt: string;
+  updatedAt: string;
+  filesCount?: number;
+  tokensCount?: number;
 }
 
 export interface ModuleCreate {
   name: string;
   code?: string;
   description?: string;
-  system_prompt?: string;
+  systemPrompt?: string;
   semester?: number;
   year?: number;
-  course_id: number;
-  tutor_language?: string;
-  ai_model_id?: number;
+  courseId: number;
+  tutorLanguage?: string;
+  aiModelId?: number;
 }
 
 export interface ModuleUpdate {
   name?: string;
   code?: string;
   description?: string;
-  system_prompt?: string;
+  systemPrompt?: string;
   semester?: number;
   year?: number;
-  course_id?: number;
-  tutor_language?: string;
-  ai_model_id?: number;
+  courseId?: number;
+  tutorLanguage?: string;
+  aiModelId?: number;
 }
 
 export interface ModuleWithDetails extends Module {
@@ -226,94 +227,94 @@ export interface ModuleWithDetails extends Module {
 export interface File {
   id: number;
   name: string;
-  file_name: string;
-  file_type: string;
-  file_size?: number;
-  content_type?: string;
-  module_id: number;
-  module_name?: string;
-  course_name?: string;
-  blob_url: string;
-  blob_container?: string;
-  blob_path?: string;
-  created_at: string;
-  updated_at: string;
+  fileName: string;
+  fileType: string;
+  fileSize?: number;
+  contentType?: string;
+  moduleId: number;
+  moduleName?: string;
+  courseName?: string;
+  blobUrl: string;
+  blobContainer?: string;
+  blobPath?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface FileUpload {
   file: File;
-  module_id: number;
+  moduleId: number;
 }
 
 export interface FileResponse extends File {
-  download_url?: string;
+  downloadUrl?: string;
 }
 
 // Professor Types
 // Note: Professors are now stored in the unified Users table
-// This interface maps to UserResponse from backend with user_type='professor'
+// This interface maps to UserResponse from backend with userType='professor'
 export interface Professor {
-  id: number; // Maps to user_id from backend UserResponse
+  id: number; // Maps to userId from backend UserResponse
   username?: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  university_id: number;
-  university_name?: string;
-  is_admin: boolean;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-  last_login_at?: string | null;
-  language_preference?: string;
-  theme_preference?: string;
-  courses_count?: number;
-  assigned_courses?: Course[];
+  firstName: string;
+  lastName: string;
+  universityId: number;
+  universityName?: string;
+  isAdmin: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string | null;
+  languagePreference?: string;
+  themePreference?: string;
+  coursesCount?: number;
+  assignedCourses?: Course[];
 }
 
 export interface ProfessorCreate {
   username: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password: string;
-  university_id: number;
-  is_admin: boolean;
-  language_preference?: string; // 'pt-br' | 'en' | 'es'
+  universityId: number;
+  isAdmin: boolean;
+  languagePreference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface ProfessorUpdate {
   email?: string;
-  first_name?: string;
-  last_name?: string;
-  is_admin?: boolean;
+  firstName?: string;
+  lastName?: string;
+  isAdmin?: boolean;
 }
 
 // Student Types
 export interface Student {
   id: number;
   email: string;
-  first_name: string;
-  last_name: string;
-  university_id?: number;
-  university_name?: string;
-  created_at: string;
-  updated_at: string;
-  enrolled_courses?: Course[];
+  firstName: string;
+  lastName: string;
+  universityId?: number;
+  universityName?: string;
+  createdAt: string;
+  updatedAt: string;
+  enrolledCourses?: Course[];
 }
 
 export interface StudentCreate {
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password: string;
-  university_id?: number;
+  universityId?: number;
 }
 
 export interface StudentUpdate {
   email?: string;
-  first_name?: string;
-  last_name?: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 // Module Token Types (API Schema)
@@ -322,34 +323,34 @@ export interface ModuleAccessToken {
   token: string;
   name: string;
   description?: string;
-  module_id: number;
-  module_name?: string;
-  course_name?: string;
-  allow_chat: boolean;
-  allow_file_access: boolean;
-  expires_at?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-  last_used_at?: string;
-  usage_count?: number;
+  moduleId: number;
+  moduleName?: string;
+  courseName?: string;
+  allowChat: boolean;
+  allowFileAccess: boolean;
+  expiresAt?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastUsedAt?: string;
+  usageCount?: number;
 }
 
 export interface ModuleAccessTokenCreate {
   name: string;
   description?: string;
-  module_id: number;
-  allow_chat: boolean;
-  allow_file_access: boolean;
-  expires_in_days?: number;
+  moduleId: number;
+  allowChat: boolean;
+  allowFileAccess: boolean;
+  expiresInDays?: number;
 }
 
 export interface ModuleAccessTokenUpdate {
   name?: string;
   description?: string;
-  allow_chat?: boolean;
-  allow_file_access?: boolean;
-  is_active?: boolean;
+  allowChat?: boolean;
+  allowFileAccess?: boolean;
+  isActive?: boolean;
 }
 
 // Legacy Module Token Types (for backwards compatibility)
@@ -357,26 +358,26 @@ export interface ModuleToken {
   id: number;
   token: string;
   name: string;
-  module_id: number;
-  module_name?: string;
-  course_name?: string;
+  moduleId: number;
+  moduleName?: string;
+  courseName?: string;
   permissions: TokenPermissions;
-  created_at: string;
-  updated_at: string;
-  last_used?: string;
-  usage_count?: number;
+  createdAt: string;
+  updatedAt: string;
+  lastUsed?: string;
+  usageCount?: number;
 }
 
 export interface TokenPermissions {
-  can_ask_questions: boolean;
-  can_upload_files: boolean;
-  max_questions_per_day?: number;
-  max_file_size_mb?: number;
+  canAskQuestions: boolean;
+  canUploadFiles: boolean;
+  maxQuestionsPerDay?: number;
+  maxFileSizeMb?: number;
 }
 
 export interface ModuleTokenCreate {
   name: string;
-  module_id: number;
+  moduleId: number;
   permissions: TokenPermissions;
 }
 
@@ -387,40 +388,40 @@ export interface ModuleTokenUpdate {
 
 // Super Admin Types
 // Note: SuperAdmins are now stored in the unified Users table
-// This interface maps to UserResponse from backend with user_type='super_admin'
+// This interface maps to UserResponse from backend with userType='super_admin'
 export interface SuperAdmin {
-  id: number; // Maps to user_id from backend UserResponse
+  id: number; // Maps to userId from backend UserResponse
   username: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  is_active: boolean;
-  created_at?: string;
-  updated_at?: string;
-  last_login_at?: string | null;
-  language_preference?: string;
-  theme_preference?: string;
+  firstName: string;
+  lastName: string;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  lastLoginAt?: string | null;
+  languagePreference?: string;
+  themePreference?: string;
 }
 
 export interface SuperAdminCreate {
   username: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   password: string;
-  language_preference?: string; // 'pt-br' | 'en' | 'es'
+  languagePreference?: string; // 'pt-br' | 'en' | 'es'
 }
 
 export interface SystemStats {
-  total_universities: number;
-  total_courses: number;
-  total_modules: number;
-  total_professors: number;
-  total_students: number;
-  total_files: number;
-  total_tokens: number;
-  storage_used_mb: number;
-  api_calls_today: number;
+  totalUniversities: number;
+  totalCourses: number;
+  totalModules: number;
+  totalProfessors: number;
+  totalStudents: number;
+  totalFiles: number;
+  totalTokens: number;
+  storageUsedMb: number;
+  apiCallsToday: number;
 }
 
 // Pagination and Filtering Types
@@ -437,43 +438,43 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   limit: number;
-  total_pages: number;
+  totalPages: number;
 }
 
 export interface CourseFilters extends PaginationParams {
-  university_id?: number;
-  professor_id?: number;
+  universityId?: number;
+  professorId?: number;
   search?: string;
 }
 
 export interface ModuleFilters extends PaginationParams {
-  course_id?: number;
-  university_id?: number;
+  courseId?: number;
+  universityId?: number;
   search?: string;
 }
 
 export interface ProfessorFilters extends PaginationParams {
-  university_id?: number;
-  is_admin?: boolean;
+  universityId?: number;
+  isAdmin?: boolean;
   search?: string;
 }
 
 export interface StudentFilters extends PaginationParams {
-  university_id?: number;
-  course_id?: number;
+  universityId?: number;
+  courseId?: number;
   search?: string;
 }
 
 export interface FileFilters extends PaginationParams {
-  module_id?: number;
-  course_id?: number;
-  content_type?: string;
+  moduleId?: number;
+  courseId?: number;
+  contentType?: string;
   search?: string;
 }
 
 export interface TokenFilters extends PaginationParams {
-  module_id?: number;
-  course_id?: number;
+  moduleId?: number;
+  courseId?: number;
   search?: string;
 }
 
@@ -494,7 +495,7 @@ export interface PermissionContext {
 export interface TutorQuestion {
   question: string;
   files?: File[];
-  module_token: string;
+  moduleToken: string;
 }
 
 export interface TutorResponse {
@@ -541,7 +542,7 @@ export interface NavigationItem {
   href: string;
   icon?: React.ComponentType<any>;
   roles?: UserRole[]; // 'super_admin', 'professor', or 'student'
-  requiresAdmin?: boolean; // For professors: requires is_admin = true
+  requiresAdmin?: boolean; // For professors: requires isAdmin = true
   children?: NavigationItem[];
 }
 

@@ -57,9 +57,9 @@ export default function ModuleDetailsPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
 
-  const breadcrumbs: BreadcrumbItem[] = module?.course_id ? [
+  const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
-    { label: module?.course_name || tCommon('breadcrumbs.course'), href: `/courses/${module.course_id}` },
+    { label: module?.courseName || tCommon('breadcrumbs.course'), href: `/courses/${module.courseId}` },
     { label: module?.name || tCommon('loading'), isCurrentPage: true }
   ] : [
     { label: tCommon('breadcrumbs.modules'), href: '/modules' },
@@ -163,11 +163,11 @@ export default function ModuleDetailsPage() {
   };
 
   const getFileDisplayName = (file: FileType): string => {
-    return file.file_name || file.name || t('fileNameUnknown');
+    return file.fileName || file.name || t('fileNameUnknown');
   };
 
   const getFileType = (file: FileType): string => {
-    return file.content_type || file.file_type || t('fileTypeUnknown');
+    return file.contentType || file.fileType || t('fileTypeUnknown');
   };
 
   const fileColumns: TableColumn<FileType>[] = [
@@ -271,7 +271,7 @@ export default function ModuleDetailsPage() {
       )
     },
     {
-      key: 'allow_chat',
+      key: 'allowChat',
       label: tTokens('chat'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -280,7 +280,7 @@ export default function ModuleDetailsPage() {
       )
     },
     {
-      key: 'allow_file_access',
+      key: 'allowFileAccess',
       label: tTokens('files'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -289,7 +289,7 @@ export default function ModuleDetailsPage() {
       )
     },
     {
-      key: 'is_active',
+      key: 'isActive',
       label: tTokens('status'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -357,8 +357,8 @@ export default function ModuleDetailsPage() {
       // Fallback based on user role
       if (user?.role === 'super_admin') {
         return '/modules';
-      } else if (user?.university_id) {
-        return `/universities/${user.university_id}`;
+      } else if (user?.universityId) {
+        return `/universities/${user.universityId}`;
       }
 
       // Last resort fallback
@@ -380,14 +380,14 @@ export default function ModuleDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={module.name}
-        description={`${t('moduleInfo')} - ${module.course_name || tCommon('breadcrumbs.course')}`}
+        description={`${t('moduleInfo')} - ${module.courseName || tCommon('breadcrumbs.course')}`}
         breadcrumbs={breadcrumbs}
         actions={
           <ProfessorOnly>
             <div className="flex items-center space-x-2">
-              {module.course_id && (
+              {module.courseId && (
                 <Button variant="outline" asChild>
-                  <Link href={`/courses/${module.course_id}`}>
+                  <Link href={`/courses/${module.courseId}`}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     {t('viewCourse')}
                   </Link>
@@ -445,14 +445,14 @@ export default function ModuleDetailsPage() {
               )}
               <div>
                 <p className="text-muted-foreground">{t('createdAt')}</p>
-                <p className="font-medium">{formatDateShort(module.created_at)}</p>
+                <p className="font-medium">{formatDateShort(module.createdAt)}</p>
               </div>
             </div>
 
             <div className="flex items-center space-x-2 pt-2">
-              <Bot className={`h-4 w-4 ${module.system_prompt ? 'text-green-500' : 'text-muted-foreground'}`} />
-              <Badge variant={module.system_prompt ? "default" : "secondary"}>
-                {module.system_prompt ? t('aiTutorConfigured') : t('aiTutorNotConfigured')}
+              <Bot className={`h-4 w-4 ${module.systemPrompt ? 'text-green-500' : 'text-muted-foreground'}`} />
+              <Badge variant={module.systemPrompt ? "default" : "secondary"}>
+                {module.systemPrompt ? t('aiTutorConfigured') : t('aiTutorNotConfigured')}
               </Badge>
             </div>
           </CardContent>
@@ -474,7 +474,7 @@ export default function ModuleDetailsPage() {
             <AdminOnly>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{module.tokens_count || 0}</p>
+                  <p className="text-2xl font-bold">{module.tokensCount || 0}</p>
                   <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-purple-500" />

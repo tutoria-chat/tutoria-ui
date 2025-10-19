@@ -35,17 +35,17 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     code: module?.code || '',
     year: module?.year || '',
     semester: module?.semester || '',
-    course_id: module?.course_id || courseId || '',
-    system_prompt: module?.system_prompt || '',
-    tutor_language: module?.tutor_language || 'pt-br',
-    ai_model_id: module?.ai_model_id || undefined,
+    courseId: module?.courseId || courseId || '',
+    systemPrompt: module?.systemPrompt || '',
+    tutorLanguage: module?.tutorLanguage || 'pt-br',
+    aiModelId: module?.aiModelId || undefined,
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
-  const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(module?.ai_model || null);
+  const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(module?.aiModel || null);
   const [showModelSelector, setShowModelSelector] = useState(false);
 
   // Predefined system prompt templates
@@ -85,8 +85,8 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
       // For super admins and admin professors: get all courses (filtered by university for profs)
       // For regular professors: API will return only their assigned courses
       const params: Record<string, string | number> = { limit: 1000 };
-      if (user?.university_id && user.role !== 'super_admin') {
-        params.university_id = user.university_id;
+      if (user?.universityId && user.role !== 'super_admin') {
+        params.universityId = user.universityId;
       }
       const response = await apiClient.getCourses(params);
 
@@ -111,8 +111,8 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     if (!formData.code.trim()) {
       newErrors.code = t('codeRequired');
     }
-    if (!formData.course_id) {
-      newErrors.course_id = t('courseRequired');
+    if (!formData.courseId) {
+      newErrors.courseId = t('courseRequired');
     }
     if (!formData.year) {
       newErrors.year = t('yearRequired');
@@ -120,8 +120,8 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     if (!formData.semester) {
       newErrors.semester = t('semesterRequired');
     }
-    if (!formData.ai_model_id) {
-      newErrors.ai_model_id = tAI('modelRequired');
+    if (!formData.aiModelId) {
+      newErrors.aiModelId = tAI('modelRequired');
     }
 
     // For regular professors, the API already filters courses to show only assigned ones
@@ -154,10 +154,10 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
         code: formData.code.trim() || undefined,
         year: formData.year ? Number(formData.year) : undefined,
         semester: formData.semester ? Number(formData.semester) : undefined,
-        course_id: Number(formData.course_id),
-        system_prompt: formData.system_prompt.trim() || undefined,
-        tutor_language: formData.tutor_language,
-        ai_model_id: formData.ai_model_id ? Number(formData.ai_model_id) : undefined,
+        courseId: Number(formData.courseId),
+        systemPrompt: formData.systemPrompt.trim() || undefined,
+        tutorLanguage: formData.tutorLanguage,
+        aiModelId: formData.aiModelId ? Number(formData.aiModelId) : undefined,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -174,12 +174,12 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
   };
 
   const applyPromptTemplate = (template: typeof promptTemplates[0]) => {
-    setFormData(prev => ({ ...prev, system_prompt: template.prompt }));
-    setErrors(prev => ({ ...prev, system_prompt: '' }));
+    setFormData(prev => ({ ...prev, systemPrompt: template.prompt }));
+    setErrors(prev => ({ ...prev, systemPrompt: '' }));
   };
 
   const handleImprovePrompt = async () => {
-    if (!formData.system_prompt.trim()) {
+    if (!formData.systemPrompt.trim()) {
       toast.error(t('improvePromptNoContent'), {
         description: t('improvePromptNoContentDesc'),
       });
@@ -195,12 +195,9 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
 
     setIsImprovingPrompt(true);
     try {
-      const response = await apiClient.post<{ improved_prompt: string; remaining_improvements: number }>(
-        `/modules/${module.id}/improve-prompt`,
-        { current_prompt: formData.system_prompt }
-      );
+      const response = await apiClient.improveSystemPrompt(module.id, formData.systemPrompt);
 
-      setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
+      setFormData(prev => ({ ...prev, systemPrompt: response.improved_prompt }));
       setRemainingImprovements(response.remaining_improvements);
 
       toast.success(t('improveSuccess'), {
@@ -217,7 +214,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     }
   };
 
-  const selectedCourse = courses.find(c => c.id === Number(formData.course_id));
+  const selectedCourse = courses.find(c => c.id === Number(formData.courseId));
 
   return (
     <div className="w-full max-w-4xl space-y-6">
@@ -310,11 +307,11 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
             {/* Course Selection */}
             <FormField>
               <FormItem>
-                <FormLabel htmlFor="course_id">{t('courseLabel')}</FormLabel>
+                <FormLabel htmlFor="courseId">{t('courseLabel')}</FormLabel>
                 {courseId ? (
                   <div className="flex items-center space-x-2">
                     <Input
-                      value={selectedCourse ? `${selectedCourse.name} (${selectedCourse.university_name})` : `Disciplina ID: ${courseId}`}
+                      value={selectedCourse ? `${selectedCourse.name} (${selectedCourse.universityName})` : `Disciplina ID: ${courseId}`}
                       disabled
                       className="bg-muted"
                     />
@@ -322,9 +319,9 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                   </div>
                 ) : (
                   <select
-                    id="course_id"
-                    value={String(formData.course_id)}
-                    onChange={(e) => handleInputChange('course_id', e.target.value)}
+                    id="courseId"
+                    value={String(formData.courseId)}
+                    onChange={(e) => handleInputChange('courseId', e.target.value)}
                     disabled={isLoading || loadingCourses}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     required
@@ -337,7 +334,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     ))}
                   </select>
                 )}
-                {errors.course_id && <FormMessage>{errors.course_id}</FormMessage>}
+                {errors.courseId && <FormMessage>{errors.courseId}</FormMessage>}
               </FormItem>
             </FormField>
 
@@ -402,7 +399,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                           height={24}
                         />
                         <div>
-                          <span className="font-medium">{selectedAIModel.display_name}</span>
+                          <span className="font-medium">{selectedAIModel.displayName}</span>
                           <p className="text-xs text-muted-foreground mt-0.5">
                             {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'}
                           </p>
@@ -410,11 +407,11 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                       </div>
                     </div>
                   ) : (
-                    <p className={`text-sm ${errors.ai_model_id ? 'text-destructive' : 'text-muted-foreground'}`}>
+                    <p className={`text-sm ${errors.aiModelId ? 'text-destructive' : 'text-muted-foreground'}`}>
                       {tAI('noModelSelected')}
                     </p>
                   )}
-                  {errors.ai_model_id && <FormMessage>{errors.ai_model_id}</FormMessage>}
+                  {errors.aiModelId && <FormMessage>{errors.aiModelId}</FormMessage>}
                 </FormItem>
               </FormField>
 
@@ -455,14 +452,14 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
               <FormField>
                 <FormItem>
                   <div className="flex items-center justify-between mb-2">
-                    <FormLabel htmlFor="system_prompt">{t('systemPromptLabel')}</FormLabel>
+                    <FormLabel htmlFor="systemPrompt">{t('systemPromptLabel')}</FormLabel>
                     {module && (
                       <Button
                         type="button"
                         variant="outline"
                         size="sm"
                         onClick={handleImprovePrompt}
-                        disabled={isImprovingPrompt || isLoading || !formData.system_prompt.trim()}
+                        disabled={isImprovingPrompt || isLoading || !formData.systemPrompt.trim()}
                       >
                         {isImprovingPrompt ? (
                           <>
@@ -491,18 +488,18 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     </div>
                   )}
                   <Textarea
-                    id="system_prompt"
+                    id="systemPrompt"
                     placeholder={t('systemPromptPlaceholder')}
-                    value={formData.system_prompt}
-                    onChange={(e) => handleInputChange('system_prompt', e.target.value)}
+                    value={formData.systemPrompt}
+                    onChange={(e) => handleInputChange('systemPrompt', e.target.value)}
                     disabled={isLoading}
                     rows={8}
                     className="font-mono text-sm"
                   />
                   <div className="flex items-center justify-between mt-1">
                     <p className="text-xs text-muted-foreground">
-                      {t('charactersCount', { count: formData.system_prompt.length })}
-                      {formData.system_prompt.length > 0 && (
+                      {t('charactersCount', { count: formData.systemPrompt.length })}
+                      {formData.systemPrompt.length > 0 && (
                         <span className="ml-2 text-green-600">{t('configured')}</span>
                       )}
                     </p>
@@ -512,23 +509,23 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                       </p>
                     )}
                   </div>
-                  {errors.system_prompt && <FormMessage>{errors.system_prompt}</FormMessage>}
+                  {errors.systemPrompt && <FormMessage>{errors.systemPrompt}</FormMessage>}
                 </FormItem>
               </FormField>
 
               {/* Tutor Language Selection */}
               <FormField>
                 <FormItem>
-                  <FormLabel htmlFor="tutor_language">🌐 {t('tutorLanguageLabel')}</FormLabel>
+                  <FormLabel htmlFor="tutorLanguage">🌐 {t('tutorLanguageLabel')}</FormLabel>
                   <div className="mb-3 p-3 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-md">
                     <p className="text-sm text-amber-900 dark:text-amber-100">
                       {t('tutorLanguageHint')}
                     </p>
                   </div>
                   <select
-                    id="tutor_language"
-                    value={formData.tutor_language}
-                    onChange={(e) => handleInputChange('tutor_language', e.target.value)}
+                    id="tutorLanguage"
+                    value={formData.tutorLanguage}
+                    onChange={(e) => handleInputChange('tutorLanguage', e.target.value)}
                     disabled={isLoading}
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
@@ -536,7 +533,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     <option value="en">🇺🇸 English (United States)</option>
                     <option value="es">🇪🇸 Español (Spanish)</option>
                   </select>
-                  {errors.tutor_language && <FormMessage>{errors.tutor_language}</FormMessage>}
+                  {errors.tutorLanguage && <FormMessage>{errors.tutorLanguage}</FormMessage>}
                 </FormItem>
               </FormField>
 
@@ -586,7 +583,7 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
         selectedModelId={selectedAIModel?.id}
         onSelectModel={(model) => {
           setSelectedAIModel(model);
-          handleInputChange('ai_model_id', String(model.id));
+          handleInputChange('aiModelId', String(model.id));
         }}
       />
     </div>

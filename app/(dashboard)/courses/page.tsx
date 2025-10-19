@@ -34,13 +34,13 @@ export default function CoursesPage() {
   const { confirm, dialog } = useConfirmDialog();
 
   // Check for university_id from URL query parameter
-  const urlUniversityId = searchParams.get('university_id');
+  const urlUniversityId = searchParams.get('universityId');
 
   // Build API URL with pagination params and university filter
   // Priority: URL parameter > user's university (for professors)
   const universityFilter = urlUniversityId
     ? `&university_id=${urlUniversityId}`
-    : (user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '');
+    : (user?.universityId && user.role !== 'super_admin' ? `&university_id=${user.universityId}` : '');
   const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get courses
@@ -72,13 +72,13 @@ export default function CoursesPage() {
       )
     },
     {
-      key: 'university_name',
+      key: 'universityName',
       label: t('columns.university'),
       sortable: true,
       render: (value, course) => (
         <div className="flex items-center space-x-2">
           <Building2 className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm">{course.university_name}</span>
+          <span className="text-sm">{course.universityName}</span>
         </div>
       )
     },

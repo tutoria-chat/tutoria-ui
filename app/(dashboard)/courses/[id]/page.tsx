@@ -77,12 +77,12 @@ export default function CourseDetailsPage() {
       return true;
     }
     // Admin professors can add modules to courses in their university
-    if (user?.role === 'professor' && user?.is_admin === true) {
+    if (user?.role === 'professor' && user?.isAdmin === true) {
       return true;
     }
     // Regular professors: For now, allow them to see the button
     // The module form will handle filtering courses by assignment
-    if (user?.role === 'professor' && user?.is_admin === false) {
+    if (user?.role === 'professor' && user?.isAdmin === false) {
       return true;
     }
     return false;
@@ -96,9 +96,9 @@ export default function CourseDetailsPage() {
     return <div className="flex items-center justify-center h-64">{tCommon('error')}</div>;
   }
 
-  const breadcrumbs: BreadcrumbItem[] = course.university_id ? [
-    { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
-    { label: course.university_name || 'University', href: `/universities/${course.university_id}` },
+  const breadcrumbs: BreadcrumbItem[] = course.universityId ? [
+    { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.universityId}` },
+    { label: course.universityName || 'University', href: `/universities/${course.universityId}` },
     { label: course.name, isCurrentPage: true }
   ] : [
     { label: t('breadcrumbCourses'), href: '/courses' },
@@ -106,10 +106,10 @@ export default function CourseDetailsPage() {
   ];
 
   const canEditModule = (module: Module): boolean => {
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) {
       return true;
     }
-    if (user?.role === 'professor' && user?.is_admin === false) {
+    if (user?.role === 'professor' && user?.isAdmin === false) {
       return true;
     }
     return false;
@@ -243,14 +243,14 @@ export default function CourseDetailsPage() {
             <Users className="h-4 w-4 text-green-600" />
           </div>
           <div>
-            <div className="font-medium">{professor.first_name} {professor.last_name}</div>
+            <div className="font-medium">{professor.firstName} {professor.lastName}</div>
             <div className="text-sm text-muted-foreground">{professor.email}</div>
           </div>
         </div>
       )
     },
     {
-      key: 'is_admin',
+      key: 'isAdmin',
       label: t('professorsTab.role'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -269,13 +269,13 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`${course.university_name || t('courseInfo')} • ${t('updated', { date: formatDateShort(course.created_at) })}`}
+        description={`${course.universityName || t('courseInfo')} • ${t('updated', { date: formatDateShort(course.createdAt) })}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
-            {course.university_id && (
+            {course.universityId && (
               <Button variant="outline" asChild>
-                <Link href={`/universities/${course.university_id}`}>
+                <Link href={`/universities/${course.universityId}`}>
                   <Building2 className="mr-2 h-4 w-4" />
                   {t('viewUniversity')}
                 </Link>
@@ -318,11 +318,11 @@ export default function CourseDetailsPage() {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.university_name || t('courseInfo')}</span>
+                <span>{course.universityName || t('courseInfo')}</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>{t('updated', { date: formatDateShort(course.updated_at) })}</span>
+                <span>{t('updated', { date: formatDateShort(course.updatedAt) })}</span>
               </div>
             </div>
           </CardContent>
@@ -345,7 +345,7 @@ export default function CourseDetailsPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.students_count || 0}</p>
+                  <p className="text-2xl font-bold">{course.studentsCount || 0}</p>
                   <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
@@ -413,7 +413,7 @@ export default function CourseDetailsPage() {
           >
             {t('tabs.students')}
             <Badge variant="secondary" className="ml-2">
-              {course.students_count || 0}
+              {course.studentsCount || 0}
             </Badge>
           </button>
         </nav>

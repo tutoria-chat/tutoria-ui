@@ -46,9 +46,9 @@ export default function TutorialsPage() {
 
     if (user.role === 'super_admin') {
       return 'superAdmin';
-    } else if (user.role === 'professor' && user.is_admin === true) {
+    } else if (user.role === 'professor' && user.isAdmin === true) {
       return 'adminProfessor';
-    } else if (user.role === 'professor' && user.is_admin === false) {
+    } else if (user.role === 'professor' && user.isAdmin === false) {
       return 'regularProfessor';
     }
     return null;

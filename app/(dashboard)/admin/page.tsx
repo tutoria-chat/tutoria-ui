@@ -32,15 +32,15 @@ import type { SystemStats, BreadcrumbItem } from '@/lib/types';
 
 // Mock data - em produção viria da API
 const mockSystemStats: SystemStats = {
-  total_universities: 15,
-  total_courses: 248,
-  total_modules: 456,
-  total_professors: 156,
-  total_students: 3420,
-  total_files: 1248,
-  total_tokens: 89,
-  storage_used_mb: 15600, // ~15.6 GB
-  api_calls_today: 12450
+  totalUniversities: 15,
+  totalCourses: 248,
+  totalModules: 456,
+  totalProfessors: 156,
+  totalStudents: 3420,
+  totalFiles: 1248,
+  totalTokens: 89,
+  storageUsedMb: 15600, // ~15.6 GB
+  apiCallsToday: 12450
 };
 
 const recentActivities = [
@@ -157,7 +157,7 @@ export default function AdminDashboardPage() {
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total_universities}</div>
+              <div className="text-2xl font-bold">{stats.totalUniversities}</div>
               <p className="text-xs text-muted-foreground">
                 +2 desde o mês passado
               </p>
@@ -170,7 +170,7 @@ export default function AdminDashboardPage() {
               <BookOpen className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total_courses}</div>
+              <div className="text-2xl font-bold">{stats.totalCourses}</div>
               <p className="text-xs text-muted-foreground">
                 +15 desde a semana passada
               </p>
@@ -183,9 +183,9 @@ export default function AdminDashboardPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.total_professors + stats.total_students}</div>
+              <div className="text-2xl font-bold">{stats.totalProfessors + stats.totalStudents}</div>
               <p className="text-xs text-muted-foreground">
-                {stats.total_professors} professores, {stats.total_students} estudantes
+                {stats.totalProfessors} professores, {stats.totalStudents} estudantes
               </p>
             </CardContent>
           </Card>
@@ -196,7 +196,7 @@ export default function AdminDashboardPage() {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stats.api_calls_today.toLocaleString()}</div>
+              <div className="text-2xl font-bold">{stats.apiCallsToday.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
                 +12% desde ontem
               </p>
@@ -218,7 +218,7 @@ export default function AdminDashboardPage() {
                   <BookOpen className="h-4 w-4 text-blue-500" />
                   <span className="text-sm">Módulos</span>
                 </div>
-                <span className="font-bold">{stats.total_modules}</span>
+                <span className="font-bold">{stats.totalModules}</span>
               </div>
               
               <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ export default function AdminDashboardPage() {
                   <FileText className="h-4 w-4 text-green-500" />
                   <span className="text-sm">Arquivos</span>
                 </div>
-                <span className="font-bold">{stats.total_files}</span>
+                <span className="font-bold">{stats.totalFiles}</span>
               </div>
               
               <div className="flex items-center justify-between">
@@ -234,7 +234,7 @@ export default function AdminDashboardPage() {
                   <Key className="h-4 w-4 text-purple-500" />
                   <span className="text-sm">Tokens Ativos</span>
                 </div>
-                <span className="font-bold">{stats.total_tokens}</span>
+                <span className="font-bold">{stats.totalTokens}</span>
               </div>
               
               <div className="flex items-center justify-between">
@@ -242,7 +242,7 @@ export default function AdminDashboardPage() {
                   <Database className="h-4 w-4 text-amber-500" />
                   <span className="text-sm">Armazenamento Usado</span>
                 </div>
-                <span className="font-bold">{formatStorage(stats.storage_used_mb)}</span>
+                <span className="font-bold">{formatStorage(stats.storageUsedMb)}</span>
               </div>
             </CardContent>
           </Card>

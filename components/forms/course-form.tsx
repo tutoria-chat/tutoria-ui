@@ -27,7 +27,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     name: course?.name || '',
     code: course?.code || '',
     description: course?.description || '',
-    university_id: course?.university_id || user?.university_id || '',
+    universityId: course?.universityId || user?.universityId || '',
   });
   const [universities, setUniversities] = useState<University[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -63,8 +63,8 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
     if (!formData.code.trim()) {
       newErrors.code = t('codeRequired');
     }
-    if (!formData.university_id) {
-      newErrors.university_id = t('universityRequired');
+    if (!formData.universityId) {
+      newErrors.universityId = t('universityRequired');
     }
     
     setErrors(newErrors);
@@ -91,7 +91,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
         name: formData.name.trim(),
         code: formData.code.trim(),
         description: formData.description.trim() || undefined,
-        university_id: Number(formData.university_id),
+        universityId: Number(formData.universityId),
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -156,11 +156,11 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
           {/* University Selection */}
           <FormField>
             <FormItem>
-              <FormLabel htmlFor="university_id">{t('universityLabel')}</FormLabel>
+              <FormLabel htmlFor="universityId">{t('universityLabel')}</FormLabel>
               {user?.role === 'super_admin' ? (
                 <Select
-                  value={String(formData.university_id)}
-                  onValueChange={(value) => handleInputChange('university_id', value)}
+                  value={String(formData.universityId)}
+                  onValueChange={(value) => handleInputChange('universityId', value)}
                   disabled={isLoading || loadingUniversities}
                 >
                   <SelectTrigger>
@@ -176,12 +176,12 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
                 </Select>
               ) : (
                 <Input
-                  value={user?.university_id ? t('universityIdLabel', { id: user.university_id }) : t('noUniversity')}
+                  value={user?.universityId ? t('universityIdLabel', { id: user.universityId }) : t('noUniversity')}
                   disabled
                   className="bg-muted"
                 />
               )}
-              {errors.university_id && <FormMessage>{errors.university_id}</FormMessage>}
+              {errors.universityId && <FormMessage>{errors.universityId}</FormMessage>}
             </FormItem>
           </FormField>
 

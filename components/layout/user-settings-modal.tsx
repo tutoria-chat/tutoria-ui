@@ -30,18 +30,18 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
   const [loading, setLoading] = useState(false);
 
   // Profile state
-  const [firstName, setFirstName] = useState(user?.first_name || '');
-  const [lastName, setLastName] = useState(user?.last_name || '');
+  const [firstName, setFirstName] = useState(user?.firstName || '');
+  const [lastName, setLastName] = useState(user?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
   // Readonly fields from external system (no setters needed)
-  const governmentId = user?.government_id || '';
-  const externalId = user?.external_id || '';
+  const governmentId = user?.governmentId || '';
+  const externalId = user?.externalId || '';
   // Editable field
   const [birthdate, setBirthdate] = useState(user?.birthdate || '');
 
   // Preferences state
-  const [themePreference, setThemePreference] = useState(user?.theme_preference || 'system');
-  const [languagePreference, setLanguagePreference] = useState(user?.language_preference || 'pt-br');
+  const [themePreference, setThemePreference] = useState(user?.themePreference || 'system');
+  const [languagePreference, setLanguagePreference] = useState(user?.languagePreference || 'pt-br');
 
   const handleProfileUpdate = async () => {
     if (!user) return;
@@ -61,8 +61,8 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
         const storedUser = localStorage.getItem('tutoria_user');
         if (storedUser) {
           const userData = JSON.parse(storedUser);
-          userData.first_name = firstName;
-          userData.last_name = lastName;
+          userData.firstName = firstName;
+          userData.lastName = lastName;
           userData.email = email;
           userData.birthdate = birthdate;
           // governmentId and externalId remain unchanged (from external system)
@@ -86,7 +86,7 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
     setLoading(true);
 
     // Capture old language preference before any updates
-    const oldLanguagePreference = user?.language_preference;
+    const oldLanguagePreference = user?.languagePreference;
     const languageChanged = languagePreference !== oldLanguagePreference;
 
     try {
@@ -121,8 +121,8 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
         const storedUser = localStorage.getItem('tutoria_user');
         if (storedUser) {
           const userData = JSON.parse(storedUser);
-          userData.theme_preference = themePreference;
-          userData.language_preference = languagePreference;
+          userData.themePreference = themePreference;
+          userData.languagePreference = languagePreference;
           localStorage.setItem('tutoria_user', JSON.stringify(userData));
         }
       }

@@ -30,8 +30,8 @@ export default function CreateCoursePage() {
         name: data.name || '',
         code: data.code || '',
         description: data.description,
-        university_id: 'university_id' in data ? data.university_id :
-                      user?.university_id || 1,
+        universityId: 'universityId' in data ? data.universityId :
+                      user?.universityId || 1,
       };
 
       // Make POST request to courses/ endpoint

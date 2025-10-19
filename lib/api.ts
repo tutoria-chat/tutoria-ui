@@ -42,12 +42,16 @@ import type {
 } from './types';
 
 export const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://tutoria-api-dev.orangesmoke-8addc8f4.eastus2.azurecontainerapps.io/api/v2',
+  // C# API (Management & Auth endpoints)
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api',
+  // Python API (AI/Tutor endpoints - improve-prompt only)
+  pythonBaseURL: process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000/api/v2',
   timeout: 30000,
 } as const;
 
 class TutoriaAPIClient {
   private baseURL: string;
+  private pythonBaseURL: string;
   private timeout: number;
   private token: string | null = null;
   private isRefreshing: boolean = false;
@@ -55,6 +59,7 @@ class TutoriaAPIClient {
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
+    this.pythonBaseURL = config.pythonBaseURL;
     this.timeout = config.timeout;
 
     // Initialize token from localStorage if available
@@ -109,10 +114,10 @@ class TutoriaAPIClient {
         const data: TokenResponse = await response.json();
 
         // Update tokens
-        this.setToken(data.access_token);
-        localStorage.setItem('tutoria_token', data.access_token);
-        if (data.refresh_token) {
-          localStorage.setItem('tutoria_refresh_token', data.refresh_token);
+        this.setToken(data.accessToken);
+        localStorage.setItem('tutoria_token', data.accessToken);
+        if (data.refreshToken) {
+          localStorage.setItem('tutoria_refresh_token', data.refreshToken);
         }
 
         return true;
@@ -130,9 +135,11 @@ class TutoriaAPIClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    usePythonAPI: boolean = false
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    const baseUrl = usePythonAPI ? this.pythonBaseURL : this.baseURL;
+    const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
     const headers: Record<string, string> = {
@@ -226,7 +233,7 @@ class TutoriaAPIClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, unknown> | object): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown> | object, usePythonAPI = false): Promise<T> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
@@ -237,11 +244,11 @@ class TutoriaAPIClient {
     }
     const queryString = searchParams.toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-    
-    return this.request<T>(url, { method: 'GET' });
+
+    return this.request<T>(url, { method: 'GET' }, usePythonAPI);
   }
 
-  async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, isFormData = false, usePythonAPI = false): Promise<T> {
     const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
@@ -264,40 +271,40 @@ class TutoriaAPIClient {
       method: 'POST',
       headers: headers as unknown as HeadersInit,
       body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
-    });
+    }, usePythonAPI);
   }
 
-  async put<T>(endpoint: string, data?: unknown): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-    });
+    }, usePythonAPI);
   }
 
-  async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+  async delete<T>(endpoint: string, usePythonAPI = false): Promise<T> {
+    return this.request<T>(endpoint, { method: 'DELETE' }, usePythonAPI);
   }
 
-  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-    });
+    }, usePythonAPI);
   }
 
   // Authentication endpoints
   async login(credentials: { username: string; password: string }): Promise<TokenResponse> {
     const response = await this.post<TokenResponse>('/auth/login', credentials);
-    if (response.access_token) {
-      this.setToken(response.access_token);
+    if (response.accessToken) {
+      this.setToken(response.accessToken);
     }
     return response;
   }
 
   async refreshToken(): Promise<TokenResponse> {
     const response = await this.post<TokenResponse>('/auth/refresh');
-    if (response.access_token) {
-      this.setToken(response.access_token);
+    if (response.accessToken) {
+      this.setToken(response.accessToken);
     }
     return response;
   }
@@ -306,7 +313,7 @@ class TutoriaAPIClient {
     return this.post('/auth/reset-password-request', { username, user_type: userType });
   }
 
-  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; first_name: string; last_name: string; email: string; language_preference: string; user_type: string }> {
+  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
     return this.get('/auth/verify-reset-token', { username, reset_token: token });
   }
 
@@ -393,7 +400,7 @@ class TutoriaAPIClient {
   }
 
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
-    return this.get(`/courses/`, { university_id: universityId });
+    return this.get(`/courses/`, { universityId: universityId });
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {
@@ -425,6 +432,12 @@ class TutoriaAPIClient {
     return this.delete(`/modules/${id}`);
   }
 
+  // AI/Tutor endpoints (Python API)
+  async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
+    // This endpoint uses the Python API - must stay snake_case
+    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, true);
+  }
+
   // AI Model endpoints
   async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
     return this.get('/ai-models/', params);
@@ -441,7 +454,7 @@ class TutoriaAPIClient {
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
     const params = new URLSearchParams();
-    params.append('module_id', moduleId.toString());
+    params.append('moduleId', moduleId.toString());
     if (fileName) {
       params.append('name', fileName);
     }
@@ -472,51 +485,51 @@ class TutoriaAPIClient {
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
     // Use the unified /auth/users/create endpoint
     interface BackendUserResponse {
-      user_id: number;
+      userId: number;
       username: string;
       email: string;
-      first_name: string;
-      last_name: string;
-      user_type: 'super_admin' | 'professor' | 'student';
-      is_active: boolean;
-      is_admin?: boolean;
-      university_id?: number;
-      university_name?: string;
-      created_at: string;
-      updated_at: string;
-      last_login_at?: string | null;
-      language_preference?: string;
-      theme_preference?: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      isAdmin?: boolean;
+      universityId?: number;
+      universityName?: string;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
     }
 
     const response = await this.post<BackendUserResponse>('/auth/users/create', {
       username: data.username,
       email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
       user_type: 'professor',
-      university_id: data.university_id,
-      is_admin: data.is_admin,
-      language_preference: data.language_preference || 'pt-br',
+      universityId: data.universityId,
+      isAdmin: data.isAdmin,
+      languagePreference: data.languagePreference || 'pt-br',
     });
 
     // Map backend UserResponse to Professor interface
     return {
-      id: response.user_id,
+      id: response.userId,
       username: response.username,
       email: response.email,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      university_id: response.university_id || 0,
-      university_name: response.university_name,
-      is_admin: response.is_admin || false,
-      is_active: response.is_active,
-      created_at: response.created_at,
-      updated_at: response.updated_at,
-      last_login_at: response.last_login_at,
-      language_preference: response.language_preference,
-      theme_preference: response.theme_preference,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      universityId: response.universityId || 0,
+      universityName: response.universityName,
+      isAdmin: response.isAdmin || false,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
     };
   }
 
@@ -532,7 +545,7 @@ class TutoriaAPIClient {
     return this.put(`/professors/${id}/password`, { new_password: newPassword });
   }
 
-  async getProfessorCourses(id: number): Promise<{ course_ids: number[] }> {
+  async getProfessorCourses(id: number): Promise<{ courseIds: number[] }> {
     return this.get(`/professors/${id}/courses`);
   }
 
@@ -594,44 +607,44 @@ class TutoriaAPIClient {
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
     // Use the unified /auth/users/create endpoint
     interface BackendUserResponse {
-      user_id: number;
+      userId: number;
       username: string;
       email: string;
-      first_name: string;
-      last_name: string;
-      user_type: 'super_admin' | 'professor' | 'student';
-      is_active: boolean;
-      created_at: string;
-      updated_at: string;
-      last_login_at?: string | null;
-      language_preference?: string;
-      theme_preference?: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
     }
 
     const response = await this.post<BackendUserResponse>('/auth/users/create', {
       username: data.username,
       email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
       user_type: 'super_admin',
-      is_admin: true, // Super admins are always admins
-      language_preference: data.language_preference || 'pt-br',
+      isAdmin: true, // Super admins are always admins
+      languagePreference: data.languagePreference || 'pt-br',
     });
 
     // Map backend UserResponse to SuperAdmin interface
     return {
-      id: response.user_id,
+      id: response.userId,
       username: response.username,
       email: response.email,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      is_active: response.is_active,
-      created_at: response.created_at,
-      updated_at: response.updated_at,
-      last_login_at: response.last_login_at,
-      language_preference: response.language_preference,
-      theme_preference: response.theme_preference,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
     };
   }
 

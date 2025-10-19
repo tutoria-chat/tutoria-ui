@@ -56,8 +56,8 @@ function WelcomeForm() {
         const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
 
         // Set locale based on user's preference
-        if (response.language_preference) {
-          setLocale(response.language_preference as Locale);
+        if (response.languagePreference) {
+          setLocale(response.languagePreference as Locale);
         }
 
         // Sanitize username by removing special characters if used as fallback
@@ -67,10 +67,10 @@ function WelcomeForm() {
 
         // Get user info from verified backend response
         setUserInfo({
-          first_name: response.first_name || sanitizeUsername(usernameParam.split('@')[0]),
-          last_name: response.last_name || '',
+          first_name: response.firstName || sanitizeUsername(usernameParam.split('@')[0]),
+          last_name: response.lastName || '',
           email: response.email || '',
-          user_type: response.user_type || 'professor',
+          user_type: response.userType || 'professor',
         });
       } catch (error: any) {
         console.error('Failed to verify token:', error);

@@ -60,10 +60,10 @@ export default function UniversityDetailsPage() {
 
   // For professors, ensure they can only access their own university
   React.useEffect(() => {
-    if (user && user.role !== 'super_admin' && user.university_id) {
-      if (Number(universityId) !== user.university_id) {
+    if (user && user.role !== 'super_admin' && user.universityId) {
+      if (Number(universityId) !== user.universityId) {
         // Redirect to their own university if they try to access another
-        window.location.href = `/universities/${user.university_id}`;
+        window.location.href = `/universities/${user.universityId}`;
       }
     }
   }, [user, universityId]);
@@ -172,7 +172,7 @@ export default function UniversityDetailsPage() {
 
   const professorColumns: TableColumn<Professor>[] = [
     {
-      key: 'first_name',
+      key: 'firstName',
       label: t('professorColumns.name'),
       sortable: true,
       render: (_, professor) => (
@@ -181,14 +181,14 @@ export default function UniversityDetailsPage() {
             <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <div className="font-medium">{professor.first_name} {professor.last_name}</div>
+            <div className="font-medium">{professor.firstName} {professor.lastName}</div>
             <div className="text-sm text-muted-foreground">{professor.email}</div>
           </div>
         </div>
       )
     },
     {
-      key: 'is_admin',
+      key: 'isAdmin',
       label: t('professorColumns.type'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -285,36 +285,36 @@ export default function UniversityDetailsPage() {
                   </div>
                 </div>
 
-                {university.contact_email && (
+                {university.contactEmail && (
                   <div className="flex items-start space-x-3">
                     <Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactEmail')}</p>
-                      <a href={`mailto:${university.contact_email}`} className="text-base hover:underline text-primary">
-                        {university.contact_email}
+                      <a href={`mailto:${university.contactEmail}`} className="text-base hover:underline text-primary">
+                        {university.contactEmail}
                       </a>
                     </div>
                   </div>
                 )}
 
-                {university.contact_phone && (
+                {university.contactPhone && (
                   <div className="flex items-start space-x-3">
                     <Phone className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactPhone')}</p>
-                      <a href={`tel:${university.contact_phone}`} className="text-base hover:underline text-primary">
-                        {university.contact_phone}
+                      <a href={`tel:${university.contactPhone}`} className="text-base hover:underline text-primary">
+                        {university.contactPhone}
                       </a>
                     </div>
                   </div>
                 )}
 
-                {university.contact_person && (
+                {university.contactPerson && (
                   <div className="flex items-start space-x-3">
                     <UserCircle className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactPerson')}</p>
-                      <p className="text-base">{university.contact_person}</p>
+                      <p className="text-base">{university.contactPerson}</p>
                     </div>
                   </div>
                 )}
@@ -348,12 +348,12 @@ export default function UniversityDetailsPage() {
                   </div>
                 )}
 
-                {university.tax_id && (
+                {university.taxId && (
                   <div className="flex items-start space-x-3">
                     <FileText className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.taxId')}</p>
-                      <p className="text-base">{university.tax_id}</p>
+                      <p className="text-base">{university.taxId}</p>
                     </div>
                   </div>
                 )}
@@ -364,7 +364,7 @@ export default function UniversityDetailsPage() {
       </SuperAdminOnly>
 
       {/* University Stats */}
-      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.is_admin ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
+      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('stats.courses')}</CardTitle>
@@ -407,8 +407,8 @@ export default function UniversityDetailsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {university.subscription_tier === 1 ? tTiers('tierBasic') :
-                 university.subscription_tier === 2 ? tTiers('tierStandard') :
+                {university.subscriptionTier === 1 ? tTiers('tierBasic') :
+                 university.subscriptionTier === 2 ? tTiers('tierStandard') :
                  tTiers('tierPremium')}
               </div>
               <p className="text-xs text-muted-foreground mt-1">{tTiers('tierLabel')}</p>

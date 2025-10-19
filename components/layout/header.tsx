@@ -83,7 +83,7 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
               </div>
               <div className="hidden sm:block text-left">
                 <div className="text-sm font-medium">
-                  {user.first_name} {user.last_name}
+                  {user.firstName} {user.lastName}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   {getUserRoleDisplayName(user.role)}

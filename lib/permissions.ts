@@ -1,7 +1,7 @@
 import type { User, UserRole, Permission, PermissionContext } from './types';
 
 // Note: Professors' permissions vary by is_admin flag, so this is a simplified model
-// In practice, check user.is_admin for professors to determine their actual permissions
+// In practice, check user.isAdmin for professors to determine their actual permissions
 export const rolePermissions: Record<UserRole, Permission[]> = {
   super_admin: [
     // Universities
@@ -114,26 +114,26 @@ export function checkPermission(
 
       case 'university':
         return user.role === 'super_admin' ||
-               (user.role === 'professor' && user.is_admin === true &&
-                user.university_id === context?.universityId);
+               (user.role === 'professor' && user.isAdmin === true &&
+                user.universityId === context?.universityId);
 
       case 'course':
         // Super admin has access to everything
         if (user.role === 'super_admin') return true;
 
         // Admin professor has access to courses in their university
-        if (user.role === 'professor' && user.is_admin === true &&
-            user.university_id === context?.universityId) return true;
+        if (user.role === 'professor' && user.isAdmin === true &&
+            user.universityId === context?.universityId) return true;
 
         // Regular professor has access to assigned courses
-        if (user.role === 'professor' && user.is_admin === false &&
+        if (user.role === 'professor' && user.isAdmin === false &&
             context?.courseId &&
-            user.assigned_courses?.includes(context.courseId)) return true;
+            user.assignedCourses?.includes(context.courseId)) return true;
 
         // Student has access to enrolled courses
         if (user.role === 'student' &&
             context?.courseId &&
-            user.assigned_courses?.includes(context.courseId)) return true;
+            user.assignedCourses?.includes(context.courseId)) return true;
 
         return false;
 
@@ -169,10 +169,10 @@ export function canAccessPage(
     '/universities': (user) => user.role === 'super_admin',
     '/universities/create': (user) => user.role === 'super_admin',
     '/courses': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/courses/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.is_admin === true),
+    '/courses/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
     '/modules': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/professors': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.is_admin === true),
-    '/professors/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.is_admin === true),
+    '/professors': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
+    '/professors/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
     '/students': (user) => ['super_admin', 'professor'].includes(user.role),
     '/files': (user) => ['super_admin', 'professor'].includes(user.role),
     '/tokens': (user) => ['super_admin', 'professor'].includes(user.role),

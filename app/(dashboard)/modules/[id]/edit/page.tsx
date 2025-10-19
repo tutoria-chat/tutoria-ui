@@ -35,23 +35,23 @@ export default function EditModulePage() {
     name: '',
     code: '',
     description: '',
-    system_prompt: '',
-    tutor_language: 'pt-br',
+    systemPrompt: '',
+    tutorLanguage: 'pt-br',
     semester: undefined,
     year: undefined,
-    course_id: undefined,
-    ai_model_id: undefined,
+    courseId: undefined,
+    aiModelId: undefined,
   });
   const [formData, setFormData] = useState<ModuleUpdate>({
     name: '',
     code: '',
     description: '',
-    system_prompt: '',
-    tutor_language: 'pt-br',
+    systemPrompt: '',
+    tutorLanguage: 'pt-br',
     semester: undefined,
     year: undefined,
-    course_id: undefined,
-    ai_model_id: undefined,
+    courseId: undefined,
+    aiModelId: undefined,
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -76,12 +76,12 @@ export default function EditModulePage() {
       formData.name !== originalFormData.name ||
       formData.code !== originalFormData.code ||
       formData.description !== originalFormData.description ||
-      formData.system_prompt !== originalFormData.system_prompt ||
-      formData.tutor_language !== originalFormData.tutor_language ||
+      formData.systemPrompt !== originalFormData.systemPrompt ||
+      formData.tutorLanguage !== originalFormData.tutorLanguage ||
       formData.semester !== originalFormData.semester ||
       formData.year !== originalFormData.year ||
-      formData.ai_model_id !== originalFormData.ai_model_id ||
-      (user?.role === 'super_admin' && formData.course_id !== originalFormData.course_id)
+      formData.aiModelId !== originalFormData.aiModelId ||
+      (user?.role === 'super_admin' && formData.courseId !== originalFormData.courseId)
     );
   };
 
@@ -98,19 +98,19 @@ export default function EditModulePage() {
         name: data.name,
         code: data.code || '',
         description: data.description || '',
-        system_prompt: data.system_prompt || '',
-        tutor_language: data.tutor_language || 'pt-br',
+        systemPrompt: data.systemPrompt || '',
+        tutorLanguage: data.tutorLanguage || 'pt-br',
         semester: data.semester,
         year: data.year,
-        course_id: data.course_id,
-        ai_model_id: data.ai_model_id,
+        courseId: data.courseId,
+        aiModelId: data.aiModelId,
       };
       setFormData(initialData);
       setOriginalFormData(initialData);
 
       // Set AI model if available
-      if (data.ai_model) {
-        setSelectedAIModel(data.ai_model);
+      if (data.aiModel) {
+        setSelectedAIModel(data.aiModel);
       }
     } catch (error) {
       console.error('Failed to load module:', error);
@@ -127,8 +127,8 @@ export default function EditModulePage() {
     try {
       // Filter courses by user's university for professors
       const params: Record<string, string | number> = { limit: 1000 };
-      if (user?.university_id && user.role !== 'super_admin') {
-        params.university_id = user.university_id;
+      if (user?.universityId && user.role !== 'super_admin') {
+        params.universityId = user.universityId;
       }
       const response = await apiClient.getCourses(params);
       setCourses(response.items);
@@ -164,8 +164,8 @@ export default function EditModulePage() {
       newErrors.name = tForm('nameRequired');
     }
 
-    if (user?.role === 'super_admin' && !formData.course_id) {
-      newErrors.course_id = tForm('courseRequired');
+    if (user?.role === 'super_admin' && !formData.courseId) {
+      newErrors.courseId = tForm('courseRequired');
     }
 
     setErrors(newErrors);
@@ -173,11 +173,11 @@ export default function EditModulePage() {
   };
 
   const getFileDisplayName = (file: FileType): string => {
-    return file.file_name || file.name || tCommon('noData');
+    return file.fileName || file.name || tCommon('noData');
   };
 
   const handleImprovePrompt = async () => {
-    if (!formData.system_prompt?.trim()) {
+    if (!formData.systemPrompt?.trim()) {
       toast.error(tForm('improvePromptNoContent'), {
         description: tForm('improvePromptNoContentDesc'),
       });
@@ -188,10 +188,10 @@ export default function EditModulePage() {
     try {
       const response = await apiClient.post<{ improved_prompt: string; remaining_improvements: number }>(
         `/modules/${moduleId}/improve-prompt`,
-        { current_prompt: formData.system_prompt }
+        { current_prompt: formData.systemPrompt }
       );
 
-      setFormData(prev => ({ ...prev, system_prompt: response.improved_prompt }));
+      setFormData(prev => ({ ...prev, systemPrompt: response.improved_prompt }));
       setRemainingImprovements(response.remaining_improvements);
 
       toast.success(tForm('improveSuccess'), {
@@ -282,16 +282,16 @@ export default function EditModulePage() {
         name: formData.name?.trim(),
         code: formData.code?.trim() || undefined,
         description: formData.description?.trim() || undefined,
-        system_prompt: formData.system_prompt?.trim() || undefined,
-        tutor_language: formData.tutor_language,
+        systemPrompt: formData.systemPrompt?.trim() || undefined,
+        tutorLanguage: formData.tutorLanguage,
         semester: formData.semester,
         year: formData.year,
-        ai_model_id: selectedAIModel?.id,
+        aiModelId: selectedAIModel?.id,
       };
 
       // Only include course_id if user is super_admin
-      if (user?.role === 'super_admin' && formData.course_id) {
-        updateData.course_id = formData.course_id;
+      if (user?.role === 'super_admin' && formData.courseId) {
+        updateData.courseId = formData.courseId;
       }
 
       await apiClient.updateModule(moduleId, updateData);
@@ -435,7 +435,7 @@ export default function EditModulePage() {
                 </label>
                 <Input
                   id="course_name"
-                  value={module?.course_name || tCommon('loading')}
+                  value={module?.courseName || tCommon('loading')}
                   disabled
                   className="bg-muted cursor-not-allowed"
                 />
@@ -497,7 +497,7 @@ export default function EditModulePage() {
                           height={24}
                         />
                         <div>
-                          <span className="font-medium">{selectedAIModel.display_name}</span>
+                          <span className="font-medium">{selectedAIModel.displayName}</span>
                           <p className="text-xs text-muted-foreground mt-0.5">
                             {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'}
                           </p>
@@ -512,7 +512,7 @@ export default function EditModulePage() {
 
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="system_prompt" className="block text-sm font-medium">
+                  <label htmlFor="systemPrompt" className="block text-sm font-medium">
                     {t('systemPromptLabel')}
                   </label>
                   <Button
@@ -520,7 +520,7 @@ export default function EditModulePage() {
                     variant="outline"
                     size="sm"
                     onClick={handleImprovePrompt}
-                    disabled={isImprovingPrompt || isLoading || !formData.system_prompt?.trim()}
+                    disabled={isImprovingPrompt || isLoading || !formData.systemPrompt?.trim()}
                   >
                     {isImprovingPrompt ? (
                       <>
@@ -541,17 +541,17 @@ export default function EditModulePage() {
                   </p>
                 </div>
                 <Textarea
-                  id="system_prompt"
-                  value={formData.system_prompt}
-                  onChange={(e) => handleChange('system_prompt', e.target.value)}
+                  id="systemPrompt"
+                  value={formData.systemPrompt}
+                  onChange={(e) => handleChange('systemPrompt', e.target.value)}
                   placeholder={t('systemPromptPlaceholder')}
                   rows={6}
                   className="font-mono text-sm"
                 />
                 <div className="flex items-center justify-between mt-1">
                   <p className="text-xs text-muted-foreground">
-                    {tForm('charactersCount', { count: (formData.system_prompt || '').length })}
-                    {(formData.system_prompt || '').length > 0 && (
+                    {tForm('charactersCount', { count: (formData.systemPrompt || '').length })}
+                    {(formData.systemPrompt || '').length > 0 && (
                       <span className="ml-2 text-green-600">{tForm('configured')}</span>
                     )}
                   </p>
@@ -564,13 +564,13 @@ export default function EditModulePage() {
               </div>
 
               <div>
-                <label htmlFor="tutor_language" className="block text-sm font-medium mb-1">
+                <label htmlFor="tutorLanguage" className="block text-sm font-medium mb-1">
                   {tForm('tutorLanguageLabel')}
                 </label>
                 <select
-                  id="tutor_language"
-                  value={formData.tutor_language || 'pt-br'}
-                  onChange={(e) => handleChange('tutor_language', e.target.value)}
+                  id="tutorLanguage"
+                  value={formData.tutorLanguage || 'pt-br'}
+                  onChange={(e) => handleChange('tutorLanguage', e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="pt-br">Português (Brasil)</option>
@@ -718,7 +718,7 @@ export default function EditModulePage() {
           selectedModelId={selectedAIModel?.id}
           onSelectModel={(model) => {
             setSelectedAIModel(model);
-            handleChange('ai_model_id', model.id);
+            handleChange('aiModelId', model.id);
           }}
         />
       </div>

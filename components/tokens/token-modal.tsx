@@ -42,18 +42,18 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
   const [originalFormData, setOriginalFormData] = useState<ModuleAccessTokenCreate>({
     name: '',
     description: '',
-    module_id: preselectedModuleId || 0,
-    allow_chat: true,
-    allow_file_access: true,
-    expires_in_days: undefined,
+    moduleId: preselectedModuleId || 0,
+    allowChat: true,
+    allowFileAccess: true,
+    expiresInDays: undefined,
   });
   const [formData, setFormData] = useState<ModuleAccessTokenCreate>({
     name: '',
     description: '',
-    module_id: preselectedModuleId || 0,
-    allow_chat: true,
-    allow_file_access: true,
-    expires_in_days: undefined,
+    moduleId: preselectedModuleId || 0,
+    allowChat: true,
+    allowFileAccess: true,
+    expiresInDays: undefined,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -64,8 +64,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
     return (
       formData.name !== originalFormData.name ||
       formData.description !== originalFormData.description ||
-      formData.allow_chat !== originalFormData.allow_chat ||
-      formData.allow_file_access !== originalFormData.allow_file_access
+      formData.allowChat !== originalFormData.allowChat ||
+      formData.allowFileAccess !== originalFormData.allowFileAccess
     );
   };
 
@@ -75,10 +75,10 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       const initialData = {
         name: token.name,
         description: token.description || '',
-        module_id: token.module_id,
-        allow_chat: token.allow_chat,
-        allow_file_access: token.allow_file_access,
-        expires_in_days: undefined,
+        moduleId: token.moduleId,
+        allowChat: token.allowChat,
+        allowFileAccess: token.allowFileAccess,
+        expiresInDays: undefined,
       };
       setFormData(initialData);
       setOriginalFormData(initialData);
@@ -87,10 +87,10 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       const createData = {
         name: '',
         description: '',
-        module_id: preselectedModuleId || 0,
-        allow_chat: true,
-        allow_file_access: true,
-        expires_in_days: undefined,
+        moduleId: preselectedModuleId || 0,
+        allowChat: true,
+        allowFileAccess: true,
+        expiresInDays: undefined,
       };
       setFormData(createData);
       setOriginalFormData(createData);
@@ -113,8 +113,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
           } else {
             // Otherwise, load modules with search/filter
             const params: Record<string, string | number> = { page: 1, size: 100 };
-            if (user?.university_id && user.role !== 'super_admin') {
-              params.university_id = user.university_id;
+            if (user?.universityId && user.role !== 'super_admin') {
+              params.universityId = user.universityId;
             }
             if (moduleSearchQuery) {
               params.search = moduleSearchQuery;
@@ -155,8 +155,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       newErrors.name = t('nameRequired');
     }
 
-    if (mode === 'create' && (!formData.module_id || formData.module_id === 0)) {
-      newErrors.module_id = t('moduleRequired');
+    if (mode === 'create' && (!formData.moduleId || formData.moduleId === 0)) {
+      newErrors.moduleId = t('moduleRequired');
     }
 
     setErrors(newErrors);
@@ -176,8 +176,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
         const updateData: ModuleAccessTokenUpdate = {
           name: formData.name,
           description: formData.description,
-          allow_chat: formData.allow_chat,
-          allow_file_access: formData.allow_file_access,
+          allowChat: formData.allowChat,
+          allowFileAccess: formData.allowFileAccess,
         };
         await apiClient.updateModuleToken(token.id, updateData);
       }
@@ -208,7 +208,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
       return;
     }
     try {
-      await apiClient.updateModuleToken(token.id, { is_active: false });
+      await apiClient.updateModuleToken(token.id, { isActive: false });
       onSuccess();
       onClose();
     } catch (error) {
@@ -285,8 +285,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     </div>
                     <div className="space-y-2">
                       <Label>{t('status')}</Label>
-                      <Badge variant={token.is_active ? "default" : "secondary"}>
-                        {token.is_active ? t('active', { ns: 'tokens.columns' }) : t('inactive', { ns: 'tokens.columns' })}
+                      <Badge variant={token.isActive ? "default" : "secondary"}>
+                        {token.isActive ? t('active', { ns: 'tokens.columns' }) : t('inactive', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                   </div>
@@ -301,50 +301,50 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>{t('module')}</Label>
-                      <p className="text-sm">{token.module_name}</p>
+                      <p className="text-sm">{token.moduleName}</p>
                     </div>
                     <div className="space-y-2">
                       <Label>{t('course')}</Label>
-                      <p className="text-sm">{token.course_name}</p>
+                      <p className="text-sm">{token.courseName}</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>{t('createdAt')}</Label>
-                      <p className="text-sm">{formatDateShort(token.created_at)}</p>
+                      <p className="text-sm">{formatDateShort(token.createdAt)}</p>
                     </div>
                     <div className="space-y-2">
                       <Label>{t('expiresAt')}</Label>
-                      <p className="text-sm">{token.expires_at ? formatDateShort(token.expires_at) : t('never', { ns: 'tokens.columns' })}</p>
+                      <p className="text-sm">{token.expiresAt ? formatDateShort(token.expiresAt) : t('never', { ns: 'tokens.columns' })}</p>
                     </div>
                   </div>
 
-                  {token.last_used_at && (
+                  {token.lastUsedAt && (
                     <div className="space-y-2">
                       <Label>{t('lastUsed')}</Label>
-                      <p className="text-sm">{formatDateShort(token.last_used_at)}</p>
+                      <p className="text-sm">{formatDateShort(token.lastUsedAt)}</p>
                     </div>
                   )}
 
-                  {token.usage_count !== undefined && (
+                  {token.usageCount !== undefined && (
                     <div className="space-y-2">
                       <Label>{t('usageCount')}</Label>
-                      <p className="text-sm">{t('requests', { count: token.usage_count })}</p>
+                      <p className="text-sm">{t('requests', { count: token.usageCount })}</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>{t('chatPermission')}</Label>
-                      <Badge variant={token.allow_chat ? "default" : "secondary"}>
-                        {token.allow_chat ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
+                      <Badge variant={token.allowChat ? "default" : "secondary"}>
+                        {token.allowChat ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                     <div className="space-y-2">
                       <Label>{t('filePermission')}</Label>
-                      <Badge variant={token.allow_file_access ? "default" : "secondary"}>
-                        {token.allow_file_access ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
+                      <Badge variant={token.allowFileAccess ? "default" : "secondary"}>
+                        {token.allowFileAccess ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
                       </Badge>
                     </div>
                   </div>
@@ -362,7 +362,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                   <Copy className="mr-2 h-4 w-4" />
                   {t('copyToken')}
                 </Button>
-                {token.is_active && (
+                {token.isActive && (
                   <Button
                     type="button"
                     variant="destructive"
@@ -383,13 +383,13 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {/* Module Selection (Create Only) */}
               {mode === 'create' && (
                 <div className="space-y-2">
-                  <Label htmlFor="module_id">{t('moduleLabel')}</Label>
+                  <Label htmlFor="moduleId">{t('moduleLabel')}</Label>
                   {preselectedModuleId ? (
                     // Show selected module as read-only when preselected
                     <div className="w-full rounded-md border border-input bg-muted px-3 py-2">
                       <div className="flex flex-col">
-                        <span className="text-sm">{modules.find((m) => m.id === formData.module_id)?.name || t('loadingModules')}</span>
-                        <span className="text-xs text-muted-foreground">{modules.find((m) => m.id === formData.module_id)?.course_name}</span>
+                        <span className="text-sm">{modules.find((m) => m.id === formData.moduleId)?.name || t('loadingModules')}</span>
+                        <span className="text-xs text-muted-foreground">{modules.find((m) => m.id === formData.moduleId)?.courseName}</span>
                       </div>
                     </div>
                   ) : (
@@ -403,8 +403,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                           className="w-full justify-between"
                           disabled={isLoading || loadingModules}
                         >
-                          {formData.module_id && formData.module_id !== 0
-                            ? modules.find((m) => m.id === formData.module_id)?.name || t('selectModule')
+                          {formData.moduleId && formData.moduleId !== 0
+                            ? modules.find((m) => m.id === formData.moduleId)?.name || t('selectModule')
                             : loadingModules ? t('loadingModules') : t('selectModule')}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -428,7 +428,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                                     key={module.id}
                                     value={module.id.toString()}
                                     onSelect={() => {
-                                      handleChange('module_id', module.id);
+                                      handleChange('moduleId', module.id);
                                       setModuleComboboxOpen(false);
                                       setModuleSearchQuery('');
                                     }}
@@ -436,12 +436,12 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        formData.module_id === module.id ? "opacity-100" : "opacity-0"
+                                        formData.moduleId === module.id ? "opacity-100" : "opacity-0"
                                       )}
                                     />
                                     <div className="flex flex-col">
                                       <span>{module.name}</span>
-                                      <span className="text-xs text-muted-foreground">{module.course_name}</span>
+                                      <span className="text-xs text-muted-foreground">{module.courseName}</span>
                                     </div>
                                   </CommandItem>
                                 ))}
@@ -455,8 +455,8 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                   {errors.modules && (
                     <p className="text-sm text-destructive">{t('loadingModules')}</p>
                   )}
-                  {errors.module_id && (
-                    <p className="text-sm text-destructive">{errors.module_id}</p>
+                  {errors.moduleId && (
+                    <p className="text-sm text-destructive">{errors.moduleId}</p>
                   )}
                 </div>
               )}
@@ -465,7 +465,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {mode === 'edit' && token && (
                 <div className="space-y-2">
                   <Label>{t('module')}</Label>
-                  <p className="text-sm">{token.module_name} ({token.course_name})</p>
+                  <p className="text-sm">{token.moduleName} ({token.courseName})</p>
                 </div>
               )}
 
@@ -501,12 +501,12 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
               {/* Expiration (Create Only) */}
               {mode === 'create' && (
                 <div className="space-y-2">
-                  <Label htmlFor="expires_in_days">{t('expiresLabel')}</Label>
+                  <Label htmlFor="expiresInDays">{t('expiresLabel')}</Label>
                   <Input
-                    id="expires_in_days"
+                    id="expiresInDays"
                     type="number"
-                    value={formData.expires_in_days || ''}
-                    onChange={(e) => handleChange('expires_in_days', e.target.value ? Number(e.target.value) : undefined)}
+                    value={formData.expiresInDays || ''}
+                    onChange={(e) => handleChange('expiresInDays', e.target.value ? Number(e.target.value) : undefined)}
                     placeholder={t('expiresPlaceholder')}
                     disabled={isLoading}
                     min="1"
@@ -522,30 +522,30 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                 <Label>{t('permissions')}</Label>
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="allow_chat">{t('allowChat')}</Label>
+                    <Label htmlFor="allowChat">{t('allowChat')}</Label>
                     <p className="text-sm text-muted-foreground">
                       {t('allowChatDesc')}
                     </p>
                   </div>
                   <Switch
-                    id="allow_chat"
-                    checked={formData.allow_chat}
-                    onCheckedChange={(checked) => handleChange('allow_chat', checked)}
+                    id="allowChat"
+                    checked={formData.allowChat}
+                    onCheckedChange={(checked) => handleChange('allowChat', checked)}
                     disabled={isLoading}
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="allow_file_access">{t('allowFileAccess')}</Label>
+                    <Label htmlFor="allowFileAccess">{t('allowFileAccess')}</Label>
                     <p className="text-sm text-muted-foreground">
                       {t('allowFileAccessDesc')}
                     </p>
                   </div>
                   <Switch
-                    id="allow_file_access"
-                    checked={formData.allow_file_access}
-                    onCheckedChange={(checked) => handleChange('allow_file_access', checked)}
+                    id="allowFileAccess"
+                    checked={formData.allowFileAccess}
+                    onCheckedChange={(checked) => handleChange('allowFileAccess', checked)}
                     disabled={isLoading}
                   />
                 </div>

@@ -29,13 +29,13 @@ export default function CreateModulePage() {
       const newModule = await apiClient.post<{ id: number }>('/modules/', {
         name: data.name,
         code: data.code,
-        system_prompt: data.system_prompt,
+        systemPrompt: data.systemPrompt,
         semester: data.semester,
         year: data.year,
-        course_id: data.course_id,
+        courseId: data.courseId,
         description: data.description,
-        ai_model_id: data.ai_model_id,
-        tutor_language: data.tutor_language
+        aiModelId: data.aiModelId,
+        tutorLanguage: data.tutorLanguage
       });
 
       // Redirecionar para a página de detalhes do módulo para upload de arquivos

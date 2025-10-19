@@ -65,19 +65,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     id: userData.id,
                     username: userData.username,
                     email: userData.email,
-                    first_name: userData.first_name,
-                    last_name: userData.last_name,
-                    user_type: userData.user_type || userData.role,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    userType: userData.userType || userData.role,
                     role: userData.role,
-                    is_active: userData.is_active !== undefined ? userData.is_active : true,
-                    university_id: userData.university_id,
-                    is_admin: userData.is_admin || false,
-                    assigned_courses: userData.assigned_courses || [],
-                    created_at: userData.created_at || new Date().toISOString(),
-                    updated_at: userData.updated_at || new Date().toISOString(),
-                    last_login_at: userData.last_login_at,
-                    theme_preference: userData.theme_preference,
-                    language_preference: userData.language_preference,
+                    isActive: userData.isActive !== undefined ? userData.isActive : true,
+                    universityId: userData.universityId,
+                    isAdmin: userData.isAdmin || false,
+                    assignedCourses: userData.assignedCourses || [],
+                    createdAt: userData.createdAt || new Date().toISOString(),
+                    updatedAt: userData.updatedAt || new Date().toISOString(),
+                    lastLoginAt: userData.lastLoginAt,
+                    themePreference: userData.themePreference,
+                    languagePreference: userData.languagePreference,
                   };
 
                   localStorage.setItem('tutoria_user', JSON.stringify(user));
@@ -124,9 +124,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Make API call directly since we need to send 'username' not 'email'
       const response = await apiClient.login({ username, password });
 
-      if (response.access_token) {
+      if (response.accessToken) {
         // Set token first so the /me endpoint can use it
-        apiClient.setToken(response.access_token);
+        apiClient.setToken(response.accessToken);
 
         // Fetch full user data from /me endpoint
         const userData = await apiClient.getCurrentUser();
@@ -135,27 +135,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           id: userData.id,
           username: userData.username,
           email: userData.email,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          user_type: userData.user_type || userData.role,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          userType: userData.userType || userData.role,
           role: userData.role,
-          is_active: userData.is_active !== undefined ? userData.is_active : true,
-          university_id: userData.university_id,
-          is_admin: userData.is_admin || false,
-          assigned_courses: userData.assigned_courses || [],
-          created_at: userData.created_at || new Date().toISOString(),
-          updated_at: userData.updated_at || new Date().toISOString(),
-          last_login_at: userData.last_login_at,
-          theme_preference: userData.theme_preference,
-          language_preference: userData.language_preference,
+          isActive: userData.isActive !== undefined ? userData.isActive : true,
+          universityId: userData.universityId,
+          isAdmin: userData.isAdmin || false,
+          assignedCourses: userData.assignedCourses || [],
+          createdAt: userData.createdAt || new Date().toISOString(),
+          updatedAt: userData.updatedAt || new Date().toISOString(),
+          lastLoginAt: userData.lastLoginAt,
+          themePreference: userData.themePreference,
+          languagePreference: userData.languagePreference,
         };
 
         // Store in localStorage for persistence
         if (typeof window !== 'undefined') {
           localStorage.setItem('tutoria_user', JSON.stringify(user));
-          localStorage.setItem('tutoria_token', response.access_token);
-          if (response.refresh_token) {
-            localStorage.setItem('tutoria_refresh_token', response.refresh_token);
+          localStorage.setItem('tutoria_token', response.accessToken);
+          if (response.refreshToken) {
+            localStorage.setItem('tutoria_refresh_token', response.refreshToken);
           }
 
           // Dispatch custom event to notify language provider of user update

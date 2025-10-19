@@ -41,19 +41,19 @@ class AuthService {
       });
       
       // Decode JWT token to get user info (simplified - in production use a JWT library)
-      const userInfo = this.decodeToken(response.access_token);
+      const userInfo = this.decodeToken(response.accessToken);
       
       if (!userInfo) {
         throw new Error('Invalid token received');
       }
 
       this.user = userInfo;
-      this.token = response.access_token;
+      this.token = response.accessToken;
       
       // Store in localStorage
       if (typeof window !== 'undefined') {
         localStorage.setItem('tutoria_user', JSON.stringify(userInfo));
-        localStorage.setItem('tutoria_token', response.access_token);
+        localStorage.setItem('tutoria_token', response.accessToken);
       }
       
       // Schedule token refresh
@@ -114,19 +114,19 @@ class AuthService {
         id: payload.sub || payload.user_id,
         username: payload.username,
         email: payload.email,
-        first_name: payload.first_name,
-        last_name: payload.last_name,
-        user_type: payload.type, // Use 'type' from JWT payload
-        role: payload.type, // Alias for user_type (backwards compatibility)
-        is_active: payload.is_active !== undefined ? payload.is_active : true,
-        university_id: payload.university_id,
-        is_admin: payload.is_admin,
-        assigned_courses: payload.assigned_courses,
-        created_at: payload.created_at || new Date().toISOString(),
-        updated_at: payload.updated_at || new Date().toISOString(),
-        last_login_at: payload.last_login_at,
-        theme_preference: payload.theme_preference,
-        language_preference: payload.language_preference,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        userType: payload.type, // Use 'type' from JWT payload
+        role: payload.type, // Alias for userType (backwards compatibility)
+        isActive: payload.is_active !== undefined ? payload.is_active : true,
+        universityId: payload.universityId,
+        isAdmin: payload.isAdmin,
+        assignedCourses: payload.assignedCourses,
+        createdAt: payload.created_at || new Date().toISOString(),
+        updatedAt: payload.updated_at || new Date().toISOString(),
+        lastLoginAt: payload.last_login_at,
+        themePreference: payload.theme_preference,
+        languagePreference: payload.languagePreference,
       };
     } catch (error) {
       console.error('Failed to decode token:', error);
@@ -146,11 +146,11 @@ class AuthService {
       try {
         const response = await apiClient.refreshToken();
         
-        if (response.access_token) {
-          this.token = response.access_token;
+        if (response.accessToken) {
+          this.token = response.accessToken;
           
           if (typeof window !== 'undefined') {
-            localStorage.setItem('tutoria_token', response.access_token);
+            localStorage.setItem('tutoria_token', response.accessToken);
           }
           
           // Schedule next refresh

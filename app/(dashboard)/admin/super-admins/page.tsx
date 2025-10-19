@@ -23,7 +23,7 @@ export default function SuperAdminsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [sortColumn, setSortColumn] = useState<string | null>('first_name');
+  const [sortColumn, setSortColumn] = useState<string | null>('firstName');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [confirmDialog, setConfirmDialog] = useState<{
     open: boolean;
@@ -52,17 +52,17 @@ export default function SuperAdminsPage() {
       const users = await apiClient.getUsersByType('super_admin');
       // Map UserResponse to SuperAdmin interface
       const admins: SuperAdmin[] = users.map((user) => ({
-        id: user.user_id,
+        id: user.userId,
         username: user.username,
         email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        is_active: user.is_active,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-        last_login_at: user.last_login_at,
-        language_preference: user.language_preference,
-        theme_preference: user.theme_preference,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        lastLoginAt: user.lastLoginAt,
+        languagePreference: user.languagePreference,
+        themePreference: user.themePreference,
       }));
       setSuperAdmins(admins);
     } catch (error: unknown) {
@@ -86,7 +86,7 @@ export default function SuperAdminsPage() {
       open: true,
       type: 'deactivate',
       adminId: admin.id,
-      adminName: `${admin.first_name} ${admin.last_name}`
+      adminName: `${admin.firstName} ${admin.lastName}`
     });
   };
 
@@ -144,7 +144,7 @@ export default function SuperAdminsPage() {
             <Shield className="h-5 w-5 text-red-600" />
           </div>
           <div>
-            <div className="font-medium">{admin.first_name} {admin.last_name}</div>
+            <div className="font-medium">{admin.firstName} {admin.lastName}</div>
             <div className="text-sm text-muted-foreground flex items-center">
               <Mail className="h-3 w-3 mr-1" />
               {admin.email}
@@ -178,7 +178,7 @@ export default function SuperAdminsPage() {
       key: 'status',
       label: t('columns.status'),
       render: (_, admin) => (
-        admin.is_active ? (
+        admin.isActive ? (
           <Badge variant="default" className="bg-green-100 text-green-800">
             {t('columns.active')}
           </Badge>
@@ -213,7 +213,7 @@ export default function SuperAdminsPage() {
           >
             <Key className="h-4 w-4 text-blue-600" />
           </Button>
-          {admin.is_active ? (
+          {admin.isActive ? (
             <Button
               variant="ghost"
               size="sm"
@@ -256,7 +256,7 @@ export default function SuperAdminsPage() {
       open: true,
       type: 'delete',
       adminId: admin.id,
-      adminName: `${admin.first_name} ${admin.last_name}`
+      adminName: `${admin.firstName} ${admin.lastName}`
     });
   };
 
@@ -286,8 +286,8 @@ export default function SuperAdminsPage() {
 
   // Filtrar super admins baseado na busca
   const filteredSuperAdmins = superAdmins.filter(admin =>
-    admin.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    admin.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    admin.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     admin.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -300,8 +300,8 @@ export default function SuperAdminsPage() {
     
     // Para o campo 'name', ordenar por first_name
     if (sortColumn === 'name') {
-      aValue = a.first_name;
-      bValue = b.first_name;
+      aValue = a.firstName;
+      bValue = b.firstName;
     }
     
     if (aValue === null || aValue === undefined) return 1;
