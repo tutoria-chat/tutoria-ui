@@ -5,12 +5,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { UserCircle, Mail, Key, ArrowRight, AlertCircle, XCircle } from 'lucide-react';
+import { UserCircle, Mail, Key, ArrowRight, AlertCircle, XCircle, RefreshCcw } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useLanguage } from '@/components/providers/language-provider';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { ErrorBoundary } from '@/components/ui/error-boundary';
 import type { Locale } from '@/i18n/config';
 import Image from 'next/image';
 
@@ -30,13 +31,16 @@ function WelcomeForm() {
   } | null>(null);
   const [verifying, setVerifying] = useState(true);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     const tokenParam = searchParams.get('token');
     const usernameParam = searchParams.get('username');
 
     if (!tokenParam || !usernameParam) {
-      toast.error(t('invalidLink'));
+      const message = t('invalidLink') || 'Invalid password reset link. Missing required parameters.';
+      setErrorMessage(message);
+      toast.error(message);
       setTimeout(() => router.push('/login'), 3000);
       setVerifying(false);
       setError(true);
@@ -68,8 +72,10 @@ function WelcomeForm() {
           email: response.email || '',
           user_type: response.user_type || 'professor',
         });
-      } catch (error) {
+      } catch (error: any) {
         console.error('Failed to verify token:', error);
+        const message = error?.message || t('tokenInvalid') || 'Token verification failed. The link may have expired.';
+        setErrorMessage(message);
         setError(true);
         toast.error(t('tokenInvalid'));
         setTimeout(() => router.push('/login'), 3000);
@@ -105,10 +111,32 @@ function WelcomeForm() {
           <CardHeader>
             <CardTitle className="flex items-center text-destructive">
               <XCircle className="mr-2 h-5 w-5" />
-              {t('errorTitle')}
+              {t('errorTitle') || 'Invalid Link'}
             </CardTitle>
-            <CardDescription>{t('errorDescription')}</CardDescription>
+            <CardDescription>{errorMessage || t('errorDescription') || 'The password reset link is invalid or has expired.'}</CardDescription>
           </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+              <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <AlertDescription className="text-amber-900 dark:text-amber-100 text-sm">
+                {t('errorHelp') || 'You will be redirected to the login page. Please request a new password reset link.'}
+              </AlertDescription>
+            </Alert>
+
+            <div className="flex gap-3">
+              <Button onClick={() => router.push('/login')} className="flex-1">
+                Go to Login
+              </Button>
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+                className="flex-1"
+              >
+                <RefreshCcw className="mr-2 h-4 w-4" />
+                Retry
+              </Button>
+            </div>
+          </CardContent>
         </Card>
       </div>
     );
@@ -216,14 +244,16 @@ function WelcomeForm() {
 
 export default function WelcomePage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <LoadingSpinner size="xl" className="text-primary" />
+    <ErrorBoundary>
+      <Suspense fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="flex flex-col items-center gap-4">
+            <LoadingSpinner size="xl" className="text-primary" />
+          </div>
         </div>
-      </div>
-    }>
-      <WelcomeForm />
-    </Suspense>
+      }>
+        <WelcomeForm />
+      </Suspense>
+    </ErrorBoundary>
   );
 }

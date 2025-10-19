@@ -1213,6 +1213,8 @@
     "passwordChangeError": "Failed to change password. Please verify your current password.",
     "successTitle": "Password Changed Successfully",
     "successDescription": "Your password has been updated. You will be redirected to the dashboard shortly.",
+    "successDescriptionRelogin": "Your password has been updated. You will need to log in again for security.",
+    "reloginNotice": "For security, you will need to log in again with your new password.",
     "backToDashboard": "Back to Dashboard"
   },
   "settings": {

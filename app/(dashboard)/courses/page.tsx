@@ -9,7 +9,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ProfessorOnly } from '@/components/auth/role-guard';
+import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
@@ -146,13 +146,15 @@ export default function CoursesPage() {
             </Link>
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleDelete(course.id)}
-          >
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
+          <AdminOnly>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleDelete(course.id)}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </AdminOnly>
         </div>
       )
     }

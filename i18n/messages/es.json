@@ -1211,6 +1211,8 @@
     "passwordChangeError": "Error al cambiar la contraseña. Verifica tu contraseña actual.",
     "successTitle": "Contraseña Cambiada Exitosamente",
     "successDescription": "Tu contraseña ha sido actualizada. Serás redirigido al panel en breve.",
+    "successDescriptionRelogin": "Tu contraseña ha sido actualizada. Deberás iniciar sesión nuevamente por seguridad.",
+    "reloginNotice": "Por seguridad, deberás iniciar sesión nuevamente con tu nueva contraseña.",
     "backToDashboard": "Volver al Panel"
   },
   "settings": {

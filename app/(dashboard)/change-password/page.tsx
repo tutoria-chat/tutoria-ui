@@ -8,13 +8,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import { Lock, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Lock, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 
-export default function ChangePasswordPage() {
+function ChangePasswordForm() {
   const router = useRouter();
   const t = useTranslations('changePassword');
   const [loading, setLoading] = useState(false);
@@ -86,7 +87,9 @@ export default function ChangePasswordPage() {
       }, 2000);
     } catch (error: any) {
       console.error('Error changing password:', error);
-      toast.error(error.message || t('passwordChangeError'));
+      const errorMessage = error?.message || t('passwordChangeError') || 'Failed to change password. Please try again.';
+      toast.error(errorMessage);
+      setErrors({ submit: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -229,5 +232,13 @@ export default function ChangePasswordPage() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function ChangePasswordPage() {
+  return (
+    <ErrorBoundary>
+      <ChangePasswordForm />
+    </ErrorBoundary>
   );
 }

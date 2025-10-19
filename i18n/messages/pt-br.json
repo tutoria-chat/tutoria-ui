@@ -1211,6 +1211,8 @@
     "passwordChangeError": "Falha ao alterar senha. Verifique sua senha atual.",
     "successTitle": "Senha Alterada com Sucesso",
     "successDescription": "Sua senha foi atualizada. Você será redirecionado para o painel em breve.",
+    "successDescriptionRelogin": "Sua senha foi atualizada. Você precisará fazer login novamente por segurança.",
+    "reloginNotice": "Por segurança, você precisará fazer login novamente com sua nova senha.",
     "backToDashboard": "Voltar ao Painel"
   },
   "settings": {
