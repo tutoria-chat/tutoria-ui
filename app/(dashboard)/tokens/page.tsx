@@ -23,12 +23,12 @@ export default function TokensPage() {
   const t = useTranslations('tokens');
 
   // Build API URL with university filter for professors
-  const universityFilter = user?.universityId && user.role !== 'super_admin' ? `?university_id=${user.universityId}` : '';
-  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/${universityFilter}`);
+  const universityFilter = user?.universityId && user.role !== 'super_admin' ? `?universityId=${user.universityId}` : '';
+  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/ModuleAccessTokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [sortColumn, setSortColumn] = useState<string | null>('created_at');
+  const [sortColumn, setSortColumn] = useState<string | null>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('desc');
 
   // Modal state
@@ -131,7 +131,7 @@ export default function TokensPage() {
       )
     },
     {
-      key: 'module_name',
+      key: 'moduleName',
       label: t('columns.module'),
       sortable: true,
       render: (value) => (
@@ -175,10 +175,30 @@ export default function TokensPage() {
       )
     },
     {
-      key: 'expires_at',
+      key: 'usageCount',
+      label: t('columns.usageCount'),
+      sortable: true,
+      render: (value) => (
+        <span className="text-sm">{value || 0}</span>
+      )
+    },
+    {
+      key: 'expiresAt',
       label: t('columns.expiresAt'),
       sortable: true,
       render: (value) => value ? formatDateShort(value as string) : t('columns.never')
+    },
+    {
+      key: 'lastUsedAt',
+      label: t('columns.lastUsedAt'),
+      sortable: true,
+      render: (value) => value ? formatDateShort(value as string) : t('columns.never')
+    },
+    {
+      key: 'createdAt',
+      label: t('columns.createdAt'),
+      sortable: true,
+      render: (value) => formatDateShort(value as string)
     },
     {
       key: 'isActive',

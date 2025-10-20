@@ -42,15 +42,18 @@ import type {
 } from './types';
 
 export const API_CONFIG = {
-  // C# API (Management & Auth endpoints)
+  // C# Management API (Universities, Courses, Modules, Files, Tokens)
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api',
+  // Auth API (Separate host for authentication endpoints)
+  authBaseURL: process.env.NEXT_PUBLIC_AUTH_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002/api',
   // Python API (AI/Tutor endpoints - improve-prompt only)
-  pythonBaseURL: process.env.NEXT_PUBLIC_PYTHON_API_URL || 'http://localhost:8000/api/v2',
+  pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
   timeout: 30000,
 } as const;
 
 class TutoriaAPIClient {
   private baseURL: string;
+  private authBaseURL: string;
   private pythonBaseURL: string;
   private timeout: number;
   private token: string | null = null;
@@ -59,26 +62,27 @@ class TutoriaAPIClient {
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
+    this.authBaseURL = config.authBaseURL;
     this.pythonBaseURL = config.pythonBaseURL;
     this.timeout = config.timeout;
 
     // Initialize token from localStorage if available
     if (typeof window !== 'undefined') {
-      this.token = localStorage.getItem('auth-token');
+      this.token = localStorage.getItem('tutoria_token');
     }
   }
 
   setToken(token: string) {
     this.token = token;
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth-token', token);
+      localStorage.setItem('tutoria_token', token);
     }
   }
 
   clearToken() {
     this.token = null;
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth-token');
+      localStorage.removeItem('tutoria_token');
     }
   }
 
@@ -98,8 +102,8 @@ class TutoriaAPIClient {
           return false;
         }
 
-        // Call refresh endpoint
-        const response = await fetch(`${this.baseURL}/auth/refresh`, {
+        // Call refresh endpoint (use auth API)
+        const response = await fetch(`${this.authBaseURL}/auth/refresh`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${refreshToken}`,
@@ -136,9 +140,13 @@ class TutoriaAPIClient {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
+    useAuthAPI: boolean = false,
     usePythonAPI: boolean = false
   ): Promise<T> {
-    const baseUrl = usePythonAPI ? this.pythonBaseURL : this.baseURL;
+    // Determine which API host to use
+    const baseUrl = usePythonAPI ? this.pythonBaseURL :
+                    useAuthAPI ? this.authBaseURL :
+                    this.baseURL;
     const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
@@ -201,7 +209,7 @@ class TutoriaAPIClient {
 
         if (refreshed) {
           // Retry the original request with new token
-          return this.request<T>(endpoint, options);
+          return this.request<T>(endpoint, options, useAuthAPI, usePythonAPI);
         } else {
           // Refresh failed, clear token and redirect to login
           this.clearToken();
@@ -233,7 +241,7 @@ class TutoriaAPIClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, unknown> | object, usePythonAPI = false): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown> | object, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
@@ -245,10 +253,10 @@ class TutoriaAPIClient {
     const queryString = searchParams.toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
-    return this.request<T>(url, { method: 'GET' }, usePythonAPI);
+    return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI);
   }
 
-  async post<T>(endpoint: string, data?: unknown, isFormData = false, usePythonAPI = false): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, isFormData = false, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
@@ -271,90 +279,108 @@ class TutoriaAPIClient {
       method: 'POST',
       headers: headers as unknown as HeadersInit,
       body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
-    }, usePythonAPI);
+    }, useAuthAPI, usePythonAPI);
   }
 
-  async put<T>(endpoint: string, data?: unknown, usePythonAPI = false): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-    }, usePythonAPI);
+    }, useAuthAPI, usePythonAPI);
   }
 
-  async delete<T>(endpoint: string, usePythonAPI = false): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' }, usePythonAPI);
+  async delete<T>(endpoint: string, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+    return this.request<T>(endpoint, { method: 'DELETE' }, useAuthAPI, usePythonAPI);
   }
 
-  async patch<T>(endpoint: string, data?: unknown, usePythonAPI = false): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-    }, usePythonAPI);
+    }, useAuthAPI, usePythonAPI);
   }
 
-  // Authentication endpoints
+  // Authentication endpoints (use Next.js API route for secure server-side client authentication)
   async login(credentials: { username: string; password: string }): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/auth/login', credentials);
-    if (response.accessToken) {
-      this.setToken(response.accessToken);
+    // Call Next.js API route instead of Auth API directly
+    // This keeps client_id/client_secret secure on the server
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.detail || errorData.message || `HTTP error! status: ${response.status}`;
+      throw new Error(errorMessage);
     }
-    return response;
+
+    const data: TokenResponse = await response.json();
+
+    if (data.accessToken) {
+      this.setToken(data.accessToken);
+    }
+
+    return data;
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/auth/refresh');
+    const response = await this.post<TokenResponse>('/auth/refresh', undefined, false, true);
     if (response.accessToken) {
       this.setToken(response.accessToken);
     }
     return response;
   }
 
-  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
-    return this.post('/auth/reset-password-request', { username, user_type: userType });
+  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
+    return this.post('/auth/reset-password-request', { username, userType }, false, true);
   }
 
   async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
-    return this.get('/auth/verify-reset-token', { username, reset_token: token });
+    return this.get('/auth/verify-reset-token', { username, resetToken: token }, true);
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/auth/reset-password?username=${username}&reset_token=${token}`, { new_password: newPassword });
+    return this.post(`/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
-    return this.put('/auth/password', { current_password: currentPassword, new_password: newPassword });
+    return this.put('/auth/password', { currentPassword, newPassword }, true);
   }
 
-  async getCurrentUser(): Promise<User> {
-    return this.get('/auth/me');
+  async getCurrentUser(): Promise<UserResponse> {
+    return this.get('/auth/me', undefined, true);
   }
 
-  async updateUserPreferences(data: { theme_preference?: string; language_preference?: string }): Promise<{ message: string }> {
-    return this.put('/auth/preferences', data);
+  async updateUserPreferences(data: { themePreference?: string; languagePreference?: string }): Promise<{ message: string }> {
+    return this.put('/auth/preferences', data, true);
   }
 
   async deactivateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/deactivate`);
+    return this.patch(`/auth/users/${userId}/deactivate`, undefined, true);
   }
 
   async activateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/activate`);
+    return this.patch(`/auth/users/${userId}/activate`, undefined, true);
   }
 
   async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
-    return this.delete(`/auth/users/${userId}`);
+    return this.delete(`/auth/users/${userId}`, true);
   }
 
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
-    return this.get('/auth/users/', { user_type: userType });
+    return this.get('/auth/users/', { userType }, true);
   }
 
   async getUser(userId: number): Promise<UserResponse> {
-    return this.get(`/auth/users/${userId}`);
+    return this.get(`/auth/users/${userId}`, undefined, true);
   }
 
-  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
-    return this.put(`/auth/users/${userId}`, data);
+  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
+    return this.put(`/auth/users/${userId}`, data, true);
   }
 
   // University endpoints
@@ -400,7 +426,8 @@ class TutoriaAPIClient {
   }
 
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
-    return this.get(`/courses/`, { universityId: universityId });
+    const response = await this.get<PaginatedResponse<Course>>(`/courses/`, { universityId, size: 1000 });
+    return response.items;
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {
@@ -508,11 +535,11 @@ class TutoriaAPIClient {
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
-      user_type: 'professor',
+      userType: 'professor',
       universityId: data.universityId,
       isAdmin: data.isAdmin,
       languagePreference: data.languagePreference || 'pt-br',
-    });
+    }, false, true);
 
     // Map backend UserResponse to Professor interface
     return {
@@ -542,7 +569,7 @@ class TutoriaAPIClient {
   }
 
   async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
-    return this.put(`/professors/${id}/password`, { new_password: newPassword });
+    return this.put(`/professors/${id}/password`, { newPassword });
   }
 
   async getProfessorCourses(id: number): Promise<{ courseIds: number[] }> {
@@ -576,23 +603,23 @@ class TutoriaAPIClient {
 
   // Module Token endpoints
   async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
-    return this.get('/module-tokens/', params);
+    return this.get('/ModuleAccessTokens/', params);
   }
 
   async createModuleToken(data: ModuleAccessTokenCreate): Promise<ModuleAccessToken> {
-    return this.post('/module-tokens/', data);
+    return this.post('/ModuleAccessTokens/', data);
   }
 
   async getModuleToken(id: number): Promise<ModuleAccessToken> {
-    return this.get(`/module-tokens/${id}`);
+    return this.get(`/ModuleAccessTokens/${id}`);
   }
 
   async updateModuleToken(id: number, data: ModuleAccessTokenUpdate): Promise<ModuleAccessToken> {
-    return this.put(`/module-tokens/${id}`, data);
+    return this.put(`/ModuleAccessTokens/${id}`, data);
   }
 
   async deleteModuleToken(id: number): Promise<void> {
-    return this.delete(`/module-tokens/${id}`);
+    return this.delete(`/ModuleAccessTokens/${id}`);
   }
 
   // Super Admin endpoints
@@ -627,10 +654,10 @@ class TutoriaAPIClient {
       firstName: data.firstName,
       lastName: data.lastName,
       password: data.password,
-      user_type: 'super_admin',
+      userType: 'super_admin',
       isAdmin: true, // Super admins are always admins
       languagePreference: data.languagePreference || 'pt-br',
-    });
+    }, false, true);
 
     // Map backend UserResponse to SuperAdmin interface
     return {

@@ -67,7 +67,7 @@ export default function UniversitiesPage() {
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('columns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)

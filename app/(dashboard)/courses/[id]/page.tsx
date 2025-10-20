@@ -27,7 +27,7 @@ import { AdminProfessorOnly, ProfessorOnly, AdminOnly } from '@/components/auth/
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
-import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { CourseWithDetails, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -40,15 +40,18 @@ export default function CourseDetailsPage() {
   const tCommon = useTranslations('common');
   const tModules = useTranslations('modules');
 
-  // Fetch course data from API
-  const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
-  const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(`/modules/?course_id=${courseId}`);
-  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?course_id=${courseId}`);
-
-  const allModules = modulesResponse?.items || [];
-  const professors = professorsResponse?.items || [];
-
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
+
+  // OPTIMIZED: Single API call returns course + modules + students
+  const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/courses/${courseId}`);
+
+  // Fetch professors (kept on page load due to backend authorization issues with lazy loading)
+  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
+    `/professors/?courseId=${courseId}`
+  );
+
+  const allModules = course?.modules || [];
+  const professors = professorsResponse?.items || [];
   const [semesterFilter, setSemesterFilter] = useState<string>('all');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -126,7 +129,7 @@ export default function CourseDetailsPage() {
         try {
           const { apiClient } = await import('@/lib/api');
           await apiClient.delete(`/modules/${moduleId}`);
-          refetchModules();
+          window.location.reload();
         } catch (error) {
           console.error('Erro ao deletar módulo:', error);
           toast.error(tModules('deleteError'));
@@ -167,7 +170,7 @@ export default function CourseDetailsPage() {
       )
     },
     {
-      key: 'files_count',
+      key: 'filesCount',
       label: t('modulesTab.files'),
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -177,14 +180,14 @@ export default function CourseDetailsPage() {
       )
     },
     {
-      key: 'tokens_count',
+      key: 'tokensCount',
       label: t('modulesTab.tokens'),
       render: (value) => (
         <Badge variant="outline">{t('modulesTab.tokensCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'updated_at',
+      key: 'updatedAt',
       label: t('modulesTab.lastUpdate'),
       render: (value) => formatDateShort(value as string)
     },
@@ -257,11 +260,6 @@ export default function CourseDetailsPage() {
           {value ? t('professorsTab.adminProfessor') : t('professorsTab.regularProfessor')}
         </Badge>
       )
-    },
-    {
-      key: 'courses_count',
-      label: t('professorsTab.totalCourses'),
-      render: (value) => t('professorsTab.coursesCount', { count: value || 0 })
     }
   ];
 
@@ -284,7 +282,7 @@ export default function CourseDetailsPage() {
 
             {canAddModule() && (
               <Button variant="outline" asChild>
-                <Link href={`/modules/create?course_id=${courseId}`}>
+                <Link href={`/modules/create?courseId=${courseId}`}>
                   <Plus className="mr-2 h-4 w-4" />
                   {t('addModule')}
                 </Link>
@@ -345,7 +343,7 @@ export default function CourseDetailsPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.studentsCount || 0}</p>
+                  <p className="text-2xl font-bold">{course?.students?.length || 0}</p>
                   <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
@@ -413,7 +411,7 @@ export default function CourseDetailsPage() {
           >
             {t('tabs.students')}
             <Badge variant="secondary" className="ml-2">
-              {course.studentsCount || 0}
+              {course?.students?.length || 0}
             </Badge>
           </button>
         </nav>

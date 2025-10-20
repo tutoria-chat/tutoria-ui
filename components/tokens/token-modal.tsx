@@ -15,6 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Loader2, Copy, XCircle, Eye, EyeOff, Check, ChevronsUpDown } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
+import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, cn } from '@/lib/utils';
 import type { Module, ModuleAccessToken, ModuleAccessTokenCreate, ModuleAccessTokenUpdate } from '@/lib/types';
@@ -34,6 +35,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
   const { user } = useAuth();
   const t = useTranslations('tokens.modal');
   const tCommon = useTranslations('common');
+  const { confirm, dialog } = useConfirmDialog();
   const [modules, setModules] = useState<Module[]>([]);
   const [loadingModules, setLoadingModules] = useState(false);
   const [showFullToken, setShowFullToken] = useState(false);
@@ -202,19 +204,27 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
     }
   };
 
-  const handleRevokeToken = async () => {
+  const handleRevokeToken = () => {
     if (!token) return;
-    if (!confirm(t('revokeConfirm'))) {
-      return;
-    }
-    try {
-      await apiClient.updateModuleToken(token.id, { isActive: false });
-      onSuccess();
-      onClose();
-    } catch (error) {
-      console.error('Error revoking token:', error);
-      toast.error(t('revokeError'));
-    }
+
+    confirm({
+      title: t('revokeTitle'),
+      description: t('revokeConfirm'),
+      variant: 'destructive',
+      confirmText: t('revokeToken'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.updateModuleToken(token.id, { isActive: false });
+          onSuccess();
+          onClose();
+          toast.success(t('revokeSuccess'));
+        } catch (error) {
+          console.error('Error revoking token:', error);
+          toast.error(t('revokeError'));
+        }
+      }
+    });
   };
 
   const getDialogTitle = () => {
@@ -577,6 +587,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
           </DialogFooter>
         </form>
       </DialogContent>
+      {dialog}
     </Dialog>
   );
 }

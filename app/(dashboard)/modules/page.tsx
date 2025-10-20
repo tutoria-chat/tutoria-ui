@@ -55,8 +55,8 @@ export default function ModulesPage() {
   // Build API URL with pagination params and university filter
   // Priority: URL parameter > user's university (for professors)
   const universityFilter = urlUniversityId
-    ? `&university_id=${urlUniversityId}`
-    : (user?.universityId && user.role !== 'super_admin' ? `&university_id=${user.universityId}` : '');
+    ? `&universityId=${urlUniversityId}`
+    : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
   const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get modules (paginated for display)

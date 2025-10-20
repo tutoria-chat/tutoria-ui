@@ -39,8 +39,8 @@ export default function CoursesPage() {
   // Build API URL with pagination params and university filter
   // Priority: URL parameter > user's university (for professors)
   const universityFilter = urlUniversityId
-    ? `&university_id=${urlUniversityId}`
-    : (user?.universityId && user.role !== 'super_admin' ? `&university_id=${user.universityId}` : '');
+    ? `&universityId=${urlUniversityId}`
+    : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
   const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get courses
@@ -83,7 +83,7 @@ export default function CoursesPage() {
       )
     },
     {
-      key: 'modules_count',
+      key: 'modulesCount',
       label: t('columns.modules'),
       sortable: true,
       render: (value) => (
@@ -93,7 +93,7 @@ export default function CoursesPage() {
       )
     },
     {
-      key: 'professors_count',
+      key: 'professorsCount',
       label: t('columns.professors'),
       sortable: true,
       render: (value) => (
@@ -104,7 +104,7 @@ export default function CoursesPage() {
       )
     },
     {
-      key: 'students_count',
+      key: 'studentsCount',
       label: t('columns.students'),
       sortable: true,
       render: (value) => (
@@ -115,7 +115,7 @@ export default function CoursesPage() {
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('columns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)

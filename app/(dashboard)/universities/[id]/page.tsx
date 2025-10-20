@@ -31,7 +31,7 @@ import { AdminOnly, ProfessorOnly, SuperAdminOnly } from '@/components/auth/role
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
-import type { University, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { UniversityWithCourses, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
@@ -68,11 +68,15 @@ export default function UniversityDetailsPage() {
     }
   }, [user, universityId]);
 
-  const { data: university, loading: universityLoading } = useFetch<University>(`/universities/${universityId}`);
-  const { data: coursesResponse, loading: coursesLoading } = useFetch<PaginatedResponse<Course>>(`/courses/?university_id=${universityId}&limit=100`);
-  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?university_id=${universityId}&limit=100`);
+  // OPTIMIZED: Single API call returns university + courses + counts
+  const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/universities/${universityId}`);
 
-  const courses = coursesResponse?.items || [];
+  // Fetch professors (kept on page load due to backend authorization issues with lazy loading)
+  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
+    `/professors/?universityId=${universityId}&limit=100`
+  );
+
+  const courses = university?.courses || [];
   const professors = professorsResponse?.items || [];
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -86,16 +90,16 @@ export default function UniversityDetailsPage() {
       setShowProfessorTypeDialog(true);
     } else {
       // If admin professor, go directly to create regular professor
-      router.push(`/professors/create?university_id=${universityId}`);
+      router.push(`/professors/create?universityId=${universityId}`);
     }
   };
 
   const handleSelectProfessorType = (type: 'regular' | 'admin') => {
     setShowProfessorTypeDialog(false);
     if (type === 'admin') {
-      router.push(`/professors/create-admin?university_id=${universityId}`);
+      router.push(`/professors/create-admin?universityId=${universityId}`);
     } else {
-      router.push(`/professors/create?university_id=${universityId}`);
+      router.push(`/professors/create?universityId=${universityId}`);
     }
   };
 
@@ -121,21 +125,21 @@ export default function UniversityDetailsPage() {
       )
     },
     {
-      key: 'modules_count',
+      key: 'modulesCount',
       label: t('courseColumns.modules'),
       render: (value) => (
         <Badge variant="outline">{t('courseColumns.modulesCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'professors_count',
+      key: 'professorsCount',
       label: t('courseColumns.professors'),
       render: (value) => (
         <Badge variant="outline">{t('courseColumns.professorsCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('courseColumns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
@@ -197,7 +201,7 @@ export default function UniversityDetailsPage() {
       )
     },
     {
-      key: 'courses_count',
+      key: 'coursesCount',
       label: t('professorColumns.courses'),
       render: (value) => (
         <span className="text-sm">{t('professorColumns.coursesCount', { count: value || 0 })}</span>
@@ -371,7 +375,7 @@ export default function UniversityDetailsPage() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{courses.length}</div>
+            <div className="text-2xl font-bold">{university?.coursesCount ?? 0}</div>
           </CardContent>
         </Card>
 
@@ -383,7 +387,7 @@ export default function UniversityDetailsPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{professors.length}</div>
+              <div className="text-2xl font-bold">{university?.professorsCount ?? 0}</div>
             </CardContent>
           </Card>
         </AdminOnly>
@@ -459,7 +463,7 @@ export default function UniversityDetailsPage() {
               </div>
               <AdminOnly>
                 <Button asChild>
-                  <Link href={`/courses/create?university_id=${universityId}`}>
+                  <Link href={`/courses/create?universityId=${universityId}`}>
                     <Plus className="mr-2 h-4 w-4" />
                     {t('coursesTab.newCourse')}
                   </Link>
@@ -471,7 +475,7 @@ export default function UniversityDetailsPage() {
             <DataTable
               data={courses}
               columns={courseColumns}
-              loading={coursesLoading}
+              loading={universityLoading}
               emptyMessage={t('coursesTab.emptyMessage')}
             />
           </CardContent>

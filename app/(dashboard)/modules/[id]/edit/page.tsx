@@ -66,7 +66,7 @@ export default function EditModulePage() {
   const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(null);
   const [showModelSelector, setShowModelSelector] = useState(false);
 
-  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
+  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?moduleId=${moduleId}`);
 
   const files = filesResponse?.items || [];
 

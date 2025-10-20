@@ -7,14 +7,14 @@ import { jwtDecode } from 'jwt-decode';
 import type { User, Permission, PermissionContext, UserRole } from '@/lib/types';
 
 interface JWTPayload {
-  user_id: number;
+  userId: number;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   type: UserRole;
-  university_id?: number;
-  is_admin?: boolean;
-  assigned_courses?: number[];
+  universityId?: number;
+  isAdmin?: boolean;
+  assignedCourses?: number[];
   exp: number;
   iat: number;
 }
@@ -54,25 +54,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
               const parsedUser = JSON.parse(storedUser);
 
-              // Check if user data is missing first_name (old format)
-              if (!parsedUser.first_name) {
+              // Check if user data is missing firstName (old format)
+              if (!parsedUser.firstName) {
                 console.log('Refreshing user data from /me endpoint...');
                 try {
                   // Fetch fresh user data from /me endpoint
                   const userData = await apiClient.getCurrentUser();
 
                   const user: User = {
-                    id: userData.id,
+                    id: userData.userId,
                     username: userData.username,
                     email: userData.email,
                     firstName: userData.firstName,
                     lastName: userData.lastName,
-                    userType: userData.userType || userData.role,
-                    role: userData.role,
+                    userType: userData.userType,
+                    role: userData.userType,
                     isActive: userData.isActive !== undefined ? userData.isActive : true,
                     universityId: userData.universityId,
                     isAdmin: userData.isAdmin || false,
-                    assignedCourses: userData.assignedCourses || [],
+                    assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
                     createdAt: userData.createdAt || new Date().toISOString(),
                     updatedAt: userData.updatedAt || new Date().toISOString(),
                     lastLoginAt: userData.lastLoginAt,
@@ -132,17 +132,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const userData = await apiClient.getCurrentUser();
 
         const user: User = {
-          id: userData.id,
+          id: userData.userId,
           username: userData.username,
           email: userData.email,
           firstName: userData.firstName,
           lastName: userData.lastName,
-          userType: userData.userType || userData.role,
-          role: userData.role,
+          userType: userData.userType,
+          role: userData.userType,
           isActive: userData.isActive !== undefined ? userData.isActive : true,
           universityId: userData.universityId,
           isAdmin: userData.isAdmin || false,
-          assignedCourses: userData.assignedCourses || [],
+          assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
           createdAt: userData.createdAt || new Date().toISOString(),
           updatedAt: userData.updatedAt || new Date().toISOString(),
           lastLoginAt: userData.lastLoginAt,

@@ -12,7 +12,7 @@ import type { ModuleCreate, ModuleUpdate, BreadcrumbItem } from '@/lib/types';
 export default function CreateModulePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const courseId = searchParams.get('course_id');
+  const courseId = searchParams.get('courseId');
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations('modules.create');
   const tCommon = useTranslations('common');

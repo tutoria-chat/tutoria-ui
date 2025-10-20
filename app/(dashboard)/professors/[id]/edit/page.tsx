@@ -67,13 +67,16 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
+      // Set assigned course IDs from professor data (included in the response now)
+      if (data.assignedCourseIds) {
+        setAssignedCourseIds(data.assignedCourseIds);
+        setOriginalAssignedCourseIds(data.assignedCourseIds);
+      }
+
       // Load courses for this professor's university
       if (data.universityId) {
         loadCourses(data.universityId);
       }
-
-      // Load assigned courses
-      loadAssignedCourses();
     } catch (error) {
       console.error('Failed to load professor:', error);
       setErrors({ load: t('loadError') });
@@ -92,20 +95,6 @@ export default function EditProfessorPage() {
       toast.error(t('errorLoadingCourses'));
     } finally {
       setIsLoadingCourses(false);
-    }
-  };
-
-  const loadAssignedCourses = async () => {
-    try {
-      // Get courses assigned to this professor
-      const result = await apiClient.getProfessorCourses(professorId);
-      const courseIds = result.courseIds || [];
-
-      setAssignedCourseIds(courseIds);
-      setOriginalAssignedCourseIds(courseIds);
-    } catch (error) {
-      console.error('Error loading assigned courses:', error);
-      toast.error(t('errorLoadingCourses'));
     }
   };
 

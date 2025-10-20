@@ -110,22 +110,25 @@ class AuthService {
       const payload = JSON.parse(jsonPayload);
       
       // Map JWT payload to User object
+      // ClaimTypes.Role maps to: "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+      const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role || payload.type;
+
       return {
         id: payload.sub || payload.user_id,
         username: payload.username,
         email: payload.email,
         firstName: payload.firstName,
         lastName: payload.lastName,
-        userType: payload.type, // Use 'type' from JWT payload
-        role: payload.type, // Alias for userType (backwards compatibility)
-        isActive: payload.is_active !== undefined ? payload.is_active : true,
+        userType: role, // Use standard ClaimTypes.Role from JWT
+        role: role, // Alias for userType (backwards compatibility)
+        isActive: payload.isActive !== undefined ? payload.isActive : true,
         universityId: payload.universityId,
         isAdmin: payload.isAdmin,
         assignedCourses: payload.assignedCourses,
-        createdAt: payload.created_at || new Date().toISOString(),
-        updatedAt: payload.updated_at || new Date().toISOString(),
-        lastLoginAt: payload.last_login_at,
-        themePreference: payload.theme_preference,
+        createdAt: payload.createdAt || new Date().toISOString(),
+        updatedAt: payload.updatedAt || new Date().toISOString(),
+        lastLoginAt: payload.lastLoginAt,
+        themePreference: payload.themePreference,
         languagePreference: payload.languagePreference,
       };
     } catch (error) {

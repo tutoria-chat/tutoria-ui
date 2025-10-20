@@ -122,7 +122,7 @@ export default function SuperAdminsPage() {
       const response = await apiClient.requestPasswordReset(admin.username, 'super_admin');
 
       // Copy reset link to clipboard - use setup-password page
-      const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.reset_token}`;
+      const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.resetToken}`;
       await navigator.clipboard.writeText(resetUrl);
 
       toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');

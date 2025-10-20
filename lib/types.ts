@@ -41,6 +41,8 @@ export interface UserResponse {
   governmentId?: string;
   externalId?: string;
   birthdate?: string;
+  studentCourseIds?: number[]; // For students
+  professorCourseIds?: number[]; // For professors
   languagePreference?: string;
   themePreference?: string;
   createdAt?: string;
@@ -58,6 +60,10 @@ export interface TokenResponse {
   refreshToken?: string;
   tokenType: string;
   expiresIn?: number;
+  // Minimal user info from login response
+  userId?: number;
+  username?: string;
+  userType?: UserRole;
 }
 
 export interface AuthResult {

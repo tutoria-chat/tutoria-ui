@@ -15,7 +15,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v2
 NEXT_PUBLIC_API_URL=http://localhost:5001/api
 
 # Python API (AI/Tutor endpoints - improve-prompt only)
-NEXT_PUBLIC_PYTHON_API_URL=http://localhost:8000/api/v2
+NEXT_PUBLIC_AI_API_URL=http://localhost:8000/api/v2
 ```
 
 ## Endpoint Mappings

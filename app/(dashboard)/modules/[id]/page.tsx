@@ -45,11 +45,11 @@ export default function ModuleDetailsPage() {
   const tCommon = useTranslations('common');
   const tTokens = useTranslations('tokens.columns');
 
-  const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module>(`/modules/${moduleId}`);
-  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?module_id=${moduleId}`);
-  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/?module_id=${moduleId}`);
+  // OPTIMIZED: Module endpoint returns files, so no separate call needed
+  const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module & { files?: FileType[] }>(`/modules/${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/?moduleId=${moduleId}`);
 
-  const files = filesResponse?.items || [];
+  const files = module?.files || [];
   const tokens = tokensResponse?.items || [];
 
   const [isUploading, setIsUploading] = useState(false);
@@ -107,10 +107,10 @@ export default function ModuleDetailsPage() {
       // Pass module_id and file name as query parameters
       await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
 
-      // Reset form and refetch files
+      // Reset form and reload page to show new file
       form.reset();
       setSelectedFile(null);
-      refetchFiles?.();
+      window.location.reload();
 
       toast.success(t('fileUploadSuccess'), {
         description: t('fileUploadSuccessDesc', { fileName: selectedFile.name }),
@@ -135,7 +135,7 @@ export default function ModuleDetailsPage() {
 
     try {
       await apiClient.deleteFile(fileId);
-      refetchFiles?.();
+      window.location.reload();
       toast.success(t('fileDeleteSuccess'), {
         description: t('fileDeleteSuccessDesc'),
       });
@@ -543,7 +543,7 @@ export default function ModuleDetailsPage() {
           <DataTable
             data={files || []}
             columns={fileColumns}
-            loading={filesLoading}
+            loading={moduleLoading}
             emptyMessage={t('noFiles')}
           />
         </CardContent>

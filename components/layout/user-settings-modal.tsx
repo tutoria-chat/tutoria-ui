@@ -49,8 +49,8 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
     setLoading(true);
     try {
       await apiClient.updateUser(user.id, {
-        first_name: firstName,
-        last_name: lastName,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         // Only send birthdate (governmentId and externalId are readonly, set by external system)
         birthdate: birthdate,
@@ -92,8 +92,8 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
     try {
       // Call API to update user preferences
       await apiClient.updateUserPreferences({
-        theme_preference: themePreference,
-        language_preference: languagePreference
+        themePreference: themePreference,
+        languagePreference: languagePreference
       });
 
       // Update localStorage
