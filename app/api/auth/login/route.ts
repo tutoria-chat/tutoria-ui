@@ -39,14 +39,13 @@ export async function POST(request: NextRequest) {
     // These are NEVER exposed to the browser
     const clientId = process.env.TUTORIA_CLIENT_ID;
     const clientSecret = process.env.TUTORIA_CLIENT_SECRET;
-    const authApiUrl = process.env.TUTORIA_AUTH_API_URL || process.env.NEXT_PUBLIC_AUTH_API_URL;
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     if (process.env.NODE_ENV === 'development') {
       console.log('[Next.js API Route] Environment variables:');
       console.log('  TUTORIA_CLIENT_ID:', clientId ? '✓ Set' : '✗ Missing');
       console.log('  TUTORIA_CLIENT_SECRET:', clientSecret ? '✓ Set' : '✗ Missing');
-      console.log('  TUTORIA_AUTH_API_URL:', authApiUrl || 'Not set, using NEXT_PUBLIC_AUTH_API_URL');
-      console.log('  Final Auth API URL:', authApiUrl);
+      console.log('  NEXT_PUBLIC_API_BASE_URL:', apiBaseUrl || '✗ Missing');
     }
 
     // Validate environment variables are configured
@@ -58,16 +57,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!authApiUrl) {
-      console.error('[Next.js API Route] Missing TUTORIA_AUTH_API_URL or NEXT_PUBLIC_AUTH_API_URL environment variable');
+    if (!apiBaseUrl) {
+      console.error('[Next.js API Route] Missing NEXT_PUBLIC_API_BASE_URL environment variable');
       return NextResponse.json(
-        { detail: 'Server configuration error: Auth API URL not configured' },
+        { detail: 'Server configuration error: API Base URL not configured' },
         { status: 500 }
       );
     }
 
     // Call Auth API with user credentials + client credentials
-    const authApiEndpoint = `${authApiUrl}/auth/login`;
+    const authApiEndpoint = `${apiBaseUrl}/api/auth/login`;
 
     if (process.env.NODE_ENV === 'development') {
       console.log('[Next.js API Route] Calling Auth API:', authApiEndpoint);
