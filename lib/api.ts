@@ -43,10 +43,10 @@ import type {
 } from './types';
 
 export const API_CONFIG = {
-  // C# Management API (Universities, Courses, Modules, Files, Tokens)
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api',
-  // Auth API (Separate host for authentication endpoints)
-  authBaseURL: process.env.NEXT_PUBLIC_AUTH_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002/api',
+  // C# Unified API (Management & Auth endpoints - now combined!)
+  // Management API: /api/universities, /api/courses, /api/modules, etc.
+  // Auth API: /api/auth/login, /api/auth/register, /api/auth/me, etc.
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6969',
   // Python API (AI/Tutor endpoints - improve-prompt only)
   pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
   timeout: 30000,
@@ -54,7 +54,6 @@ export const API_CONFIG = {
 
 class TutoriaAPIClient {
   private baseURL: string;
-  private authBaseURL: string;
   private pythonBaseURL: string;
   private timeout: number;
   private token: string | null = null;
@@ -65,7 +64,6 @@ class TutoriaAPIClient {
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
-    this.authBaseURL = config.authBaseURL;
     this.pythonBaseURL = config.pythonBaseURL;
     this.timeout = config.timeout;
 
@@ -116,8 +114,8 @@ class TutoriaAPIClient {
           return false;
         }
 
-        // Call refresh endpoint (use auth API)
-        const response = await fetch(`${this.authBaseURL}/auth/refresh`, {
+        // Call refresh endpoint
+        const response = await fetch(`${this.baseURL}/api/auth/refresh`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${refreshToken}`,
@@ -160,10 +158,8 @@ class TutoriaAPIClient {
     useAuthAPI: boolean = false,
     usePythonAPI: boolean = false
   ): Promise<T> {
-    // Determine which API host to use
-    const baseUrl = usePythonAPI ? this.pythonBaseURL :
-                    useAuthAPI ? this.authBaseURL :
-                    this.baseURL;
+    // Determine which API host to use (Python API or unified C# API)
+    const baseUrl = usePythonAPI ? this.pythonBaseURL : this.baseURL;
     const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
@@ -345,7 +341,7 @@ class TutoriaAPIClient {
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/auth/refresh', undefined, false, true);
+    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, false, true);
     if (response.accessToken) {
       this.setToken(response.accessToken);
     }
@@ -353,130 +349,130 @@ class TutoriaAPIClient {
   }
 
   async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
-    return this.post('/auth/reset-password-request', { username, userType }, false, true);
+    return this.post('/api/auth/reset-password-request', { username, userType }, false, true);
   }
 
   async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
-    return this.get('/auth/verify-reset-token', { username, resetToken: token }, true);
+    return this.get('/api/auth/verify-reset-token', { username, resetToken: token }, true);
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
+    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
-    return this.put('/auth/password', { currentPassword, newPassword }, true);
+    return this.put('/api/auth/password', { currentPassword, newPassword }, true);
   }
 
   async getCurrentUser(): Promise<UserResponse> {
-    return this.get('/auth/me', undefined, true);
+    return this.get('/api/auth/me', undefined, true);
   }
 
   async updateUserPreferences(data: { themePreference?: string; languagePreference?: string }): Promise<{ message: string }> {
-    return this.put('/auth/preferences', data, true);
+    return this.put('/api/auth/preferences', data, true);
   }
 
   async deactivateUser(userId: number): Promise<User> {
-    return this.patch(`/users/${userId}/deactivate`, undefined, false);
+    return this.patch(`/api/users/${userId}/deactivate`, undefined, false);
   }
 
   async activateUser(userId: number): Promise<User> {
-    return this.patch(`/users/${userId}/activate`, undefined, false);
+    return this.patch(`/api/users/${userId}/activate`, undefined, false);
   }
 
   async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
-    return this.delete(`/users/${userId}`, false);
+    return this.delete(`/api/users/${userId}`, false);
   }
 
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
     // Backend returns PaginatedResponse, extract items array
     // Request all items by using maximum page size as a workaround
-    const response = await this.get<PaginatedResponse<UserResponse>>('/users/', { userType, page: 1, size: PAGINATION.MAX_PAGE_SIZE }, false);
+    const response = await this.get<PaginatedResponse<UserResponse>>('/api/users/', { userType, page: 1, size: PAGINATION.MAX_PAGE_SIZE }, false);
     return response.items;
   }
 
   async getUser(userId: number): Promise<UserResponse> {
-    return this.get(`/users/${userId}`, undefined, false); // Management API
+    return this.get(`/api/users/${userId}`, undefined, false); // Management API
   }
 
   async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
-    return this.put(`/users/${userId}`, data, false); // Management API
+    return this.put(`/api/users/${userId}`, data, false); // Management API
   }
 
   // University endpoints
   async getUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
-    return this.get('/universities/', params);
+    return this.get('/api/universities/', params);
   }
 
   async createUniversity(data: UniversityCreate): Promise<University> {
-    return this.post('/universities/', data);
+    return this.post('/api/universities/', data);
   }
 
   async getUniversity(id: number): Promise<UniversityWithCourses> {
-    return this.get(`/universities/${id}`);
+    return this.get(`/api/universities/${id}`);
   }
 
   async updateUniversity(id: number, data: UniversityUpdate): Promise<University> {
-    return this.put(`/universities/${id}`, data);
+    return this.put(`/api/universities/${id}`, data);
   }
 
   async deleteUniversity(id: number): Promise<void> {
-    return this.delete(`/universities/${id}`);
+    return this.delete(`/api/universities/${id}`);
   }
 
   // Course endpoints
   async getCourses(params?: CourseFilters): Promise<PaginatedResponse<Course>> {
-    return this.get('/courses/', params);
+    return this.get('/api/courses/', params);
   }
 
   async createCourse(data: CourseCreate): Promise<Course> {
-    return this.post('/courses/', data);
+    return this.post('/api/courses/', data);
   }
 
   async getCourse(id: number): Promise<CourseWithDetails> {
-    return this.get(`/courses/${id}`);
+    return this.get(`/api/courses/${id}`);
   }
 
   async updateCourse(id: number, data: CourseUpdate): Promise<Course> {
-    return this.put(`/courses/${id}`, data);
+    return this.put(`/api/courses/${id}`, data);
   }
 
   async deleteCourse(id: number): Promise<void> {
-    return this.delete(`/courses/${id}`);
+    return this.delete(`/api/courses/${id}`);
   }
 
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
-    const response = await this.get<PaginatedResponse<Course>>(`/courses/`, { universityId, size: PAGINATION.MAX_PAGE_SIZE });
+    const response = await this.get<PaginatedResponse<Course>>(`/api/courses/`, { universityId, size: PAGINATION.MAX_PAGE_SIZE });
     return response.items;
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {
-    return this.post(`/courses/${courseId}/professors/${professorId}`);
+    return this.post(`/api/courses/${courseId}/professors/${professorId}`);
   }
 
   async unassignProfessorFromCourse(courseId: number, professorId: number): Promise<void> {
-    return this.delete(`/courses/${courseId}/professors/${professorId}`);
+    return this.delete(`/api/courses/${courseId}/professors/${professorId}`);
   }
 
   // Module endpoints
   async getModules(params?: ModuleFilters): Promise<PaginatedResponse<Module>> {
-    return this.get('/modules/', params);
+    return this.get('/api/modules/', params);
   }
 
   async createModule(data: ModuleCreate): Promise<Module> {
-    return this.post('/modules/', data);
+    return this.post('/api/modules/', data);
   }
 
   async getModule(id: number): Promise<ModuleWithDetails> {
-    return this.get(`/modules/${id}`);
+    return this.get(`/api/modules/${id}`);
   }
 
   async updateModule(id: number, data: ModuleUpdate): Promise<Module> {
-    return this.put(`/modules/${id}`, data);
+    return this.put(`/api/modules/${id}`, data);
   }
 
   async deleteModule(id: number): Promise<void> {
-    return this.delete(`/modules/${id}`);
+    return this.delete(`/api/modules/${id}`);
   }
 
   // AI/Tutor endpoints (Python API)
@@ -487,16 +483,16 @@ class TutoriaAPIClient {
 
   // AI Model endpoints
   async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
-    return this.get('/ai-models/', params);
+    return this.get('/api/ai-models/', params);
   }
 
   async getAIModel(id: number): Promise<AIModel> {
-    return this.get(`/ai-models/${id}`);
+    return this.get(`/api/ai-models/${id}`);
   }
 
   // File endpoints
   async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
-    return this.get('/files/', params);
+    return this.get('/api/files/', params);
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
@@ -506,32 +502,32 @@ class TutoriaAPIClient {
     if (fileName) {
       formData.append('name', fileName);
     }
-    return this.post('/files/', formData, true);
+    return this.post('/api/files/', formData, true);
   }
 
   async getFile(id: number): Promise<FileResponse> {
-    return this.get(`/files/${id}`);
+    return this.get(`/api/files/${id}`);
   }
 
   async updateFile(id: number, data: Partial<File>): Promise<File> {
-    return this.put(`/files/${id}`, data);
+    return this.put(`/api/files/${id}`, data);
   }
 
   async deleteFile(id: number): Promise<void> {
-    return this.delete(`/files/${id}`);
+    return this.delete(`/api/files/${id}`);
   }
 
   async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
-    return this.get(`/files/${id}/download`);
+    return this.get(`/api/files/${id}/download`);
   }
 
   // Professor endpoints
   async getProfessors(params?: ProfessorFilters): Promise<PaginatedResponse<Professor>> {
-    return this.get('/professors/', params);
+    return this.get('/api/professors/', params);
   }
 
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
-    // Use the unified /users endpoint (Management API)
+    // Use the unified /api/users endpoint (Management API)
     interface BackendUserResponse {
       userId: number;
       username: string;
@@ -550,7 +546,7 @@ class TutoriaAPIClient {
       themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/users', {
+    const response = await this.post<BackendUserResponse>('/api/users', {
       username: data.username,
       email: data.email,
       firstName: data.firstName,
@@ -582,78 +578,78 @@ class TutoriaAPIClient {
   }
 
   async getProfessor(id: number): Promise<Professor> {
-    return this.get(`/professors/${id}`);
+    return this.get(`/api/professors/${id}`);
   }
 
   async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
-    return this.put(`/professors/${id}`, data);
+    return this.put(`/api/professors/${id}`, data);
   }
 
   async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
-    return this.put(`/professors/${id}/password`, { newPassword });
+    return this.put(`/api/professors/${id}/password`, { newPassword });
   }
 
   async getProfessorCourses(id: number): Promise<{ courseIds: number[] }> {
-    return this.get(`/professors/${id}/courses`);
+    return this.get(`/api/professors/${id}/courses`);
   }
 
   async deleteProfessor(id: number): Promise<void> {
-    return this.delete(`/professors/${id}`);
+    return this.delete(`/api/professors/${id}`);
   }
 
   // Student endpoints
   async getStudents(params?: StudentFilters): Promise<PaginatedResponse<Student>> {
-    return this.get('/students/', params);
+    return this.get('/api/students/', params);
   }
 
   async createStudent(data: StudentCreate): Promise<Student> {
-    return this.post('/students/', data);
+    return this.post('/api/students/', data);
   }
 
   async getStudent(id: number): Promise<Student> {
-    return this.get(`/students/${id}`);
+    return this.get(`/api/students/${id}`);
   }
 
   async updateStudent(id: number, data: StudentUpdate): Promise<Student> {
-    return this.put(`/students/${id}`, data);
+    return this.put(`/api/students/${id}`, data);
   }
 
   async deleteStudent(id: number): Promise<void> {
-    return this.delete(`/students/${id}`);
+    return this.delete(`/api/students/${id}`);
   }
 
   // Module Token endpoints
   async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
-    return this.get('/moduleaccesstokens/', params);
+    return this.get('/api/moduleaccesstokens/', params);
   }
 
   async createModuleToken(data: ModuleAccessTokenCreate): Promise<ModuleAccessToken> {
-    return this.post('/moduleaccesstokens/', data);
+    return this.post('/api/moduleaccesstokens/', data);
   }
 
   async getModuleToken(id: number): Promise<ModuleAccessToken> {
-    return this.get(`/moduleaccesstokens/${id}`);
+    return this.get(`/api/moduleaccesstokens/${id}`);
   }
 
   async updateModuleToken(id: number, data: ModuleAccessTokenUpdate): Promise<ModuleAccessToken> {
-    return this.put(`/moduleaccesstokens/${id}`, data);
+    return this.put(`/api/moduleaccesstokens/${id}`, data);
   }
 
   async deleteModuleToken(id: number): Promise<void> {
-    return this.delete(`/moduleaccesstokens/${id}`);
+    return this.delete(`/api/moduleaccesstokens/${id}`);
   }
 
   // Super Admin endpoints
   async getSystemStats(): Promise<SystemStats> {
-    return this.get('/super-admin/stats');
+    return this.get('/api/super-admin/stats');
   }
 
   async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
-    return this.get('/super-admin/super-admins/', params);
+    return this.get('/api/super-admin/super-admins/', params);
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    // Use the unified /auth/users/create endpoint
+    // Use the unified /api/auth/users/create endpoint
     interface BackendUserResponse {
       userId: number;
       username: string;
@@ -669,7 +665,7 @@ class TutoriaAPIClient {
       themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+    const response = await this.post<BackendUserResponse>('/api/auth/users/create', {
       username: data.username,
       email: data.email,
       firstName: data.firstName,
@@ -697,20 +693,20 @@ class TutoriaAPIClient {
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
-    return this.put(`/super-admin/super-admins/${id}`, data);
+    return this.put(`/api/super-admin/super-admins/${id}`, data);
   }
 
   async getAllUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
-    return this.get('/super-admin/universities/all', params);
+    return this.get('/api/super-admin/universities/all', params);
   }
 
   async getAllProfessors(params?: PaginationParams): Promise<PaginatedResponse<Professor>> {
-    return this.get('/super-admin/professors/all', params);
+    return this.get('/api/super-admin/professors/all', params);
   }
 
   // AI Tutor endpoints
   async askTutor(question: TutorQuestion): Promise<TutorResponse> {
-    return this.post('/tutor/ask', question);
+    return this.post('/api/tutor/ask', question);
   }
 }
 
