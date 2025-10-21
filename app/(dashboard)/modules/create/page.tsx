@@ -26,7 +26,7 @@ export default function CreateModulePage() {
     setIsLoading(true);
     try {
       // Criar módulo via API
-      const newModule = await apiClient.post<{ id: number }>('/modules/', {
+      const newModule = await apiClient.post<{ id: number }>('/api/modules/', {
         name: data.name,
         code: data.code,
         systemPrompt: data.systemPrompt,

@@ -57,7 +57,7 @@ export default function ModulesPage() {
   const universityFilter = urlUniversityId
     ? `&universityId=${urlUniversityId}`
     : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
-  const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
+  const apiUrl = `/api/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get modules (paginated for display)
   const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);

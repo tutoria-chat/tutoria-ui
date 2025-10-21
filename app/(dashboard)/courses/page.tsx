@@ -62,7 +62,7 @@ export default function CoursesPage() {
     }
     // Super admin sees all courses (no filter)
 
-    return `/courses/?${filters}`;
+    return `/api/courses/?${filters}`;
   };
 
   // API call to get courses

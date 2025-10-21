@@ -25,7 +25,7 @@ export default function TokensPage() {
 
   // Build API URL with university filter for professors
   const universityFilter = user?.universityId && user.role !== 'super_admin' ? `?universityId=${user.universityId}` : '';
-  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/ModuleAccessTokens/${universityFilter}`);
+  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/api/moduleaccesstokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);

@@ -80,7 +80,7 @@ export default function ProfessorsPage() {
       }
 
       // Use unified Users endpoint to get professors (use Management API, not Auth API)
-      const response: { items: UserResponse[] } = await apiClient.get('/users/', params, false); // false = use Management API
+      const response: { items: UserResponse[] } = await apiClient.get('/api/users/', params, false); // false = use Management API
       // Map UserResponse to Professor interface
       const profs: Professor[] = response.items.map((user: UserResponse) => ({
         id: user.userId,

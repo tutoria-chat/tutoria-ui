@@ -30,7 +30,7 @@ export default function UniversitiesPage() {
   }, [user, router]);
 
   // API call to get universities (only for super_admin)
-  const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/universities/');
+  const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/api/universities/');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);

@@ -43,7 +43,7 @@ export default function CourseDetailsPage() {
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
   // Fetch course basic info
-  const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/courses/${courseId}`);
+  const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/api/courses/${courseId}`);
 
   // Pagination and filtering state for modules
   const [modulePage, setModulePage] = useState(1);
@@ -70,7 +70,7 @@ export default function CourseDetailsPage() {
       filters += `&year=${yearFilter}`;
     }
 
-    return `/modules/?${filters}`;
+    return `/api/modules/?${filters}`;
   };
 
   // Fetch modules with pagination
@@ -78,7 +78,7 @@ export default function CourseDetailsPage() {
 
   // Fetch professors
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
-    `/professors/?courseId=${courseId}`
+    `/api/professors/?courseId=${courseId}`
   );
 
   const modules = modulesResponse?.items || [];

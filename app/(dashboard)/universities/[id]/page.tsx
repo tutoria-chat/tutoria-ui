@@ -83,7 +83,7 @@ export default function UniversityDetailsPage() {
   }, [user, universityId]);
 
   // Fetch university details
-  const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/universities/${universityId}`);
+  const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/api/universities/${universityId}`);
 
   // Build courses API URL with pagination params and filters
   // Backend now handles role-based filtering:
@@ -105,7 +105,7 @@ export default function UniversityDetailsPage() {
       filters += `&professorId=${user.id}`;
     }
 
-    return `/courses/?${filters}`;
+    return `/api/courses/?${filters}`;
   };
 
   // Fetch courses with pagination
@@ -121,7 +121,7 @@ export default function UniversityDetailsPage() {
 
     filters += `&universityId=${universityId}`;
 
-    return `/professors/?${filters}`;
+    return `/api/professors/?${filters}`;
   };
 
   // Fetch professors ONLY for admin users (super admin or admin professor)

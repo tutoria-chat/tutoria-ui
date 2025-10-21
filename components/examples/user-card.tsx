@@ -14,7 +14,7 @@ interface UserCardProps {
 }
 
 export function UserCard({ userId }: UserCardProps) {
-  const { data: user, loading, error, refetch } = useFetch<User>(`/users/${userId}`);
+  const { data: user, loading, error, refetch } = useFetch<User>(`/api/users/${userId}`);
 
   if (loading) {
     return (

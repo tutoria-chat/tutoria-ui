@@ -57,8 +57,8 @@ export default function ModuleDetailsPage() {
   const tTokens = useTranslations('tokens.columns');
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
-  const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/modules/${moduleId}`);
-  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/moduleaccesstokens/?moduleId=${moduleId}`);
+  const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/api/modules/${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/api/moduleaccesstokens/?moduleId=${moduleId}`);
 
   const files = module?.files || [];
   const tokens = tokensResponse?.items || [];
