@@ -11,7 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
-import { Shield, Copy, Check, Mail, AlertCircle } from 'lucide-react';
+import { Shield, Mail, AlertCircle } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
@@ -22,17 +22,15 @@ export default function CreateSuperAdminPage() {
   const tMain = useTranslations('superAdmins');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [resetLink, setResetLink] = useState('');
-  const [copiedLink, setCopiedLink] = useState(false);
   const [newUser, setNewUser] = useState<any>(null);
 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    language_preference: 'pt-br',
+    languagePreference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,8 +46,8 @@ export default function CreateSuperAdminPage() {
 
     if (!formData.username.trim()) newErrors.username = t('usernameRequired');
     if (!formData.email.trim()) newErrors.email = t('emailRequired');
-    if (!formData.first_name.trim()) newErrors.first_name = t('firstNameRequired');
-    if (!formData.last_name.trim()) newErrors.last_name = t('lastNameRequired');
+    if (!formData.firstName.trim()) newErrors.firstName = t('firstNameRequired');
+    if (!formData.lastName.trim()) newErrors.lastName = t('lastNameRequired');
     if (!formData.password.trim()) newErrors.password = t('passwordRequired');
     if (formData.password.length < 6) newErrors.password = t('passwordMinLength');
 
@@ -78,13 +76,6 @@ export default function CreateSuperAdminPage() {
       const response = await apiClient.createSuperAdmin(formData);
 
       setNewUser(response);
-
-      // Request password reset token from backend using username + user_type
-      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'super_admin');
-      const resetToken = resetResponse.reset_token;
-      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
-      setResetLink(link);
-
       setShowSuccess(true);
       toast.success(t('createSuccess'));
     } catch (error: any) {
@@ -92,17 +83,6 @@ export default function CreateSuperAdminPage() {
       toast.error(error.message || t('createError'));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(resetLink);
-      setCopiedLink(true);
-      toast.success(t('linkCopySuccess'));
-      setTimeout(() => setCopiedLink(false), 2000);
-    } catch (error) {
-      toast.error(t('linkCopyError'));
     }
   };
 
@@ -123,7 +103,7 @@ export default function CreateSuperAdminPage() {
                 ✅ {t('successTitle')}
               </CardTitle>
               <CardDescription className="text-green-700 dark:text-green-200">
-                {t('successDescription', { name: `${newUser?.first_name} ${newUser?.last_name}` })}
+                {t('successDescription', { name: `${newUser?.firstName} ${newUser?.lastName}` })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -146,55 +126,21 @@ export default function CreateSuperAdminPage() {
 
           <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
             <CardHeader>
-              <CardTitle className="text-blue-900 dark:text-blue-50">🔗 {t('resetLinkTitle')}</CardTitle>
+              <CardTitle className="text-blue-900 dark:text-blue-50 flex items-center">
+                <Mail className="mr-2 h-5 w-5" />
+                {t('emailSentTitle')}
+              </CardTitle>
               <CardDescription className="text-blue-700 dark:text-blue-200">
-                {t('resetLinkDescription')}
+                {t('emailSentDescription', { email: formData.email })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Alert className="bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800">
-                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                <AlertDescription className="text-amber-900 dark:text-amber-100">
-                  <strong>⏱️ {t('resetLinkExpiry')}</strong> {t('resetLinkExpiryWarning')}
+              <Alert className="bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700">
+                <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <AlertDescription className="text-blue-900 dark:text-blue-100">
+                  {t('emailInstructions')}
                 </AlertDescription>
               </Alert>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900 dark:text-blue-50">{t('resetLinkLabel')}</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    value={resetLink}
-                    readOnly
-                    className="bg-white dark:bg-blue-900/50 font-mono text-sm"
-                  />
-                  <Button
-                    onClick={handleCopyLink}
-                    variant="outline"
-                    className="shrink-0"
-                  >
-                    {copiedLink ? (
-                      <>
-                        <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
-                        {t('linkCopied')}
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="mr-2 h-4 w-4" />
-                        {t('copyLink')}
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="p-4 bg-white dark:bg-blue-900/50 rounded border border-blue-200 dark:border-blue-700">
-                <p className="text-sm text-blue-900 dark:text-blue-50 font-medium mb-2">📋 {t('shareTitle')}</p>
-                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
-                  <li>{t('shareEmail')} <strong>{formData.email}</strong></li>
-                  <li>{t('shareMessaging')}</li>
-                  <li>{t('shareSecure')}</li>
-                </ul>
-              </div>
             </CardContent>
           </Card>
 
@@ -207,12 +153,11 @@ export default function CreateSuperAdminPage() {
               setFormData({
                 username: '',
                 email: '',
-                first_name: '',
-                last_name: '',
+                firstName: '',
+                lastName: '',
                 password: '',
-                language_preference: 'pt-br',
+                languagePreference: 'pt-br',
               });
-              setResetLink('');
               setNewUser(null);
             }}>
               {t('createAnother')}
@@ -250,28 +195,28 @@ export default function CreateSuperAdminPage() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
+                  <Label htmlFor="firstName">{t('firstNameLabel')}</Label>
                   <Input
-                    id="first_name"
-                    value={formData.first_name}
-                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     placeholder={t('firstNamePlaceholder')}
                   />
-                  {errors.first_name && (
-                    <p className="text-sm text-destructive">{errors.first_name}</p>
+                  {errors.firstName && (
+                    <p className="text-sm text-destructive">{errors.firstName}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
+                  <Label htmlFor="lastName">{t('lastNameLabel')}</Label>
                   <Input
-                    id="last_name"
-                    value={formData.last_name}
-                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     placeholder={t('lastNamePlaceholder')}
                   />
-                  {errors.last_name && (
-                    <p className="text-sm text-destructive">{errors.last_name}</p>
+                  {errors.lastName && (
+                    <p className="text-sm text-destructive">{errors.lastName}</p>
                   )}
                 </div>
               </div>
@@ -327,10 +272,10 @@ export default function CreateSuperAdminPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Label htmlFor="languagePreference">{t('languageLabel')}</Label>
                 <Select
-                  value={formData.language_preference}
-                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                  value={formData.languagePreference}
+                  onValueChange={(value) => setFormData({ ...formData, languagePreference: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t('languagePlaceholder')} />

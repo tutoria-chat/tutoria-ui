@@ -24,14 +24,14 @@
 
 ## High Priority (Ranked by Customer Value + Implementation Ease)
 
-### 3. **Dark Mode Setup** 🌙
-- [ ] Implement dark mode toggle in UI
-- [ ] **Backend**: Add user profile field to store theme preference
-- [ ] Persist user's theme choice in database
-- [ ] Apply theme consistently across all components
-- [ ] Test all UI components in both light and dark modes
+### 3. **Dark Mode Setup** 🌙 ✅ COMPLETED
+- [x] Implement dark mode toggle in UI
+- [x] **Backend**: Add user profile field to store theme preference
+- [x] Persist user's theme choice in database
+- [x] Apply theme consistently across all components
+- [x] Test all UI components in both light and dark modes
 
-**Estimated Effort**: Medium (requires backend changes)
+**Estimated Effort**: Medium (requires backend changes) ✅ COMPLETED
 **Customer Value**: High (modern UX expectation)
 
 ### 4. **Internationalization (i18n)** 🌍 ✅ COMPLETED
@@ -56,14 +56,14 @@
 **Estimated Effort**: Medium (requires backend updates)
 **Customer Value**: High (provides actionable insights)
 
-### 6. **Multi-Model Configuration for Modules** 🤖
-- [ ] UI for selecting AI model per module (OpenAI, Anthropic, etc.)
-- [ ] **Backend**: Support multiple AI providers in module configuration
-- [ ] **Backend**: Implement adapter pattern for different AI APIs
-- [ ] Add model-specific settings (temperature, max tokens, etc.)
-- [ ] Display model info to users
+### 6. **Multi-Model Configuration for Modules** 🤖 ✅ COMPLETED
+- [x] UI for selecting AI model per module (OpenAI, Anthropic, etc.)
+- [x] **Backend**: Support multiple AI providers in module configuration
+- [x] **Backend**: Implement adapter pattern for different AI APIs
+- [x] Add model-specific settings (temperature, max tokens, etc.)
+- [x] Display model info to users
 
-**Estimated Effort**: High (significant backend architecture)
+**Estimated Effort**: High (significant backend architecture) ✅ COMPLETED
 **Customer Value**: Medium-High (flexibility for power users)
 
 ### 7. **Super Admin UI Pages** 👑
@@ -73,6 +73,13 @@
 - [ ] System health monitoring
 - [ ] User management enhancements
 - [ ] Audit logs viewer
+- [ ] **AI Models Management UI** 🤖
+  - [ ] Create super admin page for managing AI models
+  - [ ] CRUD operations for AI models (create, edit, delete)
+  - [ ] Configure model settings (name, provider, max tokens, costs)
+  - [ ] Set default models for new modules
+  - [ ] Test AI model connectivity
+  - [ ] Display cost analytics per model
 
 **Estimated Effort**: Medium-High (depends on backend needs)
 **Customer Value**: Medium (admin tool improvements)
@@ -176,10 +183,10 @@
 |------|----------|---------|-------|------------|------|
 | ~~1. Logo~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
 | ~~2. Colors~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
-| 3. Dark Mode | 4-6 | 4-6 | 8-12 | Low | Low |
+| ~~3. Dark Mode~~ | ~~4-6~~ | ~~4-6~~ | ~~8-12~~ | ~~Low~~ | ~~Low~~ |
 | ~~4. i18n~~ | ~~20-30~~ | ~~0~~ | ~~20-30~~ | ~~Medium~~ | ~~Low~~ |
 | 5. Dashboard Stats | 8-12 | 12-16 | 20-28 | Medium | Medium |
-| 6. Multi-Model AI | 8-12 | 20-30 | 28-42 | High | High |
+| ~~6. Multi-Model AI~~ | ~~8-12~~ | ~~20-30~~ | ~~28-42~~ | ~~High~~ | ~~High~~ |
 | 7. Super Admin UI | 12-16 | 16-24 | 28-40 | Medium-High | Medium |
 | 8. Notifications | 8-12 | 12-18 | 20-30 | High | Medium |
 | ~~9. CI/CD~~ | ~~2~~ | ~~0~~ | ~~2~~ | ~~Low~~ | ~~None~~ |
@@ -187,8 +194,8 @@
 | ~~11. Auth Refresh~~ | ~~6-8~~ | ~~0~~ | ~~6-8~~ | ~~Medium~~ | ~~Medium~~ |
 | ~~12. Token Modals~~ | ~~8-12~~ | ~~0~~ | ~~8-12~~ | ~~Low-Medium~~ | ~~Low~~ |
 | **TOTAL** | **84-130** | **64-94** | **148-224** | - | - |
-| **COMPLETED** | **38-52** | **0** | **38-52** | - | - |
-| **REMAINING** | **46-78** | **64-94** | **110-172** | - | - |
+| **COMPLETED** | **50-70** | **24-36** | **74-106** | - | - |
+| **REMAINING** | **34-60** | **40-58** | **74-118** | - | - |
 
 ### Prioritization Matrix
 
@@ -198,7 +205,7 @@ Based on **Customer Value** + **Ease of Implementation**:
 |----------|------|----------------|---------------------|--------|-------|
 | ~~1~~ | ~~**Logo Integration**~~ | ~~Medium~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐⭐~~ |
 | ~~2~~ | ~~**Color Palette**~~ | ~~Medium~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐⭐~~ |
-| 3 | **Dark Mode** | High | High | 8-12h | ⭐⭐⭐⭐⭐ |
+| ~~3~~ | ~~**Dark Mode**~~ | ~~High~~ | ~~High~~ | ~~8-12h~~ | ~~⭐⭐⭐⭐⭐~~ |
 | ~~4~~ | ~~**i18n**~~ | ~~Very High~~ | ~~Medium~~ | ~~20-30h~~ | ~~⭐⭐⭐⭐~~ |
 | ~~5~~ | ~~**CI/CD**~~ | ~~Low~~ | ~~Very High~~ | ~~2h~~ | ~~⭐⭐⭐⭐~~ |
 | ~~6~~ | ~~**Auth Refresh** ⚡~~ | ~~**CRITICAL**~~ | ~~Medium~~ | ~~6-8h~~ | ~~⭐⭐⭐⭐⭐~~ |
@@ -207,7 +214,7 @@ Based on **Customer Value** + **Ease of Implementation**:
 | 9 | **Remove :any** | Low | High | 8-12h | ⭐⭐⭐ |
 | 10 | **Super Admin UI** | Medium | Medium | 28-40h | ⭐⭐⭐ |
 | 11 | **Notifications** | Medium-High | Low | 20-30h | ⭐⭐ |
-| 12 | **Multi-Model AI** | Medium-High | Very Low | 28-42h | ⭐⭐ |
+| ~~12~~ | ~~**Multi-Model AI**~~ | ~~Medium-High~~ | ~~Very Low~~ | ~~28-42h~~ | ~~⭐⭐~~ |
 
 ### Recommended Implementation Order
 
@@ -220,15 +227,45 @@ Based on **Customer Value** + **Ease of Implementation**:
 1. ✅ **Auth Token Refresh** (6-8h) ⚡ CRITICAL PRIORITY
 2. ✅ **Token Management Modals** (8-12h) ⚡ SUPER HIGH PRIORITY
 3. ✅ **i18n Implementation** (20-30h)
+4. ✅ **Dark Mode Setup** (8-12h)
+5. ✅ **Multi-Model AI Configuration** (28-42h)
 
-**Phase 3: High-Value Features** (28-40 hours)
-1. Dark Mode Setup (8-12h)
-2. Dashboard Statistics (20-28h)
+**Phase 3: High-Value Features** (20-28 hours)
+1. Dashboard Statistics (20-28h)
 
-**Phase 4: Advanced Features** (56-82 hours)
-6. Super Admin UI Pages (28-40h)
-7. Notifications System (20-30h)
-8. Multi-Model AI Config (28-42h)
+**Phase 3.5: Error Handling Improvements** (4-8 hours) 🔧
+1. **Backend Error Handling Consistency** (4-8h)
+   - [ ] Review all API error responses for consistent structure
+   - [ ] Ensure frontend error handlers account for backend's error middleware format
+   - [ ] Update all try-catch blocks to properly parse backend error responses
+   - [ ] Add proper error typing for API responses
+   - [ ] Test all error scenarios (validation, auth, server errors)
+
+**Estimated Effort**: 4-8 hours
+**Customer Value**: Medium (better error handling and UX)
+**Complexity**: Low-Medium
+**Priority**: MEDIUM - Improves reliability and user experience
+
+**Phase 3.6: Code Refactoring - User Type Migration** (2-4 hours) 🔧
+1. **Migrate from user.type to user.role** (2-4h)
+   - [ ] Find all instances of `user.type` in frontend codebase
+   - [ ] Replace with `user.role` throughout the application
+   - [ ] Update TypeScript types/interfaces (User interface)
+   - [ ] Update all components using user.type
+   - [ ] Update authentication logic and role checks
+   - [ ] Test all role-based access control functionality
+   - [ ] Note: `user.type` will remain as backwards compatibility field from backend
+
+**Background**: Backend is migrating to use `role` instead of `type` for user types. The `type` field will remain for backwards compatibility, but frontend should use `role` going forward.
+
+**Estimated Effort**: 2-4 hours
+**Customer Value**: Low (internal code quality, future-proofing)
+**Complexity**: Low
+**Priority**: MEDIUM - Prevents technical debt
+
+**Phase 4: Advanced Features** (48-70 hours)
+1. Super Admin UI Pages (28-40h)
+2. Notifications System (20-30h)
 
 ---
 

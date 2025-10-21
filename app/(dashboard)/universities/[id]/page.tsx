@@ -31,7 +31,7 @@ import { AdminOnly, ProfessorOnly, SuperAdminOnly } from '@/components/auth/role
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
-import type { University, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { UniversityWithCourses, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
@@ -55,25 +55,87 @@ export default function UniversityDetailsPage() {
   const [activeTab, setActiveTab] = useState<'courses' | 'professors'>('courses');
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
 
+  // Search, pagination, and sorting state for courses
+  const [courseSearchTerm, setCourseSearchTerm] = useState('');
+  const [coursePage, setCoursePage] = useState(1);
+  const [courseLimit, setCourseLimit] = useState(10);
+  const [courseSortColumn, setCourseSortColumn] = useState<string | null>('name');
+  const [courseSortDirection, setCourseSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Search, pagination, and sorting state for professors
+  const [professorSearchTerm, setProfessorSearchTerm] = useState('');
+  const [professorPage, setProfessorPage] = useState(1);
+  const [professorLimit, setProfessorLimit] = useState(10);
+  const [professorSortColumn, setProfessorSortColumn] = useState<string | null>('firstName');
+  const [professorSortDirection, setProfessorSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
 
   // For professors, ensure they can only access their own university
   React.useEffect(() => {
-    if (user && user.role !== 'super_admin' && user.university_id) {
-      if (Number(universityId) !== user.university_id) {
+    if (user && user.role !== 'super_admin' && user.universityId) {
+      if (Number(universityId) !== user.universityId) {
         // Redirect to their own university if they try to access another
-        window.location.href = `/universities/${user.university_id}`;
+        window.location.href = `/universities/${user.universityId}`;
       }
     }
   }, [user, universityId]);
 
-  const { data: university, loading: universityLoading } = useFetch<University>(`/universities/${universityId}`);
-  const { data: coursesResponse, loading: coursesLoading } = useFetch<PaginatedResponse<Course>>(`/courses/?university_id=${universityId}&limit=100`);
-  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?university_id=${universityId}&limit=100`);
+  // Fetch university details
+  const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/api/universities/${universityId}`);
+
+  // Build courses API URL with pagination params and filters
+  // Backend now handles role-based filtering:
+  // - Super admins: see all courses (no filter beyond universityId)
+  // - Admin professors: see all courses in their university (universityId filter)
+  // - Regular professors: see ONLY their assigned courses (professorId filter)
+  const buildCoursesApiUrl = () => {
+    let filters = `page=${coursePage}&limit=${courseLimit}`;
+
+    if (courseSearchTerm) {
+      filters += `&search=${encodeURIComponent(courseSearchTerm)}`;
+    }
+
+    // Always filter by university when on university detail page
+    filters += `&universityId=${universityId}`;
+
+    // Regular professor (not admin) - backend filters by professorId
+    if (user?.role === 'professor' && user.isAdmin === false && user.id) {
+      filters += `&professorId=${user.id}`;
+    }
+
+    return `/api/courses/?${filters}`;
+  };
+
+  // Fetch courses with pagination
+  const { data: coursesResponse, loading: coursesLoading } = useFetch<PaginatedResponse<Course>>(buildCoursesApiUrl());
+
+  // Build professors API URL with pagination params and filters
+  const buildProfessorsApiUrl = () => {
+    let filters = `page=${professorPage}&limit=${professorLimit}`;
+
+    if (professorSearchTerm) {
+      filters += `&search=${encodeURIComponent(professorSearchTerm)}`;
+    }
+
+    filters += `&universityId=${universityId}`;
+
+    return `/api/professors/?${filters}`;
+  };
+
+  // Fetch professors ONLY for admin users (super admin or admin professor)
+  // Regular professors get 403 Forbidden and don't need this data
+  const isAdmin = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin);
+  const professorsApiUrl = isAdmin ? buildProfessorsApiUrl() : null;
+  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
+    professorsApiUrl
+  );
 
   const courses = coursesResponse?.items || [];
+  const totalCourses = coursesResponse?.total || 0;
   const professors = professorsResponse?.items || [];
+  const totalProfessors = professorsResponse?.total || 0;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('breadcrumb'), href: '/universities' },
@@ -86,16 +148,16 @@ export default function UniversityDetailsPage() {
       setShowProfessorTypeDialog(true);
     } else {
       // If admin professor, go directly to create regular professor
-      router.push(`/professors/create?university_id=${universityId}`);
+      router.push(`/professors/create?universityId=${universityId}`);
     }
   };
 
   const handleSelectProfessorType = (type: 'regular' | 'admin') => {
     setShowProfessorTypeDialog(false);
     if (type === 'admin') {
-      router.push(`/professors/create-admin?university_id=${universityId}`);
+      router.push(`/professors/create-admin?universityId=${universityId}`);
     } else {
-      router.push(`/professors/create?university_id=${universityId}`);
+      router.push(`/professors/create?universityId=${universityId}`);
     }
   };
 
@@ -121,21 +183,21 @@ export default function UniversityDetailsPage() {
       )
     },
     {
-      key: 'modules_count',
+      key: 'modulesCount',
       label: t('courseColumns.modules'),
       render: (value) => (
         <Badge variant="outline">{t('courseColumns.modulesCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'professors_count',
+      key: 'professorsCount',
       label: t('courseColumns.professors'),
       render: (value) => (
         <Badge variant="outline">{t('courseColumns.professorsCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('courseColumns.createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
@@ -172,7 +234,7 @@ export default function UniversityDetailsPage() {
 
   const professorColumns: TableColumn<Professor>[] = [
     {
-      key: 'first_name',
+      key: 'firstName',
       label: t('professorColumns.name'),
       sortable: true,
       render: (_, professor) => (
@@ -181,14 +243,14 @@ export default function UniversityDetailsPage() {
             <Users className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <div className="font-medium">{professor.first_name} {professor.last_name}</div>
+            <div className="font-medium">{professor.firstName} {professor.lastName}</div>
             <div className="text-sm text-muted-foreground">{professor.email}</div>
           </div>
         </div>
       )
     },
     {
-      key: 'is_admin',
+      key: 'isAdmin',
       label: t('professorColumns.type'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
@@ -197,7 +259,7 @@ export default function UniversityDetailsPage() {
       )
     },
     {
-      key: 'courses_count',
+      key: 'coursesCount',
       label: t('professorColumns.courses'),
       render: (value) => (
         <span className="text-sm">{t('professorColumns.coursesCount', { count: value || 0 })}</span>
@@ -237,6 +299,24 @@ export default function UniversityDetailsPage() {
         }
       }
     });
+  };
+
+  const handleCourseSortChange = (column: string) => {
+    if (courseSortColumn === column) {
+      setCourseSortDirection(courseSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setCourseSortColumn(column);
+      setCourseSortDirection('asc');
+    }
+  };
+
+  const handleProfessorSortChange = (column: string) => {
+    if (professorSortColumn === column) {
+      setProfessorSortDirection(professorSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setProfessorSortColumn(column);
+      setProfessorSortDirection('asc');
+    }
   };
 
   if (universityLoading) {
@@ -285,36 +365,36 @@ export default function UniversityDetailsPage() {
                   </div>
                 </div>
 
-                {university.contact_email && (
+                {university.contactEmail && (
                   <div className="flex items-start space-x-3">
                     <Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactEmail')}</p>
-                      <a href={`mailto:${university.contact_email}`} className="text-base hover:underline text-primary">
-                        {university.contact_email}
+                      <a href={`mailto:${university.contactEmail}`} className="text-base hover:underline text-primary">
+                        {university.contactEmail}
                       </a>
                     </div>
                   </div>
                 )}
 
-                {university.contact_phone && (
+                {university.contactPhone && (
                   <div className="flex items-start space-x-3">
                     <Phone className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactPhone')}</p>
-                      <a href={`tel:${university.contact_phone}`} className="text-base hover:underline text-primary">
-                        {university.contact_phone}
+                      <a href={`tel:${university.contactPhone}`} className="text-base hover:underline text-primary">
+                        {university.contactPhone}
                       </a>
                     </div>
                   </div>
                 )}
 
-                {university.contact_person && (
+                {university.contactPerson && (
                   <div className="flex items-start space-x-3">
                     <UserCircle className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.contactPerson')}</p>
-                      <p className="text-base">{university.contact_person}</p>
+                      <p className="text-base">{university.contactPerson}</p>
                     </div>
                   </div>
                 )}
@@ -348,12 +428,12 @@ export default function UniversityDetailsPage() {
                   </div>
                 )}
 
-                {university.tax_id && (
+                {university.taxId && (
                   <div className="flex items-start space-x-3">
                     <FileText className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.taxId')}</p>
-                      <p className="text-base">{university.tax_id}</p>
+                      <p className="text-base">{university.taxId}</p>
                     </div>
                   </div>
                 )}
@@ -364,14 +444,14 @@ export default function UniversityDetailsPage() {
       </SuperAdminOnly>
 
       {/* University Stats */}
-      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.is_admin ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
+      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('stats.courses')}</CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{courses.length}</div>
+            <div className="text-2xl font-bold">{university?.coursesCount ?? 0}</div>
           </CardContent>
         </Card>
 
@@ -383,7 +463,7 @@ export default function UniversityDetailsPage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{professors.length}</div>
+              <div className="text-2xl font-bold">{university?.professorsCount ?? 0}</div>
             </CardContent>
           </Card>
         </AdminOnly>
@@ -407,8 +487,8 @@ export default function UniversityDetailsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {university.subscription_tier === 1 ? tTiers('tierBasic') :
-                 university.subscription_tier === 2 ? tTiers('tierStandard') :
+                {university.subscriptionTier === 1 ? tTiers('tierBasic') :
+                 university.subscriptionTier === 2 ? tTiers('tierStandard') :
                  tTiers('tierPremium')}
               </div>
               <p className="text-xs text-muted-foreground mt-1">{tTiers('tierLabel')}</p>
@@ -459,7 +539,7 @@ export default function UniversityDetailsPage() {
               </div>
               <AdminOnly>
                 <Button asChild>
-                  <Link href={`/courses/create?university_id=${universityId}`}>
+                  <Link href={`/courses/create?universityId=${universityId}`}>
                     <Plus className="mr-2 h-4 w-4" />
                     {t('coursesTab.newCourse')}
                   </Link>
@@ -472,6 +552,23 @@ export default function UniversityDetailsPage() {
               data={courses}
               columns={courseColumns}
               loading={coursesLoading}
+              search={{
+                value: courseSearchTerm,
+                placeholder: t('coursesTab.searchPlaceholder'),
+                onSearchChange: setCourseSearchTerm
+              }}
+              pagination={{
+                page: coursePage,
+                limit: courseLimit,
+                total: totalCourses,
+                onPageChange: setCoursePage,
+                onLimitChange: setCourseLimit
+              }}
+              sorting={{
+                column: courseSortColumn,
+                direction: courseSortDirection,
+                onSortChange: handleCourseSortChange
+              }}
               emptyMessage={t('coursesTab.emptyMessage')}
             />
           </CardContent>
@@ -501,6 +598,23 @@ export default function UniversityDetailsPage() {
                 data={professors}
                 columns={professorColumns}
                 loading={professorsLoading}
+                search={{
+                  value: professorSearchTerm,
+                  placeholder: t('professorsTab.searchPlaceholder'),
+                  onSearchChange: setProfessorSearchTerm
+                }}
+                pagination={{
+                  page: professorPage,
+                  limit: professorLimit,
+                  total: totalProfessors,
+                  onPageChange: setProfessorPage,
+                  onLimitChange: setProfessorLimit
+                }}
+                sorting={{
+                  column: professorSortColumn,
+                  direction: professorSortDirection,
+                  onSortChange: handleProfessorSortChange
+                }}
                 emptyMessage={t('professorsTab.emptyMessage')}
               />
             </CardContent>

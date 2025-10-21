@@ -20,8 +20,8 @@ export default function EditStudentPage() {
   const [student, setStudent] = useState<Student | null>(null);
   const [formData, setFormData] = useState<StudentUpdate>({
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -34,8 +34,8 @@ export default function EditStudentPage() {
       setStudent(data);
       setFormData({
         email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
+        firstName: data.firstName,
+        lastName: data.lastName,
       });
     } catch (error) {
       console.error('Falha ao carregar estudante:', error);
@@ -51,7 +51,7 @@ export default function EditStudentPage() {
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Estudantes', href: '/students' },
-    { label: student ? `${student.first_name} ${student.last_name}` : 'Carregando...', href: `/students/${studentId}` },
+    { label: student ? `${student.firstName} ${student.lastName}` : 'Carregando...', href: `/students/${studentId}` },
     { label: 'Editar', isCurrentPage: true }
   ];
 
@@ -71,12 +71,12 @@ export default function EditStudentPage() {
       newErrors.email = 'Email inválido';
     }
 
-    if (!formData.first_name?.trim()) {
-      newErrors.first_name = 'Nome é obrigatório';
+    if (!formData.firstName?.trim()) {
+      newErrors.firstName = 'Nome é obrigatório';
     }
 
-    if (!formData.last_name?.trim()) {
-      newErrors.last_name = 'Sobrenome é obrigatório';
+    if (!formData.lastName?.trim()) {
+      newErrors.lastName = 'Sobrenome é obrigatório';
     }
 
     setErrors(newErrors);
@@ -125,7 +125,7 @@ export default function EditStudentPage() {
       <div className="space-y-6">
         <PageHeader
           title="Editar Estudante"
-          description={`Atualize as informações de ${student?.first_name} ${student?.last_name}`}
+          description={`Atualize as informações de ${student?.firstName} ${student?.lastName}`}
           breadcrumbs={breadcrumbs}
         />
 
@@ -136,30 +136,30 @@ export default function EditStudentPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="first_name">Nome</Label>
+                <Label htmlFor="firstName">Nome</Label>
                 <Input
-                  id="first_name"
-                  value={formData.first_name}
-                  onChange={(e) => handleChange('first_name', e.target.value)}
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => handleChange('firstName', e.target.value)}
                   placeholder="Nome do estudante"
                   disabled={isLoading}
                 />
-                {errors.first_name && (
-                  <p className="text-sm text-destructive">{errors.first_name}</p>
+                {errors.firstName && (
+                  <p className="text-sm text-destructive">{errors.firstName}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="last_name">Sobrenome</Label>
+                <Label htmlFor="lastName">Sobrenome</Label>
                 <Input
-                  id="last_name"
-                  value={formData.last_name}
-                  onChange={(e) => handleChange('last_name', e.target.value)}
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) => handleChange('lastName', e.target.value)}
                   placeholder="Sobrenome do estudante"
                   disabled={isLoading}
                 />
-                {errors.last_name && (
-                  <p className="text-sm text-destructive">{errors.last_name}</p>
+                {errors.lastName && (
+                  <p className="text-sm text-destructive">{errors.lastName}</p>
                 )}
               </div>
 

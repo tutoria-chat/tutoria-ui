@@ -7,14 +7,14 @@ import { jwtDecode } from 'jwt-decode';
 import type { User, Permission, PermissionContext, UserRole } from '@/lib/types';
 
 interface JWTPayload {
-  user_id: number;
+  userId: number;
   email: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   type: UserRole;
-  university_id?: number;
-  is_admin?: boolean;
-  assigned_courses?: number[];
+  universityId?: number;
+  isAdmin?: boolean;
+  assignedCourses?: number[];
   exp: number;
   iat: number;
 }
@@ -54,30 +54,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
               const parsedUser = JSON.parse(storedUser);
 
-              // Check if user data is missing first_name (old format)
-              if (!parsedUser.first_name) {
+              // Check if user data is missing firstName (old format)
+              if (!parsedUser.firstName) {
                 console.log('Refreshing user data from /me endpoint...');
                 try {
                   // Fetch fresh user data from /me endpoint
                   const userData = await apiClient.getCurrentUser();
 
                   const user: User = {
-                    id: userData.id,
+                    id: userData.userId,
                     username: userData.username,
                     email: userData.email,
-                    first_name: userData.first_name,
-                    last_name: userData.last_name,
-                    user_type: userData.user_type || userData.role,
-                    role: userData.role,
-                    is_active: userData.is_active !== undefined ? userData.is_active : true,
-                    university_id: userData.university_id,
-                    is_admin: userData.is_admin || false,
-                    assigned_courses: userData.assigned_courses || [],
-                    created_at: userData.created_at || new Date().toISOString(),
-                    updated_at: userData.updated_at || new Date().toISOString(),
-                    last_login_at: userData.last_login_at,
-                    theme_preference: userData.theme_preference,
-                    language_preference: userData.language_preference,
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    userType: userData.userType,
+                    role: userData.userType,
+                    isActive: userData.isActive !== undefined ? userData.isActive : true,
+                    universityId: userData.universityId,
+                    isAdmin: userData.isAdmin || false,
+                    assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
+                    createdAt: userData.createdAt || new Date().toISOString(),
+                    updatedAt: userData.updatedAt || new Date().toISOString(),
+                    lastLoginAt: userData.lastLoginAt,
+                    themePreference: userData.themePreference,
+                    languagePreference: userData.languagePreference,
                   };
 
                   localStorage.setItem('tutoria_user', JSON.stringify(user));
@@ -124,38 +124,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Make API call directly since we need to send 'username' not 'email'
       const response = await apiClient.login({ username, password });
 
-      if (response.access_token) {
+      if (response.accessToken) {
         // Set token first so the /me endpoint can use it
-        apiClient.setToken(response.access_token);
+        apiClient.setToken(response.accessToken);
 
         // Fetch full user data from /me endpoint
         const userData = await apiClient.getCurrentUser();
 
         const user: User = {
-          id: userData.id,
+          id: userData.userId,
           username: userData.username,
           email: userData.email,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          user_type: userData.user_type || userData.role,
-          role: userData.role,
-          is_active: userData.is_active !== undefined ? userData.is_active : true,
-          university_id: userData.university_id,
-          is_admin: userData.is_admin || false,
-          assigned_courses: userData.assigned_courses || [],
-          created_at: userData.created_at || new Date().toISOString(),
-          updated_at: userData.updated_at || new Date().toISOString(),
-          last_login_at: userData.last_login_at,
-          theme_preference: userData.theme_preference,
-          language_preference: userData.language_preference,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          userType: userData.userType,
+          role: userData.userType,
+          isActive: userData.isActive !== undefined ? userData.isActive : true,
+          universityId: userData.universityId,
+          isAdmin: userData.isAdmin || false,
+          assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
+          createdAt: userData.createdAt || new Date().toISOString(),
+          updatedAt: userData.updatedAt || new Date().toISOString(),
+          lastLoginAt: userData.lastLoginAt,
+          themePreference: userData.themePreference,
+          languagePreference: userData.languagePreference,
         };
 
         // Store in localStorage for persistence
         if (typeof window !== 'undefined') {
           localStorage.setItem('tutoria_user', JSON.stringify(user));
-          localStorage.setItem('tutoria_token', response.access_token);
-          if (response.refresh_token) {
-            localStorage.setItem('tutoria_refresh_token', response.refresh_token);
+          localStorage.setItem('tutoria_token', response.accessToken);
+          if (response.refreshToken) {
+            localStorage.setItem('tutoria_refresh_token', response.refreshToken);
           }
 
           // Dispatch custom event to notify language provider of user update
@@ -192,6 +192,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('tutoria_refresh_token');
       }
       setUser(null);
+
+      // Redirect to login page
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
     } finally {
       setIsLoading(false);
     }

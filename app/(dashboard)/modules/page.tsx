@@ -38,26 +38,26 @@ export default function ModulesPage() {
   // So if a module appears in the list for a regular professor, they can edit it
   const canEditModule = (module: Module): boolean => {
     // Super admins and admin professors can edit all modules
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) {
       return true;
     }
     // Regular professors (is_admin = false) can edit modules that appear in their filtered list
     // The API ensures they only see modules from their assigned courses
-    if (user?.role === 'professor' && user?.is_admin === false) {
+    if (user?.role === 'professor' && user?.isAdmin === false) {
       return true;
     }
     return false;
   };
 
   // Check for university_id from URL query parameter
-  const urlUniversityId = searchParams.get('university_id');
+  const urlUniversityId = searchParams.get('universityId');
 
   // Build API URL with pagination params and university filter
   // Priority: URL parameter > user's university (for professors)
   const universityFilter = urlUniversityId
-    ? `&university_id=${urlUniversityId}`
-    : (user?.university_id && user.role !== 'super_admin' ? `&university_id=${user.university_id}` : '');
-  const apiUrl = `/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
+    ? `&universityId=${urlUniversityId}`
+    : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
+  const apiUrl = `/api/modules/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get modules (paginated for display)
   const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);
@@ -79,7 +79,7 @@ export default function ModulesPage() {
           <div>
             <div className="font-medium">{module.name}</div>
             <div className="text-sm text-muted-foreground">
-              {module.course_name}
+              {module.courseName}
             </div>
             {module.description && (
               <div className="text-xs text-muted-foreground line-clamp-1 max-w-md mt-1">
@@ -125,9 +125,9 @@ export default function ModulesPage() {
       label: t('columns.aiTutor'),
       render: (_, module) => (
         <div className="flex items-center space-x-1">
-          <Bot className={`h-4 w-4 ${module.system_prompt ? 'text-green-500' : 'text-muted-foreground'}`} />
-          <Badge variant={module.system_prompt ? "default" : "secondary"}>
-            {module.system_prompt ? t('columns.configured') : t('columns.notConfigured')}
+          <Bot className={`h-4 w-4 ${module.systemPrompt ? 'text-green-500' : 'text-muted-foreground'}`} />
+          <Badge variant={module.systemPrompt ? "default" : "secondary"}>
+            {module.systemPrompt ? t('columns.configured') : t('columns.notConfigured')}
           </Badge>
         </div>
       )

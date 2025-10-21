@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { apiClient } from '@/lib/api';
-import { UserPlus, Copy, Check, Mail, AlertCircle, Building2, BookOpen, Search } from 'lucide-react';
+import { UserPlus, Mail, AlertCircle, Building2, BookOpen, Search } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -26,8 +26,6 @@ export default function CreateProfessorPage() {
   const tPwValidation = useTranslations('common.passwordValidation');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [resetLink, setResetLink] = useState('');
-  const [copiedLink, setCopiedLink] = useState(false);
   const [newUser, setNewUser] = useState<any>(null);
   const [universities, setUniversities] = useState<any[]>([]);
   const [universitySearch, setUniversitySearch] = useState('');
@@ -41,12 +39,12 @@ export default function CreateProfessorPage() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    university_id: '',
-    course_ids: [] as string[],
-    language_preference: 'pt-br',
+    universityId: '',
+    courseIds: [] as string[],
+    languagePreference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,19 +56,19 @@ export default function CreateProfessorPage() {
 
   // Check if user is super admin or admin professor
   const isSuperAdmin = user?.role === 'super_admin';
-  const isAdminProfessor = user?.role === 'professor' && user?.is_admin;
+  const isAdminProfessor = user?.role === 'professor' && user?.isAdmin;
 
   // Handle URL university_id parameter
   useEffect(() => {
     // Admin professors ALWAYS get their own university (ignore URL parameter)
-    if (isAdminProfessor && user?.university_id) {
-      loadUniversityById(user.university_id);
+    if (isAdminProfessor && user?.universityId) {
+      loadUniversityById(user.universityId);
       setFromUrl(true);
       return;
     }
 
     // Super admins can use URL parameter or search
-    const universityIdFromUrl = searchParams.get('university_id');
+    const universityIdFromUrl = searchParams.get('universityId');
     if (universityIdFromUrl && isSuperAdmin) {
       setFromUrl(true);
       loadUniversityById(parseInt(universityIdFromUrl));
@@ -79,12 +77,12 @@ export default function CreateProfessorPage() {
 
   // Load courses when university is selected
   useEffect(() => {
-    if (formData.university_id) {
-      loadCourses(parseInt(formData.university_id));
+    if (formData.universityId) {
+      loadCourses(parseInt(formData.universityId));
     } else {
       setCourses([]);
     }
-  }, [formData.university_id]);
+  }, [formData.universityId]);
 
   // Search universities when search term changes
   useEffect(() => {
@@ -108,7 +106,7 @@ export default function CreateProfessorPage() {
       const university = await apiClient.getUniversity(universityId);
       setSelectedUniversity(university);
       setUniversitySearch(university.name);
-      setFormData(prev => ({ ...prev, university_id: String(university.id) }));
+      setFormData(prev => ({ ...prev, universityId: String(university.id) }));
     } catch (error: any) {
       console.error('Error loading university:', error);
       toast.error(t('errorLoadingUniversities'));
@@ -148,12 +146,12 @@ export default function CreateProfessorPage() {
 
     if (!formData.username.trim()) newErrors.username = t('usernameRequired');
     if (!formData.email.trim()) newErrors.email = t('emailRequired');
-    if (!formData.first_name.trim()) newErrors.first_name = t('firstNameRequired');
-    if (!formData.last_name.trim()) newErrors.last_name = t('lastNameRequired');
+    if (!formData.firstName.trim()) newErrors.firstName = t('firstNameRequired');
+    if (!formData.lastName.trim()) newErrors.lastName = t('lastNameRequired');
     if (!formData.password.trim()) newErrors.password = t('passwordRequired');
     if (formData.password.length < 6) newErrors.password = t('passwordMinLength');
-    if (!formData.university_id) newErrors.university_id = t('universityRequired');
-    if (formData.course_ids.length === 0) newErrors.course_ids = t('coursesRequired');
+    if (!formData.universityId) newErrors.universityId = t('universityRequired');
+    if (formData.courseIds.length === 0) newErrors.courseIds = t('coursesRequired');
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -180,34 +178,33 @@ export default function CreateProfessorPage() {
       const response = await apiClient.createProfessor({
         username: formData.username,
         email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         password: formData.password,
-        university_id: parseInt(formData.university_id),
-        is_admin: false,
-        language_preference: formData.language_preference,
+        universityId: parseInt(formData.universityId),
+        isAdmin: false,
+        languagePreference: formData.languagePreference,
       });
 
       setNewUser(response);
 
-      // Assign courses to professor
-      for (const courseId of formData.course_ids) {
-        try {
-          await apiClient.assignProfessorToCourse(parseInt(courseId), response.id);
-        } catch (error) {
-          console.error(`Error assigning course ${courseId}:`, error);
-          // Continue with other courses even if one fails
-        }
+      // Assign courses to professor - use Promise.allSettled to track failures
+      const courseAssignmentResults = await Promise.allSettled(
+        formData.courseIds.map(courseId =>
+          apiClient.assignProfessorToCourse(parseInt(courseId), response.id)
+        )
+      );
+
+      // Check for failed course assignments
+      const failedAssignments = courseAssignmentResults.filter(result => result.status === 'rejected');
+      if (failedAssignments.length > 0) {
+        console.error('Some course assignments failed:', failedAssignments);
+        toast.warning(t('someCoursesFailed') || `Professor created, but ${failedAssignments.length} course assignment(s) failed.`);
+      } else {
+        toast.success(t('professorCreatedSuccess'));
       }
 
-      // Request password reset token from backend using username + user_type
-      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'professor');
-      const resetToken = resetResponse.reset_token;
-      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
-      setResetLink(link);
-
       setShowSuccess(true);
-      toast.success(t('professorCreatedSuccess'));
     } catch (error: any) {
       console.error('Error creating professor:', error);
       toast.error(error.message || t('errorCreatingProfessor'));
@@ -216,34 +213,23 @@ export default function CreateProfessorPage() {
     }
   };
 
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(resetLink);
-      setCopiedLink(true);
-      toast.success(t('linkCopied'));
-      setTimeout(() => setCopiedLink(false), 2000);
-    } catch (error) {
-      toast.error(t('errorCopyingLink'));
-    }
-  };
-
   const toggleCourse = (courseId: string) => {
     setFormData(prev => ({
       ...prev,
-      course_ids: prev.course_ids.includes(courseId)
-        ? prev.course_ids.filter(id => id !== courseId)
-        : [...prev.course_ids, courseId]
+      courseIds: prev.courseIds.includes(courseId)
+        ? prev.courseIds.filter(id => id !== courseId)
+        : [...prev.courseIds, courseId]
     }));
   };
 
   const getUniversityName = () => {
-    const university = universities.find(u => u.id === parseInt(formData.university_id));
+    const university = universities.find(u => u.id === parseInt(formData.universityId));
     return university?.name || '';
   };
 
   const getCoursesNames = () => {
     return courses
-      .filter(c => formData.course_ids.includes(String(c.id)))
+      .filter(c => formData.courseIds.includes(String(c.id)))
       .map(c => c.name)
       .join(', ');
   };
@@ -264,7 +250,7 @@ export default function CreateProfessorPage() {
               {t('successCardTitle')}
             </CardTitle>
             <CardDescription className="text-green-700 dark:text-green-300">
-              {t('successCardDescription', { firstName: newUser?.first_name, lastName: newUser?.last_name })}
+              {t('successCardDescription', { firstName: newUser?.firstName, lastName: newUser?.lastName })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -303,59 +289,30 @@ export default function CreateProfessorPage() {
 
         <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
           <CardHeader>
-            <CardTitle className="text-blue-900 dark:text-blue-100">{t('resetLinkTitle')}</CardTitle>
+            <CardTitle className="text-blue-900 dark:text-blue-100 flex items-center">
+              <Mail className="mr-2 h-5 w-5" />
+              {t('emailSentTitle')}
+            </CardTitle>
             <CardDescription className="text-blue-700 dark:text-blue-300">
-              {t('resetLinkDescription')}
+              {t('emailSentDescription', { email: formData.email })}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950 dark:border-amber-800">
-              <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-              <AlertDescription className="text-amber-900 dark:text-amber-100">
-                <strong>{t('linkExpiresWarning')}</strong> {t('shareQuickly')}
+            <Alert className="bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700">
+              <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <AlertDescription className="text-blue-900 dark:text-blue-100">
+                {t('emailInstructions')}
               </AlertDescription>
             </Alert>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-blue-900 dark:text-blue-100">{t('setupLinkLabel')}</Label>
-              <div className="flex space-x-2">
-                <Input
-                  value={resetLink}
-                  readOnly
-                  className="bg-white dark:bg-blue-900 font-mono text-sm"
-                />
-                <Button
-                  onClick={handleCopyLink}
-                  variant="outline"
-                  className="shrink-0"
-                >
-                  {copiedLink ? (
-                    <>
-                      <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
-                      {t('copied')}
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="mr-2 h-4 w-4" />
-                      {t('copyLink')}
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-
-            <div className="p-4 bg-white dark:bg-blue-900 rounded border border-blue-200 dark:border-blue-700">
-              <p className="text-sm text-blue-900 dark:text-blue-100 font-medium mb-2">{t('howToShare')}</p>
-              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
-                <li>{t('shareViaEmail', { email: formData.email })}</li>
-                <li>{t('shareViaMessaging')}</li>
-                <li>{t('shareInPerson')}</li>
-              </ul>
-            </div>
           </CardContent>
         </Card>
 
         <div className="flex space-x-4">
+          {formData.universityId && (
+            <Button onClick={() => router.push(`/universities/${formData.universityId}`)} variant="default">
+              {t('backToUniversity') || 'Back to University Details'}
+            </Button>
+          )}
           <Button onClick={() => router.push('/professors')} variant="outline">
             {t('backToList')}
           </Button>
@@ -364,16 +321,15 @@ export default function CreateProfessorPage() {
             setFormData({
               username: '',
               email: '',
-              first_name: '',
-              last_name: '',
+              firstName: '',
+              lastName: '',
               password: '',
-              university_id: isAdminProfessor && user?.university_id ? String(user.university_id) : '',
-              course_ids: [],
-              language_preference: 'pt-br',
+              universityId: isAdminProfessor && user?.universityId ? String(user.universityId) : '',
+              courseIds: [],
+              languagePreference: 'pt-br',
             });
-            setResetLink('');
             setNewUser(null);
-          }}>
+          }} variant="outline">
             {t('createAnother')}
           </Button>
         </div>
@@ -406,18 +362,18 @@ export default function CreateProfessorPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="university_id">{t('universityLabel')}</Label>
+              <Label htmlFor="universityId">{t('universityLabel')}</Label>
               <div className="relative">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
-                    id="university_id"
+                    id="universityId"
                     value={universitySearch}
                     onChange={(e) => {
                       setUniversitySearch(e.target.value);
                       if (!e.target.value) {
                         setSelectedUniversity(null);
-                        setFormData({ ...formData, university_id: '', course_ids: [] });
+                        setFormData({ ...formData, universityId: '', courseIds: [] });
                       }
                     }}
                     placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')}
@@ -433,7 +389,7 @@ export default function CreateProfessorPage() {
                         onClick={() => {
                           setSelectedUniversity(university);
                           setUniversitySearch(university.name);
-                          setFormData({ ...formData, university_id: String(university.id), course_ids: [] });
+                          setFormData({ ...formData, universityId: String(university.id), courseIds: [] });
                         }}
                         className="px-3 py-2 cursor-pointer hover:bg-muted flex items-center"
                       >
@@ -449,8 +405,8 @@ export default function CreateProfessorPage() {
                   </div>
                 )}
               </div>
-              {errors.university_id && (
-                <p className="text-sm text-destructive">{errors.university_id}</p>
+              {errors.universityId && (
+                <p className="text-sm text-destructive">{errors.universityId}</p>
               )}
               {fromUrl && selectedUniversity && isAdminProfessor && (
                 <p className="text-xs text-muted-foreground">
@@ -470,7 +426,7 @@ export default function CreateProfessorPage() {
                 <p className="text-sm text-muted-foreground">{t('loadingCourses')}</p>
               ) : courses.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  {formData.university_id ? t('noCoursesAvailable') : t('selectUniversityFirst')}
+                  {formData.universityId ? t('noCoursesAvailable') : t('selectUniversityFirst')}
                 </p>
               ) : (
                 <div className="border rounded-md p-4 space-y-2 max-h-48 overflow-y-auto">
@@ -479,7 +435,7 @@ export default function CreateProfessorPage() {
                       <input
                         type="checkbox"
                         id={`course-${course.id}`}
-                        checked={formData.course_ids.includes(String(course.id))}
+                        checked={formData.courseIds.includes(String(course.id))}
                         onChange={() => toggleCourse(String(course.id))}
                         className="h-4 w-4 rounded border-gray-300"
                       />
@@ -493,35 +449,35 @@ export default function CreateProfessorPage() {
                   ))}
                 </div>
               )}
-              {errors.course_ids && (
-                <p className="text-sm text-destructive">{errors.course_ids}</p>
+              {errors.courseIds && (
+                <p className="text-sm text-destructive">{errors.courseIds}</p>
               )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
+                <Label htmlFor="firstName">{t('firstNameLabel')}</Label>
                 <Input
-                  id="first_name"
-                  value={formData.first_name}
-                  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                   placeholder={t('firstNamePlaceholder')}
                 />
-                {errors.first_name && (
-                  <p className="text-sm text-destructive">{errors.first_name}</p>
+                {errors.firstName && (
+                  <p className="text-sm text-destructive">{errors.firstName}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
+                <Label htmlFor="lastName">{t('lastNameLabel')}</Label>
                 <Input
-                  id="last_name"
-                  value={formData.last_name}
-                  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                   placeholder={t('lastNamePlaceholder')}
                 />
-                {errors.last_name && (
-                  <p className="text-sm text-destructive">{errors.last_name}</p>
+                {errors.lastName && (
+                  <p className="text-sm text-destructive">{errors.lastName}</p>
                 )}
               </div>
             </div>
@@ -585,8 +541,8 @@ export default function CreateProfessorPage() {
             <div className="space-y-2">
               <Label htmlFor="language_preference">{t('languageLabel')}</Label>
               <Select
-                value={formData.language_preference}
-                onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                value={formData.languagePreference}
+                onValueChange={(value) => setFormData({ ...formData, languagePreference: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={t('languagePlaceholder')} />

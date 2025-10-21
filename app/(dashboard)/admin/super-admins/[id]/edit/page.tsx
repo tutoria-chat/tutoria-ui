@@ -27,8 +27,8 @@ export default function EditSuperAdminPage() {
   const [submitting, setSubmitting] = useState(false);
   const [superAdmin, setSuperAdmin] = useState<SuperAdmin | null>(null);
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     username: '',
   });
@@ -48,25 +48,25 @@ export default function EditSuperAdminPage() {
 
       // Map UserResponse to SuperAdmin
       const admin: SuperAdmin = {
-        id: user.user_id,
+        id: user.userId,
         username: user.username,
         email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        is_active: user.is_active,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-        last_login_at: user.last_login_at,
-        language_preference: user.language_preference,
-        theme_preference: user.theme_preference,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isActive: user.isActive,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        lastLoginAt: user.lastLoginAt,
+        languagePreference: user.languagePreference,
+        themePreference: user.themePreference,
       };
 
       // Only update state if component is still mounted
       if (isMountedRef.current) {
         setSuperAdmin(admin);
         setFormData({
-          first_name: admin.first_name,
-          last_name: admin.last_name,
+          firstName: admin.firstName,
+          lastName: admin.lastName,
           email: admin.email,
           username: admin.username,
         });
@@ -96,11 +96,11 @@ export default function EditSuperAdminPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.first_name.trim()) {
-      newErrors.first_name = t('firstNameRequired') || 'First name is required';
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = t('firstNameRequired') || 'First name is required';
     }
-    if (!formData.last_name.trim()) {
-      newErrors.last_name = t('lastNameRequired') || 'Last name is required';
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = t('lastNameRequired') || 'Last name is required';
     }
     if (!formData.email.trim()) {
       newErrors.email = t('emailRequired') || 'Email is required';
@@ -159,7 +159,7 @@ export default function EditSuperAdminPage() {
       <div className="space-y-6">
         <PageHeader
           title={t('title') || 'Edit Super Administrator'}
-          description={t('description', { name: `${superAdmin?.first_name} ${superAdmin?.last_name}` }) || `Edit super administrator information for ${superAdmin?.first_name} ${superAdmin?.last_name}`}
+          description={t('description', { name: `${superAdmin?.firstName} ${superAdmin?.lastName}` }) || `Edit super administrator information for ${superAdmin?.firstName} ${superAdmin?.lastName}`}
           breadcrumbs={breadcrumbs}
           actions={
             <Button variant="outline" onClick={() => router.back()}>
@@ -180,34 +180,34 @@ export default function EditSuperAdminPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">
+                  <Label htmlFor="firstName">
                     {t('firstNameLabel') || 'First Name'} *
                   </Label>
                   <Input
-                    id="first_name"
-                    value={formData.first_name}
-                    onChange={(e) => handleChange('first_name', e.target.value)}
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => handleChange('firstName', e.target.value)}
                     placeholder={t('firstNamePlaceholder') || 'e.g., John'}
                     disabled={submitting}
                   />
-                  {errors.first_name && (
-                    <p className="text-sm text-destructive">{errors.first_name}</p>
+                  {errors.firstName && (
+                    <p className="text-sm text-destructive">{errors.firstName}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">
+                  <Label htmlFor="lastName">
                     {t('lastNameLabel') || 'Last Name'} *
                   </Label>
                   <Input
-                    id="last_name"
-                    value={formData.last_name}
-                    onChange={(e) => handleChange('last_name', e.target.value)}
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => handleChange('lastName', e.target.value)}
                     placeholder={t('lastNamePlaceholder') || 'e.g., Smith'}
                     disabled={submitting}
                   />
-                  {errors.last_name && (
-                    <p className="text-sm text-destructive">{errors.last_name}</p>
+                  {errors.lastName && (
+                    <p className="text-sm text-destructive">{errors.lastName}</p>
                   )}
                 </div>
               </div>

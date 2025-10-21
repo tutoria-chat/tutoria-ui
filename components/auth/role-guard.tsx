@@ -70,8 +70,8 @@ export function AdminOnly({ children, fallback, hideIfNoAccess = true }: {
 }) {
   const { user } = useAuth();
 
-  // Super admins or professors with is_admin = true
-  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
+  // Super admins or professors with isAdmin = true
+  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -87,8 +87,8 @@ export function AdminProfessorOnly({ children, fallback, hideIfNoAccess = true }
 }) {
   const { user } = useAuth();
 
-  // Super admins or professors with is_admin = true
-  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true);
+  // Super admins or professors with isAdmin = true
+  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;

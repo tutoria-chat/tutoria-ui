@@ -52,8 +52,8 @@ function SetupPasswordForm() {
         const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
 
         // Set locale based on user's preference
-        if (response.language_preference) {
-          setLocale(response.language_preference as Locale);
+        if (response.languagePreference) {
+          setLocale(response.languagePreference as Locale);
         }
       } catch (error) {
         console.error('Failed to verify token or detect language:', error);

@@ -29,16 +29,16 @@ export default function EditProfessorPage() {
   const tPwValidation = useTranslations('common.passwordValidation');
 
   // Get return URL from query params or default based on user role
-  const returnUrl = searchParams.get('returnUrl') || (user?.role === 'super_admin' ? '/professors' : user?.university_id ? `/universities/${user.university_id}` : '/dashboard');
+  const returnUrl = searchParams.get('returnUrl') || (user?.role === 'super_admin' ? '/professors' : user?.universityId ? `/universities/${user.universityId}` : '/dashboard');
 
   const [professor, setProfessor] = useState<Professor | null>(null);
-  const [formData, setFormData] = useState<ProfessorUpdate & { username?: string; university_id?: number }>({
+  const [formData, setFormData] = useState<ProfessorUpdate & { username?: string; universityId?: number }>({
     email: '',
-    first_name: '',
-    last_name: '',
-    is_admin: false,
+    firstName: '',
+    lastName: '',
+    isAdmin: false,
     username: '',
-    university_id: undefined,
+    universityId: undefined,
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [assignedCourseIds, setAssignedCourseIds] = useState<number[]>([]);
@@ -60,20 +60,24 @@ export default function EditProfessorPage() {
       setProfessor(data);
       setFormData({
         email: data.email,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        is_admin: data.is_admin,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        isAdmin: data.isAdmin,
         username: data.username,
-        university_id: data.university_id,
+        universityId: data.universityId,
       });
 
-      // Load courses for this professor's university
-      if (data.university_id) {
-        loadCourses(data.university_id);
+      // Set assigned course IDs from professor data (extract from assignedCourses)
+      if (data.assignedCourses && data.assignedCourses.length > 0) {
+        const courseIds = data.assignedCourses.map(course => course.id);
+        setAssignedCourseIds(courseIds);
+        setOriginalAssignedCourseIds(courseIds);
       }
 
-      // Load assigned courses
-      loadAssignedCourses();
+      // Load courses for this professor's university
+      if (data.universityId) {
+        loadCourses(data.universityId);
+      }
     } catch (error) {
       console.error('Failed to load professor:', error);
       setErrors({ load: t('loadError') });
@@ -95,20 +99,6 @@ export default function EditProfessorPage() {
     }
   };
 
-  const loadAssignedCourses = async () => {
-    try {
-      // Get courses assigned to this professor
-      const result = await apiClient.getProfessorCourses(professorId);
-      const courseIds = result.course_ids || [];
-
-      setAssignedCourseIds(courseIds);
-      setOriginalAssignedCourseIds(courseIds);
-    } catch (error) {
-      console.error('Error loading assigned courses:', error);
-      toast.error(t('errorLoadingCourses'));
-    }
-  };
-
   useEffect(() => {
     loadProfessor();
   }, [loadProfessor]);
@@ -121,7 +111,7 @@ export default function EditProfessorPage() {
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: tCommon('breadcrumbs.professors'), href: '/professors' },
-    { label: professor ? `${professor.first_name} ${professor.last_name}` : tCommon('loading'), href: `/professors/${professorId}` },
+    { label: professor ? `${professor.firstName} ${professor.lastName}` : tCommon('loading'), href: `/professors/${professorId}` },
     { label: t('breadcrumb'), isCurrentPage: true }
   ];
 
@@ -149,12 +139,12 @@ export default function EditProfessorPage() {
       newErrors.email = t('emailInvalid');
     }
 
-    if (!formData.first_name?.trim()) {
-      newErrors.first_name = t('firstNameRequired');
+    if (!formData.firstName?.trim()) {
+      newErrors.firstName = t('firstNameRequired');
     }
 
-    if (!formData.last_name?.trim()) {
-      newErrors.last_name = t('lastNameRequired');
+    if (!formData.lastName?.trim()) {
+      newErrors.lastName = t('lastNameRequired');
     }
 
     if (isSuperAdmin && !formData.username?.trim()) {
@@ -179,11 +169,11 @@ export default function EditProfessorPage() {
       // Update basic info
       await apiClient.updateProfessor(professorId, {
         email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        is_admin: formData.is_admin,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        isAdmin: formData.isAdmin,
         ...(isSuperAdmin && formData.username ? { username: formData.username } : {}),
-        ...(isSuperAdmin && formData.university_id ? { university_id: formData.university_id } : {}),
+        ...(isSuperAdmin && formData.universityId ? { universityId: formData.universityId } : {}),
       });
 
       // Update course assignments
@@ -218,7 +208,13 @@ export default function EditProfessorPage() {
       }
 
       toast.success(t('updateSuccess'));
-      router.push(returnUrl);
+
+      // Use window.location.href for more reliable navigation
+      if (typeof window !== 'undefined') {
+        window.location.href = returnUrl;
+      } else {
+        router.push(returnUrl);
+      }
     } catch (error: any) {
       console.error('Failed to update professor:', error);
       toast.error(error.message || t('updateError'));
@@ -252,7 +248,7 @@ export default function EditProfessorPage() {
       <div className="space-y-6 max-w-4xl mx-auto">
         <PageHeader
           title={t('title')}
-          description={t('description', { name: `${professor?.first_name} ${professor?.last_name}` })}
+          description={t('description', { name: `${professor?.firstName} ${professor?.lastName}` })}
           breadcrumbs={breadcrumbs}
         />
 
@@ -266,32 +262,32 @@ export default function EditProfessorPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
+                  <Label htmlFor="firstName">{t('firstNameLabel')}</Label>
                   <Input
-                    id="first_name"
-                    value={formData.first_name}
-                    onChange={(e) => handleChange('first_name', e.target.value)}
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => handleChange('firstName', e.target.value)}
                     placeholder={t('firstNamePlaceholder')}
                     disabled={isLoading}
                     autoComplete="off"
                   />
-                  {errors.first_name && (
-                    <p className="text-sm text-destructive">{errors.first_name}</p>
+                  {errors.firstName && (
+                    <p className="text-sm text-destructive">{errors.firstName}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
+                  <Label htmlFor="lastName">{t('lastNameLabel')}</Label>
                   <Input
-                    id="last_name"
-                    value={formData.last_name}
-                    onChange={(e) => handleChange('last_name', e.target.value)}
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => handleChange('lastName', e.target.value)}
                     placeholder={t('lastNamePlaceholder')}
                     disabled={isLoading}
                     autoComplete="off"
                   />
-                  {errors.last_name && (
-                    <p className="text-sm text-destructive">{errors.last_name}</p>
+                  {errors.lastName && (
+                    <p className="text-sm text-destructive">{errors.lastName}</p>
                   )}
                 </div>
               </div>
@@ -332,15 +328,15 @@ export default function EditProfessorPage() {
               {isSuperAdmin && (
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <Label htmlFor="is_admin">{t('adminProfessorLabel')}</Label>
+                    <Label htmlFor="isAdmin">{t('adminProfessorLabel')}</Label>
                     <p className="text-sm text-muted-foreground">
                       {t('adminDescription')}
                     </p>
                   </div>
                   <Switch
-                    id="is_admin"
-                    checked={formData.is_admin}
-                    onCheckedChange={(checked) => handleChange('is_admin', checked)}
+                    id="isAdmin"
+                    checked={formData.isAdmin}
+                    onCheckedChange={(checked) => handleChange('isAdmin', checked)}
                     disabled={isLoading}
                   />
                 </div>

@@ -33,9 +33,9 @@ export default function ProfessorsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [sortColumn, setSortColumn] = useState<string | null>('first_name');
+  const [sortColumn, setSortColumn] = useState<string | null>('firstName');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserResponse | null>(null);
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
 
   // Confirm dialogs
@@ -68,24 +68,35 @@ export default function ProfessorsPage() {
   const loadProfessors = async () => {
     setLoading(true);
     try {
-      // Use unified Users endpoint to get professors
-      const users: UserResponse[] = await apiClient.getUsersByType('professor');
+      // Build query params - filter by university for non-super-admin users
+      const params: Record<string, string | number> = {
+        userType: 'professor',
+        limit: 1000
+      };
+
+      // If user is a professor (not super admin), only fetch professors from their university
+      if (currentUser?.universityId && currentUser.userType !== 'super_admin') {
+        params.universityId = currentUser.universityId;
+      }
+
+      // Use unified Users endpoint to get professors (use Management API, not Auth API)
+      const response: { items: UserResponse[] } = await apiClient.get('/api/users/', params, false); // false = use Management API
       // Map UserResponse to Professor interface
-      const profs: Professor[] = users.map((user: UserResponse) => ({
-        id: user.user_id,
+      const profs: Professor[] = response.items.map((user: UserResponse) => ({
+        id: user.userId,
         username: user.username,
         email: user.email,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        is_active: user.is_active,
-        is_admin: user.is_admin || false,
-        university_id: user.university_id || 0,
-        university_name: user.university_name,
-        created_at: user.created_at || new Date().toISOString(),
-        updated_at: user.updated_at || new Date().toISOString(),
-        last_login_at: user.last_login_at,
-        language_preference: user.language_preference,
-        theme_preference: user.theme_preference,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isActive: user.isActive,
+        isAdmin: user.isAdmin || false,
+        universityId: user.universityId || 0,
+        universityName: user.universityName,
+        createdAt: user.createdAt || new Date().toISOString(),
+        updatedAt: user.updatedAt || new Date().toISOString(),
+        lastLoginAt: user.lastLoginAt,
+        languagePreference: user.languagePreference,
+        themePreference: user.themePreference,
       }));
       setProfessors(profs);
     } catch (error: any) {
@@ -149,7 +160,7 @@ export default function ProfessorsPage() {
 
   const handleAddProfessor = () => {
     // If super admin, show dialog to choose type
-    if (currentUser?.role === 'super_admin') {
+    if (currentUser?.userType === 'super_admin') {
       setShowProfessorTypeDialog(true);
     } else {
       // If admin professor, go directly to create regular professor
@@ -174,16 +185,16 @@ export default function ProfessorsPage() {
       render: (value, professor) => (
         <div className="flex items-center space-x-3">
           <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
-            professor.is_admin ? 'bg-purple-100' : 'bg-blue-100'
+            professor.isAdmin ? 'bg-purple-100' : 'bg-blue-100'
           }`}>
-            {professor.is_admin ? (
+            {professor.isAdmin ? (
               <Shield className="h-5 w-5 text-purple-600" />
             ) : (
               <Users className="h-5 w-5 text-blue-600" />
             )}
           </div>
           <div>
-            <div className="font-medium">{professor.first_name} {professor.last_name}</div>
+            <div className="font-medium">{professor.firstName} {professor.lastName}</div>
             <div className="text-sm text-muted-foreground flex items-center">
               <Mail className="h-3 w-3 mr-1" />
               {professor.email}
@@ -196,7 +207,7 @@ export default function ProfessorsPage() {
       key: 'type',
       label: t('columns.type') || 'Type',
       render: (_, professor) => (
-        professor.is_admin ? (
+        professor.isAdmin ? (
           <Badge variant="default" className="bg-purple-100 text-purple-800">
             {t('columns.admin') || 'Administrator'}
           </Badge>
@@ -208,22 +219,37 @@ export default function ProfessorsPage() {
       )
     },
     {
-      key: 'university_name',
+      key: 'universityName',
       label: t('columns.university') || 'University',
       render: (_, professor) => (
         <div className="text-sm">
-          {professor.university_name || 'N/A'}
+          {professor.universityName || 'N/A'}
         </div>
       )
     },
     {
-      key: 'created_at',
+      key: 'isActive',
+      label: t('columns.status') || 'Status',
+      render: (_, professor) => (
+        professor.isActive ? (
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            {t('columns.active') || 'Active'}
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+            {t('columns.inactive') || 'Inactive'}
+          </Badge>
+        )
+      )
+    },
+    {
+      key: 'createdAt',
       label: t('columns.createdAt') || 'Created at',
       sortable: true,
       render: (value) => (
         <div className="flex items-center space-x-1">
           <Calendar className="h-3 w-3 text-muted-foreground" />
-          <span className="text-sm">{formatDateShort(value as string)}</span>
+          <span className="text-sm">{value ? formatDateShort(value as string) : 'N/A'}</span>
         </div>
       )
     },
@@ -232,8 +258,10 @@ export default function ProfessorsPage() {
       label: t('columns.actions') || 'Actions',
       width: '200px',
       render: (_, professor) => {
-        // Only super admins can deactivate/reactivate admin professors
-        const canManageActivation = !professor.is_admin || currentUser?.role === 'super_admin';
+        // Super admins have ALL THE POWER - they can manage everyone
+        // Regular admin professors can only manage non-admin professors
+        const isSuperAdmin = currentUser?.userType === 'super_admin';
+        const canManageActivation = isSuperAdmin || !professor.isAdmin;
 
         return (
           <div className="flex items-center space-x-1">
@@ -246,7 +274,7 @@ export default function ProfessorsPage() {
               <Edit className="h-4 w-4 text-blue-600" />
             </Button>
             {canManageActivation && (
-              <>
+              professor.isActive ? (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -255,6 +283,7 @@ export default function ProfessorsPage() {
                 >
                   <Ban className="h-4 w-4 text-amber-600" />
                 </Button>
+              ) : (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -263,9 +292,9 @@ export default function ProfessorsPage() {
                 >
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 </Button>
-              </>
+              )
             )}
-            {currentUser?.role === 'super_admin' && (
+            {currentUser?.userType === 'super_admin' && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -292,10 +321,10 @@ export default function ProfessorsPage() {
 
   // Filter professors based on search term
   const filteredProfessors = professors.filter(professor =>
-    professor.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    professor.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    professor.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    professor.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     professor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (professor.university_name || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (professor.universityName || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Sort professors
@@ -307,8 +336,8 @@ export default function ProfessorsPage() {
 
     // For 'name' column, sort by first_name
     if (sortColumn === 'name') {
-      aValue = a.first_name;
-      bValue = b.first_name;
+      aValue = a.firstName;
+      bValue = b.firstName;
     }
 
     if (aValue === null || aValue === undefined) return 1;
@@ -324,8 +353,8 @@ export default function ProfessorsPage() {
 
   // Calculate stats
   const totalProfessors = professors.length;
-  const adminProfessors = professors.filter(p => p.is_admin).length;
-  const regularProfessors = professors.filter(p => !p.is_admin).length;
+  const adminProfessors = professors.filter(p => p.isAdmin).length;
+  const regularProfessors = professors.filter(p => !p.isAdmin).length;
 
   return (
     <AdminOnly>
@@ -335,7 +364,7 @@ export default function ProfessorsPage() {
           description={t('description')}
           breadcrumbs={breadcrumbs}
           actions={
-            currentUser?.is_admin && (
+            currentUser?.isAdmin && (
               <Button onClick={handleAddProfessor}>
                 <Plus className="mr-2 h-4 w-4" />
                 {t('addButton')}

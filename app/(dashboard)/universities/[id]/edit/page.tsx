@@ -29,12 +29,12 @@ export default function EditUniversityPage() {
     code: '',
     description: '',
     address: '',
-    tax_id: '',
-    contact_email: '',
-    contact_phone: '',
-    contact_person: '',
+    taxId: '',
+    contactEmail: '',
+    contactPhone: '',
+    contactPerson: '',
     website: '',
-    subscription_tier: 3,
+    subscriptionTier: 3,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -50,12 +50,12 @@ export default function EditUniversityPage() {
         code: data.code,
         description: data.description || '',
         address: data.address || '',
-        tax_id: data.tax_id || '',
-        contact_email: data.contact_email || '',
-        contact_phone: data.contact_phone || '',
-        contact_person: data.contact_person || '',
+        taxId: data.taxId || '',
+        contactEmail: data.contactEmail || '',
+        contactPhone: data.contactPhone || '',
+        contactPerson: data.contactPerson || '',
         website: data.website || '',
-        subscription_tier: data.subscription_tier || 3,
+        subscriptionTier: data.subscriptionTier || 3,
       });
     } catch (error) {
       console.error('Failed to load university:', error);
@@ -225,14 +225,14 @@ export default function EditUniversityPage() {
               <div className="pt-6 border-t">
                 <h3 className="text-lg font-medium mb-4">{tTiers('title')}</h3>
                 <div>
-                  <label htmlFor="subscription_tier" className="block text-sm font-medium mb-1">
+                  <label htmlFor="subscriptionTier" className="block text-sm font-medium mb-1">
                     {tTiers('tierLabel')}
                   </label>
                   <Select
-                    value={formData.subscription_tier?.toString() || '3'}
-                    onValueChange={(value) => handleChange('subscription_tier', parseInt(value))}
+                    value={formData.subscriptionTier?.toString() || '3'}
+                    onValueChange={(value) => handleChange('subscriptionTier', parseInt(value))}
                   >
-                    <SelectTrigger id="subscription_tier" className="w-full">
+                    <SelectTrigger id="subscriptionTier" className="w-full">
                       <SelectValue placeholder={tTiers('selectPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -280,56 +280,56 @@ export default function EditUniversityPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="tax_id" className="block text-sm font-medium mb-1">
+                    <label htmlFor="taxId" className="block text-sm font-medium mb-1">
                       {t('taxIdLabel')}
                     </label>
                     <Input
-                      id="tax_id"
+                      id="taxId"
                       type="text"
-                      value={formData.tax_id || ''}
-                      onChange={(e) => handleChange('tax_id', e.target.value)}
+                      value={formData.taxId || ''}
+                      onChange={(e) => handleChange('taxId', e.target.value)}
                       placeholder={t('taxIdPlaceholder')}
                       maxLength={20}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact_email" className="block text-sm font-medium mb-1">
+                    <label htmlFor="contactEmail" className="block text-sm font-medium mb-1">
                       {t('contactEmailLabel')}
                     </label>
                     <Input
-                      id="contact_email"
+                      id="contactEmail"
                       type="email"
-                      value={formData.contact_email || ''}
-                      onChange={(e) => handleChange('contact_email', e.target.value)}
+                      value={formData.contactEmail || ''}
+                      onChange={(e) => handleChange('contactEmail', e.target.value)}
                       placeholder={t('contactEmailPlaceholder')}
                       maxLength={255}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact_phone" className="block text-sm font-medium mb-1">
+                    <label htmlFor="contactPhone" className="block text-sm font-medium mb-1">
                       {t('contactPhoneLabel')}
                     </label>
                     <Input
-                      id="contact_phone"
+                      id="contactPhone"
                       type="tel"
-                      value={formData.contact_phone || ''}
-                      onChange={(e) => handleChange('contact_phone', e.target.value)}
+                      value={formData.contactPhone || ''}
+                      onChange={(e) => handleChange('contactPhone', e.target.value)}
                       placeholder={t('contactPhonePlaceholder')}
                       maxLength={50}
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="contact_person" className="block text-sm font-medium mb-1">
+                    <label htmlFor="contactPerson" className="block text-sm font-medium mb-1">
                       {t('contactPersonLabel')}
                     </label>
                     <Input
-                      id="contact_person"
+                      id="contactPerson"
                       type="text"
-                      value={formData.contact_person || ''}
-                      onChange={(e) => handleChange('contact_person', e.target.value)}
+                      value={formData.contactPerson || ''}
+                      onChange={(e) => handleChange('contactPerson', e.target.value)}
                       placeholder={t('contactPersonPlaceholder')}
                       maxLength={200}
                     />

@@ -40,6 +40,29 @@ export function formatDateShort(date: string | Date | null | undefined): string 
   }).format(dateObj);
 }
 
+/**
+ * Checks if an entity has been meaningfully updated (updatedAt is different from createdAt)
+ * @param createdAt - Creation timestamp
+ * @param updatedAt - Update timestamp
+ * @returns true if the entity has been updated after creation
+ */
+export function hasBeenUpdated(
+  createdAt: string | Date | null | undefined,
+  updatedAt: string | Date | null | undefined
+): boolean {
+  if (!updatedAt || !createdAt) return false;
+
+  const created = new Date(createdAt);
+  const updated = new Date(updatedAt);
+
+  // Check for invalid dates
+  if (isNaN(created.getTime()) || isNaN(updated.getTime())) return false;
+
+  // Consider updated if the difference is more than 1 second (accounts for millisecond differences)
+  const diffInSeconds = Math.abs(updated.getTime() - created.getTime()) / 1000;
+  return diffInSeconds > 1;
+}
+
 export function formatRelativeTime(date: string | Date): string {
   const now = new Date();
   const targetDate = new Date(date);
@@ -49,7 +72,7 @@ export function formatRelativeTime(date: string | Date): string {
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
   if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
-  
+
   return formatDate(date);
 }
 
@@ -144,4 +167,42 @@ export function validatePasswordStrength(password: string): PasswordValidationRe
     hasNumber,
     hasSpecialChar,
   };
+}
+
+/**
+ * Extract a user-friendly error message from API error responses.
+ *
+ * Handles multiple error formats:
+ * - { detail: "Error message" }
+ * - { message: "Error message" }
+ * - Plain string errors
+ * - Unknown error objects
+ *
+ * @param error - The error object from the API or catch block
+ * @returns A user-friendly error message string
+ */
+export function getErrorMessage(error: any): string {
+  // Check for API error response with detail field (FastAPI/Python backend)
+  if (error?.detail) {
+    // Handle both string and array formats of detail
+    if (typeof error.detail === 'string') {
+      return error.detail;
+    }
+    if (Array.isArray(error.detail)) {
+      return error.detail.map((d: any) => d.msg || d).join(', ');
+    }
+  }
+
+  // Check for generic message field (.NET backend or generic errors)
+  if (error?.message && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  // Handle plain string errors
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  // Fallback for unknown error formats
+  return 'An unexpected error occurred';
 }

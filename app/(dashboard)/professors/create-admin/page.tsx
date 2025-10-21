@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
-import { Shield, Copy, Check, Mail, AlertCircle, Building2 } from 'lucide-react';
+import { Shield, Mail, AlertCircle, Building2 } from 'lucide-react';
 import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
 import { validatePasswordStrength } from '@/lib/utils';
@@ -25,8 +25,6 @@ export default function CreateAdminProfessorPage() {
   const tPwValidation = useTranslations('common.passwordValidation');
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [resetLink, setResetLink] = useState('');
-  const [copiedLink, setCopiedLink] = useState(false);
   const [newUser, setNewUser] = useState<any>(null);
   const [universities, setUniversities] = useState<any[]>([]);
   const [loadingUniversities, setLoadingUniversities] = useState(true);
@@ -35,11 +33,11 @@ export default function CreateAdminProfessorPage() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    first_name: '',
-    last_name: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    university_id: '',
-    language_preference: 'pt-br',
+    universityId: '',
+    languagePreference: 'pt-br',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -50,7 +48,7 @@ export default function CreateAdminProfessorPage() {
   ];
 
   useEffect(() => {
-    const universityIdFromUrl = searchParams.get('university_id');
+    const universityIdFromUrl = searchParams.get('universityId');
     if (universityIdFromUrl) {
       // If university_id in URL, load that specific university first
       loadUniversityById(parseInt(universityIdFromUrl));
@@ -71,7 +69,7 @@ export default function CreateAdminProfessorPage() {
       const university = await apiClient.getUniversity(universityId);
       // Set the selected university and also add it to the list
       setUniversities([university]);
-      setFormData(prev => ({ ...prev, university_id: String(university.id) }));
+      setFormData(prev => ({ ...prev, universityId: String(university.id) }));
     } catch (error: any) {
       console.error('Error loading university:', error);
       toast.error(t('errorLoadingUniversities'));
@@ -101,11 +99,11 @@ export default function CreateAdminProfessorPage() {
 
     if (!formData.username.trim()) newErrors.username = t('usernameRequired');
     if (!formData.email.trim()) newErrors.email = t('emailRequired');
-    if (!formData.first_name.trim()) newErrors.first_name = t('firstNameRequired');
-    if (!formData.last_name.trim()) newErrors.last_name = t('lastNameRequired');
+    if (!formData.firstName.trim()) newErrors.firstName = t('firstNameRequired');
+    if (!formData.lastName.trim()) newErrors.lastName = t('lastNameRequired');
     if (!formData.password.trim()) newErrors.password = t('passwordRequired');
     if (formData.password.length < 6) newErrors.password = t('passwordMinLength');
-    if (!formData.university_id) newErrors.university_id = t('universityRequired');
+    if (!formData.universityId) newErrors.universityId = t('universityRequired');
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -130,19 +128,17 @@ export default function CreateAdminProfessorPage() {
     try {
       // Create admin professor
       const response = await apiClient.createProfessor({
-        ...formData,
-        university_id: parseInt(formData.university_id),
-        is_admin: true,
+        username: formData.username,
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        password: formData.password,
+        universityId: parseInt(formData.universityId),
+        isAdmin: true,
+        languagePreference: formData.languagePreference,
       });
 
       setNewUser(response);
-
-      // Request password reset token from backend using username + user_type
-      const resetResponse = await apiClient.requestPasswordReset(formData.username, 'professor');
-      const resetToken = resetResponse.reset_token;
-      const link = `${window.location.origin}/welcome?token=${resetToken}&username=${formData.username}`;
-      setResetLink(link);
-
       setShowSuccess(true);
       toast.success(t('adminCreatedSuccess'));
     } catch (error: any) {
@@ -153,19 +149,8 @@ export default function CreateAdminProfessorPage() {
     }
   };
 
-  const handleCopyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(resetLink);
-      setCopiedLink(true);
-      toast.success(t('linkCopied'));
-      setTimeout(() => setCopiedLink(false), 2000);
-    } catch (error) {
-      toast.error(t('errorCopyingLink'));
-    }
-  };
-
   const getUniversityName = () => {
-    const university = universities.find(u => u.id === parseInt(formData.university_id));
+    const university = universities.find(u => u.id === parseInt(formData.universityId));
     return university?.name || '';
   };
 
@@ -186,7 +171,7 @@ export default function CreateAdminProfessorPage() {
                 {t('successCardTitle')}
               </CardTitle>
               <CardDescription className="text-green-700 dark:text-green-300">
-                {t('successCardDescription', { firstName: newUser?.first_name, lastName: newUser?.last_name })}
+                {t('successCardDescription', { firstName: newUser?.firstName, lastName: newUser?.lastName })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -217,55 +202,21 @@ export default function CreateAdminProfessorPage() {
 
           <Card className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
             <CardHeader>
-              <CardTitle className="text-blue-900 dark:text-blue-100">{t('resetLinkTitle')}</CardTitle>
+              <CardTitle className="text-blue-900 dark:text-blue-100 flex items-center">
+                <Mail className="mr-2 h-5 w-5" />
+                {t('emailSentTitle')}
+              </CardTitle>
               <CardDescription className="text-blue-700 dark:text-blue-300">
-                {t('resetLinkDescription')}
+                {t('emailSentDescription', { email: formData.email })}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Alert className="bg-amber-50 border-amber-200 dark:bg-amber-950 dark:border-amber-800">
-                <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                <AlertDescription className="text-amber-900 dark:text-amber-100">
-                  <strong>{t('linkExpiresWarning')}</strong> {t('shareQuickly')}
+              <Alert className="bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-700">
+                <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <AlertDescription className="text-blue-900 dark:text-blue-100">
+                  {t('emailInstructions')}
                 </AlertDescription>
               </Alert>
-
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-blue-900 dark:text-blue-100">{t('setupLinkLabel')}</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    value={resetLink}
-                    readOnly
-                    className="bg-white dark:bg-blue-900 font-mono text-sm"
-                  />
-                  <Button
-                    onClick={handleCopyLink}
-                    variant="outline"
-                    className="shrink-0"
-                  >
-                    {copiedLink ? (
-                      <>
-                        <Check className="mr-2 h-4 w-4 text-green-600 dark:text-green-400" />
-                        {t('copied')}
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="mr-2 h-4 w-4" />
-                        {t('copyLink')}
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <div className="p-4 bg-white dark:bg-blue-900 rounded border border-blue-200 dark:border-blue-700">
-                <p className="text-sm text-blue-900 dark:text-blue-100 font-medium mb-2">{t('howToShare')}</p>
-                <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-disc list-inside">
-                  <li>{t('shareViaEmail', { email: formData.email })}</li>
-                  <li>{t('shareViaMessaging')}</li>
-                  <li>{t('shareInPerson')}</li>
-                </ul>
-              </div>
             </CardContent>
           </Card>
 
@@ -278,13 +229,12 @@ export default function CreateAdminProfessorPage() {
               setFormData({
                 username: '',
                 email: '',
-                first_name: '',
-                last_name: '',
+                firstName: '',
+                lastName: '',
                 password: '',
-                university_id: '',
-                language_preference: 'pt-br',
+                universityId: '',
+                languagePreference: 'pt-br',
               });
-              setResetLink('');
               setNewUser(null);
             }}>
               {t('createAnother')}
@@ -321,10 +271,10 @@ export default function CreateAdminProfessorPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="university_id">{t('universityLabel')}</Label>
+                <Label htmlFor="universityId">{t('universityLabel')}</Label>
                 <Select
-                  value={formData.university_id}
-                  onValueChange={(value) => setFormData({ ...formData, university_id: value })}
+                  value={formData.universityId}
+                  onValueChange={(value) => setFormData({ ...formData, universityId: value })}
                   disabled={loadingUniversities}
                 >
                   <SelectTrigger>
@@ -338,37 +288,37 @@ export default function CreateAdminProfessorPage() {
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.university_id && (
-                  <p className="text-sm text-destructive">{errors.university_id}</p>
+                {errors.universityId && (
+                  <p className="text-sm text-destructive">{errors.universityId}</p>
                 )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">{t('firstNameLabel')}</Label>
+                  <Label htmlFor="firstName">{t('firstNameLabel')}</Label>
                   <Input
-                    id="first_name"
-                    value={formData.first_name}
-                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                    id="firstName"
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     placeholder={t('firstNamePlaceholder')}
                     autoComplete="off"
                   />
-                  {errors.first_name && (
-                    <p className="text-sm text-destructive">{errors.first_name}</p>
+                  {errors.firstName && (
+                    <p className="text-sm text-destructive">{errors.firstName}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">{t('lastNameLabel')}</Label>
+                  <Label htmlFor="lastName">{t('lastNameLabel')}</Label>
                   <Input
-                    id="last_name"
-                    value={formData.last_name}
-                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                    id="lastName"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     placeholder={t('lastNamePlaceholder')}
                     autoComplete="off"
                   />
-                  {errors.last_name && (
-                    <p className="text-sm text-destructive">{errors.last_name}</p>
+                  {errors.lastName && (
+                    <p className="text-sm text-destructive">{errors.lastName}</p>
                   )}
                 </div>
               </div>
@@ -432,10 +382,10 @@ export default function CreateAdminProfessorPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="language_preference">{t('languageLabel')}</Label>
+                <Label htmlFor="languagePreference">{t('languageLabel')}</Label>
                 <Select
-                  value={formData.language_preference}
-                  onValueChange={(value) => setFormData({ ...formData, language_preference: value })}
+                  value={formData.languagePreference}
+                  onValueChange={(value) => setFormData({ ...formData, languagePreference: value })}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder={t('languagePlaceholder')} />

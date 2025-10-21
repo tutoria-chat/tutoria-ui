@@ -1,3 +1,4 @@
+import { PAGINATION } from './constants';
 import type {
   TokenResponse,
   User,
@@ -42,43 +43,61 @@ import type {
 } from './types';
 
 export const API_CONFIG = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://tutoria-api-dev.orangesmoke-8addc8f4.eastus2.azurecontainerapps.io/api/v2',
+  // C# Unified API (Management & Auth endpoints - now combined!)
+  // Management API: /api/universities, /api/courses, /api/modules, etc.
+  // Auth API: /api/auth/login, /api/auth/register, /api/auth/me, etc.
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6969',
+  // Python API (AI/Tutor endpoints - improve-prompt only)
+  pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
   timeout: 30000,
 } as const;
 
 class TutoriaAPIClient {
   private baseURL: string;
+  private pythonBaseURL: string;
   private timeout: number;
   private token: string | null = null;
   private isRefreshing: boolean = false;
   private refreshPromise: Promise<boolean> | null = null;
+  private refreshAttempts: number = 0;
+  private readonly MAX_REFRESH_ATTEMPTS = 3;
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
+    this.pythonBaseURL = config.pythonBaseURL;
     this.timeout = config.timeout;
 
     // Initialize token from localStorage if available
     if (typeof window !== 'undefined') {
-      this.token = localStorage.getItem('auth-token');
+      this.token = localStorage.getItem('tutoria_token');
     }
   }
 
   setToken(token: string) {
     this.token = token;
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth-token', token);
+      localStorage.setItem('tutoria_token', token);
     }
   }
 
   clearToken() {
     this.token = null;
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth-token');
+      localStorage.removeItem('tutoria_token');
     }
   }
 
   private async refreshAccessToken(): Promise<boolean> {
     if (typeof window === 'undefined') return false;
+
+    // Check if max refresh attempts exceeded
+    if (this.refreshAttempts >= this.MAX_REFRESH_ATTEMPTS) {
+      console.error('Max token refresh attempts exceeded. Clearing tokens.');
+      this.clearToken();
+      localStorage.removeItem('tutoria_refresh_token');
+      this.refreshAttempts = 0;
+      return false;
+    }
 
     // If already refreshing, wait for that promise
     if (this.isRefreshing && this.refreshPromise) {
@@ -86,6 +105,8 @@ class TutoriaAPIClient {
     }
 
     this.isRefreshing = true;
+    this.refreshAttempts++;
+
     this.refreshPromise = (async () => {
       try {
         const refreshToken = localStorage.getItem('tutoria_refresh_token');
@@ -94,7 +115,7 @@ class TutoriaAPIClient {
         }
 
         // Call refresh endpoint
-        const response = await fetch(`${this.baseURL}/auth/refresh`, {
+        const response = await fetch(`${this.baseURL}/api/auth/refresh`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${refreshToken}`,
@@ -109,11 +130,14 @@ class TutoriaAPIClient {
         const data: TokenResponse = await response.json();
 
         // Update tokens
-        this.setToken(data.access_token);
-        localStorage.setItem('tutoria_token', data.access_token);
-        if (data.refresh_token) {
-          localStorage.setItem('tutoria_refresh_token', data.refresh_token);
+        this.setToken(data.accessToken);
+        localStorage.setItem('tutoria_token', data.accessToken);
+        if (data.refreshToken) {
+          localStorage.setItem('tutoria_refresh_token', data.refreshToken);
         }
+
+        // Reset refresh attempts on success
+        this.refreshAttempts = 0;
 
         return true;
       } catch (error) {
@@ -130,9 +154,13 @@ class TutoriaAPIClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    useAuthAPI: boolean = false,
+    usePythonAPI: boolean = false
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
+    // Determine which API host to use (Python API or unified C# API)
+    const baseUrl = usePythonAPI ? this.pythonBaseURL : this.baseURL;
+    const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
     const headers: Record<string, string> = {
@@ -194,7 +222,7 @@ class TutoriaAPIClient {
 
         if (refreshed) {
           // Retry the original request with new token
-          return this.request<T>(endpoint, options);
+          return this.request<T>(endpoint, options, useAuthAPI, usePythonAPI);
         } else {
           // Refresh failed, clear token and redirect to login
           this.clearToken();
@@ -226,7 +254,7 @@ class TutoriaAPIClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, unknown> | object): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown> | object, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
@@ -237,11 +265,11 @@ class TutoriaAPIClient {
     }
     const queryString = searchParams.toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
-    
-    return this.request<T>(url, { method: 'GET' });
+
+    return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI);
   }
 
-  async post<T>(endpoint: string, data?: unknown, isFormData = false): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, isFormData = false, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
@@ -264,392 +292,421 @@ class TutoriaAPIClient {
       method: 'POST',
       headers: headers as unknown as HeadersInit,
       body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
-    });
+    }, useAuthAPI, usePythonAPI);
   }
 
-  async put<T>(endpoint: string, data?: unknown): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-    });
+    }, useAuthAPI, usePythonAPI);
   }
 
-  async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+  async delete<T>(endpoint: string, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+    return this.request<T>(endpoint, { method: 'DELETE' }, useAuthAPI, usePythonAPI);
   }
 
-  async patch<T>(endpoint: string, data?: unknown): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-    });
+    }, useAuthAPI, usePythonAPI);
   }
 
-  // Authentication endpoints
+  // Authentication endpoints (use Next.js API route for secure server-side client authentication)
   async login(credentials: { username: string; password: string }): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/auth/login', credentials);
-    if (response.access_token) {
-      this.setToken(response.access_token);
+    // Call Next.js API route instead of Auth API directly
+    // This keeps client_id/client_secret secure on the server
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errorMessage = errorData.detail || errorData.message || `HTTP error! status: ${response.status}`;
+      throw new Error(errorMessage);
     }
-    return response;
+
+    const data: TokenResponse = await response.json();
+
+    if (data.accessToken) {
+      this.setToken(data.accessToken);
+    }
+
+    return data;
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/auth/refresh');
-    if (response.access_token) {
-      this.setToken(response.access_token);
+    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, false, true);
+    if (response.accessToken) {
+      this.setToken(response.accessToken);
     }
     return response;
   }
 
-  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; reset_token: string }> {
-    return this.post('/auth/reset-password-request', { username, user_type: userType });
+  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
+    return this.post('/api/auth/reset-password-request', { username, userType }, false, true);
   }
 
-  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; first_name: string; last_name: string; email: string; language_preference: string; user_type: string }> {
-    return this.get('/auth/verify-reset-token', { username, reset_token: token });
+  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
+    return this.get('/api/auth/verify-reset-token', { username, resetToken: token }, true);
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/auth/reset-password?username=${username}&reset_token=${token}`, { new_password: newPassword });
+    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
-    return this.put('/auth/password', { current_password: currentPassword, new_password: newPassword });
+    return this.put('/api/auth/password', { currentPassword, newPassword }, true);
   }
 
-  async getCurrentUser(): Promise<User> {
-    return this.get('/auth/me');
+  async getCurrentUser(): Promise<UserResponse> {
+    return this.get('/api/auth/me', undefined, true);
   }
 
-  async updateUserPreferences(data: { theme_preference?: string; language_preference?: string }): Promise<{ message: string }> {
-    return this.put('/auth/preferences', data);
+  async updateUserPreferences(data: { themePreference?: string; languagePreference?: string }): Promise<{ message: string }> {
+    return this.put('/api/auth/preferences', data, true);
   }
 
   async deactivateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/deactivate`);
+    return this.patch(`/api/users/${userId}/deactivate`, undefined, false);
   }
 
   async activateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/activate`);
+    return this.patch(`/api/users/${userId}/activate`, undefined, false);
   }
 
   async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
-    return this.delete(`/auth/users/${userId}`);
+    return this.delete(`/api/users/${userId}`, false);
   }
 
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
-    return this.get('/auth/users/', { user_type: userType });
+    // Backend returns PaginatedResponse, extract items array
+    // Request all items by using maximum page size as a workaround
+    const response = await this.get<PaginatedResponse<UserResponse>>('/api/users/', { userType, page: 1, size: PAGINATION.MAX_PAGE_SIZE }, false);
+    return response.items;
   }
 
   async getUser(userId: number): Promise<UserResponse> {
-    return this.get(`/auth/users/${userId}`);
+    return this.get(`/api/users/${userId}`, undefined, false); // Management API
   }
 
-  async updateUser(userId: number, data: { first_name?: string; last_name?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
-    return this.put(`/auth/users/${userId}`, data);
+  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
+    return this.put(`/api/users/${userId}`, data, false); // Management API
   }
 
   // University endpoints
   async getUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
-    return this.get('/universities/', params);
+    return this.get('/api/universities/', params);
   }
 
   async createUniversity(data: UniversityCreate): Promise<University> {
-    return this.post('/universities/', data);
+    return this.post('/api/universities/', data);
   }
 
   async getUniversity(id: number): Promise<UniversityWithCourses> {
-    return this.get(`/universities/${id}`);
+    return this.get(`/api/universities/${id}`);
   }
 
   async updateUniversity(id: number, data: UniversityUpdate): Promise<University> {
-    return this.put(`/universities/${id}`, data);
+    return this.put(`/api/universities/${id}`, data);
   }
 
   async deleteUniversity(id: number): Promise<void> {
-    return this.delete(`/universities/${id}`);
+    return this.delete(`/api/universities/${id}`);
   }
 
   // Course endpoints
   async getCourses(params?: CourseFilters): Promise<PaginatedResponse<Course>> {
-    return this.get('/courses/', params);
+    return this.get('/api/courses/', params);
   }
 
   async createCourse(data: CourseCreate): Promise<Course> {
-    return this.post('/courses/', data);
+    return this.post('/api/courses/', data);
   }
 
   async getCourse(id: number): Promise<CourseWithDetails> {
-    return this.get(`/courses/${id}`);
+    return this.get(`/api/courses/${id}`);
   }
 
   async updateCourse(id: number, data: CourseUpdate): Promise<Course> {
-    return this.put(`/courses/${id}`, data);
+    return this.put(`/api/courses/${id}`, data);
   }
 
   async deleteCourse(id: number): Promise<void> {
-    return this.delete(`/courses/${id}`);
+    return this.delete(`/api/courses/${id}`);
   }
 
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
-    return this.get(`/courses/`, { university_id: universityId });
+    const response = await this.get<PaginatedResponse<Course>>(`/api/courses/`, { universityId, size: PAGINATION.MAX_PAGE_SIZE });
+    return response.items;
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {
-    return this.post(`/courses/${courseId}/professors/${professorId}`);
+    return this.post(`/api/courses/${courseId}/professors/${professorId}`);
   }
 
   async unassignProfessorFromCourse(courseId: number, professorId: number): Promise<void> {
-    return this.delete(`/courses/${courseId}/professors/${professorId}`);
+    return this.delete(`/api/courses/${courseId}/professors/${professorId}`);
   }
 
   // Module endpoints
   async getModules(params?: ModuleFilters): Promise<PaginatedResponse<Module>> {
-    return this.get('/modules/', params);
+    return this.get('/api/modules/', params);
   }
 
   async createModule(data: ModuleCreate): Promise<Module> {
-    return this.post('/modules/', data);
+    return this.post('/api/modules/', data);
   }
 
   async getModule(id: number): Promise<ModuleWithDetails> {
-    return this.get(`/modules/${id}`);
+    return this.get(`/api/modules/${id}`);
   }
 
   async updateModule(id: number, data: ModuleUpdate): Promise<Module> {
-    return this.put(`/modules/${id}`, data);
+    return this.put(`/api/modules/${id}`, data);
   }
 
   async deleteModule(id: number): Promise<void> {
-    return this.delete(`/modules/${id}`);
+    return this.delete(`/api/modules/${id}`);
+  }
+
+  // AI/Tutor endpoints (Python API)
+  async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
+    // This endpoint uses the Python API - must stay snake_case
+    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, true);
   }
 
   // AI Model endpoints
   async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
-    return this.get('/ai-models/', params);
+    return this.get('/api/ai-models/', params);
   }
 
   async getAIModel(id: number): Promise<AIModel> {
-    return this.get(`/ai-models/${id}`);
+    return this.get(`/api/ai-models/${id}`);
   }
 
   // File endpoints
   async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
-    return this.get('/files/', params);
+    return this.get('/api/files/', params);
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
-    const params = new URLSearchParams();
-    params.append('module_id', moduleId.toString());
+    // Add moduleId and name to the FormData (not query params)
+    // Backend expects these in the form body as part of UploadFileRequest DTO
+    formData.append('moduleId', moduleId.toString());
     if (fileName) {
-      params.append('name', fileName);
+      formData.append('name', fileName);
     }
-    return this.post(`/files/?${params.toString()}`, formData, true);
+    return this.post('/api/files/', formData, true);
   }
 
   async getFile(id: number): Promise<FileResponse> {
-    return this.get(`/files/${id}`);
+    return this.get(`/api/files/${id}`);
   }
 
   async updateFile(id: number, data: Partial<File>): Promise<File> {
-    return this.put(`/files/${id}`, data);
+    return this.put(`/api/files/${id}`, data);
   }
 
   async deleteFile(id: number): Promise<void> {
-    return this.delete(`/files/${id}`);
+    return this.delete(`/api/files/${id}`);
   }
 
-  async getFileDownloadUrl(id: number): Promise<{ download_url: string }> {
-    return this.get(`/files/${id}/download`);
+  async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
+    return this.get(`/api/files/${id}/download`);
   }
 
   // Professor endpoints
   async getProfessors(params?: ProfessorFilters): Promise<PaginatedResponse<Professor>> {
-    return this.get('/professors/', params);
+    return this.get('/api/professors/', params);
   }
 
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
-    // Use the unified /auth/users/create endpoint
+    // Use the unified /api/users endpoint (Management API)
     interface BackendUserResponse {
-      user_id: number;
+      userId: number;
       username: string;
       email: string;
-      first_name: string;
-      last_name: string;
-      user_type: 'super_admin' | 'professor' | 'student';
-      is_active: boolean;
-      is_admin?: boolean;
-      university_id?: number;
-      university_name?: string;
-      created_at: string;
-      updated_at: string;
-      last_login_at?: string | null;
-      language_preference?: string;
-      theme_preference?: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      isAdmin?: boolean;
+      universityId?: number;
+      universityName?: string;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+    const response = await this.post<BackendUserResponse>('/api/users', {
       username: data.username,
       email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
-      user_type: 'professor',
-      university_id: data.university_id,
-      is_admin: data.is_admin,
-      language_preference: data.language_preference || 'pt-br',
-    });
+      userType: 'professor',
+      universityId: data.universityId,
+      isAdmin: data.isAdmin,
+      languagePreference: data.languagePreference || 'pt-br',
+    }, false, false);
 
     // Map backend UserResponse to Professor interface
     return {
-      id: response.user_id,
+      id: response.userId,
       username: response.username,
       email: response.email,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      university_id: response.university_id || 0,
-      university_name: response.university_name,
-      is_admin: response.is_admin || false,
-      is_active: response.is_active,
-      created_at: response.created_at,
-      updated_at: response.updated_at,
-      last_login_at: response.last_login_at,
-      language_preference: response.language_preference,
-      theme_preference: response.theme_preference,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      universityId: response.universityId || 0,
+      universityName: response.universityName,
+      isAdmin: response.isAdmin || false,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
     };
   }
 
   async getProfessor(id: number): Promise<Professor> {
-    return this.get(`/professors/${id}`);
+    return this.get(`/api/professors/${id}`);
   }
 
   async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
-    return this.put(`/professors/${id}`, data);
+    return this.put(`/api/professors/${id}`, data);
   }
 
   async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
-    return this.put(`/professors/${id}/password`, { new_password: newPassword });
+    return this.put(`/api/professors/${id}/password`, { newPassword });
   }
 
-  async getProfessorCourses(id: number): Promise<{ course_ids: number[] }> {
-    return this.get(`/professors/${id}/courses`);
+  async getProfessorCourses(id: number): Promise<{ courseIds: number[] }> {
+    return this.get(`/api/professors/${id}/courses`);
   }
 
   async deleteProfessor(id: number): Promise<void> {
-    return this.delete(`/professors/${id}`);
+    return this.delete(`/api/professors/${id}`);
   }
 
   // Student endpoints
   async getStudents(params?: StudentFilters): Promise<PaginatedResponse<Student>> {
-    return this.get('/students/', params);
+    return this.get('/api/students/', params);
   }
 
   async createStudent(data: StudentCreate): Promise<Student> {
-    return this.post('/students/', data);
+    return this.post('/api/students/', data);
   }
 
   async getStudent(id: number): Promise<Student> {
-    return this.get(`/students/${id}`);
+    return this.get(`/api/students/${id}`);
   }
 
   async updateStudent(id: number, data: StudentUpdate): Promise<Student> {
-    return this.put(`/students/${id}`, data);
+    return this.put(`/api/students/${id}`, data);
   }
 
   async deleteStudent(id: number): Promise<void> {
-    return this.delete(`/students/${id}`);
+    return this.delete(`/api/students/${id}`);
   }
 
   // Module Token endpoints
   async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
-    return this.get('/module-tokens/', params);
+    return this.get('/api/moduleaccesstokens/', params);
   }
 
   async createModuleToken(data: ModuleAccessTokenCreate): Promise<ModuleAccessToken> {
-    return this.post('/module-tokens/', data);
+    return this.post('/api/moduleaccesstokens/', data);
   }
 
   async getModuleToken(id: number): Promise<ModuleAccessToken> {
-    return this.get(`/module-tokens/${id}`);
+    return this.get(`/api/moduleaccesstokens/${id}`);
   }
 
   async updateModuleToken(id: number, data: ModuleAccessTokenUpdate): Promise<ModuleAccessToken> {
-    return this.put(`/module-tokens/${id}`, data);
+    return this.put(`/api/moduleaccesstokens/${id}`, data);
   }
 
   async deleteModuleToken(id: number): Promise<void> {
-    return this.delete(`/module-tokens/${id}`);
+    return this.delete(`/api/moduleaccesstokens/${id}`);
   }
 
   // Super Admin endpoints
   async getSystemStats(): Promise<SystemStats> {
-    return this.get('/super-admin/stats');
+    return this.get('/api/super-admin/stats');
   }
 
   async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
-    return this.get('/super-admin/super-admins/', params);
+    return this.get('/api/super-admin/super-admins/', params);
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    // Use the unified /auth/users/create endpoint
+    // Use the unified /api/auth/users/create endpoint
     interface BackendUserResponse {
-      user_id: number;
+      userId: number;
       username: string;
       email: string;
-      first_name: string;
-      last_name: string;
-      user_type: 'super_admin' | 'professor' | 'student';
-      is_active: boolean;
-      created_at: string;
-      updated_at: string;
-      last_login_at?: string | null;
-      language_preference?: string;
-      theme_preference?: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+    const response = await this.post<BackendUserResponse>('/api/auth/users/create', {
       username: data.username,
       email: data.email,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
-      user_type: 'super_admin',
-      is_admin: true, // Super admins are always admins
-      language_preference: data.language_preference || 'pt-br',
-    });
+      userType: 'super_admin',
+      isAdmin: true, // Super admins are always admins
+      languagePreference: data.languagePreference || 'pt-br',
+    }, false, true);
 
     // Map backend UserResponse to SuperAdmin interface
     return {
-      id: response.user_id,
+      id: response.userId,
       username: response.username,
       email: response.email,
-      first_name: response.first_name,
-      last_name: response.last_name,
-      is_active: response.is_active,
-      created_at: response.created_at,
-      updated_at: response.updated_at,
-      last_login_at: response.last_login_at,
-      language_preference: response.language_preference,
-      theme_preference: response.theme_preference,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
     };
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
-    return this.put(`/super-admin/super-admins/${id}`, data);
+    return this.put(`/api/super-admin/super-admins/${id}`, data);
   }
 
   async getAllUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
-    return this.get('/super-admin/universities/all', params);
+    return this.get('/api/super-admin/universities/all', params);
   }
 
   async getAllProfessors(params?: PaginationParams): Promise<PaginatedResponse<Professor>> {
-    return this.get('/super-admin/professors/all', params);
+    return this.get('/api/super-admin/professors/all', params);
   }
 
   // AI Tutor endpoints
   async askTutor(question: TutorQuestion): Promise<TutorResponse> {
-    return this.post('/tutor/ask', question);
+    return this.post('/api/tutor/ask', question);
   }
 }
 

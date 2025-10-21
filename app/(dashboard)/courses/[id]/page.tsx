@@ -26,8 +26,8 @@ import { Loading } from '@/components/ui/loading-spinner';
 import { AdminProfessorOnly, ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
-import { formatDateShort } from '@/lib/utils';
-import type { Course, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
+import type { CourseWithDetails, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -40,33 +40,58 @@ export default function CourseDetailsPage() {
   const tCommon = useTranslations('common');
   const tModules = useTranslations('modules');
 
-  // Fetch course data from API
-  const { data: course, loading: courseLoading, error: courseError } = useFetch<Course>(`/courses/${courseId}`);
-  const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(`/modules/?course_id=${courseId}`);
-  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(`/professors/?course_id=${courseId}`);
-
-  const allModules = modulesResponse?.items || [];
-  const professors = professorsResponse?.items || [];
-
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
+
+  // Fetch course basic info
+  const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/api/courses/${courseId}`);
+
+  // Pagination and filtering state for modules
+  const [modulePage, setModulePage] = useState(1);
+  const [moduleLimit, setModuleLimit] = useState(10);
   const [semesterFilter, setSemesterFilter] = useState<string>('all');
   const [yearFilter, setYearFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [moduleSortColumn, setModuleSortColumn] = useState<string | null>('name');
+  const [moduleSortDirection, setModuleSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Build modules API URL with pagination and filters
+  const buildModulesApiUrl = () => {
+    let filters = `courseId=${courseId}&page=${modulePage}&limit=${moduleLimit}`;
+
+    if (searchTerm) {
+      filters += `&search=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (semesterFilter !== 'all') {
+      filters += `&semester=${semesterFilter}`;
+    }
+
+    if (yearFilter !== 'all') {
+      filters += `&year=${yearFilter}`;
+    }
+
+    return `/api/modules/?${filters}`;
+  };
+
+  // Fetch modules with pagination
+  const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
+
+  // Fetch professors
+  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
+    `/api/professors/?courseId=${courseId}`
+  );
+
+  const modules = modulesResponse?.items || [];
+  const totalModules = modulesResponse?.total || 0;
+  const professors = professorsResponse?.items || [];
+
+  // Get all modules for filter options (using course embedded data)
+  const allModules = course?.modules || [];
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
 
-  // Filter modules
-  const modules = allModules.filter(module => {
-    const matchesSemester = semesterFilter === 'all' || module.semester?.toString() === semesterFilter;
-    const matchesYear = yearFilter === 'all' || module.year?.toString() === yearFilter;
-    const matchesSearch = !searchTerm ||
-      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      module.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSemester && matchesYear && matchesSearch;
-  });
-
-  // Get unique semesters and years for filters
+  // Get unique semesters and years for filter dropdowns (using all modules from course)
   const availableSemesters = Array.from(new Set(allModules.map(m => m.semester).filter(Boolean))).sort();
   const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => (b ?? 0) - (a ?? 0));
 
@@ -77,12 +102,12 @@ export default function CourseDetailsPage() {
       return true;
     }
     // Admin professors can add modules to courses in their university
-    if (user?.role === 'professor' && user?.is_admin === true) {
+    if (user?.role === 'professor' && user?.isAdmin === true) {
       return true;
     }
     // Regular professors: For now, allow them to see the button
     // The module form will handle filtering courses by assignment
-    if (user?.role === 'professor' && user?.is_admin === false) {
+    if (user?.role === 'professor' && user?.isAdmin === false) {
       return true;
     }
     return false;
@@ -96,9 +121,9 @@ export default function CourseDetailsPage() {
     return <div className="flex items-center justify-center h-64">{tCommon('error')}</div>;
   }
 
-  const breadcrumbs: BreadcrumbItem[] = course.university_id ? [
-    { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.university_id}` },
-    { label: course.university_name || 'University', href: `/universities/${course.university_id}` },
+  const breadcrumbs: BreadcrumbItem[] = course.universityId ? [
+    { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.universityId}` },
+    { label: course.universityName || 'University', href: `/universities/${course.universityId}` },
     { label: course.name, isCurrentPage: true }
   ] : [
     { label: t('breadcrumbCourses'), href: '/courses' },
@@ -106,10 +131,10 @@ export default function CourseDetailsPage() {
   ];
 
   const canEditModule = (module: Module): boolean => {
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.is_admin === true)) {
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) {
       return true;
     }
-    if (user?.role === 'professor' && user?.is_admin === false) {
+    if (user?.role === 'professor' && user?.isAdmin === false) {
       return true;
     }
     return false;
@@ -133,6 +158,15 @@ export default function CourseDetailsPage() {
         }
       }
     });
+  };
+
+  const handleModuleSortChange = (column: string) => {
+    if (moduleSortColumn === column) {
+      setModuleSortDirection(moduleSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setModuleSortColumn(column);
+      setModuleSortDirection('asc');
+    }
   };
 
   const moduleColumns: TableColumn<Module>[] = [
@@ -167,7 +201,7 @@ export default function CourseDetailsPage() {
       )
     },
     {
-      key: 'files_count',
+      key: 'filesCount',
       label: t('modulesTab.files'),
       render: (value) => (
         <div className="flex items-center space-x-1">
@@ -177,16 +211,21 @@ export default function CourseDetailsPage() {
       )
     },
     {
-      key: 'tokens_count',
+      key: 'tokensCount',
       label: t('modulesTab.tokens'),
       render: (value) => (
         <Badge variant="outline">{t('modulesTab.tokensCount', { count: value || 0 })}</Badge>
       )
     },
     {
-      key: 'updated_at',
+      key: 'updatedAt',
       label: t('modulesTab.lastUpdate'),
-      render: (value) => formatDateShort(value as string)
+      render: (value, module) => {
+        if (hasBeenUpdated(module.createdAt, value as string)) {
+          return <span className="text-sm">{formatDateShort(value as string)}</span>;
+        }
+        return <span className="text-sm text-muted-foreground">{t('modulesTab.neverUpdated')}</span>;
+      }
     },
     {
       key: 'actions',
@@ -243,25 +282,20 @@ export default function CourseDetailsPage() {
             <Users className="h-4 w-4 text-green-600" />
           </div>
           <div>
-            <div className="font-medium">{professor.first_name} {professor.last_name}</div>
+            <div className="font-medium">{professor.firstName} {professor.lastName}</div>
             <div className="text-sm text-muted-foreground">{professor.email}</div>
           </div>
         </div>
       )
     },
     {
-      key: 'is_admin',
+      key: 'isAdmin',
       label: t('professorsTab.role'),
       render: (value) => (
         <Badge variant={value ? "default" : "secondary"}>
           {value ? t('professorsTab.adminProfessor') : t('professorsTab.regularProfessor')}
         </Badge>
       )
-    },
-    {
-      key: 'courses_count',
-      label: t('professorsTab.totalCourses'),
-      render: (value) => t('professorsTab.coursesCount', { count: value || 0 })
     }
   ];
 
@@ -269,13 +303,13 @@ export default function CourseDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={course.name}
-        description={`${course.university_name || t('courseInfo')} • ${t('updated', { date: formatDateShort(course.created_at) })}`}
+        description={`${course.universityName || t('courseInfo')} • ${t('updated', { date: formatDateShort(course.createdAt) })}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
-            {course.university_id && (
+            {course.universityId && (
               <Button variant="outline" asChild>
-                <Link href={`/universities/${course.university_id}`}>
+                <Link href={`/universities/${course.universityId}`}>
                   <Building2 className="mr-2 h-4 w-4" />
                   {t('viewUniversity')}
                 </Link>
@@ -284,7 +318,7 @@ export default function CourseDetailsPage() {
 
             {canAddModule() && (
               <Button variant="outline" asChild>
-                <Link href={`/modules/create?course_id=${courseId}`}>
+                <Link href={`/modules/create?courseId=${courseId}`}>
                   <Plus className="mr-2 h-4 w-4" />
                   {t('addModule')}
                 </Link>
@@ -318,12 +352,14 @@ export default function CourseDetailsPage() {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.university_name || t('courseInfo')}</span>
+                <span>{course.universityName || t('courseInfo')}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>{t('updated', { date: formatDateShort(course.updated_at) })}</span>
-              </div>
+              {hasBeenUpdated(course.createdAt, course.updatedAt) && (
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span>{t('updated', { date: formatDateShort(course.updatedAt) })}</span>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -333,7 +369,7 @@ export default function CourseDetailsPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{allModules.length}</p>
+                  <p className="text-2xl font-bold">{totalModules}</p>
                   <p className="text-sm text-muted-foreground">{t('modules')}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-500" />
@@ -341,17 +377,18 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
+          {/* Students Card - Temporarily disabled */}
+          {/* <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course.students_count || 0}</p>
+                  <p className="text-2xl font-bold">{course?.students?.length || 0}</p>
                   <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Professors Card - Admin only */}
           <AdminOnly>
@@ -403,7 +440,8 @@ export default function CourseDetailsPage() {
             </button>
           </AdminOnly>
 
-          <button
+          {/* Students Tab - Temporarily disabled */}
+          {/* <button
             onClick={() => setActiveTab('students')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'students'
@@ -413,9 +451,9 @@ export default function CourseDetailsPage() {
           >
             {t('tabs.students')}
             <Badge variant="secondary" className="ml-2">
-              {course.students_count || 0}
+              {course?.students?.length || 0}
             </Badge>
-          </button>
+          </button> */}
         </nav>
       </div>
 
@@ -466,6 +504,19 @@ export default function CourseDetailsPage() {
               <DataTable
                 data={modules || []}
                 columns={moduleColumns}
+                loading={modulesLoading}
+                pagination={{
+                  page: modulePage,
+                  limit: moduleLimit,
+                  total: totalModules,
+                  onPageChange: setModulePage,
+                  onLimitChange: setModuleLimit
+                }}
+                sorting={{
+                  column: moduleSortColumn,
+                  direction: moduleSortDirection,
+                  onSortChange: handleModuleSortChange
+                }}
                 emptyMessage={searchTerm || semesterFilter !== 'all' || yearFilter !== 'all'
                   ? t('modulesTab.noModules')
                   : t('modulesTab.noModulesInitial')}
@@ -496,7 +547,8 @@ export default function CourseDetailsPage() {
           )}
         </AdminOnly>
 
-        {activeTab === 'students' && (
+        {/* Students Tab Content - Temporarily disabled */}
+        {/* {activeTab === 'students' && (
           <Card>
             <CardHeader>
               <CardTitle>{t('studentsTab.title')}</CardTitle>
@@ -521,7 +573,7 @@ export default function CourseDetailsPage() {
               </div>
             </CardContent>
           </Card>
-        )}
+        )} */}
       </div>
       {dialog}
     </div>

@@ -23,8 +23,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        if (userData.language_preference) {
-          initialLocale = userData.language_preference as Locale;
+        if (userData.languagePreference) {
+          initialLocale = userData.languagePreference as Locale;
         }
       } catch (error) {
         console.error('Failed to parse user data:', error);

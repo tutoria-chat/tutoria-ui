@@ -24,10 +24,10 @@ function WelcomeForm() {
   const [token, setToken] = useState('');
   const [username, setUsername] = useState('');
   const [userInfo, setUserInfo] = useState<{
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    user_type: string;
+    userType: string;
   } | null>(null);
   const [verifying, setVerifying] = useState(true);
   const [error, setError] = useState(false);
@@ -56,8 +56,8 @@ function WelcomeForm() {
         const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
 
         // Set locale based on user's preference
-        if (response.language_preference) {
-          setLocale(response.language_preference as Locale);
+        if (response.languagePreference) {
+          setLocale(response.languagePreference as Locale);
         }
 
         // Sanitize username by removing special characters if used as fallback
@@ -67,10 +67,10 @@ function WelcomeForm() {
 
         // Get user info from verified backend response
         setUserInfo({
-          first_name: response.first_name || sanitizeUsername(usernameParam.split('@')[0]),
-          last_name: response.last_name || '',
+          firstName: response.firstName || sanitizeUsername(usernameParam.split('@')[0]),
+          lastName: response.lastName || '',
           email: response.email || '',
-          user_type: response.user_type || 'professor',
+          userType: response.userType || 'professor',
         });
       } catch (error: any) {
         console.error('Failed to verify token:', error);
@@ -185,7 +185,7 @@ function WelcomeForm() {
                 <div className="flex-1">
                   <p className="text-xs text-muted-foreground">{t('fullName')}</p>
                   <p className="font-medium">
-                    {userInfo?.first_name} {userInfo?.last_name}
+                    {userInfo?.firstName} {userInfo?.lastName}
                   </p>
                 </div>
               </div>

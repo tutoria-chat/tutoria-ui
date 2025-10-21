@@ -26,7 +26,7 @@ export default function DashboardPage() {
   if (!user) return null;
 
   const roleDisplayName = getUserRoleDisplayName(user.role);
-  const userName = user.first_name || user.email?.split('@')[0] || t('welcome', { userName: 'User' }).split(',')[1]?.trim() || 'User';
+  const userName = user.firstName || user.email?.split('@')[0] || t('welcome', { userName: 'User' }).split(',')[1]?.trim() || 'User';
 
   return (
     <div className="space-y-8">

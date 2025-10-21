@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
 import { CourseForm } from '@/components/forms/course-form';
@@ -12,10 +12,15 @@ import type { CourseCreate, CourseUpdate, BreadcrumbItem } from '@/lib/types';
 
 export default function CreateCoursePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations('courses.create');
   const tCommon = useTranslations('common');
+
+  // Get universityId from query params (e.g., ?universityId=11)
+  const universityIdParam = searchParams.get('universityId');
+  const initialUniversityId = universityIdParam ? Number(universityIdParam) : undefined;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -30,8 +35,8 @@ export default function CreateCoursePage() {
         name: data.name || '',
         code: data.code || '',
         description: data.description,
-        university_id: 'university_id' in data ? data.university_id :
-                      user?.university_id || 1,
+        universityId: 'universityId' in data ? data.universityId :
+                      user?.universityId || 1,
       };
 
       // Make POST request to courses/ endpoint
@@ -66,6 +71,7 @@ export default function CreateCoursePage() {
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             isLoading={isLoading}
+            initialUniversityId={initialUniversityId}
           />
         </div>
       </div>

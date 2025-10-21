@@ -9,16 +9,22 @@ type FetchState<T> = {
   error: string | null;
 };
 
-export function useFetch<T>(endpoint: string) {
+export function useFetch<T>(endpoint: string | null) {
   const [state, setState] = useState<FetchState<T>>({
     data: null,
-    loading: true,
+    loading: !!endpoint, // Only show loading if endpoint is provided
     error: null,
   });
 
   const fetchData = useCallback(async () => {
+    if (!endpoint) {
+      // Skip fetching if endpoint is null
+      setState({ data: null, loading: false, error: null });
+      return;
+    }
+
     setState(prev => ({ ...prev, loading: true, error: null }));
-    
+
     try {
       const data = await apiClient.get<T>(endpoint);
       setState({ data, loading: false, error: null });
