@@ -8,15 +8,25 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { PageHeader } from '@/components/layout/page-header';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
-import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download, Sparkles, Cpu, Bot } from 'lucide-react';
+import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download, Sparkles, Cpu, Bot, Eye } from 'lucide-react';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
-import { useFetch } from '@/lib/hooks';
-import type { Module, ModuleUpdate, Course, File as FileType, TableColumn, BreadcrumbItem, PaginatedResponse, AIModel } from '@/lib/types';
+import type { Module, ModuleUpdate, Course, File as FileType, TableColumn, BreadcrumbItem, AIModel } from '@/lib/types';
 import { AIModelSelector } from '@/components/modules/ai-model-selector';
 import Image from 'next/image';
 
@@ -65,10 +75,12 @@ export default function EditModulePage() {
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
   const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(null);
   const [showModelSelector, setShowModelSelector] = useState(false);
-
-  const { data: filesResponse, loading: filesLoading, refetch: refetchFiles } = useFetch<PaginatedResponse<FileType>>(`/files/?moduleId=${moduleId}`);
-
-  const files = filesResponse?.items || [];
+  const [files, setFiles] = useState<FileType[]>([]);
+  const [fileViewerOpen, setFileViewerOpen] = useState(false);
+  const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
+  const [viewingFileName, setViewingFileName] = useState<string>('');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<number | null>(null);
 
   // Check if form has changes
   const hasChanges = () => {
@@ -112,13 +124,18 @@ export default function EditModulePage() {
       if (data.aiModel) {
         setSelectedAIModel(data.aiModel);
       }
+
+      // Set files from module response (reduces API calls)
+      if (data.files) {
+        setFiles(data.files);
+      }
     } catch (error) {
       console.error('Failed to load module:', error);
       setErrors({ load: t('loadError') });
     } finally {
       setIsLoadingData(false);
     }
-  }, [moduleId, user]);
+  }, [moduleId, user, t]);
 
   const loadCourses = useCallback(async () => {
     if (user?.role !== 'super_admin') return;
@@ -138,6 +155,29 @@ export default function EditModulePage() {
       setLoadingCourses(false);
     }
   }, [user]);
+
+  const handleDeleteFile = (fileId: number) => {
+    setFileToDelete(fileId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDeleteFile = async () => {
+    if (!fileToDelete) return;
+
+    try {
+      await apiClient.deleteFile(fileToDelete);
+      setDeleteConfirmOpen(false);
+      setFileToDelete(null);
+      // Reload module to get updated files list
+      await loadModule();
+      toast.success(t('fileDeleteSuccess') || 'File deleted', {
+        description: t('fileDeleteSuccessDesc') || 'The file has been removed',
+      });
+    } catch (error) {
+      console.error('Erro ao deletar arquivo:', error);
+      toast.error(t('fileDeleteError') || 'Error deleting file');
+    }
+  };
 
   useEffect(() => {
     loadModule();
@@ -246,11 +286,12 @@ export default function EditModulePage() {
       const uploadFormData = new FormData();
       uploadFormData.append('file', selectedFile);
 
-      // Pass module_id and file name as query parameters
+      // API client adds moduleId and name to FormData for backend DTO binding
       await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
       form.reset();
       setSelectedFile(null);
-      refetchFiles?.();
+      // Reload module to get updated files list
+      await loadModule();
 
       toast.success(t('fileUploadSuccess', { ns: 'modules.detail' }), {
         description: t('fileUploadSuccessDesc', { fileName: selectedFile.name, ns: 'modules.detail' }),
@@ -650,7 +691,7 @@ export default function EditModulePage() {
               data={files || []}
               columns={[
                 {
-                  key: 'file_name',
+                  key: 'fileName',
                   label: t('fileColumn'),
                   render: (_, file) => (
                     <div className="flex items-center space-x-2">
@@ -660,9 +701,9 @@ export default function EditModulePage() {
                   )
                 },
                 {
-                  key: 'file_size',
+                  key: 'fileSize',
                   label: t('sizeColumn'),
-                  render: (value) => `${((value as number) / 1024 / 1024).toFixed(2)} MB`
+                  render: (value) => value ? `${((value as number) / 1024 / 1024).toFixed(2)} MB` : 'N/A'
                 },
                 {
                   key: 'actions',
@@ -675,28 +716,29 @@ export default function EditModulePage() {
                         size="sm"
                         onClick={async () => {
                           try {
-                            const { download_url } = await apiClient.getFileDownloadUrl(file.id);
-                            window.open(download_url, '_blank');
+                            const { downloadUrl } = await apiClient.getFileDownloadUrl(file.id);
+
+                            // Extract filename from URL or use file.fileName
+                            const urlParts = downloadUrl.split('/');
+                            const fileNameWithParams = urlParts[urlParts.length - 1];
+                            const fileName = file.fileName || fileNameWithParams.split('?')[0];
+
+                            setViewingFileUrl(downloadUrl);
+                            setViewingFileName(fileName);
+                            setFileViewerOpen(true);
                           } catch (error) {
-                            console.error('Erro ao baixar arquivo:', error);
+                            console.error('Error loading file:', error);
+                            toast.error('Error loading file');
                           }
                         }}
+                        title="View file"
                       >
-                        <Download className="h-4 w-4" />
+                        <Eye className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={async () => {
-                          if (confirm(t('confirmDelete'))) {
-                            try {
-                              await apiClient.deleteFile(file.id);
-                              refetchFiles?.();
-                            } catch (error) {
-                              console.error('Erro ao deletar arquivo:', error);
-                            }
-                          }
-                        }}
+                        onClick={() => handleDeleteFile(file.id)}
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
@@ -704,7 +746,7 @@ export default function EditModulePage() {
                   )
                 }
               ] as TableColumn<FileType>[]}
-              loading={filesLoading}
+              loading={isLoadingData}
               emptyMessage={t('noFilesYet')}
             />
           </CardContent>
@@ -721,6 +763,44 @@ export default function EditModulePage() {
             handleChange('aiModelId', model.id);
           }}
         />
+
+        {/* File Viewer Dialog */}
+        <Dialog open={fileViewerOpen} onOpenChange={setFileViewerOpen}>
+          <DialogContent className="max-w-[95vw] w-[95vw] h-[95vh] flex flex-col p-0">
+            <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
+              <DialogTitle className="text-lg">{viewingFileName}</DialogTitle>
+            </DialogHeader>
+            <div className="flex-1 px-6 pb-6 overflow-hidden">
+              {viewingFileUrl && (
+                <iframe
+                  src={viewingFileUrl}
+                  className="w-full h-full border border-border rounded-md"
+                  title={viewingFileName}
+                />
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Delete Confirmation Dialog */}
+        <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete File</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this file? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setFileToDelete(null)}>
+                {tCommon('buttons.cancel')}
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDeleteFile} className="bg-destructive hover:bg-destructive/90">
+                {tCommon('buttons.delete')}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </ProfessorOnly>
   );

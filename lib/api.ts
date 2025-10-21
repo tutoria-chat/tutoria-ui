@@ -360,27 +360,30 @@ class TutoriaAPIClient {
   }
 
   async deactivateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/deactivate`, undefined, true);
+    return this.patch(`/users/${userId}/deactivate`, undefined, false);
   }
 
   async activateUser(userId: number): Promise<User> {
-    return this.patch(`/auth/users/${userId}/activate`, undefined, true);
+    return this.patch(`/users/${userId}/activate`, undefined, false);
   }
 
   async deleteUserPermanently(userId: number): Promise<{ message: string; user_id: number; deleted: boolean }> {
-    return this.delete(`/auth/users/${userId}`, true);
+    return this.delete(`/users/${userId}`, false);
   }
 
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
-    return this.get('/auth/users/', { userType }, true);
+    // Backend returns PaginatedResponse, extract items array
+    // Request all items by using a large page size
+    const response = await this.get<PaginatedResponse<UserResponse>>('/users/', { userType, page: 1, size: 1000 }, false);
+    return response.items;
   }
 
   async getUser(userId: number): Promise<UserResponse> {
-    return this.get(`/auth/users/${userId}`, undefined, true);
+    return this.get(`/users/${userId}`, undefined, false); // Management API
   }
 
   async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
-    return this.put(`/auth/users/${userId}`, data, true);
+    return this.put(`/users/${userId}`, data, false); // Management API
   }
 
   // University endpoints
@@ -480,12 +483,13 @@ class TutoriaAPIClient {
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
-    const params = new URLSearchParams();
-    params.append('moduleId', moduleId.toString());
+    // Add moduleId and name to the FormData (not query params)
+    // Backend expects these in the form body as part of UploadFileRequest DTO
+    formData.append('moduleId', moduleId.toString());
     if (fileName) {
-      params.append('name', fileName);
+      formData.append('name', fileName);
     }
-    return this.post(`/files/?${params.toString()}`, formData, true);
+    return this.post('/files/', formData, true);
   }
 
   async getFile(id: number): Promise<FileResponse> {
@@ -500,7 +504,7 @@ class TutoriaAPIClient {
     return this.delete(`/files/${id}`);
   }
 
-  async getFileDownloadUrl(id: number): Promise<{ download_url: string }> {
+  async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
     return this.get(`/files/${id}/download`);
   }
 
@@ -510,7 +514,7 @@ class TutoriaAPIClient {
   }
 
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
-    // Use the unified /auth/users/create endpoint
+    // Use the unified /users endpoint (Management API)
     interface BackendUserResponse {
       userId: number;
       username: string;
@@ -529,7 +533,7 @@ class TutoriaAPIClient {
       themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/auth/users/create', {
+    const response = await this.post<BackendUserResponse>('/users', {
       username: data.username,
       email: data.email,
       firstName: data.firstName,
@@ -539,7 +543,7 @@ class TutoriaAPIClient {
       universityId: data.universityId,
       isAdmin: data.isAdmin,
       languagePreference: data.languagePreference || 'pt-br',
-    }, false, true);
+    }, false, false);
 
     // Map backend UserResponse to Professor interface
     return {

@@ -26,7 +26,7 @@ import { Loading } from '@/components/ui/loading-spinner';
 import { AdminProfessorOnly, ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
-import { formatDateShort } from '@/lib/utils';
+import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import type { CourseWithDetails, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -42,34 +42,56 @@ export default function CourseDetailsPage() {
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
-  // OPTIMIZED: Single API call returns course + modules + students
+  // Fetch course basic info
   const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/courses/${courseId}`);
 
-  // Fetch professors (kept on page load due to backend authorization issues with lazy loading)
+  // Pagination and filtering state for modules
+  const [modulePage, setModulePage] = useState(1);
+  const [moduleLimit, setModuleLimit] = useState(10);
+  const [semesterFilter, setSemesterFilter] = useState<string>('all');
+  const [yearFilter, setYearFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [moduleSortColumn, setModuleSortColumn] = useState<string | null>('name');
+  const [moduleSortDirection, setModuleSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Build modules API URL with pagination and filters
+  const buildModulesApiUrl = () => {
+    let filters = `courseId=${courseId}&page=${modulePage}&limit=${moduleLimit}`;
+
+    if (searchTerm) {
+      filters += `&search=${encodeURIComponent(searchTerm)}`;
+    }
+
+    if (semesterFilter !== 'all') {
+      filters += `&semester=${semesterFilter}`;
+    }
+
+    if (yearFilter !== 'all') {
+      filters += `&year=${yearFilter}`;
+    }
+
+    return `/modules/?${filters}`;
+  };
+
+  // Fetch modules with pagination
+  const { data: modulesResponse, loading: modulesLoading } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
+
+  // Fetch professors
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
     `/professors/?courseId=${courseId}`
   );
 
-  const allModules = course?.modules || [];
+  const modules = modulesResponse?.items || [];
+  const totalModules = modulesResponse?.total || 0;
   const professors = professorsResponse?.items || [];
-  const [semesterFilter, setSemesterFilter] = useState<string>('all');
-  const [yearFilter, setYearFilter] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+
+  // Get all modules for filter options (using course embedded data)
+  const allModules = course?.modules || [];
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
 
-  // Filter modules
-  const modules = allModules.filter(module => {
-    const matchesSemester = semesterFilter === 'all' || module.semester?.toString() === semesterFilter;
-    const matchesYear = yearFilter === 'all' || module.year?.toString() === yearFilter;
-    const matchesSearch = !searchTerm ||
-      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      module.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSemester && matchesYear && matchesSearch;
-  });
-
-  // Get unique semesters and years for filters
+  // Get unique semesters and years for filter dropdowns (using all modules from course)
   const availableSemesters = Array.from(new Set(allModules.map(m => m.semester).filter(Boolean))).sort();
   const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => (b ?? 0) - (a ?? 0));
 
@@ -138,6 +160,15 @@ export default function CourseDetailsPage() {
     });
   };
 
+  const handleModuleSortChange = (column: string) => {
+    if (moduleSortColumn === column) {
+      setModuleSortDirection(moduleSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setModuleSortColumn(column);
+      setModuleSortDirection('asc');
+    }
+  };
+
   const moduleColumns: TableColumn<Module>[] = [
     {
       key: 'name',
@@ -189,7 +220,12 @@ export default function CourseDetailsPage() {
     {
       key: 'updatedAt',
       label: t('modulesTab.lastUpdate'),
-      render: (value) => formatDateShort(value as string)
+      render: (value, module) => {
+        if (hasBeenUpdated(module.createdAt, value as string)) {
+          return <span className="text-sm">{formatDateShort(value as string)}</span>;
+        }
+        return <span className="text-sm text-muted-foreground">{t('modulesTab.neverUpdated')}</span>;
+      }
     },
     {
       key: 'actions',
@@ -318,10 +354,12 @@ export default function CourseDetailsPage() {
                 <Building2 className="h-4 w-4 text-muted-foreground" />
                 <span>{course.universityName || t('courseInfo')}</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>{t('updated', { date: formatDateShort(course.updatedAt) })}</span>
-              </div>
+              {hasBeenUpdated(course.createdAt, course.updatedAt) && (
+                <div className="flex items-center space-x-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span>{t('updated', { date: formatDateShort(course.updatedAt) })}</span>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -331,7 +369,7 @@ export default function CourseDetailsPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{allModules.length}</p>
+                  <p className="text-2xl font-bold">{totalModules}</p>
                   <p className="text-sm text-muted-foreground">{t('modules')}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-blue-500" />
@@ -339,7 +377,8 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
+          {/* Students Card - Temporarily disabled */}
+          {/* <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -349,7 +388,7 @@ export default function CourseDetailsPage() {
                 <GraduationCap className="h-8 w-8 text-green-500" />
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Professors Card - Admin only */}
           <AdminOnly>
@@ -401,7 +440,8 @@ export default function CourseDetailsPage() {
             </button>
           </AdminOnly>
 
-          <button
+          {/* Students Tab - Temporarily disabled */}
+          {/* <button
             onClick={() => setActiveTab('students')}
             className={`py-2 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'students'
@@ -413,7 +453,7 @@ export default function CourseDetailsPage() {
             <Badge variant="secondary" className="ml-2">
               {course?.students?.length || 0}
             </Badge>
-          </button>
+          </button> */}
         </nav>
       </div>
 
@@ -464,6 +504,19 @@ export default function CourseDetailsPage() {
               <DataTable
                 data={modules || []}
                 columns={moduleColumns}
+                loading={modulesLoading}
+                pagination={{
+                  page: modulePage,
+                  limit: moduleLimit,
+                  total: totalModules,
+                  onPageChange: setModulePage,
+                  onLimitChange: setModuleLimit
+                }}
+                sorting={{
+                  column: moduleSortColumn,
+                  direction: moduleSortDirection,
+                  onSortChange: handleModuleSortChange
+                }}
                 emptyMessage={searchTerm || semesterFilter !== 'all' || yearFilter !== 'all'
                   ? t('modulesTab.noModules')
                   : t('modulesTab.noModulesInitial')}
@@ -494,7 +547,8 @@ export default function CourseDetailsPage() {
           )}
         </AdminOnly>
 
-        {activeTab === 'students' && (
+        {/* Students Tab Content - Temporarily disabled */}
+        {/* {activeTab === 'students' && (
           <Card>
             <CardHeader>
               <CardTitle>{t('studentsTab.title')}</CardTitle>
@@ -519,7 +573,7 @@ export default function CourseDetailsPage() {
               </div>
             </CardContent>
           </Card>
-        )}
+        )} */}
       </div>
       {dialog}
     </div>

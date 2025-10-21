@@ -131,31 +131,53 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-size: 16px;
+    font-size: 1.0625rem; /* 17px */
   }
 
   /* Increase base font sizes globally */
   html {
-    font-size: 16px;
+    font-size: 17px; /* Increased from 16px to 17px for better readability */
   }
 
   /* Button text sizes */
   button {
-    font-size: 1rem;
+    font-size: 1rem; /* Now 17px base */
   }
 
-  /* Input and form elements */
+  /* Input and form elements - larger for better readability */
   input, textarea, select {
-    font-size: 1rem;
+    font-size: 1rem; /* Now 17px base */
   }
 
-  /* Table text */
+  /* Table text - slightly larger */
   table {
-    font-size: 0.9375rem;
+    font-size: 1rem; /* Increased from 0.9375rem to 1rem */
   }
 
-  /* Card titles */
-  h1, h2, h3, h4, h5, h6 {
-    font-size: 1.125em;
+  /* Card titles and headings - more prominent */
+  h1 {
+    font-size: 1.875rem; /* ~32px */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* ~25.5px */
+  }
+
+  h3 {
+    font-size: 1.25rem; /* ~21px */
+  }
+
+  h4, h5, h6 {
+    font-size: 1.125rem; /* ~19px */
+  }
+
+  /* Paragraphs and general text */
+  p {
+    font-size: 1rem; /* 17px */
+  }
+
+  /* Labels - slightly smaller but still readable */
+  label {
+    font-size: 0.9375rem; /* ~16px */
   }
 }

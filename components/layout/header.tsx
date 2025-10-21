@@ -25,8 +25,7 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const handleLogout = async () => {
-    await logout();
-    router.push('/login');
+    await logout(); // Logout will handle the redirect to /login
   };
 
   const handleSettingsClick = () => {

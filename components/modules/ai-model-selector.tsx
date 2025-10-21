@@ -124,7 +124,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                     const translation = getModelTranslation(model.modelName);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.isDeprecated;
-                    const isExpensive = !isSuperAdmin && Number(model.inputCostPer1m) > MAX_NON_ADMIN_MODEL_COST;
+                    const isExpensive = !isSuperAdmin && Number(model.inputCostPer1M) > MAX_NON_ADMIN_MODEL_COST;
 
                     return (
                       <button
@@ -180,10 +180,10 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                             <Sparkles className="h-3 w-3" />
                             {(Number(model.maxTokens) / 1000).toFixed(0)}K
                           </div>
-                          {isSuperAdmin && model.inputCostPer1m && (
+                          {isSuperAdmin && model.inputCostPer1M && (
                             <div className="flex items-center gap-1">
                               <DollarSign className="h-3 w-3" />
-                              <span>${Number(model.inputCostPer1m).toFixed(2)} {t('pricePerMillion')}</span>
+                              <span>${Number(model.inputCostPer1M).toFixed(2)} {t('pricePerMillion')}</span>
                             </div>
                           )}
                         </div>
@@ -206,7 +206,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                     const translation = getModelTranslation(model.modelName);
                     const isSelected = selectedModel?.id === model.id;
                     const isDeprecated = model.isDeprecated;
-                    const isExpensive = !isSuperAdmin && Number(model.inputCostPer1m) > MAX_NON_ADMIN_MODEL_COST;
+                    const isExpensive = !isSuperAdmin && Number(model.inputCostPer1M) > MAX_NON_ADMIN_MODEL_COST;
 
                     return (
                       <button
@@ -262,10 +262,10 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
                             <Sparkles className="h-3 w-3" />
                             {(Number(model.maxTokens) / 1000).toFixed(0)}K
                           </div>
-                          {isSuperAdmin && model.inputCostPer1m && (
+                          {isSuperAdmin && model.inputCostPer1M && (
                             <div className="flex items-center gap-1">
                               <DollarSign className="h-3 w-3" />
-                              <span>${Number(model.inputCostPer1m).toFixed(2)} {t('pricePerMillion')}</span>
+                              <span>${Number(model.inputCostPer1M).toFixed(2)} {t('pricePerMillion')}</span>
                             </div>
                           )}
                         </div>

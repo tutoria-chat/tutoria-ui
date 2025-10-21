@@ -18,16 +18,17 @@ interface CourseFormProps {
   onSubmit: (data: CourseCreate | CourseUpdate) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
+  initialUniversityId?: number; // Pre-select university from query param
 }
 
-export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: CourseFormProps) {
+export function CourseForm({ course, onSubmit, onCancel, isLoading = false, initialUniversityId }: CourseFormProps) {
   const { user } = useAuth();
   const t = useTranslations('courses.form');
   const [formData, setFormData] = useState({
     name: course?.name || '',
     code: course?.code || '',
     description: course?.description || '',
-    universityId: course?.universityId || user?.universityId || '',
+    universityId: course?.universityId || initialUniversityId || user?.universityId || '',
   });
   const [universities, setUniversities] = useState<University[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -35,22 +36,29 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false }: Co
 
   // Load universities for super admin
   useEffect(() => {
-    if (user?.role === 'super_admin') {
-      loadUniversities();
-    }
-  }, [user]);
+    const loadUniversities = async () => {
+      if (user?.role !== 'super_admin') return;
 
-  const loadUniversities = async () => {
-    setLoadingUniversities(true);
-    try {
-      const response = await apiClient.getUniversities({ limit: 1000 });
-      setUniversities(response.items);
-    } catch (error) {
-      console.error('Failed to load universities:', error);
-    } finally {
-      setLoadingUniversities(false);
-    }
-  };
+      setLoadingUniversities(true);
+      try {
+        // Optimization: If initialUniversityId is provided, fetch only that university
+        if (initialUniversityId) {
+          const university = await apiClient.getUniversity(initialUniversityId);
+          setUniversities([university]);
+        } else {
+          // Fetch all universities only if no specific ID provided
+          const response = await apiClient.getUniversities({ limit: 1000 });
+          setUniversities(response.items);
+        }
+      } catch (error) {
+        console.error('Failed to load universities:', error);
+      } finally {
+        setLoadingUniversities(false);
+      }
+    };
+
+    loadUniversities();
+  }, [user?.role, initialUniversityId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

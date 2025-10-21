@@ -143,7 +143,8 @@
         "files": "Arquivos",
         "tokens": "Tokens",
         "tokensCount": "{count} tokens",
-        "lastUpdate": "Última Atualização"
+        "lastUpdate": "Última Atualização",
+        "neverUpdated": "Nunca"
       },
       "professorsTab": {
         "title": "Professores Atribuídos",
@@ -210,8 +211,10 @@
       "yearPlaceholder": "ex: 2024",
       "yearRequired": "O ano é obrigatório",
       "semesterLabel": "Semestre *",
-      "semesterPlaceholder": "ex: 1, 2...",
+      "semesterPlaceholder": "1 ou 2",
       "semesterRequired": "O semestre é obrigatório",
+      "semesterInvalid": "O semestre deve ser 1 ou 2 (apenas dois semestres por ano)",
+      "semesterHint": "Apenas 1 ou 2 (dois semestres por ano)",
       "courseLabel": "Disciplina *",
       "coursePreselected": "Pré-selecionado",
       "loadingCourses": "Carregando disciplinas...",
@@ -324,6 +327,9 @@
       "downloadStartedDesc": "O arquivo será baixado em breve.",
       "downloadError": "Erro ao baixar arquivo",
       "downloadErrorDesc": "Não foi possível baixar o arquivo. Tente novamente.",
+      "viewFile": "Ver arquivo",
+      "viewError": "Erro ao carregar arquivo",
+      "viewErrorDesc": "Não foi possível carregar o arquivo para visualização",
       "fileSelectError": "Selecione um arquivo para enviar",
       "fileTooLarge": "Arquivo muito grande. Tamanho máximo: 50MB",
       "fileTypeNotSupported": "Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX",
@@ -333,7 +339,10 @@
         "fileName": "Arquivo",
         "size": "Tamanho",
         "uploadedAt": "Enviado em",
-        "actions": "Ações"
+        "actions": "Ações",
+        "deleteConfirm": "Tem certeza de que deseja excluir este arquivo? Esta ação não pode ser desfeita.",
+        "deleteFileTitle": "Excluir Arquivo",
+        "deleteFileDescription": "Tem certeza de que deseja excluir este arquivo? Esta ação não pode ser desfeita."
       },
       "fileUpload": {
         "clickToSelect": "Clique para selecionar ou arraste o arquivo aqui",
@@ -540,12 +549,14 @@
         "title": "Disciplinas",
         "description": "Disciplinas oferecidas por esta universidade",
         "newCourse": "Nova Disciplina",
+        "searchPlaceholder": "Buscar disciplinas...",
         "emptyMessage": "Nenhuma disciplina cadastrada ainda."
       },
       "professorsTab": {
         "title": "Professores",
         "description": "Professores vinculados a esta universidade",
         "newProfessor": "Novo Professor",
+        "searchPlaceholder": "Buscar professores...",
         "emptyMessage": "Nenhum professor cadastrado ainda."
       },
       "deleteConfirm": "Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.",
@@ -675,7 +686,9 @@
       "emailSentDescription": "Um email com instruções de login foi enviado para {email}",
       "emailInstructions": "O novo professor receberá um email com sua senha temporária e um link para definir sua senha permanente. O link expirará em 24 horas.",
       "backToList": "Voltar para Lista",
+      "backToUniversity": "Voltar para Detalhes da Universidade",
       "createAnother": "Criar Outro Professor",
+      "someCoursesFailed": "Professor criado, mas algumas atribuições de disciplinas falharam. Por favor verifique as disciplinas atribuídas.",
       "permissions": "Permissões: Professores regulares podem visualizar disciplinas e gerenciar módulos que lhes são atribuídos.",
       "professorInfoTitle": "Informações do Professor",
       "professorInfoDescription": "Preencha os dados do novo professor. Um link de configuração de senha será gerado após a criação.",
@@ -877,6 +890,7 @@
       "securityRate": "Taxa de Segurança",
       "expiringSoon": "Expirando em Breve"
     },
+    "deleteTitle": "Deletar Token",
     "deleteConfirm": "Tem certeza que deseja deletar este token? Esta ação não pode ser desfeita.",
     "deleteSuccess": "Token deletado com sucesso",
     "deleteError": "Erro ao deletar token. Tente novamente.",
@@ -1016,6 +1030,9 @@
     "deleteError": "Erro ao deletar super administrador",
     "deleteMainError": "Não é possível excluir a conta principal de super administrador",
     "deleteNotImplemented": "Funcionalidade de exclusão será implementada em breve",
+    "onlyMainAdminCanDeactivate": "Apenas o administrador principal pode desativar super administradores.",
+    "onlyMainAdminCanActivate": "Apenas o administrador principal pode ativar super administradores.",
+    "onlyMainAdminCanDelete": "Apenas o administrador principal pode excluir super administradores.",
     "deactivate": "Desativar",
     "activate": "Ativar",
     "delete": "Excluir",

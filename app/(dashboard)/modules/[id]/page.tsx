@@ -27,6 +27,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { TokenModal } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -47,7 +58,7 @@ export default function ModuleDetailsPage() {
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
   const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module & { files?: FileType[] }>(`/modules/${moduleId}`);
-  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/module-tokens/?moduleId=${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/ModuleAccessTokens/?moduleId=${moduleId}`);
 
   const files = module?.files || [];
   const tokens = tokensResponse?.items || [];
@@ -56,6 +67,13 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
+  const [fileViewerOpen, setFileViewerOpen] = useState(false);
+  const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
+  const [viewingFileName, setViewingFileName] = useState<string>('');
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [fileToDelete, setFileToDelete] = useState<number | null>(null);
+  const [urlDialogOpen, setUrlDialogOpen] = useState(false);
+  const [selectedTokenUrl, setSelectedTokenUrl] = useState<string>('');
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -129,12 +147,17 @@ export default function ModuleDetailsPage() {
   };
 
   const handleDeleteFile = async (fileId: number) => {
-    if (!confirm(t('columns.deleteConfirm', { ns: 'modules' }))) {
-      return;
-    }
+    setFileToDelete(fileId);
+    setDeleteConfirmOpen(true);
+  };
+
+  const confirmDeleteFile = async () => {
+    if (!fileToDelete) return;
 
     try {
-      await apiClient.deleteFile(fileId);
+      await apiClient.deleteFile(fileToDelete);
+      setDeleteConfirmOpen(false);
+      setFileToDelete(null);
       window.location.reload();
       toast.success(t('fileDeleteSuccess'), {
         description: t('fileDeleteSuccessDesc'),
@@ -147,17 +170,22 @@ export default function ModuleDetailsPage() {
     }
   };
 
-  const handleDownloadFile = async (fileId: number) => {
+  const handleViewFile = async (file: FileType) => {
     try {
-      const { download_url } = await apiClient.getFileDownloadUrl(fileId);
-      window.open(download_url, '_blank');
-      toast.success(t('downloadStarted'), {
-        description: t('downloadStartedDesc'),
-      });
+      const { downloadUrl } = await apiClient.getFileDownloadUrl(file.id);
+
+      // Extract filename from URL or use file.fileName
+      const urlParts = downloadUrl.split('/');
+      const fileNameWithParams = urlParts[urlParts.length - 1];
+      const fileName = file.fileName || fileNameWithParams.split('?')[0];
+
+      setViewingFileUrl(downloadUrl);
+      setViewingFileName(fileName);
+      setFileViewerOpen(true);
     } catch (error) {
-      console.error('Erro ao baixar arquivo:', error);
-      toast.error(t('downloadError'), {
-        description: t('downloadErrorDesc'),
+      console.error('Error loading file:', error);
+      toast.error(t('viewError') || 'Error loading file', {
+        description: t('viewErrorDesc') || 'Could not load the file for viewing',
       });
     }
   };
@@ -172,7 +200,7 @@ export default function ModuleDetailsPage() {
 
   const fileColumns: TableColumn<FileType>[] = [
     {
-      key: 'file_name',
+      key: 'fileName',
       label: t('columns.fileName'),
       sortable: true,
       render: (_, file) => (
@@ -190,13 +218,13 @@ export default function ModuleDetailsPage() {
       )
     },
     {
-      key: 'file_size',
+      key: 'fileSize',
       label: t('columns.size'),
       sortable: true,
-      render: (value) => `${((value as number) / 1024 / 1024).toFixed(2)} MB`
+      render: (value) => value ? `${((value as number) / 1024 / 1024).toFixed(2)} MB` : 'N/A'
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('columns.uploadedAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
@@ -210,9 +238,10 @@ export default function ModuleDetailsPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleDownloadFile(file.id)}
+            onClick={() => handleViewFile(file)}
+            title={t('viewFile') || 'View file'}
           >
-            <Download className="h-4 w-4" />
+            <Eye className="h-4 w-4" />
           </Button>
 
           <ProfessorOnly>
@@ -298,7 +327,7 @@ export default function ModuleDetailsPage() {
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('createdAt'),
       sortable: true,
       render: (value) => formatDateShort(value as string)
@@ -306,22 +335,53 @@ export default function ModuleDetailsPage() {
     {
       key: 'actions',
       label: t('columns.actions'),
-      width: '80px',
-      render: (_, token) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
-              window.open(widgetUrl, '_blank');
-            }}
-            title={t('openInWidget')}
-          >
-            <ExternalLink className="h-4 w-4" />
-          </Button>
-        </div>
-      )
+      width: '140px',
+      render: (_, token) => {
+        const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+        return (
+          <div className="flex items-center space-x-1">
+            {/* Copy URL */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(widgetUrl);
+                  toast.success(tTokens('copyWidgetUrlSuccess'));
+                } catch (error) {
+                  toast.error(tTokens('copyError'));
+                }
+              }}
+              title="Copy widget URL"
+            >
+              <Copy className="h-4 w-4" />
+            </Button>
+
+            {/* View URL */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSelectedTokenUrl(widgetUrl);
+                setUrlDialogOpen(true);
+              }}
+              title="View widget URL"
+            >
+              <Eye className="h-4 w-4" />
+            </Button>
+
+            {/* Open in new tab */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.open(widgetUrl, '_blank')}
+              title={t('openInWidget')}
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
+        );
+      }
     }
   ];
 
@@ -581,6 +641,88 @@ export default function ModuleDetailsPage() {
         }}
         preselectedModuleId={moduleId}
       />
+
+      {/* File Viewer Dialog */}
+      <Dialog open={fileViewerOpen} onOpenChange={setFileViewerOpen}>
+        <DialogContent className="max-w-[95vw] w-[95vw] h-[95vh] flex flex-col p-0">
+          <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
+            <DialogTitle className="text-lg">{viewingFileName}</DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 px-6 pb-6 overflow-hidden">
+            {viewingFileUrl && (
+              <iframe
+                src={viewingFileUrl}
+                className="w-full h-full border border-border rounded-md"
+                title={viewingFileName}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('columns.deleteFileTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('columns.deleteFileDescription')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setFileToDelete(null)}>
+              {tCommon('buttons.cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteFile} className="bg-destructive hover:bg-destructive/90">
+              {tCommon('buttons.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Widget URL Viewer Dialog */}
+      <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Widget URL</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="bg-muted p-4 rounded-md">
+              <code className="text-sm break-all">{selectedTokenUrl}</code>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setUrlDialogOpen(false)}
+              >
+                Close
+              </Button>
+              <Button
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(selectedTokenUrl);
+                    toast.success(tTokens('copyWidgetUrlSuccess'));
+                  } catch (error) {
+                    toast.error(tTokens('copyError'));
+                  }
+                }}
+              >
+                <Copy className="h-4 w-4 mr-2" />
+                Copy URL
+              </Button>
+              <Button
+                onClick={() => {
+                  window.open(selectedTokenUrl, '_blank');
+                  setUrlDialogOpen(false);
+                }}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />
+                Test URL
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

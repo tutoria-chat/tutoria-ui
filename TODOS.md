@@ -73,6 +73,13 @@
 - [ ] System health monitoring
 - [ ] User management enhancements
 - [ ] Audit logs viewer
+- [ ] **AI Models Management UI** 🤖
+  - [ ] Create super admin page for managing AI models
+  - [ ] CRUD operations for AI models (create, edit, delete)
+  - [ ] Configure model settings (name, provider, max tokens, costs)
+  - [ ] Set default models for new modules
+  - [ ] Test AI model connectivity
+  - [ ] Display cost analytics per model
 
 **Estimated Effort**: Medium-High (depends on backend needs)
 **Customer Value**: Medium (admin tool improvements)
@@ -238,6 +245,23 @@ Based on **Customer Value** + **Ease of Implementation**:
 **Customer Value**: Medium (better error handling and UX)
 **Complexity**: Low-Medium
 **Priority**: MEDIUM - Improves reliability and user experience
+
+**Phase 3.6: Code Refactoring - User Type Migration** (2-4 hours) 🔧
+1. **Migrate from user.type to user.role** (2-4h)
+   - [ ] Find all instances of `user.type` in frontend codebase
+   - [ ] Replace with `user.role` throughout the application
+   - [ ] Update TypeScript types/interfaces (User interface)
+   - [ ] Update all components using user.type
+   - [ ] Update authentication logic and role checks
+   - [ ] Test all role-based access control functionality
+   - [ ] Note: `user.type` will remain as backwards compatibility field from backend
+
+**Background**: Backend is migrating to use `role` instead of `type` for user types. The `type` field will remain for backwards compatibility, but frontend should use `role` going forward.
+
+**Estimated Effort**: 2-4 hours
+**Customer Value**: Low (internal code quality, future-proofing)
+**Complexity**: Low
+**Priority**: MEDIUM - Prevents technical debt
 
 **Phase 4: Advanced Features** (48-70 hours)
 1. Super Admin UI Pages (28-40h)

@@ -40,6 +40,29 @@ export function formatDateShort(date: string | Date | null | undefined): string 
   }).format(dateObj);
 }
 
+/**
+ * Checks if an entity has been meaningfully updated (updatedAt is different from createdAt)
+ * @param createdAt - Creation timestamp
+ * @param updatedAt - Update timestamp
+ * @returns true if the entity has been updated after creation
+ */
+export function hasBeenUpdated(
+  createdAt: string | Date | null | undefined,
+  updatedAt: string | Date | null | undefined
+): boolean {
+  if (!updatedAt || !createdAt) return false;
+
+  const created = new Date(createdAt);
+  const updated = new Date(updatedAt);
+
+  // Check for invalid dates
+  if (isNaN(created.getTime()) || isNaN(updated.getTime())) return false;
+
+  // Consider updated if the difference is more than 1 second (accounts for millisecond differences)
+  const diffInSeconds = Math.abs(updated.getTime() - created.getTime()) / 1000;
+  return diffInSeconds > 1;
+}
+
 export function formatRelativeTime(date: string | Date): string {
   const now = new Date();
   const targetDate = new Date(date);
@@ -49,7 +72,7 @@ export function formatRelativeTime(date: string | Date): string {
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
   if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
-  
+
   return formatDate(date);
 }
 

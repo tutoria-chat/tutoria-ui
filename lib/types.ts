@@ -166,15 +166,16 @@ export interface AIModel {
   maxTokens: number;
   supportsVision: boolean;
   supportsFunctionCalling: boolean;
-  inputCostPer1m?: number;
-  outputCostPer1m?: number;
+  inputCostPer1M?: number; // Capital M to match backend DTO
+  outputCostPer1M?: number; // Capital M to match backend DTO
   requiredTier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
   isActive: boolean;
   isDeprecated: boolean;
   deprecationDate?: string;
   description?: string;
   recommendedFor?: string;
-  createdAt: string;
+  modulesCount?: number; // For AIModelListDto
+  createdAt?: string;
   updatedAt?: string;
 }
 
@@ -193,6 +194,7 @@ export interface Module {
   tutorLanguage?: string; // Language for AI tutor responses (pt-br, en, es)
   aiModelId?: number; // Selected AI model
   aiModel?: AIModel; // Populated AI model details
+  files?: File[]; // Files included in module response (reduces API calls)
   createdAt: string;
   updatedAt: string;
   filesCount?: number;

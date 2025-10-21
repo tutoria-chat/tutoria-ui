@@ -188,18 +188,23 @@ export default function CreateProfessorPage() {
 
       setNewUser(response);
 
-      // Assign courses to professor
-      for (const courseId of formData.courseIds) {
-        try {
-          await apiClient.assignProfessorToCourse(parseInt(courseId), response.id);
-        } catch (error) {
-          console.error(`Error assigning course ${courseId}:`, error);
-          // Continue with other courses even if one fails
-        }
+      // Assign courses to professor - use Promise.allSettled to track failures
+      const courseAssignmentResults = await Promise.allSettled(
+        formData.courseIds.map(courseId =>
+          apiClient.assignProfessorToCourse(parseInt(courseId), response.id)
+        )
+      );
+
+      // Check for failed course assignments
+      const failedAssignments = courseAssignmentResults.filter(result => result.status === 'rejected');
+      if (failedAssignments.length > 0) {
+        console.error('Some course assignments failed:', failedAssignments);
+        toast.warning(t('someCoursesFailed') || `Professor created, but ${failedAssignments.length} course assignment(s) failed.`);
+      } else {
+        toast.success(t('professorCreatedSuccess'));
       }
 
       setShowSuccess(true);
-      toast.success(t('professorCreatedSuccess'));
     } catch (error: any) {
       console.error('Error creating professor:', error);
       toast.error(error.message || t('errorCreatingProfessor'));
@@ -303,6 +308,11 @@ export default function CreateProfessorPage() {
         </Card>
 
         <div className="flex space-x-4">
+          {formData.universityId && (
+            <Button onClick={() => router.push(`/universities/${formData.universityId}`)} variant="default">
+              {t('backToUniversity') || 'Back to University Details'}
+            </Button>
+          )}
           <Button onClick={() => router.push('/professors')} variant="outline">
             {t('backToList')}
           </Button>
@@ -319,7 +329,7 @@ export default function CreateProfessorPage() {
               languagePreference: 'pt-br',
             });
             setNewUser(null);
-          }}>
+          }} variant="outline">
             {t('createAnother')}
           </Button>
         </div>

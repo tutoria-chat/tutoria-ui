@@ -119,6 +119,8 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
     }
     if (!formData.semester) {
       newErrors.semester = t('semesterRequired');
+    } else if (Number(formData.semester) < 1 || Number(formData.semester) > 2) {
+      newErrors.semester = t('semesterInvalid');
     }
     if (!formData.aiModelId) {
       newErrors.aiModelId = tAI('modelRequired');
@@ -297,8 +299,12 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                     disabled={isLoading}
                     className={errors.semester ? 'border-destructive' : ''}
                     min="1"
+                    max="2"
                     required
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t('semesterHint')}
+                  </p>
                   {errors.semester && <FormMessage>{errors.semester}</FormMessage>}
                 </FormItem>
               </FormField>

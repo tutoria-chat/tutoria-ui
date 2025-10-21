@@ -192,6 +192,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('tutoria_refresh_token');
       }
       setUser(null);
+
+      // Redirect to login page
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
     } finally {
       setIsLoading(false);
     }

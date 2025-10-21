@@ -12,12 +12,15 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
+import { authService } from '@/lib/auth';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import type { SuperAdmin, TableColumn, BreadcrumbItem } from '@/lib/types';
 
 export default function SuperAdminsPage() {
   const t = useTranslations('superAdmins');
+  const currentUser = authService.getUser();
+  const isMainAdmin = currentUser?.id === 1; // User ID 1 is the main admin
   const [superAdmins, setSuperAdmins] = useState<SuperAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -78,10 +81,18 @@ export default function SuperAdminsPage() {
   };
 
   const openDeactivateDialog = (admin: SuperAdmin) => {
+    // Only the main admin (user ID 1) can deactivate super admins
+    if (!isMainAdmin) {
+      toast.error(t('onlyMainAdminCanDeactivate') || 'Only the main administrator can deactivate super administrators.');
+      return;
+    }
+
+    // Cannot deactivate yourself
     if (admin.id === 1) {
       toast.error(t('deleteMainError'));
       return;
     }
+
     setConfirmDialog({
       open: true,
       type: 'deactivate',
@@ -106,6 +117,12 @@ export default function SuperAdminsPage() {
   };
 
   const handleActivate = async (id: number) => {
+    // Only the main admin (user ID 1) can activate super admins
+    if (!isMainAdmin) {
+      toast.error(t('onlyMainAdminCanActivate') || 'Only the main administrator can activate super administrators.');
+      return;
+    }
+
     try {
       await apiClient.activateUser(id);
       toast.success(t('activateSuccess') || 'Super administrator activated successfully');
@@ -154,7 +171,7 @@ export default function SuperAdminsPage() {
       )
     },
     {
-      key: 'created_at',
+      key: 'createdAt',
       label: t('columns.createdAt'),
       sortable: true,
       render: (value) => (
@@ -165,7 +182,7 @@ export default function SuperAdminsPage() {
       )
     },
     {
-      key: 'last_login_at',
+      key: 'lastLoginAt',
       label: t('columns.lastActivity'),
       sortable: true,
       render: (value) => (
@@ -218,29 +235,30 @@ export default function SuperAdminsPage() {
               variant="ghost"
               size="sm"
               onClick={() => openDeactivateDialog(admin)}
-              disabled={admin.id === 1}
-              title={t('deactivate') || 'Deactivate'}
+              disabled={!isMainAdmin || admin.id === 1}
+              title={!isMainAdmin ? (t('onlyMainAdminCanDeactivate') || 'Only main admin can deactivate') : (t('deactivate') || 'Deactivate')}
             >
-              <Ban className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-amber-600'}`} />
+              <Ban className={`h-4 w-4 ${!isMainAdmin || admin.id === 1 ? 'text-muted-foreground' : 'text-amber-600'}`} />
             </Button>
           ) : (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => handleActivate(admin.id)}
-              title={t('activate') || 'Activate'}
+              disabled={!isMainAdmin}
+              title={!isMainAdmin ? (t('onlyMainAdminCanActivate') || 'Only main admin can activate') : (t('activate') || 'Activate')}
             >
-              <CheckCircle className="h-4 w-4 text-green-600" />
+              <CheckCircle className={`h-4 w-4 ${!isMainAdmin ? 'text-muted-foreground' : 'text-green-600'}`} />
             </Button>
           )}
           <Button
             variant="ghost"
             size="sm"
             onClick={() => openDeleteDialog(admin)}
-            disabled={admin.id === 1}
-            title={t('delete') || 'Delete'}
+            disabled={!isMainAdmin || admin.id === 1}
+            title={!isMainAdmin ? (t('onlyMainAdminCanDelete') || 'Only main admin can delete') : (t('delete') || 'Delete')}
           >
-            <Trash2 className={`h-4 w-4 ${admin.id === 1 ? 'text-muted-foreground' : 'text-destructive'}`} />
+            <Trash2 className={`h-4 w-4 ${!isMainAdmin || admin.id === 1 ? 'text-muted-foreground' : 'text-destructive'}`} />
           </Button>
         </div>
       )
@@ -248,10 +266,18 @@ export default function SuperAdminsPage() {
   ];
 
   const openDeleteDialog = (admin: SuperAdmin) => {
+    // Only the main admin (user ID 1) can delete super admins
+    if (!isMainAdmin) {
+      toast.error(t('onlyMainAdminCanDelete') || 'Only the main administrator can delete super administrators.');
+      return;
+    }
+
+    // Cannot delete yourself
     if (admin.id === 1) {
       toast.error(t('deleteMainError'));
       return;
     }
+
     setConfirmDialog({
       open: true,
       type: 'delete',

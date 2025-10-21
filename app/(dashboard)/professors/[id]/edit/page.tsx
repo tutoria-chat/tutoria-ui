@@ -67,10 +67,11 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
-      // Set assigned course IDs from professor data (included in the response now)
-      if (data.assignedCourseIds) {
-        setAssignedCourseIds(data.assignedCourseIds);
-        setOriginalAssignedCourseIds(data.assignedCourseIds);
+      // Set assigned course IDs from professor data (extract from assignedCourses)
+      if (data.assignedCourses && data.assignedCourses.length > 0) {
+        const courseIds = data.assignedCourses.map(course => course.id);
+        setAssignedCourseIds(courseIds);
+        setOriginalAssignedCourseIds(courseIds);
       }
 
       // Load courses for this professor's university
@@ -207,7 +208,13 @@ export default function EditProfessorPage() {
       }
 
       toast.success(t('updateSuccess'));
-      router.push(returnUrl);
+
+      // Use window.location.href for more reliable navigation
+      if (typeof window !== 'undefined') {
+        window.location.href = returnUrl;
+      } else {
+        router.push(returnUrl);
+      }
     } catch (error: any) {
       console.error('Failed to update professor:', error);
       toast.error(error.message || t('updateError'));

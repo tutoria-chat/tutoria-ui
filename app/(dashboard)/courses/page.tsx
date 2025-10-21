@@ -36,15 +36,37 @@ export default function CoursesPage() {
   // Check for university_id from URL query parameter
   const urlUniversityId = searchParams.get('universityId');
 
-  // Build API URL with pagination params and university filter
-  // Priority: URL parameter > user's university (for professors)
-  const universityFilter = urlUniversityId
-    ? `&universityId=${urlUniversityId}`
-    : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
-  const apiUrl = `/courses/?page=${page}&limit=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
+  // Build API URL with pagination params and filters
+  // Backend now handles role-based filtering:
+  // - Super admins: see all courses (no filter)
+  // - Admin professors: see all courses in their university (universityId filter)
+  // - Regular professors: see ONLY their assigned courses (professorId filter)
+  const buildApiUrl = () => {
+    let filters = `page=${page}&limit=${limit}`;
+
+    if (searchTerm) {
+      filters += `&search=${encodeURIComponent(searchTerm)}`;
+    }
+
+    // If URL has universityId, use it (for navigation from university page)
+    if (urlUniversityId) {
+      filters += `&universityId=${urlUniversityId}`;
+    }
+    // Regular professor (not admin) - backend filters by professorId
+    else if (user?.role === 'professor' && user.isAdmin === false && user.id) {
+      filters += `&professorId=${user.id}`;
+    }
+    // Admin professor - backend filters by universityId
+    else if (user?.universityId && user.role !== 'super_admin') {
+      filters += `&universityId=${user.universityId}`;
+    }
+    // Super admin sees all courses (no filter)
+
+    return `/courses/?${filters}`;
+  };
 
   // API call to get courses
-  const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(apiUrl);
+  const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(buildApiUrl());
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }

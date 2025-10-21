@@ -55,6 +55,20 @@ export default function UniversityDetailsPage() {
   const [activeTab, setActiveTab] = useState<'courses' | 'professors'>('courses');
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
 
+  // Search, pagination, and sorting state for courses
+  const [courseSearchTerm, setCourseSearchTerm] = useState('');
+  const [coursePage, setCoursePage] = useState(1);
+  const [courseLimit, setCourseLimit] = useState(10);
+  const [courseSortColumn, setCourseSortColumn] = useState<string | null>('name');
+  const [courseSortDirection, setCourseSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Search, pagination, and sorting state for professors
+  const [professorSearchTerm, setProfessorSearchTerm] = useState('');
+  const [professorPage, setProfessorPage] = useState(1);
+  const [professorLimit, setProfessorLimit] = useState(10);
+  const [professorSortColumn, setProfessorSortColumn] = useState<string | null>('firstName');
+  const [professorSortDirection, setProfessorSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
 
@@ -68,16 +82,59 @@ export default function UniversityDetailsPage() {
     }
   }, [user, universityId]);
 
-  // OPTIMIZED: Single API call returns university + courses + counts
+  // Fetch university details
   const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/universities/${universityId}`);
 
-  // Fetch professors (kept on page load due to backend authorization issues with lazy loading)
+  // Build courses API URL with pagination params and filters
+  // Backend now handles role-based filtering:
+  // - Super admins: see all courses (no filter beyond universityId)
+  // - Admin professors: see all courses in their university (universityId filter)
+  // - Regular professors: see ONLY their assigned courses (professorId filter)
+  const buildCoursesApiUrl = () => {
+    let filters = `page=${coursePage}&limit=${courseLimit}`;
+
+    if (courseSearchTerm) {
+      filters += `&search=${encodeURIComponent(courseSearchTerm)}`;
+    }
+
+    // Always filter by university when on university detail page
+    filters += `&universityId=${universityId}`;
+
+    // Regular professor (not admin) - backend filters by professorId
+    if (user?.role === 'professor' && user.isAdmin === false && user.id) {
+      filters += `&professorId=${user.id}`;
+    }
+
+    return `/courses/?${filters}`;
+  };
+
+  // Fetch courses with pagination
+  const { data: coursesResponse, loading: coursesLoading } = useFetch<PaginatedResponse<Course>>(buildCoursesApiUrl());
+
+  // Build professors API URL with pagination params and filters
+  const buildProfessorsApiUrl = () => {
+    let filters = `page=${professorPage}&limit=${professorLimit}`;
+
+    if (professorSearchTerm) {
+      filters += `&search=${encodeURIComponent(professorSearchTerm)}`;
+    }
+
+    filters += `&universityId=${universityId}`;
+
+    return `/professors/?${filters}`;
+  };
+
+  // Fetch professors ONLY for admin users (super admin or admin professor)
+  // Regular professors get 403 Forbidden and don't need this data
+  const isAdmin = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin);
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
-    `/professors/?universityId=${universityId}&limit=100`
+    isAdmin ? buildProfessorsApiUrl() : null
   );
 
-  const courses = university?.courses || [];
+  const courses = coursesResponse?.items || [];
+  const totalCourses = coursesResponse?.total || 0;
   const professors = professorsResponse?.items || [];
+  const totalProfessors = professorsResponse?.total || 0;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('breadcrumb'), href: '/universities' },
@@ -241,6 +298,24 @@ export default function UniversityDetailsPage() {
         }
       }
     });
+  };
+
+  const handleCourseSortChange = (column: string) => {
+    if (courseSortColumn === column) {
+      setCourseSortDirection(courseSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setCourseSortColumn(column);
+      setCourseSortDirection('asc');
+    }
+  };
+
+  const handleProfessorSortChange = (column: string) => {
+    if (professorSortColumn === column) {
+      setProfessorSortDirection(professorSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setProfessorSortColumn(column);
+      setProfessorSortDirection('asc');
+    }
   };
 
   if (universityLoading) {
@@ -475,7 +550,24 @@ export default function UniversityDetailsPage() {
             <DataTable
               data={courses}
               columns={courseColumns}
-              loading={universityLoading}
+              loading={coursesLoading}
+              search={{
+                value: courseSearchTerm,
+                placeholder: t('coursesTab.searchPlaceholder'),
+                onSearchChange: setCourseSearchTerm
+              }}
+              pagination={{
+                page: coursePage,
+                limit: courseLimit,
+                total: totalCourses,
+                onPageChange: setCoursePage,
+                onLimitChange: setCourseLimit
+              }}
+              sorting={{
+                column: courseSortColumn,
+                direction: courseSortDirection,
+                onSortChange: handleCourseSortChange
+              }}
               emptyMessage={t('coursesTab.emptyMessage')}
             />
           </CardContent>
@@ -505,6 +597,23 @@ export default function UniversityDetailsPage() {
                 data={professors}
                 columns={professorColumns}
                 loading={professorsLoading}
+                search={{
+                  value: professorSearchTerm,
+                  placeholder: t('professorsTab.searchPlaceholder'),
+                  onSearchChange: setProfessorSearchTerm
+                }}
+                pagination={{
+                  page: professorPage,
+                  limit: professorLimit,
+                  total: totalProfessors,
+                  onPageChange: setProfessorPage,
+                  onLimitChange: setProfessorLimit
+                }}
+                sorting={{
+                  column: professorSortColumn,
+                  direction: professorSortDirection,
+                  onSortChange: handleProfessorSortChange
+                }}
                 emptyMessage={t('professorsTab.emptyMessage')}
               />
             </CardContent>

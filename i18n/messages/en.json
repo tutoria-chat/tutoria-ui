@@ -144,7 +144,8 @@
         "files": "Files",
         "tokens": "Tokens",
         "tokensCount": "{count} tokens",
-        "lastUpdate": "Last Update"
+        "lastUpdate": "Last Update",
+        "neverUpdated": "Never"
       },
       "professorsTab": {
         "title": "Assigned Professors",
@@ -211,8 +212,10 @@
       "yearPlaceholder": "e.g., 2024",
       "yearRequired": "Year is required",
       "semesterLabel": "Semester *",
-      "semesterPlaceholder": "e.g., 1, 2...",
+      "semesterPlaceholder": "1 or 2",
       "semesterRequired": "Semester is required",
+      "semesterInvalid": "Semester must be 1 or 2 (only two semesters per year)",
+      "semesterHint": "Only 1 or 2 (two semesters per year)",
       "courseLabel": "Course *",
       "coursePreselected": "Preselected",
       "loadingCourses": "Loading courses...",
@@ -326,6 +329,9 @@
       "downloadStartedDesc": "The file will be downloaded shortly.",
       "downloadError": "Error downloading file",
       "downloadErrorDesc": "Could not download the file. Please try again.",
+      "viewFile": "View file",
+      "viewError": "Error loading file",
+      "viewErrorDesc": "Could not load the file for viewing",
       "fileSelectError": "Select a file to upload",
       "fileTooLarge": "File too large. Maximum size: 50MB",
       "fileTypeNotSupported": "File type not supported. Use: PDF, DOC, DOCX, TXT, PPT or PPTX",
@@ -335,7 +341,10 @@
         "fileName": "File",
         "size": "Size",
         "uploadedAt": "Uploaded at",
-        "actions": "Actions"
+        "actions": "Actions",
+        "deleteConfirm": "Are you sure you want to delete this file? This action cannot be undone.",
+        "deleteFileTitle": "Delete File",
+        "deleteFileDescription": "Are you sure you want to delete this file? This action cannot be undone."
       },
       "fileUpload": {
         "clickToSelect": "Click to select or drag the file here",
@@ -542,12 +551,14 @@
         "title": "Courses",
         "description": "Courses offered by this university",
         "newCourse": "New Course",
+        "searchPlaceholder": "Search courses...",
         "emptyMessage": "No courses registered yet."
       },
       "professorsTab": {
         "title": "Professors",
         "description": "Professors associated with this university",
         "newProfessor": "New Professor",
+        "searchPlaceholder": "Search professors...",
         "emptyMessage": "No professors registered yet."
       },
       "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
@@ -677,7 +688,9 @@
       "emailSentDescription": "An email with login instructions has been sent to {email}",
       "emailInstructions": "The new professor will receive an email with their temporary password and a link to set their permanent password. The link will expire in 24 hours.",
       "backToList": "Back to List",
+      "backToUniversity": "Back to University Details",
       "createAnother": "Create Another Professor",
+      "someCoursesFailed": "Professor created, but some course assignments failed. Please check the assigned courses.",
       "permissions": "Permissions: Regular professors can view courses and manage modules they are assigned to.",
       "professorInfoTitle": "Professor Information",
       "professorInfoDescription": "Fill in the new professor's details. A password setup link will be generated after creation.",
@@ -879,6 +892,7 @@
       "securityRate": "Security Rate",
       "expiringSoon": "Expiring Soon"
     },
+    "deleteTitle": "Delete Token",
     "deleteConfirm": "Are you sure you want to delete this token? This action cannot be undone.",
     "deleteSuccess": "Token deleted successfully",
     "deleteError": "Error deleting token. Please try again.",
@@ -1018,6 +1032,9 @@
     "deleteError": "Error deleting super administrator",
     "deleteMainError": "Cannot delete the main super administrator account",
     "deleteNotImplemented": "Delete functionality will be implemented soon",
+    "onlyMainAdminCanDeactivate": "Only the main administrator can deactivate super administrators.",
+    "onlyMainAdminCanActivate": "Only the main administrator can activate super administrators.",
+    "onlyMainAdminCanDelete": "Only the main administrator can delete super administrators.",
     "deactivate": "Deactivate",
     "activate": "Activate",
     "delete": "Delete",
