@@ -57,8 +57,8 @@ export default function ModuleDetailsPage() {
   const tTokens = useTranslations('tokens.columns');
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
-  const { data: module, loading: moduleLoading, error: moduleError } = useFetch<Module & { files?: FileType[] }>(`/modules/${moduleId}`);
-  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/ModuleAccessTokens/?moduleId=${moduleId}`);
+  const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/modules/${moduleId}`);
+  const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/moduleaccesstokens/?moduleId=${moduleId}`);
 
   const files = module?.files || [];
   const tokens = tokensResponse?.items || [];
@@ -125,10 +125,10 @@ export default function ModuleDetailsPage() {
       // Pass module_id and file name as query parameters
       await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
 
-      // Reset form and reload page to show new file
+      // Reset form and refetch module data to show new file
       form.reset();
       setSelectedFile(null);
-      window.location.reload();
+      refetchModule();
 
       toast.success(t('fileUploadSuccess'), {
         description: t('fileUploadSuccessDesc', { fileName: selectedFile.name }),
@@ -158,7 +158,7 @@ export default function ModuleDetailsPage() {
       await apiClient.deleteFile(fileToDelete);
       setDeleteConfirmOpen(false);
       setFileToDelete(null);
-      window.location.reload();
+      refetchModule();
       toast.success(t('fileDeleteSuccess'), {
         description: t('fileDeleteSuccessDesc'),
       });

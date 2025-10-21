@@ -22,7 +22,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { username, password } = body;
 
-    console.log('[Next.js API Route] Login request received for username:', username);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Login request received for username:', username);
+    }
 
     // Validate required fields
     if (!username || !password) {
@@ -39,11 +41,13 @@ export async function POST(request: NextRequest) {
     const clientSecret = process.env.TUTORIA_CLIENT_SECRET;
     const authApiUrl = process.env.TUTORIA_AUTH_API_URL || process.env.NEXT_PUBLIC_AUTH_API_URL;
 
-    console.log('[Next.js API Route] Environment variables:');
-    console.log('  TUTORIA_CLIENT_ID:', clientId ? '✓ Set' : '✗ Missing');
-    console.log('  TUTORIA_CLIENT_SECRET:', clientSecret ? '✓ Set' : '✗ Missing');
-    console.log('  TUTORIA_AUTH_API_URL:', authApiUrl || 'Not set, using NEXT_PUBLIC_AUTH_API_URL');
-    console.log('  Final Auth API URL:', authApiUrl);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Environment variables:');
+      console.log('  TUTORIA_CLIENT_ID:', clientId ? '✓ Set' : '✗ Missing');
+      console.log('  TUTORIA_CLIENT_SECRET:', clientSecret ? '✓ Set' : '✗ Missing');
+      console.log('  TUTORIA_AUTH_API_URL:', authApiUrl || 'Not set, using NEXT_PUBLIC_AUTH_API_URL');
+      console.log('  Final Auth API URL:', authApiUrl);
+    }
 
     // Validate environment variables are configured
     if (!clientId || !clientSecret) {
@@ -64,7 +68,10 @@ export async function POST(request: NextRequest) {
 
     // Call Auth API with user credentials + client credentials
     const authApiEndpoint = `${authApiUrl}/auth/login`;
-    console.log('[Next.js API Route] Calling Auth API:', authApiEndpoint);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Calling Auth API:', authApiEndpoint);
+    }
 
     const authResponse = await fetch(authApiEndpoint, {
       method: 'POST',
@@ -79,11 +86,16 @@ export async function POST(request: NextRequest) {
       }),
     });
 
-    console.log('[Next.js API Route] Auth API response status:', authResponse.status);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Auth API response status:', authResponse.status);
+    }
 
     // Parse response
     const data = await authResponse.json();
-    console.log('[Next.js API Route] Auth API response data:', JSON.stringify(data, null, 2));
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Auth API response data:', JSON.stringify(data, null, 2));
+    }
 
     // If authentication failed, return error
     if (!authResponse.ok) {
@@ -95,7 +107,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Success - return tokens and user info to browser
-    console.log('[Next.js API Route] Login successful, returning tokens to browser');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Next.js API Route] Login successful, returning tokens to browser');
+    }
     return NextResponse.json(data, { status: 200 });
 
   } catch (error) {

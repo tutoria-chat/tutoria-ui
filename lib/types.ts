@@ -8,8 +8,8 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  userType: UserRole; // 'super_admin', 'professor', or 'student'
-  role: UserRole; // Alias for userType (for backwards compatibility)
+  userType: UserRole; // 'super_admin', 'professor', or 'student' - RECOMMENDED: Use this field
+  role: UserRole; // @deprecated Alias for userType (for backwards compatibility). Prefer using userType instead.
   isActive: boolean;
   universityId?: number;
   isAdmin?: boolean; // Only for professors: true = admin professor, false = regular professor

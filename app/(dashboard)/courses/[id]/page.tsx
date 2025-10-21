@@ -74,7 +74,7 @@ export default function CourseDetailsPage() {
   };
 
   // Fetch modules with pagination
-  const { data: modulesResponse, loading: modulesLoading } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
+  const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
 
   // Fetch professors
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
@@ -151,7 +151,7 @@ export default function CourseDetailsPage() {
         try {
           const { apiClient } = await import('@/lib/api');
           await apiClient.delete(`/modules/${moduleId}`);
-          window.location.reload();
+          refetchModules();
         } catch (error) {
           console.error('Erro ao deletar módulo:', error);
           toast.error(tModules('deleteError'));

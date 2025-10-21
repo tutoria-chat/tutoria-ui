@@ -168,3 +168,41 @@ export function validatePasswordStrength(password: string): PasswordValidationRe
     hasSpecialChar,
   };
 }
+
+/**
+ * Extract a user-friendly error message from API error responses.
+ *
+ * Handles multiple error formats:
+ * - { detail: "Error message" }
+ * - { message: "Error message" }
+ * - Plain string errors
+ * - Unknown error objects
+ *
+ * @param error - The error object from the API or catch block
+ * @returns A user-friendly error message string
+ */
+export function getErrorMessage(error: any): string {
+  // Check for API error response with detail field (FastAPI/Python backend)
+  if (error?.detail) {
+    // Handle both string and array formats of detail
+    if (typeof error.detail === 'string') {
+      return error.detail;
+    }
+    if (Array.isArray(error.detail)) {
+      return error.detail.map((d: any) => d.msg || d).join(', ');
+    }
+  }
+
+  // Check for generic message field (.NET backend or generic errors)
+  if (error?.message && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  // Handle plain string errors
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  // Fallback for unknown error formats
+  return 'An unexpected error occurred';
+}

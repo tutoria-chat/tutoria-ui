@@ -1,3 +1,4 @@
+import { PAGINATION } from './constants';
 import type {
   TokenResponse,
   User,
@@ -59,6 +60,8 @@ class TutoriaAPIClient {
   private token: string | null = null;
   private isRefreshing: boolean = false;
   private refreshPromise: Promise<boolean> | null = null;
+  private refreshAttempts: number = 0;
+  private readonly MAX_REFRESH_ATTEMPTS = 3;
 
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
@@ -89,12 +92,23 @@ class TutoriaAPIClient {
   private async refreshAccessToken(): Promise<boolean> {
     if (typeof window === 'undefined') return false;
 
+    // Check if max refresh attempts exceeded
+    if (this.refreshAttempts >= this.MAX_REFRESH_ATTEMPTS) {
+      console.error('Max token refresh attempts exceeded. Clearing tokens.');
+      this.clearToken();
+      localStorage.removeItem('tutoria_refresh_token');
+      this.refreshAttempts = 0;
+      return false;
+    }
+
     // If already refreshing, wait for that promise
     if (this.isRefreshing && this.refreshPromise) {
       return this.refreshPromise;
     }
 
     this.isRefreshing = true;
+    this.refreshAttempts++;
+
     this.refreshPromise = (async () => {
       try {
         const refreshToken = localStorage.getItem('tutoria_refresh_token');
@@ -123,6 +137,9 @@ class TutoriaAPIClient {
         if (data.refreshToken) {
           localStorage.setItem('tutoria_refresh_token', data.refreshToken);
         }
+
+        // Reset refresh attempts on success
+        this.refreshAttempts = 0;
 
         return true;
       } catch (error) {
@@ -373,8 +390,8 @@ class TutoriaAPIClient {
 
   async getUsersByType(userType: 'student' | 'professor' | 'super_admin'): Promise<UserResponse[]> {
     // Backend returns PaginatedResponse, extract items array
-    // Request all items by using a large page size
-    const response = await this.get<PaginatedResponse<UserResponse>>('/users/', { userType, page: 1, size: 1000 }, false);
+    // Request all items by using maximum page size as a workaround
+    const response = await this.get<PaginatedResponse<UserResponse>>('/users/', { userType, page: 1, size: PAGINATION.MAX_PAGE_SIZE }, false);
     return response.items;
   }
 
@@ -429,7 +446,7 @@ class TutoriaAPIClient {
   }
 
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
-    const response = await this.get<PaginatedResponse<Course>>(`/courses/`, { universityId, size: 1000 });
+    const response = await this.get<PaginatedResponse<Course>>(`/courses/`, { universityId, size: PAGINATION.MAX_PAGE_SIZE });
     return response.items;
   }
 
@@ -607,23 +624,23 @@ class TutoriaAPIClient {
 
   // Module Token endpoints
   async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
-    return this.get('/ModuleAccessTokens/', params);
+    return this.get('/moduleaccesstokens/', params);
   }
 
   async createModuleToken(data: ModuleAccessTokenCreate): Promise<ModuleAccessToken> {
-    return this.post('/ModuleAccessTokens/', data);
+    return this.post('/moduleaccesstokens/', data);
   }
 
   async getModuleToken(id: number): Promise<ModuleAccessToken> {
-    return this.get(`/ModuleAccessTokens/${id}`);
+    return this.get(`/moduleaccesstokens/${id}`);
   }
 
   async updateModuleToken(id: number, data: ModuleAccessTokenUpdate): Promise<ModuleAccessToken> {
-    return this.put(`/ModuleAccessTokens/${id}`, data);
+    return this.put(`/moduleaccesstokens/${id}`, data);
   }
 
   async deleteModuleToken(id: number): Promise<void> {
-    return this.delete(`/ModuleAccessTokens/${id}`);
+    return this.delete(`/moduleaccesstokens/${id}`);
   }
 
   // Super Admin endpoints

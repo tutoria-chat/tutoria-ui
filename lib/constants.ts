@@ -52,3 +52,17 @@ export const VALIDATION = {
 export const FEATURE_FLAGS = {
   TUTORIALS_ENABLED: process.env.NEXT_PUBLIC_TUTORIALS_ENABLED === 'true',
 } as const;
+
+export const PAGINATION = {
+  /**
+   * Maximum page size for fetching all items in a single request.
+   * Used as a workaround for endpoints that don't support size: -1 (get all).
+   *
+   * Note: This is a temporary solution. Ideally, the backend should support:
+   * - Cursor-based pagination for large datasets
+   * - size: -1 to fetch all items
+   */
+  MAX_PAGE_SIZE: 1000,
+  DEFAULT_PAGE_SIZE: 10,
+  DEFAULT_PAGE: 1,
+} as const;
