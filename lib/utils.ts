@@ -208,7 +208,13 @@ export function getErrorMessage(error: any): string {
 }
 
 /**
- * Extract YouTube video ID from various YouTube URL formats.
+ * Extract YouTube video ID from various YouTube URL formats with proper URL parsing and validation.
+ *
+ * Security features:
+ * - Uses browser URL API to validate URL structure and prevent XSS
+ * - Validates domain is exactly youtube.com or youtu.be (prevents subdomain attacks)
+ * - Ensures protocol is http or https (blocks javascript:, data:, etc.)
+ * - Validates video ID is exactly 11 characters with allowed charset
  *
  * Supported formats:
  * - https://www.youtube.com/watch?v=VIDEO_ID
@@ -220,38 +226,86 @@ export function getErrorMessage(error: any): string {
  * - http variants and www-less variants
  *
  * @param url - YouTube URL to parse
- * @returns Video ID if valid, null if invalid
+ * @returns Video ID if valid, null if invalid or potentially malicious
  */
 export function extractYouTubeVideoId(url: string): string | null {
   if (!url || typeof url !== 'string') return null;
 
   const trimmedUrl = url.trim();
 
+  // Step 1: Parse URL using browser URL API for security validation
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(trimmedUrl);
+  } catch {
+    // Invalid URL format
+    return null;
+  }
+
+  // Step 2: Security - Validate protocol (block javascript:, data:, etc.)
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    return null;
+  }
+
+  // Step 3: Security - Validate hostname is exactly youtube.com or youtu.be
+  // This prevents attacks like evil.youtube.com.attacker.com
+  const hostname = parsedUrl.hostname.toLowerCase();
+  const isYouTubeDomain = hostname === 'youtube.com' ||
+                          hostname === 'www.youtube.com' ||
+                          hostname === 'm.youtube.com' ||
+                          hostname === 'youtu.be';
+
+  if (!isYouTubeDomain) {
+    return null;
+  }
+
+  // Step 4: Extract video ID based on URL pattern
+  const pathname = parsedUrl.pathname;
+  const searchParams = parsedUrl.searchParams;
+
   // Pattern 1: youtube.com/watch?v=VIDEO_ID
-  const watchPattern = /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/;
-  const watchMatch = trimmedUrl.match(watchPattern);
-  if (watchMatch) return watchMatch[1];
+  if (pathname === '/watch' && searchParams.has('v')) {
+    const videoId = searchParams.get('v');
+    if (videoId && /^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
 
   // Pattern 2: youtu.be/VIDEO_ID
-  const shortPattern = /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  const shortMatch = trimmedUrl.match(shortPattern);
-  if (shortMatch) return shortMatch[1];
+  if (hostname === 'youtu.be' && pathname.length === 12 && pathname.startsWith('/')) {
+    const videoId = pathname.substring(1);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
 
   // Pattern 3: youtube.com/embed/VIDEO_ID
-  const embedPattern = /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
-  const embedMatch = trimmedUrl.match(embedPattern);
-  if (embedMatch) return embedMatch[1];
+  if (pathname.startsWith('/embed/') && pathname.length === 18) {
+    const videoId = pathname.substring(7);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
 
   // Pattern 4: youtube.com/shorts/VIDEO_ID
-  const shortsPattern = /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
-  const shortsMatch = trimmedUrl.match(shortsPattern);
-  if (shortsMatch) return shortsMatch[1];
+  if (pathname.startsWith('/shorts/') && pathname.length === 19) {
+    const videoId = pathname.substring(8);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
 
   return null;
 }
 
 /**
  * Validate if a URL is a valid YouTube URL.
+ *
+ * This function performs comprehensive security validation:
+ * - URL structure validation via URL API
+ * - Protocol whitelist (http/https only)
+ * - Domain whitelist (youtube.com/youtu.be only)
+ * - Video ID format validation
  *
  * @param url - URL to validate
  * @returns true if valid YouTube URL with extractable video ID
