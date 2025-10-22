@@ -242,6 +242,11 @@
       "promptTip5": "• Considera el público objetivo y su nivel",
       "tutorLanguageLabel": "Idioma del Tutor IA",
       "tutorLanguageHint": "Importante: Selecciona en qué idioma el tutor IA debe responder a las preguntas de los estudiantes. Esto define el idioma de las respuestas, independientemente del idioma de la pregunta.",
+      "courseTypeLabel": "Tipo de Curso",
+      "selectCourseType": "Seleccionar Tipo",
+      "changeCourseType": "Cambiar Tipo",
+      "courseTypeHint": "Selecciona el tipo de tu curso y elegiremos automáticamente el mejor modelo de IA para un rendimiento y costo óptimos.",
+      "noCourseTypeSelected": "Ningún tipo de curso seleccionado",
       "modelSelectionHint": "🧠 Cada modelo de IA tiene diferentes fortalezas, costos y capacidades. ¡Elige el que mejor se adapte a las necesidades de tu módulo - puedes cambiarlo después si lo necesitas!",
       "cancel": "Cancelar",
       "update": "Actualizar módulo",
@@ -301,6 +306,31 @@
       "uploadFileDesc": "Sube materiales de estudio para este módulo",
       "uploading": "Subiendo...",
       "uploadButton": "Subir archivo",
+      "addYoutubeVideo": "Agregar Video de YouTube",
+      "addYoutubeVideoDesc": "Agrega una URL de video de YouTube para transcribir y usar como material de curso",
+      "youtubeUrl": "URL de YouTube",
+      "videoName": "Nombre del Video",
+      "optional": "opcional",
+      "videoNamePlaceholder": "ej: Clase 1: Introducción",
+      "processing": "Procesando...",
+      "addVideoButton": "Agregar Video",
+      "youtubeUrlRequired": "URL de YouTube es requerida",
+      "invalidYoutubeUrl": "Formato de URL de YouTube inválido",
+      "youtubeVideoAdded": "Video enviado para subir",
+      "youtubeVideoAddedDesc": "Por favor, regresa más tarde para verificar el estado completo",
+      "watchOnYoutube": "Ver en YouTube",
+      "youtubeError": "Error al agregar video de YouTube",
+      "youtubeVideoAlreadyExists": "Este video ya existe en el módulo",
+      "youtubeVideoAlreadyExistsDesc": "El video ya está disponible en tus archivos",
+      "youtubeTranscriptionTips": "Consejos para Mejores Resultados:",
+      "enableYoutubeTranscripts": "Active los subtítulos/transcripciones en su video para resultados más precisos",
+      "avoidRegionLocks": "Evite videos con restricción regional cuando sea posible para un procesamiento más rápido",
+      "publicVideos": "Use videos públicos o no listados (los videos privados no se pueden procesar)",
+      "transcriptionCompleted": "Transcripción completada",
+      "transcriptionFailed": "Transcripción fallida",
+      "transcriptionFailedDesc": "El video no pudo ser transcrito",
+      "transcriptionTimeout": "La transcripción está tomando más tiempo del esperado",
+      "transcriptionTimeoutDesc": "Puedes verificar el estado más tarde",
       "moduleFiles": "Archivos del módulo",
       "filesAvailable": "Archivos disponibles en este módulo",
       "noFiles": "Aún no se han subido archivos. Sube tu primer archivo arriba.",
@@ -337,6 +367,13 @@
       "tokenCopyError": "Error al copiar el token",
       "columns": {
         "fileName": "Archivo",
+        "type": "Tipo",
+        "fileUpload": "Archivo",
+        "transcribed": "Transcrito",
+        "processing": "Procesando...",
+        "failed": "Fallido",
+        "pending": "Pendiente",
+        "words": "palabras",
         "size": "Tamaño",
         "uploadedAt": "Subido el",
         "actions": "Acciones",
@@ -3180,6 +3217,25 @@
         "Comparte prompts exitosos del tutor de IA con tus colegas",
         "Mantén un respaldo de tus prompts del sistema para reutilizarlos en semestres futuros"
       ]
+    }
+  },
+  "courseTypes": {
+    "selectCourseType": "Seleccionar Tipo de Curso",
+    "selectDescription": "Elige el tipo que mejor se ajuste al contenido de tu curso. Seleccionaremos automáticamente el modelo de IA óptimo.",
+    "selectedModel": "Modelo de IA:",
+    "tierNote": "Nota",
+    "tierDescription": "El modelo de IA se optimiza automáticamente según el nivel de suscripción de tu universidad para el mejor equilibrio costo-rendimiento.",
+    "mathLogic": {
+      "name": "Matemáticas y Lógica",
+      "description": "Cursos centrados en razonamiento matemático, fórmulas, demostraciones y resolución de problemas lógicos"
+    },
+    "programming": {
+      "name": "Programación y Ciencias de la Computación",
+      "description": "Codificación, algoritmos, desarrollo de software y temas técnicos de ciencias de la computación"
+    },
+    "theoryText": {
+      "name": "Teoría y Humanidades",
+      "description": "Conceptos teóricos, ensayos, humanidades, literatura y materias con mucho texto"
     }
   }
 }

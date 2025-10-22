@@ -206,3 +206,110 @@ export function getErrorMessage(error: any): string {
   // Fallback for unknown error formats
   return 'An unexpected error occurred';
 }
+
+/**
+ * Extract YouTube video ID from various YouTube URL formats with proper URL parsing and validation.
+ *
+ * Security features:
+ * - Uses browser URL API to validate URL structure and prevent XSS
+ * - Validates domain is exactly youtube.com or youtu.be (prevents subdomain attacks)
+ * - Ensures protocol is http or https (blocks javascript:, data:, etc.)
+ * - Validates video ID is exactly 11 characters with allowed charset
+ *
+ * Supported formats:
+ * - https://www.youtube.com/watch?v=VIDEO_ID
+ * - https://www.youtube.com/watch?v=VIDEO_ID&t=123s
+ * - https://youtu.be/VIDEO_ID
+ * - https://youtu.be/VIDEO_ID?t=123
+ * - https://www.youtube.com/embed/VIDEO_ID
+ * - https://www.youtube.com/shorts/VIDEO_ID
+ * - http variants and www-less variants
+ *
+ * @param url - YouTube URL to parse
+ * @returns Video ID if valid, null if invalid or potentially malicious
+ */
+export function extractYouTubeVideoId(url: string): string | null {
+  if (!url || typeof url !== 'string') return null;
+
+  const trimmedUrl = url.trim();
+
+  // Step 1: Parse URL using browser URL API for security validation
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(trimmedUrl);
+  } catch {
+    // Invalid URL format
+    return null;
+  }
+
+  // Step 2: Security - Validate protocol (block javascript:, data:, etc.)
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    return null;
+  }
+
+  // Step 3: Security - Validate hostname is exactly youtube.com or youtu.be
+  // This prevents attacks like evil.youtube.com.attacker.com
+  const hostname = parsedUrl.hostname.toLowerCase();
+  const isYouTubeDomain = hostname === 'youtube.com' ||
+                          hostname === 'www.youtube.com' ||
+                          hostname === 'm.youtube.com' ||
+                          hostname === 'youtu.be';
+
+  if (!isYouTubeDomain) {
+    return null;
+  }
+
+  // Step 4: Extract video ID based on URL pattern
+  const pathname = parsedUrl.pathname;
+  const searchParams = parsedUrl.searchParams;
+
+  // Pattern 1: youtube.com/watch?v=VIDEO_ID
+  if (pathname === '/watch' && searchParams.has('v')) {
+    const videoId = searchParams.get('v');
+    if (videoId && /^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
+
+  // Pattern 2: youtu.be/VIDEO_ID
+  if (hostname === 'youtu.be' && pathname.length === 12 && pathname.startsWith('/')) {
+    const videoId = pathname.substring(1);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
+
+  // Pattern 3: youtube.com/embed/VIDEO_ID
+  if (pathname.startsWith('/embed/') && pathname.length === 18) {
+    const videoId = pathname.substring(7);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
+
+  // Pattern 4: youtube.com/shorts/VIDEO_ID
+  if (pathname.startsWith('/shorts/') && pathname.length === 19) {
+    const videoId = pathname.substring(8);
+    if (/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+      return videoId;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Validate if a URL is a valid YouTube URL.
+ *
+ * This function performs comprehensive security validation:
+ * - URL structure validation via URL API
+ * - Protocol whitelist (http/https only)
+ * - Domain whitelist (youtube.com/youtu.be only)
+ * - Video ID format validation
+ *
+ * @param url - URL to validate
+ * @returns true if valid YouTube URL with extractable video ID
+ */
+export function isValidYouTubeUrl(url: string): boolean {
+  return extractYouTubeVideoId(url) !== null;
+}

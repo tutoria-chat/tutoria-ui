@@ -141,9 +141,9 @@ class AuthService {
     if (this.refreshTimeout) {
       clearTimeout(this.refreshTimeout);
     }
-    
-    // Refresh token 5 minutes before expiration (default 50 minutes)
-    const refreshIn = 45 * 60 * 1000; // 45 minutes
+
+    // Refresh token 5 minutes before expiration (access token expires at 30 minutes)
+    const refreshIn = 25 * 60 * 1000; // 25 minutes (5 minutes before 30-minute expiration)
     
     this.refreshTimeout = setTimeout(async () => {
       try {

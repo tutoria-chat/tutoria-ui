@@ -48,11 +48,10 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
 
     setLoading(true);
     try {
-      await apiClient.updateUser(user.id, {
+      await apiClient.updateUserPreferences({
         firstName: firstName,
         lastName: lastName,
         email: email,
-        // Only send birthdate (governmentId and externalId are readonly, set by external system)
         birthdate: birthdate,
       });
 

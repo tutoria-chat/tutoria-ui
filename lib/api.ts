@@ -39,7 +39,11 @@ import type {
   FileFilters,
   TokenFilters,
   TutorQuestion,
-  TutorResponse
+  TutorResponse,
+  AddYoutubeVideoRequest,
+  TranscriptionResultDto,
+  TranscriptionStatusDto,
+  TranscriptTextDto
 } from './types';
 
 export const API_CONFIG = {
@@ -368,8 +372,15 @@ class TutoriaAPIClient {
     return this.get('/api/auth/me', undefined, true);
   }
 
-  async updateUserPreferences(data: { themePreference?: string; languagePreference?: string }): Promise<{ message: string }> {
-    return this.put('/api/auth/preferences', data, true);
+  async updateUserPreferences(data: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    themePreference?: string;
+    languagePreference?: string;
+    birthdate?: string;
+  }): Promise<UserResponse> {
+    return this.put('/api/auth/me', data, true);
   }
 
   async deactivateUser(userId: number): Promise<User> {
@@ -519,6 +530,27 @@ class TutoriaAPIClient {
 
   async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
     return this.get(`/api/files/${id}/download`);
+  }
+
+  // YouTube Video Transcription endpoints
+  async addYoutubeVideo(request: AddYoutubeVideoRequest): Promise<TranscriptionResultDto> {
+    return this.post('/api/videos/youtube', request);
+  }
+
+  async getTranscriptionStatus(fileId: number): Promise<TranscriptionStatusDto> {
+    return this.get(`/api/videos/status/${fileId}`);
+  }
+
+  async getTranscriptText(fileId: number): Promise<TranscriptTextDto> {
+    return this.get(`/api/videos/transcript/${fileId}`);
+  }
+
+  async retryTranscription(fileId: number): Promise<TranscriptionResultDto> {
+    return this.post(`/api/videos/retry/${fileId}`, {});
+  }
+
+  async deleteTranscription(fileId: number): Promise<void> {
+    return this.delete(`/api/videos/${fileId}`);
   }
 
   // Professor endpoints

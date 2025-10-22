@@ -14,7 +14,7 @@ import { apiClient } from '@/lib/api';
 import { Bot, FileText, Lightbulb, Sparkles, Loader2, Cpu } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Module, ModuleCreate, ModuleUpdate, Course, AIModel } from '@/lib/types';
-import { AIModelSelector } from '@/components/modules/ai-model-selector';
+import { CourseTypeSelector, type CourseType } from '@/components/modules/course-type-selector';
 import Image from 'next/image';
 
 interface ModuleFormProps {
@@ -46,7 +46,8 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
   const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(module?.aiModel || null);
-  const [showModelSelector, setShowModelSelector] = useState(false);
+  const [selectedCourseType, setSelectedCourseType] = useState<CourseType | undefined>(undefined);
+  const [showCourseTypeSelector, setShowCourseTypeSelector] = useState(false);
 
   // Predefined system prompt templates
   const promptTemplates = [
@@ -218,6 +219,9 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
 
   const selectedCourse = courses.find(c => c.id === Number(formData.courseId));
 
+  // Get universityId from module (edit) or from selected course (create)
+  const universityId = module?.universityId || selectedCourse?.universityId;
+
   return (
     <div className="w-full max-w-4xl space-y-6">
       {/* Main Form */}
@@ -371,50 +375,55 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
                 </div>
               </div>
 
-              {/* AI Model Selection */}
+              {/* Course Type Selection (Auto-selects AI Model) */}
               <FormField>
                 <FormItem>
                   <div className="flex items-center justify-between mb-2">
                     <FormLabel>
                       <div className="flex items-center gap-2">
                         <Cpu className="h-4 w-4" />
-                        {tAI('selectModel')}
+                        {t('courseTypeLabel') || 'Course Type'}
                       </div>
                     </FormLabel>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => setShowModelSelector(true)}
+                      onClick={() => setShowCourseTypeSelector(true)}
                     >
-                      {selectedAIModel ? tAI('changeModel') : tAI('selectModelButton')}
+                      {selectedCourseType ? (t('changeCourseType') || 'Change Type') : (t('selectCourseType') || 'Select Type')}
                     </Button>
                   </div>
-                  <div className="mb-3 p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-md">
-                    <p className="text-sm text-green-900 dark:text-green-100">
-                      {t('modelSelectionHint')}
+                  <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                    <p className="text-sm text-blue-900 dark:text-blue-100">
+                      {t('courseTypeHint') || 'Select your course type and we\'ll automatically choose the best AI model for optimal performance and cost.'}
                     </p>
                   </div>
                   {selectedAIModel ? (
-                    <div className="p-3 border rounded-md bg-muted/50">
-                      <div className="flex items-center gap-3">
+                    <div className="p-3 border rounded-md bg-muted/50 space-y-2">
+                      <div className="flex items-center gap-2 text-sm font-medium">
+                        {selectedCourseType === 'math-logic' && '🧮 Mathematics & Logic'}
+                        {selectedCourseType === 'programming' && '💻 Programming & CS'}
+                        {selectedCourseType === 'theory-text' && '📚 Theory & Humanities'}
+                      </div>
+                      <div className="flex items-center gap-3 pt-2 border-t">
                         <Image
                           src={selectedAIModel.provider === 'openai' ? '/openai-logo.svg' : '/anthropic-logo.svg'}
                           alt={selectedAIModel.provider}
-                          width={24}
-                          height={24}
+                          width={20}
+                          height={20}
                         />
                         <div>
-                          <span className="font-medium">{selectedAIModel.displayName}</span>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'}
+                          <span className="text-sm font-medium">{selectedAIModel.displayName}</span>
+                          <p className="text-xs text-muted-foreground">
+                            {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'} • Auto-selected
                           </p>
                         </div>
                       </div>
                     </div>
                   ) : (
                     <p className={`text-sm ${errors.aiModelId ? 'text-destructive' : 'text-muted-foreground'}`}>
-                      {tAI('noModelSelected')}
+                      {t('noCourseTypeSelected') || 'No course type selected'}
                     </p>
                   )}
                   {errors.aiModelId && <FormMessage>{errors.aiModelId}</FormMessage>}
@@ -582,12 +591,14 @@ export function ModuleForm({ module, courseId, onSubmit, onCancel, isLoading = f
         </CardContent>
       </Card>
 
-      {/* AI Model Selector Modal */}
-      <AIModelSelector
-        open={showModelSelector}
-        onClose={() => setShowModelSelector(false)}
-        selectedModelId={selectedAIModel?.id}
-        onSelectModel={(model) => {
+      {/* Course Type Selector Modal */}
+      <CourseTypeSelector
+        open={showCourseTypeSelector}
+        onClose={() => setShowCourseTypeSelector(false)}
+        selectedType={selectedCourseType}
+        universityId={universityId}
+        onSelectType={(type, model) => {
+          setSelectedCourseType(type);
           setSelectedAIModel(model);
           handleInputChange('aiModelId', String(model.id));
         }}

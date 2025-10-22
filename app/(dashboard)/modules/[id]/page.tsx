@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -19,7 +19,10 @@ import {
   Key,
   Copy,
   Eye,
-  ExternalLink
+  ExternalLink,
+  Youtube,
+  Info,
+  Lightbulb
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -38,12 +41,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { TokenModal } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
-import { formatDateShort } from '@/lib/utils';
+import { formatDateShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
 import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
@@ -74,6 +78,11 @@ export default function ModuleDetailsPage() {
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
   const [urlDialogOpen, setUrlDialogOpen] = useState(false);
   const [selectedTokenUrl, setSelectedTokenUrl] = useState<string>('');
+  // YouTube video upload state
+  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [youtubeVideoName, setYoutubeVideoName] = useState('');
+  const [isAddingYoutubeVideo, setIsAddingYoutubeVideo] = useState(false);
+  const [youtubeError, setYoutubeError] = useState<string | null>(null);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -146,6 +155,63 @@ export default function ModuleDetailsPage() {
     }
   };
 
+  const handleAddYoutubeVideo = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!youtubeUrl.trim()) {
+      setYoutubeError(t('youtubeUrlRequired') || 'YouTube URL is required');
+      return;
+    }
+
+    // Comprehensive YouTube URL validation (handles all formats including Shorts, embed, with params, etc.)
+    if (!isValidYouTubeUrl(youtubeUrl)) {
+      setYoutubeError(t('invalidYoutubeUrl') || 'Invalid YouTube URL format');
+      return;
+    }
+
+    setIsAddingYoutubeVideo(true);
+    setYoutubeError(null);
+
+    try {
+      const result = await apiClient.addYoutubeVideo({
+        youtubeUrl: youtubeUrl.trim(),
+        moduleId,
+        language: module?.tutorLanguage || 'pt-br',
+        name: youtubeVideoName.trim() || undefined
+      });
+
+      // Reset form
+      setYoutubeUrl('');
+      setYoutubeVideoName('');
+
+      if (result.status === 'already_exists') {
+        toast.info(t('youtubeVideoAlreadyExists') || 'This video already exists in the module', {
+          description: t('youtubeVideoAlreadyExistsDesc') || 'The video is already available in your files',
+        });
+        // No need to refetch since file already exists
+      } else {
+        // Optimistic update: Refetch only files (via module refetch, but backend returns full module with updated files)
+        // This is more efficient than a separate files endpoint call
+        refetchModule();
+
+        toast.success(t('youtubeVideoAdded') || 'Video sent for upload', {
+          description: t('youtubeVideoAddedDesc') || 'Please come back later to verify the full status',
+        });
+      }
+    } catch (error) {
+      console.error('Error adding YouTube video:', error);
+      const errorMessage = error instanceof Error ? error.message : tCommon('error');
+      setYoutubeError(`${t('youtubeError') || 'Error adding YouTube video'}: ${errorMessage}`);
+
+      toast.error(t('youtubeError') || 'Error adding YouTube video', {
+        description: errorMessage,
+      });
+      // Don't refetch on error - keep existing state
+    } finally {
+      setIsAddingYoutubeVideo(false);
+    }
+  };
+
   const handleDeleteFile = async (fileId: number) => {
     setFileToDelete(fileId);
     setDeleteConfirmOpen(true);
@@ -172,6 +238,38 @@ export default function ModuleDetailsPage() {
 
   const handleViewFile = async (file: FileType) => {
     try {
+      // Check if it's a YouTube video (by sourceType or fileType)
+      const isYouTube = file.sourceType === 'youtube' || file.fileType === 'video/youtube';
+
+      if (isYouTube) {
+        let youtubeUrl = file.sourceUrl;
+
+        // If sourceUrl is missing, fetch from API (happens if .NET API wasn't restarted)
+        if (!youtubeUrl) {
+          const fileDetails = await apiClient.getFile(file.id);
+          youtubeUrl = fileDetails.sourceUrl;
+        }
+
+        if (youtubeUrl) {
+          // Extract video ID from YouTube URL for embedded player
+          const videoId = youtubeUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1];
+          if (videoId) {
+            // Use YouTube embed URL for iframe
+            setViewingFileUrl(`https://www.youtube.com/embed/${videoId}`);
+            setViewingFileName(file.name || 'YouTube Video');
+            setFileViewerOpen(true);
+            return;
+          }
+        }
+
+        // If we still don't have URL, show error
+        toast.error(t('viewError') || 'Error loading video', {
+          description: 'YouTube URL not found for this video',
+        });
+        return;
+      }
+
+      // For regular files, get download URL and open in viewer
       const { downloadUrl } = await apiClient.getFileDownloadUrl(file.id);
 
       // Extract filename from URL or use file.fileName
@@ -195,6 +293,10 @@ export default function ModuleDetailsPage() {
   };
 
   const getFileType = (file: FileType): string => {
+    // Check if it's a YouTube video (sourceType or fileType)
+    if (file.sourceType === 'youtube' || file.fileType === 'video/youtube') {
+      return 'YouTube Video';
+    }
     return file.contentType || file.fileType || t('fileTypeUnknown');
   };
 
@@ -203,25 +305,80 @@ export default function ModuleDetailsPage() {
       key: 'fileName',
       label: t('columns.fileName'),
       sortable: true,
-      render: (_, file) => (
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-            <FileText className="h-5 w-5 text-blue-600" />
-          </div>
-          <div>
-            <div className="font-medium">{getFileDisplayName(file)}</div>
-            <div className="text-sm text-muted-foreground">
-              {getFileType(file)}
+      render: (_, file) => {
+        const isYouTube = file.sourceType === 'youtube' || file.fileType === 'video/youtube';
+        return (
+          <div className="flex items-center space-x-3">
+            <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
+              isYouTube ? 'bg-red-100' : 'bg-blue-100'
+            }`}>
+              {isYouTube ? (
+                <Youtube className="h-5 w-5 text-red-600" />
+              ) : (
+                <FileText className="h-5 w-5 text-blue-600" />
+              )}
+            </div>
+            <div>
+              <div className="font-medium">{getFileDisplayName(file)}</div>
+              <div className="text-sm text-muted-foreground">
+                {getFileType(file)}
+              </div>
             </div>
           </div>
-        </div>
-      )
+        );
+      }
+    },
+    {
+      key: 'sourceType',
+      label: t('columns.type') || 'Type',
+      sortable: true,
+      render: (_, file) => {
+        const isYouTube = file.sourceType === 'youtube' || file.fileType === 'video/youtube';
+        return (
+          <div className="flex flex-col space-y-1">
+            <Badge variant={isYouTube ? 'default' : 'secondary'}>
+              {isYouTube ? 'YouTube' : t('columns.fileUpload') || 'File'}
+            </Badge>
+            {isYouTube && file.transcriptionStatus && (
+              <Badge
+                variant={
+                  file.transcriptionStatus === 'completed' ? 'outline' :
+                  file.transcriptionStatus === 'failed' ? 'destructive' :
+                  'secondary'
+                }
+              >
+                {file.transcriptionStatus === 'completed' ? '✓ ' + (t('columns.transcribed') || 'Transcribed') :
+                 file.transcriptionStatus === 'processing' ? (t('columns.processing') || 'Processing...') :
+                 file.transcriptionStatus === 'failed' ? (t('columns.failed') || 'Failed') :
+                 (t('columns.pending') || 'Pending')}
+              </Badge>
+            )}
+          </div>
+        );
+      }
     },
     {
       key: 'fileSize',
       label: t('columns.size'),
       sortable: true,
-      render: (value) => value ? `${((value as number) / 1024 / 1024).toFixed(2)} MB` : 'N/A'
+      render: (_, file) => {
+        const isYouTube = file.sourceType === 'youtube' || file.fileType === 'video/youtube';
+
+        if (isYouTube) {
+          // For YouTube videos, show duration or word count
+          if (file.videoDurationSeconds) {
+            const minutes = Math.floor(file.videoDurationSeconds / 60);
+            const seconds = file.videoDurationSeconds % 60;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+          }
+          if (file.transcriptWordCount) {
+            return `${file.transcriptWordCount} ${t('columns.words') || 'words'}`;
+          }
+          return 'N/A';
+        }
+
+        return file.fileSize ? `${((file.fileSize as number) / 1024 / 1024).toFixed(2)} MB` : 'N/A';
+      }
     },
     {
       key: 'createdAt',
@@ -239,9 +396,13 @@ export default function ModuleDetailsPage() {
             variant="ghost"
             size="sm"
             onClick={() => handleViewFile(file)}
-            title={t('viewFile') || 'View file'}
+            title={file.sourceType === 'youtube' ? (t('watchOnYoutube') || 'Watch on YouTube') : (t('viewFile') || 'View file')}
           >
-            <Eye className="h-4 w-4" />
+            {file.sourceType === 'youtube' ? (
+              <ExternalLink className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </Button>
 
           <ProfessorOnly>
@@ -589,6 +750,82 @@ export default function ModuleDetailsPage() {
             </form>
           </CardContent>
         </Card>
+
+        {/* YouTube Video Upload Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('addYoutubeVideo') || 'Add YouTube Video'}</CardTitle>
+            <CardDescription>
+              {t('addYoutubeVideoDesc') || 'Add a YouTube video URL to transcribe and use as course material'}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* Tips for better transcription */}
+            <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+              <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
+                <p className="font-medium mb-2">{t('youtubeTranscriptionTips') || 'Tips for Best Results:'}</p>
+                <ul className="space-y-1 ml-4 list-disc text-blue-800 dark:text-blue-200">
+                  <li>{t('enableYoutubeTranscripts') || 'Enable subtitles/transcripts on your video for more accurate results'}</li>
+                  <li>{t('avoidRegionLocks') || 'Avoid region-restricted videos when possible for faster processing'}</li>
+                  <li>{t('publicVideos') || 'Use public or unlisted videos (private videos cannot be processed)'}</li>
+                </ul>
+              </AlertDescription>
+            </Alert>
+
+            <form onSubmit={handleAddYoutubeVideo} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="youtubeUrl" className="text-sm font-medium">
+                  {t('youtubeUrl') || 'YouTube URL'}
+                </label>
+                <input
+                  id="youtubeUrl"
+                  type="url"
+                  value={youtubeUrl}
+                  onChange={(e) => setYoutubeUrl(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  disabled={isAddingYoutubeVideo}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="youtubeVideoName" className="text-sm font-medium">
+                  {t('videoName') || 'Video Name'} ({t('optional') || 'optional'})
+                </label>
+                <input
+                  id="youtubeVideoName"
+                  type="text"
+                  value={youtubeVideoName}
+                  onChange={(e) => setYoutubeVideoName(e.target.value)}
+                  placeholder={t('videoNamePlaceholder') || 'e.g., Lecture 1: Introduction'}
+                  disabled={isAddingYoutubeVideo}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </div>
+
+              {youtubeError && (
+                <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
+                  <p className="text-sm text-destructive">{youtubeError}</p>
+                </div>
+              )}
+
+              <Button type="submit" disabled={isAddingYoutubeVideo || !youtubeUrl.trim()}>
+                {isAddingYoutubeVideo ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t('processing') || 'Processing...'}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    {t('addVideoButton') || 'Add Video'}
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </ProfessorOnly>
 
       {/* Files List */}
@@ -644,16 +881,30 @@ export default function ModuleDetailsPage() {
 
       {/* File Viewer Dialog */}
       <Dialog open={fileViewerOpen} onOpenChange={setFileViewerOpen}>
-        <DialogContent className="max-w-[95vw] w-[95vw] h-[95vh] flex flex-col p-0">
+        <DialogContent className={`${
+          viewingFileUrl?.includes('youtube.com/embed')
+            ? '!max-w-[1400px] !w-[90vw]'
+            : '!max-w-[95vw] !w-[95vw] !h-[95vh]'
+        } flex flex-col !p-0`}>
           <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
             <DialogTitle className="text-lg">{viewingFileName}</DialogTitle>
           </DialogHeader>
-          <div className="flex-1 px-6 pb-6 overflow-hidden">
+          <div className={`${
+            viewingFileUrl?.includes('youtube.com/embed')
+              ? 'px-6 pb-6'
+              : 'flex-1 px-6 pb-6 overflow-hidden'
+          }`}>
             {viewingFileUrl && (
               <iframe
                 src={viewingFileUrl}
-                className="w-full h-full border border-border rounded-md"
+                className={`w-full border border-border rounded-md ${
+                  viewingFileUrl?.includes('youtube.com/embed')
+                    ? 'aspect-video'
+                    : 'h-full'
+                }`}
                 title={viewingFileName}
+                allow={viewingFileUrl?.includes('youtube.com/embed') ? "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" : undefined}
+                allowFullScreen={viewingFileUrl?.includes('youtube.com/embed')}
               />
             )}
           </div>
