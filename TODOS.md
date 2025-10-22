@@ -263,6 +263,49 @@ Based on **Customer Value** + **Ease of Implementation**:
 **Complexity**: Low
 **Priority**: MEDIUM - Prevents technical debt
 
+**Phase 3.7: API Client Refactoring** (4-6 hours) 🔧
+1. **Move direct API calls from pages/components to api.ts** (4-6h)
+   - [ ] Audit all pages for direct `apiClient.get/post/put/delete` calls
+   - [ ] Move all calls to centralized methods in `lib/api.ts`
+   - [ ] Update pages to use new api.ts methods
+   - [ ] Files with direct calls to refactor:
+     - `app/(dashboard)/professors/page.tsx` - `apiClient.get('/api/users/')`
+     - `app/(dashboard)/modules/create/page.tsx` - `apiClient.post('/api/modules/')`
+     - Other pages as discovered during audit
+   - [ ] Benefits: Centralized API management, easier to update endpoints, better type safety
+   - [ ] Test all refactored pages
+
+**Estimated Effort**: 4-6 hours
+**Customer Value**: Low (internal code quality, maintainability)
+**Complexity**: Low
+**Priority**: LOW - Technical debt cleanup
+
+**Phase 3.8: Password Reset API Improvements** (2-3 hours) 🔧
+1. **Move reset token from query params to request body** (2-3h)
+   - [ ] Update `lib/api.ts` - Change `resetPassword` method to pass token in body instead of query param
+   - [ ] Update DTOs/types to match new backend contract
+   - [ ] Test password reset flow end-to-end
+   - [ ] **Backend dependency**: Backend must update `/api/auth/reset-password` endpoint first
+
+**Current Implementation**:
+```typescript
+async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
+  return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
+}
+```
+
+**Target Implementation**:
+```typescript
+async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
+  return this.post('/api/auth/reset-password', { username, resetToken: token, newPassword }, false, true);
+}
+```
+
+**Estimated Effort**: 2-3 hours (frontend only - requires backend changes first)
+**Customer Value**: Low (security best practice)
+**Complexity**: Low
+**Priority**: MEDIUM - Security improvement
+
 **Phase 4: Advanced Features** (48-70 hours)
 1. Super Admin UI Pages (28-40h)
 2. Notifications System (20-30h)

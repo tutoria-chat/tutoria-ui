@@ -27,7 +27,7 @@ import { ArrowLeft, Loader2, Upload, FileText, Trash2, Download, Sparkles, Cpu, 
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import type { Module, ModuleUpdate, Course, File as FileType, TableColumn, BreadcrumbItem, AIModel } from '@/lib/types';
-import { AIModelSelector } from '@/components/modules/ai-model-selector';
+import { CourseTypeSelector, type CourseType } from '@/components/modules/course-type-selector';
 import Image from 'next/image';
 
 export default function EditModulePage() {
@@ -74,13 +74,26 @@ export default function EditModulePage() {
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
   const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(null);
-  const [showModelSelector, setShowModelSelector] = useState(false);
+  const [selectedCourseType, setSelectedCourseType] = useState<CourseType | undefined>(undefined);
+  const [showCourseTypeSelector, setShowCourseTypeSelector] = useState(false);
   const [files, setFiles] = useState<FileType[]>([]);
   const [fileViewerOpen, setFileViewerOpen] = useState(false);
   const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
   const [viewingFileName, setViewingFileName] = useState<string>('');
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
+
+  // Detect course type from AI model name
+  const detectCourseType = (modelName: string): CourseType | undefined => {
+    const mathModels = ['gpt-3.5-turbo', 'gpt-4', 'gpt-4o', 'gpt-4-turbo'];
+    const programmingModels = ['claude-3-haiku-20240307', 'claude-3-7-sonnet-20250219', 'claude-sonnet-4-5'];
+    const theoryModels = ['claude-3-5-haiku-20241022', 'claude-haiku-4-5'];
+
+    if (mathModels.includes(modelName)) return 'math-logic';
+    if (programmingModels.includes(modelName)) return 'programming';
+    if (theoryModels.includes(modelName)) return 'theory-text';
+    return undefined;
+  };
 
   // Check if form has changes
   const hasChanges = () => {
@@ -123,6 +136,11 @@ export default function EditModulePage() {
       // Set AI model if available
       if (data.aiModel) {
         setSelectedAIModel(data.aiModel);
+        // Detect and set course type from AI model
+        const detectedType = detectCourseType(data.aiModel.modelName);
+        if (detectedType) {
+          setSelectedCourseType(detectedType);
+        }
       }
 
       // Set files from module response (reduces API calls)
@@ -505,48 +523,53 @@ export default function EditModulePage() {
                   <h3 className="text-lg font-semibold">{tForm('aiConfig')}</h3>
                 </div>
 
-                {/* AI Model Selection */}
+                {/* Course Type Selection (Auto-selects AI Model) */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="block text-sm font-medium">
                       <div className="flex items-center gap-2">
                         <Cpu className="h-4 w-4" />
-                        {tAI('selectModel')}
+                        {tForm('courseTypeLabel')}
                       </div>
                     </label>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => setShowModelSelector(true)}
+                      onClick={() => setShowCourseTypeSelector(true)}
                     >
-                      {selectedAIModel ? tAI('changeModel') : tAI('selectModelButton')}
+                      {selectedCourseType ? tForm('changeCourseType') : tForm('selectCourseType')}
                     </Button>
                   </div>
-                  <div className="mb-3 p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-md">
-                    <p className="text-sm text-green-900 dark:text-green-100">
-                      {tForm('modelSelectionHint')}
+                  <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-md">
+                    <p className="text-sm text-blue-900 dark:text-blue-100">
+                      {tForm('courseTypeHint')}
                     </p>
                   </div>
                   {selectedAIModel ? (
-                    <div className="p-3 border rounded-md bg-muted/50">
-                      <div className="flex items-center gap-3">
+                    <div className="p-3 border rounded-md bg-muted/50 space-y-2">
+                      <div className="flex items-center gap-2 text-sm font-medium">
+                        {selectedCourseType === 'math-logic' && '🧮 Mathematics & Logic'}
+                        {selectedCourseType === 'programming' && '💻 Programming & CS'}
+                        {selectedCourseType === 'theory-text' && '📚 Theory & Humanities'}
+                      </div>
+                      <div className="flex items-center gap-3 pt-2 border-t">
                         <Image
                           src={selectedAIModel.provider === 'openai' ? '/openai-logo.svg' : '/anthropic-logo.svg'}
                           alt={selectedAIModel.provider}
-                          width={24}
-                          height={24}
+                          width={20}
+                          height={20}
                         />
                         <div>
-                          <span className="font-medium">{selectedAIModel.displayName}</span>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'}
+                          <span className="text-sm font-medium">{selectedAIModel.displayName}</span>
+                          <p className="text-xs text-muted-foreground">
+                            {selectedAIModel.provider === 'openai' ? 'OpenAI' : 'Anthropic'} • Auto-selected
                           </p>
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-muted-foreground">{tAI('noModelSelected')}</p>
+                    <p className="text-sm text-muted-foreground">{tForm('noCourseTypeSelected')}</p>
                   )}
                 </div>
               </div>
@@ -753,12 +776,14 @@ export default function EditModulePage() {
         </Card>
         </div>
 
-        {/* AI Model Selector Modal */}
-        <AIModelSelector
-          open={showModelSelector}
-          onClose={() => setShowModelSelector(false)}
-          selectedModelId={selectedAIModel?.id}
-          onSelectModel={(model) => {
+        {/* Course Type Selector Modal */}
+        <CourseTypeSelector
+          open={showCourseTypeSelector}
+          onClose={() => setShowCourseTypeSelector(false)}
+          selectedType={selectedCourseType}
+          universityId={module?.universityId}
+          onSelectType={(type, model) => {
+            setSelectedCourseType(type);
             setSelectedAIModel(model);
             handleChange('aiModelId', model.id);
           }}

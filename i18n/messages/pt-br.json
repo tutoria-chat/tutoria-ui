@@ -242,6 +242,11 @@
       "promptTip5": "• Considere o público-alvo e seu nível",
       "tutorLanguageLabel": "Idioma do Tutor IA",
       "tutorLanguageHint": "Importante: Selecione em qual idioma o tutor IA deve responder às perguntas dos alunos. Isso define o idioma das respostas, independentemente do idioma da pergunta.",
+      "courseTypeLabel": "Tipo de Disciplina",
+      "selectCourseType": "Selecionar Tipo",
+      "changeCourseType": "Mudar Tipo",
+      "courseTypeHint": "Selecione o tipo da sua disciplina e escolheremos automaticamente o melhor modelo de IA para desempenho e custo otimizados.",
+      "noCourseTypeSelected": "Nenhum tipo de disciplina selecionado",
       "modelSelectionHint": "🧠 Cada modelo de IA tem diferentes pontos fortes, custos e capacidades. Escolha o que melhor se adequa às necessidades do seu módulo - você pode mudá-lo depois se precisar!",
       "cancel": "Cancelar",
       "update": "Atualizar Módulo",
@@ -301,6 +306,31 @@
       "uploadFileDesc": "Faça upload de materiais de estudo para este módulo",
       "uploading": "Enviando...",
       "uploadButton": "Enviar Arquivo",
+      "addYoutubeVideo": "Adicionar Vídeo do YouTube",
+      "addYoutubeVideoDesc": "Adicione uma URL de vídeo do YouTube para transcrever e usar como material de curso",
+      "youtubeUrl": "URL do YouTube",
+      "videoName": "Nome do Vídeo",
+      "optional": "opcional",
+      "videoNamePlaceholder": "ex: Aula 1: Introdução",
+      "processing": "Processando...",
+      "addVideoButton": "Adicionar Vídeo",
+      "youtubeUrlRequired": "URL do YouTube é obrigatória",
+      "invalidYoutubeUrl": "Formato de URL do YouTube inválido",
+      "youtubeVideoAdded": "Vídeo enviado para upload",
+      "youtubeVideoAddedDesc": "Por favor, volte mais tarde para verificar o status completo",
+      "watchOnYoutube": "Assistir no YouTube",
+      "youtubeError": "Erro ao adicionar vídeo do YouTube",
+      "youtubeVideoAlreadyExists": "Este vídeo já existe no módulo",
+      "youtubeVideoAlreadyExistsDesc": "O vídeo já está disponível nos seus arquivos",
+      "youtubeTranscriptionTips": "Dicas para Melhores Resultados:",
+      "enableYoutubeTranscripts": "Ative legendas/transcrições no seu vídeo para resultados mais precisos",
+      "avoidRegionLocks": "Evite vídeos com restrição regional quando possível para processamento mais rápido",
+      "publicVideos": "Use vídeos públicos ou não listados (vídeos privados não podem ser processados)",
+      "transcriptionCompleted": "Transcrição concluída",
+      "transcriptionFailed": "Transcrição falhou",
+      "transcriptionFailedDesc": "O vídeo não pôde ser transcrito",
+      "transcriptionTimeout": "A transcrição está demorando mais do que o esperado",
+      "transcriptionTimeoutDesc": "Você pode verificar o status mais tarde",
       "moduleFiles": "Arquivos do Módulo",
       "filesAvailable": "Arquivos disponíveis neste módulo",
       "noFiles": "Nenhum arquivo enviado ainda. Faça upload do primeiro arquivo acima.",
@@ -337,6 +367,13 @@
       "tokenCopyError": "Erro ao copiar token",
       "columns": {
         "fileName": "Arquivo",
+        "type": "Tipo",
+        "fileUpload": "Arquivo",
+        "transcribed": "Transcrito",
+        "processing": "Processando...",
+        "failed": "Falhou",
+        "pending": "Pendente",
+        "words": "palavras",
         "size": "Tamanho",
         "uploadedAt": "Enviado em",
         "actions": "Ações",
@@ -3890,6 +3927,25 @@
         "Share successful AI tutor prompts with your colleagues",
         "Keep a backup of your system prompts for reuse in future semesters"
       ]
+    }
+  },
+  "courseTypes": {
+    "selectCourseType": "Selecione o Tipo de Disciplina",
+    "selectDescription": "Escolha o tipo que melhor corresponde ao conteúdo da sua disciplina. Selecionaremos automaticamente o modelo de IA ideal.",
+    "selectedModel": "Modelo de IA:",
+    "tierNote": "Nota",
+    "tierDescription": "O modelo de IA é automaticamente otimizado com base no plano de assinatura da sua universidade para o melhor equilíbrio custo-desempenho.",
+    "mathLogic": {
+      "name": "Matemática e Lógica",
+      "description": "Disciplinas focadas em raciocínio matemático, fórmulas, provas e resolução de problemas lógicos"
+    },
+    "programming": {
+      "name": "Programação e Ciência da Computação",
+      "description": "Codificação, algoritmos, desenvolvimento de software e tópicos técnicos de ciência da computação"
+    },
+    "theoryText": {
+      "name": "Teoria e Humanidades",
+      "description": "Conceitos teóricos, ensaios, humanidades, literatura e disciplinas com muito texto"
     }
   }
 }

@@ -245,6 +245,16 @@ export interface File {
   blobUrl: string;
   blobContainer?: string;
   blobPath?: string;
+  // Video/Transcription fields
+  sourceType?: 'upload' | 'youtube' | 'url';
+  sourceUrl?: string;
+  transcriptionStatus?: 'pending' | 'processing' | 'completed' | 'failed';
+  transcriptText?: string;
+  transcriptLanguage?: string;
+  transcriptJobId?: string;
+  videoDurationSeconds?: number;
+  transcriptedAt?: string;
+  transcriptWordCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -256,6 +266,45 @@ export interface FileUpload {
 
 export interface FileResponse extends File {
   downloadUrl?: string;
+}
+
+// YouTube Transcription Types
+export interface AddYoutubeVideoRequest {
+  youtubeUrl: string;
+  moduleId: number;
+  language?: string; // 'pt-br' | 'en' | 'es'
+  name?: string;
+}
+
+export interface TranscriptionResultDto {
+  fileId: number;
+  status: string;
+  wordCount?: number;
+  durationSeconds?: number;
+  source: string;
+  costUsd?: number;
+  language: string;
+  transcriptPreview?: string;
+}
+
+export interface TranscriptionStatusDto {
+  fileId: number;
+  name: string;
+  status: string;
+  wordCount?: number;
+  durationSeconds?: number;
+  language?: string;
+  sourceUrl?: string;
+  sourceType?: string;
+  completedAt?: string;
+  hasTranscript: boolean;
+}
+
+export interface TranscriptTextDto {
+  fileId: number;
+  transcript: string;
+  wordCount: number;
+  language: string;
 }
 
 // Professor Types

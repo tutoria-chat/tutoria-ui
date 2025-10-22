@@ -243,6 +243,11 @@
       "promptTip5": "• Consider target audience and their level",
       "tutorLanguageLabel": "AI Tutor Language",
       "tutorLanguageHint": "Important: Select which language the AI tutor should respond to student questions in. This defines the response language, regardless of the question language.",
+      "courseTypeLabel": "Course Type",
+      "selectCourseType": "Select Type",
+      "changeCourseType": "Change Type",
+      "courseTypeHint": "Select your course type and we'll automatically choose the best AI model for optimal performance and cost.",
+      "noCourseTypeSelected": "No course type selected",
       "modelSelectionHint": "🧠 Each AI model has different strengths, costs, and capabilities. Choose the one that best fits your module's needs - you can change it later if needed!",
       "cancel": "Cancel",
       "create": "Create Module",
@@ -337,8 +342,40 @@
       "fileTypeNotSupported": "File type not supported. Use: PDF, DOC, DOCX, TXT, PPT or PPTX",
       "tokenCopied": "Token copied!",
       "tokenCopyError": "Error copying token",
+      "addYoutubeVideo": "Add YouTube Video",
+      "addYoutubeVideoDesc": "Add a YouTube video URL to transcribe and use as course material",
+      "youtubeUrl": "YouTube URL",
+      "videoName": "Video Name",
+      "optional": "optional",
+      "videoNamePlaceholder": "e.g., Lecture 1: Introduction",
+      "processing": "Processing...",
+      "addVideoButton": "Add Video",
+      "youtubeUrlRequired": "YouTube URL is required",
+      "invalidYoutubeUrl": "Invalid YouTube URL format",
+      "youtubeVideoAdded": "Video sent for upload",
+      "youtubeVideoAddedDesc": "Please come back later to verify the full status",
+      "watchOnYoutube": "Watch on YouTube",
+      "youtubeError": "Error adding YouTube video",
+      "youtubeVideoAlreadyExists": "This video already exists in the module",
+      "youtubeVideoAlreadyExistsDesc": "The video is already available in your files",
+      "youtubeTranscriptionTips": "Tips for Best Results:",
+      "enableYoutubeTranscripts": "Enable subtitles/transcripts on your video for more accurate results",
+      "avoidRegionLocks": "Avoid region-restricted videos when possible for faster processing",
+      "publicVideos": "Use public or unlisted videos (private videos cannot be processed)",
+      "transcriptionCompleted": "Transcription completed",
+      "transcriptionFailed": "Transcription failed",
+      "transcriptionFailedDesc": "The video could not be transcribed",
+      "transcriptionTimeout": "Transcription is taking longer than expected",
+      "transcriptionTimeoutDesc": "You can check the status later",
       "columns": {
         "fileName": "File",
+        "type": "Type",
+        "fileUpload": "File",
+        "transcribed": "Transcribed",
+        "processing": "Processing...",
+        "failed": "Failed",
+        "pending": "Pending",
+        "words": "words",
         "size": "Size",
         "uploadedAt": "Uploaded at",
         "actions": "Actions",
@@ -2861,5 +2898,24 @@
           "Keep a backup of your system prompts for reuse in future semesters"
         ]
       }
+    },
+  "courseTypes": {
+    "selectCourseType": "Select Course Type",
+    "selectDescription": "Choose the type that best matches your course content. We'll automatically select the optimal AI model.",
+    "selectedModel": "AI Model:",
+    "tierNote": "Note",
+    "tierDescription": "The AI model is automatically optimized based on your university's subscription tier for best cost-performance balance.",
+    "mathLogic": {
+      "name": "Mathematics & Logic",
+      "description": "Courses focused on mathematical reasoning, formulas, proofs, and logical problem-solving"
+    },
+    "programming": {
+      "name": "Programming & Computer Science",
+      "description": "Coding, algorithms, software development, and technical computer science topics"
+    },
+    "theoryText": {
+      "name": "Theory & Humanities",
+      "description": "Theoretical concepts, essays, humanities, literature, and text-heavy subjects"
     }
   }
+}
