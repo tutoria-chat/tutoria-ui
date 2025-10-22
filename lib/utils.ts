@@ -206,3 +206,56 @@ export function getErrorMessage(error: any): string {
   // Fallback for unknown error formats
   return 'An unexpected error occurred';
 }
+
+/**
+ * Extract YouTube video ID from various YouTube URL formats.
+ *
+ * Supported formats:
+ * - https://www.youtube.com/watch?v=VIDEO_ID
+ * - https://www.youtube.com/watch?v=VIDEO_ID&t=123s
+ * - https://youtu.be/VIDEO_ID
+ * - https://youtu.be/VIDEO_ID?t=123
+ * - https://www.youtube.com/embed/VIDEO_ID
+ * - https://www.youtube.com/shorts/VIDEO_ID
+ * - http variants and www-less variants
+ *
+ * @param url - YouTube URL to parse
+ * @returns Video ID if valid, null if invalid
+ */
+export function extractYouTubeVideoId(url: string): string | null {
+  if (!url || typeof url !== 'string') return null;
+
+  const trimmedUrl = url.trim();
+
+  // Pattern 1: youtube.com/watch?v=VIDEO_ID
+  const watchPattern = /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/;
+  const watchMatch = trimmedUrl.match(watchPattern);
+  if (watchMatch) return watchMatch[1];
+
+  // Pattern 2: youtu.be/VIDEO_ID
+  const shortPattern = /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+  const shortMatch = trimmedUrl.match(shortPattern);
+  if (shortMatch) return shortMatch[1];
+
+  // Pattern 3: youtube.com/embed/VIDEO_ID
+  const embedPattern = /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+  const embedMatch = trimmedUrl.match(embedPattern);
+  if (embedMatch) return embedMatch[1];
+
+  // Pattern 4: youtube.com/shorts/VIDEO_ID
+  const shortsPattern = /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/;
+  const shortsMatch = trimmedUrl.match(shortsPattern);
+  if (shortsMatch) return shortsMatch[1];
+
+  return null;
+}
+
+/**
+ * Validate if a URL is a valid YouTube URL.
+ *
+ * @param url - URL to validate
+ * @returns true if valid YouTube URL with extractable video ID
+ */
+export function isValidYouTubeUrl(url: string): boolean {
+  return extractYouTubeVideoId(url) !== null;
+}

@@ -47,7 +47,7 @@ import { TokenModal } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
-import { formatDateShort } from '@/lib/utils';
+import { formatDateShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
 import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
@@ -163,9 +163,8 @@ export default function ModuleDetailsPage() {
       return;
     }
 
-    // Basic YouTube URL validation
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/;
-    if (!youtubeRegex.test(youtubeUrl)) {
+    // Comprehensive YouTube URL validation (handles all formats including Shorts, embed, with params, etc.)
+    if (!isValidYouTubeUrl(youtubeUrl)) {
       setYoutubeError(t('invalidYoutubeUrl') || 'Invalid YouTube URL format');
       return;
     }
@@ -181,16 +180,20 @@ export default function ModuleDetailsPage() {
         name: youtubeVideoName.trim() || undefined
       });
 
-      // Reset form and refetch module data
+      // Reset form
       setYoutubeUrl('');
       setYoutubeVideoName('');
-      refetchModule();
 
       if (result.status === 'already_exists') {
         toast.info(t('youtubeVideoAlreadyExists') || 'This video already exists in the module', {
           description: t('youtubeVideoAlreadyExistsDesc') || 'The video is already available in your files',
         });
+        // No need to refetch since file already exists
       } else {
+        // Optimistic update: Refetch only files (via module refetch, but backend returns full module with updated files)
+        // This is more efficient than a separate files endpoint call
+        refetchModule();
+
         toast.success(t('youtubeVideoAdded') || 'Video sent for upload', {
           description: t('youtubeVideoAddedDesc') || 'Please come back later to verify the full status',
         });
@@ -203,6 +206,7 @@ export default function ModuleDetailsPage() {
       toast.error(t('youtubeError') || 'Error adding YouTube video', {
         description: errorMessage,
       });
+      // Don't refetch on error - keep existing state
     } finally {
       setIsAddingYoutubeVideo(false);
     }

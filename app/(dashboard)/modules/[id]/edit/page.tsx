@@ -28,6 +28,7 @@ import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import type { Module, ModuleUpdate, Course, File as FileType, TableColumn, BreadcrumbItem, AIModel } from '@/lib/types';
 import { CourseTypeSelector, type CourseType } from '@/components/modules/course-type-selector';
+import { detectCourseType } from '@/lib/course-type-utils';
 import Image from 'next/image';
 
 export default function EditModulePage() {
@@ -83,17 +84,6 @@ export default function EditModulePage() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
 
-  // Detect course type from AI model name
-  const detectCourseType = (modelName: string): CourseType | undefined => {
-    const mathModels = ['gpt-3.5-turbo', 'gpt-4', 'gpt-4o', 'gpt-4-turbo'];
-    const programmingModels = ['claude-3-haiku-20240307', 'claude-3-7-sonnet-20250219', 'claude-sonnet-4-5'];
-    const theoryModels = ['claude-3-5-haiku-20241022', 'claude-haiku-4-5'];
-
-    if (mathModels.includes(modelName)) return 'math-logic';
-    if (programmingModels.includes(modelName)) return 'programming';
-    if (theoryModels.includes(modelName)) return 'theory-text';
-    return undefined;
-  };
 
   // Check if form has changes
   const hasChanges = () => {
