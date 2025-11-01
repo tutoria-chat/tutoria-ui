@@ -13,7 +13,8 @@ import {
   Users,
   Key,
   Plus,
-  Activity
+  Activity,
+  Bot
 } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { SuperAdminOnly, AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
@@ -111,6 +112,15 @@ export default function DashboardPage() {
                 <Link href="/modules">
                   <Activity className="h-12 w-12" />
                   <span className="text-lg font-semibold">{t('quickActions.viewModules')}</span>
+                </Link>
+              </Button>
+            </ProfessorOnly>
+
+            <ProfessorOnly>
+              <Button asChild variant="outline" className="h-40 p-6 flex flex-col items-center justify-center space-y-4 text-lg border-purple-200 hover:bg-purple-50 hover:border-purple-300">
+                <Link href="/professor-agent">
+                  <Bot className="h-12 w-12 text-purple-600" />
+                  <span className="text-lg font-semibold">{t('quickActions.myAIAgent')}</span>
                 </Link>
               </Button>
             </ProfessorOnly>

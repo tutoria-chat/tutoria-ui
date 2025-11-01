@@ -37,7 +37,47 @@
       "createModule": "Create Module",
       "viewCourses": "View Courses",
       "viewModules": "View Modules",
-      "manageTokens": "Manage Tokens"
+      "manageTokens": "Manage Tokens",
+      "myAIAgent": "My AI Agent"
+    }
+  },
+  "professorAgent": {
+    "title": "Professor AI Agent",
+    "description": "Your personal AI assistant for course material feedback",
+    "noAgent": {
+      "title": "No AI Agent",
+      "message": "You don't have an AI agent yet. Please contact your university admin to create one for you.",
+      "adminOnly": "Only administrators can create professor AI agents."
+    },
+    "loadError": "Failed to load agent information.",
+    "info": {
+      "language": "Language",
+      "aiModel": "AI Model",
+      "status": "Status",
+      "default": "Default",
+      "active": "Active",
+      "inactive": "Inactive",
+      "portuguese": "Portuguese (Brazil)",
+      "english": "English",
+      "spanish": "Spanish"
+    },
+    "tokens": {
+      "title": "Access Tokens",
+      "description": "Generate tokens to access your AI agent via the widget",
+      "newButton": "New Token",
+      "empty": "No tokens yet. Create one to access your AI agent.",
+      "instructions": "Click on a token to access the widget and get AI feedback on your course materials.",
+      "createSuccess": "Token created successfully!",
+      "createError": "Failed to create token",
+      "copySuccess": "Token copied to clipboard!",
+      "copyError": "Failed to copy token"
+    },
+    "howToUse": {
+      "title": "How to Use",
+      "step1": "1. Create an access token above",
+      "step2": "2. Click on the token to open the widget",
+      "step3": "3. Ask questions about your course materials and get AI-powered feedback",
+      "step4": "4. The AI will analyze your content and provide suggestions for improvement"
     }
   },
   "courses": {
@@ -708,6 +748,16 @@
       "regularDescription": "Can view and manage assigned courses and modules",
       "adminProfessor": "Admin Professor",
       "adminDescription": "Can manage all courses, modules, and professors in their university"
+    },
+    "agentDialog": {
+      "title": "Manage AI Agent",
+      "description": "Create an AI agent for {professorName} to provide feedback on their course materials.",
+      "explanation": "This will create a personalized AI assistant that the professor can use to get feedback and suggestions for improving their courses.",
+      "createButton": "Create AI Agent",
+      "creating": "Creating...",
+      "createSuccess": "Professor agent created successfully!",
+      "createError": "Failed to create professor agent",
+      "manageAgent": "Manage AI Agent"
     },
     "create": {
       "title": "Create Professor",

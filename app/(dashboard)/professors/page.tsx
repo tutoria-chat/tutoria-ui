@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit, Bot } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,9 @@ export default function ProfessorsPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [currentUser, setCurrentUser] = useState<UserResponse | null>(null);
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
+  const [showAgentDialog, setShowAgentDialog] = useState(false);
+  const [selectedProfessor, setSelectedProfessor] = useState<Professor | null>(null);
+  const [agentLoading, setAgentLoading] = useState(false);
 
   // Confirm dialogs
   const { confirm, dialog } = useConfirmDialog();
@@ -177,6 +180,32 @@ export default function ProfessorsPage() {
     }
   };
 
+  const handleManageAgent = (professor: Professor) => {
+    setSelectedProfessor(professor);
+    setShowAgentDialog(true);
+  };
+
+  const handleCreateAgent = async () => {
+    if (!selectedProfessor) return;
+
+    setAgentLoading(true);
+    try {
+      await apiClient.createProfessorAgent({
+        professorId: selectedProfessor.id,
+        name: `${selectedProfessor.firstName} ${selectedProfessor.lastName}'s AI Agent`,
+        description: 'AI assistant for course material feedback',
+        tutorLanguage: 'pt-br',
+      });
+      toast.success(t('agentDialog.createSuccess'));
+      setShowAgentDialog(false);
+    } catch (error: any) {
+      console.error('Error creating professor agent:', error);
+      toast.error(error.message || t('agentDialog.createError'));
+    } finally {
+      setAgentLoading(false);
+    }
+  };
+
   const columns: TableColumn<Professor>[] = [
     {
       key: 'name',
@@ -293,6 +322,16 @@ export default function ProfessorsPage() {
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 </Button>
               )
+            )}
+            {(currentUser?.userType === 'super_admin' || (currentUser?.isAdmin && !professor.isAdmin)) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleManageAgent(professor)}
+                title={t('agentDialog.manageAgent')}
+              >
+                <Bot className="h-4 w-4 text-purple-600" />
+              </Button>
             )}
             {currentUser?.userType === 'super_admin' && (
               <Button
@@ -480,6 +519,30 @@ export default function ProfessorsPage() {
                     {t('selectTypeDialog.adminDescription')}
                   </p>
                 </div>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Professor Agent Management Dialog */}
+        <Dialog open={showAgentDialog} onOpenChange={setShowAgentDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('agentDialog.title')}</DialogTitle>
+              <DialogDescription>
+                {t('agentDialog.description', { professorName: `${selectedProfessor?.firstName} ${selectedProfessor?.lastName}` })}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                {t('agentDialog.explanation')}
+              </p>
+              <Button
+                onClick={handleCreateAgent}
+                disabled={agentLoading}
+                className="w-full"
+              >
+                {agentLoading ? t('agentDialog.creating') : t('agentDialog.createButton')}
               </Button>
             </div>
           </DialogContent>

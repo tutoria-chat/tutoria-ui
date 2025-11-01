@@ -347,6 +347,68 @@ export interface ProfessorUpdate {
   isAdmin?: boolean;
 }
 
+// Professor Agent Types
+export interface ProfessorAgent {
+  id: number;
+  professorId: number;
+  professorName?: string;
+  professorEmail?: string;
+  universityId: number;
+  universityName?: string;
+  name: string;
+  description?: string;
+  systemPrompt?: string;
+  openAIAssistantId?: string;
+  openAIVectorStoreId?: string;
+  tutorLanguage: string;
+  aiModelId?: number;
+  aiModelDisplayName?: string;
+  isActive: boolean;
+  tokensCount?: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProfessorAgentCreate {
+  professorId: number;
+  name: string;
+  description?: string;
+  systemPrompt?: string;
+  tutorLanguage?: string;
+  aiModelId?: number;
+}
+
+export interface ProfessorAgentUpdate {
+  name?: string;
+  description?: string;
+  systemPrompt?: string;
+  tutorLanguage?: string;
+  aiModelId?: number;
+  isActive?: boolean;
+}
+
+export interface ProfessorAgentToken {
+  id: number;
+  token: string;
+  professorAgentId: number;
+  professorId: number;
+  name: string;
+  description?: string;
+  allowChat: boolean;
+  expiresAt?: string;
+  isExpired: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProfessorAgentTokenCreate {
+  professorAgentId: number;
+  name: string;
+  description?: string;
+  allowChat?: boolean;
+  expiresAt?: string;
+}
+
 // Student Types
 export interface Student {
   id: number;

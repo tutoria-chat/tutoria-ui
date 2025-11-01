@@ -37,7 +37,8 @@
       "createModule": "Crear módulo",
       "viewCourses": "Ver cursos",
       "viewModules": "Ver módulos",
-      "manageTokens": "Gestionar tokens"
+      "manageTokens": "Gestionar tokens",
+      "myAIAgent": "Mi Agente de IA"
     }
   },
   "courses": {
@@ -880,6 +881,16 @@
       "languageEnglish": "English (Estados Unidos)",
       "languageSpanish": "Español",
       "languageHint": "La interfaz del profesor se mostrará en este idioma"
+    },
+    "agentDialog": {
+      "title": "Gestionar Agente de IA",
+      "description": "Crea un agente de IA para que {professorName} proporcione retroalimentación sobre sus materiales del curso.",
+      "explanation": "Esto creará un asistente de IA personalizado que el profesor puede usar para obtener retroalimentación y sugerencias para mejorar sus cursos.",
+      "createButton": "Crear Agente de IA",
+      "creating": "Creando...",
+      "createSuccess": "¡Agente del profesor creado con éxito!",
+      "createError": "Error al crear agente del profesor",
+      "manageAgent": "Gestionar Agente de IA"
     }
   },
   "students": {
@@ -896,6 +907,44 @@
     "studentsTable": "Estudiantes",
     "tableDescription": "La interfaz de gestión de estudiantes se implementará aquí",
     "comingSoon": "Sistema de gestión de estudiantes próximamente..."
+  },
+  "professorAgent": {
+    "title": "Agente de IA del Profesor",
+    "description": "Tu asistente de IA personal para retroalimentación sobre materiales del curso",
+    "noAgent": {
+      "message": "Aún no tienes un agente de IA. Por favor, contacta al administrador de tu universidad para crear uno para ti.",
+      "adminOnly": "Solo los administradores pueden crear agentes de IA para profesores."
+    },
+    "agentInfo": {
+      "title": "Información del Agente",
+      "language": "Idioma:",
+      "languagePortuguese": "Portugués (Brasil)",
+      "languageEnglish": "Inglés",
+      "languageSpanish": "Español",
+      "aiModel": "Modelo de IA:",
+      "defaultModel": "Predeterminado",
+      "status": "Estado:",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "tokens": {
+      "title": "Tokens de Acceso",
+      "description": "Genera tokens para acceder a tu agente de IA a través del widget",
+      "newButton": "Nuevo Token",
+      "createSuccess": "¡Token creado con éxito!",
+      "createError": "Error al crear token",
+      "copySuccess": "¡Token copiado al portapapeles!",
+      "copyError": "Error al copiar token",
+      "noTokens": "No hay tokens aún. Crea uno para acceder a tu agente de IA.",
+      "clickToAccess": "Haz clic en un token para acceder al widget y obtener retroalimentación de IA sobre tus materiales del curso."
+    },
+    "howToUse": {
+      "title": "Cómo Usar",
+      "step1": "1. Crea un token de acceso arriba",
+      "step2": "2. Haz clic en el token para abrir el widget",
+      "step3": "3. Haz preguntas sobre tus materiales del curso y recibe retroalimentación impulsada por IA",
+      "step4": "4. La IA analizará tu contenido y proporcionará sugerencias de mejora"
+    }
   },
   "tokens": {
     "title": "Gestión de tokens de módulos",
