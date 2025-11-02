@@ -48,7 +48,19 @@ import type {
   AddYoutubeVideoRequest,
   TranscriptionResultDto,
   TranscriptionStatusDto,
-  TranscriptTextDto
+  TranscriptTextDto,
+  AnalyticsFilterDto,
+  CostAnalysisDto,
+  TodayCostDto,
+  UsageStatsDto,
+  HourlyUsageResponseDto,
+  UsageTrendsResponseDto,
+  TopActiveStudentsResponseDto,
+  ResponseQualityDto,
+  ConversationMetricsDto,
+  ModuleComparisonResponseDto,
+  FrequentlyAskedQuestionsResponseDto,
+  DashboardSummaryDto
 } from './types';
 
 export const API_CONFIG = {
@@ -494,7 +506,7 @@ class TutoriaAPIClient {
   // AI/Tutor endpoints (Python API)
   async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
     // This endpoint uses the Python API - must stay snake_case
-    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, true);
+    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, false, true);
   }
 
   // AI Model endpoints
@@ -770,6 +782,54 @@ class TutoriaAPIClient {
   // AI Tutor endpoints
   async askTutor(question: TutorQuestion): Promise<TutorResponse> {
     return this.post('/api/tutor/ask', question);
+  }
+
+  // Analytics endpoints
+  async getAnalyticsDashboardSummary(filters?: AnalyticsFilterDto): Promise<DashboardSummaryDto> {
+    return this.get('/api/analytics/dashboard/summary', filters);
+  }
+
+  async getAnalyticsCostAnalysis(filters?: AnalyticsFilterDto): Promise<CostAnalysisDto> {
+    return this.get('/api/analytics/costs/detailed', filters);
+  }
+
+  async getAnalyticsTodayCost(filters?: AnalyticsFilterDto): Promise<TodayCostDto> {
+    return this.get('/api/analytics/costs/today', filters);
+  }
+
+  async getAnalyticsTodayUsage(filters?: AnalyticsFilterDto): Promise<UsageStatsDto> {
+    return this.get('/api/analytics/usage/today', filters);
+  }
+
+  async getAnalyticsUsageTrends(filters?: AnalyticsFilterDto): Promise<UsageTrendsResponseDto> {
+    return this.get('/api/analytics/usage/trends', filters);
+  }
+
+  async getAnalyticsHourlyUsage(filters?: AnalyticsFilterDto): Promise<HourlyUsageResponseDto> {
+    return this.get('/api/analytics/usage/hourly', filters);
+  }
+
+  async getAnalyticsTopActiveStudents(filters?: AnalyticsFilterDto): Promise<TopActiveStudentsResponseDto> {
+    return this.get('/api/analytics/students/top-active', filters);
+  }
+
+  async getAnalyticsResponseQuality(filters?: AnalyticsFilterDto): Promise<ResponseQualityDto> {
+    return this.get('/api/analytics/performance/response-quality', filters);
+  }
+
+  async getAnalyticsConversationMetrics(filters?: AnalyticsFilterDto): Promise<ConversationMetricsDto> {
+    return this.get('/api/analytics/engagement/conversations', filters);
+  }
+
+  async getAnalyticsModuleComparison(moduleIds: number[], filters?: Omit<AnalyticsFilterDto, 'moduleId'>): Promise<ModuleComparisonResponseDto> {
+    return this.get('/api/analytics/modules/compare', {
+      ...filters,
+      moduleIds: moduleIds.join(','),
+    });
+  }
+
+  async getAnalyticsFrequentQuestions(filters?: AnalyticsFilterDto): Promise<FrequentlyAskedQuestionsResponseDto> {
+    return this.get('/api/analytics/questions/frequently-asked', filters);
   }
 }
 

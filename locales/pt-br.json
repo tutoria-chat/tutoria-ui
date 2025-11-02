@@ -276,7 +276,7 @@
       "downloadError": "Erro ao baixar arquivo",
       "downloadErrorDesc": "Não foi possível baixar o arquivo. Tente novamente.",
       "fileSelectError": "Selecione um arquivo para enviar",
-      "fileTooLarge": "Arquivo muito grande. Tamanho máximo: 50MB",
+      "fileTooLarge": "Arquivo muito grande. Tamanho máximo: 10MB",
       "fileTypeNotSupported": "Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX",
       "tokenCopied": "Token copiado!",
       "tokenCopyError": "Erro ao copiar token",
@@ -493,3 +493,4 @@
     "homePage": "Página Inicial"
   }
 }
+

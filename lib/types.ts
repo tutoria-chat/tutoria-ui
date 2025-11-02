@@ -211,6 +211,7 @@ export interface ModuleCreate {
   courseId: number;
   tutorLanguage?: string;
   aiModelId?: number;
+  courseType?: 'math-logic' | 'programming' | 'theory-text';
 }
 
 export interface ModuleUpdate {
@@ -223,6 +224,7 @@ export interface ModuleUpdate {
   courseId?: number;
   tutorLanguage?: string;
   aiModelId?: number;
+  courseType?: 'math-logic' | 'programming' | 'theory-text';
 }
 
 export interface ModuleWithDetails extends Module {
@@ -272,7 +274,7 @@ export interface FileResponse extends File {
 export interface AddYoutubeVideoRequest {
   youtubeUrl: string;
   moduleId: number;
-  language?: string; // 'pt-br' | 'en' | 'es'
+  language: string; // 'pt-br' | 'en' | 'es' - REQUIRED by backend
   name?: string;
 }
 
@@ -546,7 +548,7 @@ export interface SystemStats {
 // Pagination and Filtering Types
 export interface PaginationParams {
   page?: number;
-  limit?: number;
+  size?: number; // Backend uses 'size' not 'limit'
   sort?: string;
   order?: 'asc' | 'desc';
   search?: string;
@@ -556,7 +558,7 @@ export interface PaginatedResponse<T> {
   items: T[];
   total: number;
   page: number;
-  limit: number;
+  size: number; // Backend returns 'size' not 'limit'
   totalPages: number;
 }
 
@@ -676,4 +678,218 @@ export interface APIResponse<T> {
   success: boolean;
   data?: T;
   error?: APIError;
+}
+
+// Analytics Types
+export interface AnalyticsFilterDto {
+  startDate?: string;
+  endDate?: string;
+  universityId?: number;
+  courseId?: number;
+  moduleId?: number;
+  period?: 'day' | 'week' | 'month' | 'year' | 'all';
+  limit?: number;
+}
+
+export interface ProviderCostDto {
+  provider: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface ModelCostDto {
+  modelName: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface CostAnalysisDto {
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  startDate?: string;
+  endDate?: string;
+  costByProvider: { [key: string]: ProviderCostDto };
+  costByModel: { [key: string]: ModelCostDto };
+  costByModule: { [key: number]: number }; // moduleId -> cost
+  costByCourse: { [key: number]: number }; // courseId -> cost
+  costByUniversity: { [key: number]: number }; // universityId -> cost
+}
+
+export interface TodayCostDto {
+  date: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  comparedToYesterday: {
+    messagesDiff: number;
+    tokensDiff: number;
+    costDiff: number;
+    messagesPercentChange: number;
+    tokensPercentChange: number;
+    costPercentChange: number;
+  };
+}
+
+export interface PeakHourDto {
+  hour: number; // 0-23
+  messageCount: number;
+  percentage: number;
+}
+
+export interface UsageStatsDto {
+  date: string;
+  totalMessages: number;
+  uniqueStudents: number;
+  uniqueConversations: number;
+  activeModules: number;
+  totalTokens: number;
+  averageResponseTime: number; // milliseconds
+  estimatedCostUSD: number;
+  messagesByProvider: { [key: string]: number };
+  messagesByModel: { [key: string]: number };
+  peakHour?: PeakHourDto;
+}
+
+export interface HourlyUsageDto {
+  hour: number; // 0-23
+  messageCount: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface HourlyUsageResponseDto {
+  date: string;
+  totalMessages: number;
+  hourlyBreakdown: HourlyUsageDto[];
+}
+
+export interface DailyTrendDto {
+  date: string;
+  messageCount: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface UsageTrendsResponseDto {
+  startDate: string;
+  endDate: string;
+  totalMessages: number;
+  trends: DailyTrendDto[];
+}
+
+export interface StudentActivitySummaryDto {
+  studentId: number;
+  studentName?: string;
+  studentEmail?: string;
+  messageCount: number;
+  conversationCount: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  lastActivityAt: string;
+}
+
+export interface TopActiveStudentsResponseDto {
+  startDate?: string;
+  endDate?: string;
+  totalStudents: number;
+  topStudents: StudentActivitySummaryDto[];
+}
+
+export interface ResponseQualityDto {
+  averageResponseTimeMs: number;
+  medianResponseTimeMs: number;
+  averageTokensPerMessage: number;
+  totalMessages: number;
+}
+
+export interface ConversationMetricsDto {
+  totalConversations: number;
+  averageMessagesPerConversation: number;
+  medianMessagesPerConversation: number;
+  completionRate: number; // percentage of conversations with > 1 message
+}
+
+export interface ModuleComparisonItemDto {
+  moduleId: number;
+  moduleName: string;
+  totalMessages: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  averageResponseTimeMs: number;
+}
+
+export interface ModuleComparisonResponseDto {
+  startDate?: string;
+  endDate?: string;
+  modules: ModuleComparisonItemDto[];
+}
+
+export interface FrequentQuestionDto {
+  question: string;
+  count: number;
+  percentage: number;
+  similarQuestions: string[];
+  category?: string;
+  firstAskedAt: string;
+  lastAskedAt: string;
+}
+
+export interface FrequentlyAskedQuestionsResponseDto {
+  totalUniqueQuestions: number;
+  startDate?: string;
+  endDate?: string;
+  questions: FrequentQuestionDto[];
+}
+
+export interface DashboardSummaryDto {
+  period: string;
+  dateRange: {
+    start: string;
+    end: string;
+  };
+  overview: {
+    totalMessages: number;
+    totalCostUSD: number;
+    uniqueStudents: number;
+    activeModules: number;
+    activeCourses: number;
+    activeUniversities: number;
+  };
+  growth: {
+    messagesGrowth: number;
+    studentGrowth: number;
+    costGrowth: number;
+  };
+  topPerformers: {
+    topModule?: {
+      moduleId: number;
+      moduleName: string;
+      messages: number;
+    };
+    topStudent?: {
+      studentId: number;
+      studentName: string;
+      messages: number;
+    };
+    topCourse?: {
+      courseId: number;
+      courseName: string;
+      messages: number;
+    };
+  };
+  costBreakdown: {
+    byProvider: Record<string, number>;
+  };
+  healthIndicators: {
+    systemHealth: string;
+    averageResponseTime: number;
+    errorRate: number;
+    uptime: number;
+  };
 }

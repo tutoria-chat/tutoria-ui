@@ -77,6 +77,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   ];
 
   const adminItems: NavigationItem[] = [
+    {
+      label: t('analytics'),
+      href: '/analytics',
+      icon: BarChart3,
+      roles: ['super_admin', 'professor'],
+      requiresAdmin: true, // Only admin professors
+    },
     // TODO: Re-enable System Overview page when backend endpoints are ready
     // {
     //   label: t('systemOverview'),

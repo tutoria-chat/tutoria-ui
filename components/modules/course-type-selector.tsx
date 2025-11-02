@@ -217,12 +217,9 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType, 
                   </p>
 
                   <div className="mt-auto pt-4 border-t border-border">
-                    <div className="text-xs text-muted-foreground mb-1">
-                      {t('selectedModel') || 'AI Model:'}
+                    <div className="text-xs text-muted-foreground">
+                      {t('autoOptimized') || 'AI model automatically optimized for this course type'}
                     </div>
-                    <Badge variant="secondary" className="text-xs">
-                      {selectedModel}
-                    </Badge>
                   </div>
                 </button>
               );

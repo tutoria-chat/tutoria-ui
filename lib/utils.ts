@@ -313,3 +313,188 @@ export function extractYouTubeVideoId(url: string): string | null {
 export function isValidYouTubeUrl(url: string): boolean {
   return extractYouTubeVideoId(url) !== null;
 }
+
+/**
+ * Format a string as Brazilian CNPJ (Cadastro Nacional da Pessoa Jurídica).
+ *
+ * Format: XX.XXX.XXX/XXXX-XX (14 digits)
+ * Example: 12.345.678/0001-90
+ *
+ * @param value - Input string (digits only or with existing formatting)
+ * @returns Formatted CNPJ string
+ */
+export function formatCNPJ(value: string): string {
+  if (!value) return '';
+
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, '');
+
+  // Limit to 14 digits (CNPJ length)
+  const limited = digits.slice(0, 14);
+
+  // Apply mask: XX.XXX.XXX/XXXX-XX
+  let formatted = limited;
+
+  if (limited.length > 12) {
+    // XX.XXX.XXX/XXXX-XX
+    formatted = `${limited.slice(0, 2)}.${limited.slice(2, 5)}.${limited.slice(5, 8)}/${limited.slice(8, 12)}-${limited.slice(12, 14)}`;
+  } else if (limited.length > 8) {
+    // XX.XXX.XXX/XXXX
+    formatted = `${limited.slice(0, 2)}.${limited.slice(2, 5)}.${limited.slice(5, 8)}/${limited.slice(8)}`;
+  } else if (limited.length > 5) {
+    // XX.XXX.XXX
+    formatted = `${limited.slice(0, 2)}.${limited.slice(2, 5)}.${limited.slice(5)}`;
+  } else if (limited.length > 2) {
+    // XX.XXX
+    formatted = `${limited.slice(0, 2)}.${limited.slice(2)}`;
+  }
+
+  return formatted;
+}
+
+/**
+ * Format a string as Brazilian phone number.
+ *
+ * Formats:
+ * - Mobile: (XX) XXXXX-XXXX (11 digits)
+ * - Landline: (XX) XXXX-XXXX (10 digits)
+ *
+ * Examples:
+ * - (85) 98765-4321
+ * - (11) 3456-7890
+ *
+ * @param value - Input string (digits only or with existing formatting)
+ * @returns Formatted phone string
+ */
+export function formatBrazilianPhone(value: string): string {
+  if (!value) return '';
+
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, '');
+
+  // Limit to 11 digits (mobile with area code)
+  const limited = digits.slice(0, 11);
+
+  // Apply mask based on length
+  let formatted = limited;
+
+  if (limited.length > 10) {
+    // Mobile: (XX) XXXXX-XXXX
+    formatted = `(${limited.slice(0, 2)}) ${limited.slice(2, 7)}-${limited.slice(7, 11)}`;
+  } else if (limited.length > 6) {
+    // Landline or partial mobile: (XX) XXXX-XXXX
+    formatted = `(${limited.slice(0, 2)}) ${limited.slice(2, 6)}-${limited.slice(6, 10)}`;
+  } else if (limited.length > 2) {
+    // Partial: (XX) XXXX
+    formatted = `(${limited.slice(0, 2)}) ${limited.slice(2)}`;
+  } else if (limited.length > 0) {
+    // Partial: (XX
+    formatted = `(${limited}`;
+  }
+
+  return formatted;
+}
+
+/**
+ * Format a string as Brazilian CEP (Código de Endereçamento Postal).
+ *
+ * Format: XXXXX-XXX (8 digits)
+ * Example: 60110-123
+ *
+ * @param value - Input string (digits only or with existing formatting)
+ * @returns Formatted CEP string
+ */
+export function formatCEP(value: string): string {
+  if (!value) return '';
+
+  // Remove all non-digit characters
+  const digits = value.replace(/\D/g, '');
+
+  // Limit to 8 digits (CEP length)
+  const limited = digits.slice(0, 8);
+
+  // Apply mask: XXXXX-XXX
+  let formatted = limited;
+
+  if (limited.length > 5) {
+    // XXXXX-XXX
+    formatted = `${limited.slice(0, 5)}-${limited.slice(5, 8)}`;
+  }
+
+  return formatted;
+}
+
+/**
+ * ViaCEP API response interface
+ */
+export interface ViaCEPResponse {
+  cep: string;
+  logradouro: string; // Street name
+  complemento: string; // Complement
+  bairro: string; // Neighborhood
+  localidade: string; // City
+  uf: string; // State (2-letter code)
+  ibge: string;
+  gia: string;
+  ddd: string;
+  siafi: string;
+  erro?: boolean; // True if CEP not found
+}
+
+/**
+ * Fetch address data from ViaCEP API based on Brazilian postal code.
+ *
+ * API Documentation: https://viacep.com.br/
+ * Endpoint: https://viacep.com.br/ws/{cep}/json/
+ *
+ * @param cep - Brazilian postal code (8 digits, with or without dash)
+ * @returns Promise<ViaCEPResponse | null> - Address data or null if not found/error
+ *
+ * @example
+ * const address = await fetchViaCEP('60110-123');
+ * if (address) {
+ *   console.log(address.logradouro); // Street name
+ *   console.log(address.bairro); // Neighborhood
+ *   console.log(address.localidade); // City
+ *   console.log(address.uf); // State
+ * }
+ */
+export async function fetchViaCEP(cep: string): Promise<ViaCEPResponse | null> {
+  if (!cep) return null;
+
+  // Remove all non-digit characters
+  const cleanCEP = cep.replace(/\D/g, '');
+
+  // Validate CEP length (must be exactly 8 digits)
+  if (cleanCEP.length !== 8) {
+    console.warn('Invalid CEP: must be 8 digits');
+    return null;
+  }
+
+  try {
+    const response = await fetch(`https://viacep.com.br/ws/${cleanCEP}/json/`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('ViaCEP API error:', response.status, response.statusText);
+      return null;
+    }
+
+    const data: ViaCEPResponse = await response.json();
+
+    // Check if CEP was not found (API returns erro: true)
+    if (data.erro) {
+      console.warn('CEP not found:', cleanCEP);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch ViaCEP:', error);
+    return null;
+  }
+}

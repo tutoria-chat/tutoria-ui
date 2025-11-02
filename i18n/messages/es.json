@@ -202,6 +202,16 @@
     "form": {
       "create": "Crear módulo",
       "edit": "Editar módulo",
+      "steps": {
+        "basic": "Información básica",
+        "basicDesc": "Detalles del módulo",
+        "aiModel": "Modelo de IA",
+        "aiModelDesc": "Seleccionar modelo",
+        "prompt": "Prompt del Sistema",
+        "promptDesc": "Configurar IA",
+        "settings": "Configuración",
+        "settingsDesc": "Idioma y más"
+      },
       "nameLabel": "Nombre del módulo *",
       "namePlaceholder": "ej., Introducción a Estructuras de Datos",
       "nameRequired": "El nombre del módulo es requerido",
@@ -263,6 +273,7 @@
       "improveSuccess": "¡Prompt mejorado!",
       "improveSuccessDesc": "Mejoras restantes: {count}/3 en las próximas 72h.",
       "improveError": "Error al mejorar el prompt",
+      "courseCannotChange": "El curso no se puede cambiar",
       "templates": {
         "general": {
           "name": "Tutor general",
@@ -290,7 +301,8 @@
       "viewCourse": "Ver curso",
       "prepareModule": "Preparar módulo",
       "preparing": "Preparando...",
-      "createToken": "Crear token",
+      "createToken": "Crear clave de acceso",
+      "createModuleInCourse": "Crear nuevo módulo en el mismo curso",
       "editModule": "Editar módulo",
       "moduleInfo": "Información del módulo",
       "description": "Descripción",
@@ -302,7 +314,7 @@
       "aiTutorNotConfigured": "Tutor de IA no configurado",
       "stats": "Estadísticas",
       "files": "Archivos",
-      "accessTokens": "Tokens de acceso",
+      "accessTokens": "Claves de acceso",
       "uploadFile": "Subir archivo",
       "uploadFileDesc": "Sube materiales de estudio para este módulo",
       "uploading": "Subiendo...",
@@ -362,10 +374,13 @@
       "viewError": "Error al cargar el archivo",
       "viewErrorDesc": "No se pudo cargar el archivo para visualización",
       "fileSelectError": "Selecciona un archivo para subir",
-      "fileTooLarge": "Archivo demasiado grande. Tamaño máximo: 50MB",
+      "fileTooLarge": "Archivo demasiado grande. Tamaño máximo: 10MB",
       "fileTypeNotSupported": "Tipo de archivo no soportado. Usa: PDF, DOC, DOCX, TXT, PPT o PPTX",
       "tokenCopied": "¡Clave copiada!",
       "tokenCopyError": "Error al copiar la clave",
+      "widgetUrlTitle": "URL del Widget",
+      "copyUrl": "Copiar URL",
+      "testUrl": "Probar URL",
       "columns": {
         "fileName": "Archivo",
         "type": "Tipo",
@@ -619,8 +634,21 @@
       "codeRequired": "El nombre de fantasía es requerido",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Descripción de la universidad (opcional)",
-      "addressLabel": "Dirección",
-      "addressPlaceholder": "Ej: Calle de la Rectoría, 374 - Ciudad Universitaria",
+      "cepLabel": "Código Postal (CEP)",
+      "cepPlaceholder": "00000-000",
+      "cepHelpText": "Ingrese el código postal brasileño para autocompletar la dirección",
+      "streetLabel": "Calle",
+      "streetPlaceholder": "Nombre de la calle",
+      "streetNumberLabel": "Número",
+      "streetNumberPlaceholder": "Número",
+      "complementLabel": "Complemento",
+      "complementPlaceholder": "Apartamento, Suite, etc. (opcional)",
+      "neighborhoodLabel": "Barrio",
+      "neighborhoodPlaceholder": "Barrio",
+      "cityLabel": "Ciudad",
+      "cityPlaceholder": "Ciudad",
+      "stateLabel": "Estado",
+      "statePlaceholder": "UF",
       "taxIdLabel": "Número de identificación fiscal",
       "taxIdPlaceholder": "Ej: 00.000.000/0000-00",
       "contactEmailLabel": "Correo electrónico de contacto",
@@ -736,6 +764,9 @@
       "loadingCourses": "Cargando cursos...",
       "noCoursesAvailable": "No hay cursos disponibles para esta universidad.",
       "selectUniversityFirst": "Selecciona una universidad primero para ver los cursos disponibles.",
+      "selectCourses": "Seleccionar cursos...",
+      "searchCourses": "Buscar cursos...",
+      "noCoursesFound": "No se encontraron cursos.",
       "firstNameLabel": "Nombre *",
       "firstNamePlaceholder": "ej., Juan",
       "lastNameLabel": "Apellido *",
@@ -854,6 +885,9 @@
       "adminDescription": "Los administradores pueden gestionar cursos y asignar profesores",
       "assignedCourses": "Cursos Asignados",
       "assignedCoursesDescription": "Selecciona qué cursos puede acceder este profesor",
+      "selectCourses": "Seleccionar cursos...",
+      "searchCourses": "Buscar cursos...",
+      "noCoursesFound": "No se encontraron cursos.",
       "noCoursesAvailable": "No hay cursos disponibles para esta universidad",
       "errorLoadingCourses": "Error al cargar cursos",
       "passwordReset": "Restablecer Contraseña",
@@ -968,7 +1002,17 @@
       "status": "Estado",
       "active": "Activo",
       "inactive": "Inactivo",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "copyWidgetUrlSuccess": "¡URL del widget copiada al portapapeles!",
+      "copyError": "Error al copiar. Por favor, intenta de nuevo.",
+      "actionButtons": {
+        "view": "Ver detalles de la clave",
+        "edit": "Editar clave",
+        "openWidget": "Abrir widget en nueva pestaña",
+        "copyWidgetUrl": "Copiar URL del widget",
+        "viewWidgetUrl": "Ver URL del widget",
+        "delete": "Eliminar clave"
+      }
     },
     "stats": {
       "totalTokens": "Total de claves",
@@ -988,6 +1032,7 @@
       "edit": "Editar clave",
       "openWidget": "Abrir widget en nueva pestaña",
       "copyWidgetUrl": "Copiar URL del widget",
+      "viewWidgetUrl": "Ver URL del widget",
       "delete": "Eliminar clave"
     },
     "modal": {
@@ -1253,9 +1298,10 @@
     "tutorials": "Tutoriales y Guías",
     "universities": "Universidades",
     "myUniversity": "Mi universidad",
-    "moduleTokens": "Claves de acceso de módulo",
+    "moduleTokens": "Claves de Acceso",
     "professors": "Profesores",
     "administration": "Administración",
+    "analytics": "Analíticas",
     "systemOverview": "Vista general del sistema",
     "superAdmins": "Super administradores",
     "globalSearch": "Búsqueda global",
@@ -1358,6 +1404,15 @@
     "languageChangeInfo": "La página se recargará para aplicar el nuevo idioma",
     "saveError": "Error al guardar la configuración"
   },
+  "dateRangePicker": {
+    "placeholder": "Selecciona un rango de fechas",
+    "presets": "Predefinidos",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "last7Days": "Últimos 7 días",
+    "last30Days": "Últimos 30 días",
+    "last365Days": "Últimos 365 días"
+  },
   "common": {
     "buttons": {
       "save": "Guardar",
@@ -1367,9 +1422,12 @@
       "view": "Ver",
       "create": "Crear",
       "back": "Volver",
+      "previous": "Anterior",
+      "next": "Siguiente",
       "loading": "Cargando...",
       "search": "Buscar",
-      "filter": "Filtrar"
+      "filter": "Filtrar",
+      "close": "Cerrar"
     },
     "pagination": {
       "rowsPerPage": "Filas por página:",
@@ -1389,6 +1447,9 @@
     "noData": "No hay datos disponibles",
     "error": "Error",
     "success": "Éxito",
+    "cancel": "Cancelar",
+    "previous": "Anterior",
+    "next": "Siguiente",
     "passwordSetup": {
       "title": "Configurar tu contraseña",
       "description": "Cuando recibas un enlace de configuración de contraseña:",
@@ -2009,7 +2070,7 @@
         "title": "CÓMO SUBIR ARCHIVOS A MÓDULOS - Tutorial Completo",
         "whatIs": "¡Subir ARCHIVOS es como poner LIBROS, NOTAS y MATERIALES en una BIBLIOTECA para que la IA los lea! Los archivos que subes (PDFs, PowerPoints, documentos Word, etc.) son lo que el TUTOR IA usará para RESPONDER preguntas de los estudiantes! Piensa en esto así: la IA es un bibliotecario súper inteligente, ¡y los archivos son los libros que puede consultar!",
         "why": "¿POR QUÉ subir archivos? ¡Porque la IA necesita CONTENIDO con el que trabajar! Si no subes archivos, la IA solo tendrá su conocimiento general. ¡Pero si subes TUS diapositivas de clase, TUS notas, TUS PDFs, la IA puede responder preguntas ESPECÍFICAMENTE sobre el contenido de TU curso!",
-        "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 50MB por archivo.",
+        "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 10MB por archivo.",
         "steps": [
           {
             "number": "1",
@@ -2050,7 +2111,7 @@
           },
           {
             "mistake": "¡Mi archivo es demasiado grande y no se sube!",
-            "solution": "¡El tamaño máximo de archivo es 50MB! Si tu archivo es más grande: 1) DIVÍDELO en partes más pequeñas (como dividir un PDF de 100MB en dos PDFs de 50MB), 2) COMPRIME el PDF (usa herramientas en línea como 'smallpdf.com' o 'ilovepdf.com' para reducir el tamaño), 3) Elimina imágenes/páginas innecesarias para reducir el tamaño."
+            "solution": "¡El tamaño máximo de archivo es 10MB! Si tu archivo es más grande: 1) DIVÍDELO en partes más pequeñas (como dividir un PDF de 100MB en dos PDFs de 10MB), 2) COMPRIME el PDF (usa herramientas en línea como 'smallpdf.com' o 'ilovepdf.com' para reducir el tamaño), 3) Elimina imágenes/páginas innecesarias para reducir el tamaño."
           },
           {
             "mistake": "¡La subida comenzó pero se quedó atascada al 50% y no continúa!",
@@ -2470,7 +2531,7 @@
           "Haz clic en 'Subir Archivo'",
           "Selecciona o arrastra y suelta tu archivo",
           "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-          "Tamaño máximo: 50MB por archivo",
+          "Tamaño máximo: 10MB por archivo",
           "Espera a que se complete la subida"
         ],
         "managing": {
@@ -2731,7 +2792,7 @@
               "Haz clic en 'Subir Archivo' en la sección de Archivos",
               "Selecciona o arrastra y suelta tu archivo",
               "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-              "Tamaño máximo: 50MB por archivo",
+              "Tamaño máximo: 10MB por archivo",
               "Haz clic en 'Subir Archivo' para agregarlo",
               "El archivo será indexado y estará disponible para el tutor IA"
             ]
@@ -2901,11 +2962,11 @@
           "title": "Problemas de preparación de módulos",
           "noTokens": "Error: 'No hay tokens disponibles' - Crea al menos un token activo con permiso de chat antes de preparar.",
           "invalidToken": "Error: 'Token inválido' - Asegúrate de que el token esté activo y tenga habilitado el permiso de chat.",
-          "preparationFailed": "Si la preparación falla, verifica que tus archivos sean menores de 50MB y estén en formatos soportados."
+          "preparationFailed": "Si la preparación falla, verifica que tus archivos sean menores de 10MB y estén en formatos soportados."
         },
         "fileUploads": {
           "title": "Problemas de subida de archivos",
-          "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 50MB.",
+          "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 10MB.",
           "unsupportedFormat": "Formato no soportado: Convierte archivos a PDF, DOC, DOCX, TXT, PPT o PPTX.",
           "uploadFailed": "Subida fallida: Verifica tu conexión a internet e intenta de nuevo."
         },
@@ -3061,7 +3122,7 @@
             "Haz clic en 'Subir Archivo' en la sección de Archivos",
             "Selecciona o arrastra y suelta tu archivo",
             "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-            "Tamaño máximo: 50MB por archivo",
+            "Tamaño máximo: 10MB por archivo",
             "Haz clic en 'Subir Archivo' para agregarlo",
             "El archivo será indexado y estará disponible para el tutor de IA"
           ]
@@ -3231,11 +3292,11 @@
         "title": "Problemas de Preparación de Módulos",
         "noTokens": "Error: 'No hay tokens disponibles' - Crea al menos un token activo con permiso de chat antes de preparar.",
         "invalidToken": "Error: 'Token inválido' - Asegúrate de que el token esté activo y tenga habilitado el permiso de chat.",
-        "preparationFailed": "Si la preparación falla, verifica que tus archivos estén bajo 50MB y en formatos soportados."
+        "preparationFailed": "Si la preparación falla, verifica que tus archivos estén bajo 10MB y en formatos soportados."
       },
       "fileUploads": {
         "title": "Problemas de Subida de Archivos",
-        "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 50MB.",
+        "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 10MB.",
         "unsupportedFormat": "Formato no soportado: Convierte archivos a PDF, DOC, DOCX, TXT, PPT o PPTX.",
         "uploadFailed": "Subida fallida: Verifica tu conexión a internet e intenta de nuevo."
       },
@@ -3272,6 +3333,7 @@
     "selectCourseType": "Seleccionar Tipo de Curso",
     "selectDescription": "Elige el tipo que mejor se ajuste al contenido de tu curso. Seleccionaremos automáticamente el modelo de IA óptimo.",
     "selectedModel": "Modelo de IA:",
+    "autoOptimized": "Modelo de IA optimizado automáticamente para este tipo de curso",
     "tierNote": "Nota",
     "tierDescription": "El modelo de IA se optimiza automáticamente según el nivel de suscripción de tu universidad para el mejor equilibrio costo-rendimiento.",
     "mathLogic": {
@@ -3285,6 +3347,100 @@
     "theoryText": {
       "name": "Teoría y Humanidades",
       "description": "Conceptos teóricos, ensayos, humanidades, literatura y materias con mucho texto"
+    }
+  },
+  "analytics": {
+    "title": "Panel de Analíticas",
+    "description": "Información sobre actividad de estudiantes, patrones de uso y costos del sistema",
+    "loadError": "Error al cargar datos de analíticas. Por favor, inténtelo de nuevo.",
+    "refreshSuccess": "Datos de analíticas actualizados correctamente",
+    "refresh": "Actualizar",
+    "allUniversities": "Todas las Universidades",
+    "searchUniversities": "Buscar universidades...",
+    "noUniversitiesFound": "No se encontraron universidades.",
+    "exportSuccess": "Informe {format} exportado correctamente",
+    "period": {
+      "day": "Hoy",
+      "week": "Esta Semana",
+      "month": "Este Mes",
+      "year": "Este Año"
+    },
+    "stats": {
+      "totalMessages": "Mensajes Totales",
+      "uniqueStudents": "Estudiantes Únicos",
+      "activeModules": "Módulos Activos",
+      "estimatedCost": "Costo Estimado",
+      "inPeriod": "en {period}",
+      "inSelectedPeriod": "en período seleccionado",
+      "vsYesterday": "vs. ayer",
+      "activeStudents": "Estudiantes activos",
+      "modulesWithActivity": "Módulos con actividad",
+      "totalCost": "Costo total de IA",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "last7Days": "Últimos 7 días",
+      "last30Days": "Últimos 30 días",
+      "last365Days": "Últimos 365 días"
+    },
+    "charts": {
+      "usageTrends": "Tendencias de Uso",
+      "usageTrendsDescription": "Mensajes y actividad de estudiantes a lo largo del tiempo",
+      "costTrend": "Tendencia de Costos",
+      "costTrendDescription": "Costos de uso de IA a lo largo del tiempo",
+      "hourlyBreakdown": "Desglose Horario de Actividad",
+      "hourlyBreakdownDescription": "Análisis de horas pico de uso",
+      "providerDistribution": "Distribución por Proveedor",
+      "providerDistributionDescription": "Mensajes por proveedor de IA",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "costUSD": "Costo (USD)"
+    },
+    "moduleComparison": {
+      "title": "Comparación de Módulos",
+      "description": "Comparar rendimiento entre módulos",
+      "show": "Mostrar Comparación",
+      "hide": "Ocultar Comparación",
+      "selectModules": "Seleccione módulos para comparar",
+      "modulesSelected": "módulos seleccionados",
+      "searchModules": "Buscar módulos...",
+      "noModulesFound": "No se encontraron módulos",
+      "selectAtLeastTwo": "Seleccione al menos 2 módulos para comparar",
+      "loadError": "Error al cargar datos de comparación de módulos",
+      "moduleName": "Nombre del Módulo",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "tokens": "Tokens",
+      "cost": "Costo (USD)",
+      "avgResponseTime": "Tiempo Promedio de Respuesta"
+    },
+    "todayUsage": {
+      "title": "Uso de Hoy",
+      "description": "Métricas de actividad del día actual",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "conversations": "Conversaciones",
+      "avgResponseTime": "Tiempo Promedio de Respuesta"
+    },
+    "todayCost": {
+      "title": "Costo de Hoy",
+      "description": "Costo de uso de IA para hoy",
+      "totalToday": "Costo total hoy",
+      "tokens": "Tokens Totales",
+      "vsYesterday": "vs. Ayer"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "description": "Preguntas más comunes de los estudiantes",
+      "similarQuestions": "Preguntas similares",
+      "noData": "Aún no hay preguntas frecuentes"
+    },
+    "topStudents": {
+      "title": "Estudiantes Más Activos",
+      "description": "Estudiantes con más actividad",
+      "messages": "mensajes",
+      "conversations": "conversaciones",
+      "noData": "Aún no hay datos de actividad de estudiantes"
     }
   }
 }

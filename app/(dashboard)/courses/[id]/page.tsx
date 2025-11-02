@@ -316,15 +316,6 @@ export default function CourseDetailsPage() {
               </Button>
             )}
 
-            {canAddModule() && (
-              <Button variant="outline" asChild>
-                <Link href={`/modules/create?courseId=${courseId}`}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  {t('addModule')}
-                </Link>
-              </Button>
-            )}
-
             <AdminProfessorOnly>
               <Button asChild>
                 <Link href={`/courses/${courseId}/edit`}>
@@ -462,10 +453,22 @@ export default function CourseDetailsPage() {
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
-              <CardTitle>{t('modulesTab.title')}</CardTitle>
-              <CardDescription>
-                {t('modulesTab.description')}
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>{t('modulesTab.title')}</CardTitle>
+                  <CardDescription>
+                    {t('modulesTab.description')}
+                  </CardDescription>
+                </div>
+                {canAddModule() && (
+                  <Button asChild>
+                    <Link href={`/modules/create?courseId=${courseId}`}>
+                      <Plus className="mr-2 h-4 w-4" />
+                      {t('addModule')}
+                    </Link>
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Filters */}

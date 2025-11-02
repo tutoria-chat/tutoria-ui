@@ -16,6 +16,7 @@ import type { BreadcrumbItem } from '@/lib/types';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/auth/auth-provider';
 import { validatePasswordStrength } from '@/lib/utils';
+import { MultiSelect } from '@/components/ui/multi-select';
 
 export default function CreateProfessorPage() {
   const router = useRouter();
@@ -429,25 +430,17 @@ export default function CreateProfessorPage() {
                   {formData.universityId ? t('noCoursesAvailable') : t('selectUniversityFirst')}
                 </p>
               ) : (
-                <div className="border rounded-md p-4 space-y-2 max-h-48 overflow-y-auto">
-                  {courses.map((course) => (
-                    <div key={course.id} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`course-${course.id}`}
-                        checked={formData.courseIds.includes(String(course.id))}
-                        onChange={() => toggleCourse(String(course.id))}
-                        className="h-4 w-4 rounded border-gray-300"
-                      />
-                      <Label
-                        htmlFor={`course-${course.id}`}
-                        className="text-sm font-normal cursor-pointer"
-                      >
-                        {course.name}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
+                <MultiSelect
+                  options={courses.map((course) => ({
+                    value: String(course.id),
+                    label: course.name,
+                  }))}
+                  selected={formData.courseIds}
+                  onChange={(selected) => setFormData({ ...formData, courseIds: selected })}
+                  placeholder={t('selectCourses') || 'Select courses...'}
+                  searchPlaceholder={t('searchCourses') || 'Search courses...'}
+                  emptyMessage={t('noCoursesFound') || 'No courses found.'}
+                />
               )}
               {errors.courseIds && (
                 <p className="text-sm text-destructive">{errors.courseIds}</p>

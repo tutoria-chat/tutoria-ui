@@ -140,7 +140,7 @@ tutoria-ui/
 
 ### File Upload
 - Drag-and-drop interface
-- 50MB max file size
+- 10MB max file size
 - Type validation (PDF, DOC, DOCX, TXT, PPT, PPTX)
 - Azure Blob Storage integration
 
