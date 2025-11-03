@@ -119,7 +119,7 @@ export default function CreateProfessorPage() {
   const searchUniversities = async (search: string) => {
     setLoadingUniversities(true);
     try {
-      const data = await apiClient.getUniversities({ search, limit: 10 });
+      const data = await apiClient.getUniversities({ search, size: 10 });
       setUniversities(data.items);
     } catch (error: any) {
       console.error('Error searching universities:', error);

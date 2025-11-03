@@ -78,7 +78,16 @@ export interface University {
   name: string;
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string; // Postal code (ZIP in US, CEP in Brazil, etc.)
+  street?: string;
+  streetNumber?: string;
+  complement?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
+  country?: string;
   taxId?: string; // CNPJ in Brazil, Tax ID in other countries
   contactEmail?: string;
   contactPhone?: string;
@@ -96,7 +105,16 @@ export interface UniversityCreate {
   name: string;
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string | null;
+  street?: string | null;
+  streetNumber?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
   taxId?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -109,7 +127,16 @@ export interface UniversityUpdate {
   name: string;
   code: string;
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string | null;
+  street?: string | null;
+  streetNumber?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
   taxId?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -328,7 +355,8 @@ export interface Professor {
   languagePreference?: string;
   themePreference?: string;
   coursesCount?: number;
-  assignedCourses?: Course[];
+  assignedCourseIds?: number[]; // Course IDs assigned to this professor
+  assignedCourses?: Course[]; // Full course objects (for compatibility)
 }
 
 export interface ProfessorCreate {
@@ -409,6 +437,17 @@ export interface ProfessorAgentTokenCreate {
   description?: string;
   allowChat?: boolean;
   expiresAt?: string;
+}
+
+export interface ProfessorAgentStatus {
+  professorId: number;
+  professorName: string;
+  professorEmail: string;
+  hasAgent: boolean;
+  agentId?: number;
+  agentName?: string;
+  agentIsActive?: boolean;
+  agentCreatedAt?: string;
 }
 
 // Student Types
@@ -731,6 +770,10 @@ export interface TodayCostDto {
     tokensPercentChange: number;
     costPercentChange: number;
   };
+  // Video Transcription Costs
+  transcriptionCostUSD: number;
+  transcriptionVideoCount: number;
+  projectedDailyTranscriptionCost: number;
 }
 
 export interface PeakHourDto {

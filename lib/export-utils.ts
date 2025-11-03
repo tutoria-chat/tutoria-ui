@@ -9,6 +9,42 @@ import type {
 } from './types';
 
 /**
+ * Translations interface for export functions
+ */
+export interface ExportTranslations {
+  title: string;
+  period: string;
+  dateRange: string;
+  generated: string;
+  university: string;
+  overviewTitle: string;
+  metric: string;
+  value: string;
+  totalMessages: string;
+  uniqueStudents: string;
+  activeModules: string;
+  activeCourses: string;
+  estimatedCost: string;
+  todayUsageTitle: string;
+  messages: string;
+  students: string;
+  conversations: string;
+  avgResponseTime: string;
+  todayCostTitle: string;
+  totalCost: string;
+  totalTokens: string;
+  frequentQuestionsTitle: string;
+  question: string;
+  count: string;
+  percentage: string;
+  topStudentsTitle: string;
+  studentName: string;
+  email: string;
+  tokens: string;
+  cost: string;
+}
+
+/**
  * Export analytics data to CSV format
  */
 export function exportAnalyticsToCSV(data: {
@@ -19,53 +55,54 @@ export function exportAnalyticsToCSV(data: {
   topStudents?: StudentActivitySummaryDto[];
   period: string;
   dateRange?: { start: Date; end: Date };
+  translations: ExportTranslations;
 }) {
-  const { summary, todayUsage, todayCost, frequentQuestions, topStudents, period, dateRange } = data;
+  const { summary, todayUsage, todayCost, frequentQuestions, topStudents, period, dateRange, translations: t } = data;
 
   // Build CSV content
-  let csvContent = 'Analytics Report\n';
-  csvContent += `Period: ${period}\n`;
+  let csvContent = `${t.title}\n`;
+  csvContent += `${t.period}: ${period}\n`;
 
   if (dateRange) {
-    csvContent += `Date Range: ${dateRange.start.toLocaleDateString()} - ${dateRange.end.toLocaleDateString()}\n`;
+    csvContent += `${t.dateRange}: ${dateRange.start.toLocaleDateString()} - ${dateRange.end.toLocaleDateString()}\n`;
   }
 
-  csvContent += `Generated: ${new Date().toLocaleString()}\n\n`;
+  csvContent += `${t.generated}: ${new Date().toLocaleString()}\n\n`;
 
   // Overview Stats
   if (summary?.overview) {
-    csvContent += 'Overview Statistics\n';
-    csvContent += 'Metric,Value\n';
-    csvContent += `Total Messages,${summary.overview.totalMessages ?? 0}\n`;
-    csvContent += `Unique Students,${summary.overview.uniqueStudents ?? 0}\n`;
-    csvContent += `Active Modules,${summary.overview.activeModules ?? 0}\n`;
-    csvContent += `Active Courses,${summary.overview.activeCourses ?? 0}\n`;
-    csvContent += `Estimated Cost (USD),$${(summary.overview.totalCostUSD ?? 0).toFixed(2)}\n\n`;
+    csvContent += `${t.overviewTitle}\n`;
+    csvContent += `${t.metric},${t.value}\n`;
+    csvContent += `${t.totalMessages},${summary.overview.totalMessages ?? 0}\n`;
+    csvContent += `${t.uniqueStudents},${summary.overview.uniqueStudents ?? 0}\n`;
+    csvContent += `${t.activeModules},${summary.overview.activeModules ?? 0}\n`;
+    csvContent += `${t.activeCourses},${summary.overview.activeCourses ?? 0}\n`;
+    csvContent += `${t.estimatedCost} (USD),$${(summary.overview.totalCostUSD ?? 0).toFixed(2)}\n\n`;
   }
 
   // Today's Usage
   if (todayUsage) {
-    csvContent += 'Today\'s Usage\n';
-    csvContent += 'Metric,Value\n';
-    csvContent += `Messages,${todayUsage.totalMessages ?? 0}\n`;
-    csvContent += `Students,${todayUsage.uniqueStudents ?? 0}\n`;
-    csvContent += `Conversations,${todayUsage.uniqueConversations ?? 0}\n`;
-    csvContent += `Avg Response Time (ms),${(todayUsage.averageResponseTime ?? 0).toFixed(2)}\n\n`;
+    csvContent += `${t.todayUsageTitle}\n`;
+    csvContent += `${t.metric},${t.value}\n`;
+    csvContent += `${t.messages},${todayUsage.totalMessages ?? 0}\n`;
+    csvContent += `${t.students},${todayUsage.uniqueStudents ?? 0}\n`;
+    csvContent += `${t.conversations},${todayUsage.uniqueConversations ?? 0}\n`;
+    csvContent += `${t.avgResponseTime} (ms),${(todayUsage.averageResponseTime ?? 0).toFixed(2)}\n\n`;
   }
 
   // Today's Cost
   if (todayCost) {
-    csvContent += 'Today\'s Cost\n';
-    csvContent += 'Metric,Value\n';
-    csvContent += `Total Cost (USD),$${todayCost.estimatedCostUSD.toFixed(2)}\n`;
-    csvContent += `Total Tokens,${todayCost.totalTokens}\n`;
-    csvContent += `Messages,${todayCost.totalMessages}\n\n`;
+    csvContent += `${t.todayCostTitle}\n`;
+    csvContent += `${t.metric},${t.value}\n`;
+    csvContent += `${t.totalCost} (USD),$${todayCost.estimatedCostUSD.toFixed(2)}\n`;
+    csvContent += `${t.totalTokens},${todayCost.totalTokens}\n`;
+    csvContent += `${t.messages},${todayCost.totalMessages}\n\n`;
   }
 
   // Frequently Asked Questions
   if (frequentQuestions && frequentQuestions.length > 0) {
-    csvContent += 'Frequently Asked Questions\n';
-    csvContent += 'Question,Count,Percentage\n';
+    csvContent += `${t.frequentQuestionsTitle}\n`;
+    csvContent += `${t.question},${t.count},${t.percentage}\n`;
     frequentQuestions.forEach((faq) => {
       const question = faq.question.replace(/"/g, '""'); // Escape quotes
       csvContent += `"${question}",${faq.count},${faq.percentage.toFixed(1)}%\n`;
@@ -75,8 +112,8 @@ export function exportAnalyticsToCSV(data: {
 
   // Top Active Students
   if (topStudents && topStudents.length > 0) {
-    csvContent += 'Top Active Students\n';
-    csvContent += 'Student Name,Email,Messages,Conversations,Tokens,Cost (USD)\n';
+    csvContent += `${t.topStudentsTitle}\n`;
+    csvContent += `${t.studentName},${t.email},${t.messages},${t.conversations},${t.tokens},${t.cost} (USD)\n`;
     topStudents.forEach((student) => {
       const name = (student.studentName || '').replace(/"/g, '""');
       const email = (student.studentEmail || '').replace(/"/g, '""');
@@ -110,8 +147,9 @@ export function exportAnalyticsToPDF(data: {
   period: string;
   dateRange?: { start: Date; end: Date };
   universityName?: string;
+  translations: ExportTranslations;
 }) {
-  const { summary, todayUsage, todayCost, frequentQuestions, topStudents, period, dateRange, universityName } = data;
+  const { summary, todayUsage, todayCost, frequentQuestions, topStudents, period, dateRange, universityName, translations: t } = data;
 
   const doc = new jsPDF();
   let yPosition = 20;
@@ -119,13 +157,13 @@ export function exportAnalyticsToPDF(data: {
   // Title
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('Analytics Report', 105, yPosition, { align: 'center' });
+  doc.text(t.title, 105, yPosition, { align: 'center' });
   yPosition += 10;
 
   // Subtitle
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Period: ${period}`, 105, yPosition, { align: 'center' });
+  doc.text(`${t.period}: ${period}`, 105, yPosition, { align: 'center' });
   yPosition += 6;
 
   if (dateRange) {
@@ -134,29 +172,29 @@ export function exportAnalyticsToPDF(data: {
   }
 
   if (universityName) {
-    doc.text(`University: ${universityName}`, 105, yPosition, { align: 'center' });
+    doc.text(`${t.university}: ${universityName}`, 105, yPosition, { align: 'center' });
     yPosition += 6;
   }
 
-  doc.text(`Generated: ${new Date().toLocaleString()}`, 105, yPosition, { align: 'center' });
+  doc.text(`${t.generated}: ${new Date().toLocaleString()}`, 105, yPosition, { align: 'center' });
   yPosition += 15;
 
   // Overview Statistics
   if (summary?.overview) {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Overview Statistics', 14, yPosition);
+    doc.text(t.overviewTitle, 14, yPosition);
     yPosition += 7;
 
     autoTable(doc, {
       startY: yPosition,
-      head: [['Metric', 'Value']],
+      head: [[t.metric, t.value]],
       body: [
-        ['Total Messages', (summary.overview.totalMessages ?? 0).toLocaleString()],
-        ['Unique Students', (summary.overview.uniqueStudents ?? 0).toLocaleString()],
-        ['Active Modules', (summary.overview.activeModules ?? 0).toString()],
-        ['Active Courses', (summary.overview.activeCourses ?? 0).toString()],
-        ['Estimated Cost (USD)', `$${(summary.overview.totalCostUSD ?? 0).toFixed(2)}`],
+        [t.totalMessages, (summary.overview.totalMessages ?? 0).toLocaleString()],
+        [t.uniqueStudents, (summary.overview.uniqueStudents ?? 0).toLocaleString()],
+        [t.activeModules, (summary.overview.activeModules ?? 0).toString()],
+        [t.activeCourses, (summary.overview.activeCourses ?? 0).toString()],
+        [t.estimatedCost + ' (USD)', `$${(summary.overview.totalCostUSD ?? 0).toFixed(2)}`],
       ],
       theme: 'striped',
       headStyles: { fillColor: [59, 130, 246] },
@@ -169,19 +207,19 @@ export function exportAnalyticsToPDF(data: {
   if (todayUsage && todayCost) {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Today\'s Metrics', 14, yPosition);
+    doc.text(t.todayUsageTitle, 14, yPosition);
     yPosition += 7;
 
     autoTable(doc, {
       startY: yPosition,
-      head: [['Metric', 'Value']],
+      head: [[t.metric, t.value]],
       body: [
-        ['Messages', (todayUsage.totalMessages ?? 0).toLocaleString()],
-        ['Unique Students', (todayUsage.uniqueStudents ?? 0).toString()],
-        ['Conversations', (todayUsage.uniqueConversations ?? 0).toString()],
-        ['Avg Response Time', `${((todayUsage.averageResponseTime ?? 0) / 1000).toFixed(2)}s`],
-        ['Total Cost', `$${(todayCost.estimatedCostUSD ?? 0).toFixed(2)}`],
-        ['Total Tokens', (todayCost.totalTokens ?? 0).toLocaleString()],
+        [t.messages, (todayUsage.totalMessages ?? 0).toLocaleString()],
+        [t.students, (todayUsage.uniqueStudents ?? 0).toString()],
+        [t.conversations, (todayUsage.uniqueConversations ?? 0).toString()],
+        [t.avgResponseTime, `${((todayUsage.averageResponseTime ?? 0) / 1000).toFixed(2)}s`],
+        [t.totalCost, `$${(todayCost.estimatedCostUSD ?? 0).toFixed(2)}`],
+        [t.totalTokens, (todayCost.totalTokens ?? 0).toLocaleString()],
       ],
       theme: 'striped',
       headStyles: { fillColor: [59, 130, 246] },
@@ -200,12 +238,12 @@ export function exportAnalyticsToPDF(data: {
   if (frequentQuestions && frequentQuestions.length > 0) {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Frequently Asked Questions', 14, yPosition);
+    doc.text(t.frequentQuestionsTitle, 14, yPosition);
     yPosition += 7;
 
     autoTable(doc, {
       startY: yPosition,
-      head: [['Question', 'Count', '%']],
+      head: [[t.question, t.count, '%']],
       body: frequentQuestions.map((faq) => [
         faq.question.length > 80 ? faq.question.substring(0, 77) + '...' : faq.question,
         faq.count.toString(),
@@ -233,12 +271,12 @@ export function exportAnalyticsToPDF(data: {
   if (topStudents && topStudents.length > 0) {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Top Active Students', 14, yPosition);
+    doc.text(t.topStudentsTitle, 14, yPosition);
     yPosition += 7;
 
     autoTable(doc, {
       startY: yPosition,
-      head: [['Student', 'Messages', 'Conversations', 'Cost']],
+      head: [[t.studentName, t.messages, t.conversations, t.cost]],
       body: topStudents.map((student) => [
         student.studentName || student.studentEmail || `Student #${student.studentId}`,
         (student.messageCount ?? 0).toString(),

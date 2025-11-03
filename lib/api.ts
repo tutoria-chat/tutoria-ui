@@ -26,6 +26,7 @@ import type {
   ProfessorAgentUpdate,
   ProfessorAgentToken,
   ProfessorAgentTokenCreate,
+  ProfessorAgentStatus,
   Student,
   StudentCreate,
   StudentUpdate,
@@ -777,6 +778,19 @@ class TutoriaAPIClient {
 
   async createProfessorAgentToken(agentId: number, data: ProfessorAgentTokenCreate): Promise<ProfessorAgentToken> {
     return this.post(`/api/professoragents/${agentId}/tokens`, data);
+  }
+
+  async getProfessorAgentStatus(universityId?: number): Promise<ProfessorAgentStatus[]> {
+    const params = universityId ? { universityId } : undefined;
+    return this.get('/api/professoragents/by-professor', params);
+  }
+
+  async activateProfessorAgent(agentId: number): Promise<void> {
+    return this.patch(`/api/professoragents/${agentId}/activate`, {});
+  }
+
+  async deactivateProfessorAgent(agentId: number): Promise<void> {
+    return this.patch(`/api/professoragents/${agentId}/deactivate`, {});
   }
 
   // AI Tutor endpoints

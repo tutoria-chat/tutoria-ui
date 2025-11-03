@@ -325,6 +325,11 @@
       "videoName": "Nome do Vídeo",
       "optional": "opcional",
       "videoNamePlaceholder": "ex: Aula 1: Introdução",
+      "videoLanguage": "Idioma do Vídeo",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "Inglês",
+      "languageSpanish": "Espanhol",
+      "languageHint": "Selecione o idioma falado no vídeo para uma transcrição precisa",
       "processing": "Processando...",
       "addVideoButton": "Adicionar Vídeo",
       "youtubeUrlRequired": "URL do YouTube é obrigatória",
@@ -558,6 +563,7 @@
     "detail": {
       "breadcrumb": "Universidades",
       "edit": "Editar",
+      "myAIAgent": "Meu Agente IA",
       "notFound": "Universidade não encontrada",
       "stats": {
         "courses": "Disciplinas",
@@ -4137,7 +4143,11 @@
       "description": "Custo de uso de IA para hoje",
       "totalToday": "Custo total hoje",
       "tokens": "Tokens Totais",
-      "vsYesterday": "vs. Ontem"
+      "vsYesterday": "vs. Ontem",
+      "videoTranscriptions": "Transcrições de Vídeo",
+      "transcriptionCost": "Custo de Transcrição",
+      "videosTranscribed": "Vídeos Transcritos",
+      "projectedTranscriptionCost": "Custo Diário Projetado"
     },
     "faq": {
       "title": "Perguntas Frequentes",

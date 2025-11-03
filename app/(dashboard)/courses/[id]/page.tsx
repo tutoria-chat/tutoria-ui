@@ -479,12 +479,14 @@ export default function CourseDetailsPage() {
                     placeholder={t('modulesTab.search')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    autoComplete="off"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   />
                 </div>
                 <select
                   value={semesterFilter}
                   onChange={(e) => setSemesterFilter(e.target.value)}
+                  autoComplete="off"
                   className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="all">{t('modulesTab.allSemesters')}</option>
@@ -495,6 +497,7 @@ export default function CourseDetailsPage() {
                 <select
                   value={yearFilter}
                   onChange={(e) => setYearFilter(e.target.value)}
+                  autoComplete="off"
                   className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <option value="all">{t('modulesTab.allYears')}</option>

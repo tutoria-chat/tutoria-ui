@@ -25,7 +25,8 @@ import {
   FileText,
   GitCompare,
   Check,
-  ChevronsUpDown
+  ChevronsUpDown,
+  Video
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -112,7 +113,16 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedUniversityId, setSelectedUniversityId] = useState<number | undefined>(undefined);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
+    // Default to last 7 days
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+    return {
+      from: sevenDaysAgo,
+      to: today
+    };
+  });
 
   const [summary, setSummary] = useState<DashboardSummaryDto | null>(null);
   const [todayUsage, setTodayUsage] = useState<UsageStatsDto | null>(null);
@@ -189,10 +199,10 @@ export default function AnalyticsPage() {
       };
 
       // Determine period based on date range - backend needs this for some endpoints
-      let period = 'month'; // default
+      let period: 'day' | 'week' | 'month' | 'year' | 'all' = 'month'; // default
       if (dateRange?.from && dateRange?.to) {
         const daysDiff = Math.floor((dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 60 * 60 * 24));
-        if (daysDiff === 0) period = 'today';
+        if (daysDiff === 0) period = 'day';
         else if (daysDiff <= 7) period = 'week';
         else if (daysDiff <= 31) period = 'month';
         else if (daysDiff <= 365) period = 'year';
@@ -278,6 +288,38 @@ export default function AnalyticsPage() {
       topStudents: topStudents?.topStudents || [],
       period: dateRange ? 'custom' : 'month',
       dateRange: dateRange?.from && dateRange?.to ? { start: dateRange.from, end: dateRange.to } : undefined,
+      translations: {
+        title: t('export.title'),
+        period: t('export.period'),
+        dateRange: t('export.dateRange'),
+        generated: t('export.generated'),
+        university: t('export.university'),
+        overviewTitle: t('export.overviewTitle'),
+        metric: t('export.metric'),
+        value: t('export.value'),
+        totalMessages: t('export.totalMessages'),
+        uniqueStudents: t('export.uniqueStudents'),
+        activeModules: t('export.activeModules'),
+        activeCourses: t('export.activeCourses'),
+        estimatedCost: t('export.estimatedCost'),
+        todayUsageTitle: t('export.todayUsageTitle'),
+        messages: t('export.messages'),
+        students: t('export.students'),
+        conversations: t('export.conversations'),
+        avgResponseTime: t('export.avgResponseTime'),
+        todayCostTitle: t('export.todayCostTitle'),
+        totalCost: t('export.totalCost'),
+        totalTokens: t('export.totalTokens'),
+        frequentQuestionsTitle: t('export.frequentQuestionsTitle'),
+        question: t('export.question'),
+        count: t('export.count'),
+        percentage: t('export.percentage'),
+        topStudentsTitle: t('export.topStudentsTitle'),
+        studentName: t('export.studentName'),
+        email: t('export.email'),
+        tokens: t('export.tokens'),
+        cost: t('export.cost'),
+      }
     });
     toast.success(t('exportSuccess', { format: 'CSV' }));
   };
@@ -291,6 +333,38 @@ export default function AnalyticsPage() {
       topStudents: topStudents?.topStudents || [],
       period: dateRange ? 'custom' : 'month',
       dateRange: dateRange?.from && dateRange?.to ? { start: dateRange.from, end: dateRange.to } : undefined,
+      translations: {
+        title: t('export.title'),
+        period: t('export.period'),
+        dateRange: t('export.dateRange'),
+        generated: t('export.generated'),
+        university: t('export.university'),
+        overviewTitle: t('export.overviewTitle'),
+        metric: t('export.metric'),
+        value: t('export.value'),
+        totalMessages: t('export.totalMessages'),
+        uniqueStudents: t('export.uniqueStudents'),
+        activeModules: t('export.activeModules'),
+        activeCourses: t('export.activeCourses'),
+        estimatedCost: t('export.estimatedCost'),
+        todayUsageTitle: t('export.todayUsageTitle'),
+        messages: t('export.messages'),
+        students: t('export.students'),
+        conversations: t('export.conversations'),
+        avgResponseTime: t('export.avgResponseTime'),
+        todayCostTitle: t('export.todayCostTitle'),
+        totalCost: t('export.totalCost'),
+        totalTokens: t('export.totalTokens'),
+        frequentQuestionsTitle: t('export.frequentQuestionsTitle'),
+        question: t('export.question'),
+        count: t('export.count'),
+        percentage: t('export.percentage'),
+        topStudentsTitle: t('export.topStudentsTitle'),
+        studentName: t('export.studentName'),
+        email: t('export.email'),
+        tokens: t('export.tokens'),
+        cost: t('export.cost'),
+      }
     });
     toast.success(t('exportSuccess', { format: 'PDF' }));
   };
@@ -808,6 +882,33 @@ export default function AnalyticsPage() {
                 </Badge>
               </div>
             </div>
+
+            {/* Transcription Costs Section */}
+            {(todayCost?.transcriptionCostUSD ?? 0) > 0 && (
+              <>
+                <Separator />
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Video className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{t('todayCost.videoTranscriptions')}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">{t('todayCost.transcriptionCost')}</span>
+                      <span className="text-sm font-medium">${(todayCost?.transcriptionCostUSD ?? 0).toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">{t('todayCost.videosTranscribed')}</span>
+                      <span className="text-sm font-medium">{todayCost?.transcriptionVideoCount ?? 0}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">{t('todayCost.projectedTranscriptionCost')}</span>
+                      <span className="text-sm font-medium">${(todayCost?.projectedDailyTranscriptionCost ?? 0).toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

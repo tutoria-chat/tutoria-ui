@@ -40,13 +40,14 @@ export default function EditUniversityPage() {
 
   // Separate address fields
   const [addressFields, setAddressFields] = useState({
-    cep: '',
+    postalCode: '',
     street: '',
     streetNumber: '',
     complement: '',
     neighborhood: '',
     city: '',
     state: '',
+    country: 'Brazil',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -70,6 +71,17 @@ export default function EditUniversityPage() {
         contactPerson: data.contactPerson || '',
         website: data.website || '',
         subscriptionTier: data.subscriptionTier || 3,
+      });
+      // Populate address fields
+      setAddressFields({
+        postalCode: data.postalCode ? formatCEP(data.postalCode) : '',
+        street: data.street || '',
+        streetNumber: data.streetNumber || '',
+        complement: data.complement || '',
+        neighborhood: data.neighborhood || '',
+        city: data.city || '',
+        state: data.state || '',
+        country: data.country || 'Brazil',
       });
     } catch (error) {
       console.error('Failed to load university:', error);
@@ -102,9 +114,9 @@ export default function EditUniversityPage() {
 
   const handleCEPChange = async (value: string) => {
     const formatted = formatCEP(value);
-    handleAddressFieldChange('cep', formatted);
+    handleAddressFieldChange('postalCode', formatted);
 
-    // Only fetch when we have exactly 8 digits
+    // Only fetch when we have exactly 8 digits (Brazilian CEP)
     const cleanCEP = formatted.replace(/\D/g, '');
     if (cleanCEP.length === 8) {
       setIsFetchingCEP(true);
@@ -151,24 +163,19 @@ export default function EditUniversityPage() {
       return;
     }
 
-    // Concatenate address fields into single address string
-    const addressParts = [
-      addressFields.street,
-      addressFields.streetNumber,
-      addressFields.complement,
-      addressFields.neighborhood,
-      addressFields.city,
-      addressFields.state,
-      addressFields.cep,
-    ].filter(Boolean); // Remove empty values
-
-    const fullAddress = addressParts.join(', ');
-
     setIsLoading(true);
     try {
       await apiClient.updateUniversity(universityId, {
         ...formData,
-        address: fullAddress || formData.address,
+        // Send individual address fields
+        postalCode: addressFields.postalCode || null,
+        street: addressFields.street || null,
+        streetNumber: addressFields.streetNumber || null,
+        complement: addressFields.complement || null,
+        neighborhood: addressFields.neighborhood || null,
+        city: addressFields.city || null,
+        state: addressFields.state || null,
+        country: addressFields.country || null,
       });
       router.push(`/universities/${universityId}`);
     } catch (error) {
@@ -328,19 +335,19 @@ export default function EditUniversityPage() {
                 <h3 className="text-lg font-medium mb-4">{t('contactInfo')}</h3>
 
                 <div className="space-y-4">
-                  {/* CEP Lookup */}
+                  {/* Postal Code / CEP Lookup */}
                   <div>
-                    <label htmlFor="cep" className="block text-sm font-medium mb-1">
+                    <label htmlFor="postalCode" className="block text-sm font-medium mb-1">
                       {t('cepLabel')}
                     </label>
                     <div className="relative">
                       <Input
-                        id="cep"
+                        id="postalCode"
                         type="text"
-                        value={addressFields.cep}
+                        value={addressFields.postalCode}
                         onChange={(e) => handleCEPChange(e.target.value)}
                         placeholder={t('cepPlaceholder')}
-                        maxLength={9}
+                        maxLength={20}
                       />
                       {isFetchingCEP && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">

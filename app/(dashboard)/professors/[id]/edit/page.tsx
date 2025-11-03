@@ -68,8 +68,12 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
-      // Set assigned course IDs from professor data (extract from assignedCourses)
-      if (data.assignedCourses && data.assignedCourses.length > 0) {
+      // Set assigned course IDs from professor data
+      if (data.assignedCourseIds && data.assignedCourseIds.length > 0) {
+        setAssignedCourseIds(data.assignedCourseIds);
+        setOriginalAssignedCourseIds(data.assignedCourseIds);
+      } else if (data.assignedCourses && data.assignedCourses.length > 0) {
+        // Fallback to extracting from assignedCourses (for backward compatibility)
         const courseIds = data.assignedCourses.map(course => course.id);
         setAssignedCourseIds(courseIds);
         setOriginalAssignedCourseIds(courseIds);

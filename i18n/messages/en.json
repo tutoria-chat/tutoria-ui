@@ -403,6 +403,11 @@
       "videoName": "Video Name",
       "optional": "optional",
       "videoNamePlaceholder": "e.g., Lecture 1: Introduction",
+      "videoLanguage": "Video Language",
+      "languagePortuguese": "Portuguese (Brazil)",
+      "languageEnglish": "English",
+      "languageSpanish": "Spanish",
+      "languageHint": "Select the language spoken in the video for accurate transcription",
       "processing": "Processing...",
       "addVideoButton": "Add Video",
       "youtubeUrlRequired": "YouTube URL is required",
@@ -599,6 +604,7 @@
     "detail": {
       "breadcrumb": "Universities",
       "edit": "Edit",
+      "myAIAgent": "My AI Agent",
       "notFound": "University not found",
       "stats": {
         "courses": "Courses",
@@ -3108,7 +3114,11 @@
       "description": "AI usage cost for today",
       "totalToday": "Total cost today",
       "tokens": "Total Tokens",
-      "vsYesterday": "vs. Yesterday"
+      "vsYesterday": "vs. Yesterday",
+      "videoTranscriptions": "Video Transcriptions",
+      "transcriptionCost": "Transcription Cost",
+      "videosTranscribed": "Videos Transcribed",
+      "projectedTranscriptionCost": "Projected Daily Cost"
     },
     "faq": {
       "title": "Frequently Asked Questions",

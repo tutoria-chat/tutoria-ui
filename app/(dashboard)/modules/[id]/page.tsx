@@ -85,6 +85,7 @@ export default function ModuleDetailsPage() {
   // YouTube video upload state
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [youtubeVideoName, setYoutubeVideoName] = useState('');
+  const [youtubeLanguage, setYoutubeLanguage] = useState<string>('pt-br'); // Default to Portuguese, user-selectable
   const [isAddingYoutubeVideo, setIsAddingYoutubeVideo] = useState(false);
   const [youtubeError, setYoutubeError] = useState<string | null>(null);
 
@@ -208,13 +209,14 @@ export default function ModuleDetailsPage() {
       const result = await apiClient.addYoutubeVideo({
         youtubeUrl: youtubeUrl.trim(),
         moduleId,
-        language: module?.tutorLanguage || 'pt-br',
+        language: youtubeLanguage, // Use user-selected language
         name: youtubeVideoName.trim() || undefined
       });
 
       // Reset form and close modal
       setYoutubeUrl('');
       setYoutubeVideoName('');
+      setYoutubeLanguage('pt-br'); // Reset to default language
       setYoutubeUploadModalOpen(false);
 
       if (result.status === 'already_exists') {
@@ -1019,6 +1021,27 @@ export default function ModuleDetailsPage() {
                 disabled={isAddingYoutubeVideo}
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="youtubeLanguage" className="text-sm font-medium">
+                {t('videoLanguage') || 'Video Language'}
+              </label>
+              <select
+                id="youtubeLanguage"
+                value={youtubeLanguage}
+                onChange={(e) => setYoutubeLanguage(e.target.value)}
+                disabled={isAddingYoutubeVideo}
+                autoComplete="off"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="pt-br">{t('languagePortuguese') || 'Portuguese (Brazil)'}</option>
+                <option value="en">{t('languageEnglish') || 'English'}</option>
+                <option value="es">{t('languageSpanish') || 'Spanish'}</option>
+              </select>
+              <p className="text-xs text-muted-foreground">
+                {t('languageHint') || 'Select the language spoken in the video for accurate transcription'}
+              </p>
             </div>
 
             {youtubeError && (
