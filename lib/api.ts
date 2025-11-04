@@ -61,7 +61,8 @@ import type {
   ConversationMetricsDto,
   ModuleComparisonResponseDto,
   FrequentlyAskedQuestionsResponseDto,
-  DashboardSummaryDto
+  DashboardSummaryDto,
+  UnifiedDashboardResponseDto
 } from './types';
 
 export const API_CONFIG = {

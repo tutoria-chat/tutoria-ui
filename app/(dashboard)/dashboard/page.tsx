@@ -98,7 +98,7 @@ export default function DashboardPage() {
               costPercentChange: summaryData.growth.costGrowth,
               studentsPercentChange: summaryData.growth.studentGrowth,
             },
-            dailyStats: trendsData?.trends.map(trend => ({
+            dailyStats: trendsData?.trends.map((trend: any) => ({
               date: trend.date,
               totalMessages: trend.messageCount,
               uniqueStudents: trend.uniqueStudents,
@@ -108,9 +108,9 @@ export default function DashboardPage() {
         } else {
           setSummary(null);
         }
-        setTrends(trendsData);
-        setTodayUsage(todayUsageData);
-        setTodayCost(todayCostData);
+        setTrends(trendsData ?? null);
+        setTodayUsage(todayUsageData ?? null);
+        setTodayCost(todayCostData ?? null);
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {
