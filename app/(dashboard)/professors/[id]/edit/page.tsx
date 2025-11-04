@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/components/auth/auth-provider';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { validatePasswordStrength } from '@/lib/utils';
+import { MultiSelect } from '@/components/ui/multi-select';
 
 export default function EditProfessorPage() {
   const router = useRouter();
@@ -67,8 +68,12 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
-      // Set assigned course IDs from professor data (extract from assignedCourses)
-      if (data.assignedCourses && data.assignedCourses.length > 0) {
+      // Set assigned course IDs from professor data
+      if (data.assignedCourseIds && data.assignedCourseIds.length > 0) {
+        setAssignedCourseIds(data.assignedCourseIds);
+        setOriginalAssignedCourseIds(data.assignedCourseIds);
+      } else if (data.assignedCourses && data.assignedCourses.length > 0) {
+        // Fallback to extracting from assignedCourses (for backward compatibility)
         const courseIds = data.assignedCourses.map(course => course.id);
         setAssignedCourseIds(courseIds);
         setOriginalAssignedCourseIds(courseIds);
@@ -361,27 +366,30 @@ export default function EditProfessorPage() {
                   {t('noCoursesAvailable')}
                 </p>
               ) : (
-                <div className="border rounded-md p-4 space-y-2 max-h-64 overflow-y-auto">
-                  {courses.map((course) => (
-                    <div key={course.id} className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id={`course-${course.id}`}
-                        checked={assignedCourseIds.includes(course.id)}
-                        onChange={() => toggleCourse(course.id)}
-                        className="h-4 w-4 rounded border-gray-300"
-                        disabled={isLoading}
-                      />
-                      <Label
-                        htmlFor={`course-${course.id}`}
-                        className="text-sm font-normal cursor-pointer"
-                      >
-                        {course.name}
-                        {course.code && <span className="text-muted-foreground ml-2">({course.code})</span>}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
+                <MultiSelect
+                  options={courses.map((course) => ({
+                    value: String(course.id),
+                    label: course.code ? `${course.name} (${course.code})` : course.name,
+                  }))}
+                  selected={assignedCourseIds.map(String)}
+                  onChange={(selected) => {
+                    const courseIds = selected.map(Number);
+                    courseIds.forEach((courseId) => {
+                      if (!assignedCourseIds.includes(courseId)) {
+                        toggleCourse(courseId);
+                      }
+                    });
+                    assignedCourseIds.forEach((courseId) => {
+                      if (!courseIds.includes(courseId)) {
+                        toggleCourse(courseId);
+                      }
+                    });
+                  }}
+                  placeholder={t('selectCourses') || 'Select courses...'}
+                  searchPlaceholder={t('searchCourses') || 'Search courses...'}
+                  emptyMessage={t('noCoursesFound') || 'No courses found.'}
+                  disabled={isLoading}
+                />
               )}
             </CardContent>
           </Card>

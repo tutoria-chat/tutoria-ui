@@ -12,6 +12,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { Loading } from '@/components/ui/loading-spinner';
 import { apiClient } from '@/lib/api';
+import { formatCNPJ, formatBrazilianPhone, formatCEP, fetchViaCEP } from '@/lib/utils';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import type { University, UniversityUpdate, BreadcrumbItem } from '@/lib/types';
 
@@ -36,9 +37,23 @@ export default function EditUniversityPage() {
     website: '',
     subscriptionTier: 3,
   });
+
+  // Separate address fields
+  const [addressFields, setAddressFields] = useState({
+    postalCode: '',
+    street: '',
+    streetNumber: '',
+    complement: '',
+    neighborhood: '',
+    city: '',
+    state: '',
+    country: 'Brazil',
+  });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isFetchingCEP, setIsFetchingCEP] = useState(false);
 
   const loadUniversity = useCallback(async () => {
     setIsLoadingData(true);
@@ -50,12 +65,23 @@ export default function EditUniversityPage() {
         code: data.code,
         description: data.description || '',
         address: data.address || '',
-        taxId: data.taxId || '',
+        taxId: data.taxId ? formatCNPJ(data.taxId) : '',
         contactEmail: data.contactEmail || '',
-        contactPhone: data.contactPhone || '',
+        contactPhone: data.contactPhone ? formatBrazilianPhone(data.contactPhone) : '',
         contactPerson: data.contactPerson || '',
         website: data.website || '',
         subscriptionTier: data.subscriptionTier || 3,
+      });
+      // Populate address fields
+      setAddressFields({
+        postalCode: data.postalCode ? formatCEP(data.postalCode) : '',
+        street: data.street || '',
+        streetNumber: data.streetNumber || '',
+        complement: data.complement || '',
+        neighborhood: data.neighborhood || '',
+        city: data.city || '',
+        state: data.state || '',
+        country: data.country || 'Brazil',
       });
     } catch (error) {
       console.error('Failed to load university:', error);
@@ -79,6 +105,39 @@ export default function EditUniversityPage() {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleAddressFieldChange = (field: keyof typeof addressFields, value: string) => {
+    setAddressFields(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCEPChange = async (value: string) => {
+    const formatted = formatCEP(value);
+    handleAddressFieldChange('postalCode', formatted);
+
+    // Only fetch when we have exactly 8 digits (Brazilian CEP)
+    const cleanCEP = formatted.replace(/\D/g, '');
+    if (cleanCEP.length === 8) {
+      setIsFetchingCEP(true);
+      try {
+        const data = await fetchViaCEP(cleanCEP);
+        if (data) {
+          // Auto-populate fields from ViaCEP, but keep them editable
+          setAddressFields(prev => ({
+            ...prev,
+            street: data.logradouro || prev.street,
+            neighborhood: data.bairro || prev.neighborhood,
+            city: data.localidade || prev.city,
+            state: data.uf || prev.state,
+            complement: data.complemento || prev.complement,
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to fetch CEP:', error);
+      } finally {
+        setIsFetchingCEP(false);
+      }
     }
   };
 
@@ -106,7 +165,18 @@ export default function EditUniversityPage() {
 
     setIsLoading(true);
     try {
-      await apiClient.updateUniversity(universityId, formData);
+      await apiClient.updateUniversity(universityId, {
+        ...formData,
+        // Send individual address fields
+        postalCode: addressFields.postalCode || null,
+        street: addressFields.street || null,
+        streetNumber: addressFields.streetNumber || null,
+        complement: addressFields.complement || null,
+        neighborhood: addressFields.neighborhood || null,
+        city: addressFields.city || null,
+        state: addressFields.state || null,
+        country: addressFields.country || null,
+      });
       router.push(`/universities/${universityId}`);
     } catch (error) {
       console.error('Failed to update university:', error);
@@ -265,18 +335,117 @@ export default function EditUniversityPage() {
                 <h3 className="text-lg font-medium mb-4">{t('contactInfo')}</h3>
 
                 <div className="space-y-4">
+                  {/* Postal Code / CEP Lookup */}
                   <div>
-                    <label htmlFor="address" className="block text-sm font-medium mb-1">
-                      {t('addressLabel')}
+                    <label htmlFor="postalCode" className="block text-sm font-medium mb-1">
+                      {t('cepLabel')}
+                    </label>
+                    <div className="relative">
+                      <Input
+                        id="postalCode"
+                        type="text"
+                        value={addressFields.postalCode}
+                        onChange={(e) => handleCEPChange(e.target.value)}
+                        placeholder={t('cepPlaceholder')}
+                        maxLength={20}
+                      />
+                      {isFetchingCEP && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {t('cepHelpText')}
+                    </p>
+                  </div>
+
+                  {/* Street and Number */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <label htmlFor="street" className="block text-sm font-medium mb-1">
+                        {t('streetLabel')}
+                      </label>
+                      <Input
+                        id="street"
+                        type="text"
+                        value={addressFields.street}
+                        onChange={(e) => handleAddressFieldChange('street', e.target.value)}
+                        placeholder={t('streetPlaceholder')}
+                        maxLength={200}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="streetNumber" className="block text-sm font-medium mb-1">
+                        {t('streetNumberLabel')}
+                      </label>
+                      <Input
+                        id="streetNumber"
+                        type="text"
+                        value={addressFields.streetNumber}
+                        onChange={(e) => handleAddressFieldChange('streetNumber', e.target.value)}
+                        placeholder={t('streetNumberPlaceholder')}
+                        maxLength={20}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Complement */}
+                  <div>
+                    <label htmlFor="complement" className="block text-sm font-medium mb-1">
+                      {t('complementLabel')}
                     </label>
                     <Input
-                      id="address"
+                      id="complement"
                       type="text"
-                      value={formData.address || ''}
-                      onChange={(e) => handleChange('address', e.target.value)}
-                      placeholder={t('addressPlaceholder')}
-                      maxLength={500}
+                      value={addressFields.complement}
+                      onChange={(e) => handleAddressFieldChange('complement', e.target.value)}
+                      placeholder={t('complementPlaceholder')}
+                      maxLength={100}
                     />
+                  </div>
+
+                  {/* Neighborhood, City, State */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label htmlFor="neighborhood" className="block text-sm font-medium mb-1">
+                        {t('neighborhoodLabel')}
+                      </label>
+                      <Input
+                        id="neighborhood"
+                        type="text"
+                        value={addressFields.neighborhood}
+                        onChange={(e) => handleAddressFieldChange('neighborhood', e.target.value)}
+                        placeholder={t('neighborhoodPlaceholder')}
+                        maxLength={100}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="city" className="block text-sm font-medium mb-1">
+                        {t('cityLabel')}
+                      </label>
+                      <Input
+                        id="city"
+                        type="text"
+                        value={addressFields.city}
+                        onChange={(e) => handleAddressFieldChange('city', e.target.value)}
+                        placeholder={t('cityPlaceholder')}
+                        maxLength={100}
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="state" className="block text-sm font-medium mb-1">
+                        {t('stateLabel')}
+                      </label>
+                      <Input
+                        id="state"
+                        type="text"
+                        value={addressFields.state}
+                        onChange={(e) => handleAddressFieldChange('state', e.target.value)}
+                        placeholder={t('statePlaceholder')}
+                        maxLength={2}
+                      />
+                    </div>
                   </div>
 
                   <div>
@@ -287,9 +456,9 @@ export default function EditUniversityPage() {
                       id="taxId"
                       type="text"
                       value={formData.taxId || ''}
-                      onChange={(e) => handleChange('taxId', e.target.value)}
+                      onChange={(e) => handleChange('taxId', formatCNPJ(e.target.value))}
                       placeholder={t('taxIdPlaceholder')}
-                      maxLength={20}
+                      maxLength={18}
                     />
                   </div>
 
@@ -315,9 +484,9 @@ export default function EditUniversityPage() {
                       id="contactPhone"
                       type="tel"
                       value={formData.contactPhone || ''}
-                      onChange={(e) => handleChange('contactPhone', e.target.value)}
+                      onChange={(e) => handleChange('contactPhone', formatBrazilianPhone(e.target.value))}
                       placeholder={t('contactPhonePlaceholder')}
-                      maxLength={50}
+                      maxLength={15}
                     />
                   </div>
 

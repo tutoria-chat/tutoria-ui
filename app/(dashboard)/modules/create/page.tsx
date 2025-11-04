@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
-import { ModuleForm } from '@/components/forms/module-form';
+import { ModuleFormStepped } from '@/components/forms/module-form-stepped';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import type { ModuleCreate, ModuleUpdate, BreadcrumbItem } from '@/lib/types';
@@ -34,7 +34,7 @@ export default function CreateModulePage() {
         year: data.year,
         courseId: data.courseId,
         description: data.description,
-        aiModelId: data.aiModelId,
+        courseType: data.courseType,
         tutorLanguage: data.tutorLanguage
       });
 
@@ -62,7 +62,7 @@ export default function CreateModulePage() {
         />
 
         <div className="flex justify-center">
-          <ModuleForm
+          <ModuleFormStepped
             courseId={courseId ? Number(courseId) : undefined}
             onSubmit={handleSubmit}
             onCancel={handleCancel}

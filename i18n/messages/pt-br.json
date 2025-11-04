@@ -37,7 +37,9 @@
       "createModule": "Criar Módulo",
       "viewCourses": "Ver Disciplinas",
       "viewModules": "Ver Módulos",
-      "manageTokens": "Gerenciar Tokens"
+      "manageTokens": "Gerenciar Tokens",
+      "manageAccessKeys": "Gerenciar Chaves de Acesso",
+      "myAIAgent": "Meu Agente de IA"
     }
   },
   "courses": {
@@ -201,6 +203,16 @@
     "form": {
       "create": "Criar Módulo",
       "edit": "Editar Módulo",
+      "steps": {
+        "basic": "Informações Básicas",
+        "basicDesc": "Detalhes do módulo",
+        "aiModel": "Modelo de IA",
+        "aiModelDesc": "Selecionar modelo",
+        "prompt": "Prompt do Sistema",
+        "promptDesc": "Configurar IA",
+        "settings": "Configurações",
+        "settingsDesc": "Idioma e mais"
+      },
       "nameLabel": "Nome do Módulo *",
       "namePlaceholder": "ex: Introdução a Estruturas de Dados",
       "nameRequired": "Nome do módulo é obrigatório",
@@ -262,6 +274,7 @@
       "improveSuccess": "Prompt melhorado!",
       "improveSuccessDesc": "Melhorias restantes: {count}/3 nas próximas 72h.",
       "improveError": "Erro ao melhorar prompt",
+      "courseCannotChange": "A disciplina não pode ser alterada",
       "templates": {
         "general": {
           "name": "Tutor Geral",
@@ -289,7 +302,8 @@
       "viewCourse": "Ver Disciplina",
       "prepareModule": "Preparar Módulo",
       "preparing": "Preparando...",
-      "createToken": "Criar Token",
+      "createToken": "Criar Chave de Acesso",
+      "createModuleInCourse": "Criar novo módulo na mesma disciplina",
       "editModule": "Editar Módulo",
       "moduleInfo": "Informações do Módulo",
       "description": "Descrição",
@@ -301,7 +315,7 @@
       "aiTutorNotConfigured": "Tutor IA Não Configurado",
       "stats": "Estatísticas",
       "files": "Arquivos",
-      "accessTokens": "Tokens de Acesso",
+      "accessTokens": "Chaves de Acesso",
       "uploadFile": "Enviar Arquivo",
       "uploadFileDesc": "Faça upload de materiais de estudo para este módulo",
       "uploading": "Enviando...",
@@ -312,6 +326,11 @@
       "videoName": "Nome do Vídeo",
       "optional": "opcional",
       "videoNamePlaceholder": "ex: Aula 1: Introdução",
+      "videoLanguage": "Idioma do Vídeo",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "Inglês",
+      "languageSpanish": "Espanhol",
+      "languageHint": "Selecione o idioma falado no vídeo para uma transcrição precisa",
       "processing": "Processando...",
       "addVideoButton": "Adicionar Vídeo",
       "youtubeUrlRequired": "URL do YouTube é obrigatória",
@@ -334,18 +353,18 @@
       "moduleFiles": "Arquivos do Módulo",
       "filesAvailable": "Arquivos disponíveis neste módulo",
       "noFiles": "Nenhum arquivo enviado ainda. Faça upload do primeiro arquivo acima.",
-      "moduleTokens": "Tokens de Acesso",
-      "tokensGenerated": "Tokens gerados para este módulo",
-      "noTokens": "Nenhum token gerado ainda. Clique em 'Criar Token' acima.",
-      "prepareNoTokens": "Nenhum token disponível",
-      "prepareNoTokensDesc": "Crie um token primeiro para preparar o módulo.",
-      "prepareInvalidToken": "Token inválido",
-      "prepareInvalidTokenDesc": "Crie um token ativo com permissão de chat.",
+      "moduleTokens": "Chaves de Acesso",
+      "tokensGenerated": "Chaves geradas para este módulo",
+      "noTokens": "Nenhuma chave gerada ainda. Clique em 'Criar Chave' acima.",
+      "prepareNoTokens": "Nenhuma chave disponível",
+      "prepareNoTokensDesc": "Crie uma chave primeiro para preparar o módulo.",
+      "prepareInvalidToken": "Chave inválida",
+      "prepareInvalidTokenDesc": "Crie uma chave ativa com permissão de chat.",
       "prepareSuccess": "Módulo preparado!",
       "prepareSuccessDesc": "Arquivos foram enviados para OpenAI e o assistente está pronto.",
       "prepareError": "Erro ao preparar módulo",
       "prepareErrorDesc": "Não foi possível preparar o módulo. Tente novamente.",
-      "tokenCreatedSuccess": "Token criado com sucesso!",
+      "tokenCreatedSuccess": "Chave criada com sucesso!",
       "fileUploadSuccess": "Arquivo enviado com sucesso!",
       "fileUploadSuccessDesc": "{fileName} foi adicionado ao módulo.",
       "fileUploadError": "Erro ao enviar arquivo",
@@ -361,10 +380,13 @@
       "viewError": "Erro ao carregar arquivo",
       "viewErrorDesc": "Não foi possível carregar o arquivo para visualização",
       "fileSelectError": "Selecione um arquivo para enviar",
-      "fileTooLarge": "Arquivo muito grande. Tamanho máximo: 50MB",
+      "fileTooLarge": "Arquivo muito grande. Tamanho máximo: 10MB",
       "fileTypeNotSupported": "Tipo de arquivo não suportado. Use: PDF, DOC, DOCX, TXT, PPT ou PPTX",
-      "tokenCopied": "Token copiado!",
-      "tokenCopyError": "Erro ao copiar token",
+      "tokenCopied": "Chave copiada!",
+      "tokenCopyError": "Erro ao copiar chave",
+      "widgetUrlTitle": "URL do Widget",
+      "copyUrl": "Copiar URL",
+      "testUrl": "Testar URL",
       "columns": {
         "fileName": "Arquivo",
         "type": "Tipo",
@@ -542,6 +564,7 @@
     "detail": {
       "breadcrumb": "Universidades",
       "edit": "Editar",
+      "myAIAgent": "Meu Agente IA",
       "notFound": "Universidade não encontrada",
       "stats": {
         "courses": "Disciplinas",
@@ -618,8 +641,21 @@
       "codeRequired": "Nome fantasia é obrigatório",
       "descriptionLabel": "Descrição",
       "descriptionPlaceholder": "Descrição da universidade (opcional)",
-      "addressLabel": "Endereço",
-      "addressPlaceholder": "Ex: Rua da Reitoria, 374 - Butantã, São Paulo - SP",
+      "cepLabel": "CEP",
+      "cepPlaceholder": "00000-000",
+      "cepHelpText": "Digite o CEP para preencher automaticamente o endereço",
+      "streetLabel": "Logradouro",
+      "streetPlaceholder": "Nome da rua",
+      "streetNumberLabel": "Número",
+      "streetNumberPlaceholder": "Número",
+      "complementLabel": "Complemento",
+      "complementPlaceholder": "Apartamento, Sala, etc. (opcional)",
+      "neighborhoodLabel": "Bairro",
+      "neighborhoodPlaceholder": "Bairro",
+      "cityLabel": "Cidade",
+      "cityPlaceholder": "Cidade",
+      "stateLabel": "Estado",
+      "statePlaceholder": "UF",
       "taxIdLabel": "CNPJ",
       "taxIdPlaceholder": "Ex: 00.000.000/0000-00",
       "contactEmailLabel": "E-mail de Contato",
@@ -673,6 +709,14 @@
     "deactivate": "Desativar",
     "activate": "Ativar",
     "delete": "Deletar",
+    "agentDeactivate": "Desativar Agente",
+    "agentActivate": "Ativar Agente",
+    "agentDeactivateConfirm": "Desativar Agente",
+    "agentDeactivateDescription": "Tem certeza que deseja desativar este agente? O professor não poderá usá-lo até que seja reativado.",
+    "agentDeactivateSuccess": "Agente desativado com sucesso",
+    "agentDeactivateError": "Falha ao desativar agente",
+    "agentActivateSuccess": "Agente ativado com sucesso",
+    "agentActivateError": "Falha ao ativar agente",
     "stats": {
       "totalProfessors": "Total de Professores",
       "totalDesc": "Todos os professores",
@@ -694,6 +738,10 @@
       "status": "Status",
       "active": "Ativo",
       "inactive": "Inativo",
+      "agentStatus": "Agente IA",
+      "noAgent": "Sem Agente",
+      "agentActive": "Ativo",
+      "agentInactive": "Inativo",
       "actions": "Ações"
     },
     "professorsTable": "Professores",
@@ -735,6 +783,9 @@
       "loadingCourses": "Carregando disciplinas...",
       "noCoursesAvailable": "Nenhuma disciplina disponível para esta universidade.",
       "selectUniversityFirst": "Selecione uma universidade primeiro para ver as disciplinas disponíveis.",
+      "selectCourses": "Selecionar disciplinas...",
+      "searchCourses": "Buscar disciplinas...",
+      "noCoursesFound": "Nenhuma disciplina encontrada.",
       "firstNameLabel": "Primeiro Nome *",
       "firstNamePlaceholder": "Ex: João",
       "lastNameLabel": "Sobrenome *",
@@ -853,6 +904,9 @@
       "adminDescription": "Administradores podem gerenciar disciplinas e atribuir professores",
       "assignedCourses": "Disciplinas Atribuídas",
       "assignedCoursesDescription": "Selecione quais disciplinas este professor pode acessar",
+      "selectCourses": "Selecionar disciplinas...",
+      "searchCourses": "Buscar disciplinas...",
+      "noCoursesFound": "Nenhuma disciplina encontrada.",
       "noCoursesAvailable": "Nenhuma disciplina disponível para esta universidade",
       "errorLoadingCourses": "Erro ao carregar disciplinas",
       "passwordReset": "Redefinir Senha",
@@ -880,6 +934,16 @@
       "languageEnglish": "English (Estados Unidos)",
       "languageSpanish": "Español",
       "languageHint": "A interface do professor será exibida neste idioma"
+    },
+    "agentDialog": {
+      "title": "Gerenciar Agente de IA",
+      "description": "Crie um agente de IA para {professorName} fornecer feedback sobre seus materiais didáticos.",
+      "explanation": "Isso criará um assistente de IA personalizado que o professor pode usar para obter feedback e sugestões para melhorar seus cursos.",
+      "createButton": "Criar Agente de IA",
+      "creating": "Criando...",
+      "createSuccess": "Agente do professor criado com sucesso!",
+      "createError": "Falha ao criar agente do professor",
+      "manageAgent": "Gerenciar Agente de IA"
     }
   },
   "students": {
@@ -897,16 +961,54 @@
     "tableDescription": "A interface de gerenciamento de estudantes será implementada aqui",
     "comingSoon": "Sistema de gerenciamento de estudantes em breve..."
   },
+  "professorAgent": {
+    "title": "Agente de IA do Professor",
+    "description": "Seu assistente de IA pessoal para feedback sobre materiais didáticos",
+    "noAgent": {
+      "message": "Você ainda não possui um agente de IA. Por favor, entre em contato com o administrador da sua universidade para criar um para você.",
+      "adminOnly": "Apenas administradores podem criar agentes de IA para professores."
+    },
+    "agentInfo": {
+      "title": "Informações do Agente",
+      "language": "Idioma:",
+      "languagePortuguese": "Português (Brasil)",
+      "languageEnglish": "Inglês",
+      "languageSpanish": "Espanhol",
+      "aiModel": "Modelo de IA:",
+      "defaultModel": "Padrão",
+      "status": "Status:",
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "tokens": {
+      "title": "Tokens de Acesso",
+      "description": "Gere tokens para acessar seu agente de IA através do widget",
+      "newButton": "Novo Token",
+      "createSuccess": "Token criado com sucesso!",
+      "createError": "Falha ao criar token",
+      "copySuccess": "Token copiado para a área de transferência!",
+      "copyError": "Falha ao copiar token",
+      "noTokens": "Nenhum token ainda. Crie um para acessar seu agente de IA.",
+      "clickToAccess": "Clique em um token para acessar o widget e obter feedback de IA sobre seus materiais didáticos."
+    },
+    "howToUse": {
+      "title": "Como Usar",
+      "step1": "1. Crie um token de acesso acima",
+      "step2": "2. Clique no token para abrir o widget",
+      "step3": "3. Faça perguntas sobre seus materiais didáticos e receba feedback baseado em IA",
+      "step4": "4. A IA analisará seu conteúdo e fornecerá sugestões de melhoria"
+    }
+  },
   "tokens": {
-    "title": "Gerenciamento de Tokens de Módulo",
-    "description": "Crie e gerencie tokens de acesso para widgets de tutoria IA",
-    "createButton": "Gerar Token",
-    "searchPlaceholder": "Buscar tokens, módulos ou descrições...",
-    "emptyMessage": "Nenhum token encontrado. Crie seu primeiro token para começar.",
+    "title": "Gerenciamento de Chaves de Acesso de Módulo",
+    "description": "Crie e gerencie chaves de acesso para widgets de tutoria IA",
+    "createButton": "Gerar Chave",
+    "searchPlaceholder": "Buscar chaves, módulos ou descrições...",
+    "emptyMessage": "Nenhuma chave encontrada. Crie sua primeira chave para começar.",
     "columns": {
-      "tokenName": "Nome do Token",
+      "tokenName": "Nome da Chave",
       "module": "Módulo",
-      "token": "Token",
+      "token": "Chave",
       "chat": "Chat",
       "files": "Arquivos",
       "allowed": "Permitido",
@@ -919,49 +1021,60 @@
       "status": "Status",
       "active": "Ativo",
       "inactive": "Inativo",
-      "actions": "Ações"
+      "actions": "Ações",
+      "copyWidgetUrlSuccess": "URL do widget copiada para a área de transferência!",
+      "copyError": "Falha ao copiar. Tente novamente.",
+      "actionButtons": {
+        "view": "Ver detalhes da chave",
+        "edit": "Editar chave",
+        "openWidget": "Abrir widget em nova aba",
+        "copyWidgetUrl": "Copiar URL do widget",
+        "viewWidgetUrl": "Ver URL do widget",
+        "delete": "Excluir chave"
+      }
     },
     "stats": {
-      "totalTokens": "Tokens Totais",
-      "activeTokens": "Tokens Ativos",
+      "totalTokens": "Chaves Totais",
+      "activeTokens": "Chaves Ativas",
       "securityRate": "Taxa de Segurança",
       "expiringSoon": "Expirando em Breve"
     },
-    "deleteTitle": "Deletar Token",
-    "deleteConfirm": "Tem certeza que deseja deletar este token? Esta ação não pode ser desfeita.",
-    "deleteSuccess": "Token deletado com sucesso",
-    "deleteError": "Erro ao deletar token. Tente novamente.",
-    "copySuccess": "Token copiado para a área de transferência!",
+    "deleteTitle": "Deletar Chave",
+    "deleteConfirm": "Tem certeza que deseja deletar esta chave? Esta ação não pode ser desfeita.",
+    "deleteSuccess": "Chave deletada com sucesso",
+    "deleteError": "Erro ao deletar chave. Tente novamente.",
+    "copySuccess": "Chave copiada para a área de transferência!",
     "copyWidgetUrlSuccess": "URL do widget copiada para a área de transferência!",
-    "copyError": "Falha ao copiar o token. Tente novamente.",
+    "copyError": "Falha ao copiar a chave. Tente novamente.",
     "actions": {
-      "view": "Ver detalhes do token",
-      "edit": "Editar token",
+      "view": "Ver detalhes da chave",
+      "edit": "Editar chave",
       "openWidget": "Abrir widget em nova aba",
       "copyWidgetUrl": "Copiar URL do widget",
-      "delete": "Deletar token"
+      "viewWidgetUrl": "Ver URL do widget",
+      "delete": "Deletar chave"
     },
     "modal": {
-      "createTitle": "Criar Token de Módulo",
-      "editTitle": "Editar Token de Módulo",
-      "viewTitle": "Detalhes do Token",
-      "createDescription": "Gere um novo token de acesso para widgets de tutoria IA",
-      "editDescription": "Atualize as configurações do token de acesso",
-      "viewDescription": "Visualize as informações e ações disponíveis para este token",
+      "createTitle": "Criar Chave de Acesso de Módulo",
+      "editTitle": "Editar Chave de Acesso de Módulo",
+      "viewTitle": "Detalhes da Chave",
+      "createDescription": "Gere uma nova chave de acesso para widgets de tutoria IA",
+      "editDescription": "Atualize as configurações da chave de acesso",
+      "viewDescription": "Visualize as informações e ações disponíveis para esta chave",
       "moduleLabel": "Módulo *",
       "selectModule": "Selecione um módulo",
       "loadingModules": "Carregando módulos...",
       "searchModule": "Buscar módulo...",
       "noModules": "Nenhum módulo encontrado.",
       "moduleRequired": "Selecione um módulo",
-      "nameLabel": "Nome do Token *",
+      "nameLabel": "Nome da Chave *",
       "namePlaceholder": "Ex: Widget Moodle 2024",
-      "nameRequired": "Nome do token é obrigatório",
+      "nameRequired": "Nome da chave é obrigatório",
       "descriptionLabel": "Descrição (opcional)",
-      "descriptionPlaceholder": "Descrição do uso deste token...",
+      "descriptionPlaceholder": "Descrição do uso desta chave...",
       "expiresLabel": "Expira em (dias - opcional)",
       "expiresPlaceholder": "Ex: 365",
-      "expiresHint": "Deixe vazio para um token sem expiração",
+      "expiresHint": "Deixe vazio para uma chave sem expiração",
       "permissions": "Permissões",
       "allowChat": "Permitir Chat",
       "allowChatDesc": "Permite que usuários façam perguntas ao tutor IA",
@@ -969,11 +1082,11 @@
       "allowFileAccessDesc": "Permite que usuários baixem arquivos do módulo",
       "close": "Fechar",
       "cancel": "Cancelar",
-      "createToken": "Criar Token",
+      "createToken": "Criar Chave",
       "saveChanges": "Salvar Alterações",
-      "copyToken": "Copiar Token",
-      "revokeToken": "Revogar Token",
-      "tokenLabel": "Token",
+      "copyToken": "Copiar Chave",
+      "revokeToken": "Revogar Chave",
+      "tokenLabel": "Chave",
       "name": "Nome",
       "status": "Status",
       "description": "Descrição",
@@ -986,14 +1099,14 @@
       "requests": "{count} requisições",
       "chatPermission": "Permissão de Chat",
       "filePermission": "Acesso a Arquivos",
-      "revokeTitle": "Revogar Token",
-      "revokeConfirm": "Tem certeza que deseja revogar este token? Esta ação não pode ser desfeita.",
-      "revokeSuccess": "Token revogado com sucesso",
-      "revokeError": "Erro ao revogar token. Tente novamente.",
-      "createError": "Erro ao criar token. Tente novamente.",
-      "updateError": "Erro ao atualizar token. Tente novamente.",
-      "copySuccessShort": "Token copiado!",
-      "copyErrorShort": "Erro ao copiar token",
+      "revokeTitle": "Revogar Chave",
+      "revokeConfirm": "Tem certeza que deseja revogar esta chave? Esta ação não pode ser desfeita.",
+      "revokeSuccess": "Chave revogada com sucesso",
+      "revokeError": "Erro ao revogar chave. Tente novamente.",
+      "createError": "Erro ao criar chave. Tente novamente.",
+      "updateError": "Erro ao atualizar chave. Tente novamente.",
+      "copySuccessShort": "Chave copiada!",
+      "copyErrorShort": "Erro ao copiar chave",
       "active": "Ativo",
       "inactive": "Inativo",
       "allowed": "Permitido",
@@ -1204,9 +1317,10 @@
     "tutorials": "Tutoriais e Guias",
     "universities": "Universidades",
     "myUniversity": "Minha Universidade",
-    "moduleTokens": "Tokens de Módulos",
+    "moduleTokens": "Chaves de Acesso",
     "professors": "Professores",
     "administration": "Administração",
+    "analytics": "Analíticas",
     "systemOverview": "Visão Geral do Sistema",
     "superAdmins": "Super Administradores",
     "globalSearch": "Busca Global",
@@ -1309,6 +1423,15 @@
     "languageChangeInfo": "A página será recarregada para aplicar o novo idioma",
     "saveError": "Erro ao salvar configurações"
   },
+  "dateRangePicker": {
+    "placeholder": "Escolha um intervalo de datas",
+    "presets": "Predefinições",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "last7Days": "Últimos 7 dias",
+    "last30Days": "Últimos 30 dias",
+    "last365Days": "Últimos 365 dias"
+  },
   "common": {
     "buttons": {
       "save": "Salvar",
@@ -1318,13 +1441,25 @@
       "view": "Visualizar",
       "create": "Criar",
       "back": "Voltar",
+      "previous": "Anterior",
+      "next": "Próximo",
       "loading": "Carregando...",
       "search": "Buscar",
-      "filter": "Filtrar"
+      "filter": "Filtrar",
+      "close": "Fechar"
     },
     "pagination": {
       "rowsPerPage": "Linhas por página:",
       "showing": "Mostrando {from} até {to} de {total} registros"
+    },
+    "errorBoundary": {
+      "title": "Algo deu errado",
+      "description": "Ocorreu um erro inesperado. Por favor, tente novamente ou volte para o painel.",
+      "tryAgain": "Tentar Novamente",
+      "goHome": "Ir para o Painel",
+      "sectionTitle": "Erro ao carregar seção",
+      "sectionDescription": "Ocorreu um erro ao carregar esta seção.",
+      "reloadPage": "Recarregar Página"
     },
     "breadcrumbs": {
       "courses": "Disciplinas",
@@ -1340,6 +1475,9 @@
     "noData": "Nenhum dado disponível",
     "error": "Erro",
     "success": "Sucesso",
+    "cancel": "Cancelar",
+    "previous": "Anterior",
+    "next": "Próximo",
     "passwordSetup": {
       "title": "Configurando Sua Senha",
       "description": "Quando você receber um link de configuração de senha:",
@@ -2008,18 +2146,18 @@
         }
       },
       "moduleTokens": {
-        "title": "Module Tokens Overview",
-        "description": "Module tokens provide access to AI tutoring widgets. Super admins can view tokens across all universities.",
+        "title": "Visão Geral das Chaves de Acesso de Módulo",
+        "description": "As chaves de acesso de módulo fornecem acesso aos widgets de tutoria IA. Super administradores podem ver chaves de todas as universidades.",
         "viewing": {
-          "title": "Visualizando Tokens de Módulo",
+          "title": "Visualizando Chaves de Acesso de Módulo",
           "steps": [
-            "Navigate to Module Tokens (/tokens) from the sidebar",
-            "View all tokens across the system",
-            "Filter tokens by university using the URL parameter",
-            "See token permissions, expiration dates, and usage statistics"
+            "Navegue até Chaves de Acesso de Módulo (/tokens) na barra lateral",
+            "Visualize todas as chaves do sistema",
+            "Filtre chaves por universidade usando o parâmetro de URL",
+            "Veja permissões, datas de expiração e estatísticas de uso das chaves"
           ]
         },
-        "note": "Note: Module token creation and management is typically done by professors. As a super admin, you have read access to monitor token usage across the system."
+        "note": "Nota: A criação e gerenciamento de chaves de acesso de módulo é normalmente feito por professores. Como super administrador, você tem acesso de leitura para monitorar o uso de chaves no sistema."
       },
       "bestPractices": {
         "title": "Melhores Práticas",
@@ -2298,7 +2436,7 @@
             ],
             "tip": "DICA: Se você tem slides em PowerPoint, a melhor opção é EXPORTAR COMO PDF antes de fazer upload! PDF é mais confiável. No PowerPoint: Arquivo > Salvar Como > escolha 'PDF' no tipo de arquivo."
           },
-          "maxSize": "TAMANHO MÁXIMO: Cada arquivo pode ter até 50MB (cinquenta megabytes). Isso é BASTANTE - dá para colocar apostilas gigantes, livros completos! Se seu arquivo passar de 50MB, você precisa dividir em partes menores ou comprimi-lo.",
+          "maxSize": "TAMANHO MÁXIMO: Cada arquivo pode ter até 10MB (cinquenta megabytes). Isso é BASTANTE - dá para colocar apostilas gigantes, livros completos! Se seu arquivo passar de 10MB, você precisa dividir em partes menores ou comprimi-lo.",
           "howTo": {
             "title": "Como Fazer Upload - Passo a Passo COMPLETO",
             "step1": {
@@ -2309,7 +2447,7 @@
             "step2": {
               "title": "Passo 2: Role a Página Para Baixo Até 'Arquivos do Módulo'",
               "desc": "Na página do módulo, role a página para BAIXO (use a rodinha do mouse ou arraste a barra de rolagem no lado direito). Você vai passar pelas informações do módulo (nome, código, descrição) e vai chegar numa seção com o título 'Arquivos do Módulo' ou 'Module Files'. Esta seção mostra todos os arquivos que já foram enviados (se for a primeira vez, estará vazio).",
-              "whatYouShouldSee": "Você verá: Um título 'Arquivos do Módulo', Uma ÁREA RETANGULAR com borda tracejada (---) e um ícone de nuvem ☁️ ou seta para cima ⬆️, Um texto explicativo dizendo algo como 'Clique para selecionar ou arraste o arquivo aqui', Abaixo: 'Formatos suportados: PDF, DOC, DOCX...', 'Tamanho máximo: 50MB'."
+              "whatYouShouldSee": "Você verá: Um título 'Arquivos do Módulo', Uma ÁREA RETANGULAR com borda tracejada (---) e um ícone de nuvem ☁️ ou seta para cima ⬆️, Um texto explicativo dizendo algo como 'Clique para selecionar ou arraste o arquivo aqui', Abaixo: 'Formatos suportados: PDF, DOC, DOCX...', 'Tamanho máximo: 10MB'."
             },
             "step3": {
               "title": "Passo 3: Escolha Como Fazer Upload - Duas Formas!",
@@ -2327,13 +2465,13 @@
             },
             "step5": {
               "title": "Passo 5: AGUARDE o Upload Acontecer",
-              "whatYouShouldSee": "Depois de selecionar o arquivo (seja clicando ou arrastando): 1) Aparece uma BARRINHA DE PROGRESSO (barra azul ou verde que vai enchendo da esquerda para direita) mostrando o quanto já foi enviado, 2) Pode ter uma PORCENTAGEM tipo '45%', '67%', '89%'..., 3) Pode ter um texto 'Enviando...' ou 'Uploading...', 4) O tempo depende do TAMANHO do arquivo e da sua INTERNET: Arquivo pequeno (1-5MB) = 5 a 15 segundos, Arquivo médio (5-20MB) = 15 a 60 segundos, Arquivo grande (20-50MB) = 1 a 3 minutos.",
+              "whatYouShouldSee": "Depois de selecionar o arquivo (seja clicando ou arrastando): 1) Aparece uma BARRINHA DE PROGRESSO (barra azul ou verde que vai enchendo da esquerda para direita) mostrando o quanto já foi enviado, 2) Pode ter uma PORCENTAGEM tipo '45%', '67%', '89%'..., 3) Pode ter um texto 'Enviando...' ou 'Uploading...', 4) O tempo depende do TAMANHO do arquivo e da sua INTERNET: Arquivo pequeno (1-5MB) = 5 a 15 segundos, Arquivo médio (5-20MB) = 15 a 60 segundos, Arquivo grande (20-10MB) = 1 a 3 minutos.",
               "important": "MUITO IMPORTANTE: NÃO FECHE A PÁGINA enquanto o upload está acontecendo! NÃO clique em nada! NÃO navegue para outra página! Apenas AGUARDE pacientemente até terminar. Se você fechar ou sair, o upload é CANCELADO e você tem que fazer tudo de novo!"
             },
             "step6": {
               "title": "Passo 6: Upload Concluído - Sucesso!",
               "whatYouShouldSee": "Quando o upload termina: 1) A barra de progresso desaparece, 2) Aparece uma MENSAGEM VERDE no canto superior direito dizendo 'Arquivo enviado com sucesso!' ou 'File uploaded successfully!' ou similar, 3) O arquivo APARECE na TABELA abaixo da área de upload. Você verá: Nome do arquivo, Tamanho (ex: '2.3 MB', '15.7 MB'), Data/hora que foi enviado, Botões de AÇÕES (olhinho 👁️ para visualizar, lixeira 🗑️ para deletar).",
-              "tip": "DICA: Assim que terminar o upload e ver a mensagem verde, você pode fazer upload de MAIS arquivos! Basta repetir o processo. Pode enviar quantos arquivos quiser (dentro do limite de 50MB cada)."
+              "tip": "DICA: Assim que terminar o upload e ver a mensagem verde, você pode fazer upload de MAIS arquivos! Basta repetir o processo. Pode enviar quantos arquivos quiser (dentro do limite de 10MB cada)."
             }
           },
           "multipleFiles": {
@@ -2355,7 +2493,7 @@
             }
           },
           "commonMistakes": [
-            "ERRO: Fazer upload de arquivo muito grande (mais de 50MB) - SOLUÇÃO: Vai dar erro dizendo que o arquivo é muito grande. Você precisa: 1) Comprimir o PDF (use ferramentas online como 'ILovePDF' ou 'SmallPDF'), 2) Dividir o arquivo em partes menores, 3) Remover páginas desnecessárias.",
+            "ERRO: Fazer upload de arquivo muito grande (mais de 10MB) - SOLUÇÃO: Vai dar erro dizendo que o arquivo é muito grande. Você precisa: 1) Comprimir o PDF (use ferramentas online como 'ILovePDF' ou 'SmallPDF'), 2) Dividir o arquivo em partes menores, 3) Remover páginas desnecessárias.",
             "ERRO: Fazer upload de formato não suportado (.jpg, .png, .mp4, .zip) - SOLUÇÃO: Vai dar erro. Converta para um formato aceito (PDF é o melhor!) ou coloque o conteúdo dentro de um documento Word/PowerPoint e depois exporte como PDF.",
             "ERRO: Fechar a página enquanto o upload está acontecendo - SOLUÇÃO: O upload é CANCELADO! Você perde o progresso e tem que começar de novo. SEMPRE espere até ver a mensagem verde de sucesso antes de sair!",
             "ERRO: Upload fica travado em 99% e não termina - SOLUÇÃO: Aguarde pelo menos 2-3 minutos (o final pode demorar mais). Se realmente travou, atualize a página (F5) e tente fazer o upload novamente.",
@@ -2365,7 +2503,7 @@
           "troubleshooting": [
             "PROBLEMA: A área de upload não aparece - SOLUÇÃO: Certifique-se que você está na página de DETALHES do módulo (não na lista de módulos). Role a página para baixo. Se ainda não aparece, recarregue a página (F5).",
             "PROBLEMA: Clico na área de upload mas nada acontece - SOLUÇÃO: 1) Tente usar outro navegador (Chrome geralmente funciona melhor), 2) Verifique se seu navegador está atualizado, 3) Desabilite extensões/bloqueadores de pop-up que possam estar impedindo, 4) Tente a opção de arrastar e soltar.",
-            "PROBLEMA: Upload dá erro 'Falha no envio' ou 'Upload failed' - SOLUÇÃO: 1) Verifique sua conexão com internet, 2) Verifique se o arquivo não está corrompido (tente abrir ele no seu computador), 3) Verifique o tamanho (não pode passar de 50MB), 4) Verifique o formato (tem que ser PDF, DOC, DOCX, PPT, PPTX, ou TXT), 5) Tente fazer upload de outro arquivo para ver se o problema é específico daquele arquivo.",
+            "PROBLEMA: Upload dá erro 'Falha no envio' ou 'Upload failed' - SOLUÇÃO: 1) Verifique sua conexão com internet, 2) Verifique se o arquivo não está corrompido (tente abrir ele no seu computador), 3) Verifique o tamanho (não pode passar de 10MB), 4) Verifique o formato (tem que ser PDF, DOC, DOCX, PPT, PPTX, ou TXT), 5) Tente fazer upload de outro arquivo para ver se o problema é específico daquele arquivo.",
             "PROBLEMA: Upload demora MUITO (mais de 10 minutos) - SOLUÇÃO: Sua internet pode estar lenta. Verifique a velocidade da sua internet. Tente fazer upload em um horário diferente. Considere comprimir o arquivo para diminuir o tamanho.",
             "PROBLEMA: Fiz upload mas o arquivo não aparece na lista - SOLUÇÃO: 1) Atualize a página (F5) para ver se aparece, 2) Verifique se o upload realmente terminou (viu a mensagem verde?), 3) Se não terminou, tente fazer novamente.",
             "PROBLEMA: Quero substituir um arquivo por versão atualizada - SOLUÇÃO: DELETE o arquivo antigo primeiro (ícone de lixeira), depois faça upload do arquivo novo. Infelizmente não dá para 'sobrescrever' direto."
@@ -2987,7 +3125,7 @@
         "title": "HOW TO UPLOAD FILES TO MODULES - Complete Tutorial",
         "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the AI TUTOR will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
         "why": "WHY upload files? Because the AI needs CONTENT to work with! If you don't upload files, the AI will only have its general knowledge. But if you upload YOUR lecture slides, YOUR notes, YOUR PDFs, the AI can answer questions SPECIFICALLY about YOUR course content!",
-        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 50MB per file.",
+        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 10MB per file.",
         "steps": [
           {
             "number": "1",
@@ -3028,7 +3166,7 @@
           },
           {
             "mistake": "My file is too large and won't upload!",
-            "solution": "The maximum file size is 50MB! If your file is larger: 1) SPLIT it into smaller parts (like splitting a 100MB PDF into two 50MB PDFs), 2) COMPRESS the PDF (use online tools like 'smallpdf.com' or 'ilovepdf.com' to reduce size), 3) Remove unnecessary images/pages to reduce size."
+            "solution": "The maximum file size is 10MB! If your file is larger: 1) SPLIT it into smaller parts (like splitting a 100MB PDF into two 10MB PDFs), 2) COMPRESS the PDF (use online tools like 'smallpdf.com' or 'ilovepdf.com' to reduce size), 3) Remove unnecessary images/pages to reduce size."
           },
           {
             "mistake": "The upload started but got stuck at 50% and won't continue!",
@@ -3459,7 +3597,7 @@
           "Clique no botão 'Enviar Arquivo'",
           "Select a file from your computer (or drag and drop)",
           "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-          "Tamanho máximo de arquivo: 50MB",
+          "Tamanho máximo de arquivo: 10MB",
           "Click 'Upload File' to add it to the module",
           "Files are automatically indexed for the AI tutor"
         ],
@@ -3722,7 +3860,7 @@
             "Click 'Upload File' in the Files section",
             "Select or drag and drop your file",
             "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-            "Maximum size: 50MB per file",
+            "Maximum size: 10MB per file",
             "Click 'Upload File' to add it",
             "The file will be indexed and available to the AI tutor"
           ]
@@ -3892,11 +4030,11 @@
         "title": "Problemas de Preparação de Módulo",
         "noTokens": "Error: 'No tokens available' - Create at least one active token with chat permission before preparing.",
         "invalidToken": "Error: 'Invalid token' - Ensure the token is active and has chat permission enabled.",
-        "preparationFailed": "If preparation fails, check that your files are under 50MB and in supported formats."
+        "preparationFailed": "If preparation fails, check that your files are under 10MB and in supported formats."
       },
       "fileUploads": {
         "title": "Problemas de Envio de Arquivo",
-        "tooLarge": "File too large: Split large PDFs or compress files to under 50MB.",
+        "tooLarge": "File too large: Split large PDFs or compress files to under 10MB.",
         "unsupportedFormat": "Unsupported format: Convert files to PDF, DOC, DOCX, TXT, PPT, or PPTX.",
         "uploadFailed": "Upload failed: Check your internet connection and try again."
       },
@@ -3933,6 +4071,7 @@
     "selectCourseType": "Selecione o Tipo de Disciplina",
     "selectDescription": "Escolha o tipo que melhor corresponde ao conteúdo da sua disciplina. Selecionaremos automaticamente o modelo de IA ideal.",
     "selectedModel": "Modelo de IA:",
+    "autoOptimized": "Modelo de IA automaticamente otimizado para este tipo de disciplina",
     "tierNote": "Nota",
     "tierDescription": "O modelo de IA é automaticamente otimizado com base no plano de assinatura da sua universidade para o melhor equilíbrio custo-desempenho.",
     "mathLogic": {
@@ -3947,5 +4086,172 @@
       "name": "Teoria e Humanidades",
       "description": "Conceitos teóricos, ensaios, humanidades, literatura e disciplinas com muito texto"
     }
+  },
+  "analytics": {
+    "title": "Painel de Analíticas",
+    "description": "Insights sobre atividade de estudantes, padrões de uso e custos do sistema",
+    "loadError": "Falha ao carregar dados de analíticas. Por favor, tente novamente.",
+    "refreshSuccess": "Dados de analíticas atualizados com sucesso",
+    "refresh": "Atualizar",
+    "allUniversities": "Todas as Universidades",
+    "searchUniversities": "Buscar universidades...",
+    "noUniversitiesFound": "Nenhuma universidade encontrada.",
+    "exportSuccess": "Relatório {format} exportado com sucesso",
+    "period": {
+      "day": "Hoje",
+      "week": "Esta Semana",
+      "month": "Este Mês",
+      "year": "Este Ano"
+    },
+    "stats": {
+      "totalMessages": "Total de Mensagens",
+      "uniqueStudents": "Estudantes Únicos",
+      "activeModules": "Módulos Ativos",
+      "estimatedCost": "Custo Estimado",
+      "inPeriod": "em {period}",
+      "inSelectedPeriod": "no período selecionado",
+      "vsYesterday": "vs. ontem",
+      "activeStudents": "Estudantes ativos",
+      "modulesWithActivity": "Módulos com atividade",
+      "totalCost": "Custo total de IA",
+      "allTime": "Todo o período",
+      "today": "Hoje",
+      "yesterday": "Ontem",
+      "last7Days": "Últimos 7 dias",
+      "last30Days": "Últimos 30 dias",
+      "last365Days": "Últimos 365 dias"
+    },
+    "dashboard": {
+      "last30Days": "Últimos 30 dias",
+      "last30DaysDescription": "Métricas de atividade e desempenho dos últimos 30 dias"
+    },
+    "summary": {
+      "totalMessages": "Total de Mensagens",
+      "totalCost": "Custo Total",
+      "uniqueStudents": "Estudantes Únicos",
+      "avgResponseTime": "Tempo Médio de Resposta",
+      "vsPrevious": "vs. período anterior"
+    },
+    "today": {
+      "usageTitle": "Uso de Hoje",
+      "usageDescription": "Métricas de atividade do dia atual",
+      "messages": "Mensagens",
+      "students": "Estudantes",
+      "conversations": "Conversas",
+      "avgResponseTime": "Tempo Médio de Resposta",
+      "costTitle": "Custo de Hoje",
+      "costDescription": "Custo de uso de IA para hoje",
+      "totalToday": "Custo total de hoje",
+      "tokens": "Tokens Totais",
+      "vsYesterday": "vs. Ontem",
+      "videoTranscriptions": "Transcrições de Vídeo",
+      "transcriptionCost": "Custo de Transcrição",
+      "videosTranscribed": "Vídeos Transcritos",
+      "projectedTranscriptionCost": "Custo Diário Projetado"
+    },
+    "charts": {
+      "usageTrends": "Tendências de Uso",
+      "usageTrendsDescription": "Mensagens e atividade de estudantes ao longo do tempo",
+      "costTrend": "Tendência de Custos",
+      "costTrendDescription": "Custos de uso de IA ao longo do tempo",
+      "hourlyBreakdown": "Detalhamento Horário de Atividade",
+      "hourlyBreakdownDescription": "Análise de horários de pico de uso",
+      "providerDistribution": "Distribuição por Provedor",
+      "providerDistributionDescription": "Mensagens por provedor de IA",
+      "messages": "Mensagens",
+      "students": "Estudantes",
+      "costUSD": "Custo (USD)"
+    },
+    "filters": {
+      "noFutureDates": "Datas futuras não são permitidas",
+      "noFutureDatesDescription": "Por favor selecione um intervalo de datas até hoje.",
+      "maxRangeExceeded": "Intervalo de datas muito grande",
+      "maxRangeExceededDescription": "Por favor selecione um intervalo de datas de no máximo 1 ano (365 dias)."
+    },
+    "moduleComparison": {
+      "title": "Comparação de Módulos",
+      "description": "Comparar desempenho entre módulos",
+      "show": "Mostrar Comparação",
+      "hide": "Ocultar Comparação",
+      "selectModules": "Selecione módulos para comparar",
+      "modulesSelected": "módulos selecionados",
+      "searchModules": "Buscar módulos...",
+      "noModulesFound": "Nenhum módulo encontrado",
+      "selectAtLeastTwo": "Selecione pelo menos 2 módulos para comparar",
+      "maxModulesError": "Máximo de 10 módulos podem ser selecionados para comparação",
+      "maxModulesDescription": "Por favor desselecione um módulo antes de selecionar um novo.",
+      "loadError": "Falha ao carregar dados de comparação de módulos",
+      "moduleName": "Nome do Módulo",
+      "messages": "Mensagens",
+      "students": "Estudantes",
+      "tokens": "Tokens",
+      "cost": "Custo (USD)",
+      "avgResponseTime": "Tempo Médio de Resposta"
+    },
+    "export": {
+      "title": "Relatório de Analíticas",
+      "period": "Período",
+      "dateRange": "Intervalo de Datas",
+      "generated": "Gerado",
+      "university": "Universidade",
+      "overviewTitle": "Estatísticas Gerais",
+      "metric": "Métrica",
+      "value": "Valor",
+      "totalMessages": "Total de Mensagens",
+      "uniqueStudents": "Estudantes Únicos",
+      "activeModules": "Módulos Ativos",
+      "activeCourses": "Cursos Ativos",
+      "estimatedCost": "Custo Estimado",
+      "todayUsageTitle": "Uso de Hoje",
+      "messages": "Mensagens",
+      "students": "Estudantes",
+      "conversations": "Conversas",
+      "avgResponseTime": "Tempo Médio de Resposta",
+      "todayCostTitle": "Custo de Hoje",
+      "totalCost": "Custo Total",
+      "totalTokens": "Tokens Totais",
+      "frequentQuestionsTitle": "Perguntas Frequentes",
+      "question": "Pergunta",
+      "count": "Quantidade",
+      "percentage": "Porcentagem",
+      "topStudentsTitle": "Estudantes Mais Ativos",
+      "studentName": "Nome do Estudante",
+      "email": "Email",
+      "tokens": "Tokens",
+      "cost": "Custo"
+    },
+    "todayUsage": {
+      "title": "Uso de Hoje",
+      "description": "Métricas de atividade do dia atual",
+      "messages": "Mensagens",
+      "students": "Estudantes",
+      "conversations": "Conversas",
+      "avgResponseTime": "Tempo Médio de Resposta"
+    },
+    "todayCost": {
+      "title": "Custo de Hoje",
+      "description": "Custo de uso de IA para hoje",
+      "totalToday": "Custo total hoje",
+      "tokens": "Tokens Totais",
+      "vsYesterday": "vs. Ontem",
+      "videoTranscriptions": "Transcrições de Vídeo",
+      "transcriptionCost": "Custo de Transcrição",
+      "videosTranscribed": "Vídeos Transcritos",
+      "projectedTranscriptionCost": "Custo Diário Projetado"
+    },
+    "faq": {
+      "title": "Perguntas Frequentes",
+      "description": "Perguntas mais comuns dos estudantes",
+      "similarQuestions": "Perguntas similares",
+      "noData": "Ainda não há perguntas frequentes"
+    },
+    "topStudents": {
+      "title": "Estudantes Mais Ativos",
+      "description": "Estudantes com mais atividade",
+      "messages": "mensagens",
+      "conversations": "conversas",
+      "noData": "Ainda não há dados de atividade de estudantes"
+    }
   }
 }
+

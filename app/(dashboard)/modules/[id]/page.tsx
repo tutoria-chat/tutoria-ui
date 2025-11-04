@@ -22,7 +22,8 @@ import {
   ExternalLink,
   Youtube,
   Info,
-  Lightbulb
+  Lightbulb,
+  Plus
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -69,7 +70,7 @@ export default function ModuleDetailsPage() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
   const [fileViewerOpen, setFileViewerOpen] = useState(false);
   const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
@@ -78,9 +79,13 @@ export default function ModuleDetailsPage() {
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
   const [urlDialogOpen, setUrlDialogOpen] = useState(false);
   const [selectedTokenUrl, setSelectedTokenUrl] = useState<string>('');
+  // Upload modal states
+  const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
+  const [youtubeUploadModalOpen, setYoutubeUploadModalOpen] = useState(false);
   // YouTube video upload state
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [youtubeVideoName, setYoutubeVideoName] = useState('');
+  const [youtubeLanguage, setYoutubeLanguage] = useState<string>('pt-br'); // Default to Portuguese, user-selectable
   const [isAddingYoutubeVideo, setIsAddingYoutubeVideo] = useState(false);
   const [youtubeError, setYoutubeError] = useState<string | null>(null);
 
@@ -97,19 +102,13 @@ export default function ModuleDetailsPage() {
     e.preventDefault();
     const form = e.currentTarget;
 
-    if (!selectedFile) {
+    if (selectedFiles.length === 0) {
       setUploadError(t('fileSelectError'));
       return;
     }
 
-    // Validate file size (max 50MB)
-    const maxSize = 50 * 1024 * 1024;
-    if (selectedFile.size > maxSize) {
-      setUploadError(t('fileTooLarge'));
-      return;
-    }
-
-    // Validate file type
+    // Validate file size and type for all files
+    const maxSize = 10 * 1024 * 1024; // 10MB
     const allowedTypes = [
       'application/pdf',
       'application/msword',
@@ -119,36 +118,70 @@ export default function ModuleDetailsPage() {
       'application/vnd.openxmlformats-officedocument.presentationml.presentation'
     ];
 
-    if (!allowedTypes.includes(selectedFile.type)) {
-      setUploadError(t('fileTypeNotSupported'));
-      return;
+    // Validate all files before uploading
+    for (const file of selectedFiles) {
+      if (file.size > maxSize) {
+        setUploadError(`${file.name}: ${t('fileTooLarge')}`);
+        return;
+      }
+      if (!allowedTypes.includes(file.type)) {
+        setUploadError(`${file.name}: ${t('fileTypeNotSupported')}`);
+        return;
+      }
     }
 
     setIsUploading(true);
     setUploadError(null);
 
+    const successfulUploads: string[] = [];
+    const failedUploads: { fileName: string; error: string }[] = [];
+
     try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', selectedFile);
+      // Upload files sequentially to avoid overwhelming the server
+      for (const file of selectedFiles) {
+        try {
+          const uploadFormData = new FormData();
+          uploadFormData.append('file', file);
+          await apiClient.uploadFile(uploadFormData, moduleId, file.name);
+          successfulUploads.push(file.name);
+        } catch (error) {
+          console.error(`Error uploading ${file.name}:`, error);
+          const errorMessage = error instanceof Error ? error.message : tCommon('error');
+          failedUploads.push({ fileName: file.name, error: errorMessage });
+        }
+      }
 
-      // Pass module_id and file name as query parameters
-      await apiClient.uploadFile(uploadFormData, moduleId, selectedFile.name);
-
-      // Reset form and refetch module data to show new file
+      // Reset form and refetch module data
       form.reset();
-      setSelectedFile(null);
+      setSelectedFiles([]);
       refetchModule();
 
-      toast.success(t('fileUploadSuccess'), {
-        description: t('fileUploadSuccessDesc', { fileName: selectedFile.name }),
-      });
+      // Show results
+      if (failedUploads.length === 0) {
+        // All succeeded
+        setFileUploadModalOpen(false);
+        toast.success(t('fileUploadSuccess'), {
+          description: `${successfulUploads.length} file(s) uploaded successfully`,
+        });
+      } else if (successfulUploads.length === 0) {
+        // All failed
+        setUploadError(`${t('fileUploadError')}: ${failedUploads.map(f => f.fileName).join(', ')}`);
+        toast.error(t('fileUploadError'), {
+          description: `Failed to upload ${failedUploads.length} file(s)`,
+        });
+      } else {
+        // Partial success
+        setFileUploadModalOpen(false);
+        toast.warning('Partial Upload Success', {
+          description: `${successfulUploads.length} succeeded, ${failedUploads.length} failed`,
+        });
+      }
     } catch (error) {
-      console.error('Erro ao enviar arquivo:', error);
-      const errorMessage = error instanceof Error ? error.message : tCommon('error');
-      setUploadError(`${t('fileUploadError')}: ${errorMessage}`);
-
+      console.error('Unexpected error during upload:', error);
+      const errorMsg = error instanceof Error ? error.message : tCommon('error');
+      setUploadError(`${t('fileUploadError')}: ${errorMsg}`);
       toast.error(t('fileUploadError'), {
-        description: errorMessage,
+        description: errorMsg,
       });
     } finally {
       setIsUploading(false);
@@ -176,13 +209,15 @@ export default function ModuleDetailsPage() {
       const result = await apiClient.addYoutubeVideo({
         youtubeUrl: youtubeUrl.trim(),
         moduleId,
-        language: module?.tutorLanguage || 'pt-br',
+        language: youtubeLanguage, // Use user-selected language
         name: youtubeVideoName.trim() || undefined
       });
 
-      // Reset form
+      // Reset form and close modal
       setYoutubeUrl('');
       setYoutubeVideoName('');
+      setYoutubeLanguage('pt-br'); // Reset to default language
+      setYoutubeUploadModalOpen(false);
 
       if (result.status === 'already_exists') {
         toast.info(t('youtubeVideoAlreadyExists') || 'This video already exists in the module', {
@@ -513,7 +548,7 @@ export default function ModuleDetailsPage() {
                   toast.error(tTokens('copyError'));
                 }
               }}
-              title="Copy widget URL"
+              title={tTokens('actionButtons.copyWidgetUrl')}
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -526,7 +561,7 @@ export default function ModuleDetailsPage() {
                 setSelectedTokenUrl(widgetUrl);
                 setUrlDialogOpen(true);
               }}
-              title="View widget URL"
+              title={tTokens('actionButtons.viewWidgetUrl')}
             >
               <Eye className="h-4 w-4" />
             </Button>
@@ -536,7 +571,7 @@ export default function ModuleDetailsPage() {
               variant="ghost"
               size="sm"
               onClick={() => window.open(widgetUrl, '_blank')}
-              title={t('openInWidget')}
+              title={tTokens('actionButtons.openWidget')}
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
@@ -614,12 +649,14 @@ export default function ModuleDetailsPage() {
                   </Link>
                 </Button>
               )}
-              <AdminOnly>
-                <Button variant="outline" onClick={() => setTokenModalOpen(true)}>
-                  <Key className="mr-2 h-4 w-4" />
-                  {t('createToken')}
+              {module.courseId && (
+                <Button variant="outline" asChild>
+                  <Link href={`/modules/create?courseId=${module.courseId}`}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    {t('createModuleInCourse')}
+                  </Link>
                 </Button>
-              </AdminOnly>
+              )}
               <Button asChild>
                 <Link href={`/modules/${moduleId}/edit`}>
                   <Edit className="mr-2 h-4 w-4" />
@@ -695,7 +732,7 @@ export default function ModuleDetailsPage() {
             <AdminOnly>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{module.tokensCount || 0}</p>
+                  <p className="text-2xl font-bold">{tokens?.length || 0}</p>
                   <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
                 </div>
                 <BookOpen className="h-8 w-8 text-purple-500" />
@@ -705,127 +742,25 @@ export default function ModuleDetailsPage() {
         </Card>
       </div>
 
-      {/* File Upload Section */}
+      {/* Upload Actions */}
       <ProfessorOnly>
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('uploadFile')}</CardTitle>
-            <CardDescription>
-              {t('uploadFileDesc')}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleFileUpload} className="space-y-4">
-              <FileUpload
-                onFileSelect={setSelectedFile}
-                disabled={isUploading}
-                selectedFile={selectedFile}
-                maxSizeMB={50}
-                translations={{
-                  clickToSelect: t('fileUpload.clickToSelect'),
-                  supportedFormats: t('fileUpload.supportedFormats'),
-                  maxSize: t('fileUpload.maxSize', { maxSizeMB: 50 })
-                }}
-              />
-
-              {uploadError && (
-                <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
-                  <p className="text-sm text-destructive">{uploadError}</p>
-                </div>
-              )}
-
-              <Button type="submit" disabled={isUploading || !selectedFile}>
-                {isUploading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('uploading')}
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    {t('uploadButton')}
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* YouTube Video Upload Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('addYoutubeVideo') || 'Add YouTube Video'}</CardTitle>
-            <CardDescription>
-              {t('addYoutubeVideoDesc') || 'Add a YouTube video URL to transcribe and use as course material'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Tips for better transcription */}
-            <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
-              <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
-                <p className="font-medium mb-2">{t('youtubeTranscriptionTips') || 'Tips for Best Results:'}</p>
-                <ul className="space-y-1 ml-4 list-disc text-blue-800 dark:text-blue-200">
-                  <li>{t('enableYoutubeTranscripts') || 'Enable subtitles/transcripts on your video for more accurate results'}</li>
-                  <li>{t('avoidRegionLocks') || 'Avoid region-restricted videos when possible for faster processing'}</li>
-                  <li>{t('publicVideos') || 'Use public or unlisted videos (private videos cannot be processed)'}</li>
-                </ul>
-              </AlertDescription>
-            </Alert>
-
-            <form onSubmit={handleAddYoutubeVideo} className="space-y-4">
-              <div className="space-y-2">
-                <label htmlFor="youtubeUrl" className="text-sm font-medium">
-                  {t('youtubeUrl') || 'YouTube URL'}
-                </label>
-                <input
-                  id="youtubeUrl"
-                  type="url"
-                  value={youtubeUrl}
-                  onChange={(e) => setYoutubeUrl(e.target.value)}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  disabled={isAddingYoutubeVideo}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="youtubeVideoName" className="text-sm font-medium">
-                  {t('videoName') || 'Video Name'} ({t('optional') || 'optional'})
-                </label>
-                <input
-                  id="youtubeVideoName"
-                  type="text"
-                  value={youtubeVideoName}
-                  onChange={(e) => setYoutubeVideoName(e.target.value)}
-                  placeholder={t('videoNamePlaceholder') || 'e.g., Lecture 1: Introduction'}
-                  disabled={isAddingYoutubeVideo}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                />
-              </div>
-
-              {youtubeError && (
-                <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
-                  <p className="text-sm text-destructive">{youtubeError}</p>
-                </div>
-              )}
-
-              <Button type="submit" disabled={isAddingYoutubeVideo || !youtubeUrl.trim()}>
-                {isAddingYoutubeVideo ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {t('processing') || 'Processing...'}
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    {t('addVideoButton') || 'Add Video'}
-                  </>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
+        <div className="flex gap-4">
+          <Button
+            onClick={() => setFileUploadModalOpen(true)}
+            className="flex-1"
+          >
+            <Upload className="mr-2 h-4 w-4" />
+            {t('uploadFile')}
+          </Button>
+          <Button
+            onClick={() => setYoutubeUploadModalOpen(true)}
+            variant="outline"
+            className="flex-1"
+          >
+            <Youtube className="mr-2 h-4 w-4" />
+            {t('addYoutubeVideo') || 'Add YouTube Video'}
+          </Button>
+        </div>
       </ProfessorOnly>
 
       {/* Files List */}
@@ -850,10 +785,18 @@ export default function ModuleDetailsPage() {
       <AdminOnly>
         <Card>
           <CardHeader>
-            <CardTitle>{t('moduleTokens')}</CardTitle>
-            <CardDescription>
-              {t('tokensGenerated')}
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>{t('moduleTokens')}</CardTitle>
+                <CardDescription>
+                  {t('tokensGenerated')}
+                </CardDescription>
+              </div>
+              <Button onClick={() => setTokenModalOpen(true)}>
+                <Key className="mr-2 h-4 w-4" />
+                {t('createToken')}
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <DataTable
@@ -935,7 +878,7 @@ export default function ModuleDetailsPage() {
       <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Widget URL</DialogTitle>
+            <DialogTitle>{t('widgetUrlTitle')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="bg-muted p-4 rounded-md">
@@ -946,7 +889,7 @@ export default function ModuleDetailsPage() {
                 variant="outline"
                 onClick={() => setUrlDialogOpen(false)}
               >
-                Close
+                {tCommon('buttons.close')}
               </Button>
               <Button
                 onClick={async () => {
@@ -959,7 +902,7 @@ export default function ModuleDetailsPage() {
                 }}
               >
                 <Copy className="h-4 w-4 mr-2" />
-                Copy URL
+                {t('copyUrl')}
               </Button>
               <Button
                 onClick={() => {
@@ -968,10 +911,169 @@ export default function ModuleDetailsPage() {
                 }}
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
-                Test URL
+                {t('testUrl')}
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* File Upload Dialog */}
+      <Dialog open={fileUploadModalOpen} onOpenChange={setFileUploadModalOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>{t('uploadFile')}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleFileUpload} className="space-y-4">
+            <FileUpload
+              onFileSelect={setSelectedFiles}
+              disabled={isUploading}
+              selectedFiles={selectedFiles}
+              multiple={true}
+              maxSizeMB={10}
+              translations={{
+                clickToSelect: t('fileUpload.clickToSelect'),
+                supportedFormats: t('fileUpload.supportedFormats'),
+                maxSize: t('fileUpload.maxSize', { maxSizeMB: 10 }),
+                filesSelected: `${selectedFiles.length} file(s) selected`
+              }}
+            />
+
+            {uploadError && (
+              <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
+                <p className="text-sm text-destructive">{uploadError}</p>
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setFileUploadModalOpen(false)}
+                disabled={isUploading}
+              >
+                {tCommon('buttons.cancel')}
+              </Button>
+              <Button type="submit" disabled={isUploading || selectedFiles.length === 0}>
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t('uploading')}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    {t('uploadButton')}
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* YouTube Video Upload Dialog */}
+      <Dialog open={youtubeUploadModalOpen} onOpenChange={setYoutubeUploadModalOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>{t('addYoutubeVideo') || 'Add YouTube Video'}</DialogTitle>
+          </DialogHeader>
+
+          {/* Tips for better transcription */}
+          <Alert className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+            <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
+              <p className="font-medium mb-2">{t('youtubeTranscriptionTips') || 'Tips for Best Results:'}</p>
+              <ul className="space-y-1 ml-4 list-disc text-blue-800 dark:text-blue-200">
+                <li>{t('enableYoutubeTranscripts') || 'Enable subtitles/transcripts on your video for more accurate results'}</li>
+                <li>{t('avoidRegionLocks') || 'Avoid region-restricted videos when possible for faster processing'}</li>
+                <li>{t('publicVideos') || 'Use public or unlisted videos (private videos cannot be processed)'}</li>
+              </ul>
+            </AlertDescription>
+          </Alert>
+
+          <form onSubmit={handleAddYoutubeVideo} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="youtubeUrl" className="text-sm font-medium">
+                {t('youtubeUrl') || 'YouTube URL'}
+              </label>
+              <input
+                id="youtubeUrl"
+                type="url"
+                value={youtubeUrl}
+                onChange={(e) => setYoutubeUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=..."
+                disabled={isAddingYoutubeVideo}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="youtubeVideoName" className="text-sm font-medium">
+                {t('videoName') || 'Video Name'} ({t('optional') || 'optional'})
+              </label>
+              <input
+                id="youtubeVideoName"
+                type="text"
+                value={youtubeVideoName}
+                onChange={(e) => setYoutubeVideoName(e.target.value)}
+                placeholder={t('videoNamePlaceholder') || 'e.g., Lecture 1: Introduction'}
+                disabled={isAddingYoutubeVideo}
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="youtubeLanguage" className="text-sm font-medium">
+                {t('videoLanguage') || 'Video Language'}
+              </label>
+              <select
+                id="youtubeLanguage"
+                value={youtubeLanguage}
+                onChange={(e) => setYoutubeLanguage(e.target.value)}
+                disabled={isAddingYoutubeVideo}
+                autoComplete="off"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="pt-br">{t('languagePortuguese') || 'Portuguese (Brazil)'}</option>
+                <option value="en">{t('languageEnglish') || 'English'}</option>
+                <option value="es">{t('languageSpanish') || 'Spanish'}</option>
+              </select>
+              <p className="text-xs text-muted-foreground">
+                {t('languageHint') || 'Select the language spoken in the video for accurate transcription'}
+              </p>
+            </div>
+
+            {youtubeError && (
+              <div className="p-3 bg-destructive/10 border border-destructive/50 rounded-md">
+                <p className="text-sm text-destructive">{youtubeError}</p>
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setYoutubeUploadModalOpen(false)}
+                disabled={isAddingYoutubeVideo}
+              >
+                {tCommon('buttons.cancel')}
+              </Button>
+              <Button type="submit" disabled={isAddingYoutubeVideo || !youtubeUrl.trim()}>
+                {isAddingYoutubeVideo ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t('processing') || 'Processing...'}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    {t('addVideoButton') || 'Add Video'}
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

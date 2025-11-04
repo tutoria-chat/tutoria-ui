@@ -276,7 +276,7 @@
       "downloadError": "Error downloading file",
       "downloadErrorDesc": "Could not download the file. Please try again.",
       "fileSelectError": "Select a file to upload",
-      "fileTooLarge": "File too large. Maximum size: 50MB",
+      "fileTooLarge": "File too large. Maximum size: 10MB",
       "fileTypeNotSupported": "File type not supported. Use: PDF, DOC, DOCX, TXT, PPT or PPTX",
       "tokenCopied": "Token copied!",
       "tokenCopyError": "Error copying token",
@@ -493,3 +493,4 @@
     "homePage": "Home Page"
   }
 }
+

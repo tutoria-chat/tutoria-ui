@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit, Bot } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,7 @@ import { formatDateShort } from '@/lib/utils';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
-import type { Professor, TableColumn, BreadcrumbItem, User, UserResponse } from '@/lib/types';
+import type { Professor, TableColumn, BreadcrumbItem, User, UserResponse, ProfessorAgentStatus } from '@/lib/types';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export default function ProfessorsPage() {
@@ -29,6 +29,7 @@ export default function ProfessorsPage() {
   const t = useTranslations('professors');
   const tCommon = useTranslations('common');
   const [professors, setProfessors] = useState<Professor[]>([]);
+  const [agentStatuses, setAgentStatuses] = useState<ProfessorAgentStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -37,6 +38,9 @@ export default function ProfessorsPage() {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
   const [currentUser, setCurrentUser] = useState<UserResponse | null>(null);
   const [showProfessorTypeDialog, setShowProfessorTypeDialog] = useState(false);
+  const [showAgentDialog, setShowAgentDialog] = useState(false);
+  const [selectedProfessor, setSelectedProfessor] = useState<Professor | null>(null);
+  const [agentLoading, setAgentLoading] = useState(false);
 
   // Confirm dialogs
   const { confirm, dialog } = useConfirmDialog();
@@ -61,7 +65,7 @@ export default function ProfessorsPage() {
       setCurrentUser(user);
     } catch (error: any) {
       console.error('Error loading current user:', error);
-      toast.error(t('loadUserError'));
+      toast.error(t('professors.loadUserError'));
     }
   };
 
@@ -79,10 +83,14 @@ export default function ProfessorsPage() {
         params.universityId = currentUser.universityId;
       }
 
-      // Use unified Users endpoint to get professors (use Management API, not Auth API)
-      const response: { items: UserResponse[] } = await apiClient.get('/api/users/', params, false); // false = use Management API
+      // Fetch professors and agent statuses in parallel
+      const [professorsResponse, agentStatusResponse] = await Promise.all([
+        apiClient.get<{ items: UserResponse[] }>('/api/users/', params, false), // false = use Management API
+        apiClient.getProfessorAgentStatus(currentUser?.universityId)
+      ]);
+
       // Map UserResponse to Professor interface
-      const profs: Professor[] = response.items.map((user: UserResponse) => ({
+      const profs: Professor[] = professorsResponse.items.map((user: UserResponse) => ({
         id: user.userId,
         username: user.username,
         email: user.email,
@@ -98,7 +106,9 @@ export default function ProfessorsPage() {
         languagePreference: user.languagePreference,
         themePreference: user.themePreference,
       }));
+
       setProfessors(profs);
+      setAgentStatuses(agentStatusResponse);
     } catch (error: any) {
       console.error('Error loading professors:', error);
       toast.error(t('loadError'));
@@ -177,6 +187,83 @@ export default function ProfessorsPage() {
     }
   };
 
+  const handleManageAgent = (professor: Professor) => {
+    setSelectedProfessor(professor);
+    setShowAgentDialog(true);
+  };
+
+  const handleCreateAgent = async () => {
+    if (!selectedProfessor) return;
+
+    setAgentLoading(true);
+    try {
+      await apiClient.createProfessorAgent({
+        professorId: selectedProfessor.id,
+        name: `${selectedProfessor.firstName} ${selectedProfessor.lastName}'s AI Agent`,
+        description: 'AI assistant for course material feedback',
+        tutorLanguage: 'pt-br',
+      });
+      toast.success(t('agentDialog.createSuccess'));
+      setShowAgentDialog(false);
+      loadProfessors(); // Reload to get updated agent status
+    } catch (error: any) {
+      console.error('Error creating professor agent:', error);
+      if (error.response?.status === 403) {
+        toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+      } else if (error.response?.status === 400) {
+        toast.error(error.message || t('agentDialog.validationError') || 'Invalid data provided');
+      } else {
+        toast.error(error.message || t('agentDialog.createError'));
+      }
+    } finally {
+      setAgentLoading(false);
+    }
+  };
+
+  const handleActivateAgent = async (agentId: number) => {
+    try {
+      await apiClient.activateProfessorAgent(agentId);
+      toast.success(t('agentActivateSuccess') || 'Agent activated successfully');
+      loadProfessors(); // Reload to get updated agent status
+    } catch (error: any) {
+      console.error('Error activating agent:', error);
+      if (error.response?.status === 403) {
+        toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+      } else {
+        toast.error(error.message || t('agentActivateError') || 'Failed to activate agent');
+      }
+    }
+  };
+
+  const handleDeactivateAgent = async (agentId: number) => {
+    confirm({
+      title: t('agentDeactivateConfirm') || 'Deactivate Agent',
+      description: t('agentDeactivateDescription') || 'Are you sure you want to deactivate this agent? The professor will not be able to use it until it is reactivated.',
+      variant: 'destructive',
+      confirmText: t('deactivate') || 'Deactivate',
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deactivateProfessorAgent(agentId);
+          toast.success(t('agentDeactivateSuccess') || 'Agent deactivated successfully');
+          loadProfessors(); // Reload to get updated agent status
+        } catch (error: any) {
+          console.error('Error deactivating agent:', error);
+          if (error.response?.status === 403) {
+            toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+          } else {
+            toast.error(error.message || t('agentDeactivateError') || 'Failed to deactivate agent');
+          }
+        }
+      }
+    });
+  };
+
+  // Helper function to get agent status for a professor
+  const getAgentStatus = (professorId: number): ProfessorAgentStatus | undefined => {
+    return agentStatuses.find(status => status.professorId === professorId);
+  };
+
   const columns: TableColumn<Professor>[] = [
     {
       key: 'name',
@@ -243,6 +330,31 @@ export default function ProfessorsPage() {
       )
     },
     {
+      key: 'agentStatus',
+      label: t('columns.agentStatus') || 'AI Agent',
+      render: (_, professor) => {
+        const agentStatus = getAgentStatus(professor.id);
+        if (!agentStatus || !agentStatus.hasAgent) {
+          return (
+            <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
+              {t('columns.noAgent') || 'No Agent'}
+            </Badge>
+          );
+        }
+        return agentStatus.agentIsActive ? (
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            <Bot className="h-3 w-3 mr-1" />
+            {t('columns.agentActive') || 'Active'}
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+            <Bot className="h-3 w-3 mr-1" />
+            {t('columns.agentInactive') || 'Inactive'}
+          </Badge>
+        );
+      }
+    },
+    {
       key: 'createdAt',
       label: t('columns.createdAt') || 'Created at',
       sortable: true,
@@ -256,12 +368,14 @@ export default function ProfessorsPage() {
     {
       key: 'actions',
       label: t('columns.actions') || 'Actions',
-      width: '200px',
+      width: '250px',
       render: (_, professor) => {
         // Super admins have ALL THE POWER - they can manage everyone
         // Regular admin professors can only manage non-admin professors
         const isSuperAdmin = currentUser?.userType === 'super_admin';
         const canManageActivation = isSuperAdmin || !professor.isAdmin;
+        const canManageAgent = currentUser?.userType === 'super_admin' || (currentUser?.isAdmin && !professor.isAdmin);
+        const agentStatus = getAgentStatus(professor.id);
 
         return (
           <div className="flex items-center space-x-1">
@@ -293,6 +407,37 @@ export default function ProfessorsPage() {
                   <CheckCircle className="h-4 w-4 text-green-600" />
                 </Button>
               )
+            )}
+            {canManageAgent && agentStatus?.hasAgent && agentStatus.agentId && (
+              agentStatus.agentIsActive ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDeactivateAgent(agentStatus.agentId!)}
+                  title={t('agentDeactivate') || 'Deactivate Agent'}
+                >
+                  <Bot className="h-4 w-4 text-amber-600" />
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleActivateAgent(agentStatus.agentId!)}
+                  title={t('agentActivate') || 'Activate Agent'}
+                >
+                  <Bot className="h-4 w-4 text-green-600" />
+                </Button>
+              )
+            )}
+            {canManageAgent && (!agentStatus?.hasAgent) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleManageAgent(professor)}
+                title={t('agentDialog.manageAgent') || 'Create Agent'}
+              >
+                <Bot className="h-4 w-4 text-purple-600" />
+              </Button>
             )}
             {currentUser?.userType === 'super_admin' && (
               <Button
@@ -480,6 +625,30 @@ export default function ProfessorsPage() {
                     {t('selectTypeDialog.adminDescription')}
                   </p>
                 </div>
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Professor Agent Management Dialog */}
+        <Dialog open={showAgentDialog} onOpenChange={setShowAgentDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>{t('agentDialog.title')}</DialogTitle>
+              <DialogDescription>
+                {t('agentDialog.description', { professorName: `${selectedProfessor?.firstName} ${selectedProfessor?.lastName}` })}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                {t('agentDialog.explanation')}
+              </p>
+              <Button
+                onClick={handleCreateAgent}
+                disabled={agentLoading}
+                className="w-full"
+              >
+                {agentLoading ? t('agentDialog.creating') : t('agentDialog.createButton')}
               </Button>
             </div>
           </DialogContent>

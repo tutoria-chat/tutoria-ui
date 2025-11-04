@@ -37,7 +37,9 @@
       "createModule": "Crear módulo",
       "viewCourses": "Ver cursos",
       "viewModules": "Ver módulos",
-      "manageTokens": "Gestionar tokens"
+      "manageTokens": "Gestionar tokens",
+      "manageAccessKeys": "Gestionar Claves de Acceso",
+      "myAIAgent": "Mi Agente de IA"
     }
   },
   "courses": {
@@ -201,6 +203,16 @@
     "form": {
       "create": "Crear módulo",
       "edit": "Editar módulo",
+      "steps": {
+        "basic": "Información básica",
+        "basicDesc": "Detalles del módulo",
+        "aiModel": "Modelo de IA",
+        "aiModelDesc": "Seleccionar modelo",
+        "prompt": "Prompt del Sistema",
+        "promptDesc": "Configurar IA",
+        "settings": "Configuración",
+        "settingsDesc": "Idioma y más"
+      },
       "nameLabel": "Nombre del módulo *",
       "namePlaceholder": "ej., Introducción a Estructuras de Datos",
       "nameRequired": "El nombre del módulo es requerido",
@@ -262,6 +274,7 @@
       "improveSuccess": "¡Prompt mejorado!",
       "improveSuccessDesc": "Mejoras restantes: {count}/3 en las próximas 72h.",
       "improveError": "Error al mejorar el prompt",
+      "courseCannotChange": "El curso no se puede cambiar",
       "templates": {
         "general": {
           "name": "Tutor general",
@@ -289,7 +302,8 @@
       "viewCourse": "Ver curso",
       "prepareModule": "Preparar módulo",
       "preparing": "Preparando...",
-      "createToken": "Crear token",
+      "createToken": "Crear clave de acceso",
+      "createModuleInCourse": "Crear nuevo módulo en el mismo curso",
       "editModule": "Editar módulo",
       "moduleInfo": "Información del módulo",
       "description": "Descripción",
@@ -301,7 +315,7 @@
       "aiTutorNotConfigured": "Tutor de IA no configurado",
       "stats": "Estadísticas",
       "files": "Archivos",
-      "accessTokens": "Tokens de acceso",
+      "accessTokens": "Claves de acceso",
       "uploadFile": "Subir archivo",
       "uploadFileDesc": "Sube materiales de estudio para este módulo",
       "uploading": "Subiendo...",
@@ -312,6 +326,11 @@
       "videoName": "Nombre del Video",
       "optional": "opcional",
       "videoNamePlaceholder": "ej: Clase 1: Introducción",
+      "videoLanguage": "Idioma del Video",
+      "languagePortuguese": "Portugués (Brasil)",
+      "languageEnglish": "Inglés",
+      "languageSpanish": "Español",
+      "languageHint": "Seleccione el idioma hablado en el video para una transcripción precisa",
       "processing": "Procesando...",
       "addVideoButton": "Agregar Video",
       "youtubeUrlRequired": "URL de YouTube es requerida",
@@ -334,18 +353,18 @@
       "moduleFiles": "Archivos del módulo",
       "filesAvailable": "Archivos disponibles en este módulo",
       "noFiles": "Aún no se han subido archivos. Sube tu primer archivo arriba.",
-      "moduleTokens": "Tokens de acceso",
-      "tokensGenerated": "Tokens generados para este módulo",
-      "noTokens": "Aún no se han generado tokens. Haz clic en 'Crear token' arriba.",
-      "prepareNoTokens": "No hay tokens disponibles",
-      "prepareNoTokensDesc": "Crea un token primero para preparar el módulo.",
-      "prepareInvalidToken": "Token inválido",
-      "prepareInvalidTokenDesc": "Crea un token activo con permiso de chat.",
+      "moduleTokens": "Claves de acceso",
+      "tokensGenerated": "Claves generadas para este módulo",
+      "noTokens": "Aún no se han generado claves. Haz clic en 'Crear clave' arriba.",
+      "prepareNoTokens": "No hay claves disponibles",
+      "prepareNoTokensDesc": "Crea una clave primero para preparar el módulo.",
+      "prepareInvalidToken": "Clave inválida",
+      "prepareInvalidTokenDesc": "Crea una clave activa con permiso de chat.",
       "prepareSuccess": "¡Módulo preparado!",
       "prepareSuccessDesc": "Los archivos han sido subidos a OpenAI y el asistente está listo.",
       "prepareError": "Error al preparar el módulo",
       "prepareErrorDesc": "No se pudo preparar el módulo. Por favor, intenta de nuevo.",
-      "tokenCreatedSuccess": "¡Token creado exitosamente!",
+      "tokenCreatedSuccess": "¡Clave creada exitosamente!",
       "fileUploadSuccess": "¡Archivo subido exitosamente!",
       "fileUploadSuccessDesc": "{fileName} ha sido agregado al módulo.",
       "fileUploadError": "Error al subir el archivo",
@@ -361,10 +380,13 @@
       "viewError": "Error al cargar el archivo",
       "viewErrorDesc": "No se pudo cargar el archivo para visualización",
       "fileSelectError": "Selecciona un archivo para subir",
-      "fileTooLarge": "Archivo demasiado grande. Tamaño máximo: 50MB",
+      "fileTooLarge": "Archivo demasiado grande. Tamaño máximo: 10MB",
       "fileTypeNotSupported": "Tipo de archivo no soportado. Usa: PDF, DOC, DOCX, TXT, PPT o PPTX",
-      "tokenCopied": "¡Token copiado!",
-      "tokenCopyError": "Error al copiar el token",
+      "tokenCopied": "¡Clave copiada!",
+      "tokenCopyError": "Error al copiar la clave",
+      "widgetUrlTitle": "URL del Widget",
+      "copyUrl": "Copiar URL",
+      "testUrl": "Probar URL",
       "columns": {
         "fileName": "Archivo",
         "type": "Tipo",
@@ -542,6 +564,7 @@
     "detail": {
       "breadcrumb": "Universidades",
       "edit": "Editar",
+      "myAIAgent": "Mi Agente IA",
       "notFound": "Universidad no encontrada",
       "stats": {
         "courses": "Cursos",
@@ -618,8 +641,21 @@
       "codeRequired": "El nombre de fantasía es requerido",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Descripción de la universidad (opcional)",
-      "addressLabel": "Dirección",
-      "addressPlaceholder": "Ej: Calle de la Rectoría, 374 - Ciudad Universitaria",
+      "cepLabel": "Código Postal (CEP)",
+      "cepPlaceholder": "00000-000",
+      "cepHelpText": "Ingrese el código postal brasileño para autocompletar la dirección",
+      "streetLabel": "Calle",
+      "streetPlaceholder": "Nombre de la calle",
+      "streetNumberLabel": "Número",
+      "streetNumberPlaceholder": "Número",
+      "complementLabel": "Complemento",
+      "complementPlaceholder": "Apartamento, Suite, etc. (opcional)",
+      "neighborhoodLabel": "Barrio",
+      "neighborhoodPlaceholder": "Barrio",
+      "cityLabel": "Ciudad",
+      "cityPlaceholder": "Ciudad",
+      "stateLabel": "Estado",
+      "statePlaceholder": "UF",
       "taxIdLabel": "Número de identificación fiscal",
       "taxIdPlaceholder": "Ej: 00.000.000/0000-00",
       "contactEmailLabel": "Correo electrónico de contacto",
@@ -673,6 +709,14 @@
     "deactivate": "Desactivar",
     "activate": "Activar",
     "delete": "Eliminar",
+    "agentDeactivate": "Desactivar Agente",
+    "agentActivate": "Activar Agente",
+    "agentDeactivateConfirm": "Desactivar Agente",
+    "agentDeactivateDescription": "¿Estás seguro de que deseas desactivar este agente? El profesor no podrá usarlo hasta que sea reactivado.",
+    "agentDeactivateSuccess": "Agente desactivado exitosamente",
+    "agentDeactivateError": "Error al desactivar agente",
+    "agentActivateSuccess": "Agente activado exitosamente",
+    "agentActivateError": "Error al activar agente",
     "stats": {
       "totalProfessors": "Total de profesores",
       "totalDesc": "Todos los profesores",
@@ -694,6 +738,10 @@
       "status": "Estado",
       "active": "Activo",
       "inactive": "Inactivo",
+      "agentStatus": "Agente IA",
+      "noAgent": "Sin Agente",
+      "agentActive": "Activo",
+      "agentInactive": "Inactivo",
       "actions": "Acciones"
     },
     "professorsTable": "Profesores",
@@ -735,6 +783,9 @@
       "loadingCourses": "Cargando cursos...",
       "noCoursesAvailable": "No hay cursos disponibles para esta universidad.",
       "selectUniversityFirst": "Selecciona una universidad primero para ver los cursos disponibles.",
+      "selectCourses": "Seleccionar cursos...",
+      "searchCourses": "Buscar cursos...",
+      "noCoursesFound": "No se encontraron cursos.",
       "firstNameLabel": "Nombre *",
       "firstNamePlaceholder": "ej., Juan",
       "lastNameLabel": "Apellido *",
@@ -853,6 +904,9 @@
       "adminDescription": "Los administradores pueden gestionar cursos y asignar profesores",
       "assignedCourses": "Cursos Asignados",
       "assignedCoursesDescription": "Selecciona qué cursos puede acceder este profesor",
+      "selectCourses": "Seleccionar cursos...",
+      "searchCourses": "Buscar cursos...",
+      "noCoursesFound": "No se encontraron cursos.",
       "noCoursesAvailable": "No hay cursos disponibles para esta universidad",
       "errorLoadingCourses": "Error al cargar cursos",
       "passwordReset": "Restablecer Contraseña",
@@ -880,6 +934,16 @@
       "languageEnglish": "English (Estados Unidos)",
       "languageSpanish": "Español",
       "languageHint": "La interfaz del profesor se mostrará en este idioma"
+    },
+    "agentDialog": {
+      "title": "Gestionar Agente de IA",
+      "description": "Crea un agente de IA para que {professorName} proporcione retroalimentación sobre sus materiales del curso.",
+      "explanation": "Esto creará un asistente de IA personalizado que el profesor puede usar para obtener retroalimentación y sugerencias para mejorar sus cursos.",
+      "createButton": "Crear Agente de IA",
+      "creating": "Creando...",
+      "createSuccess": "¡Agente del profesor creado con éxito!",
+      "createError": "Error al crear agente del profesor",
+      "manageAgent": "Gestionar Agente de IA"
     }
   },
   "students": {
@@ -897,16 +961,54 @@
     "tableDescription": "La interfaz de gestión de estudiantes se implementará aquí",
     "comingSoon": "Sistema de gestión de estudiantes próximamente..."
   },
+  "professorAgent": {
+    "title": "Agente de IA del Profesor",
+    "description": "Tu asistente de IA personal para retroalimentación sobre materiales del curso",
+    "noAgent": {
+      "message": "Aún no tienes un agente de IA. Por favor, contacta al administrador de tu universidad para crear uno para ti.",
+      "adminOnly": "Solo los administradores pueden crear agentes de IA para profesores."
+    },
+    "agentInfo": {
+      "title": "Información del Agente",
+      "language": "Idioma:",
+      "languagePortuguese": "Portugués (Brasil)",
+      "languageEnglish": "Inglés",
+      "languageSpanish": "Español",
+      "aiModel": "Modelo de IA:",
+      "defaultModel": "Predeterminado",
+      "status": "Estado:",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "tokens": {
+      "title": "Tokens de Acceso",
+      "description": "Genera tokens para acceder a tu agente de IA a través del widget",
+      "newButton": "Nuevo Token",
+      "createSuccess": "¡Token creado con éxito!",
+      "createError": "Error al crear token",
+      "copySuccess": "¡Token copiado al portapapeles!",
+      "copyError": "Error al copiar token",
+      "noTokens": "No hay tokens aún. Crea uno para acceder a tu agente de IA.",
+      "clickToAccess": "Haz clic en un token para acceder al widget y obtener retroalimentación de IA sobre tus materiales del curso."
+    },
+    "howToUse": {
+      "title": "Cómo Usar",
+      "step1": "1. Crea un token de acceso arriba",
+      "step2": "2. Haz clic en el token para abrir el widget",
+      "step3": "3. Haz preguntas sobre tus materiales del curso y recibe retroalimentación impulsada por IA",
+      "step4": "4. La IA analizará tu contenido y proporcionará sugerencias de mejora"
+    }
+  },
   "tokens": {
-    "title": "Gestión de tokens de módulos",
-    "description": "Crea y gestiona tokens de acceso para widgets de tutoría de IA",
-    "createButton": "Generar token",
-    "searchPlaceholder": "Buscar tokens, módulos o descripciones...",
-    "emptyMessage": "No se encontraron tokens. Crea tu primer token para comenzar.",
+    "title": "Gestión de claves de acceso de módulo",
+    "description": "Crea y gestiona claves de acceso para widgets de tutoría de IA",
+    "createButton": "Generar clave",
+    "searchPlaceholder": "Buscar claves, módulos o descripciones...",
+    "emptyMessage": "No se encontraron claves. Crea tu primera clave para comenzar.",
     "columns": {
-      "tokenName": "Nombre del token",
+      "tokenName": "Nombre de la clave",
       "module": "Módulo",
-      "token": "Token",
+      "token": "Clave",
       "chat": "Chat",
       "files": "Archivos",
       "allowed": "Permitido",
@@ -919,49 +1021,60 @@
       "status": "Estado",
       "active": "Activo",
       "inactive": "Inactivo",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "copyWidgetUrlSuccess": "¡URL del widget copiada al portapapeles!",
+      "copyError": "Error al copiar. Por favor, intenta de nuevo.",
+      "actionButtons": {
+        "view": "Ver detalles de la clave",
+        "edit": "Editar clave",
+        "openWidget": "Abrir widget en nueva pestaña",
+        "copyWidgetUrl": "Copiar URL del widget",
+        "viewWidgetUrl": "Ver URL del widget",
+        "delete": "Eliminar clave"
+      }
     },
     "stats": {
-      "totalTokens": "Total de tokens",
-      "activeTokens": "Tokens activos",
+      "totalTokens": "Total de claves",
+      "activeTokens": "Claves activas",
       "securityRate": "Tasa de seguridad",
       "expiringSoon": "Expiran pronto"
     },
-    "deleteTitle": "Eliminar Token",
-    "deleteConfirm": "¿Estás seguro de que deseas eliminar este token? Esta acción no se puede deshacer.",
-    "deleteSuccess": "Token eliminado exitosamente",
-    "deleteError": "Error al eliminar el token. Por favor, intenta de nuevo.",
-    "copySuccess": "¡Token copiado al portapapeles!",
+    "deleteTitle": "Eliminar clave",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar esta clave? Esta acción no se puede deshacer.",
+    "deleteSuccess": "Clave eliminada exitosamente",
+    "deleteError": "Error al eliminar la clave. Por favor, intenta de nuevo.",
+    "copySuccess": "¡Clave copiada al portapapeles!",
     "copyWidgetUrlSuccess": "¡URL del widget copiada al portapapeles!",
-    "copyError": "Error al copiar el token. Por favor, intenta de nuevo.",
+    "copyError": "Error al copiar la clave. Por favor, intenta de nuevo.",
     "actions": {
-      "view": "Ver detalles del token",
-      "edit": "Editar token",
+      "view": "Ver detalles de la clave",
+      "edit": "Editar clave",
       "openWidget": "Abrir widget en nueva pestaña",
       "copyWidgetUrl": "Copiar URL del widget",
-      "delete": "Eliminar token"
+      "viewWidgetUrl": "Ver URL del widget",
+      "delete": "Eliminar clave"
     },
     "modal": {
-      "createTitle": "Crear token de módulo",
-      "editTitle": "Editar token de módulo",
-      "viewTitle": "Detalles del token",
-      "createDescription": "Genera un nuevo token de acceso para widgets de tutoría de IA",
-      "editDescription": "Actualiza la configuración del token de acceso",
-      "viewDescription": "Ver información y acciones disponibles para este token",
+      "createTitle": "Crear clave de acceso de módulo",
+      "editTitle": "Editar clave de acceso de módulo",
+      "viewTitle": "Detalles de la clave",
+      "createDescription": "Genera una nueva clave de acceso para widgets de tutoría de IA",
+      "editDescription": "Actualiza la configuración de la clave de acceso",
+      "viewDescription": "Ver información y acciones disponibles para esta clave",
       "moduleLabel": "Módulo *",
       "selectModule": "Selecciona un módulo",
       "loadingModules": "Cargando módulos...",
       "searchModule": "Buscar módulo...",
       "noModules": "No se encontraron módulos.",
       "moduleRequired": "Selecciona un módulo",
-      "nameLabel": "Nombre del token *",
+      "nameLabel": "Nombre de la clave *",
       "namePlaceholder": "Ej: Widget Moodle 2024",
-      "nameRequired": "El nombre del token es requerido",
+      "nameRequired": "El nombre de la clave es requerido",
       "descriptionLabel": "Descripción (opcional)",
-      "descriptionPlaceholder": "Descripción del uso de este token...",
+      "descriptionPlaceholder": "Descripción del uso de esta clave...",
       "expiresLabel": "Expira en (días - opcional)",
       "expiresPlaceholder": "Ej: 365",
-      "expiresHint": "Deja vacío para un token sin expiración",
+      "expiresHint": "Deja vacío para una clave sin expiración",
       "permissions": "Permisos",
       "allowChat": "Permitir chat",
       "allowChatDesc": "Permite a los usuarios hacer preguntas al tutor de IA",
@@ -969,11 +1082,11 @@
       "allowFileAccessDesc": "Permite a los usuarios descargar archivos del módulo",
       "close": "Cerrar",
       "cancel": "Cancelar",
-      "createToken": "Crear token",
+      "createToken": "Crear clave",
       "saveChanges": "Guardar cambios",
-      "copyToken": "Copiar token",
-      "revokeToken": "Revocar token",
-      "tokenLabel": "Token",
+      "copyToken": "Copiar clave",
+      "revokeToken": "Revocar clave",
+      "tokenLabel": "Clave",
       "name": "Nombre",
       "status": "Estado",
       "description": "Descripción",
@@ -986,14 +1099,14 @@
       "requests": "{count} solicitudes",
       "chatPermission": "Permiso de chat",
       "filePermission": "Acceso a archivos",
-      "revokeTitle": "Revocar Token",
-      "revokeConfirm": "¿Estás seguro de que deseas revocar este token? Esta acción no se puede deshacer.",
-      "revokeSuccess": "Token revocado exitosamente",
-      "revokeError": "Error al revocar el token. Por favor, intenta de nuevo.",
-      "createError": "Error al crear el token. Por favor, intenta de nuevo.",
-      "updateError": "Error al actualizar el token. Por favor, intenta de nuevo.",
-      "copySuccessShort": "¡Token copiado!",
-      "copyErrorShort": "Error al copiar el token",
+      "revokeTitle": "Revocar clave",
+      "revokeConfirm": "¿Estás seguro de que deseas revocar esta clave? Esta acción no se puede deshacer.",
+      "revokeSuccess": "Clave revocada exitosamente",
+      "revokeError": "Error al revocar la clave. Por favor, intenta de nuevo.",
+      "createError": "Error al crear la clave. Por favor, intenta de nuevo.",
+      "updateError": "Error al actualizar la clave. Por favor, intenta de nuevo.",
+      "copySuccessShort": "¡Clave copiada!",
+      "copyErrorShort": "Error al copiar la clave",
       "active": "Activo",
       "inactive": "Inactivo",
       "allowed": "Permitido",
@@ -1204,9 +1317,10 @@
     "tutorials": "Tutoriales y Guías",
     "universities": "Universidades",
     "myUniversity": "Mi universidad",
-    "moduleTokens": "Tokens de módulos",
+    "moduleTokens": "Claves de Acceso",
     "professors": "Profesores",
     "administration": "Administración",
+    "analytics": "Analíticas",
     "systemOverview": "Vista general del sistema",
     "superAdmins": "Super administradores",
     "globalSearch": "Búsqueda global",
@@ -1309,6 +1423,15 @@
     "languageChangeInfo": "La página se recargará para aplicar el nuevo idioma",
     "saveError": "Error al guardar la configuración"
   },
+  "dateRangePicker": {
+    "placeholder": "Selecciona un rango de fechas",
+    "presets": "Predefinidos",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "last7Days": "Últimos 7 días",
+    "last30Days": "Últimos 30 días",
+    "last365Days": "Últimos 365 días"
+  },
   "common": {
     "buttons": {
       "save": "Guardar",
@@ -1318,13 +1441,25 @@
       "view": "Ver",
       "create": "Crear",
       "back": "Volver",
+      "previous": "Anterior",
+      "next": "Siguiente",
       "loading": "Cargando...",
       "search": "Buscar",
-      "filter": "Filtrar"
+      "filter": "Filtrar",
+      "close": "Cerrar"
     },
     "pagination": {
       "rowsPerPage": "Filas por página:",
       "showing": "Mostrando {from} a {to} de {total} registros"
+    },
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo o vuelve al panel.",
+      "tryAgain": "Intentar de Nuevo",
+      "goHome": "Ir al Panel",
+      "sectionTitle": "Error al cargar sección",
+      "sectionDescription": "Ocurrió un error al cargar esta sección.",
+      "reloadPage": "Recargar Página"
     },
     "breadcrumbs": {
       "courses": "Cursos",
@@ -1340,6 +1475,9 @@
     "noData": "No hay datos disponibles",
     "error": "Error",
     "success": "Éxito",
+    "cancel": "Cancelar",
+    "previous": "Anterior",
+    "next": "Siguiente",
     "passwordSetup": {
       "title": "Configurar tu contraseña",
       "description": "Cuando recibas un enlace de configuración de contraseña:",
@@ -1599,18 +1737,18 @@
         }
       },
       "moduleTokens": {
-        "title": "Vista general de Tokens de módulo",
-        "description": "Los tokens de módulo proporcionan acceso a widgets de tutoría IA. Los super administradores pueden ver tokens en todas las universidades.",
+        "title": "Vista general de claves de acceso de módulo",
+        "description": "Las claves de acceso de módulo proporcionan acceso a widgets de tutoría IA. Los super administradores pueden ver claves en todas las universidades.",
         "viewing": {
-          "title": "Ver Tokens de módulo",
+          "title": "Ver claves de acceso de módulo",
           "steps": [
-            "Navega a Tokens de Módulo (/tokens) desde la barra lateral",
-            "Ver todos los tokens en todo el sistema",
-            "Filtrar tokens por universidad usando el parámetro de URL",
-            "Ver permisos de tokens, fechas de expiración y estadísticas de uso"
+            "Navega a Claves de Acceso de Módulo (/tokens) desde la barra lateral",
+            "Ver todas las claves en todo el sistema",
+            "Filtrar claves por universidad usando el parámetro de URL",
+            "Ver permisos de claves, fechas de expiración y estadísticas de uso"
           ]
         },
-        "note": "Nota: La creación y gestión de tokens de módulo generalmente la realizan los profesores. Como super administrador, tienes acceso de lectura para monitorear el uso de tokens en todo el sistema."
+        "note": "Nota: La creación y gestión de claves de acceso de módulo generalmente la realizan los profesores. Como super administrador, tienes acceso de lectura para monitorear el uso de claves en todo el sistema."
       },
       "bestPractices": {
         "title": "Mejores prácticas",
@@ -1960,7 +2098,7 @@
         "title": "CÓMO SUBIR ARCHIVOS A MÓDULOS - Tutorial Completo",
         "whatIs": "¡Subir ARCHIVOS es como poner LIBROS, NOTAS y MATERIALES en una BIBLIOTECA para que la IA los lea! Los archivos que subes (PDFs, PowerPoints, documentos Word, etc.) son lo que el TUTOR IA usará para RESPONDER preguntas de los estudiantes! Piensa en esto así: la IA es un bibliotecario súper inteligente, ¡y los archivos son los libros que puede consultar!",
         "why": "¿POR QUÉ subir archivos? ¡Porque la IA necesita CONTENIDO con el que trabajar! Si no subes archivos, la IA solo tendrá su conocimiento general. ¡Pero si subes TUS diapositivas de clase, TUS notas, TUS PDFs, la IA puede responder preguntas ESPECÍFICAMENTE sobre el contenido de TU curso!",
-        "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 50MB por archivo.",
+        "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 10MB por archivo.",
         "steps": [
           {
             "number": "1",
@@ -2001,7 +2139,7 @@
           },
           {
             "mistake": "¡Mi archivo es demasiado grande y no se sube!",
-            "solution": "¡El tamaño máximo de archivo es 50MB! Si tu archivo es más grande: 1) DIVÍDELO en partes más pequeñas (como dividir un PDF de 100MB en dos PDFs de 50MB), 2) COMPRIME el PDF (usa herramientas en línea como 'smallpdf.com' o 'ilovepdf.com' para reducir el tamaño), 3) Elimina imágenes/páginas innecesarias para reducir el tamaño."
+            "solution": "¡El tamaño máximo de archivo es 10MB! Si tu archivo es más grande: 1) DIVÍDELO en partes más pequeñas (como dividir un PDF de 100MB en dos PDFs de 10MB), 2) COMPRIME el PDF (usa herramientas en línea como 'smallpdf.com' o 'ilovepdf.com' para reducir el tamaño), 3) Elimina imágenes/páginas innecesarias para reducir el tamaño."
           },
           {
             "mistake": "¡La subida comenzó pero se quedó atascada al 50% y no continúa!",
@@ -2421,7 +2559,7 @@
           "Haz clic en 'Subir Archivo'",
           "Selecciona o arrastra y suelta tu archivo",
           "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-          "Tamaño máximo: 50MB por archivo",
+          "Tamaño máximo: 10MB por archivo",
           "Espera a que se complete la subida"
         ],
         "managing": {
@@ -2682,7 +2820,7 @@
               "Haz clic en 'Subir Archivo' en la sección de Archivos",
               "Selecciona o arrastra y suelta tu archivo",
               "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-              "Tamaño máximo: 50MB por archivo",
+              "Tamaño máximo: 10MB por archivo",
               "Haz clic en 'Subir Archivo' para agregarlo",
               "El archivo será indexado y estará disponible para el tutor IA"
             ]
@@ -2852,11 +2990,11 @@
           "title": "Problemas de preparación de módulos",
           "noTokens": "Error: 'No hay tokens disponibles' - Crea al menos un token activo con permiso de chat antes de preparar.",
           "invalidToken": "Error: 'Token inválido' - Asegúrate de que el token esté activo y tenga habilitado el permiso de chat.",
-          "preparationFailed": "Si la preparación falla, verifica que tus archivos sean menores de 50MB y estén en formatos soportados."
+          "preparationFailed": "Si la preparación falla, verifica que tus archivos sean menores de 10MB y estén en formatos soportados."
         },
         "fileUploads": {
           "title": "Problemas de subida de archivos",
-          "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 50MB.",
+          "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 10MB.",
           "unsupportedFormat": "Formato no soportado: Convierte archivos a PDF, DOC, DOCX, TXT, PPT o PPTX.",
           "uploadFailed": "Subida fallida: Verifica tu conexión a internet e intenta de nuevo."
         },
@@ -3012,7 +3150,7 @@
             "Haz clic en 'Subir Archivo' en la sección de Archivos",
             "Selecciona o arrastra y suelta tu archivo",
             "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
-            "Tamaño máximo: 50MB por archivo",
+            "Tamaño máximo: 10MB por archivo",
             "Haz clic en 'Subir Archivo' para agregarlo",
             "El archivo será indexado y estará disponible para el tutor de IA"
           ]
@@ -3182,11 +3320,11 @@
         "title": "Problemas de Preparación de Módulos",
         "noTokens": "Error: 'No hay tokens disponibles' - Crea al menos un token activo con permiso de chat antes de preparar.",
         "invalidToken": "Error: 'Token inválido' - Asegúrate de que el token esté activo y tenga habilitado el permiso de chat.",
-        "preparationFailed": "Si la preparación falla, verifica que tus archivos estén bajo 50MB y en formatos soportados."
+        "preparationFailed": "Si la preparación falla, verifica que tus archivos estén bajo 10MB y en formatos soportados."
       },
       "fileUploads": {
         "title": "Problemas de Subida de Archivos",
-        "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 50MB.",
+        "tooLarge": "Archivo demasiado grande: Divide PDFs grandes o comprime archivos a menos de 10MB.",
         "unsupportedFormat": "Formato no soportado: Convierte archivos a PDF, DOC, DOCX, TXT, PPT o PPTX.",
         "uploadFailed": "Subida fallida: Verifica tu conexión a internet e intenta de nuevo."
       },
@@ -3223,6 +3361,7 @@
     "selectCourseType": "Seleccionar Tipo de Curso",
     "selectDescription": "Elige el tipo que mejor se ajuste al contenido de tu curso. Seleccionaremos automáticamente el modelo de IA óptimo.",
     "selectedModel": "Modelo de IA:",
+    "autoOptimized": "Modelo de IA optimizado automáticamente para este tipo de curso",
     "tierNote": "Nota",
     "tierDescription": "El modelo de IA se optimiza automáticamente según el nivel de suscripción de tu universidad para el mejor equilibrio costo-rendimiento.",
     "mathLogic": {
@@ -3236,6 +3375,172 @@
     "theoryText": {
       "name": "Teoría y Humanidades",
       "description": "Conceptos teóricos, ensayos, humanidades, literatura y materias con mucho texto"
+    }
+  },
+  "analytics": {
+    "title": "Panel de Analíticas",
+    "description": "Información sobre actividad de estudiantes, patrones de uso y costos del sistema",
+    "loadError": "Error al cargar datos de analíticas. Por favor, inténtelo de nuevo.",
+    "refreshSuccess": "Datos de analíticas actualizados correctamente",
+    "refresh": "Actualizar",
+    "allUniversities": "Todas las Universidades",
+    "searchUniversities": "Buscar universidades...",
+    "noUniversitiesFound": "No se encontraron universidades.",
+    "exportSuccess": "Informe {format} exportado correctamente",
+    "period": {
+      "day": "Hoy",
+      "week": "Esta Semana",
+      "month": "Este Mes",
+      "year": "Este Año"
+    },
+    "stats": {
+      "totalMessages": "Mensajes Totales",
+      "uniqueStudents": "Estudiantes Únicos",
+      "activeModules": "Módulos Activos",
+      "estimatedCost": "Costo Estimado",
+      "inPeriod": "en {period}",
+      "inSelectedPeriod": "en período seleccionado",
+      "vsYesterday": "vs. ayer",
+      "activeStudents": "Estudiantes activos",
+      "modulesWithActivity": "Módulos con actividad",
+      "totalCost": "Costo total de IA",
+      "allTime": "Todo el tiempo",
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "last7Days": "Últimos 7 días",
+      "last30Days": "Últimos 30 días",
+      "last365Days": "Últimos 365 días"
+    },
+    "dashboard": {
+      "last30Days": "Últimos 30 días",
+      "last30DaysDescription": "Métricas de actividad y rendimiento de los últimos 30 días"
+    },
+    "summary": {
+      "totalMessages": "Mensajes Totales",
+      "totalCost": "Costo Total",
+      "uniqueStudents": "Estudiantes Únicos",
+      "avgResponseTime": "Tiempo Promedio de Respuesta",
+      "vsPrevious": "vs. período anterior"
+    },
+    "today": {
+      "usageTitle": "Uso de Hoy",
+      "usageDescription": "Métricas de actividad del día actual",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "conversations": "Conversaciones",
+      "avgResponseTime": "Tiempo Prom. de Respuesta",
+      "costTitle": "Costo de Hoy",
+      "costDescription": "Costo de uso de IA para hoy",
+      "totalToday": "Costo total de hoy",
+      "tokens": "Tokens Totales",
+      "vsYesterday": "vs. Ayer",
+      "videoTranscriptions": "Transcripciones de Video",
+      "transcriptionCost": "Costo de Transcripción",
+      "videosTranscribed": "Videos Transcritos",
+      "projectedTranscriptionCost": "Costo Diario Proyectado"
+    },
+    "charts": {
+      "usageTrends": "Tendencias de Uso",
+      "usageTrendsDescription": "Mensajes y actividad de estudiantes a lo largo del tiempo",
+      "costTrend": "Tendencia de Costos",
+      "costTrendDescription": "Costos de uso de IA a lo largo del tiempo",
+      "hourlyBreakdown": "Desglose Horario de Actividad",
+      "hourlyBreakdownDescription": "Análisis de horas pico de uso",
+      "providerDistribution": "Distribución por Proveedor",
+      "providerDistributionDescription": "Mensajes por proveedor de IA",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "costUSD": "Costo (USD)"
+    },
+    "filters": {
+      "noFutureDates": "No se permiten fechas futuras",
+      "noFutureDatesDescription": "Por favor seleccione un rango de fechas hasta hoy.",
+      "maxRangeExceeded": "Rango de fechas demasiado grande",
+      "maxRangeExceededDescription": "Por favor seleccione un rango de fechas de máximo 1 año (365 días)."
+    },
+    "moduleComparison": {
+      "title": "Comparación de Módulos",
+      "description": "Comparar rendimiento entre módulos",
+      "show": "Mostrar Comparación",
+      "hide": "Ocultar Comparación",
+      "selectModules": "Seleccione módulos para comparar",
+      "modulesSelected": "módulos seleccionados",
+      "searchModules": "Buscar módulos...",
+      "noModulesFound": "No se encontraron módulos",
+      "selectAtLeastTwo": "Seleccione al menos 2 módulos para comparar",
+      "maxModulesError": "Se pueden seleccionar un máximo de 10 módulos para comparar",
+      "maxModulesDescription": "Por favor deseleccione un módulo antes de seleccionar uno nuevo.",
+      "loadError": "Error al cargar datos de comparación de módulos",
+      "moduleName": "Nombre del Módulo",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "tokens": "Tokens",
+      "cost": "Costo (USD)",
+      "avgResponseTime": "Tiempo Promedio de Respuesta"
+    },
+    "export": {
+      "title": "Informe de Analíticas",
+      "period": "Período",
+      "dateRange": "Rango de Fechas",
+      "generated": "Generado",
+      "university": "Universidad",
+      "overviewTitle": "Estadísticas Generales",
+      "metric": "Métrica",
+      "value": "Valor",
+      "totalMessages": "Mensajes Totales",
+      "uniqueStudents": "Estudiantes Únicos",
+      "activeModules": "Módulos Activos",
+      "activeCourses": "Cursos Activos",
+      "estimatedCost": "Costo Estimado",
+      "todayUsageTitle": "Uso de Hoy",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "conversations": "Conversaciones",
+      "avgResponseTime": "Tiempo Promedio de Respuesta",
+      "todayCostTitle": "Costo de Hoy",
+      "totalCost": "Costo Total",
+      "totalTokens": "Tokens Totales",
+      "frequentQuestionsTitle": "Preguntas Frecuentes",
+      "question": "Pregunta",
+      "count": "Cantidad",
+      "percentage": "Porcentaje",
+      "topStudentsTitle": "Estudiantes Más Activos",
+      "studentName": "Nombre del Estudiante",
+      "email": "Email",
+      "tokens": "Tokens",
+      "cost": "Costo"
+    },
+    "todayUsage": {
+      "title": "Uso de Hoy",
+      "description": "Métricas de actividad del día actual",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "conversations": "Conversaciones",
+      "avgResponseTime": "Tiempo Promedio de Respuesta"
+    },
+    "todayCost": {
+      "title": "Costo de Hoy",
+      "description": "Costo de uso de IA para hoy",
+      "totalToday": "Costo total hoy",
+      "tokens": "Tokens Totales",
+      "vsYesterday": "vs. Ayer",
+      "videoTranscriptions": "Transcripciones de Video",
+      "transcriptionCost": "Costo de Transcripción",
+      "videosTranscribed": "Videos Transcritos",
+      "projectedTranscriptionCost": "Costo Diario Proyectado"
+    },
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "description": "Preguntas más comunes de los estudiantes",
+      "similarQuestions": "Preguntas similares",
+      "noData": "Aún no hay preguntas frecuentes"
+    },
+    "topStudents": {
+      "title": "Estudiantes Más Activos",
+      "description": "Estudiantes con más actividad",
+      "messages": "mensajes",
+      "conversations": "conversaciones",
+      "noData": "Aún no hay datos de actividad de estudiantes"
     }
   }
 }

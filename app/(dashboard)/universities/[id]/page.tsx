@@ -41,6 +41,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Bot } from 'lucide-react';
 
 export default function UniversityDetailsPage() {
   const params = useParams();
@@ -335,6 +336,15 @@ export default function UniversityDetailsPage() {
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">
+            {/* My AI Agent button for regular professors */}
+            {user?.role === 'professor' && !user?.isAdmin && (
+              <Button variant="default" asChild>
+                <Link href="/professor-agent">
+                  <Bot className="mr-2 h-4 w-4" />
+                  {t('myAIAgent')}
+                </Link>
+              </Button>
+            )}
             <SuperAdminOnly>
               <Button variant="outline" asChild>
                 <Link href={`/universities/${universityId}/edit`}>
@@ -418,12 +428,31 @@ export default function UniversityDetailsPage() {
                   </div>
                 )}
 
-                {university.address && (
+                {(university.street || university.city || university.postalCode) && (
                   <div className="flex items-start space-x-3">
                     <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <div className="flex-1">
                       <p className="text-sm font-medium text-muted-foreground">{t('info.address')}</p>
-                      <p className="text-base">{university.address}</p>
+                      <div className="text-base space-y-1">
+                        {university.street && (
+                          <p>
+                            {university.street}{university.streetNumber && `, ${university.streetNumber}`}
+                            {university.complement && ` - ${university.complement}`}
+                          </p>
+                        )}
+                        {university.neighborhood && (
+                          <p>{university.neighborhood}</p>
+                        )}
+                        {(university.city || university.state || university.postalCode) && (
+                          <p>
+                            {university.city}{university.state && ` - ${university.state}`}
+                            {university.postalCode && `, ${university.postalCode}`}
+                          </p>
+                        )}
+                        {university.country && university.country !== 'Brazil' && (
+                          <p>{university.country}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}

@@ -21,6 +21,12 @@ import type {
   Professor,
   ProfessorCreate,
   ProfessorUpdate,
+  ProfessorAgent,
+  ProfessorAgentCreate,
+  ProfessorAgentUpdate,
+  ProfessorAgentToken,
+  ProfessorAgentTokenCreate,
+  ProfessorAgentStatus,
   Student,
   StudentCreate,
   StudentUpdate,
@@ -43,7 +49,20 @@ import type {
   AddYoutubeVideoRequest,
   TranscriptionResultDto,
   TranscriptionStatusDto,
-  TranscriptTextDto
+  TranscriptTextDto,
+  AnalyticsFilterDto,
+  CostAnalysisDto,
+  TodayCostDto,
+  UsageStatsDto,
+  HourlyUsageResponseDto,
+  UsageTrendsResponseDto,
+  TopActiveStudentsResponseDto,
+  ResponseQualityDto,
+  ConversationMetricsDto,
+  ModuleComparisonResponseDto,
+  FrequentlyAskedQuestionsResponseDto,
+  DashboardSummaryDto,
+  UnifiedDashboardResponseDto
 } from './types';
 
 export const API_CONFIG = {
@@ -55,6 +74,18 @@ export const API_CONFIG = {
   pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
   timeout: 30000,
 } as const;
+
+/**
+ * Options for HTTP request methods to make calls more readable
+ * @example
+ * // Instead of: post(endpoint, data, false, false, true)
+ * // Use: post(endpoint, data, { usePythonAPI: true })
+ */
+export interface RequestOptions {
+  isFormData?: boolean;
+  useAuthAPI?: boolean;
+  usePythonAPI?: boolean;
+}
 
 class TutoriaAPIClient {
   private baseURL: string;
@@ -273,7 +304,37 @@ class TutoriaAPIClient {
     return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI);
   }
 
-  async post<T>(endpoint: string, data?: unknown, isFormData = false, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+  /**
+   * POST request with improved API using options object
+   * @param endpoint - API endpoint
+   * @param data - Request payload
+   * @param options - Request options (isFormData, useAuthAPI, usePythonAPI) or legacy boolean for backward compatibility
+   */
+  async post<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: RequestOptions | boolean,
+    // Legacy parameters for backward compatibility
+    useAuthAPI_DEPRECATED?: boolean,
+    usePythonAPI_DEPRECATED?: boolean
+  ): Promise<T> {
+    // Handle backward compatibility: if options is a boolean, it's the old isFormData parameter
+    let isFormData = false;
+    let useAuthAPI = false;
+    let usePythonAPI = false;
+
+    if (typeof options === 'boolean') {
+      // Legacy call: post(endpoint, data, isFormData, useAuthAPI, usePythonAPI)
+      isFormData = options;
+      useAuthAPI = useAuthAPI_DEPRECATED ?? false;
+      usePythonAPI = usePythonAPI_DEPRECATED ?? false;
+    } else if (options) {
+      // New call: post(endpoint, data, { isFormData, useAuthAPI, usePythonAPI })
+      isFormData = options.isFormData ?? false;
+      useAuthAPI = options.useAuthAPI ?? false;
+      usePythonAPI = options.usePythonAPI ?? false;
+    }
+
     const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
@@ -345,7 +406,7 @@ class TutoriaAPIClient {
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, false, true);
+    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, { useAuthAPI: true });
     if (response.accessToken) {
       this.setToken(response.accessToken);
     }
@@ -353,7 +414,7 @@ class TutoriaAPIClient {
   }
 
   async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
-    return this.post('/api/auth/reset-password-request', { username, userType }, false, true);
+    return this.post('/api/auth/reset-password-request', { username, userType }, { useAuthAPI: true });
   }
 
   async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
@@ -361,7 +422,7 @@ class TutoriaAPIClient {
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
+    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, { useAuthAPI: true });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
@@ -489,7 +550,7 @@ class TutoriaAPIClient {
   // AI/Tutor endpoints (Python API)
   async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
     // This endpoint uses the Python API - must stay snake_case
-    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, true);
+    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
   }
 
   // AI Model endpoints
@@ -706,7 +767,7 @@ class TutoriaAPIClient {
       userType: 'super_admin',
       isAdmin: true, // Super admins are always admins
       languagePreference: data.languagePreference || 'pt-br',
-    }, false, true);
+    }, { useAuthAPI: true });
 
     // Map backend UserResponse to SuperAdmin interface
     return {
@@ -736,9 +797,101 @@ class TutoriaAPIClient {
     return this.get('/api/super-admin/professors/all', params);
   }
 
+  // Professor Agent endpoints
+  async getMyProfessorAgent(): Promise<ProfessorAgent> {
+    return this.get('/api/professoragents/my-agent');
+  }
+
+  async getAllProfessorAgents(universityId?: number): Promise<ProfessorAgent[]> {
+    const params = universityId ? { universityId } : undefined;
+    return this.get('/api/professoragents', params);
+  }
+
+  async createProfessorAgent(data: ProfessorAgentCreate): Promise<ProfessorAgent> {
+    return this.post('/api/professoragents', data);
+  }
+
+  async updateProfessorAgent(id: number, data: ProfessorAgentUpdate): Promise<ProfessorAgent> {
+    return this.put(`/api/professoragents/${id}`, data);
+  }
+
+  async deleteProfessorAgent(id: number): Promise<void> {
+    return this.delete(`/api/professoragents/${id}`);
+  }
+
+  async createProfessorAgentToken(agentId: number, data: ProfessorAgentTokenCreate): Promise<ProfessorAgentToken> {
+    return this.post(`/api/professoragents/${agentId}/tokens`, data);
+  }
+
+  async getProfessorAgentStatus(universityId?: number): Promise<ProfessorAgentStatus[]> {
+    const params = universityId ? { universityId } : undefined;
+    return this.get('/api/professoragents/by-professor', params);
+  }
+
+  async activateProfessorAgent(agentId: number): Promise<void> {
+    return this.patch(`/api/professoragents/${agentId}/activate`, {});
+  }
+
+  async deactivateProfessorAgent(agentId: number): Promise<void> {
+    return this.patch(`/api/professoragents/${agentId}/deactivate`, {});
+  }
+
   // AI Tutor endpoints
   async askTutor(question: TutorQuestion): Promise<TutorResponse> {
     return this.post('/api/tutor/ask', question);
+  }
+
+  // Analytics endpoints
+  async getAnalyticsDashboardSummary(filters?: AnalyticsFilterDto): Promise<DashboardSummaryDto> {
+    return this.get('/api/analytics/dashboard/summary', filters);
+  }
+
+  // Unified dashboard endpoint - combines summary, trends, todayUsage, and todayCost
+  async getAnalyticsDashboardUnified(filters?: AnalyticsFilterDto): Promise<UnifiedDashboardResponseDto> {
+    return this.get('/api/analytics/dashboard/unified', filters);
+  }
+
+  async getAnalyticsCostAnalysis(filters?: AnalyticsFilterDto): Promise<CostAnalysisDto> {
+    return this.get('/api/analytics/costs/detailed', filters);
+  }
+
+  async getAnalyticsTodayCost(filters?: AnalyticsFilterDto): Promise<TodayCostDto> {
+    return this.get('/api/analytics/costs/today', filters);
+  }
+
+  async getAnalyticsTodayUsage(filters?: AnalyticsFilterDto): Promise<UsageStatsDto> {
+    return this.get('/api/analytics/usage/today', filters);
+  }
+
+  async getAnalyticsUsageTrends(filters?: AnalyticsFilterDto): Promise<UsageTrendsResponseDto> {
+    return this.get('/api/analytics/usage/trends', filters);
+  }
+
+  async getAnalyticsHourlyUsage(filters?: AnalyticsFilterDto): Promise<HourlyUsageResponseDto> {
+    return this.get('/api/analytics/usage/hourly', filters);
+  }
+
+  async getAnalyticsTopActiveStudents(filters?: AnalyticsFilterDto): Promise<TopActiveStudentsResponseDto> {
+    return this.get('/api/analytics/students/top-active', filters);
+  }
+
+  async getAnalyticsResponseQuality(filters?: AnalyticsFilterDto): Promise<ResponseQualityDto> {
+    return this.get('/api/analytics/performance/response-quality', filters);
+  }
+
+  async getAnalyticsConversationMetrics(filters?: AnalyticsFilterDto): Promise<ConversationMetricsDto> {
+    return this.get('/api/analytics/engagement/conversations', filters);
+  }
+
+  async getAnalyticsModuleComparison(moduleIds: number[], filters?: Omit<AnalyticsFilterDto, 'moduleId'>): Promise<ModuleComparisonResponseDto> {
+    return this.get('/api/analytics/modules/compare', {
+      ...filters,
+      moduleIds: moduleIds.join(','),
+    });
+  }
+
+  async getAnalyticsFrequentQuestions(filters?: AnalyticsFilterDto): Promise<FrequentlyAskedQuestionsResponseDto> {
+    return this.get('/api/analytics/questions/frequently-asked', filters);
   }
 }
 

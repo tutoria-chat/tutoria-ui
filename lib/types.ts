@@ -78,7 +78,16 @@ export interface University {
   name: string;
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string; // Postal code (ZIP in US, CEP in Brazil, etc.)
+  street?: string;
+  streetNumber?: string;
+  complement?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
+  country?: string;
   taxId?: string; // CNPJ in Brazil, Tax ID in other countries
   contactEmail?: string;
   contactPhone?: string;
@@ -96,7 +105,16 @@ export interface UniversityCreate {
   name: string;
   code: string; // Fantasy Name (Nome Fantasia) - e.g., USP, BYU
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string | null;
+  street?: string | null;
+  streetNumber?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
   taxId?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -109,7 +127,16 @@ export interface UniversityUpdate {
   name: string;
   code: string;
   description?: string;
-  address?: string;
+  // Address fields
+  address?: string; // Deprecated - Use individual address fields below
+  postalCode?: string | null;
+  street?: string | null;
+  streetNumber?: string | null;
+  complement?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
   taxId?: string;
   contactEmail?: string;
   contactPhone?: string;
@@ -194,6 +221,7 @@ export interface Module {
   tutorLanguage?: string; // Language for AI tutor responses (pt-br, en, es)
   aiModelId?: number; // Selected AI model
   aiModel?: AIModel; // Populated AI model details
+  courseType?: 'math-logic' | 'programming' | 'theory-text'; // Course type - backend selects AI model based on this
   files?: File[]; // Files included in module response (reduces API calls)
   createdAt: string;
   updatedAt: string;
@@ -211,6 +239,7 @@ export interface ModuleCreate {
   courseId: number;
   tutorLanguage?: string;
   aiModelId?: number;
+  courseType?: 'math-logic' | 'programming' | 'theory-text';
 }
 
 export interface ModuleUpdate {
@@ -223,6 +252,7 @@ export interface ModuleUpdate {
   courseId?: number;
   tutorLanguage?: string;
   aiModelId?: number;
+  courseType?: 'math-logic' | 'programming' | 'theory-text';
 }
 
 export interface ModuleWithDetails extends Module {
@@ -272,7 +302,7 @@ export interface FileResponse extends File {
 export interface AddYoutubeVideoRequest {
   youtubeUrl: string;
   moduleId: number;
-  language?: string; // 'pt-br' | 'en' | 'es'
+  language: string; // 'pt-br' | 'en' | 'es' - REQUIRED by backend
   name?: string;
 }
 
@@ -326,7 +356,8 @@ export interface Professor {
   languagePreference?: string;
   themePreference?: string;
   coursesCount?: number;
-  assignedCourses?: Course[];
+  assignedCourseIds?: number[]; // Course IDs assigned to this professor
+  assignedCourses?: Course[]; // Full course objects (for compatibility)
 }
 
 export interface ProfessorCreate {
@@ -345,6 +376,79 @@ export interface ProfessorUpdate {
   firstName?: string;
   lastName?: string;
   isAdmin?: boolean;
+}
+
+// Professor Agent Types
+export interface ProfessorAgent {
+  id: number;
+  professorId: number;
+  professorName?: string;
+  professorEmail?: string;
+  universityId: number;
+  universityName?: string;
+  name: string;
+  description?: string;
+  systemPrompt?: string;
+  openAIAssistantId?: string;
+  openAIVectorStoreId?: string;
+  tutorLanguage: string;
+  aiModelId?: number;
+  aiModelDisplayName?: string;
+  isActive: boolean;
+  tokensCount?: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProfessorAgentCreate {
+  professorId: number;
+  name: string;
+  description?: string;
+  systemPrompt?: string;
+  tutorLanguage?: string;
+  aiModelId?: number;
+}
+
+export interface ProfessorAgentUpdate {
+  name?: string;
+  description?: string;
+  systemPrompt?: string;
+  tutorLanguage?: string;
+  aiModelId?: number;
+  isActive?: boolean;
+}
+
+export interface ProfessorAgentToken {
+  id: number;
+  token: string;
+  professorAgentId: number;
+  professorId: number;
+  name: string;
+  description?: string;
+  allowChat: boolean;
+  expiresAt?: string;
+  isExpired: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ProfessorAgentTokenCreate {
+  professorAgentId: number;
+  name: string;
+  description?: string;
+  allowChat?: boolean;
+  expiresAt?: string;
+}
+
+export interface ProfessorAgentStatus {
+  professorId: number;
+  professorName: string;
+  professorEmail: string;
+  hasAgent: boolean;
+  agentId?: number;
+  agentName?: string;
+  agentIsActive?: boolean;
+  agentCreatedAt?: string;
 }
 
 // Student Types
@@ -484,7 +588,7 @@ export interface SystemStats {
 // Pagination and Filtering Types
 export interface PaginationParams {
   page?: number;
-  limit?: number;
+  size?: number; // Backend uses 'size' not 'limit'
   sort?: string;
   order?: 'asc' | 'desc';
   search?: string;
@@ -494,7 +598,7 @@ export interface PaginatedResponse<T> {
   items: T[];
   total: number;
   page: number;
-  limit: number;
+  size: number; // Backend returns 'size' not 'limit'
   totalPages: number;
 }
 
@@ -614,4 +718,247 @@ export interface APIResponse<T> {
   success: boolean;
   data?: T;
   error?: APIError;
+}
+
+// Analytics Types
+export interface AnalyticsFilterDto {
+  startDate?: string;
+  endDate?: string;
+  universityId?: number;
+  courseId?: number;
+  moduleId?: number;
+  period?: 'day' | 'week' | 'month' | 'year' | 'all';
+  limit?: number;
+}
+
+export interface ProviderCostDto {
+  provider: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface ModelCostDto {
+  modelName: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface CostAnalysisDto {
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  startDate?: string;
+  endDate?: string;
+  costByProvider: { [key: string]: ProviderCostDto };
+  costByModel: { [key: string]: ModelCostDto };
+  costByModule: { [key: number]: number }; // moduleId -> cost
+  costByCourse: { [key: number]: number }; // courseId -> cost
+  costByUniversity: { [key: number]: number }; // universityId -> cost
+}
+
+export interface TodayCostDto {
+  date: string;
+  totalMessages: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  comparedToYesterday: {
+    messagesDiff: number;
+    tokensDiff: number;
+    costDiff: number;
+    messagesPercentChange: number;
+    tokensPercentChange: number;
+    costPercentChange: number;
+  };
+  // Video Transcription Costs
+  transcriptionCostUSD: number;
+  transcriptionVideoCount: number;
+  projectedDailyTranscriptionCost: number;
+}
+
+export interface PeakHourDto {
+  hour: number; // 0-23
+  messageCount: number;
+  percentage: number;
+}
+
+export interface UsageStatsDto {
+  date: string;
+  totalMessages: number;
+  uniqueStudents: number;
+  uniqueConversations: number;
+  activeModules: number;
+  totalTokens: number;
+  averageResponseTime: number; // milliseconds
+  estimatedCostUSD: number;
+  messagesByProvider: { [key: string]: number };
+  messagesByModel: { [key: string]: number };
+  peakHour?: PeakHourDto;
+}
+
+export interface HourlyUsageDto {
+  hour: number; // 0-23
+  messageCount: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface HourlyUsageResponseDto {
+  date: string;
+  totalMessages: number;
+  hourlyBreakdown: HourlyUsageDto[];
+}
+
+export interface DailyTrendDto {
+  date: string;
+  messageCount: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+}
+
+export interface UsageTrendsResponseDto {
+  startDate: string;
+  endDate: string;
+  totalMessages: number;
+  trends: DailyTrendDto[];
+}
+
+export interface StudentActivitySummaryDto {
+  studentId: number;
+  studentName?: string;
+  studentEmail?: string;
+  messageCount: number;
+  conversationCount: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  lastActivityAt: string;
+}
+
+export interface TopActiveStudentsResponseDto {
+  startDate?: string;
+  endDate?: string;
+  totalStudents: number;
+  topStudents: StudentActivitySummaryDto[];
+}
+
+export interface ResponseQualityDto {
+  averageResponseTimeMs: number;
+  medianResponseTimeMs: number;
+  averageTokensPerMessage: number;
+  totalMessages: number;
+}
+
+export interface ConversationMetricsDto {
+  totalConversations: number;
+  averageMessagesPerConversation: number;
+  medianMessagesPerConversation: number;
+  completionRate: number; // percentage of conversations with > 1 message
+}
+
+export interface ModuleComparisonItemDto {
+  moduleId: number;
+  moduleName: string;
+  totalMessages: number;
+  uniqueStudents: number;
+  totalTokens: number;
+  estimatedCostUSD: number;
+  averageResponseTimeMs: number;
+}
+
+export interface ModuleComparisonResponseDto {
+  startDate?: string;
+  endDate?: string;
+  modules: ModuleComparisonItemDto[];
+}
+
+export interface FrequentQuestionDto {
+  question: string;
+  count: number;
+  percentage: number;
+  similarQuestions: string[];
+  category?: string;
+  firstAskedAt: string;
+  lastAskedAt: string;
+}
+
+export interface FrequentlyAskedQuestionsResponseDto {
+  totalUniqueQuestions: number;
+  startDate?: string;
+  endDate?: string;
+  questions: FrequentQuestionDto[];
+}
+
+export interface DashboardSummaryDto {
+  period: string;
+  dateRange: {
+    start: string;
+    end: string;
+  };
+  overview: {
+    totalMessages: number;
+    totalCostUSD: number;
+    uniqueStudents: number;
+    activeModules: number;
+    activeCourses: number;
+    activeUniversities: number;
+  };
+  growth: {
+    messagesGrowth: number;
+    studentGrowth: number;
+    costGrowth: number;
+  };
+  topPerformers: {
+    topModule?: {
+      moduleId: number;
+      moduleName: string;
+      messages: number;
+    };
+    topStudent?: {
+      studentId: number;
+      studentName: string;
+      messages: number;
+    };
+    topCourse?: {
+      courseId: number;
+      courseName: string;
+      messages: number;
+    };
+  };
+  costBreakdown: {
+    byProvider: Record<string, number>;
+  };
+  healthIndicators: {
+    systemHealth: string;
+    averageResponseTime: number;
+    errorRate: number;
+    uptime: number;
+  };
+}
+
+export interface UsageAnalyticsSummaryResponseDto {
+  totalMessages: number;
+  totalCostUSD: number;
+  uniqueStudents: number;
+  averageResponseTime: number; // milliseconds
+  comparedToPrevious?: {
+    messagesPercentChange: number;
+    costPercentChange: number;
+    studentsPercentChange: number;
+  };
+  dailyStats?: Array<{
+    date: string;
+    totalMessages: number;
+    uniqueStudents: number;
+  }>;
+}
+
+// Unified dashboard response combining all dashboard data
+export interface UnifiedDashboardResponseDto {
+  summary: DashboardSummaryDto;
+  trends: UsageTrendsResponseDto;
+  todayUsage: UsageStatsDto;
+  todayCost: TodayCostDto;
 }

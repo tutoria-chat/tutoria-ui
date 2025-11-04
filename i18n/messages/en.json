@@ -37,7 +37,48 @@
       "createModule": "Create Module",
       "viewCourses": "View Courses",
       "viewModules": "View Modules",
-      "manageTokens": "Manage Tokens"
+      "manageTokens": "Manage keys",
+      "manageAccessKeys": "Manage Access Keys",
+      "myAIAgent": "My AI Agent"
+    }
+  },
+  "professorAgent": {
+    "title": "Professor AI Agent",
+    "description": "Your personal AI assistant for course material feedback",
+    "noAgent": {
+      "title": "No AI Agent",
+      "message": "You don't have an AI agent yet. Please contact your university admin to create one for you.",
+      "adminOnly": "Only administrators can create professor AI agents."
+    },
+    "loadError": "Failed to load agent information.",
+    "info": {
+      "language": "Language",
+      "aiModel": "AI Model",
+      "status": "Status",
+      "default": "Default",
+      "active": "Active",
+      "inactive": "Inactive",
+      "portuguese": "Portuguese (Brazil)",
+      "english": "English",
+      "spanish": "Spanish"
+    },
+    "keys": {
+      "title": "Access Keys",
+      "description": "Generate keys to access your AI agent via the widget",
+      "newButton": "New key",
+      "empty": "No keys yet. Create one to access your AI agent.",
+      "instructions": "Click on a key to access the widget and get AI feedback on your course materials.",
+      "createSuccess": "key created successfully!",
+      "createError": "Failed to CREATE KEY",
+      "copySuccess": "key copied to clipboard!",
+      "copyError": "Failed to copy key"
+    },
+    "howToUse": {
+      "title": "How to Use",
+      "step1": "1. Create an access key above",
+      "step2": "2. Click on the key to open the widget",
+      "step3": "3. Ask questions about your course materials and get AI-powered feedback",
+      "step4": "4. The AI will analyze your content and provide suggestions for improvement"
     }
   },
   "courses": {
@@ -142,8 +183,8 @@
         "noModules": "No modules found with the applied filters.",
         "noModulesInitial": "No modules found. Add your first module to get started.",
         "files": "Files",
-        "tokens": "Tokens",
-        "tokensCount": "{count} tokens",
+        "keys": "keys",
+        "tokensCount": "{count} keys",
         "lastUpdate": "Last Update",
         "neverUpdated": "Never"
       },
@@ -202,6 +243,16 @@
     "form": {
       "create": "Create New Module",
       "edit": "Edit Module",
+      "steps": {
+        "basic": "Basic Info",
+        "basicDesc": "Module details",
+        "aiModel": "AI Model",
+        "aiModelDesc": "Select model",
+        "prompt": "System Prompt",
+        "promptDesc": "Configure AI",
+        "settings": "Settings",
+        "settingsDesc": "Language & more"
+      },
       "nameLabel": "Module Name *",
       "namePlaceholder": "e.g., Introduction to Data Structures",
       "nameRequired": "Module name is required",
@@ -264,6 +315,7 @@
       "improveSuccess": "Prompt improved!",
       "improveSuccessDesc": "Remaining improvements: {count}/3 in the next 72h.",
       "improveError": "Error improving prompt",
+      "courseCannotChange": "Course cannot be changed",
       "templates": {
         "general": {
           "name": "General Tutor",
@@ -291,7 +343,8 @@
       "viewCourse": "View Course",
       "prepareModule": "Prepare Module",
       "preparing": "Preparing...",
-      "createToken": "Create Token",
+      "createToken": "CREATE KEY",
+      "createModuleInCourse": "Create new module in same course",
       "editModule": "Edit Module",
       "moduleInfo": "Module Information",
       "description": "Description",
@@ -303,7 +356,7 @@
       "aiTutorNotConfigured": "AI Tutor Not Configured",
       "stats": "Statistics",
       "files": "Files",
-      "accessTokens": "Access Tokens",
+      "accessTokens": "Access Keys",
       "uploadFile": "Upload File",
       "uploadFileDesc": "Upload study materials for this module",
       "uploading": "Uploading...",
@@ -311,18 +364,18 @@
       "moduleFiles": "Module Files",
       "filesAvailable": "Files available in this module",
       "noFiles": "No files uploaded yet. Upload your first file above.",
-      "moduleTokens": "Access Tokens",
-      "tokensGenerated": "Tokens generated for this module",
-      "noTokens": "No tokens generated yet. Click 'Create Token' above.",
-      "prepareNoTokens": "No tokens available",
-      "prepareNoTokensDesc": "Create a token first to prepare the module.",
-      "prepareInvalidToken": "Invalid token",
-      "prepareInvalidTokenDesc": "Create an active token with chat permission.",
+      "moduleTokens": "Access Keys",
+      "tokensGenerated": "Keys generated for this module",
+      "noTokens": "No keys generated yet. Click 'Create Key' above.",
+      "prepareNoTokens": "No keys available",
+      "prepareNoTokensDesc": "Create a key first to prepare the module.",
+      "prepareInvalidToken": "Invalid key",
+      "prepareInvalidTokenDesc": "Create an active key with chat permission.",
       "prepareSuccess": "Module prepared!",
       "prepareSuccessDesc": "Files have been uploaded to OpenAI and the assistant is ready.",
       "prepareError": "Error preparing module",
       "prepareErrorDesc": "Could not prepare the module. Please try again.",
-      "tokenCreatedSuccess": "Token created successfully!",
+      "tokenCreatedSuccess": "Key created successfully!",
       "fileUploadSuccess": "File uploaded successfully!",
       "fileUploadSuccessDesc": "{fileName} has been added to the module.",
       "fileUploadError": "Error uploading file",
@@ -338,16 +391,24 @@
       "viewError": "Error loading file",
       "viewErrorDesc": "Could not load the file for viewing",
       "fileSelectError": "Select a file to upload",
-      "fileTooLarge": "File too large. Maximum size: 50MB",
+      "fileTooLarge": "File too large. Maximum size: 10MB",
       "fileTypeNotSupported": "File type not supported. Use: PDF, DOC, DOCX, TXT, PPT or PPTX",
-      "tokenCopied": "Token copied!",
-      "tokenCopyError": "Error copying token",
+      "tokenCopied": "key copied!",
+      "tokenCopyError": "Error copying key",
+      "widgetUrlTitle": "Widget URL",
+      "copyUrl": "Copy URL",
+      "testUrl": "Test URL",
       "addYoutubeVideo": "Add YouTube Video",
       "addYoutubeVideoDesc": "Add a YouTube video URL to transcribe and use as course material",
       "youtubeUrl": "YouTube URL",
       "videoName": "Video Name",
       "optional": "optional",
       "videoNamePlaceholder": "e.g., Lecture 1: Introduction",
+      "videoLanguage": "Video Language",
+      "languagePortuguese": "Portuguese (Brazil)",
+      "languageEnglish": "English",
+      "languageSpanish": "Spanish",
+      "languageHint": "Select the language spoken in the video for accurate transcription",
       "processing": "Processing...",
       "addVideoButton": "Add Video",
       "youtubeUrlRequired": "YouTube URL is required",
@@ -441,13 +502,13 @@
     "selectModelButton": "Select AI Model",
     "modelDetails": "Model Details",
     "provider": "Provider",
-    "maxTokens": "Max Tokens",
-    "costPer1M": "Cost per 1M tokens",
+    "maxTokens": "Max keys",
+    "costPer1M": "Cost per 1M keys",
     "input": "Input",
     "output": "Output",
     "deprecated": "Deprecated",
     "comingSoon": "Coming Soon!",
-    "pricePerMillion": "per 1M tokens",
+    "pricePerMillion": "per 1M keys",
     "tier": "Tier",
     "tierBasic": "Basic",
     "tierStandard": "Standard",
@@ -544,6 +605,7 @@
     "detail": {
       "breadcrumb": "Universities",
       "edit": "Edit",
+      "myAIAgent": "My AI Agent",
       "notFound": "University not found",
       "stats": {
         "courses": "Courses",
@@ -620,8 +682,21 @@
       "codeRequired": "Fantasy name is required",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "University description (optional)",
-      "addressLabel": "Address",
-      "addressPlaceholder": "Ex: 123 University Ave, City, State",
+      "cepLabel": "ZIP Code (CEP)",
+      "cepPlaceholder": "00000-000",
+      "cepHelpText": "Enter the Brazilian ZIP code to auto-fill the address",
+      "streetLabel": "Street",
+      "streetPlaceholder": "Street name",
+      "streetNumberLabel": "Number",
+      "streetNumberPlaceholder": "Number",
+      "complementLabel": "Complement",
+      "complementPlaceholder": "Apartment, Suite, etc. (optional)",
+      "neighborhoodLabel": "Neighborhood",
+      "neighborhoodPlaceholder": "Neighborhood",
+      "cityLabel": "City",
+      "cityPlaceholder": "City",
+      "stateLabel": "State",
+      "statePlaceholder": "UF",
       "taxIdLabel": "Tax ID",
       "taxIdPlaceholder": "Ex: 00-0000000",
       "contactEmailLabel": "Contact Email",
@@ -675,6 +750,14 @@
     "deactivate": "Deactivate",
     "activate": "Activate",
     "delete": "Delete",
+    "agentDeactivate": "Deactivate Agent",
+    "agentActivate": "Activate Agent",
+    "agentDeactivateConfirm": "Deactivate Agent",
+    "agentDeactivateDescription": "Are you sure you want to deactivate this agent? The professor will not be able to use it until it is reactivated.",
+    "agentDeactivateSuccess": "Agent deactivated successfully",
+    "agentDeactivateError": "Failed to deactivate agent",
+    "agentActivateSuccess": "Agent activated successfully",
+    "agentActivateError": "Failed to activate agent",
     "stats": {
       "totalProfessors": "Total Professors",
       "totalDesc": "All professors",
@@ -696,6 +779,10 @@
       "status": "Status",
       "active": "Active",
       "inactive": "Inactive",
+      "agentStatus": "AI Agent",
+      "noAgent": "No Agent",
+      "agentActive": "Active",
+      "agentInactive": "Inactive",
       "actions": "Actions"
     },
     "professorsTable": "Professors",
@@ -708,6 +795,16 @@
       "regularDescription": "Can view and manage assigned courses and modules",
       "adminProfessor": "Admin Professor",
       "adminDescription": "Can manage all courses, modules, and professors in their university"
+    },
+    "agentDialog": {
+      "title": "Manage AI Agent",
+      "description": "Create an AI agent for {professorName} to provide feedback on their course materials.",
+      "explanation": "This will create a personalized AI assistant that the professor can use to get feedback and suggestions for improving their courses.",
+      "createButton": "Create AI Agent",
+      "creating": "Creating...",
+      "createSuccess": "Professor agent created successfully!",
+      "createError": "Failed to create professor agent",
+      "manageAgent": "Manage AI Agent"
     },
     "create": {
       "title": "Create Professor",
@@ -737,6 +834,9 @@
       "loadingCourses": "Loading courses...",
       "noCoursesAvailable": "No courses available for this university.",
       "selectUniversityFirst": "Select a university first to see available courses.",
+      "selectCourses": "Select courses...",
+      "searchCourses": "Search courses...",
+      "noCoursesFound": "No courses found.",
       "firstNameLabel": "First Name *",
       "firstNamePlaceholder": "e.g., John",
       "lastNameLabel": "Last Name *",
@@ -855,6 +955,9 @@
       "adminDescription": "Administrators can manage courses and assign professors",
       "assignedCourses": "Assigned Courses",
       "assignedCoursesDescription": "Select which courses this professor can access",
+      "selectCourses": "Select courses...",
+      "searchCourses": "Search courses...",
+      "noCoursesFound": "No courses found.",
       "noCoursesAvailable": "No courses available for this university",
       "errorLoadingCourses": "Error loading courses",
       "passwordReset": "Password Reset",
@@ -899,16 +1002,16 @@
     "tableDescription": "Student management interface will be implemented here",
     "comingSoon": "Student management system coming soon..."
   },
-  "tokens": {
-    "title": "Module Token Management",
-    "description": "Create and manage access tokens for AI tutoring widgets",
-    "createButton": "Generate Token",
-    "searchPlaceholder": "Search tokens, modules or descriptions...",
-    "emptyMessage": "No tokens found. Create your first token to get started.",
+  "keys": {
+    "title": "Module Access Key Management",
+    "description": "Create and manage access keys for AI tutoring widgets",
+    "createButton": "Generate Key",
+    "searchPlaceholder": "Search keys, modules or descriptions...",
+    "emptyMessage": "No keys found. Create your first key to get started.",
     "columns": {
-      "tokenName": "Token Name",
+      "tokenName": "Key Name",
       "module": "Module",
-      "token": "Token",
+      "key": "Key",
       "chat": "Chat",
       "files": "Files",
       "allowed": "Allowed",
@@ -921,49 +1024,60 @@
       "status": "Status",
       "active": "Active",
       "inactive": "Inactive",
-      "actions": "Actions"
+      "actions": "Actions",
+      "copyWidgetUrlSuccess": "Widget URL copied to clipboard!",
+      "copyError": "Failed to copy. Please try again.",
+      "actionButtons": {
+        "view": "View key details",
+        "edit": "Edit key",
+        "openWidget": "Open widget in new tab",
+        "copyWidgetUrl": "Copy widget URL",
+        "viewWidgetUrl": "View widget URL",
+        "delete": "Delete key"
+      }
     },
     "stats": {
-      "totalTokens": "Total Tokens",
-      "activeTokens": "Active Tokens",
+      "totalTokens": "Total Keys",
+      "activeTokens": "Active Keys",
       "securityRate": "Security Rate",
       "expiringSoon": "Expiring Soon"
     },
-    "deleteTitle": "Delete Token",
-    "deleteConfirm": "Are you sure you want to delete this token? This action cannot be undone.",
-    "deleteSuccess": "Token deleted successfully",
-    "deleteError": "Error deleting token. Please try again.",
-    "copySuccess": "Token copied to clipboard!",
+    "deleteTitle": "Delete Key",
+    "deleteConfirm": "Are you sure you want to delete this key? This action cannot be undone.",
+    "deleteSuccess": "Key deleted successfully",
+    "deleteError": "Error deleting key. Please try again.",
+    "copySuccess": "Key copied to clipboard!",
     "copyWidgetUrlSuccess": "Widget URL copied to clipboard!",
-    "copyError": "Failed to copy token. Please try again.",
+    "copyError": "Failed to copy key. Please try again.",
     "actions": {
-      "view": "View token details",
-      "edit": "Edit token",
+      "view": "View key details",
+      "edit": "Edit key",
       "openWidget": "Open widget in new tab",
       "copyWidgetUrl": "Copy widget URL",
-      "delete": "Delete token"
+      "viewWidgetUrl": "View widget URL",
+      "delete": "Delete key"
     },
     "modal": {
-      "createTitle": "Create Module Token",
-      "editTitle": "Edit Module Token",
-      "viewTitle": "Token Details",
-      "createDescription": "Generate a new access token for AI tutoring widgets",
-      "editDescription": "Update access token settings",
-      "viewDescription": "View information and available actions for this token",
+      "createTitle": "Create Module Access Key",
+      "editTitle": "Edit Module Access Key",
+      "viewTitle": "Key Details",
+      "createDescription": "Generate a new access key for AI tutoring widgets",
+      "editDescription": "Update access key settings",
+      "viewDescription": "View information and available actions for this key",
       "moduleLabel": "Module *",
       "selectModule": "Select a module",
       "loadingModules": "Loading modules...",
       "searchModule": "Search module...",
       "noModules": "No modules found.",
       "moduleRequired": "Select a module",
-      "nameLabel": "Token Name *",
+      "nameLabel": "Key Name *",
       "namePlaceholder": "Ex: Moodle Widget 2024",
-      "nameRequired": "Token name is required",
+      "nameRequired": "Key name is required",
       "descriptionLabel": "Description (optional)",
-      "descriptionPlaceholder": "Description of this token's usage...",
+      "descriptionPlaceholder": "Description of this key's usage...",
       "expiresLabel": "Expires in (days - optional)",
       "expiresPlaceholder": "Ex: 365",
-      "expiresHint": "Leave empty for a token with no expiration",
+      "expiresHint": "Leave empty for a key with no expiration",
       "permissions": "Permissions",
       "allowChat": "Allow Chat",
       "allowChatDesc": "Allows users to ask questions to the AI tutor",
@@ -971,11 +1085,11 @@
       "allowFileAccessDesc": "Allows users to download module files",
       "close": "Close",
       "cancel": "Cancel",
-      "createToken": "Create Token",
+      "createToken": "Create Key",
       "saveChanges": "Save Changes",
-      "copyToken": "Copy Token",
-      "revokeToken": "Revoke Token",
-      "tokenLabel": "Token",
+      "copyToken": "Copy Key",
+      "revokeToken": "Revoke Key",
+      "tokenLabel": "Key",
       "name": "Name",
       "status": "Status",
       "description": "Description",
@@ -988,14 +1102,14 @@
       "requests": "{count} requests",
       "chatPermission": "Chat Permission",
       "filePermission": "File Access",
-      "revokeTitle": "Revoke Token",
-      "revokeConfirm": "Are you sure you want to revoke this token? This action cannot be undone.",
-      "revokeSuccess": "Token revoked successfully",
-      "revokeError": "Error revoking token. Please try again.",
-      "createError": "Error creating token. Please try again.",
-      "updateError": "Error updating token. Please try again.",
-      "copySuccessShort": "Token copied!",
-      "copyErrorShort": "Error copying token",
+      "revokeTitle": "Revoke Key",
+      "revokeConfirm": "Are you sure you want to revoke this key? This action cannot be undone.",
+      "revokeSuccess": "Key revoked successfully",
+      "revokeError": "Error revoking key. Please try again.",
+      "createError": "Error creating key. Please try again.",
+      "updateError": "Error updating key. Please try again.",
+      "copySuccessShort": "Key copied!",
+      "copyErrorShort": "Error copying key",
       "active": "Active",
       "inactive": "Inactive",
       "allowed": "Allowed",
@@ -1049,7 +1163,7 @@
     "errorTitle": "Invalid or Expired Link",
     "errorDescription": "This welcome link is invalid or has already expired. Contact your administrator for a new link.",
     "invalidLink": "Invalid welcome link",
-    "tokenInvalid": "Invalid or expired verification token"
+    "tokenInvalid": "Invalid or expired verification key"
   },
   "superAdmins": {
     "title": "Super Administrators Management",
@@ -1206,9 +1320,10 @@
     "tutorials": "Tutorials & Guides",
     "universities": "Universities",
     "myUniversity": "My University",
-    "moduleTokens": "Module Tokens",
+    "moduleTokens": "Access Keys",
     "professors": "Professors",
     "administration": "Administration",
+    "analytics": "Analytics",
     "systemOverview": "System Overview",
     "superAdmins": "Super Administrators",
     "globalSearch": "Global Search",
@@ -1311,6 +1426,15 @@
     "languageChangeInfo": "The page will reload to apply the new language",
     "saveError": "Error saving settings"
   },
+  "dateRangePicker": {
+    "placeholder": "Pick a date range",
+    "presets": "Presets",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "last365Days": "Last 365 days"
+  },
   "common": {
     "buttons": {
       "save": "Save",
@@ -1320,13 +1444,25 @@
       "view": "View",
       "create": "Create",
       "back": "Back",
+      "previous": "Previous",
+      "next": "Next",
       "loading": "Loading...",
       "search": "Search",
-      "filter": "Filter"
+      "filter": "Filter",
+      "close": "Close"
     },
     "pagination": {
       "rowsPerPage": "Rows per page:",
       "showing": "Showing {from} to {to} of {total} records"
+    },
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again or go back to the dashboard.",
+      "tryAgain": "Try Again",
+      "goHome": "Go to Dashboard",
+      "sectionTitle": "Error loading section",
+      "sectionDescription": "An error occurred while loading this section.",
+      "reloadPage": "Reload Page"
     },
     "breadcrumbs": {
       "courses": "Courses",
@@ -1342,6 +1478,9 @@
     "noData": "No data available",
     "error": "Error",
     "success": "Success",
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
     "passwordSetup": {
       "title": "Setting Up Your Password",
       "description": "When you receive a password setup link:",
@@ -1395,7 +1534,7 @@
         "description": "The left sidebar provides access to main features:",
         "common": [
           "Dashboard: Your home page with quick actions",
-          "Module Tokens: View and manage access tokens"
+          "Module Access Keys: View and manage access keys"
         ],
         "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
       },
@@ -1467,7 +1606,7 @@
         "step1Title": "1. Dashboard Overview",
         "step1Desc": "After logging in, you'll see your dashboard at /dashboard with quick actions and system overview. The dashboard provides access to all major features.",
         "step2Title": "2. Understanding Your Navigation",
-        "step2Desc": "Your sidebar contains: Dashboard, Universities, Module Tokens, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
+        "step2Desc": "Your sidebar contains: Dashboard, Universities, Module Access Keys, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
         "step3Title": "3. First Steps",
         "step3Desc": "Start by creating your first university, then create an admin professor for that university. The admin professor can then manage courses and regular professors."
       },
@@ -1572,7 +1711,7 @@
             "Create and edit courses",
             "Create and manage modules for courses",
             "Create regular professors and assign them to courses",
-            "Generate and manage module access tokens",
+            "Generate and manage module access keys",
             "Upload files to modules",
             "Configure AI tutor system prompts"
           ]
@@ -1601,18 +1740,18 @@
         }
       },
       "moduleTokens": {
-        "title": "Module Tokens Overview",
-        "description": "Module tokens provide access to AI tutoring widgets. Super admins can view tokens across all universities.",
+        "title": "Module Access Keys Overview",
+        "description": "Module access keys provide access to AI tutoring widgets. Super admins can view keys across all universities.",
         "viewing": {
-          "title": "Viewing Module Tokens",
+          "title": "Viewing Module Access Keys",
           "steps": [
-            "Navigate to Module Tokens (/tokens) from the sidebar",
-            "View all tokens across the system",
-            "Filter tokens by university using the URL parameter",
-            "See token permissions, expiration dates, and usage statistics"
+            "Navigate to Module Access Keys (/keys) from the sidebar",
+            "View all keys across the system",
+            "Filter keys by university using the URL parameter",
+            "See key permissions, expiration dates, and usage statistics"
           ]
         },
-        "note": "Note: Module token creation and management is typically done by professors. As a super admin, you have read access to monitor token usage across the system."
+        "note": "Note: Module access key creation and management is typically done by professors. As a super admin, you have read access to monitor key usage across the system."
       },
       "bestPractices": {
         "title": "Best Practices",
@@ -1622,7 +1761,7 @@
           "Regularly review system activity through Global Search",
           "Keep super administrator accounts to a minimum",
           "Use password setup links instead of sharing passwords directly",
-          "Monitor token usage to ensure security compliance",
+          "Monitor key usage to ensure security compliance",
           "Document university structures and policies",
           "Perform regular security audits"
         ]
@@ -1673,8 +1812,8 @@
           },
           {
             "number": "6",
-            "title": "Create Tokens (Keys for Students)",
-            "desc": "Create 'KEYS' (tokens) that students will use to ACCESS the AI tutor. Think of it like creating passwords that you will give to students."
+            "title": "CREATE KEYs (Keys for Students)",
+            "desc": "Create 'KEYS' (keys) that students will use to ACCESS the AI tutor. Think of it like creating passwords that you will give to students."
           },
           {
             "number": "7",
@@ -1688,16 +1827,16 @@
           },
           {
             "number": "9",
-            "title": "Distribute Tokens to Students",
-            "desc": "Copy the tokens (keys) and paste them into Moodle, send by email, WhatsApp, or wherever you communicate with students!"
+            "title": "Distribute keys to Students",
+            "desc": "Copy the keys (keys) and paste them into Moodle, send by email, WhatsApp, or wherever you communicate with students!"
           },
           {
             "number": "10",
             "title": "Monitor and Update",
-            "desc": "Keep an eye on how students are using it! You can add more files, improve the AI tutor, create more tokens, etc."
+            "desc": "Keep an eye on how students are using it! You can add more files, improve the AI tutor, create more keys, etc."
           }
         ],
-        "tip": "💡 TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 token, and TEST everything before creating more!"
+        "tip": "💡 TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 key, and TEST everything before creating more!"
       },
       "creatingCourses": {
         "title": "HOW TO CREATE COURSES (DISCIPLINES) - COMPLETE TUTORIAL",
@@ -1814,7 +1953,7 @@
       "creatingModules": {
         "title": "HOW TO CREATE MODULES - COMPLETE TUTORIAL WITH AI TUTOR",
         "whatIs": "A MODULE is like a CHAPTER or UNIT within a course. For example: if you have a course called 'Introduction to Programming', you can have: Module 1: 'Variables and Data Types', Module 2: 'Loops and Conditions', Module 3: 'Functions', etc. Each module is a SPECIFIC PART of the content!",
-        "why": "Modules are where STUDENTS will interact with the AI TUTOR! Each module has: 1) Files (PDFs, slides, etc.), 2) An AI Tutor configured to help students with THIS specific topic, 3) Tokens (keys) that students use to access the content.",
+        "why": "Modules are where STUDENTS will interact with the AI TUTOR! Each module has: 1) Files (PDFs, slides, etc.), 2) An AI Tutor configured to help students with THIS specific topic, 3) keys (keys) that students use to access the content.",
         "steps": [
           {
             "number": "1",
@@ -1884,10 +2023,10 @@
           {
             "number": "14",
             "title": "WAIT for CONFIRMATION and GO TO MODULE PAGE",
-            "desc": "The system will SAVE your module. You'll see a GREEN SUCCESS MESSAGE or be REDIRECTED to the MODULE DETAIL PAGE. This page shows: Files, Tokens, Module Info, etc. CONGRATULATIONS! You created a module!"
+            "desc": "The system will SAVE your module. You'll see a GREEN SUCCESS MESSAGE or be REDIRECTED to the MODULE DETAIL PAGE. This page shows: Files, keys, Module Info, etc. CONGRATULATIONS! You created a module!"
           }
         ],
-        "whatYouShouldSee": "After creating the module, you should see the MODULE DETAIL PAGE with several sections: 1) MODULE INFORMATION (name, code, course, description), 2) FILES section (empty for now), 3) ACCESS TOKENS section (empty for now), 4) Buttons like 'UPLOAD FILE', 'CREATE TOKEN', 'PREPARE MODULE', etc.",
+        "whatYouShouldSee": "After creating the module, you should see the MODULE DETAIL PAGE with several sections: 1) MODULE INFORMATION (name, code, course, description), 2) FILES section (empty for now), 3) ACCESS KEYS section (empty for now), 4) Buttons like 'UPLOAD FILE', 'CREATE KEY', 'PREPARE MODULE', etc.",
         "commonMistakes": [
           {
             "mistake": "I forgot to select a Course and the system won't save!",
@@ -1911,7 +2050,7 @@
           },
           {
             "mistake": "I created the module but don't see any files or students!",
-            "solution": "That's NORMAL! You just created an EMPTY module! Now you need to: 1) UPLOAD FILES (next section), 2) CREATE TOKENS (section after that), 3) PREPARE the module, 4) Share tokens with students. Follow the complete workflow!"
+            "solution": "That's NORMAL! You just created an EMPTY module! Now you need to: 1) UPLOAD FILES (next section), 2) CREATE KEYS (section after that), 3) PREPARE the module, 4) Share keys with students. Follow the complete workflow!"
           },
           {
             "mistake": "I selected the wrong AI Tutor Language!",
@@ -1962,7 +2101,7 @@
         "title": "HOW TO UPLOAD FILES TO MODULES - Complete Tutorial",
         "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the AI TUTOR will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
         "why": "WHY upload files? Because the AI needs CONTENT to work with! If you don't upload files, the AI will only have its general knowledge. But if you upload YOUR lecture slides, YOUR notes, YOUR PDFs, the AI can answer questions SPECIFICALLY about YOUR course content!",
-        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 50MB per file.",
+        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 10MB per file.",
         "steps": [
           {
             "number": "1",
@@ -2003,7 +2142,7 @@
           },
           {
             "mistake": "My file is too large and won't upload!",
-            "solution": "The maximum file size is 50MB! If your file is larger: 1) SPLIT it into smaller parts (like splitting a 100MB PDF into two 50MB PDFs), 2) COMPRESS the PDF (use online tools like 'smallpdf.com' or 'ilovepdf.com' to reduce size), 3) Remove unnecessary images/pages to reduce size."
+            "solution": "The maximum file size is 10MB! If your file is larger: 1) SPLIT it into smaller parts (like splitting a 100MB PDF into two 10MB PDFs), 2) COMPRESS the PDF (use online tools like 'smallpdf.com' or 'ilovepdf.com' to reduce size), 3) Remove unnecessary images/pages to reduce size."
           },
           {
             "mistake": "The upload started but got stuck at 50% and won't continue!",
@@ -2037,7 +2176,7 @@
           },
           {
             "problem": "I uploaded files but students say they can't see them!",
-            "solution": "Check two things: 1) Did you PREPARE THE MODULE? (See next section), 2) Does the token you gave students have 'Allow File Access' permission? If the token doesn't allow file access, students can chat but can't download files!"
+            "solution": "Check two things: 1) Did you PREPARE THE MODULE? (See next section), 2) Does the key you gave students have 'Allow File Access' permission? If the key doesn't allow file access, students can chat but can't download files!"
           },
           {
             "problem": "Can I upload folders/multiple files at once?",
@@ -2054,39 +2193,39 @@
         ]
       },
       "creatingTokens": {
-        "title": "HOW TO CREATE TOKENS (Access Keys for Students) - COMPLETE TUTORIAL",
-        "whatIs": "A TOKEN is like a SPECIAL KEY or PASSWORD that students use to ACCESS the AI tutor! Think of it like this: You have a ROOM (the module) with an AI tutor inside. The TOKEN is the KEY that opens the door to that room! Each module can have MULTIPLE tokens (multiple keys) that you give to different groups of students.",
-        "why": "WHY create tokens? Because you need a way to CONTROL who can access your module! You don't want the whole internet using your AI tutor - you only want YOUR students! Tokens also let you: 1) Control what students can do (chat only? or also download files?), 2) Set expiration dates (so the token stops working after the semester ends), 3) Track usage (see how many times the token was used).",
+        "title": "HOW TO CREATE KEYS (Access Keys for Students) - COMPLETE TUTORIAL",
+        "whatIs": "A key is like a SPECIAL KEY or PASSWORD that students use to ACCESS the AI tutor! Think of it like this: You have a ROOM (the module) with an AI tutor inside. The key is the KEY that opens the door to that room! Each module can have MULTIPLE keys (multiple keys) that you give to different groups of students.",
+        "why": "WHY CREATE KEYs? Because you need a way to CONTROL who can access your module! You don't want the whole internet using your AI tutor - you only want YOUR students! keys also let you: 1) Control what students can do (chat only? or also download files?), 2) Set expiration dates (so the key stops working after the semester ends), 3) Track usage (see how many times the key was used).",
         "steps": [
           {
             "number": "1",
-            "title": "GO TO 'Module Tokens' page",
-            "desc": "Click on 'MODULE TOKENS' or 'Module Tokens' in the LEFT MENU. You'll see a page showing ALL your tokens (if you have any). If this is your first time, the list will be EMPTY."
+            "title": "GO TO 'module access keys' page",
+            "desc": "Click on 'module access keyS' or 'module access keys' in the LEFT MENU. You'll see a page showing ALL your keys (if you have any). If this is your first time, the list will be EMPTY."
           },
           {
             "number": "2",
-            "title": "CLICK 'Generate Token' or 'Create Token'",
-            "desc": "Look for a BLUE BUTTON at the TOP RIGHT that says 'GENERATE TOKEN' or 'Create Token' or 'New Token'. CLICK on it! A FORM (dialog box) will open where you'll fill in the token details."
+            "title": "CLICK 'Generate key' or 'CREATE KEY'",
+            "desc": "Look for a BLUE BUTTON at the TOP RIGHT that says 'GENERATE key' or 'CREATE KEY' or 'New key'. CLICK on it! A FORM (dialog box) will open where you'll fill in the key details."
           },
           {
             "number": "3",
-            "title": "SELECT which MODULE this token is for",
-            "desc": "The FIRST field is usually 'Module' or 'Select Module'. Click the DROPDOWN and SELECT which module this token will unlock. For example, if you want students to access your 'Introduction to Python - Week 1' module, select that module from the list!"
+            "title": "SELECT which MODULE this key is for",
+            "desc": "The FIRST field is usually 'Module' or 'Select Module'. Click the DROPDOWN and SELECT which module this key will unlock. For example, if you want students to access your 'Introduction to Python - Week 1' module, select that module from the list!"
           },
           {
             "number": "4",
-            "title": "GIVE the token a NAME",
-            "desc": "The second field is 'Token Name'. Give it a DESCRIPTIVE name so you know what it's for later! Example: 'Fall 2024 - Section A', 'Moodle Widget - CS101', 'WhatsApp Group Token'. Don't just write 'Token 1' - be specific about WHERE or WHO will use this token!"
+            "title": "GIVE the key a NAME",
+            "desc": "The second field is 'key Name'. Give it a DESCRIPTIVE name so you know what it's for later! Example: 'Fall 2024 - Section A', 'Moodle Widget - CS101', 'WhatsApp Group key'. Don't just write 'key 1' - be specific about WHERE or WHO will use this key!"
           },
           {
             "number": "5",
             "title": "ADD a description (OPTIONAL but recommended)",
-            "desc": "There's usually a 'Description' field. This is OPTIONAL but helpful! Write something like: 'Token for CS101 students enrolled in Moodle course' or 'For private tutoring students'. This helps you remember the purpose of each token later!"
+            "desc": "There's usually a 'Description' field. This is OPTIONAL but helpful! Write something like: 'key for CS101 students enrolled in Moodle course' or 'For private tutoring students'. This helps you remember the purpose of each key later!"
           },
           {
             "number": "6",
             "title": "SET expiration (OPTIONAL)",
-            "desc": "There's a field called 'Expires in (days)' or 'Expiration'. This is OPTIONAL! If you LEAVE IT EMPTY, the token will NEVER EXPIRE (works forever). If you FILL IT IN, enter a NUMBER of days. Example: '120' means the token will work for 120 days from today, then automatically stop working. Good for semester-based courses!"
+            "desc": "There's a field called 'Expires in (days)' or 'Expiration'. This is OPTIONAL! If you LEAVE IT EMPTY, the key will NEVER EXPIRE (works forever). If you FILL IT IN, enter a NUMBER of days. Example: '120' means the key will work for 120 days from today, then automatically stop working. Good for semester-based courses!"
           },
           {
             "number": "7",
@@ -2100,22 +2239,22 @@
           },
           {
             "number": "9",
-            "title": "CLICK 'Create Token' or 'Generate'",
-            "desc": "After filling everything in, look for the BLUE BUTTON at the bottom that says 'CREATE TOKEN' or 'Generate' or 'Save'. CLICK on it! The system will create your token."
+            "title": "CLICK 'CREATE KEY' or 'Generate'",
+            "desc": "After filling everything in, look for the BLUE BUTTON at the bottom that says 'CREATE KEY' or 'Generate' or 'Save'. CLICK on it! The system will create your key."
           },
           {
             "number": "10",
-            "title": "COPY the token!",
-            "desc": "After creating, you'll see the TOKEN STRING (a long text like 'abc123xyz456...'). There should be a 'COPY' button or 'Copy Token' button. CLICK on it to copy the token to your clipboard. You'll need this to share with students!"
+            "title": "COPY the key!",
+            "desc": "After creating, you'll see the key STRING (a long text like 'abc123xyz456...'). There should be a 'COPY' button or 'Copy key' button. CLICK on it to copy the key to your clipboard. You'll need this to share with students!"
           }
         ],
-        "whatYouShouldSee": "After creating the token: You should see the token in the TOKEN LIST with: Name, Module, Status (Active), Expiration date (or 'Never'), Permissions (Chat/Files), and Actions. The token string itself is usually HIDDEN for security, but you can VIEW it or COPY it by clicking the view/copy icons.",
+        "whatYouShouldSee": "After creating the key: You should see the key in the key LIST with: Name, Module, Status (Active), Expiration date (or 'Never'), Permissions (Chat/Files), and Actions. The key string itself is usually HIDDEN for security, but you can VIEW it or COPY it by clicking the view/copy icons.",
         "distribution": {
-          "title": "HOW TO DISTRIBUTE TOKENS TO STUDENTS",
+          "title": "HOW TO DISTRIBUTE keys TO STUDENTS",
           "methods": [
             {
               "method": "📚 MOODLE (or other LMS)",
-              "desc": "BEST METHOD for most professors! In Moodle: 1) Create an 'External Tool' or 'URL' resource, 2) Paste the widget URL with your token: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE, 3) Students click on it inside Moodle and the widget opens!"
+              "desc": "BEST METHOD for most professors! In Moodle: 1) Create an 'External Tool' or 'URL' resource, 2) Paste the widget URL with your key: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE, 3) Students click on it inside Moodle and the widget opens!"
             },
             {
               "method": "📧 EMAIL",
@@ -2137,70 +2276,70 @@
         },
         "commonMistakes": [
           {
-            "mistake": "I created the token but students say it doesn't work!",
-            "solution": "Check these things: 1) Did you PREPARE THE MODULE? Tokens only work after the module is prepared! 2) Is 'Allow Chat' enabled? If not, students can't ask questions! 3) Did you copy the FULL token string? Sometimes people copy only part of it. 4) Has the token expired? Check the expiration date!"
+            "mistake": "I created the key but students say it doesn't work!",
+            "solution": "Check these things: 1) Did you PREPARE THE MODULE? keys only work after the module is prepared! 2) Is 'Allow Chat' enabled? If not, students can't ask questions! 3) Did you copy the FULL key string? Sometimes people copy only part of it. 4) Has the key expired? Check the expiration date!"
           },
           {
-            "mistake": "I forgot to copy the token after creating it!",
-            "solution": "No problem! Go to the MODULE TOKENS page, find your token in the list, and click the VIEW icon (👁️ eye) or COPY icon (📋 clipboard) to see/copy the token again!"
+            "mistake": "I forgot to copy the key after creating it!",
+            "solution": "No problem! Go to the module access keyS page, find your key in the list, and click the VIEW icon (👁️ eye) or COPY icon (📋 clipboard) to see/copy the key again!"
           },
           {
             "mistake": "Students can chat but say they can't download files!",
-            "solution": "Check the token PERMISSIONS! Go to Module Tokens, find your token, and click EDIT. Make sure 'Allow File Access' is CHECKED (turned ON). If it was off, turn it on and save. Students should now be able to download files!"
+            "solution": "Check the key PERMISSIONS! Go to module access keys, find your key, and click EDIT. Make sure 'Allow File Access' is CHECKED (turned ON). If it was off, turn it on and save. Students should now be able to download files!"
           },
           {
-            "mistake": "I want to create separate tokens for different sections of the same course!",
-            "solution": "GREAT IDEA! Create MULTIPLE tokens for the SAME MODULE with different names! Example: 'Section A - Morning Class', 'Section B - Afternoon Class'. This way you can track which section uses the AI more, and you can revoke one section's access without affecting the other!"
+            "mistake": "I want to create separate keys for different sections of the same course!",
+            "solution": "GREAT IDEA! Create MULTIPLE keys for the SAME MODULE with different names! Example: 'Section A - Morning Class', 'Section B - Afternoon Class'. This way you can track which section uses the AI more, and you can revoke one section's access without affecting the other!"
           },
           {
-            "mistake": "The token expired and students can't access anymore!",
-            "solution": "You have 2 options: 1) CREATE A NEW TOKEN (easier) - make a new token for the same module and share the new link with students, 2) EDIT THE EXISTING TOKEN (if the system allows) - but usually it's easier to just create a fresh token!"
+            "mistake": "The key expired and students can't access anymore!",
+            "solution": "You have 2 options: 1) CREATE A NEW key (easier) - make a new key for the same module and share the new link with students, 2) EDIT THE EXISTING key (if the system allows) - but usually it's easier to just create a fresh key!"
           },
           {
-            "mistake": "I want to stop students from using the AI but keep the token for later!",
-            "solution": "You can DEACTIVATE or DELETE the token! Go to Module Tokens, find the token, and click the DELETE icon. This immediately stops the token from working. Students who try to use it will see an error. You can create a new token anytime to re-enable access!"
+            "mistake": "I want to stop students from using the AI but keep the key for later!",
+            "solution": "You can DEACTIVATE or DELETE the key! Go to module access keys, find the key, and click the DELETE icon. This immediately stops the key from working. Students who try to use it will see an error. You can create a new key anytime to re-enable access!"
           }
         ],
         "troubleshooting": [
           {
-            "problem": "I can't create a token because there are no modules in the dropdown!",
-            "solution": "You need to CREATE A MODULE FIRST! Tokens are tied to modules. If you don't have any modules, go create one first (see 'How to Create Modules' section), THEN come back and create a token for that module!"
+            "problem": "I can't create a key because there are no modules in the dropdown!",
+            "solution": "You need to CREATE A MODULE FIRST! keys are tied to modules. If you don't have any modules, go create one first (see 'How to Create Modules' section), THEN come back and create a key for that module!"
           },
           {
-            "problem": "The 'Generate Token' button is not appearing!",
+            "problem": "The 'Generate key' button is not appearing!",
             "solution": "Check your permissions! Are you an Admin Professor or a Regular Professor assigned to this course? If you're a Regular Professor but not assigned to any courses, you won't see the button. Contact your Admin Professor!"
           },
           {
-            "problem": "Can I use the same token for multiple modules?",
-            "solution": "NO! Each token is for ONE SPECIFIC MODULE! If you have 5 modules, you need 5 tokens (or however many you want per module). This is intentional - it allows you to control access per module!"
+            "problem": "Can I use the same key for multiple modules?",
+            "solution": "NO! Each key is for ONE SPECIFIC MODULE! If you have 5 modules, you need 5 keys (or however many you want per module). This is intentional - it allows you to control access per module!"
           },
           {
             "problem": "Students are complaining the widget is too slow!",
-            "solution": "This is usually NOT related to the token - it's either: 1) The student's internet is slow, 2) The AI system is overloaded (rare), 3) The module has HUGE files and the AI is processing them (happens with very large PDFs). Unfortunately you can't control this from the token side!"
+            "solution": "This is usually NOT related to the key - it's either: 1) The student's internet is slow, 2) The AI system is overloaded (rare), 3) The module has HUGE files and the AI is processing them (happens with very large PDFs). Unfortunately you can't control this from the key side!"
           },
           {
-            "problem": "Can I see how many times a token was used?",
-            "solution": "YES! In the Module Tokens list, you should see a column like 'Usage Count' or 'Requests' that shows how many times the token was used. Click on VIEW for a token to see detailed stats!"
+            "problem": "Can I see how many times a key was used?",
+            "solution": "YES! In the module access keys list, you should see a column like 'Usage Count' or 'Requests' that shows how many times the key was used. Click on VIEW for a key to see detailed stats!"
           }
         ],
         "tips": [
-          "💡 Use DESCRIPTIVE NAMES! 'Fall 2024 Moodle Section A' is way better than 'Token 1'!",
+          "💡 Use DESCRIPTIVE NAMES! 'Fall 2024 Moodle Section A' is way better than 'key 1'!",
           "💡 Set EXPIRATION DATES for semester-based courses! Example: If your semester ends in 120 days, set expiration to 120 days. This prevents students from using it in future semesters with different content!",
-          "💡 Create BACKUP TOKENS! Make 2 tokens for the same module - one PRIMARY (share with students) and one BACKUP (keep secret). If you need to revoke the primary, you have a backup ready!",
-          "💡 Test the token YOURSELF before sharing with students! Copy the widget URL and open it in your browser. Ask the AI a question to make sure everything works!",
-          "💡 MONITOR token usage! Check the usage count periodically. If a token has 0 uses after a week, maybe students didn't get the link or don't know how to use it - check in with them!",
+          "💡 Create BACKUP keys! Make 2 keys for the same module - one PRIMARY (share with students) and one BACKUP (keep secret). If you need to revoke the primary, you have a backup ready!",
+          "💡 Test the key YOURSELF before sharing with students! Copy the widget URL and open it in your browser. Ask the AI a question to make sure everything works!",
+          "💡 MONITOR key usage! Check the usage count periodically. If a key has 0 uses after a week, maybe students didn't get the link or don't know how to use it - check in with them!",
           "💡 For LARGE CLASSES, use LMS integration (Moodle/Canvas)! Don't send individual links - embed the widget in your LMS so students access it where they're already comfortable!",
-          "💡 Keep a SPREADSHEET or NOTE of which tokens you created for which purpose! With many modules and tokens, it's easy to forget which is which!"
+          "💡 Keep a SPREADSHEET or NOTE of which keys you created for which purpose! With many modules and keys, it's easy to forget which is which!"
         ]
       },
       "preparingModules": {
         "title": "HOW TO PREPARE MODULES - Making Everything READY for Students!",
-        "whatIs": "PREPARING A MODULE is the FINAL STEP before students can use your AI tutor! Think of it like this: You've 1) Created the room (module), 2) Put books inside (uploaded files), 3) Made keys (tokens)... but the AI tutor hasn't READ the books yet! 'Preparing' = Sending ALL your files to OpenAI's system and creating the ACTUAL AI assistant that will chat with students!",
+        "whatIs": "PREPARING A MODULE is the FINAL STEP before students can use your AI tutor! Think of it like this: You've 1) Created the room (module), 2) Put books inside (uploaded files), 3) Made keys (keys)... but the AI tutor hasn't READ the books yet! 'Preparing' = Sending ALL your files to OpenAI's system and creating the ACTUAL AI assistant that will chat with students!",
         "why": "WHY is this necessary? Because uploading files to Tutoria is NOT the same as making them available to the AI! When you 'Prepare', the system: 1) Sends all your files to OpenAI, 2) Creates a specialized AI assistant with your System Prompt, 3) Links everything together so students can use it. Without preparing, the AI has NOTHING to work with!",
         "prerequisites": {
           "title": "BEFORE YOU PREPARE - Checklist",
           "items": [
-            "✅ You MUST have created at least ONE TOKEN with 'Allow Chat' permission! (The system needs a token to create the AI assistant)",
+            "✅ You MUST have created at least ONE key with 'Allow Chat' permission! (The system needs a key to create the AI assistant)",
             "✅ You SHOULD have uploaded files to the module (optional but highly recommended - otherwise the AI only has general knowledge)",
             "✅ You SHOULD have configured a System Prompt (optional but recommended - this tells the AI how to behave)"
           ]
@@ -2209,12 +2348,12 @@
           {
             "number": "1",
             "title": "GO TO the MODULE PAGE",
-            "desc": "Click on 'Modules' in the left menu, then click on the NAME of the module you want to prepare. You'll see the module detail page with files, tokens, etc."
+            "desc": "Click on 'Modules' in the left menu, then click on the NAME of the module you want to prepare. You'll see the module detail page with files, keys, etc."
           },
           {
             "number": "2",
-            "title": "MAKE SURE you have at least 1 token created!",
-            "desc": "Look at the 'ACCESS TOKENS' section on the module page. You should see at least ONE token in the list! If the list is EMPTY, go create a token first (see the section above). You CANNOT prepare without a token!"
+            "title": "MAKE SURE you have at least 1 key created!",
+            "desc": "Look at the 'Access Keys' section on the module page. You should see at least ONE key in the list! If the list is EMPTY, go create a key first (see the section above). You CANNOT prepare without a key!"
           },
           {
             "number": "3",
@@ -2238,7 +2377,7 @@
           "steps": [
             {
               "number": "1",
-              "desc": "Copy one of your module TOKENS (from the Access Tokens section)"
+              "desc": "Copy one of your module access keyS (from the ACCESS KEYS section)"
             },
             {
               "number": "2",
@@ -2246,7 +2385,7 @@
             },
             {
               "number": "3",
-              "desc": "Paste this URL (replacing YOUR_TOKEN_HERE with your actual token): https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE"
+              "desc": "Paste this URL (replacing YOUR_TOKEN_HERE with your actual key): https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE"
             },
             {
               "number": "4",
@@ -2264,12 +2403,12 @@
         },
         "commonMistakes": [
           {
-            "mistake": "I clicked 'Prepare Module' but it says 'No tokens available'!",
-            "solution": "You need to CREATE A TOKEN FIRST! Go to the 'Module Tokens' page (or the Access Tokens section on the module page), create a token with 'Allow Chat' enabled, THEN try preparing again!"
+            "mistake": "I clicked 'Prepare Module' but it says 'No keys available'!",
+            "solution": "You need to CREATE A key FIRST! Go to the 'module access keys' page (or the ACCESS KEYS section on the module page), create a key with 'Allow Chat' enabled, THEN try preparing again!"
           },
           {
-            "mistake": "It says 'Invalid token' when I try to prepare!",
-            "solution": "The token needs to have 'Allow Chat' permission ENABLED! Check your token - if 'Allow Chat' is turned OFF, turn it ON, save the token, and try preparing again!"
+            "mistake": "It says 'Invalid key' when I try to prepare!",
+            "solution": "The key needs to have 'Allow Chat' permission ENABLED! Check your key - if 'Allow Chat' is turned OFF, turn it ON, save the key, and try preparing again!"
           },
           {
             "mistake": "The preparation completed but the AI doesn't know about my files!",
@@ -2325,12 +2464,12 @@
             "✅ Module created with good name and description?",
             "✅ System Prompt configured (AI knows how to teach)?",
             "✅ Files uploaded (lecture slides, notes, readings)?",
-            "✅ At least 1 token created with proper permissions?",
+            "✅ At least 1 key created with proper permissions?",
             "✅ Module PREPARED (clicked the Prepare button and saw success)?",
             "✅ TESTED the widget yourself (asked questions, downloaded files)?",
             "✅ Widget link shared with students (Moodle, email, WhatsApp, etc.)?",
             "✅ Students know HOW to use the AI tutor (maybe provide instructions)?",
-            "✅ You're monitoring usage (checking token stats occasionally)?",
+            "✅ You're monitoring usage (checking key stats occasionally)?",
             "✅ You have a plan to update content and re-prepare as needed?"
           ]
         }
@@ -2338,7 +2477,7 @@
       "regularProfessor": {
         "title": "Guide for Regular Professors",
         "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
-        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating tokens, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
+        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
       },
         "viewing": {
           "title": "Viewing Course Details",
@@ -2374,7 +2513,7 @@
       },
       "modules": {
         "title": "Managing Modules",
-        "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and access tokens.",
+        "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and Access Keys.",
         "creating": {
           "title": "Creating a Module",
           "steps": [
@@ -2429,7 +2568,7 @@
             "Click 'Upload File' button",
             "Select a file from your computer (or drag and drop)",
             "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
-            "Maximum file size: 50MB",
+            "Maximum file size: 10MB",
             "Click 'Upload File' to add it to the module",
             "Files are automatically indexed for the AI tutor"
           ],
@@ -2445,7 +2584,7 @@
           "title": "Preparing a Module",
           "description": "Before students can use the AI tutor, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
           "prerequisites": [
-            "The module must have at least one active token with chat permission",
+            "The module must have at least one active key with chat permission",
             "The module should have an AI tutor system prompt configured",
             "Files should be uploaded (optional but recommended)"
           ],
@@ -2458,50 +2597,50 @@
           "note": "Note: You can update files and re-prepare the module at any time."
         }
       },
-      "tokens": {
-        "title": "Managing Module Tokens",
-        "description": "Module tokens provide secure access to AI tutoring widgets. Each token controls what students can do (chat, access files, etc.).",
+      "keys": {
+        "title": "Managing module access keys",
+        "description": "module access keys provide secure access to AI tutoring widgets. Each key controls what students can do (chat, access files, etc.).",
         "creating": {
-          "title": "Creating a Token",
+          "title": "Creating a key",
           "steps": [
-            "Navigate to Module Tokens (/tokens)",
-            "Click 'Generate Token'",
-            "Fill in the token details:",
+            "Navigate to module access keys (/keys)",
+            "Click 'Generate key'",
+            "Fill in the key details:",
             "  • Select the module",
-            "  • Token Name (e.g., 'Moodle Widget 2024')",
+            "  • key Name (e.g., 'Moodle Widget 2024')",
             "  • Description (optional)",
             "  • Expiration (optional, in days)",
             "Configure permissions:",
             "  • Allow Chat: Students can ask questions to the AI tutor",
             "  • Allow File Access: Students can download module files",
-            "Click 'Create Token'",
-            "Copy the generated token - you'll need it for the widget"
+            "Click 'CREATE KEY'",
+            "Copy the generated key - you'll need it for the widget"
           ]
         },
         "using": {
-          "title": "Using Tokens",
-          "description": "Tokens are used to embed the AI tutor widget in your LMS or website.",
+          "title": "Using keys",
+          "description": "keys are used to embed the AI tutor widget in your LMS or website.",
           "example": "Widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE",
-          "security": "Keep tokens secure and only share them through official channels."
+          "security": "Keep keys secure and only share them through official channels."
         },
         "managing": {
-          "title": "Managing Tokens",
+          "title": "Managing keys",
           "actions": [
-            "View: See token details and statistics",
-            "Edit: Update token name, description, or permissions",
-            "Copy: Copy the token to clipboard",
-            "Revoke/Delete: Disable a token permanently"
+            "View: See key details and statistics",
+            "Edit: Update key name, description, or permissions",
+            "Copy: Copy the key to clipboard",
+            "Revoke/Delete: Disable a key permanently"
           ]
         },
         "bestPractices": {
-          "title": "Token Best Practices",
+          "title": "key Best Practices",
           "list": [
-            "Use descriptive names that indicate where the token is used",
-            "Set expiration dates for tokens used in temporary contexts",
+            "Use descriptive names that indicate where the key is used",
+            "Set expiration dates for keys used in temporary contexts",
             "Disable chat or file access if not needed",
-            "Monitor token usage through the statistics",
-            "Revoke tokens that are no longer in use",
-            "Create separate tokens for different LMS courses or contexts"
+            "Monitor key usage through the statistics",
+            "Revoke keys that are no longer in use",
+            "Create separate keys for different LMS courses or contexts"
           ]
         }
       },
@@ -2549,7 +2688,7 @@
           "3. Configure AI tutor prompts for each module",
           "4. Upload educational files to modules",
           "5. Create regular professors and assign them to the course",
-          "6. Generate module access tokens",
+          "6. Generate module Access Keys",
           "7. Prepare modules for student use",
           "8. Share widget links with students through your LMS"
         ]
@@ -2560,13 +2699,13 @@
           "Use clear, descriptive names for courses and modules",
           "Write detailed AI tutor prompts that match your teaching style",
           "Upload comprehensive materials before preparing modules",
-          "Create separate tokens for different student groups or LMS courses",
+          "Create separate keys for different student groups or LMS courses",
           "Regularly review and update module content",
           "Use the 'Improve with AI' feature to refine tutor prompts",
-          "Set expiration dates on tokens for semester-based courses",
-          "Monitor professor and token usage regularly",
+          "Set expiration dates on keys for semester-based courses",
+          "Monitor professor and key usage regularly",
           "Keep course codes consistent across semesters",
-          "Document your course structure and token usage"
+          "Document your course structure and key usage"
         ]
       }
     },
@@ -2575,13 +2714,13 @@
       "subtitle": "Complete guide for course instructors",
       "overview": {
         "title": "Role Overview",
-        "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate access tokens for your students.",
+        "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate Access Keys for your students.",
         "keyResponsibilities": "Key Responsibilities",
         "responsibilities": [
           "Creating and managing modules for assigned courses",
           "Configuring AI tutor system prompts",
           "Uploading educational content and files",
-          "Generating and managing module access tokens",
+          "Generating and managing module Access Keys",
           "Preparing modules for student use",
           "Monitoring module usage and student engagement"
         ]
@@ -2591,7 +2730,7 @@
         "step1Title": "1. First Login",
         "step1Desc": "Use the password setup link provided by your administrator to set your password. After setting your password, you can log in with your username.",
         "step2Title": "2. View Your Dashboard",
-        "step2Desc": "Your dashboard (/dashboard) shows quick actions: Create Module, View Courses, View Modules, and Manage Tokens.",
+        "step2Desc": "Your dashboard (/dashboard) shows quick actions: Create Module, View Courses, View Modules, and Manage keys.",
         "step3Title": "3. View Your Courses",
         "step3Desc": "Navigate to Courses (/courses) to see all courses you've been assigned to by your administrator.",
         "step4Title": "4. Create Your First Module",
@@ -2692,7 +2831,7 @@
               "Click 'Upload File' in the Files section",
               "Select or drag and drop your file",
               "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
-              "Maximum size: 50MB per file",
+              "Maximum size: 10MB per file",
               "Click 'Upload File' to add it",
               "The file will be indexed and available to the AI tutor"
             ]
@@ -2723,7 +2862,7 @@
           "requirements": {
             "title": "Prerequisites",
             "list": [
-              "At least one active module access token with chat permission",
+              "At least one active module access key with chat permission",
               "AI tutor system prompt configured (recommended)",
               "Files uploaded (optional but recommended)"
             ]
@@ -2731,7 +2870,7 @@
           "steps": {
             "title": "Preparation Steps",
             "list": [
-              "Ensure you have created a token for the module",
+              "Ensure you have created a key for the module",
               "Navigate to the module detail page",
               "Click 'Prepare Module' button",
               "Wait for the preparation to complete (usually a few seconds)",
@@ -2755,7 +2894,7 @@
         },
         "deleting": {
           "title": "Deleting Modules",
-          "warning": "⚠️ Warning: Deleting a module removes all its files, tokens, and student interaction history. This cannot be undone.",
+          "warning": "⚠️ Warning: Deleting a module removes all its files, keys, and student interaction history. This cannot be undone.",
           "steps": [
             "From the Modules list, click the delete icon",
             "Confirm the deletion",
@@ -2763,24 +2902,24 @@
           ]
         }
       },
-      "tokens": {
-        "title": "Module Access Tokens",
-        "description": "Tokens provide secure access to your AI tutor widget. Create tokens to share your modules with students.",
+      "keys": {
+        "title": "Module Access Keys",
+        "description": "keys provide secure access to your AI tutor widget. CREATE KEYs to share your modules with students.",
         "creating": {
-          "title": "Creating a Token",
+          "title": "Creating a key",
           "steps": [
-            "Navigate to Module Tokens (/tokens)",
-            "Click 'Generate Token'",
+            "Navigate to module access keys (/keys)",
+            "Click 'Generate key'",
             "Select your module from the dropdown",
-            "Fill in token details:",
-            "  • Token Name (e.g., 'Fall 2024 - Section A')",
+            "Fill in key details:",
+            "  • key Name (e.g., 'Fall 2024 - Section A')",
             "  • Description (optional, e.g., 'For CS101 Moodle course')",
             "  • Expiration in days (optional, e.g., 120 for semester-long)",
             "Set permissions:",
             "  • Allow Chat: Let students ask questions",
             "  • Allow File Access: Let students download files",
-            "Click 'Create Token'",
-            "Copy the token - you'll need it for the widget"
+            "Click 'CREATE KEY'",
+            "Copy the key - you'll need it for the widget"
           ]
         },
         "permissions": {
@@ -2795,22 +2934,22 @@
           }
         },
         "using": {
-          "title": "Using Tokens in Your LMS",
+          "title": "Using keys in Your LMS",
           "description": "Embed the AI tutor widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
           "steps": [
-            "Copy your module token",
+            "Copy your module access key",
             "Use the widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN",
             "Add this URL as an external tool or iframe in your LMS",
             "Students can now interact with your AI tutor through the LMS"
           ]
         },
         "managing": {
-          "title": "Managing Tokens",
+          "title": "Managing keys",
           "viewing": {
-            "title": "Viewing Token Details",
+            "title": "Viewing key Details",
             "description": "Click the 'View' icon to see:",
             "details": [
-              "Token string and quick copy",
+              "key string and quick copy",
               "Module and course information",
               "Creation and expiration dates",
               "Usage statistics (request count)",
@@ -2818,25 +2957,25 @@
             ]
           },
           "editing": {
-            "title": "Editing Tokens",
-            "description": "Update token name, description, or permissions without changing the token string."
+            "title": "Editing keys",
+            "description": "Update key name, description, or permissions without changing the key string."
           },
           "revoking": {
-            "title": "Revoking Tokens",
-            "description": "Delete a token to immediately revoke access. Students will no longer be able to use the widget with that token."
+            "title": "Revoking keys",
+            "description": "Delete a key to immediately revoke access. Students will no longer be able to use the widget with that key."
           }
         },
         "bestPractices": {
-          "title": "Token Best Practices",
+          "title": "key Best Practices",
           "list": [
-            "Create separate tokens for different sections or semesters",
+            "Create separate keys for different sections or semesters",
             "Use descriptive names that include course code and term",
             "Set expiration dates aligned with your course end date",
-            "Monitor token usage to track student engagement",
-            "Revoke tokens after the course ends",
-            "Keep tokens secure - don't share them publicly",
-            "Test the widget with the token before sharing with students",
-            "Create a backup token in case you need to revoke the primary one"
+            "Monitor key usage to track student engagement",
+            "Revoke keys after the course ends",
+            "Keep keys secure - don't share them publicly",
+            "Test the widget with the key before sharing with students",
+            "Create a backup key in case you need to revoke the primary one"
           ]
         }
       },
@@ -2848,32 +2987,32 @@
           "2. Write or select an AI tutor system prompt",
           "3. Upload your course materials (slides, notes, readings)",
           "4. Review and improve the AI tutor prompt if needed",
-          "5. Create a module access token for your students",
+          "5. Create a module access key for your students",
           "6. Prepare the module (uploads files to AI and creates assistant)",
-          "7. Test the widget with your token to ensure it works",
+          "7. Test the widget with your key to ensure it works",
           "8. Share the widget link in your LMS or with students",
           "9. Monitor usage and update content as needed",
-          "10. At the end of the semester, revoke tokens or set new ones for next term"
+          "10. At the end of the semester, revoke keys or set new ones for next term"
         ]
       },
       "troubleshooting": {
         "title": "Troubleshooting",
         "modulePreparation": {
           "title": "Module Preparation Issues",
-          "noTokens": "Error: 'No tokens available' - Create at least one active token with chat permission before preparing.",
-          "invalidToken": "Error: 'Invalid token' - Ensure the token is active and has chat permission enabled.",
-          "preparationFailed": "If preparation fails, check that your files are under 50MB and in supported formats."
+          "noTokens": "Error: 'No keys available' - Create at least one active key with chat permission before preparing.",
+          "invalidToken": "Error: 'Invalid key' - Ensure the key is active and has chat permission enabled.",
+          "preparationFailed": "If preparation fails, check that your files are under 10MB and in supported formats."
         },
         "fileUploads": {
           "title": "File Upload Issues",
-          "tooLarge": "File too large: Split large PDFs or compress files to under 50MB.",
+          "tooLarge": "File too large: Split large PDFs or compress files to under 10MB.",
           "unsupportedFormat": "Unsupported format: Convert files to PDF, DOC, DOCX, TXT, PPT, or PPTX.",
           "uploadFailed": "Upload failed: Check your internet connection and try again."
         },
         "tokenIssues": {
-          "title": "Token Issues",
-          "widgetNotWorking": "Widget not working: Verify the token is active and the module is prepared.",
-          "chatDisabled": "Students can't chat: Enable 'Allow Chat' permission on the token.",
+          "title": "key Issues",
+          "widgetNotWorking": "Widget not working: Verify the key is active and the module is prepared.",
+          "chatDisabled": "Students can't chat: Enable 'Allow Chat' permission on the key.",
           "filesNotAccessible": "Files not accessible: Enable 'Allow File Access' permission or re-prepare the module."
         },
         "permissions": {
@@ -2891,7 +3030,7 @@
           "Test your AI tutor by asking it questions students might ask",
           "Include course policies and FAQ documents for the AI to reference",
           "Update your tutor prompt mid-semester if you notice areas for improvement",
-          "Create multiple tokens for A/B testing different AI configurations",
+          "Create multiple keys for A/B testing different AI configurations",
           "Use semester/year in module names for easy identification across terms",
           "Monitor which topics generate the most student questions",
           "Share successful AI tutor prompts with your colleagues",
@@ -2903,6 +3042,7 @@
     "selectCourseType": "Select Course Type",
     "selectDescription": "Choose the type that best matches your course content. We'll automatically select the optimal AI model.",
     "selectedModel": "AI Model:",
+    "autoOptimized": "AI model automatically optimized for this course type",
     "tierNote": "Note",
     "tierDescription": "The AI model is automatically optimized based on your university's subscription tier for best cost-performance balance.",
     "mathLogic": {
@@ -2917,5 +3057,172 @@
       "name": "Theory & Humanities",
       "description": "Theoretical concepts, essays, humanities, literature, and text-heavy subjects"
     }
+  },
+  "analytics": {
+    "title": "Analytics Dashboard",
+    "description": "Insights into student activity, usage patterns, and system costs",
+    "loadError": "Failed to load analytics data. Please try again.",
+    "refreshSuccess": "Analytics data refreshed successfully",
+    "refresh": "Refresh",
+    "allUniversities": "All Universities",
+    "searchUniversities": "Search universities...",
+    "noUniversitiesFound": "No universities found.",
+    "exportSuccess": "{format} report exported successfully",
+    "period": {
+      "day": "Today",
+      "week": "This Week",
+      "month": "This Month",
+      "year": "This Year"
+    },
+    "stats": {
+      "totalMessages": "Total Messages",
+      "uniqueStudents": "Unique Students",
+      "activeModules": "Active Modules",
+      "estimatedCost": "Estimated Cost",
+      "inPeriod": "in {period}",
+      "inSelectedPeriod": "in selected period",
+      "vsYesterday": "vs. yesterday",
+      "activeStudents": "Active students",
+      "modulesWithActivity": "Modules with activity",
+      "totalCost": "Total AI cost",
+      "allTime": "All time",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "last365Days": "Last 365 days"
+    },
+    "dashboard": {
+      "last30Days": "Last 30 days",
+      "last30DaysDescription": "Activity and performance metrics for the last 30 days"
+    },
+    "summary": {
+      "totalMessages": "Total Messages",
+      "totalCost": "Total Cost",
+      "uniqueStudents": "Unique Students",
+      "avgResponseTime": "Avg. Response Time",
+      "vsPrevious": "vs. previous period"
+    },
+    "today": {
+      "usageTitle": "Today's Usage",
+      "usageDescription": "Current day activity metrics",
+      "messages": "Messages",
+      "students": "Students",
+      "conversations": "Conversations",
+      "avgResponseTime": "Avg. Response Time",
+      "costTitle": "Today's Cost",
+      "costDescription": "AI usage cost for today",
+      "totalToday": "Total cost today",
+      "tokens": "Total Tokens",
+      "vsYesterday": "vs. Yesterday",
+      "videoTranscriptions": "Video Transcriptions",
+      "transcriptionCost": "Transcription Cost",
+      "videosTranscribed": "Videos Transcribed",
+      "projectedTranscriptionCost": "Projected Daily Cost"
+    },
+    "charts": {
+      "usageTrends": "Usage Trends",
+      "usageTrendsDescription": "Messages and student activity over time",
+      "costTrend": "Cost Trend",
+      "costTrendDescription": "AI usage costs over time",
+      "hourlyBreakdown": "Hourly Activity Breakdown",
+      "hourlyBreakdownDescription": "Peak usage hours analysis",
+      "providerDistribution": "Provider Distribution",
+      "providerDistributionDescription": "Messages by AI provider",
+      "messages": "Messages",
+      "students": "Students",
+      "costUSD": "Cost (USD)"
+    },
+    "filters": {
+      "noFutureDates": "Future dates are not allowed",
+      "noFutureDatesDescription": "Please select a date range up to today.",
+      "maxRangeExceeded": "Date range too large",
+      "maxRangeExceededDescription": "Please select a date range of maximum 1 year (365 days)."
+    },
+    "moduleComparison": {
+      "title": "Module Comparison",
+      "description": "Compare performance across modules",
+      "show": "Show Comparison",
+      "hide": "Hide Comparison",
+      "selectModules": "Select modules to compare",
+      "modulesSelected": "modules selected",
+      "searchModules": "Search modules...",
+      "noModulesFound": "No modules found",
+      "selectAtLeastTwo": "Select at least 2 modules to compare",
+      "maxModulesError": "Maximum 10 modules can be selected for comparison",
+      "maxModulesDescription": "Please deselect a module before selecting a new one.",
+      "loadError": "Failed to load module comparison data",
+      "moduleName": "Module Name",
+      "messages": "Messages",
+      "students": "Students",
+      "tokens": "Tokens",
+      "cost": "Cost (USD)",
+      "avgResponseTime": "Avg Response Time"
+    },
+    "export": {
+      "title": "Analytics Report",
+      "period": "Period",
+      "dateRange": "Date Range",
+      "generated": "Generated",
+      "university": "University",
+      "overviewTitle": "Overview Statistics",
+      "metric": "Metric",
+      "value": "Value",
+      "totalMessages": "Total Messages",
+      "uniqueStudents": "Unique Students",
+      "activeModules": "Active Modules",
+      "activeCourses": "Active Courses",
+      "estimatedCost": "Estimated Cost",
+      "todayUsageTitle": "Today's Usage",
+      "messages": "Messages",
+      "students": "Students",
+      "conversations": "Conversations",
+      "avgResponseTime": "Avg Response Time",
+      "todayCostTitle": "Today's Cost",
+      "totalCost": "Total Cost",
+      "totalTokens": "Total Tokens",
+      "frequentQuestionsTitle": "Frequently Asked Questions",
+      "question": "Question",
+      "count": "Count",
+      "percentage": "Percentage",
+      "topStudentsTitle": "Top Active Students",
+      "studentName": "Student Name",
+      "email": "Email",
+      "tokens": "Tokens",
+      "cost": "Cost"
+    },
+    "todayUsage": {
+      "title": "Today's Usage",
+      "description": "Current day activity metrics",
+      "messages": "Messages",
+      "students": "Students",
+      "conversations": "Conversations",
+      "avgResponseTime": "Avg. Response Time"
+    },
+    "todayCost": {
+      "title": "Today's Cost",
+      "description": "AI usage cost for today",
+      "totalToday": "Total cost today",
+      "tokens": "Total Tokens",
+      "vsYesterday": "vs. Yesterday",
+      "videoTranscriptions": "Video Transcriptions",
+      "transcriptionCost": "Transcription Cost",
+      "videosTranscribed": "Videos Transcribed",
+      "projectedTranscriptionCost": "Projected Daily Cost"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Most common student questions",
+      "similarQuestions": "Similar questions",
+      "noData": "No frequently asked questions yet"
+    },
+    "topStudents": {
+      "title": "Top Active Students",
+      "description": "Students with the most activity",
+      "messages": "messages",
+      "conversations": "conversations",
+      "noData": "No student activity data yet"
+    }
   }
 }
+

@@ -47,7 +47,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
           setUniversities([university]);
         } else {
           // Fetch all universities only if no specific ID provided
-          const response = await apiClient.getUniversities({ limit: 1000 });
+          const response = await apiClient.getUniversities({ size: 1000 });
           setUniversities(response.items);
         }
       } catch (error) {
