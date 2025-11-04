@@ -1451,6 +1451,15 @@
       "rowsPerPage": "Linhas por página:",
       "showing": "Mostrando {from} até {to} de {total} registros"
     },
+    "errorBoundary": {
+      "title": "Algo deu errado",
+      "description": "Ocorreu um erro inesperado. Por favor, tente novamente ou volte para o painel.",
+      "tryAgain": "Tentar Novamente",
+      "goHome": "Ir para o Painel",
+      "sectionTitle": "Erro ao carregar seção",
+      "sectionDescription": "Ocorreu um erro ao carregar esta seção.",
+      "reloadPage": "Recarregar Página"
+    },
     "breadcrumbs": {
       "courses": "Disciplinas",
       "course": "Disciplina",

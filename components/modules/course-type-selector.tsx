@@ -1,16 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
-import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useTranslations } from 'next-intl';
-import { apiClient } from '@/lib/api';
-import { AIModel } from '@/lib/types';
+import { type CourseType } from '@/lib/course-type-utils';
 import { Check, Calculator, Code, BookText } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/components/auth/auth-provider';
-import { COURSE_TYPE_MODEL_PREFERENCES, type CourseType } from '@/lib/course-type-utils';
 
 // Re-export CourseType for backward compatibility
 export type { CourseType } from '@/lib/course-type-utils';
@@ -26,19 +21,15 @@ interface CourseTypeSelectorProps {
   open: boolean;
   onClose: () => void;
   selectedType?: CourseType;
-  onSelectType: (type: CourseType, model: AIModel) => void;
-  universityId?: number;
+  onSelectType: (type: CourseType) => void; // Simplified: only returns courseType (backend selects model)
+  universityId?: number; // Kept for future use, but not currently needed
 }
 
-export function CourseTypeSelector({ open, onClose, selectedType, onSelectType, universityId }: CourseTypeSelectorProps) {
+export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }: CourseTypeSelectorProps) {
   const t = useTranslations('courseTypes');
-  const { user } = useAuth();
-  const [models, setModels] = useState<AIModel[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<CourseType | undefined>(selectedType);
-  const [universityTier, setUniversityTier] = useState<'basic' | 'standard' | 'premium'>('basic');
 
-  // Course type options (model preferences now centralized in course-type-utils.ts)
+  // Course type options (backend now handles AI model selection based on university tier)
   const courseTypes: CourseTypeOption[] = [
     {
       id: 'math-logic',
@@ -60,112 +51,10 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType, 
     }
   ];
 
-  const loadUniversityTier = useCallback(async () => {
-    if (!universityId) return;
-
-    try {
-      const university = await apiClient.getUniversity(universityId);
-      // Map subscription tier number to tier string
-      let tier: 'basic' | 'standard' | 'premium' = 'basic';
-      if (university.subscriptionTier === 3) {
-        tier = 'premium';
-      } else if (university.subscriptionTier === 2) {
-        tier = 'standard';
-      }
-      setUniversityTier(tier);
-    } catch (error) {
-      console.error('Failed to load university tier:', error);
-      // Default to basic if fetch fails
-      setUniversityTier('basic');
-    }
-  }, [universityId]);
-
-  const loadModels = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await apiClient.getAIModels({ is_active: true, include_deprecated: false });
-      setModels(data);
-    } catch (error) {
-      console.error('Failed to load AI models:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (open) {
-      loadModels();
-      if (universityId) {
-        loadUniversityTier();
-      }
-    }
-  }, [open, universityId, loadModels, loadUniversityTier]);
-
   const handleSelectType = (type: CourseType) => {
-    // Get the appropriate model name based on university tier
-    const targetModelName = COURSE_TYPE_MODEL_PREFERENCES[type][universityTier];
-
-    // Find the model in the loaded models
-    const matchedModel = models.find(m => m.modelName === targetModelName);
-
-    if (matchedModel) {
-      setSelected(type);
-      onSelectType(type, matchedModel);
-      onClose();
-    } else {
-      console.error(`Model "${targetModelName}" not found in database`);
-      // Fallback: try to find ANY available model for this type
-      const fallbackModel = findFallbackModel(type);
-      if (fallbackModel) {
-        setSelected(type);
-        onSelectType(type, fallbackModel);
-        onClose();
-      }
-    }
-  };
-
-  // Fallback: find a suitable model if the preferred one isn't available
-  // Respects university tier - won't select premium models for basic tier universities
-  const findFallbackModel = (courseType: CourseType): AIModel | null => {
-    const modelPreferences = COURSE_TYPE_MODEL_PREFERENCES[courseType];
-
-    // Build tier preferences based on university tier
-    let preferences: string[];
-
-    if (universityTier === 'basic') {
-      // Basic tier: only try basic models
-      preferences = [modelPreferences.basic];
-    } else if (universityTier === 'standard') {
-      // Standard tier: try standard, then basic
-      preferences = [
-        modelPreferences.standard,
-        modelPreferences.basic,
-      ];
-    } else {
-      // Premium tier: try all in descending order
-      preferences = [
-        modelPreferences.premium,
-        modelPreferences.standard,
-        modelPreferences.basic,
-      ];
-    }
-
-    // Try to find model from allowed tier preferences
-    for (const modelName of preferences) {
-      const model = models.find(m => m.modelName === modelName);
-      if (model) return model;
-    }
-
-    // Ultimate fallback: return first available model
-    // This should rarely happen if AI models are properly seeded
-    return models[0] || null;
-  };
-
-  const getSelectedModelForType = (type: CourseType): string => {
-    const targetModelName = COURSE_TYPE_MODEL_PREFERENCES[type][universityTier];
-    const model = models.find(m => m.modelName === targetModelName);
-
-    return model ? model.displayName : targetModelName;
+    setSelected(type);
+    onSelectType(type); // Simplified: only pass course type, backend selects model
+    onClose();
   };
 
   return (
@@ -180,17 +69,11 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType, 
           </DialogDescription>
         </DialogHeader>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <LoadingSpinner size="lg" className="text-primary" />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-            {courseTypes.map((courseType) => {
-              const isSelected = selected === courseType.id;
-              const selectedModel = getSelectedModelForType(courseType.id);
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+          {courseTypes.map((courseType) => {
+            const isSelected = selected === courseType.id;
 
-              return (
+            return (
                 <button
                   key={courseType.id}
                   onClick={() => handleSelectType(courseType.id)}
@@ -224,8 +107,7 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType, 
                 </button>
               );
             })}
-          </div>
-        )}
+        </div>
 
         <div className="mt-6 p-4 bg-muted rounded-lg">
           <p className="text-sm text-muted-foreground">

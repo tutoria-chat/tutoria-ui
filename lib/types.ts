@@ -221,6 +221,7 @@ export interface Module {
   tutorLanguage?: string; // Language for AI tutor responses (pt-br, en, es)
   aiModelId?: number; // Selected AI model
   aiModel?: AIModel; // Populated AI model details
+  courseType?: 'math-logic' | 'programming' | 'theory-text'; // Course type - backend selects AI model based on this
   files?: File[]; // Files included in module response (reduces API calls)
   createdAt: string;
   updatedAt: string;

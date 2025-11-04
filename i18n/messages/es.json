@@ -1451,6 +1451,15 @@
       "rowsPerPage": "Filas por página:",
       "showing": "Mostrando {from} a {to} de {total} registros"
     },
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo o vuelve al panel.",
+      "tryAgain": "Intentar de Nuevo",
+      "goHome": "Ir al Panel",
+      "sectionTitle": "Error al cargar sección",
+      "sectionDescription": "Ocurrió un error al cargar esta sección.",
+      "reloadPage": "Recargar Página"
+    },
     "breadcrumbs": {
       "courses": "Cursos",
       "course": "Curso",

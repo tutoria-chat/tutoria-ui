@@ -15,7 +15,6 @@ import { Bot, FileText, Lightbulb, Sparkles, Loader2, Cpu, ChevronLeft, ChevronR
 import { toast } from 'sonner';
 import type { Module, ModuleCreate, ModuleUpdate, Course, AIModel } from '@/lib/types';
 import { CourseTypeSelector, type CourseType } from '@/components/modules/course-type-selector';
-import { detectCourseType } from '@/lib/course-type-utils';
 
 interface ModuleFormSteppedProps {
   module?: Module;
@@ -42,18 +41,16 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
     courseId: module?.courseId || courseId || '',
     systemPrompt: module?.systemPrompt || '',
     tutorLanguage: module?.tutorLanguage || 'pt-br',
-    aiModelId: module?.aiModelId || undefined,
-    courseType: undefined as CourseType | undefined,
+    courseType: module?.courseType as CourseType | undefined,
   });
   const [courses, setCourses] = useState<Course[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingCourses, setLoadingCourses] = useState(false);
   const [isImprovingPrompt, setIsImprovingPrompt] = useState(false);
   const [remainingImprovements, setRemainingImprovements] = useState<number | null>(null);
-  const [selectedAIModel, setSelectedAIModel] = useState<AIModel | null>(module?.aiModel || null);
-  const [selectedCourseType, setSelectedCourseType] = useState<CourseType | undefined>(
-    module?.aiModel ? detectCourseType(module.aiModel.modelName) : undefined
-  );
+  // Course type selection - backend handles AI model selection based on this
+  // Initialize with existing module's courseType if editing
+  const [selectedCourseType, setSelectedCourseType] = useState<CourseType | undefined>(module?.courseType as CourseType | undefined);
   const [showCourseTypeSelector, setShowCourseTypeSelector] = useState(false);
 
   // Define steps
@@ -171,8 +168,8 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
         newErrors.semester = t('semesterInvalid');
       }
     } else if (step === 1) {
-      // AI Model Selection
-      if (!formData.aiModelId) newErrors.aiModelId = tAI('modelRequired');
+      // Course Type Selection (backend will auto-select AI model)
+      if (!formData.courseType) newErrors.courseType = tCourseTypes('typeRequired') || 'Course type is required';
     }
     // Steps 2 and 3 (Prompt and Settings) are optional
 
@@ -444,11 +441,11 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
                         </div>
                       </div>
                     ) : (
-                      <p className={`text-sm ${errors.aiModelId ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      <p className={`text-sm ${errors.courseType ? 'text-destructive' : 'text-muted-foreground'}`}>
                         {t('noCourseTypeSelected') || 'No course type selected'}
                       </p>
                     )}
-                    {errors.aiModelId && <FormMessage>{errors.aiModelId}</FormMessage>}
+                    {errors.courseType && <FormMessage>{errors.courseType}</FormMessage>}
                   </FormItem>
                 </FormField>
               </div>
@@ -658,10 +655,10 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
         onClose={() => setShowCourseTypeSelector(false)}
         selectedType={selectedCourseType}
         universityId={universityId}
-        onSelectType={(type, model) => {
+        onSelectType={(type) => {
           setSelectedCourseType(type);
-          setSelectedAIModel(model);
           setFormData(prev => ({ ...prev, courseType: type }));
+          // Backend will auto-select AI model based on courseType and university tier
         }}
       />
     </div>

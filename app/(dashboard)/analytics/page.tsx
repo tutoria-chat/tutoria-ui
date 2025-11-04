@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
@@ -193,6 +193,25 @@ export default function AnalyticsPage() {
     }
   }, [isSuperAdmin]);
 
+  // Define loadModuleComparison before useEffect (to avoid hoisting issues)
+  const loadModuleComparison = useCallback(async () => {
+    if (selectedModuleIds.length < 2) return;
+
+    try {
+      const filters: Omit<AnalyticsFilterDto, 'moduleId'> = {
+        ...(selectedUniversityId && { universityId: selectedUniversityId }),
+        ...(dateRange?.from && { startDate: format(dateRange.from, 'yyyy-MM-dd') }),
+        ...(dateRange?.to && { endDate: format(dateRange.to, 'yyyy-MM-dd') }),
+      };
+
+      const comparisonData = await apiClient.getAnalyticsModuleComparison(selectedModuleIds, filters);
+      setModuleComparison(comparisonData);
+    } catch (error) {
+      console.error('Error loading module comparison:', error);
+      toast.error(t('moduleComparison.loadError'));
+    }
+  }, [selectedModuleIds, selectedUniversityId, dateRange, t]);
+
   useEffect(() => {
     loadAnalytics();
     loadAvailableModules();
@@ -202,7 +221,7 @@ export default function AnalyticsPage() {
     if (selectedModuleIds.length >= 2) {
       loadModuleComparison();
     }
-  }, [selectedModuleIds, dateRange]);
+  }, [selectedModuleIds, dateRange, loadModuleComparison]);
 
   const loadAvailableModules = async () => {
     try {
@@ -275,24 +294,6 @@ export default function AnalyticsPage() {
       toast.error(t('loadError') + ': ' + (error?.message || 'Unknown error'));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const loadModuleComparison = async () => {
-    if (selectedModuleIds.length < 2) return;
-
-    try {
-      const filters: Omit<AnalyticsFilterDto, 'moduleId'> = {
-        ...(selectedUniversityId && { universityId: selectedUniversityId }),
-        ...(dateRange?.from && { startDate: format(dateRange.from, 'yyyy-MM-dd') }),
-        ...(dateRange?.to && { endDate: format(dateRange.to, 'yyyy-MM-dd') }),
-      };
-
-      const comparisonData = await apiClient.getAnalyticsModuleComparison(selectedModuleIds, filters);
-      setModuleComparison(comparisonData);
-    } catch (error) {
-      console.error('Error loading module comparison:', error);
-      toast.error(t('moduleComparison.loadError'));
     }
   };
 

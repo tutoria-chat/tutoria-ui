@@ -1454,6 +1454,15 @@
       "rowsPerPage": "Rows per page:",
       "showing": "Showing {from} to {to} of {total} records"
     },
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "description": "An unexpected error occurred. Please try again or go back to the dashboard.",
+      "tryAgain": "Try Again",
+      "goHome": "Go to Dashboard",
+      "sectionTitle": "Error loading section",
+      "sectionDescription": "An error occurred while loading this section.",
+      "reloadPage": "Reload Page"
+    },
     "breadcrumbs": {
       "courses": "Courses",
       "course": "Course",
