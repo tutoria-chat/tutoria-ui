@@ -889,7 +889,7 @@ export default function AnalyticsPage() {
             <Separator />
             <div className="flex justify-between items-center">
               <span className="text-sm text-muted-foreground">{t('todayUsage.conversations')}</span>
-              <span className="text-lg font-semibold">{todayUsage?.uniqueConversations || '0'}</span>
+              <span className="text-lg font-semibold">{todayUsage?.uniqueConversations ?? '0'}</span>
             </div>
             <Separator />
             <div className="flex justify-between items-center">
