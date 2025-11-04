@@ -845,6 +845,11 @@ class TutoriaAPIClient {
     return this.get('/api/analytics/dashboard/summary', filters);
   }
 
+  // Unified dashboard endpoint - combines summary, trends, todayUsage, and todayCost
+  async getAnalyticsDashboardUnified(filters?: AnalyticsFilterDto): Promise<UnifiedDashboardResponseDto> {
+    return this.get('/api/analytics/dashboard/unified', filters);
+  }
+
   async getAnalyticsCostAnalysis(filters?: AnalyticsFilterDto): Promise<CostAnalysisDto> {
     return this.get('/api/analytics/costs/detailed', filters);
   }

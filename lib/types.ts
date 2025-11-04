@@ -937,3 +937,28 @@ export interface DashboardSummaryDto {
     uptime: number;
   };
 }
+
+export interface UsageAnalyticsSummaryResponseDto {
+  totalMessages: number;
+  totalCostUSD: number;
+  uniqueStudents: number;
+  averageResponseTime: number; // milliseconds
+  comparedToPrevious?: {
+    messagesPercentChange: number;
+    costPercentChange: number;
+    studentsPercentChange: number;
+  };
+  dailyStats?: Array<{
+    date: string;
+    totalMessages: number;
+    uniqueStudents: number;
+  }>;
+}
+
+// Unified dashboard response combining all dashboard data
+export interface UnifiedDashboardResponseDto {
+  summary: DashboardSummaryDto;
+  trends: UsageTrendsResponseDto;
+  todayUsage: UsageStatsDto;
+  todayCost: TodayCostDto;
+}

@@ -208,7 +208,13 @@ export default function ProfessorsPage() {
       loadProfessors(); // Reload to get updated agent status
     } catch (error: any) {
       console.error('Error creating professor agent:', error);
-      toast.error(error.message || t('agentDialog.createError'));
+      if (error.response?.status === 403) {
+        toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+      } else if (error.response?.status === 400) {
+        toast.error(error.message || t('agentDialog.validationError') || 'Invalid data provided');
+      } else {
+        toast.error(error.message || t('agentDialog.createError'));
+      }
     } finally {
       setAgentLoading(false);
     }
@@ -221,7 +227,11 @@ export default function ProfessorsPage() {
       loadProfessors(); // Reload to get updated agent status
     } catch (error: any) {
       console.error('Error activating agent:', error);
-      toast.error(error.message || t('agentActivateError') || 'Failed to activate agent');
+      if (error.response?.status === 403) {
+        toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+      } else {
+        toast.error(error.message || t('agentActivateError') || 'Failed to activate agent');
+      }
     }
   };
 
@@ -239,7 +249,11 @@ export default function ProfessorsPage() {
           loadProfessors(); // Reload to get updated agent status
         } catch (error: any) {
           console.error('Error deactivating agent:', error);
-          toast.error(error.message || t('agentDeactivateError') || 'Failed to deactivate agent');
+          if (error.response?.status === 403) {
+            toast.error(t('agentDialog.permissionDenied') || 'Only university administrators can manage professor agents');
+          } else {
+            toast.error(error.message || t('agentDeactivateError') || 'Failed to deactivate agent');
+          }
         }
       }
     });

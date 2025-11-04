@@ -38,6 +38,7 @@
       "viewCourses": "Ver cursos",
       "viewModules": "Ver módulos",
       "manageTokens": "Gestionar tokens",
+      "manageAccessKeys": "Gestionar Claves de Acceso",
       "myAIAgent": "Mi Agente de IA"
     }
   },
@@ -3409,6 +3410,34 @@
       "last7Days": "Últimos 7 días",
       "last30Days": "Últimos 30 días",
       "last365Days": "Últimos 365 días"
+    },
+    "dashboard": {
+      "last30Days": "Últimos 30 días",
+      "last30DaysDescription": "Métricas de actividad y rendimiento de los últimos 30 días"
+    },
+    "summary": {
+      "totalMessages": "Mensajes Totales",
+      "totalCost": "Costo Total",
+      "uniqueStudents": "Estudiantes Únicos",
+      "avgResponseTime": "Tiempo Promedio de Respuesta",
+      "vsPrevious": "vs. período anterior"
+    },
+    "today": {
+      "usageTitle": "Uso de Hoy",
+      "usageDescription": "Métricas de actividad del día actual",
+      "messages": "Mensajes",
+      "students": "Estudiantes",
+      "conversations": "Conversaciones",
+      "avgResponseTime": "Tiempo Prom. de Respuesta",
+      "costTitle": "Costo de Hoy",
+      "costDescription": "Costo de uso de IA para hoy",
+      "totalToday": "Costo total de hoy",
+      "tokens": "Tokens Totales",
+      "vsYesterday": "vs. Ayer",
+      "videoTranscriptions": "Transcripciones de Video",
+      "transcriptionCost": "Costo de Transcripción",
+      "videosTranscribed": "Videos Transcritos",
+      "projectedTranscriptionCost": "Costo Diario Proyectado"
     },
     "charts": {
       "usageTrends": "Tendencias de Uso",

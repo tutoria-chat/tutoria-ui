@@ -570,6 +570,38 @@ AdminActivityLog table:
 
 ---
 
+## ⚡ Dashboard Performance Optimization
+
+### Phase 1: Use Unified Dashboard Endpoint
+- [ ] Update dashboard page to call `/api/analytics/dashboard/unified` instead of 4 separate endpoints
+- [ ] Remove individual API calls (summary, trends, todayUsage, todayCost)
+- [ ] Update loading states to handle single unified response
+- [ ] Estimate: Reduce ~100 DynamoDB queries to ~25, improve page load by 5-7 seconds
+
+### Phase 2: Frontend Optimizations (Future)
+- [ ] Add client-side caching for dashboard data (SWR or React Query)
+- [ ] Implement dashboard data refresh interval (30-60 seconds)
+- [ ] Add loading skeletons for better perceived performance
+
+## 🏛️ University Management
+
+### Fix University Address Fields
+- [ ] Update university create form to include new address fields:
+  - postalCode
+  - street
+  - streetNumber
+  - complement
+  - neighborhood
+  - city
+  - state
+  - country
+- [ ] Update university edit form to show and save address fields
+- [ ] Update university details page to display address fields
+- [ ] Add address field validation (required fields, postal code format, etc.)
+- [ ] Update TypeScript types in `lib/types.ts` for University interface
+
+---
+
 ## Notes
 
 - Items 1-2 are **mandatory** for the next work session

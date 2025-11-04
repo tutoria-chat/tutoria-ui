@@ -38,6 +38,7 @@
       "viewCourses": "View Courses",
       "viewModules": "View Modules",
       "manageTokens": "Manage keys",
+      "manageAccessKeys": "Manage Access Keys",
       "myAIAgent": "My AI Agent"
     }
   },
@@ -3090,6 +3091,34 @@
       "last7Days": "Last 7 days",
       "last30Days": "Last 30 days",
       "last365Days": "Last 365 days"
+    },
+    "dashboard": {
+      "last30Days": "Last 30 days",
+      "last30DaysDescription": "Activity and performance metrics for the last 30 days"
+    },
+    "summary": {
+      "totalMessages": "Total Messages",
+      "totalCost": "Total Cost",
+      "uniqueStudents": "Unique Students",
+      "avgResponseTime": "Avg. Response Time",
+      "vsPrevious": "vs. previous period"
+    },
+    "today": {
+      "usageTitle": "Today's Usage",
+      "usageDescription": "Current day activity metrics",
+      "messages": "Messages",
+      "students": "Students",
+      "conversations": "Conversations",
+      "avgResponseTime": "Avg. Response Time",
+      "costTitle": "Today's Cost",
+      "costDescription": "AI usage cost for today",
+      "totalToday": "Total cost today",
+      "tokens": "Total Tokens",
+      "vsYesterday": "vs. Yesterday",
+      "videoTranscriptions": "Video Transcriptions",
+      "transcriptionCost": "Transcription Cost",
+      "videosTranscribed": "Videos Transcribed",
+      "projectedTranscriptionCost": "Projected Daily Cost"
     },
     "charts": {
       "usageTrends": "Usage Trends",
