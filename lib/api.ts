@@ -406,7 +406,7 @@ class TutoriaAPIClient {
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, false, true);
+    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, { useAuthAPI: true });
     if (response.accessToken) {
       this.setToken(response.accessToken);
     }
@@ -767,7 +767,7 @@ class TutoriaAPIClient {
       userType: 'super_admin',
       isAdmin: true, // Super admins are always admins
       languagePreference: data.languagePreference || 'pt-br',
-    }, false, true);
+    }, { useAuthAPI: true });
 
     // Map backend UserResponse to SuperAdmin interface
     return {
