@@ -74,6 +74,18 @@ export const API_CONFIG = {
   timeout: 30000,
 } as const;
 
+/**
+ * Options for HTTP request methods to make calls more readable
+ * @example
+ * // Instead of: post(endpoint, data, false, false, true)
+ * // Use: post(endpoint, data, { usePythonAPI: true })
+ */
+export interface RequestOptions {
+  isFormData?: boolean;
+  useAuthAPI?: boolean;
+  usePythonAPI?: boolean;
+}
+
 class TutoriaAPIClient {
   private baseURL: string;
   private pythonBaseURL: string;
@@ -291,7 +303,37 @@ class TutoriaAPIClient {
     return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI);
   }
 
-  async post<T>(endpoint: string, data?: unknown, isFormData = false, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+  /**
+   * POST request with improved API using options object
+   * @param endpoint - API endpoint
+   * @param data - Request payload
+   * @param options - Request options (isFormData, useAuthAPI, usePythonAPI) or legacy boolean for backward compatibility
+   */
+  async post<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: RequestOptions | boolean,
+    // Legacy parameters for backward compatibility
+    useAuthAPI_DEPRECATED?: boolean,
+    usePythonAPI_DEPRECATED?: boolean
+  ): Promise<T> {
+    // Handle backward compatibility: if options is a boolean, it's the old isFormData parameter
+    let isFormData = false;
+    let useAuthAPI = false;
+    let usePythonAPI = false;
+
+    if (typeof options === 'boolean') {
+      // Legacy call: post(endpoint, data, isFormData, useAuthAPI, usePythonAPI)
+      isFormData = options;
+      useAuthAPI = useAuthAPI_DEPRECATED ?? false;
+      usePythonAPI = usePythonAPI_DEPRECATED ?? false;
+    } else if (options) {
+      // New call: post(endpoint, data, { isFormData, useAuthAPI, usePythonAPI })
+      isFormData = options.isFormData ?? false;
+      useAuthAPI = options.useAuthAPI ?? false;
+      usePythonAPI = options.usePythonAPI ?? false;
+    }
+
     const headers: Record<string, string | null> = {};
 
     // For FormData, DON'T set Content-Type - browser will auto-set with boundary
@@ -371,7 +413,7 @@ class TutoriaAPIClient {
   }
 
   async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
-    return this.post('/api/auth/reset-password-request', { username, userType }, false, true);
+    return this.post('/api/auth/reset-password-request', { username, userType }, { useAuthAPI: true });
   }
 
   async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
@@ -379,7 +421,7 @@ class TutoriaAPIClient {
   }
 
   async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, false, true);
+    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, { useAuthAPI: true });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
@@ -507,7 +549,7 @@ class TutoriaAPIClient {
   // AI/Tutor endpoints (Python API)
   async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
     // This endpoint uses the Python API - must stay snake_case
-    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, false, false, true);
+    return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
   }
 
   // AI Model endpoints

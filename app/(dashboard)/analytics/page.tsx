@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { SectionErrorBoundary } from '@/components/ui/error-boundary';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -145,6 +146,46 @@ export default function AnalyticsPage() {
 
   const isSuperAdmin = user?.role === 'super_admin';
 
+  // Validate and handle date range changes
+  const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
+    if (!newDateRange?.from) {
+      setDateRange(newDateRange);
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
+
+    // Prevent future dates
+    if (newDateRange.from > today) {
+      toast.error(t('filters.noFutureDates') || 'Future dates are not allowed', {
+        description: t('filters.noFutureDatesDescription') || 'Please select a date range up to today.'
+      });
+      return;
+    }
+
+    // If end date exists, validate it too
+    if (newDateRange.to && newDateRange.to > today) {
+      toast.error(t('filters.noFutureDates') || 'Future dates are not allowed', {
+        description: t('filters.noFutureDatesDescription') || 'Please select a date range up to today.'
+      });
+      return;
+    }
+
+    // Check if range exceeds 1 year (365 days)
+    if (newDateRange.from && newDateRange.to) {
+      const daysDifference = Math.floor((newDateRange.to.getTime() - newDateRange.from.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysDifference > 365) {
+        toast.error(t('filters.maxRangeExceeded') || 'Date range too large', {
+          description: t('filters.maxRangeExceededDescription') || 'Please select a date range of maximum 1 year (365 days).'
+        });
+        return;
+      }
+    }
+
+    setDateRange(newDateRange);
+  };
+
   // Load universities on mount (for super admins)
   useEffect(() => {
     if (isSuperAdmin) {
@@ -176,7 +217,6 @@ export default function AnalyticsPage() {
     try {
       const response = await apiClient.getUniversities();
       setUniversities(response.items);
-      console.log('Loaded universities:', response.items.length);
     } catch (error) {
       console.error('Error loading universities:', error);
       toast.error('Failed to load universities');
@@ -185,7 +225,6 @@ export default function AnalyticsPage() {
 
   const loadAnalytics = async () => {
     if (!user) {
-      console.log('No user, skipping analytics load');
       return;
     }
 
@@ -209,8 +248,6 @@ export default function AnalyticsPage() {
         else period = 'year';
       }
 
-      console.log('Loading analytics with filters:', filters, 'period:', period);
-
       const [summaryData, todayUsageData, todayCostData, faqData, topStudentsData, trendsData, hourlyData] = await Promise.all([
         apiClient.getAnalyticsDashboardSummary({ ...filters, period }),
         apiClient.getAnalyticsTodayUsage(filters),
@@ -220,16 +257,6 @@ export default function AnalyticsPage() {
         apiClient.getAnalyticsUsageTrends(filters),
         apiClient.getAnalyticsHourlyUsage(filters),
       ]);
-
-      console.log('Analytics data loaded:', {
-        summary: summaryData,
-        todayUsage: todayUsageData,
-        todayCost: todayCostData,
-        faq: faqData,
-        topStudents: topStudentsData,
-        trends: trendsData,
-        hourly: hourlyData,
-      });
 
       setSummary(summaryData);
       setTodayUsage(todayUsageData);
@@ -370,11 +397,22 @@ export default function AnalyticsPage() {
   };
 
   const toggleModuleSelection = (moduleId: number) => {
-    setSelectedModuleIds(prev =>
-      prev.includes(moduleId)
-        ? prev.filter(id => id !== moduleId)
-        : [...prev, moduleId]
-    );
+    setSelectedModuleIds(prev => {
+      // If module is already selected, remove it
+      if (prev.includes(moduleId)) {
+        return prev.filter(id => id !== moduleId);
+      }
+
+      // Limit to maximum 10 modules for performance
+      if (prev.length >= 10) {
+        toast.error(t('moduleComparison.maxModulesError') || 'Maximum 10 modules can be selected for comparison', {
+          description: t('moduleComparison.maxModulesDescription') || 'Please deselect a module before selecting a new one.'
+        });
+        return prev;
+      }
+
+      return [...prev, moduleId];
+    });
   };
 
   if (!user) return null;
@@ -469,7 +507,7 @@ export default function AnalyticsPage() {
 
         {/* Filters Section - Below Title */}
         <div className="flex flex-wrap items-center gap-4 mt-6">
-          <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+          <DateRangePicker date={dateRange} onDateChange={handleDateRangeChange} />
 
           {isSuperAdmin && (
             <Popover open={universityComboOpen} onOpenChange={setUniversityComboOpen}>
@@ -582,114 +620,123 @@ export default function AnalyticsPage() {
 
       {/* Charts Row 1: Usage Trends */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('charts.usageTrends')}</CardTitle>
-            <CardDescription>{t('charts.usageTrendsDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={trendsChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="messages" stroke="#3b82f6" strokeWidth={2} name={t('charts.messages')} />
-                <Line type="monotone" dataKey="students" stroke="#10b981" strokeWidth={2} name={t('charts.students')} />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <SectionErrorBoundary title="Failed to load usage trends">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('charts.usageTrends')}</CardTitle>
+              <CardDescription>{t('charts.usageTrendsDescription')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={trendsChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="messages" stroke="#3b82f6" strokeWidth={2} name={t('charts.messages')} />
+                  <Line type="monotone" dataKey="students" stroke="#10b981" strokeWidth={2} name={t('charts.students')} />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </SectionErrorBoundary>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('charts.costTrend')}</CardTitle>
-            <CardDescription>{t('charts.costTrendDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={trendsChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Area type="monotone" dataKey="cost" stroke="#f59e0b" fill="#fef3c7" name={t('charts.costUSD')} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <SectionErrorBoundary title="Failed to load cost trend">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('charts.costTrend')}</CardTitle>
+              <CardDescription>{t('charts.costTrendDescription')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={trendsChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Area type="monotone" dataKey="cost" stroke="#f59e0b" fill="#fef3c7" name={t('charts.costUSD')} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </SectionErrorBoundary>
       </div>
 
       {/* Charts Row 2: Hourly Breakdown & Provider Distribution */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('charts.hourlyBreakdown')}</CardTitle>
-            <CardDescription>{t('charts.hourlyBreakdownDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={hourlyChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hour" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="messages" fill="#3b82f6" name={t('charts.messages')} />
-                <Bar dataKey="students" fill="#10b981" name={t('charts.students')} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <SectionErrorBoundary title="Failed to load hourly breakdown">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('charts.hourlyBreakdown')}</CardTitle>
+              <CardDescription>{t('charts.hourlyBreakdownDescription')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={hourlyChartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="hour" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="messages" fill="#3b82f6" name={t('charts.messages')} />
+                  <Bar dataKey="students" fill="#10b981" name={t('charts.students')} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </SectionErrorBoundary>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('charts.providerDistribution')}</CardTitle>
-            <CardDescription>{t('charts.providerDistributionDescription')}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={providerChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={(entry) => `${entry.name}: ${entry.value}`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {providerChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <SectionErrorBoundary title="Failed to load provider distribution">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('charts.providerDistribution')}</CardTitle>
+              <CardDescription>{t('charts.providerDistributionDescription')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={providerChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={(entry) => `${entry.name}: ${entry.value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {providerChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </SectionErrorBoundary>
       </div>
 
       {/* Module Comparison Section */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>{t('moduleComparison.title')}</CardTitle>
-              <CardDescription>{t('moduleComparison.description')}</CardDescription>
+      <SectionErrorBoundary title="Failed to load module comparison">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>{t('moduleComparison.title')}</CardTitle>
+                <CardDescription>{t('moduleComparison.description')}</CardDescription>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowModuleComparison(!showModuleComparison)}
+              >
+                <GitCompare className="mr-2 h-4 w-4" />
+                {showModuleComparison ? t('moduleComparison.hide') : t('moduleComparison.show')}
+              </Button>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowModuleComparison(!showModuleComparison)}
-            >
-              <GitCompare className="mr-2 h-4 w-4" />
-              {showModuleComparison ? t('moduleComparison.hide') : t('moduleComparison.show')}
-            </Button>
-          </div>
-        </CardHeader>
+          </CardHeader>
         {showModuleComparison && (
           <CardContent className="space-y-4">
             {/* Module Multi-Select Combobox */}
@@ -818,7 +865,8 @@ export default function AnalyticsPage() {
             )}
           </CardContent>
         )}
-      </Card>
+        </Card>
+      </SectionErrorBoundary>
 
       {/* Today's Metrics */}
       <div className="grid gap-4 md:grid-cols-2">

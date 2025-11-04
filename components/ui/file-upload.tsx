@@ -23,7 +23,7 @@ export function FileUpload({
   onFileSelect,
   accept = '.pdf,.doc,.docx,.txt,.ppt,.pptx',
   disabled = false,
-  maxSizeMB = 50,
+  maxSizeMB = 10, // Default 10MB limit for security and cost optimization
   selectedFiles = [],
   multiple = true,
   translations,

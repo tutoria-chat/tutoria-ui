@@ -65,7 +65,7 @@ export default function ProfessorsPage() {
       setCurrentUser(user);
     } catch (error: any) {
       console.error('Error loading current user:', error);
-      toast.error(t('loadUserError'));
+      toast.error(t('professors.loadUserError'));
     }
   };
 

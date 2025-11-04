@@ -106,3 +106,46 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return this.props.children;
   }
 }
+
+/**
+ * Lightweight error boundary for sections/cards
+ * Shows error UI within the section instead of full screen
+ */
+export function SectionErrorBoundary({
+  children,
+  title = 'Error loading section',
+  description = 'An error occurred while loading this section.'
+}: {
+  children: ReactNode;
+  title?: string;
+  description?: string;
+}) {
+  return (
+    <ErrorBoundary
+      fallback={
+        <Card className="border-destructive/50 bg-destructive/5">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              <CardTitle className="text-destructive text-base">{title}</CardTitle>
+            </div>
+            <CardDescription>{description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              <RefreshCcw className="h-4 w-4" />
+              Reload Page
+            </Button>
+          </CardContent>
+        </Card>
+      }
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
