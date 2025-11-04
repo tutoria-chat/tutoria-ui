@@ -20,7 +20,7 @@ import { APP_CONFIG } from '@/lib/constants';
 
 export default function TokensPage() {
   const { user } = useAuth();
-  const t = useTranslations('tokens');
+  const t = useTranslations('accessKeys');
   const tCommon = useTranslations('common');
 
   // Build API URL with university filter for professors

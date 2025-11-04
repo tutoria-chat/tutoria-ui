@@ -33,7 +33,7 @@ interface TokenModalProps {
 
 export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedModuleId }: TokenModalProps) {
   const { user } = useAuth();
-  const t = useTranslations('tokens.modal');
+  const t = useTranslations('accessKeys.modal');
   const tCommon = useTranslations('common');
   const { confirm, dialog } = useConfirmDialog();
   const [modules, setModules] = useState<Module[]>([]);
@@ -296,7 +296,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     <div className="space-y-2">
                       <Label>{t('status')}</Label>
                       <Badge variant={token.isActive ? "default" : "secondary"}>
-                        {token.isActive ? t('active', { ns: 'tokens.columns' }) : t('inactive', { ns: 'tokens.columns' })}
+                        {token.isActive ? t('active', { ns: 'accessKeys.columns' }) : t('inactive', { ns: 'accessKeys.columns' })}
                       </Badge>
                     </div>
                   </div>
@@ -326,7 +326,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     </div>
                     <div className="space-y-2">
                       <Label>{t('expiresAt')}</Label>
-                      <p className="text-sm">{token.expiresAt ? formatDateShort(token.expiresAt) : t('never', { ns: 'tokens.columns' })}</p>
+                      <p className="text-sm">{token.expiresAt ? formatDateShort(token.expiresAt) : t('never', { ns: 'accessKeys.columns' })}</p>
                     </div>
                   </div>
 
@@ -348,13 +348,13 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     <div className="space-y-2">
                       <Label>{t('chatPermission')}</Label>
                       <Badge variant={token.allowChat ? "default" : "secondary"}>
-                        {token.allowChat ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
+                        {token.allowChat ? t('allowed', { ns: 'accessKeys.columns' }) : t('blocked', { ns: 'accessKeys.columns' })}
                       </Badge>
                     </div>
                     <div className="space-y-2">
                       <Label>{t('filePermission')}</Label>
                       <Badge variant={token.allowFileAccess ? "default" : "secondary"}>
-                        {token.allowFileAccess ? t('allowed', { ns: 'tokens.columns' }) : t('blocked', { ns: 'tokens.columns' })}
+                        {token.allowFileAccess ? t('allowed', { ns: 'accessKeys.columns' }) : t('blocked', { ns: 'accessKeys.columns' })}
                       </Badge>
                     </div>
                   </div>
