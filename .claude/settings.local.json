@@ -26,7 +26,8 @@
       "Bash(node compare-translations.js)",
       "Bash(del compare-translations.js)",
       "Bash(node:*)",
-      "Bash(del add-translations.js verify-translations.js)"
+      "Bash(del add-translations.js verify-translations.js)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
