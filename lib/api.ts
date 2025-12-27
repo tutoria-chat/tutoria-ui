@@ -72,6 +72,8 @@ export const API_CONFIG = {
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6969',
   // Python API (AI/Tutor endpoints - improve-prompt only)
   pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
+  // Files API (dedicated file upload/download service)
+  filesBaseURL: process.env.NEXT_PUBLIC_FILES_API_URL || 'http://localhost:5001',
   timeout: 30000,
 } as const;
 
@@ -85,11 +87,13 @@ export interface RequestOptions {
   isFormData?: boolean;
   useAuthAPI?: boolean;
   usePythonAPI?: boolean;
+  useFilesAPI?: boolean;
 }
 
 class TutoriaAPIClient {
   private baseURL: string;
   private pythonBaseURL: string;
+  private filesBaseURL: string;
   private timeout: number;
   private token: string | null = null;
   private isRefreshing: boolean = false;
@@ -100,6 +104,7 @@ class TutoriaAPIClient {
   constructor(config = API_CONFIG) {
     this.baseURL = config.baseURL;
     this.pythonBaseURL = config.pythonBaseURL;
+    this.filesBaseURL = config.filesBaseURL;
     this.timeout = config.timeout;
 
     // Initialize token from localStorage if available
@@ -191,10 +196,11 @@ class TutoriaAPIClient {
     endpoint: string,
     options: RequestInit = {},
     useAuthAPI: boolean = false,
-    usePythonAPI: boolean = false
+    usePythonAPI: boolean = false,
+    useFilesAPI: boolean = false
   ): Promise<T> {
-    // Determine which API host to use (Python API or unified C# API)
-    const baseUrl = usePythonAPI ? this.pythonBaseURL : this.baseURL;
+    // Determine which API host to use (Files API, Python API, or unified C# API)
+    const baseUrl = useFilesAPI ? this.filesBaseURL : (usePythonAPI ? this.pythonBaseURL : this.baseURL);
     const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
@@ -257,7 +263,7 @@ class TutoriaAPIClient {
 
         if (refreshed) {
           // Retry the original request with new token
-          return this.request<T>(endpoint, options, useAuthAPI, usePythonAPI);
+          return this.request<T>(endpoint, options, useAuthAPI, usePythonAPI, useFilesAPI);
         } else {
           // Refresh failed, clear token and redirect to login
           this.clearToken();
@@ -289,7 +295,7 @@ class TutoriaAPIClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, unknown> | object, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown> | object, useAuthAPI = false, usePythonAPI = false, useFilesAPI = false): Promise<T> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params as Record<string, unknown>).forEach(([key, value]) => {
@@ -301,7 +307,7 @@ class TutoriaAPIClient {
     const queryString = searchParams.toString();
     const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
-    return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI);
+    return this.request<T>(url, { method: 'GET' }, useAuthAPI, usePythonAPI, useFilesAPI);
   }
 
   /**
@@ -322,6 +328,7 @@ class TutoriaAPIClient {
     let isFormData = false;
     let useAuthAPI = false;
     let usePythonAPI = false;
+    let useFilesAPI = false;
 
     if (typeof options === 'boolean') {
       // Legacy call: post(endpoint, data, isFormData, useAuthAPI, usePythonAPI)
@@ -329,10 +336,11 @@ class TutoriaAPIClient {
       useAuthAPI = useAuthAPI_DEPRECATED ?? false;
       usePythonAPI = usePythonAPI_DEPRECATED ?? false;
     } else if (options) {
-      // New call: post(endpoint, data, { isFormData, useAuthAPI, usePythonAPI })
+      // New call: post(endpoint, data, { isFormData, useAuthAPI, usePythonAPI, useFilesAPI })
       isFormData = options.isFormData ?? false;
       useAuthAPI = options.useAuthAPI ?? false;
       usePythonAPI = options.usePythonAPI ?? false;
+      useFilesAPI = options.useFilesAPI ?? false;
     }
 
     const headers: Record<string, string | null> = {};
@@ -357,25 +365,25 @@ class TutoriaAPIClient {
       method: 'POST',
       headers: headers as unknown as HeadersInit,
       body: isFormData ? (data as FormData) : (data ? JSON.stringify(data) : undefined),
-    }, useAuthAPI, usePythonAPI);
+    }, useAuthAPI, usePythonAPI, useFilesAPI);
   }
 
-  async put<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+  async put<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false, useFilesAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
-    }, useAuthAPI, usePythonAPI);
+    }, useAuthAPI, usePythonAPI, useFilesAPI);
   }
 
-  async delete<T>(endpoint: string, useAuthAPI = false, usePythonAPI = false): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' }, useAuthAPI, usePythonAPI);
+  async delete<T>(endpoint: string, useAuthAPI = false, usePythonAPI = false, useFilesAPI = false): Promise<T> {
+    return this.request<T>(endpoint, { method: 'DELETE' }, useAuthAPI, usePythonAPI, useFilesAPI);
   }
 
-  async patch<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false): Promise<T> {
+  async patch<T>(endpoint: string, data?: unknown, useAuthAPI = false, usePythonAPI = false, useFilesAPI = false): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
-    }, useAuthAPI, usePythonAPI);
+    }, useAuthAPI, usePythonAPI, useFilesAPI);
   }
 
   // Authentication endpoints (use Next.js API route for secure server-side client authentication)
@@ -563,34 +571,41 @@ class TutoriaAPIClient {
   }
 
   // File endpoints
+  // File endpoints - these go to the dedicated Files API (TutoriaFiles)
   async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
+    // List files still uses main API (has the full file records with module info)
     return this.get('/api/files/', params);
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
-    // Add moduleId and name to the FormData (not query params)
-    // Backend expects these in the form body as part of UploadFileRequest DTO
+    // Add moduleId and customName to the FormData
+    // TutoriaFiles API expects: moduleId, file, customName (optional)
     formData.append('moduleId', moduleId.toString());
     if (fileName) {
-      formData.append('name', fileName);
+      formData.append('customName', fileName);
     }
-    return this.post('/api/files/', formData, true);
+    // Use dedicated Files API for uploads (handles large files up to 15MB)
+    return this.post('/api/files/upload', formData, { isFormData: true, useFilesAPI: true });
   }
 
   async getFile(id: number): Promise<FileResponse> {
-    return this.get(`/api/files/${id}`);
+    // Get file details from Files API
+    return this.get(`/api/files/${id}`, undefined, false, false, true);
   }
 
   async updateFile(id: number, data: Partial<File>): Promise<File> {
+    // Update still uses main API
     return this.put(`/api/files/${id}`, data);
   }
 
   async deleteFile(id: number): Promise<void> {
-    return this.delete(`/api/files/${id}`);
+    // Delete from Files API
+    return this.delete(`/api/files/${id}`, false, false, true);
   }
 
   async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
-    return this.get(`/api/files/${id}/download`);
+    // Get download URL from Files API
+    return this.get(`/api/files/${id}/download`, undefined, false, false, true);
   }
 
   // YouTube Video Transcription endpoints
