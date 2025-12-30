@@ -3327,6 +3327,91 @@
       "active": "Active",
       "inactive": "Inactive"
     }
+  },
+  "tokens": {
+    "title": "Module Access Key Management",
+    "description": "Create and manage access keys for AI tutoring widgets",
+    "createButton": "Generate Key",
+    "searchPlaceholder": "Search keys, modules or descriptions...",
+    "emptyMessage": "No keys found. Create your first key to get started.",
+    "columns": {
+      "tokenName": "Key Name",
+      "module": "Module",
+      "token": "Key",
+      "chat": "Chat",
+      "files": "Files",
+      "allowed": "Allowed",
+      "blocked": "Blocked",
+      "usageCount": "Usage Count",
+      "expiresAt": "Expires At",
+      "lastUsedAt": "Last Used",
+      "createdAt": "Created",
+      "never": "Never",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "actions": "Actions",
+      "copyWidgetUrlSuccess": "Widget URL copied to clipboard!",
+      "copyError": "Failed to copy. Please try again.",
+      "actionButtons": {
+        "view": "View key details",
+        "edit": "Edit key",
+        "openWidget": "Open widget in new tab",
+        "copyWidgetUrl": "Copy widget URL",
+        "viewWidgetUrl": "View widget URL",
+        "delete": "Delete key"
+      }
+    },
+    "stats": {
+      "totalTokens": "Total Keys",
+      "activeTokens": "Active Keys",
+      "securityRate": "Security Rate",
+      "expiringSoon": "Expiring Soon"
+    },
+    "deleteTitle": "Delete Key",
+    "deleteConfirm": "Are you sure you want to delete this key? This action cannot be undone.",
+    "deleteSuccess": "Key deleted successfully",
+    "deleteError": "Failed to delete key. Please try again.",
+    "copySuccess": "Key copied to clipboard!",
+    "copyWidgetUrlSuccess": "Widget URL copied to clipboard!",
+    "copyError": "Failed to copy key. Please try again.",
+    "actions": {
+      "view": "View key details",
+      "edit": "Edit key",
+      "openWidget": "Open widget in new tab",
+      "copyWidgetUrl": "Copy widget URL",
+      "viewWidgetUrl": "View widget URL",
+      "delete": "Delete key"
+    },
+    "modal": {
+      "createTitle": "Create Module Access Key",
+      "editTitle": "Edit Module Access Key",
+      "viewTitle": "Key Details",
+      "createDescription": "Generate a new access key for AI tutoring widgets",
+      "editDescription": "Update access key settings",
+      "nameLabel": "Key Name",
+      "namePlaceholder": "e.g., Moodle Integration, Fall 2024",
+      "nameRequired": "Key name is required",
+      "moduleLabel": "Module",
+      "selectModule": "Select a module",
+      "searchModule": "Search modules...",
+      "loadingModules": "Loading modules...",
+      "noModules": "No modules found",
+      "moduleRequired": "Module is required",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Optional description for this key...",
+      "expiresLabel": "Expires in (days)",
+      "expiresPlaceholder": "Leave empty for no expiration",
+      "expiresHint": "Number of days until key expires",
+      "permissions": "Permissions",
+      "allowChat": "Allow Chat",
+      "allowChatDesc": "Allow AI chat interactions",
+      "allowFileAccess": "Allow File Access",
+      "allowFileAccessDesc": "Allow downloading files through widget",
+      "createToken": "Create Key",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel"
+    }
   }
 }
 
