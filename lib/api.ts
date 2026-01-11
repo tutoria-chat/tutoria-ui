@@ -72,8 +72,13 @@ export const API_CONFIG = {
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6969',
   // Python API (AI/Tutor endpoints - improve-prompt only)
   pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
+<<<<<<< HEAD
   // TutoriaFiles API (File Upload/Download/Delete endpoints)
   filesBaseURL: process.env.NEXT_PUBLIC_FILES_API_URL || 'http://localhost:5000',
+=======
+  // Files API (dedicated file upload/download service)
+  filesBaseURL: process.env.NEXT_PUBLIC_FILES_API_URL || 'http://localhost:5001',
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
   timeout: 30000,
 } as const;
 
@@ -200,9 +205,13 @@ class TutoriaAPIClient {
     useFilesAPI: boolean = false
   ): Promise<T> {
     // Determine which API host to use (Files API, Python API, or unified C# API)
+<<<<<<< HEAD
     const baseUrl = useFilesAPI
       ? this.filesBaseURL
       : (usePythonAPI ? this.pythonBaseURL : this.baseURL);
+=======
+    const baseUrl = useFilesAPI ? this.filesBaseURL : (usePythonAPI ? this.pythonBaseURL : this.baseURL);
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
     const url = `${baseUrl}${endpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
@@ -573,37 +582,58 @@ class TutoriaAPIClient {
   }
 
   // File endpoints
+  // File endpoints - these go to the dedicated Files API (TutoriaFiles)
   async getFiles(params?: FileFilters): Promise<PaginatedResponse<File>> {
+    // List files still uses main API (has the full file records with module info)
     return this.get('/api/files/', params);
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
     // Add moduleId and customName to the FormData
+<<<<<<< HEAD
     // TutoriaFiles API expects: moduleId (required), file (required), customName (optional)
+=======
+    // TutoriaFiles API expects: moduleId, file, customName (optional)
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
     formData.append('moduleId', moduleId.toString());
     if (fileName) {
       formData.append('customName', fileName);
     }
+<<<<<<< HEAD
     // Use TutoriaFiles API for file upload
+=======
+    // Use dedicated Files API for uploads (handles large files up to 15MB)
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
     return this.post('/api/files/upload', formData, { isFormData: true, useFilesAPI: true });
   }
 
   async getFile(id: number): Promise<FileResponse> {
-    return this.get(`/api/files/${id}`);
+    // Get file details from Files API
+    return this.get(`/api/files/${id}`, undefined, false, false, true);
   }
 
   async updateFile(id: number, data: Partial<File>): Promise<File> {
+    // Update still uses main API
     return this.put(`/api/files/${id}`, data);
   }
 
   async deleteFile(id: number): Promise<void> {
+<<<<<<< HEAD
     // Use TutoriaFiles API for file deletion
+=======
+    // Delete from Files API
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
     return this.delete(`/api/files/${id}`, false, false, true);
   }
 
   async getFileDownloadUrl(id: number): Promise<{ downloadUrl: string }> {
+<<<<<<< HEAD
     // Use TutoriaFiles API for download URL generation (returns SAS token)
     return this.get(`/api/files/${id}/download`, {}, false, false, true);
+=======
+    // Get download URL from Files API
+    return this.get(`/api/files/${id}/download`, undefined, false, false, true);
+>>>>>>> 3bf692c92ffcf1357fb9023bd7c5fcd62b49a76d
   }
 
   // YouTube Video Transcription endpoints
@@ -629,7 +659,34 @@ class TutoriaAPIClient {
 
   // Professor endpoints
   async getProfessors(params?: ProfessorFilters): Promise<PaginatedResponse<Professor>> {
-    return this.get('/api/professors/', params);
+    // Use unified Users API with userType filter
+    const usersResponse = await this.get<PaginatedResponse<User>>('/api/users', {
+      ...params,
+      userType: 'professor'
+    });
+
+    // Map User[] to Professor[]
+    const professors: Professor[] = usersResponse.items.map((user: User) => ({
+      id: user.userId,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      universityId: user.universityId || 0,
+      universityName: user.universityName,
+      isAdmin: user.isAdmin || false,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLoginAt: user.lastLoginAt,
+      languagePreference: user.languagePreference,
+      themePreference: user.themePreference,
+    }));
+
+    return {
+      ...usersResponse,
+      items: professors
+    };
   }
 
   async createProfessor(data: ProfessorCreate): Promise<Professor> {
@@ -684,15 +741,95 @@ class TutoriaAPIClient {
   }
 
   async getProfessor(id: number): Promise<Professor> {
-    return this.get(`/api/professors/${id}`);
+    // Use unified Users API
+    interface BackendUserResponse {
+      userId: number;
+      username: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      isAdmin?: boolean;
+      universityId?: number;
+      universityName?: string;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
+    }
+
+    const user = await this.get<BackendUserResponse>(`/api/users/${id}`);
+
+    // Map backend UserResponse to Professor interface
+    return {
+      id: user.userId,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      universityId: user.universityId || 0,
+      universityName: user.universityName,
+      isAdmin: user.isAdmin || false,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLoginAt: user.lastLoginAt,
+      languagePreference: user.languagePreference,
+      themePreference: user.themePreference,
+    };
   }
 
   async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
-    return this.put(`/api/professors/${id}`, data);
+    // Use unified Users API
+    interface BackendUserResponse {
+      userId: number;
+      username: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      isAdmin?: boolean;
+      universityId?: number;
+      universityName?: string;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
+    }
+
+    const response = await this.put<BackendUserResponse>(`/api/users/${id}`, {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      languagePreference: data.languagePreference,
+    });
+
+    // Map backend UserResponse to Professor interface
+    return {
+      id: response.userId,
+      username: response.username,
+      email: response.email,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      universityId: response.universityId || 0,
+      universityName: response.universityName,
+      isAdmin: response.isAdmin || false,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
+    };
   }
 
   async updateProfessorPassword(id: number, newPassword: string): Promise<{ message: string }> {
-    return this.put(`/api/professors/${id}/password`, { newPassword });
+    // Use unified Users API
+    return this.put(`/api/users/${id}/password`, { newPassword });
   }
 
   async getProfessorCourses(id: number): Promise<{ courseIds: number[] }> {
@@ -700,7 +837,8 @@ class TutoriaAPIClient {
   }
 
   async deleteProfessor(id: number): Promise<void> {
-    return this.delete(`/api/professors/${id}`);
+    // Use unified Users API
+    return this.delete(`/api/users/${id}`);
   }
 
   // Student endpoints
@@ -751,7 +889,31 @@ class TutoriaAPIClient {
   }
 
   async getSuperAdmins(params?: PaginationParams): Promise<PaginatedResponse<SuperAdmin>> {
-    return this.get('/api/super-admin/super-admins/', params);
+    // Use unified Users API with userType filter
+    const usersResponse = await this.get<PaginatedResponse<User>>('/api/users', {
+      ...params,
+      userType: 'super_admin'
+    });
+
+    // Map User[] to SuperAdmin[]
+    const superAdmins: SuperAdmin[] = usersResponse.items.map((user: User) => ({
+      id: user.userId,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLoginAt: user.lastLoginAt,
+      languagePreference: user.languagePreference,
+      themePreference: user.themePreference,
+    }));
+
+    return {
+      ...usersResponse,
+      items: superAdmins
+    };
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
@@ -799,7 +961,43 @@ class TutoriaAPIClient {
   }
 
   async updateSuperAdmin(id: number, data: Partial<SuperAdminCreate>): Promise<SuperAdmin> {
-    return this.put(`/api/super-admin/super-admins/${id}`, data);
+    // Use unified Users API
+    interface BackendUserResponse {
+      userId: number;
+      username: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+      userType: 'super_admin' | 'professor' | 'student';
+      isActive: boolean;
+      createdAt: string;
+      updatedAt: string;
+      lastLoginAt?: string | null;
+      languagePreference?: string;
+      themePreference?: string;
+    }
+
+    const response = await this.put<BackendUserResponse>(`/api/users/${id}`, {
+      email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      languagePreference: data.languagePreference,
+    });
+
+    // Map backend UserResponse to SuperAdmin interface
+    return {
+      id: response.userId,
+      username: response.username,
+      email: response.email,
+      firstName: response.firstName,
+      lastName: response.lastName,
+      isActive: response.isActive,
+      createdAt: response.createdAt,
+      updatedAt: response.updatedAt,
+      lastLoginAt: response.lastLoginAt,
+      languagePreference: response.languagePreference,
+      themePreference: response.themePreference,
+    };
   }
 
   async getAllUniversities(params?: PaginationParams): Promise<PaginatedResponse<University>> {
@@ -807,7 +1005,34 @@ class TutoriaAPIClient {
   }
 
   async getAllProfessors(params?: PaginationParams): Promise<PaginatedResponse<Professor>> {
-    return this.get('/api/super-admin/professors/all', params);
+    // Use unified Users API with userType filter
+    const usersResponse = await this.get<PaginatedResponse<User>>('/api/users', {
+      ...params,
+      userType: 'professor'
+    });
+
+    // Map User[] to Professor[]
+    const professors: Professor[] = usersResponse.items.map((user: User) => ({
+      id: user.userId,
+      username: user.username,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      universityId: user.universityId || 0,
+      universityName: user.universityName,
+      isAdmin: user.isAdmin || false,
+      isActive: user.isActive,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      lastLoginAt: user.lastLoginAt,
+      languagePreference: user.languagePreference,
+      themePreference: user.themePreference,
+    }));
+
+    return {
+      ...usersResponse,
+      items: professors
+    };
   }
 
   // Professor Agent endpoints
