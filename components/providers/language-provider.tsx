@@ -97,6 +97,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       };
       loadMessages();
     }
+
+    // Update the HTML lang attribute to prevent browser auto-translation
+    document.documentElement.lang = locale;
   }, [locale, isLoading]);
 
   const setLocale = (newLocale: Locale) => {
