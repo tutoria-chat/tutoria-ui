@@ -29,14 +29,15 @@ export default function UniversitiesPage() {
     }
   }, [user, router]);
 
-  // API call to get universities (only for super_admin)
-  const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>('/api/universities/');
-
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // API call to get universities (only for super_admin)
+  const apiUrl = `/api/universities/?page=${page}&size=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}`;
+  const { data: universitiesResponse, loading, error, refetch } = useFetch<PaginatedResponse<University>>(apiUrl);
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
@@ -139,7 +140,7 @@ export default function UniversitiesPage() {
     }
   };
 
-  // Get universities from API response
+  // Get universities from API response (already paginated/filtered by server)
   const universities = universitiesResponse?.items || [];
 
   // Handle API error
@@ -147,29 +148,19 @@ export default function UniversitiesPage() {
     console.error('Error fetching universities:', error);
   }
 
-  // Filter universities based on search term
-  const filteredUniversities = universities.filter(university =>
-    university.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (university.description && university.description.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
-  // Sort universities
-  const sortedUniversities = [...filteredUniversities].sort((a, b) => {
+  // Sort universities client-side (TODO: add server-side sorting support)
+  const sortedUniversities = [...universities].sort((a, b) => {
     if (!sortColumn || !sortDirection) return 0;
-    
+
     const aValue = a[sortColumn as keyof University];
     const bValue = b[sortColumn as keyof University];
-    
+
     if (aValue === null || aValue === undefined) return 1;
     if (bValue === null || bValue === undefined) return -1;
-    
+
     const result = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
     return sortDirection === 'asc' ? result : -result;
   });
-
-  // Paginate universities
-  const startIndex = (page - 1) * limit;
-  const paginatedUniversities = sortedUniversities.slice(startIndex, startIndex + limit);
 
   return (
     <SuperAdminOnly>
@@ -201,7 +192,7 @@ export default function UniversitiesPage() {
         />
 
       <DataTable
-        data={paginatedUniversities}
+        data={sortedUniversities}
         columns={columns}
         loading={loading}
         search={{
@@ -212,7 +203,7 @@ export default function UniversitiesPage() {
         pagination={{
           page,
           limit,
-          total: sortedUniversities.length,
+          total: universitiesResponse?.total || 0,
           onPageChange: setPage,
           onLimitChange: setLimit
         }}
