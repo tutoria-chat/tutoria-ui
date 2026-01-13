@@ -50,41 +50,19 @@ function WelcomeForm() {
     setToken(tokenParam);
     setUsername(usernameParam);
 
-    // Verify token and get user info
-    const verifyToken = async () => {
-      try {
-        const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
-
-        // Set locale based on user's preference
-        if (response.languagePreference) {
-          setLocale(response.languagePreference as Locale);
-        }
-
-        // Sanitize username by removing special characters if used as fallback
-        const sanitizeUsername = (username: string): string => {
-          return username.replace(/[<>\"'&]/g, '');
-        };
-
-        // Get user info from verified backend response
-        setUserInfo({
-          firstName: response.firstName || sanitizeUsername(usernameParam.split('@')[0]),
-          lastName: response.lastName || '',
-          email: response.email || '',
-          userType: response.userType || 'professor',
-        });
-      } catch (error: any) {
-        console.error('Failed to verify token:', error);
-        const message = error?.message || t('tokenInvalid') || 'Token verification failed. The link may have expired.';
-        setErrorMessage(message);
-        setError(true);
-        toast.error(t('tokenInvalid'));
-        setTimeout(() => router.push('/login'), 3000);
-      } finally {
-        setVerifying(false);
-      }
+    // Token will be verified when user sets password
+    // Just show welcome screen without pre-verification
+    const sanitizeUsername = (username: string): string => {
+      return username.replace(/[<>\"'&]/g, '');
     };
 
-    verifyToken();
+    setUserInfo({
+      firstName: sanitizeUsername(usernameParam.split('@')[0]),
+      lastName: '',
+      email: '',
+      userType: 'professor',
+    });
+    setVerifying(false);
   }, [searchParams, router, t, setLocale, username]);
 
   const handleContinue = () => {

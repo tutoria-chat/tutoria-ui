@@ -136,16 +136,12 @@ export default function SuperAdminsPage() {
 
   const handlePasswordReset = async (admin: SuperAdmin) => {
     try {
-      const response = await apiClient.requestPasswordReset(admin.username, 'super_admin');
+      await apiClient.requestPasswordReset(admin.email);
 
-      // Copy reset link to clipboard - use setup-password page
-      const resetUrl = `${window.location.origin}/setup-password?username=${admin.username}&token=${response.resetToken}`;
-      await navigator.clipboard.writeText(resetUrl);
-
-      toast.success(t('passwordResetSuccess') || 'Password reset link copied to clipboard');
+      toast.success(t('passwordResetSuccess') || 'Password reset email sent successfully');
     } catch (error: unknown) {
       console.error('Error generating password reset:', error);
-      const errorMessage = error instanceof Error ? error.message : t('passwordResetError') || 'Error generating password reset link';
+      const errorMessage = error instanceof Error ? error.message : t('passwordResetError') || 'Error sending password reset email';
       toast.error(errorMessage);
     }
   };

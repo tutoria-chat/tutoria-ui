@@ -416,31 +416,31 @@ class TutoriaAPIClient {
   }
 
   async refreshToken(): Promise<TokenResponse> {
-    const response = await this.post<TokenResponse>('/api/auth/refresh', undefined, { useAuthAPI: true });
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_refresh_token') : null;
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+    const response = await this.post<TokenResponse>('/api/auth/refresh', { refreshToken });
     if (response.accessToken) {
       this.setToken(response.accessToken);
     }
     return response;
   }
 
-  async requestPasswordReset(username: string, userType: 'student' | 'professor' | 'super_admin'): Promise<{ message: string; resetToken: string }> {
-    return this.post('/api/auth/reset-password-request', { username, userType }, { useAuthAPI: true });
+  async requestPasswordReset(email: string): Promise<{ message: string }> {
+    return this.post('/api/auth/password-reset-request', { email });
   }
 
-  async verifyResetToken(username: string, token: string): Promise<{ valid: boolean; username: string; firstName: string; lastName: string; email: string; languagePreference: string; userType: string }> {
-    return this.get('/api/auth/verify-reset-token', { username, resetToken: token }, true);
-  }
-
-  async resetPassword(username: string, token: string, newPassword: string): Promise<{ message: string }> {
-    return this.post(`/api/auth/reset-password?username=${username}&resetToken=${token}`, { newPassword }, { useAuthAPI: true });
+  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+    return this.post('/api/auth/password-reset', { token, newPassword });
   }
 
   async changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
-    return this.put('/api/auth/password', { currentPassword, newPassword }, true);
+    return this.put('/api/auth/me/password', { currentPassword, newPassword });
   }
 
   async getCurrentUser(): Promise<UserResponse> {
-    return this.get('/api/auth/me', undefined, true);
+    return this.get('/api/auth/me');
   }
 
   async updateUserPreferences(data: {
@@ -451,7 +451,7 @@ class TutoriaAPIClient {
     languagePreference?: string;
     birthdate?: string;
   }): Promise<UserResponse> {
-    return this.put('/api/auth/me', data, true);
+    return this.put('/api/auth/me', data);
   }
 
   async deactivateUser(userId: number): Promise<User> {
@@ -890,7 +890,7 @@ class TutoriaAPIClient {
   }
 
   async createSuperAdmin(data: SuperAdminCreate): Promise<SuperAdmin> {
-    // Use the unified /api/auth/users/create endpoint
+    // Use the unified /api/users endpoint (Management API)
     interface BackendUserResponse {
       userId: number;
       username: string;
@@ -906,7 +906,7 @@ class TutoriaAPIClient {
       themePreference?: string;
     }
 
-    const response = await this.post<BackendUserResponse>('/api/auth/users/create', {
+    const response = await this.post<BackendUserResponse>('/api/users', {
       username: data.username,
       email: data.email,
       firstName: data.firstName,
@@ -915,7 +915,7 @@ class TutoriaAPIClient {
       userType: 'super_admin',
       isAdmin: true, // Super admins are always admins
       languagePreference: data.languagePreference || 'pt-br',
-    }, { useAuthAPI: true });
+    });
 
     // Map backend UserResponse to SuperAdmin interface
     return {

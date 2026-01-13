@@ -46,25 +46,9 @@ function SetupPasswordForm() {
     setToken(tokenParam);
     setUsername(usernameParam);
 
-    // Verify token and detect user's language preference
-    const verifyAndSetLanguage = async () => {
-      try {
-        const response = await apiClient.verifyResetToken(usernameParam, tokenParam);
-
-        // Set locale based on user's preference
-        if (response.languagePreference) {
-          setLocale(response.languagePreference as Locale);
-        }
-      } catch (error) {
-        console.error('Failed to verify token or detect language:', error);
-        // Don't block the form if language detection fails
-        // User can still proceed with default language
-      } finally {
-        setVerifyingToken(false);
-      }
-    };
-
-    verifyAndSetLanguage();
+    // Token will be verified when user submits the form
+    // We don't verify it upfront anymore
+    setVerifyingToken(false);
   }, [searchParams, router, t, setLocale]);
 
   const getPasswordStrength = (pwd: string): { strength: 'weak' | 'medium' | 'strong'; label: string; color: string } => {
@@ -112,7 +96,7 @@ function SetupPasswordForm() {
     setLoading(true);
 
     try {
-      await apiClient.resetPassword(username, token, password);
+      await apiClient.resetPassword(token, password);
 
       setSuccess(true);
       toast.success(t('success'));

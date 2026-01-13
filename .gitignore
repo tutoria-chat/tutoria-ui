@@ -43,3 +43,9 @@ next-env.d.ts
 # backup files
 *.backup
 nul
+
+# Claude Code temporary files
+.claude_code_pwd
+*.claude_code_pwd
+.claude_*
+tmpclaude-*

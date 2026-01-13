@@ -190,9 +190,9 @@ class AuthService {
     }
   }
 
-  async requestPasswordReset(email: string, userType: 'student' | 'professor' | 'super_admin' = 'student'): Promise<{ success: boolean; error?: string }> {
+  async requestPasswordReset(email: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await apiClient.requestPasswordReset(email, userType);
+      await apiClient.requestPasswordReset(email);
       return { success: true };
     } catch (error) {
       return {
@@ -202,9 +202,9 @@ class AuthService {
     }
   }
 
-  async resetPassword(username: string, token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
+  async resetPassword(token: string, newPassword: string): Promise<{ success: boolean; error?: string }> {
     try {
-      await apiClient.resetPassword(username, token, newPassword);
+      await apiClient.resetPassword(token, newPassword);
       return { success: true };
     } catch (error) {
       return {
