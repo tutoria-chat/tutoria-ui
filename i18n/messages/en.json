@@ -183,7 +183,7 @@
         "noModules": "No modules found with the applied filters.",
         "noModulesInitial": "No modules found. Add your first module to get started.",
         "files": "Files",
-        "keys": "keys",
+        "tokens": "Access Keys",
         "tokensCount": "{count} keys",
         "lastUpdate": "Last Update",
         "neverUpdated": "Never"

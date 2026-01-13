@@ -143,8 +143,8 @@
         "noModules": "No se encontraron módulos con los filtros aplicados.",
         "noModulesInitial": "No se encontraron módulos. Agrega tu primer módulo para comenzar.",
         "files": "Archivos",
-        "tokens": "Tokens",
-        "tokensCount": "{count} tokens",
+        "tokens": "Claves de Acceso",
+        "tokensCount": "{count} claves",
         "lastUpdate": "Última actualización",
         "neverUpdated": "Nunca"
       },
