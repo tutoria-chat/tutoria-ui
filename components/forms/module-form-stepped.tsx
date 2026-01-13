@@ -158,8 +158,19 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
 
     if (step === 0) {
       // Basic Information
-      if (!formData.name.trim()) newErrors.name = t('nameRequired');
-      if (!formData.code.trim()) newErrors.code = t('codeRequired');
+      if (!formData.name.trim()) {
+        newErrors.name = t('nameRequired');
+      } else if (formData.name.length > 255) {
+        newErrors.name = t('nameTooLong');
+      }
+      if (!formData.code.trim()) {
+        newErrors.code = t('codeRequired');
+      } else if (formData.code.length > 50) {
+        newErrors.code = t('codeTooLong');
+      }
+      if (formData.description.length > 500) {
+        newErrors.description = t('descriptionTooLong');
+      }
       if (!formData.courseId) newErrors.courseId = t('courseRequired');
       if (!formData.year) newErrors.year = t('yearRequired');
       if (!formData.semester) {
@@ -279,6 +290,7 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       disabled={isLoading}
                       className={errors.name ? 'border-destructive' : ''}
+                      maxLength={255}
                       required
                     />
                     {errors.name && <FormMessage>{errors.name}</FormMessage>}
@@ -297,6 +309,7 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
                       onChange={(e) => handleInputChange('code', e.target.value)}
                       disabled={isLoading}
                       className={errors.code ? 'border-destructive' : ''}
+                      maxLength={50}
                       required
                     />
                     {errors.code && <FormMessage>{errors.code}</FormMessage>}
@@ -398,8 +411,13 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
                       value={formData.description}
                       onChange={(e) => handleInputChange('description', e.target.value)}
                       disabled={isLoading}
+                      className={errors.description ? 'border-destructive' : ''}
+                      maxLength={500}
                       rows={3}
                     />
+                    <p className={`text-xs mt-1 ${formData.description.length > 500 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {t('descriptionCharCount', { count: formData.description.length })}
+                    </p>
                     {errors.description && <FormMessage>{errors.description}</FormMessage>}
                   </FormItem>
                 </FormField>
