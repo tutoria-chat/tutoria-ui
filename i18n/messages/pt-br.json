@@ -4083,6 +4083,7 @@
     }
   },
   "courseTypes": {
+    "typeRequired": "O tipo de disciplina é obrigatório",
     "selectCourseType": "Selecione o Tipo de Disciplina",
     "selectDescription": "Escolha o tipo que melhor corresponde ao conteúdo da sua disciplina. Selecionaremos automaticamente o modelo de IA ideal.",
     "selectedModel": "Modelo de IA:",

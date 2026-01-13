@@ -6,4 +6,4 @@
  * the course type and university subscription tier.
  */
 
-export type CourseType = 'math-logic' | 'programming' | 'theory-text';
+export type CourseType = 'MathLogic' | 'Programming' | 'TheoryText';

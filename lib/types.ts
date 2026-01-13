@@ -221,7 +221,7 @@ export interface Module {
   tutorLanguage?: string; // Language for AI tutor responses (pt-br, en, es)
   aiModelId?: number; // Selected AI model
   aiModel?: AIModel; // Populated AI model details
-  courseType?: 'math-logic' | 'programming' | 'theory-text'; // Course type - backend selects AI model based on this
+  courseType?: 'MathLogic' | 'Programming' | 'TheoryText'; // Course type - backend selects AI model based on this
   files?: File[]; // Files included in module response (reduces API calls)
   createdAt: string;
   updatedAt: string;
@@ -239,7 +239,7 @@ export interface ModuleCreate {
   courseId: number;
   tutorLanguage?: string;
   aiModelId?: number;
-  courseType?: 'math-logic' | 'programming' | 'theory-text';
+  courseType?: 'MathLogic' | 'Programming' | 'TheoryText';
 }
 
 export interface ModuleUpdate {
@@ -252,7 +252,7 @@ export interface ModuleUpdate {
   courseId?: number;
   tutorLanguage?: string;
   aiModelId?: number;
-  courseType?: 'math-logic' | 'programming' | 'theory-text';
+  courseType?: 'MathLogic' | 'Programming' | 'TheoryText';
 }
 
 export interface ModuleWithDetails extends Module {

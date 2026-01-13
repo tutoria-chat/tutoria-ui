@@ -3054,6 +3054,7 @@
       }
     },
   "courseTypes": {
+    "typeRequired": "Course type is required",
     "selectCourseType": "Select Course Type",
     "selectDescription": "Choose the type that best matches your course content. We'll automatically select the optimal AI model.",
     "selectedModel": "AI Model:",

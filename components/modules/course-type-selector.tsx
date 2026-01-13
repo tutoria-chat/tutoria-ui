@@ -32,19 +32,19 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }
   // Course type options (backend now handles AI model selection based on university tier)
   const courseTypes: CourseTypeOption[] = [
     {
-      id: 'math-logic',
+      id: 'MathLogic',
       icon: <Calculator className="h-8 w-8" />,
       name: t('mathLogic.name') || 'Mathematics & Logic',
       description: t('mathLogic.description') || 'Courses focused on mathematical reasoning, formulas, proofs, and logical problem-solving',
     },
     {
-      id: 'programming',
+      id: 'Programming',
       icon: <Code className="h-8 w-8" />,
       name: t('programming.name') || 'Programming & Computer Science',
       description: t('programming.description') || 'Coding, algorithms, software development, and technical computer science topics',
     },
     {
-      id: 'theory-text',
+      id: 'TheoryText',
       icon: <BookText className="h-8 w-8" />,
       name: t('theoryText.name') || 'Theory & Humanities',
       description: t('theoryText.description') || 'Theoretical concepts, essays, humanities, literature, and text-heavy subjects',

@@ -3373,6 +3373,7 @@
     }
   },
   "courseTypes": {
+    "typeRequired": "El tipo de curso es obligatorio",
     "selectCourseType": "Seleccionar Tipo de Curso",
     "selectDescription": "Elige el tipo que mejor se ajuste al contenido de tu curso. Seleccionaremos automáticamente el modelo de IA óptimo.",
     "selectedModel": "Modelo de IA:",

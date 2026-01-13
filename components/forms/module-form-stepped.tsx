@@ -453,9 +453,9 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
                     {selectedCourseType ? (
                       <div className="p-3 border rounded-md bg-muted/50">
                         <div className="flex items-center gap-2 text-sm font-medium">
-                          {selectedCourseType === 'math-logic' && `🧮 ${tCourseTypes('mathLogic.name')}`}
-                          {selectedCourseType === 'programming' && `💻 ${tCourseTypes('programming.name')}`}
-                          {selectedCourseType === 'theory-text' && `📚 ${tCourseTypes('theoryText.name')}`}
+                          {selectedCourseType === 'MathLogic' && `🧮 ${tCourseTypes('mathLogic.name')}`}
+                          {selectedCourseType === 'Programming' && `💻 ${tCourseTypes('programming.name')}`}
+                          {selectedCourseType === 'TheoryText' && `📚 ${tCourseTypes('theoryText.name')}`}
                         </div>
                       </div>
                     ) : (
