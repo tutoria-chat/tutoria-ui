@@ -7,13 +7,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Shield, Eye, EyeOff, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { Shield, Eye, EyeOff, CheckCircle, XCircle, AlertCircle, Check, X } from 'lucide-react';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import { useLanguage } from '@/components/providers/language-provider';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import type { Locale } from '@/i18n/config';
+
+// Password requirements matching backend PasswordComplexityAttribute
+const MIN_PASSWORD_LENGTH = 8;
+
+interface PasswordRequirement {
+  key: string;
+  label: string;
+  test: (password: string) => boolean;
+}
 
 function SetupPasswordForm() {
   const router = useRouter();
@@ -31,6 +40,16 @@ function SetupPasswordForm() {
   const [verifyingToken, setVerifyingToken] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [success, setSuccess] = useState(false);
+
+  // Password requirements matching backend
+  const passwordRequirements: PasswordRequirement[] = [
+    { key: 'length', label: t('reqMinLength'), test: (p) => p.length >= MIN_PASSWORD_LENGTH },
+    { key: 'uppercase', label: t('reqUppercase'), test: (p) => /[A-Z]/.test(p) },
+    { key: 'lowercase', label: t('reqLowercase'), test: (p) => /[a-z]/.test(p) },
+    { key: 'digit', label: t('reqDigit'), test: (p) => /[0-9]/.test(p) },
+  ];
+
+  const allRequirementsMet = password.length > 0 && passwordRequirements.every((req) => req.test(password));
 
   useEffect(() => {
     const tokenParam = searchParams.get('token');
@@ -51,29 +70,25 @@ function SetupPasswordForm() {
     setVerifyingToken(false);
   }, [searchParams, router, t, setLocale]);
 
-  const getPasswordStrength = (pwd: string): { strength: 'weak' | 'medium' | 'strong'; label: string; color: string } => {
-    if (pwd.length < 6) return { strength: 'weak', label: t('passwordWeak'), color: 'text-red-600' };
-    if (pwd.length < 10) return { strength: 'medium', label: t('passwordMedium'), color: 'text-yellow-600' };
+  const getPasswordStrength = (): { strength: 'weak' | 'medium' | 'strong'; label: string; color: string } | null => {
+    if (!password) return null;
 
-    const hasUpper = /[A-Z]/.test(pwd);
-    const hasLower = /[a-z]/.test(pwd);
-    const hasNumber = /[0-9]/.test(pwd);
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
-    const criteria = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
+    const metCount = passwordRequirements.filter((req) => req.test(password)).length;
 
-    if (criteria >= 3) return { strength: 'strong', label: t('passwordStrong'), color: 'text-green-600' };
-    return { strength: 'medium', label: t('passwordMedium'), color: 'text-yellow-600' };
+    if (metCount <= 1) return { strength: 'weak', label: t('passwordWeak'), color: 'text-red-600' };
+    if (metCount <= 3) return { strength: 'medium', label: t('passwordMedium'), color: 'text-yellow-600' };
+    return { strength: 'strong', label: t('passwordStrong'), color: 'text-green-600' };
   };
 
-  const passwordStrength = password ? getPasswordStrength(password) : null;
+  const passwordStrength = getPasswordStrength();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (!password) {
       newErrors.password = t('passwordRequired');
-    } else if (password.length < 6) {
-      newErrors.password = t('passwordMinLength');
+    } else if (!allRequirementsMet) {
+      newErrors.password = t('passwordRequirements');
     }
 
     if (!confirmPassword) {
@@ -100,27 +115,33 @@ function SetupPasswordForm() {
 
       setSuccess(true);
       toast.success(t('success'));
-
-      setTimeout(() => {
-        router.push('/login');
-      }, 3000);
     } catch (error: unknown) {
       console.error('Error resetting password:', error);
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'message' in error &&
-        typeof (error as { message: unknown }).message === 'string'
-      ) {
-        const message = (error as { message: string }).message;
-        if (message.includes('expired') || message.includes('invalid')) {
-          toast.error(t('tokenExpired'));
-        } else {
-          toast.error(message || t('error'));
+
+      let errorMessage = t('error');
+
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        const message = String((error as { message: unknown }).message).toLowerCase();
+
+        if (message.includes('expired')) {
+          errorMessage = t('tokenExpired');
+        } else if (message.includes('invalid')) {
+          errorMessage = t('tokenInvalid');
+        } else if (message.includes('uppercase')) {
+          errorMessage = t('errorUppercase');
+        } else if (message.includes('lowercase')) {
+          errorMessage = t('errorLowercase');
+        } else if (message.includes('digit') || message.includes('number')) {
+          errorMessage = t('errorDigit');
+        } else if (message.includes('character') || message.includes('length')) {
+          errorMessage = t('errorLength');
+        } else if ((error as { message: string }).message) {
+          errorMessage = (error as { message: string }).message;
         }
-      } else {
-        toast.error(t('error'));
       }
+
+      toast.error(errorMessage);
+      setErrors({ submit: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -166,10 +187,16 @@ function SetupPasswordForm() {
               {t('successDesc')}
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <p className="text-sm text-green-800 dark:text-green-200">
-              {t('redirecting')}
+              {t('successMessage')}
             </p>
+            <Button
+              onClick={() => router.push('/login')}
+              className="w-full"
+            >
+              {t('goToLogin')}
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -223,23 +250,48 @@ function SetupPasswordForm() {
               {errors.password && (
                 <p className="text-sm text-destructive">{errors.password}</p>
               )}
-              {password && passwordStrength && (
-                <div className="flex items-center space-x-2">
-                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className={`h-full transition-all ${
-                        passwordStrength.strength === 'weak' ? 'w-1/3 bg-red-500' :
-                        passwordStrength.strength === 'medium' ? 'w-2/3 bg-yellow-500' :
-                        'w-full bg-green-500'
-                      }`}
-                    />
-                  </div>
-                  <span className={`text-xs font-medium ${passwordStrength.color}`}>
-                    {passwordStrength.label}
-                  </span>
+
+              {/* Password Requirements Checklist */}
+              {password && (
+                <div className="space-y-2 p-3 rounded-lg bg-muted/50">
+                  <p className="text-xs font-medium text-muted-foreground">{t('requirementsTitle')}</p>
+                  <ul className="space-y-1">
+                    {passwordRequirements.map((req) => {
+                      const isMet = req.test(password);
+                      return (
+                        <li key={req.key} className="flex items-center gap-2 text-xs">
+                          {isMet ? (
+                            <Check className="h-3 w-3 text-green-600" />
+                          ) : (
+                            <X className="h-3 w-3 text-muted-foreground" />
+                          )}
+                          <span className={isMet ? 'text-green-600' : 'text-muted-foreground'}>
+                            {req.label}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                  {/* Strength indicator */}
+                  {passwordStrength && (
+                    <div className="flex items-center space-x-2 pt-2">
+                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                        <div
+                          className={`h-full transition-all ${
+                            passwordStrength.strength === 'weak' ? 'w-1/4 bg-red-500' :
+                            passwordStrength.strength === 'medium' ? 'w-3/4 bg-yellow-500' :
+                            'w-full bg-green-500'
+                          }`}
+                        />
+                      </div>
+                      <span className={`text-xs font-medium ${passwordStrength.color}`}>
+                        {passwordStrength.label}
+                      </span>
+                    </div>
+                  )}
                 </div>
               )}
-              <p className="text-xs text-muted-foreground">{t('passwordHint')}</p>
             </div>
 
             {/* Confirm Password */}
@@ -273,6 +325,16 @@ function SetupPasswordForm() {
               )}
             </div>
 
+            {/* Submit Error */}
+            {errors.submit && (
+              <Alert variant="destructive">
+                <XCircle className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  {errors.submit}
+                </AlertDescription>
+              </Alert>
+            )}
+
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription className="text-sm">
@@ -280,7 +342,11 @@ function SetupPasswordForm() {
               </AlertDescription>
             </Alert>
 
-            <Button type="submit" disabled={loading} className="w-full">
+            <Button
+              type="submit"
+              disabled={loading || !allRequirementsMet || password !== confirmPassword}
+              className="w-full"
+            >
               {loading ? t('submitting') : t('submit')}
             </Button>
           </form>
