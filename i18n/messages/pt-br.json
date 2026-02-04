@@ -814,6 +814,8 @@
       "universityRequired": "Universidade é obrigatória",
       "coursesRequired": "Selecione pelo menos uma disciplina",
       "emailInvalid": "Email inválido",
+      "usernameAlreadyExists": "Nome de usuário já existe",
+      "emailAlreadyExists": "Email já existe",
       "fixFormErrors": "Por favor, corrija os erros no formulário",
       "professorCreatedSuccess": "Professor criado com sucesso!",
       "errorCreatingProfessor": "Erro ao criar professor",
@@ -863,6 +865,8 @@
       "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
       "universityRequired": "Universidade é obrigatória",
       "emailInvalid": "Email inválido",
+      "usernameAlreadyExists": "Nome de usuário já existe",
+      "emailAlreadyExists": "Email já existe",
       "fixFormErrors": "Por favor, corrija os erros no formulário",
       "successTitle": "Professor Administrador Criado!",
       "successDescription": "Compartilhe o link de configuração com o novo professor administrador",
@@ -1340,7 +1344,9 @@
     "superAdmins": "Super Administradores",
     "globalSearch": "Busca Global",
     "systemOnline": "Sistema Online",
-    "version": "Versão 1.0.0"
+    "version": "Versão 1.0.0",
+    "allCourses": "Todos os Cursos",
+    "allModules": "Todos os Módulos"
   },
   "header": {
     "profile": "Perfil",

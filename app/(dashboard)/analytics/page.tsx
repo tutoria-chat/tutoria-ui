@@ -55,6 +55,9 @@ export default function AnalyticsPage() {
   const { user } = useAuth();
   const t = useTranslations('analytics');
 
+  // Only super admins can see cost information
+  const canViewCosts = user?.role === 'super_admin';
+
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedUniversityId, setSelectedUniversityId] = useState<number | undefined>(undefined);
@@ -505,12 +508,14 @@ export default function AnalyticsPage() {
             icon={Activity}
           />
 
-          <StatsCard
-            title={t('stats.estimatedCost')}
-            value={`$${(summary?.overview?.totalCostUSD ?? 0).toFixed(2)}`}
-            description={getPeriodLabel()}
-            icon={DollarSign}
-          />
+          {canViewCosts && (
+            <StatsCard
+              title={t('stats.estimatedCost')}
+              value={`$${(summary?.overview?.totalCostUSD ?? 0).toFixed(2)}`}
+              description={getPeriodLabel()}
+              icon={DollarSign}
+            />
+          )}
         </div>
       </Suspense>
 
@@ -528,16 +533,18 @@ export default function AnalyticsPage() {
           </Suspense>
         </SectionErrorBoundary>
 
-        <SectionErrorBoundary title="Failed to load cost trend">
-          <Suspense fallback={<LoadingSpinner />}>
-            <CostTrendChart
-              data={trendsChartData}
-              title={t('charts.costTrend')}
-              description={t('charts.costTrendDescription')}
-              costLabel={t('charts.costUSD')}
-            />
-          </Suspense>
-        </SectionErrorBoundary>
+        {canViewCosts && (
+          <SectionErrorBoundary title="Failed to load cost trend">
+            <Suspense fallback={<LoadingSpinner />}>
+              <CostTrendChart
+                data={trendsChartData}
+                title={t('charts.costTrend')}
+                description={t('charts.costTrendDescription')}
+                costLabel={t('charts.costUSD')}
+              />
+            </Suspense>
+          </SectionErrorBoundary>
+        )}
       </div>
 
       {/* Charts Row 2: Hourly Breakdown & Provider Distribution */}
@@ -604,6 +611,7 @@ export default function AnalyticsPage() {
         <TodayMetrics
           todayUsage={todayUsage}
           todayCost={todayCost}
+          showCost={canViewCosts}
           translations={{
             usageTitle: t('todayUsage.title'),
             usageDescription: t('todayUsage.description'),

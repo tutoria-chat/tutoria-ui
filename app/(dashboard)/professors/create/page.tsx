@@ -208,7 +208,18 @@ export default function CreateProfessorPage() {
       setShowSuccess(true);
     } catch (error: any) {
       console.error('Error creating professor:', error);
-      toast.error(error.message || t('errorCreatingProfessor'));
+      const errorMessage = error.message || t('errorCreatingProfessor');
+
+      // Check for specific validation errors and show them inline
+      if (errorMessage.toLowerCase().includes('username already exists')) {
+        setErrors({ username: t('usernameAlreadyExists') || 'Username already exists' });
+        toast.error(t('usernameAlreadyExists') || 'Username already exists');
+      } else if (errorMessage.toLowerCase().includes('email already exists')) {
+        setErrors({ email: t('emailAlreadyExists') || 'Email already exists' });
+        toast.error(t('emailAlreadyExists') || 'Email already exists');
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }

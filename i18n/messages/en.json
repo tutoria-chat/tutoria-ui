@@ -865,6 +865,8 @@
       "universityRequired": "University is required",
       "coursesRequired": "Select at least one course",
       "emailInvalid": "Invalid email",
+      "usernameAlreadyExists": "Username already exists",
+      "emailAlreadyExists": "Email already exists",
       "fixFormErrors": "Please correct the errors in the form",
       "professorCreatedSuccess": "Professor created successfully!",
       "errorCreatingProfessor": "Error creating professor",
@@ -914,6 +916,8 @@
       "passwordMinLength": "Password must be at least 6 characters",
       "universityRequired": "University is required",
       "emailInvalid": "Invalid email",
+      "usernameAlreadyExists": "Username already exists",
+      "emailAlreadyExists": "Email already exists",
       "fixFormErrors": "Please correct the errors in the form",
       "successTitle": "Admin Professor Created!",
       "successDescription": "Share the setup link with the new admin professor",
@@ -1343,7 +1347,9 @@
     "superAdmins": "Super Administrators",
     "globalSearch": "Global Search",
     "systemOnline": "System Online",
-    "version": "Version 1.0.0"
+    "version": "Version 1.0.0",
+    "allCourses": "All Courses",
+    "allModules": "All Modules"
   },
   "header": {
     "profile": "Profile",

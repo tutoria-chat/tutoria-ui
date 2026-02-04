@@ -8,6 +8,7 @@ import type { UsageStatsDto, TodayCostDto } from '@/lib/types';
 interface TodayMetricsProps {
   todayUsage: UsageStatsDto | null;
   todayCost: TodayCostDto | null;
+  showCost?: boolean;
   translations: {
     usageTitle: string;
     usageDescription: string;
@@ -27,9 +28,9 @@ interface TodayMetricsProps {
   };
 }
 
-export function TodayMetrics({ todayUsage, todayCost, translations: t }: TodayMetricsProps) {
+export function TodayMetrics({ todayUsage, todayCost, showCost = true, translations: t }: TodayMetricsProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className={`grid gap-4 ${showCost ? 'md:grid-cols-2' : 'md:grid-cols-1'}`}>
       {/* Today's Usage Card */}
       <Card>
         <CardHeader>
@@ -63,13 +64,14 @@ export function TodayMetrics({ todayUsage, todayCost, translations: t }: TodayMe
         </CardContent>
       </Card>
 
-      {/* Today's Cost Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t.costTitle}</CardTitle>
-          <CardDescription>{t.costDescription}</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      {/* Today's Cost Card - Only shown for super admins */}
+      {showCost && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t.costTitle}</CardTitle>
+            <CardDescription>{t.costDescription}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
           <div>
             <div className="text-3xl font-bold">
               ${(todayCost?.estimatedCostUSD ?? 0).toFixed(2)}
@@ -120,7 +122,8 @@ export function TodayMetrics({ todayUsage, todayCost, translations: t }: TodayMe
             </>
           )}
         </CardContent>
-      </Card>
+        </Card>
+      )}
     </div>
   );
 }

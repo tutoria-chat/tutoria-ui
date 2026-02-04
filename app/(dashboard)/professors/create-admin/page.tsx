@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Combobox } from '@/components/ui/combobox';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { Shield, Mail, AlertCircle, Building2 } from 'lucide-react';
@@ -143,7 +144,18 @@ export default function CreateAdminProfessorPage() {
       toast.success(t('adminCreatedSuccess'));
     } catch (error: any) {
       console.error('Error creating admin professor:', error);
-      toast.error(error.message || t('errorCreatingAdmin'));
+      const errorMessage = error.message || t('errorCreatingAdmin');
+
+      // Check for specific validation errors and show them inline
+      if (errorMessage.toLowerCase().includes('username already exists')) {
+        setErrors({ username: t('usernameAlreadyExists') || 'Username already exists' });
+        toast.error(t('usernameAlreadyExists') || 'Username already exists');
+      } else if (errorMessage.toLowerCase().includes('email already exists')) {
+        setErrors({ email: t('emailAlreadyExists') || 'Email already exists' });
+        toast.error(t('emailAlreadyExists') || 'Email already exists');
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -272,22 +284,18 @@ export default function CreateAdminProfessorPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="universityId">{t('universityLabel')}</Label>
-                <Select
+                <Combobox
+                  options={universities.map((university) => ({
+                    value: String(university.id),
+                    label: university.name,
+                  }))}
                   value={formData.universityId}
                   onValueChange={(value) => setFormData({ ...formData, universityId: value })}
+                  placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')}
+                  searchPlaceholder={t('searchUniversity') || 'Search university...'}
+                  emptyMessage={t('noUniversitiesFound') || 'No universities found.'}
                   disabled={loadingUniversities}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={loadingUniversities ? tCommon('loading') : t('selectUniversity')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {universities.map((university) => (
-                      <SelectItem key={university.id} value={String(university.id)}>
-                        {university.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                />
                 {errors.universityId && (
                   <p className="text-sm text-destructive">{errors.universityId}</p>
                 )}

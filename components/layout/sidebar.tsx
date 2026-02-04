@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -19,7 +19,9 @@ import {
   Shield,
   Search,
   ChevronRight,
-  Folder
+  ChevronDown,
+  Folder,
+  List
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -29,6 +31,7 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { RoleGuard, SuperAdminOnly, AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import type { NavigationItem, UserRole } from '@/lib/types';
 import { FEATURE_FLAGS } from '@/lib/constants';
+import { useNavigationContext } from '@/lib/hooks/use-navigation-context';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -39,8 +42,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
   const t = useTranslations('sidebar');
+  const navContext = useNavigationContext();
+  const [isUniversityExpanded, setIsUniversityExpanded] = useState(true);
 
   if (!user) return null;
+
+  // Check if we're inside a university context
+  const hasUniversityContext = !!navContext.university;
 
   const navigationItems: NavigationItem[] = [
     {
@@ -60,12 +68,6 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       href: '/universities',
       icon: Building2,
       roles: ['super_admin'],
-    },
-    {
-      label: t('myUniversity'),
-      href: user.universityId ? `/universities/${user.universityId}` : '/universities',
-      icon: Building2,
-      roles: ['professor'],
     },
     {
       label: t('moduleTokens'),
@@ -200,6 +202,122 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                   </Button>
                 </Link>
               ))}
+
+            {/* My University - Enhanced with collapsible sub-navigation for professors */}
+            <ProfessorOnly>
+              <div>
+                {/* Main university button */}
+                <Button
+                  variant={pathname.includes('/universities/') ? "secondary" : "ghost"}
+                  className={cn(
+                    "w-full justify-start transition-all duration-200 hover:translate-x-1 text-base h-11",
+                    pathname.includes('/universities/') && "bg-primary/10 border-l-2 border-primary shadow-sm font-semibold"
+                  )}
+                  onClick={() => {
+                    if (hasUniversityContext) {
+                      setIsUniversityExpanded(!isUniversityExpanded);
+                    } else {
+                      const href = user.universityId ? `/universities/${user.universityId}` : '/universities';
+                      window.location.href = href;
+                    }
+                  }}
+                >
+                  <Building2 className={cn("mr-3 h-5 w-5", pathname.includes('/universities/') && "text-primary")} />
+                  <span className={cn(pathname.includes('/universities/') && "text-primary")}>
+                    {hasUniversityContext && navContext.university ? navContext.university.name : t('myUniversity')}
+                  </span>
+                  {hasUniversityContext && (
+                    isUniversityExpanded ?
+                      <ChevronDown className="ml-auto h-4 w-4" /> :
+                      <ChevronRight className="ml-auto h-4 w-4" />
+                  )}
+                </Button>
+
+                {/* Collapsible sub-navigation - only shown when inside university context */}
+                {hasUniversityContext && isUniversityExpanded && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {/* Current course */}
+                    {navContext.course && (
+                      <Link
+                        href={`/courses/${navContext.course.id}`}
+                        onClick={handleItemClick}
+                        className="block"
+                      >
+                        <Button
+                          variant={pathname.includes(`/courses/${navContext.course.id}`) ? "secondary" : "ghost"}
+                          size="sm"
+                          className={cn(
+                            "w-full justify-start text-sm h-9 pl-3",
+                            pathname.includes(`/courses/${navContext.course.id}`) && "bg-primary/5 text-primary"
+                          )}
+                        >
+                          <BookOpen className="mr-2 h-4 w-4" />
+                          <span className="truncate">{navContext.course.name}</span>
+                        </Button>
+                      </Link>
+                    )}
+
+                    {/* Current module */}
+                    {navContext.module && (
+                      <Link
+                        href={`/modules/${navContext.module.id}`}
+                        onClick={handleItemClick}
+                        className="block"
+                      >
+                        <Button
+                          variant={pathname.includes(`/modules/${navContext.module.id}`) ? "secondary" : "ghost"}
+                          size="sm"
+                          className={cn(
+                            "w-full justify-start text-sm h-9 pl-6",
+                            pathname.includes(`/modules/${navContext.module.id}`) && "bg-primary/5 text-primary"
+                          )}
+                        >
+                          <FileText className="mr-2 h-3 w-3" />
+                          <span className="truncate">{navContext.module.name}</span>
+                        </Button>
+                      </Link>
+                    )}
+
+                    {/* Separator */}
+                    {(navContext.course || navContext.module) && (
+                      <div className="h-px bg-border/50 my-2" />
+                    )}
+
+                    {/* Quick link to all courses */}
+                    <Link
+                      href={`/courses?universityId=${navContext.universityId}`}
+                      onClick={handleItemClick}
+                      className="block"
+                    >
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground"
+                      >
+                        <List className="mr-2 h-4 w-4" />
+                        {t('allCourses') || 'All Courses'}
+                      </Button>
+                    </Link>
+
+                    {/* Quick link to all modules */}
+                    <Link
+                      href={`/modules?universityId=${navContext.universityId}`}
+                      onClick={handleItemClick}
+                      className="block"
+                    >
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground"
+                      >
+                        <List className="mr-2 h-4 w-4" />
+                        {t('allModules') || 'All Modules'}
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </ProfessorOnly>
           </nav>
 
           {/* Admin Section - Shows for Super Admins and Admin Professors */}
