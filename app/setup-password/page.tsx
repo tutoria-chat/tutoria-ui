@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -206,12 +207,22 @@ function SetupPasswordForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="flex items-center">
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <Image
+              src="/Color_01.png"
+              alt="Tutoria Logo"
+              width={4008}
+              height={1438}
+              priority
+              className="h-16 w-auto"
+            />
+          </div>
+          <CardTitle className="flex items-center justify-center">
             <Shield className="mr-2 h-5 w-5 text-primary" />
             {t('title')}
           </CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
+          <CardDescription className="text-center">{t('description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -321,6 +332,12 @@ function SetupPasswordForm() {
                 <p className="text-sm text-green-600 flex items-center">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   {t('passwordsMatch')}
+                </p>
+              )}
+              {confirmPassword && password !== confirmPassword && !errors.confirmPassword && (
+                <p className="text-sm text-destructive flex items-center">
+                  <XCircle className="h-3 w-3 mr-1" />
+                  {t('passwordsMismatch')}
                 </p>
               )}
             </div>
