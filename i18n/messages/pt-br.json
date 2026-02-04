@@ -4472,46 +4472,46 @@
       "updateError": "Erro ao atualizar chave de acesso",
       "active": "Ativo",
       "inactive": "Inativo"
+    }
+  },
+  "auditLogs": {
+    "title": "Registros de Auditoria",
+    "description": "Visualize atividade do sistema e ações dos usuários",
+    "exportButton": "Exportar CSV",
+    "exporting": "Exportando...",
+    "exportSuccess": "Registros de auditoria exportados com sucesso",
+    "searchPlaceholder": "Buscar por nome de usuário ou entidade...",
+    "stats": {
+      "totalLogs": "Total de Registros"
     },
-    "auditLogs": {
-      "title": "Registros de Auditoria",
-      "description": "Visualize atividade do sistema e ações dos usuários",
-      "exportButton": "Exportar CSV",
-      "exporting": "Exportando...",
-      "exportSuccess": "Registros de auditoria exportados com sucesso",
-      "searchPlaceholder": "Buscar por nome de usuário ou entidade...",
-      "stats": {
-        "totalLogs": "Total de Registros"
-      },
-      "filters": {
-        "action": "Ação",
-        "allActions": "Todas as Ações",
-        "create": "Criar",
-        "update": "Atualizar",
-        "delete": "Excluir",
-        "entityType": "Tipo de Entidade",
-        "allTypes": "Todos os Tipos"
-      },
-      "table": {
-        "timestamp": "Data/Hora",
-        "user": "Usuário",
-        "action": "Ação",
-        "entityType": "Tipo de Entidade",
-        "entity": "Entidade",
-        "changes": "Alterações"
-      },
-      "entities": {
-        "user": "Usuário",
-        "university": "Universidade",
-        "course": "Curso",
-        "module": "Módulo",
-        "file": "Arquivo",
-        "token": "Token de Acesso"
-      },
-      "errors": {
-        "fetchFailed": "Falha ao carregar registros de auditoria",
-        "exportFailed": "Falha ao exportar registros de auditoria"
-      }
+    "filters": {
+      "action": "Ação",
+      "allActions": "Todas as Ações",
+      "create": "Criar",
+      "update": "Atualizar",
+      "delete": "Excluir",
+      "entityType": "Tipo de Entidade",
+      "allTypes": "Todos os Tipos"
+    },
+    "table": {
+      "timestamp": "Data/Hora",
+      "user": "Usuário",
+      "action": "Ação",
+      "entityType": "Tipo de Entidade",
+      "entity": "Entidade",
+      "changes": "Alterações"
+    },
+    "entities": {
+      "user": "Usuário",
+      "university": "Universidade",
+      "course": "Curso",
+      "module": "Módulo",
+      "file": "Arquivo",
+      "token": "Token de Acesso"
+    },
+    "errors": {
+      "fetchFailed": "Falha ao carregar registros de auditoria",
+      "exportFailed": "Falha ao exportar registros de auditoria"
     }
   }
 }

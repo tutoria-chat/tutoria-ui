@@ -344,14 +344,6 @@ export default function SuperAdminsPage() {
           title={t('title')}
           description={t('description')}
           breadcrumbs={breadcrumbs}
-          actions={
-            <Button asChild>
-              <Link href="/admin/super-admins/create">
-                <Plus className="mr-2 h-4 w-4" />
-                {t('createButton')}
-              </Link>
-            </Button>
-          }
         />
 
         {/* Stats Cards */}

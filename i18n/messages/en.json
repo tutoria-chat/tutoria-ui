@@ -3528,46 +3528,46 @@
       "createToken": "Create Key",
       "saveChanges": "Save Changes",
       "cancel": "Cancel"
+    }
+  },
+  "auditLogs": {
+    "title": "Audit Logs",
+    "description": "View system activity and user actions",
+    "exportButton": "Export CSV",
+    "exporting": "Exporting...",
+    "exportSuccess": "Audit logs exported successfully",
+    "searchPlaceholder": "Search by username or entity...",
+    "stats": {
+      "totalLogs": "Total Logs"
     },
-    "auditLogs": {
-      "title": "Audit Logs",
-      "description": "View system activity and user actions",
-      "exportButton": "Export CSV",
-      "exporting": "Exporting...",
-      "exportSuccess": "Audit logs exported successfully",
-      "searchPlaceholder": "Search by username or entity...",
-      "stats": {
-        "totalLogs": "Total Logs"
-      },
-      "filters": {
-        "action": "Action",
-        "allActions": "All Actions",
-        "create": "Create",
-        "update": "Update",
-        "delete": "Delete",
-        "entityType": "Entity Type",
-        "allTypes": "All Types"
-      },
-      "table": {
-        "timestamp": "Timestamp",
-        "user": "User",
-        "action": "Action",
-        "entityType": "Entity Type",
-        "entity": "Entity",
-        "changes": "Changes"
-      },
-      "entities": {
-        "user": "User",
-        "university": "University",
-        "course": "Course",
-        "module": "Module",
-        "file": "File",
-        "token": "Access Token"
-      },
-      "errors": {
-        "fetchFailed": "Failed to load audit logs",
-        "exportFailed": "Failed to export audit logs"
-      }
+    "filters": {
+      "action": "Action",
+      "allActions": "All Actions",
+      "create": "Create",
+      "update": "Update",
+      "delete": "Delete",
+      "entityType": "Entity Type",
+      "allTypes": "All Types"
+    },
+    "table": {
+      "timestamp": "Timestamp",
+      "user": "User",
+      "action": "Action",
+      "entityType": "Entity Type",
+      "entity": "Entity",
+      "changes": "Changes"
+    },
+    "entities": {
+      "user": "User",
+      "university": "University",
+      "course": "Course",
+      "module": "Module",
+      "file": "File",
+      "token": "Access Token"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load audit logs",
+      "exportFailed": "Failed to export audit logs"
     }
   }
 }

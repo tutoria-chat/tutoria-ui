@@ -56,7 +56,7 @@ export default function UsersPage() {
         params.isActive = isActiveFilter === 'active';
       }
 
-      const response = await apiClient.get<{ items: UserResponse[]; total: number }>('/auth/users', params);
+      const response = await apiClient.get<{ items: UserResponse[]; total: number }>('/api/users', params);
       setUsers(response.items);
       setTotal(response.total);
     } catch (error) {
