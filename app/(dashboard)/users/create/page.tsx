@@ -115,7 +115,7 @@ export default function CreateUserPage() {
         payload.universityId = parseInt(formData.universityId);
       }
 
-      await apiClient.post('/auth/users/create', payload);
+      await apiClient.post('/api/users', payload);
 
       toast.success(t('successMessage'));
       router.push('/users');
