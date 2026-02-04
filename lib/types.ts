@@ -962,3 +962,27 @@ export interface UnifiedDashboardResponseDto {
   todayUsage: UsageStatsDto;
   todayCost: TodayCostDto;
 }
+
+// Audit Log Types
+export interface AuditLog {
+  id: number;
+  userId: number;
+  username: string;
+  universityId?: number;
+  action: 'Create' | 'Update' | 'Delete';
+  entityType: string;
+  entityId: number;
+  entityName?: string;
+  changes?: string; // JSON string
+  createdAt: string;
+}
+
+export interface AuditLogFilters extends PaginationParams {
+  universityId?: number;
+  userId?: number;
+  action?: string;
+  entityType?: string;
+  startDate?: string;
+  endDate?: string;
+  search?: string;
+}

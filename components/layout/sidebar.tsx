@@ -21,7 +21,8 @@ import {
   ChevronRight,
   ChevronDown,
   Folder,
-  List
+  List,
+  ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -83,6 +84,12 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('analytics'),
       href: '/analytics',
       icon: BarChart3,
+      roles: ['super_admin', 'manager'],
+    },
+    {
+      label: t('auditLogs'),
+      href: '/audit-logs',
+      icon: ClipboardList,
       roles: ['super_admin', 'manager'],
     },
     // TODO: Re-enable System Overview page when backend endpoints are ready

@@ -1418,6 +1418,7 @@
     "users": "Usuarios",
     "administration": "Administración",
     "analytics": "Analíticas",
+    "auditLogs": "Registros de Auditoría",
     "systemOverview": "Vista general del sistema",
     "superAdmins": "Super administradores",
     "globalSearch": "Búsqueda global",
@@ -3761,6 +3762,46 @@
       "updateError": "Error al actualizar la clave de acceso",
       "active": "Activo",
       "inactive": "Inactivo"
+    },
+    "auditLogs": {
+      "title": "Registros de Auditoría",
+      "description": "Ver actividad del sistema y acciones de usuarios",
+      "exportButton": "Exportar CSV",
+      "exporting": "Exportando...",
+      "exportSuccess": "Registros de auditoría exportados exitosamente",
+      "searchPlaceholder": "Buscar por nombre de usuario o entidad...",
+      "stats": {
+        "totalLogs": "Total de Registros"
+      },
+      "filters": {
+        "action": "Acción",
+        "allActions": "Todas las Acciones",
+        "create": "Crear",
+        "update": "Actualizar",
+        "delete": "Eliminar",
+        "entityType": "Tipo de Entidad",
+        "allTypes": "Todos los Tipos"
+      },
+      "table": {
+        "timestamp": "Fecha/Hora",
+        "user": "Usuario",
+        "action": "Acción",
+        "entityType": "Tipo de Entidad",
+        "entity": "Entidad",
+        "changes": "Cambios"
+      },
+      "entities": {
+        "user": "Usuario",
+        "university": "Universidad",
+        "course": "Curso",
+        "module": "Módulo",
+        "file": "Archivo",
+        "token": "Token de Acceso"
+      },
+      "errors": {
+        "fetchFailed": "Error al cargar registros de auditoría",
+        "exportFailed": "Error al exportar registros de auditoría"
+      }
     }
   }
 }

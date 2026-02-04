@@ -62,7 +62,9 @@ import type {
   ModuleComparisonResponseDto,
   FrequentlyAskedQuestionsResponseDto,
   DashboardSummaryDto,
-  UnifiedDashboardResponseDto
+  UnifiedDashboardResponseDto,
+  AuditLog,
+  AuditLogFilters
 } from './types';
 
 export const API_CONFIG = {
@@ -1102,6 +1104,37 @@ class TutoriaAPIClient {
 
   async getAnalyticsFrequentQuestions(filters?: AnalyticsFilterDto): Promise<FrequentlyAskedQuestionsResponseDto> {
     return this.get('/api/analytics/questions/frequently-asked', filters);
+  }
+
+  // Audit Logs
+  async getAuditLogs(params?: AuditLogFilters): Promise<PaginatedResponse<AuditLog>> {
+    return this.get('/api/audit-logs', params);
+  }
+
+  async exportAuditLogs(filters?: Omit<AuditLogFilters, 'page' | 'size'>): Promise<Blob> {
+    const searchParams = new URLSearchParams();
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          searchParams.append(key, String(value));
+        }
+      });
+    }
+
+    const url = `${this.baseURL}/api/audit-logs/export?${searchParams}`;
+    const headers: HeadersInit = {};
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(url, { headers });
+
+    if (!response.ok) {
+      throw new Error('Export failed');
+    }
+
+    return await response.blob();
   }
 }
 
