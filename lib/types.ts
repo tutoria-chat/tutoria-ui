@@ -8,7 +8,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
-  userType: UserRole; // 'super_admin', 'professor', or 'student' - RECOMMENDED: Use this field
+  userType: UserRole; // 'super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor', or 'student' - RECOMMENDED: Use this field
   role: UserRole; // @deprecated Alias for userType (for backwards compatibility). Prefer using userType instead.
   isActive: boolean;
   universityId?: number;
@@ -24,7 +24,7 @@ export interface User {
   languagePreference?: string; // 'pt-br' | 'en' | 'es'
 }
 
-export type UserRole = 'super_admin' | 'professor' | 'student';
+export type UserRole = 'super_admin' | 'manager' | 'tutor' | 'platform_coordinator' | 'professor' | 'student';
 
 // Backend UserResponse type (matches API schema)
 export interface UserResponse {
@@ -702,8 +702,8 @@ export interface NavigationItem {
   label: string;
   href: string;
   icon?: React.ComponentType<any>;
-  roles?: UserRole[]; // 'super_admin', 'professor', or 'student'
-  requiresAdmin?: boolean; // For professors: requires isAdmin = true
+  roles?: UserRole[]; // 'super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor', or 'student'
+  requiresAdmin?: boolean; // @deprecated Legacy field for backward compatibility with professor isAdmin flag
   children?: NavigationItem[];
 }
 

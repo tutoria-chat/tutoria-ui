@@ -83,8 +83,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('analytics'),
       href: '/analytics',
       icon: BarChart3,
-      roles: ['super_admin', 'professor'],
-      requiresAdmin: true, // Only admin professors
+      roles: ['super_admin', 'manager'],
     },
     // TODO: Re-enable System Overview page when backend endpoints are ready
     // {
@@ -94,17 +93,16 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     //   roles: ['super_admin'],
     // },
     {
+      label: t('users'),
+      href: '/users',
+      icon: Users,
+      roles: ['super_admin', 'manager'],
+    },
+    {
       label: t('superAdmins'),
       href: '/admin/super-admins',
       icon: Shield,
       roles: ['super_admin'],
-    },
-    {
-      label: t('professors'),
-      href: '/professors',
-      icon: Users,
-      roles: ['super_admin', 'professor'],
-      requiresAdmin: true, // Only admin professors
     },
     {
       label: t('globalSearch'),
@@ -127,7 +125,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     // Check if user's role is in the allowed roles
     if (!item.roles.includes(user.role)) return false;
 
-    // If requiresAdmin is true, check if user is admin
+    // Legacy: If requiresAdmin is true, check if user is admin professor (for backward compatibility)
     if (item.requiresAdmin && user.role === 'professor') {
       return user.isAdmin === true;
     }

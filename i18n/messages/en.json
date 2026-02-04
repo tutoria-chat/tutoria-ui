@@ -15,7 +15,7 @@
       "submitButton": "Sign In",
       "submitting": "Signing in...",
       "forgotPassword": "Forgot your password?",
-      "copyright": "© 2025 Tutoria. All rights reserved.",
+      "copyright": "© {year} Tutoria. All rights reserved.",
       "loginFailed": "Invalid credentials. Please try again.",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "instructionsTitle": "How to log in:",
@@ -995,6 +995,83 @@
       "languageHint": "The professor's interface will be displayed in this language"
     }
   },
+  "users": {
+    "title": "User Management",
+    "description": "Manage all users in the system",
+    "createButton": "Create User",
+    "searchPlaceholder": "Search by name, email, or username...",
+    "filters": {
+      "userType": "Filter by role",
+      "allTypes": "All Roles",
+      "status": "Filter by status",
+      "allStatuses": "All Statuses"
+    },
+    "table": {
+      "username": "Username",
+      "name": "Name",
+      "role": "Role",
+      "university": "University",
+      "status": "Status",
+      "actions": "Actions",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "create": {
+      "title": "Create User",
+      "description": "Add a new user to the system",
+      "formTitle": "User Information",
+      "formDescription": "Fill in the user details. A welcome email with login instructions will be sent after creation.",
+      "submitButton": "Create User",
+      "successMessage": "User created successfully!",
+      "errorMessage": "Failed to create user",
+      "fields": {
+        "userType": {
+          "label": "Role",
+          "placeholder": "Select a role..."
+        },
+        "university": {
+          "label": "University",
+          "placeholder": "Select a university..."
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter username"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "user@example.com"
+        },
+        "firstName": {
+          "label": "First Name",
+          "placeholder": "Enter first name"
+        },
+        "lastName": {
+          "label": "Last Name",
+          "placeholder": "Enter last name"
+        },
+        "password": {
+          "label": "Initial Password",
+          "placeholder": "Enter initial password",
+          "hint": "The user will be prompted to change this password on first login"
+        },
+        "language": {
+          "label": "Preferred Language"
+        }
+      },
+      "errors": {
+        "usernameRequired": "Username is required",
+        "emailRequired": "Email is required",
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 6 characters",
+        "userTypeRequired": "Role is required",
+        "universityRequired": "University is required for this role",
+        "usernameExists": "This username already exists",
+        "emailExists": "This email is already registered"
+      }
+    }
+  },
   "students": {
     "title": "Student Management",
     "description": "Manage students and track their progress",
@@ -1341,6 +1418,7 @@
     "myUniversity": "My University",
     "moduleTokens": "Access Keys",
     "professors": "Professors",
+    "users": "Users",
     "administration": "Administration",
     "analytics": "Analytics",
     "systemOverview": "System Overview",
@@ -1494,6 +1572,22 @@
       "university": "University",
       "professors": "Professors",
       "professor": "Professor"
+    },
+    "roles": {
+      "super_admin": "Super Administrator",
+      "manager": "Manager",
+      "tutor": "Tutor",
+      "platform_coordinator": "Platform Coordinator",
+      "professor": "Professor",
+      "student": "Student",
+      "descriptions": {
+        "super_admin": "Full system access across all universities",
+        "manager": "University management with analytics access",
+        "tutor": "Can create courses, modules, and tokens",
+        "platform_coordinator": "View courses/modules and generate access tokens",
+        "professor": "Manage assigned courses and modules",
+        "student": "Access course materials and AI tutor"
+      }
     },
     "loading": "Loading...",
     "noData": "No data available",

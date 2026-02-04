@@ -15,7 +15,7 @@
       "submitButton": "Iniciar sesión",
       "submitting": "Iniciando sesión...",
       "forgotPassword": "¿Olvidaste tu contraseña?",
-      "copyright": "© 2025 Tutoria. Todos los derechos reservados.",
+      "copyright": "© {year} Tutoria. Todos los derechos reservados.",
       "loginFailed": "Credenciales inválidas. Por favor, intenta de nuevo.",
       "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo.",
       "instructionsTitle": "Cómo iniciar sesión:",
@@ -954,6 +954,83 @@
       "manageAgent": "Gestionar Agente de IA"
     }
   },
+  "users": {
+    "title": "Gestión de Usuarios",
+    "description": "Gestionar todos los usuarios del sistema",
+    "createButton": "Crear Usuario",
+    "searchPlaceholder": "Buscar por nombre, correo o nombre de usuario...",
+    "filters": {
+      "userType": "Filtrar por rol",
+      "allTypes": "Todos los Roles",
+      "status": "Filtrar por estado",
+      "allStatuses": "Todos los Estados"
+    },
+    "table": {
+      "username": "Nombre de Usuario",
+      "name": "Nombre",
+      "role": "Rol",
+      "university": "Universidad",
+      "status": "Estado",
+      "actions": "Acciones",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "create": {
+      "title": "Crear Usuario",
+      "description": "Agregar un nuevo usuario al sistema",
+      "formTitle": "Información del Usuario",
+      "formDescription": "Complete los detalles del usuario. Se enviará un correo de bienvenida con instrucciones de inicio de sesión después de la creación.",
+      "submitButton": "Crear Usuario",
+      "successMessage": "¡Usuario creado exitosamente!",
+      "errorMessage": "Error al crear usuario",
+      "fields": {
+        "userType": {
+          "label": "Rol",
+          "placeholder": "Seleccione un rol..."
+        },
+        "university": {
+          "label": "Universidad",
+          "placeholder": "Seleccione una universidad..."
+        },
+        "username": {
+          "label": "Nombre de Usuario",
+          "placeholder": "Ingrese el nombre de usuario"
+        },
+        "email": {
+          "label": "Correo Electrónico",
+          "placeholder": "usuario@ejemplo.com"
+        },
+        "firstName": {
+          "label": "Nombre",
+          "placeholder": "Ingrese el nombre"
+        },
+        "lastName": {
+          "label": "Apellido",
+          "placeholder": "Ingrese el apellido"
+        },
+        "password": {
+          "label": "Contraseña Inicial",
+          "placeholder": "Ingrese la contraseña inicial",
+          "hint": "Se le pedirá al usuario que cambie esta contraseña en el primer inicio de sesión"
+        },
+        "language": {
+          "label": "Idioma Preferido"
+        }
+      },
+      "errors": {
+        "usernameRequired": "El nombre de usuario es obligatorio",
+        "emailRequired": "El correo electrónico es obligatorio",
+        "firstNameRequired": "El nombre es obligatorio",
+        "lastNameRequired": "El apellido es obligatorio",
+        "passwordRequired": "La contraseña es obligatoria",
+        "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+        "userTypeRequired": "El rol es obligatorio",
+        "universityRequired": "La universidad es obligatoria para este rol",
+        "usernameExists": "Este nombre de usuario ya existe",
+        "emailExists": "Este correo electrónico ya está registrado"
+      }
+    }
+  },
   "students": {
     "title": "Gestión de estudiantes",
     "description": "Gestiona estudiantes y rastrea su progreso",
@@ -1338,6 +1415,7 @@
     "myUniversity": "Mi universidad",
     "moduleTokens": "Claves de Acceso",
     "professors": "Profesores",
+    "users": "Usuarios",
     "administration": "Administración",
     "analytics": "Analíticas",
     "systemOverview": "Vista general del sistema",
@@ -1491,6 +1569,22 @@
       "university": "Universidad",
       "professors": "Profesores",
       "professor": "Profesor"
+    },
+    "roles": {
+      "super_admin": "Super Administrador",
+      "manager": "Gestor",
+      "tutor": "Tutor",
+      "platform_coordinator": "Coordinador de Plataforma",
+      "professor": "Profesor",
+      "student": "Estudiante",
+      "descriptions": {
+        "super_admin": "Acceso completo al sistema en todas las universidades",
+        "manager": "Gestión de universidad con acceso a análisis",
+        "tutor": "Puede crear cursos, módulos y tokens",
+        "platform_coordinator": "Ver cursos/módulos y generar tokens de acceso",
+        "professor": "Gestionar cursos y módulos asignados",
+        "student": "Acceder a materiales del curso y tutor IA"
+      }
     },
     "loading": "Cargando...",
     "noData": "No hay datos disponibles",

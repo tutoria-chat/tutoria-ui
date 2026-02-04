@@ -1,7 +1,6 @@
 import type { User, UserRole, Permission, PermissionContext } from './types';
 
-// Note: Professors' permissions vary by is_admin flag, so this is a simplified model
-// In practice, check user.isAdmin for professors to determine their actual permissions
+// Note: Permissions are scoped to user roles and their assigned universities/courses
 export const rolePermissions: Record<UserRole, Permission[]> = {
   super_admin: [
     // Universities
@@ -47,40 +46,123 @@ export const rolePermissions: Record<UserRole, Permission[]> = {
     { action: 'delete', resource: 'token', scope: 'global' },
   ],
 
-  // Professors - permissions depend on is_admin flag
-  // - Admin professors (is_admin=true): can create/edit courses, manage professors in their university
-  // - Regular professors (is_admin=false): can only create/edit modules in their assigned courses
-  professor: [
-    // Modules - All professors can work with modules (filtered by assignment)
-    { action: 'create', resource: 'module', scope: 'course' },
-    { action: 'read', resource: 'module', scope: 'course' },
-    { action: 'update', resource: 'module', scope: 'course' },
-    { action: 'delete', resource: 'module', scope: 'course' },
-
-    // Files - All professors can work with files
-    { action: 'create', resource: 'file', scope: 'course' },
-    { action: 'read', resource: 'file', scope: 'course' },
-    { action: 'update', resource: 'file', scope: 'course' },
-    { action: 'delete', resource: 'file', scope: 'course' },
-
-    // Tokens - All professors can manage tokens
-    { action: 'create', resource: 'token', scope: 'course' },
-    { action: 'read', resource: 'token', scope: 'course' },
-    { action: 'update', resource: 'token', scope: 'course' },
-    { action: 'delete', resource: 'token', scope: 'course' },
-
-    // Students - Professors can view students
-    { action: 'read', resource: 'student', scope: 'course' },
-
-    // Courses - Depends on is_admin (check at runtime)
+  // Manager - Full university permissions + analytics (formerly "Admin Professor")
+  // - Can create/edit courses, manage staff in their university
+  // - Has access to analytics dashboard
+  manager: [
+    // Courses - University scope
     { action: 'create', resource: 'course', scope: 'university' },
     { action: 'read', resource: 'course', scope: 'university' },
     { action: 'update', resource: 'course', scope: 'university' },
     { action: 'delete', resource: 'course', scope: 'university' },
 
-    // Professors - Admin professors only (check is_admin at runtime)
+    // Modules - University scope
+    { action: 'create', resource: 'module', scope: 'university' },
+    { action: 'read', resource: 'module', scope: 'university' },
+    { action: 'update', resource: 'module', scope: 'university' },
+    { action: 'delete', resource: 'module', scope: 'university' },
+
+    // Staff (Tutors, Platform Coordinators, Professors, Students) - University scope
     { action: 'create', resource: 'professor', scope: 'university' },
     { action: 'read', resource: 'professor', scope: 'university' },
+    { action: 'update', resource: 'professor', scope: 'university' },
+    { action: 'delete', resource: 'professor', scope: 'university' },
+
+    { action: 'create', resource: 'student', scope: 'university' },
+    { action: 'read', resource: 'student', scope: 'university' },
+    { action: 'update', resource: 'student', scope: 'university' },
+    { action: 'delete', resource: 'student', scope: 'university' },
+
+    // Files - University scope
+    { action: 'create', resource: 'file', scope: 'university' },
+    { action: 'read', resource: 'file', scope: 'university' },
+    { action: 'update', resource: 'file', scope: 'university' },
+    { action: 'delete', resource: 'file', scope: 'university' },
+
+    // Tokens - University scope
+    { action: 'create', resource: 'token', scope: 'university' },
+    { action: 'read', resource: 'token', scope: 'university' },
+    { action: 'update', resource: 'token', scope: 'university' },
+    { action: 'delete', resource: 'token', scope: 'university' },
+  ],
+
+  // Tutor - Can create courses/modules/tokens, NO analytics
+  tutor: [
+    // Courses - University scope
+    { action: 'create', resource: 'course', scope: 'university' },
+    { action: 'read', resource: 'course', scope: 'university' },
+    { action: 'update', resource: 'course', scope: 'university' },
+    { action: 'delete', resource: 'course', scope: 'university' },
+
+    // Modules - University scope
+    { action: 'create', resource: 'module', scope: 'university' },
+    { action: 'read', resource: 'module', scope: 'university' },
+    { action: 'update', resource: 'module', scope: 'university' },
+    { action: 'delete', resource: 'module', scope: 'university' },
+
+    // Files - University scope
+    { action: 'create', resource: 'file', scope: 'university' },
+    { action: 'read', resource: 'file', scope: 'university' },
+    { action: 'update', resource: 'file', scope: 'university' },
+    { action: 'delete', resource: 'file', scope: 'university' },
+
+    // Tokens - University scope
+    { action: 'create', resource: 'token', scope: 'university' },
+    { action: 'read', resource: 'token', scope: 'university' },
+    { action: 'update', resource: 'token', scope: 'university' },
+    { action: 'delete', resource: 'token', scope: 'university' },
+
+    // Students - Read only
+    { action: 'read', resource: 'student', scope: 'university' },
+  ],
+
+  // Platform Coordinator (AVA Manager) - View courses/modules, generate tokens only
+  platform_coordinator: [
+    // Courses - Read only
+    { action: 'read', resource: 'course', scope: 'university' },
+
+    // Modules - Read only
+    { action: 'read', resource: 'module', scope: 'university' },
+
+    // Files - Read only
+    { action: 'read', resource: 'file', scope: 'university' },
+
+    // Tokens - Can create and manage
+    { action: 'create', resource: 'token', scope: 'university' },
+    { action: 'read', resource: 'token', scope: 'university' },
+    { action: 'update', resource: 'token', scope: 'university' },
+    { action: 'delete', resource: 'token', scope: 'university' },
+
+    // Students - Read only
+    { action: 'read', resource: 'student', scope: 'university' },
+  ],
+
+  // Professor - Legacy role (to be rethought later)
+  // - Regular professors: can only create/edit modules in their assigned courses
+  professor: [
+    // Modules - Course scope (filtered by assignment)
+    { action: 'create', resource: 'module', scope: 'course' },
+    { action: 'read', resource: 'module', scope: 'course' },
+    { action: 'update', resource: 'module', scope: 'course' },
+    { action: 'delete', resource: 'module', scope: 'course' },
+
+    // Files - Course scope
+    { action: 'create', resource: 'file', scope: 'course' },
+    { action: 'read', resource: 'file', scope: 'course' },
+    { action: 'update', resource: 'file', scope: 'course' },
+    { action: 'delete', resource: 'file', scope: 'course' },
+
+    // Tokens - Course scope
+    { action: 'create', resource: 'token', scope: 'course' },
+    { action: 'read', resource: 'token', scope: 'course' },
+    { action: 'update', resource: 'token', scope: 'course' },
+    { action: 'delete', resource: 'token', scope: 'course' },
+
+    // Students - Read only
+    { action: 'read', resource: 'student', scope: 'course' },
+
+    // Courses - Read only
+    { action: 'read', resource: 'course', scope: 'course' },
   ],
 
   student: [
@@ -113,20 +195,33 @@ export function checkPermission(
         return user.role === 'super_admin';
 
       case 'university':
-        return user.role === 'super_admin' ||
-               (user.role === 'professor' && user.isAdmin === true &&
-                user.universityId === context?.universityId);
+        // Super admin has global access
+        if (user.role === 'super_admin') return true;
+
+        // Manager, Tutor, Platform Coordinator have university-scoped access
+        if (['manager', 'tutor', 'platform_coordinator'].includes(user.role) &&
+            user.universityId === context?.universityId) return true;
+
+        // Legacy: Support old professor with isAdmin flag
+        if (user.role === 'professor' && user.isAdmin === true &&
+            user.universityId === context?.universityId) return true;
+
+        return false;
 
       case 'course':
         // Super admin has access to everything
         if (user.role === 'super_admin') return true;
 
-        // Admin professor has access to courses in their university
+        // Manager has access to courses in their university (via course lookup)
+        if (user.role === 'manager' &&
+            user.universityId === context?.universityId) return true;
+
+        // Legacy: Admin professor has access to courses in their university
         if (user.role === 'professor' && user.isAdmin === true &&
             user.universityId === context?.universityId) return true;
 
         // Regular professor has access to assigned courses
-        if (user.role === 'professor' && user.isAdmin === false &&
+        if (user.role === 'professor' && !user.isAdmin &&
             context?.courseId &&
             user.assignedCourses?.includes(context.courseId)) return true;
 
@@ -147,6 +242,12 @@ export function getUserRoleDisplayName(role: UserRole): string {
   switch (role) {
     case 'super_admin':
       return 'Super Administrador';
+    case 'manager':
+      return 'Gestor';
+    case 'tutor':
+      return 'Tutor';
+    case 'platform_coordinator':
+      return 'Coordenador de Plataforma';
     case 'professor':
       return 'Professor';
     case 'student':
@@ -168,14 +269,16 @@ export function canAccessPage(
     '/admin': (user) => user.role === 'super_admin',
     '/universities': (user) => user.role === 'super_admin',
     '/universities/create': (user) => user.role === 'super_admin',
-    '/courses': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/courses/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
-    '/modules': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/professors': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
-    '/professors/create': (user) => user.role === 'super_admin' || (user.role === 'professor' && user.isAdmin === true),
-    '/students': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/files': (user) => ['super_admin', 'professor'].includes(user.role),
-    '/tokens': (user) => ['super_admin', 'professor'].includes(user.role),
+    '/analytics': (user) => ['super_admin', 'manager'].includes(user.role),
+    '/courses': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
+    '/courses/create': (user) => ['super_admin', 'manager', 'tutor'].includes(user.role) || (user.role === 'professor' && user.isAdmin === true),
+    '/modules': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
+    '/modules/create': (user) => ['super_admin', 'manager', 'tutor', 'professor'].includes(user.role),
+    '/professors': (user) => ['super_admin', 'manager'].includes(user.role) || (user.role === 'professor' && user.isAdmin === true),
+    '/professors/create': (user) => ['super_admin', 'manager'].includes(user.role) || (user.role === 'professor' && user.isAdmin === true),
+    '/students': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
+    '/files': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
+    '/tokens': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
   };
 
   const rule = pageRules[pagePath];
