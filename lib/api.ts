@@ -205,7 +205,11 @@ class TutoriaAPIClient {
     const baseUrl = useFilesAPI
       ? this.filesBaseURL
       : (usePythonAPI ? this.pythonBaseURL : this.baseURL);
-    const url = `${baseUrl}${endpoint}`;
+
+    // Normalize URL to avoid double slashes (remove trailing slash from base, ensure endpoint starts with /)
+    const normalizedBase = baseUrl.replace(/\/$/, ''); // Remove trailing slash
+    const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`; // Ensure leading slash
+    const url = `${normalizedBase}${normalizedEndpoint}`;
 
     // Build headers - don't set Content-Type if it's explicitly null (for FormData)
     const headers: Record<string, string> = {
@@ -582,13 +586,13 @@ class TutoriaAPIClient {
   }
 
   async uploadFile(formData: FormData, moduleId: number, fileName?: string): Promise<FileResponse> {
-    // Add moduleId and customName to the FormData
-    // TutoriaFiles API expects: moduleId (required), file (required), customName (optional)
-    formData.append('moduleId', moduleId.toString());
+    // Add ModuleId and CustomName to the FormData (capital letters match C# DTO properties)
+    // TutoriaFiles FileUploadRequest expects: ModuleId (required), File (required), CustomName (optional)
+    formData.append('ModuleId', moduleId.toString());
     if (fileName) {
-      formData.append('customName', fileName);
+      formData.append('CustomName', fileName);
     }
-    // Use dedicated Files API for uploads (handles large files up to 15MB)
+    // POST to /api/files/upload (TutoriaFiles.API/Controllers/FilesController.UploadFile)
     return this.post('/api/files/upload', formData, { isFormData: true, useFilesAPI: true });
   }
 

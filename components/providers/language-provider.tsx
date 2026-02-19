@@ -21,26 +21,31 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (typeof window === 'undefined') return 'pt-br';
 
     const storedUser = localStorage.getItem('tutoria_user');
-    let initialLocale: Locale = 'pt-br';
 
+    // PRIORITY 1: Use the user's languagePreference from their account
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
         if (userData.languagePreference) {
-          initialLocale = userData.languagePreference as Locale;
+          const userLang = userData.languagePreference as Locale;
+          // Validate it's a supported locale
+          if (userLang === 'pt-br' || userLang === 'en' || userLang === 'es') {
+            return userLang;
+          }
         }
       } catch (error) {
         console.error('Failed to parse user data:', error);
       }
     }
 
-    // Fallback to localStorage
+    // PRIORITY 2: Fallback to localStorage (for guests or before login)
     const storedLocale = localStorage.getItem('tutoria_locale') as Locale;
     if (storedLocale && (storedLocale === 'pt-br' || storedLocale === 'en' || storedLocale === 'es')) {
-      initialLocale = storedLocale;
+      return storedLocale;
     }
 
-    return initialLocale;
+    // PRIORITY 3: Default to Portuguese
+    return 'pt-br';
   };
 
   useEffect(() => {

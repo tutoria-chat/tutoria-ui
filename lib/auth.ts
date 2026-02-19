@@ -54,8 +54,11 @@ class AuthService {
       if (typeof window !== 'undefined') {
         localStorage.setItem('tutoria_user', JSON.stringify(userInfo));
         localStorage.setItem('tutoria_token', response.accessToken);
+
+        // Trigger custom event to update language preference
+        window.dispatchEvent(new Event('tutoria_user_updated'));
       }
-      
+
       // Schedule token refresh
       this.scheduleTokenRefresh();
       

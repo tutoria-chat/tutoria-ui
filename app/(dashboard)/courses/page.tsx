@@ -42,7 +42,7 @@ export default function CoursesPage() {
   // - Admin professors: see all courses in their university (universityId filter)
   // - Regular professors: see ONLY their assigned courses (professorId filter)
   const buildApiUrl = () => {
-    let filters = `page=${page}&limit=${limit}`;
+    let filters = `page=${page}&size=${limit}`;
 
     if (searchTerm) {
       filters += `&search=${encodeURIComponent(searchTerm)}`;

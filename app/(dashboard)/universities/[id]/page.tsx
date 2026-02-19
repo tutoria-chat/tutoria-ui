@@ -92,7 +92,7 @@ export default function UniversityDetailsPage() {
   // - Admin professors: see all courses in their university (universityId filter)
   // - Regular professors: see ONLY their assigned courses (professorId filter)
   const buildCoursesApiUrl = () => {
-    let filters = `page=${coursePage}&limit=${courseLimit}`;
+    let filters = `page=${coursePage}&size=${courseLimit}`;
 
     if (courseSearchTerm) {
       filters += `&search=${encodeURIComponent(courseSearchTerm)}`;
@@ -114,7 +114,7 @@ export default function UniversityDetailsPage() {
 
   // Build professors API URL with pagination params and filters
   const buildProfessorsApiUrl = () => {
-    let filters = `page=${professorPage}&limit=${professorLimit}`;
+    let filters = `page=${professorPage}&size=${professorLimit}`;
 
     if (professorSearchTerm) {
       filters += `&search=${encodeURIComponent(professorSearchTerm)}`;

@@ -56,7 +56,7 @@ export default function CourseDetailsPage() {
 
   // Build modules API URL with pagination and filters
   const buildModulesApiUrl = () => {
-    let filters = `courseId=${courseId}&page=${modulePage}&limit=${moduleLimit}`;
+    let filters = `courseId=${courseId}&page=${modulePage}&size=${moduleLimit}`;
 
     if (searchTerm) {
       filters += `&search=${encodeURIComponent(searchTerm)}`;

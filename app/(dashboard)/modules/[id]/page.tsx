@@ -141,7 +141,7 @@ export default function ModuleDetailsPage() {
       for (const file of selectedFiles) {
         try {
           const uploadFormData = new FormData();
-          uploadFormData.append('file', file);
+          uploadFormData.append('File', file); // Capital 'F' - matches backend DTO property name
           await apiClient.uploadFile(uploadFormData, moduleId, file.name);
           successfulUploads.push(file.name);
         } catch (error) {
