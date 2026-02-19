@@ -40,6 +40,27 @@ export function formatDateShort(date: string | Date | null | undefined): string 
   }).format(dateObj);
 }
 
+export function formatDateTimeShort(date: string | Date | null | undefined): string {
+  if (!date) return 'N/A';
+
+  const dateObj = new Date(date);
+
+  // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
+  if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {
+    return 'N/A';
+  }
+
+  // Format as "26 Jul 2025, 14:30" — date + time in user's local timezone
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(dateObj);
+}
+
 /**
  * Checks if an entity has been meaningfully updated (updatedAt is different from createdAt)
  * @param createdAt - Creation timestamp

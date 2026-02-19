@@ -569,6 +569,14 @@ class TutoriaAPIClient {
     return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
   }
 
+  async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ status: string; message: string; extracted_count: number; failed_count: number; module_id: number }> {
+    return this.post(`/modules/${moduleId}/extract-text?force=${force}`, {}, { usePythonAPI: true });
+  }
+
+  async generateModuleQuizzes(moduleId: number, upsert: boolean = true, count: number = 50): Promise<{ status: string; message: string; quiz_count: number; module_id: number }> {
+    return this.post(`/modules/${moduleId}/generate-quizzes?upsert=${upsert}&count=${count}`, {}, { usePythonAPI: true });
+  }
+
   // AI Model endpoints
   async getAIModels(params?: { provider?: string; is_active?: boolean; include_deprecated?: boolean }): Promise<AIModel[]> {
     return this.get('/api/ai-models/', params);

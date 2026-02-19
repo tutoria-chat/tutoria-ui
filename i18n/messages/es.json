@@ -414,7 +414,18 @@
       },
       "fileNameUnknown": "Archivo sin nombre",
       "fileTypeUnknown": "Tipo desconocido",
-      "openInWidget": "Abrir en Widget"
+      "openInWidget": "Abrir en Widget",
+      "updateAIConfig": "Actualizar IA Ahora",
+      "updateAIConfigDesc": "Re-extraer textos de archivos y regenerar preguntas de quiz para este módulo.",
+      "updateAIConfigRunning": "Actualizando...",
+      "updateAIConfigSuccess": "¡Configuración de IA actualizada!",
+      "updateAIConfigSuccessDesc": "Extracción de texto y generación de quiz completadas con éxito.",
+      "updateAIConfigPartial": "Actualización parcial",
+      "updateAIConfigPartialDesc": "Extracción de texto completada, pero la generación de quiz tuvo problemas.",
+      "updateAIConfigError": "Error al actualizar configuración de IA",
+      "updateAIConfigErrorDesc": "No se pudo actualizar la configuración de IA. Inténtelo de nuevo.",
+      "extractionResult": "{count} archivo(s) extraído(s)",
+      "quizResult": "{count} preguntas de quiz generadas"
     },
     "edit": {
       "title": "Editar módulo",

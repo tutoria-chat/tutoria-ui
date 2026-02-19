@@ -455,7 +455,18 @@
       },
       "fileNameUnknown": "File without name",
       "fileTypeUnknown": "Unknown type",
-      "openInWidget": "Open in Widget"
+      "openInWidget": "Open in Widget",
+      "updateAIConfig": "Update AI Now",
+      "updateAIConfigDesc": "Re-extract all file texts and regenerate quiz questions for this module.",
+      "updateAIConfigRunning": "Updating...",
+      "updateAIConfigSuccess": "AI configuration updated!",
+      "updateAIConfigSuccessDesc": "Text extraction and quiz generation completed successfully.",
+      "updateAIConfigPartial": "Partially updated",
+      "updateAIConfigPartialDesc": "Text extraction completed, but quiz generation had issues.",
+      "updateAIConfigError": "Error updating AI configuration",
+      "updateAIConfigErrorDesc": "Could not update the AI configuration. Please try again.",
+      "extractionResult": "{count} file(s) extracted",
+      "quizResult": "{count} quiz questions generated"
     },
     "edit": {
       "title": "Edit Module",

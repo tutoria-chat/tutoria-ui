@@ -23,7 +23,8 @@ import {
   Youtube,
   Info,
   Lightbulb,
-  Plus
+  Plus,
+  RefreshCw
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -48,7 +49,7 @@ import { TokenModal } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
-import { formatDateShort, isValidYouTubeUrl } from '@/lib/utils';
+import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
 import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 
@@ -88,6 +89,8 @@ export default function ModuleDetailsPage() {
   const [youtubeLanguage, setYoutubeLanguage] = useState<string>('pt-br'); // Default to Portuguese, user-selectable
   const [isAddingYoutubeVideo, setIsAddingYoutubeVideo] = useState(false);
   const [youtubeError, setYoutubeError] = useState<string | null>(null);
+  // AI Config update state
+  const [isUpdatingAIConfig, setIsUpdatingAIConfig] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -268,6 +271,42 @@ export default function ModuleDetailsPage() {
       toast.error(t('fileDeleteError'), {
         description: t('fileDeleteErrorDesc'),
       });
+    }
+  };
+
+  /**
+   * Triggers on-demand file text extraction + quiz regeneration for this module.
+   */
+  const handleUpdateAIConfig = async () => {
+    setIsUpdatingAIConfig(true);
+    try {
+      // Step 1: Extract text from all files (force re-extraction)
+      const extractResult = await apiClient.extractModuleTexts(moduleId, true);
+
+      // Step 2: Generate/regenerate quiz questions (upsert mode)
+      let quizResult;
+      try {
+        quizResult = await apiClient.generateModuleQuizzes(moduleId, true, 50);
+      } catch (quizError) {
+        console.error('Quiz generation failed:', quizError);
+        // Partial success — extraction worked, quiz failed
+        toast.warning(t('updateAIConfigPartial'), {
+          description: `${t('extractionResult', { count: extractResult.extracted_count })}. ${t('updateAIConfigPartialDesc')}`,
+        });
+        return;
+      }
+
+      // Full success
+      toast.success(t('updateAIConfigSuccess'), {
+        description: `${t('extractionResult', { count: extractResult.extracted_count })} · ${t('quizResult', { count: quizResult.quiz_count })}`,
+      });
+    } catch (error) {
+      console.error('AI config update error:', error);
+      toast.error(t('updateAIConfigError'), {
+        description: t('updateAIConfigErrorDesc'),
+      });
+    } finally {
+      setIsUpdatingAIConfig(false);
     }
   };
 
@@ -526,7 +565,7 @@ export default function ModuleDetailsPage() {
       key: 'createdAt',
       label: t('createdAt'),
       sortable: true,
-      render: (value) => formatDateShort(value as string)
+      render: (value) => formatDateTimeShort(value as string)
     },
     {
       key: 'actions',
@@ -759,6 +798,25 @@ export default function ModuleDetailsPage() {
           >
             <Youtube className="mr-2 h-4 w-4" />
             {t('addYoutubeVideo') || 'Add YouTube Video'}
+          </Button>
+          <Button
+            onClick={handleUpdateAIConfig}
+            variant="outline"
+            className="flex-1"
+            disabled={isUpdatingAIConfig || !files || files.length === 0}
+            title={t('updateAIConfigDesc')}
+          >
+            {isUpdatingAIConfig ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {t('updateAIConfigRunning')}
+              </>
+            ) : (
+              <>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                {t('updateAIConfig')}
+              </>
+            )}
           </Button>
         </div>
       </ProfessorOnly>
