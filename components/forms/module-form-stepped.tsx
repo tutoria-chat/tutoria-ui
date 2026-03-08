@@ -10,7 +10,7 @@ import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/for
 import { Badge } from '@/components/ui/badge';
 import { Stepper, type Step } from '@/components/ui/stepper';
 import { useAuth } from '@/components/auth/auth-provider';
-import { apiClient } from '@/lib/api';
+import { apiClient, ApiError } from '@/lib/api';
 import { Bot, FileText, Lightbulb, Sparkles, Loader2, Cpu, ChevronLeft, ChevronRight, Languages } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Module, ModuleCreate, ModuleUpdate, Course, AIModel } from '@/lib/types';
@@ -238,7 +238,14 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: t('saveError') });
+      if (error instanceof ApiError && error.isPlanLimitError) {
+        toast.error(error.message, {
+          action: { label: t('upgradePlan'), onClick: () => window.location.href = '/subscription' },
+        });
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: error instanceof Error ? error.message : t('saveError') });
+      }
     }
   };
 

@@ -70,8 +70,12 @@ export function AdminOnly({ children, fallback, hideIfNoAccess = true }: {
 }) {
   const { user } = useAuth();
 
-  // Super admins or professors with isAdmin = true
-  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true);
+  // Super admins, platform coordinators, managers, or professors with isAdmin = true
+  const hasAccess =
+    user?.role === 'super_admin' ||
+    user?.role === 'platform_coordinator' ||
+    user?.role === 'manager' ||
+    (user?.role === 'professor' && user?.isAdmin === true);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -87,8 +91,12 @@ export function AdminProfessorOnly({ children, fallback, hideIfNoAccess = true }
 }) {
   const { user } = useAuth();
 
-  // Super admins or professors with isAdmin = true
-  const hasAccess = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true);
+  // Super admins, platform coordinators, managers, or professors with isAdmin = true
+  const hasAccess =
+    user?.role === 'super_admin' ||
+    user?.role === 'platform_coordinator' ||
+    user?.role === 'manager' ||
+    (user?.role === 'professor' && user?.isAdmin === true);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -104,8 +112,13 @@ export function ProfessorOnly({ children, fallback, hideIfNoAccess = true }: {
 }) {
   const { user } = useAuth();
 
-  // Super admins or any professor (admin or regular)
-  const hasAccess = user?.role === 'super_admin' || user?.role === 'professor';
+  // Super admins, platform coordinators, managers, tutors, or any professor
+  const hasAccess =
+    user?.role === 'super_admin' ||
+    user?.role === 'platform_coordinator' ||
+    user?.role === 'manager' ||
+    user?.role === 'tutor' ||
+    user?.role === 'professor';
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;

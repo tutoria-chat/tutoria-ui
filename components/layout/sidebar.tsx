@@ -22,7 +22,9 @@ import {
   ChevronDown,
   Folder,
   List,
-  ClipboardList
+  ClipboardList,
+  Bot,
+  CreditCard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -77,6 +79,12 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       roles: ['super_admin', 'professor'],
       requiresAdmin: true, // Only admin professors
     },
+    {
+      label: t('subscription'),
+      href: '/subscription',
+      icon: CreditCard,
+      roles: ['super_admin', 'manager', 'professor'],
+    },
   ];
 
   const adminItems: NavigationItem[] = [
@@ -85,6 +93,12 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       href: '/analytics',
       icon: BarChart3,
       roles: ['super_admin', 'manager'],
+    },
+    {
+      label: t('aiModels'),
+      href: '/models',
+      icon: Bot,
+      roles: ['super_admin'],
     },
     {
       label: t('auditLogs'),

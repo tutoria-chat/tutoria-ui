@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
-import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { Course, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -67,6 +67,12 @@ export default function CoursesPage() {
 
   // API call to get courses
   const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(buildApiUrl());
+
+  // Plan limits — block create button when at limit
+  const { data: limits } = useFetch<UniversityLimits>(
+    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
+  );
+  const courseLimitReached = limits ? limits.currentCourses >= limits.maxCourses : false;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -238,15 +244,36 @@ export default function CoursesPage() {
                   {t('viewModules')}
                 </Link>
               </Button>
-              <Button asChild>
-                <Link href="/courses/create">
-                  <Plus className="mr-2 h-4 w-4" />
+              {courseLimitReached ? (
+                <Button disabled title={t('limitReached')}>
+                  <AlertTriangle className="mr-2 h-4 w-4" />
                   {t('createButton')}
-                </Link>
-              </Button>
+                </Button>
+              ) : (
+                <Button asChild>
+                  <Link href="/courses/create">
+                    <Plus className="mr-2 h-4 w-4" />
+                    {t('createButton')}
+                  </Link>
+                </Button>
+              )}
             </div>
           }
         />
+
+      {courseLimitReached && (
+        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+            <span className="text-sm text-red-800 dark:text-red-300">
+              {t('limitReached')} ({limits?.currentCourses}/{limits?.maxCourses})
+            </span>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/subscription">{t('upgradePlan')}</Link>
+          </Button>
+        </div>
+      )}
 
       <DataTable
         data={paginatedCourses}

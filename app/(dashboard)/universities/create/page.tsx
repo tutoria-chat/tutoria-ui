@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
@@ -43,6 +44,12 @@ export default function CreateUniversityPage() {
     state: '',
     country: 'Brazil',
   });
+
+  // Enterprise fields (super_admin only)
+  const [isEnterprise, setIsEnterprise] = useState(false);
+  const [maxCourses, setMaxCourses] = useState<number>(0);
+  const [maxModules, setMaxModules] = useState<number>(0);
+  const [maxStudents, setMaxStudents] = useState<number>(0);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -128,6 +135,11 @@ export default function CreateUniversityPage() {
         city: addressFields.city || null,
         state: addressFields.state || null,
         country: addressFields.country || null,
+        // Plan limits & enterprise config
+        isEnterprise,
+        maxCourses: isEnterprise ? maxCourses : null,
+        maxModules: isEnterprise ? maxModules : null,
+        maxStudents: isEnterprise ? maxStudents : null,
       });
       router.push('/universities');
     } catch (error) {
@@ -249,6 +261,71 @@ export default function CreateUniversityPage() {
                     </SelectContent>
                   </Select>
                   <p className="text-sm text-muted-foreground mt-2">{tTiers('tierHelpText')}</p>
+                </div>
+
+                {/* Enterprise Configuration */}
+                <div className="mt-6 p-4 border rounded-lg bg-muted/30">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <label htmlFor="isEnterprise" className="text-sm font-medium">
+                        {tTiers('isEnterpriseLabel')}
+                      </label>
+                      <p className="text-xs text-muted-foreground">
+                        {tTiers('isEnterpriseHelp')}
+                      </p>
+                    </div>
+                    <Switch
+                      id="isEnterprise"
+                      checked={isEnterprise}
+                      onCheckedChange={setIsEnterprise}
+                    />
+                  </div>
+                  {isEnterprise && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                      <div>
+                        <label htmlFor="maxCourses" className="block text-sm font-medium mb-1">
+                          {tTiers('maxCoursesLabel')}
+                        </label>
+                        <Input
+                          id="maxCourses"
+                          type="number"
+                          min={0}
+                          value={maxCourses}
+                          onChange={(e) => setMaxCourses(parseInt(e.target.value) || 0)}
+                          placeholder={tTiers('maxCoursesPlaceholder')}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxCoursesHelp')}</p>
+                      </div>
+                      <div>
+                        <label htmlFor="maxModules" className="block text-sm font-medium mb-1">
+                          {tTiers('maxModulesLabel')}
+                        </label>
+                        <Input
+                          id="maxModules"
+                          type="number"
+                          min={0}
+                          value={maxModules}
+                          onChange={(e) => setMaxModules(parseInt(e.target.value) || 0)}
+                          placeholder={tTiers('maxModulesPlaceholder')}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxModulesHelp')}</p>
+                      </div>
+                      <div>
+                        <label htmlFor="maxStudents" className="block text-sm font-medium mb-1">
+                          {tTiers('maxStudentsLabel')}
+                        </label>
+                        <Input
+                          id="maxStudents"
+                          type="number"
+                          min={0}
+                          value={maxStudents}
+                          onChange={(e) => setMaxStudents(parseInt(e.target.value) || 0)}
+                          placeholder={tTiers('maxStudentsPlaceholder')}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxStudentsHelp')}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

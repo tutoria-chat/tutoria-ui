@@ -94,6 +94,13 @@ export interface University {
   contactPerson?: string;
   website?: string;
   subscriptionTier: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  // Plan limits & enterprise config
+  isEnterprise?: boolean;
+  maxCourses?: number | null;
+  maxModules?: number | null;
+  maxStudents?: number | null;
+  stripeCustomerId?: string | null;
+  createdByUserId?: number | null;
   createdAt: string;
   updatedAt: string;
   coursesCount?: number;
@@ -121,6 +128,11 @@ export interface UniversityCreate {
   contactPerson?: string;
   website?: string;
   subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  // Plan limits & enterprise config
+  isEnterprise?: boolean;
+  maxCourses?: number | null;
+  maxModules?: number | null;
+  maxStudents?: number | null;
 }
 
 export interface UniversityUpdate {
@@ -143,6 +155,11 @@ export interface UniversityUpdate {
   contactPerson?: string;
   website?: string;
   subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
+  // Plan limits & enterprise config
+  isEnterprise?: boolean;
+  maxCourses?: number | null;
+  maxModules?: number | null;
+  maxStudents?: number | null;
 }
 
 export interface UniversityWithCourses extends University {
@@ -452,16 +469,26 @@ export interface ProfessorAgentStatus {
 }
 
 // Student Types
+export interface StudentCourseEnrollment {
+  courseId: number;
+  courseName: string;
+  enrolledAt: string;
+}
+
 export interface Student {
   id: number;
+  username: string;
   email: string;
   firstName: string;
   lastName: string;
+  externalId?: string; // Matricula
+  isActive: boolean;
   universityId?: number;
   universityName?: string;
+  enrolledCourses: StudentCourseEnrollment[];
+  lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
-  enrolledCourses?: Course[];
 }
 
 export interface StudentCreate {
@@ -985,4 +1012,152 @@ export interface AuditLogFilters extends PaginationParams {
   startDate?: string;
   endDate?: string;
   search?: string;
+}
+
+// Provider Keys - API key management for AI providers
+export interface ProviderKey {
+  id: number;
+  provider: string;
+  keyName: string;
+  maskedKey?: string;
+  region?: string;
+  priority: number;
+  isActive: boolean;
+  lastUsedAt?: string;
+  failureCount: number;
+  lastFailureAt?: string;
+  cooldownUntil?: string;
+  createdAt: string;
+}
+
+export interface ProviderKeyCreate {
+  provider: string;
+  keyName: string;
+  apiKey: string;
+  region?: string;
+  priority?: number;
+  isActive?: boolean;
+}
+
+export interface ProviderKeyUpdate {
+  keyName?: string;
+  apiKey?: string;
+  region?: string;
+  priority?: number;
+  isActive?: boolean;
+}
+
+// Course Type Models - AI model assignment per course type
+export interface CourseTypeModel {
+  id: number;
+  courseType: string;
+  aiModelId: number;
+  aiModel?: AIModel;
+  priority: number;
+  isActive: boolean;
+}
+
+export interface CourseTypeModelCreate {
+  courseType: string;
+  aiModelId: number;
+  priority?: number;
+  isActive?: boolean;
+}
+
+export interface CourseTypeModelUpdate {
+  aiModelId?: number;
+  priority?: number;
+  isActive?: boolean;
+}
+
+// Plans & Subscriptions
+export interface Plan {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  monthlyPriceBRL: number;
+  maxCourses: number;
+  maxModules: number;
+  maxStudents?: number | null;
+  hasAIQuizzes: boolean;
+  hasWhatsApp: boolean;
+  hasPrioritySupport: boolean;
+  hasCustomModelConfig: boolean;
+  trialDays: number;
+  isCustom: boolean;
+}
+
+export type SubscriptionStatus = 'active' | 'trialing' | 'past_due' | 'canceled' | 'incomplete' | 'expired';
+
+export interface Subscription {
+  id: number;
+  universityId: number;
+  planId: number;
+  plan?: Plan;
+  status: SubscriptionStatus;
+  stripeSubscriptionId?: string;
+  currentPeriodStart?: string;
+  currentPeriodEnd?: string;
+  trialEndsAt?: string;
+  canceledAt?: string;
+}
+
+export interface UniversityLimits {
+  maxCourses: number;
+  maxModules: number;
+  maxStudents?: number | null;
+  currentCourses: number;
+  currentModules: number;
+  currentStudents?: number;
+  hasAIQuizzes: boolean;
+  hasWhatsApp: boolean;
+  planName: string;
+  planSlug: string;
+}
+
+export interface UniversityRegistration {
+  universityName: string;
+  universityCode: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  planSlug: string;
+}
+
+// Student Import Types
+export interface StudentImportResult {
+  jobId: number;
+  totalRows: number;
+  createdCount: number;
+  enrolledCount: number;
+  skippedCount: number;
+  errorCount: number;
+  errors: StudentImportError[];
+}
+
+export interface StudentImportError {
+  row: number;
+  matricula: string;
+  email: string;
+  reason: string;
+}
+
+export interface StudentImportJob {
+  id: number;
+  universityId: number;
+  courseId: number;
+  courseName?: string;
+  uploadedByName?: string;
+  fileName: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  totalRows: number;
+  createdCount: number;
+  enrolledCount: number;
+  skippedCount: number;
+  errorCount: number;
+  errorDetails?: string;
+  processedAt?: string;
+  createdAt: string;
 }

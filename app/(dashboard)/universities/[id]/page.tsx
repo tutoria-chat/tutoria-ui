@@ -473,7 +473,7 @@ export default function UniversityDetailsPage() {
       </SuperAdminOnly>
 
       {/* University Stats */}
-      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.isAdmin ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
+      <div className={`grid gap-4 ${user?.role === 'super_admin' || user?.isAdmin ? 'md:grid-cols-5' : 'md:grid-cols-2'}`}>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('stats.courses')}</CardTitle>
@@ -493,6 +493,24 @@ export default function UniversityDetailsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{university?.professorsCount ?? 0}</div>
+            </CardContent>
+          </Card>
+        </AdminOnly>
+
+        {/* Students Card - Admin only */}
+        <AdminOnly>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{t('stats.students')}</CardTitle>
+              <GraduationCap className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{university?.studentsCount ?? 0}</div>
+              {university?.maxStudents && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  / {university.maxStudents.toLocaleString()}
+                </p>
+              )}
             </CardContent>
           </Card>
         </AdminOnly>

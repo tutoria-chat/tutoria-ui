@@ -33,9 +33,9 @@ export function ProtectedRoute({
       return;
     }
 
-    // Check role-based access
+    // Check role-based access — students are redirected to login (they should never access the dashboard)
     if (allowedRoles.length > 0 && user && !allowedRoles.includes(user.role)) {
-      router.push('/dashboard');
+      router.push(user.role === 'student' ? '/login' : '/dashboard');
       return;
     }
 

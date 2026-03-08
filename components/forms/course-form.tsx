@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAuth } from '@/components/auth/auth-provider';
-import { apiClient } from '@/lib/api';
+import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import type { Course, CourseCreate, CourseUpdate, University } from '@/lib/types';
 
@@ -103,7 +103,14 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
       });
     } catch (error) {
       console.error('Form submission error:', error);
-      setErrors({ submit: t('saveError') });
+      if (error instanceof ApiError && error.isPlanLimitError) {
+        toast.error(error.message, {
+          action: { label: t('upgradePlan'), onClick: () => window.location.href = '/subscription' },
+        });
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: error instanceof Error ? error.message : t('saveError') });
+      }
     }
   };
 

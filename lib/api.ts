@@ -64,8 +64,33 @@ import type {
   DashboardSummaryDto,
   UnifiedDashboardResponseDto,
   AuditLog,
-  AuditLogFilters
+  AuditLogFilters,
+  ProviderKey,
+  ProviderKeyCreate,
+  ProviderKeyUpdate,
+  CourseTypeModel,
+  CourseTypeModelCreate,
+  CourseTypeModelUpdate,
+  Plan,
+  Subscription,
+  UniversityLimits,
+  UniversityRegistration,
+  StudentImportResult,
+  StudentImportJob
 } from './types';
+
+export class ApiError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+
+  get isPlanLimitError(): boolean {
+    return this.status === 403 && /limit reached/i.test(this.message);
+  }
+}
 
 export const API_CONFIG = {
   // C# Unified API (Management & Auth endpoints - now combined!)
@@ -289,7 +314,7 @@ class TutoriaAPIClient {
         const errorData = await response.json().catch(() => ({}));
         // Backend uses 'detail' (FastAPI standard) or 'message' for error messages
         const errorMessage = errorData.detail || errorData.message || `HTTP error! status: ${response.status}`;
-        throw new Error(errorMessage);
+        throw new ApiError(errorMessage, response.status);
       }
 
       return await response.json();
@@ -849,6 +874,23 @@ class TutoriaAPIClient {
     return this.delete(`/api/students/${id}`);
   }
 
+  // Student Import endpoints
+  async importStudents(courseId: number, file: globalThis.File): Promise<StudentImportResult> {
+    const formData = new FormData();
+    formData.append('courseId', courseId.toString());
+    formData.append('file', file);
+    return this.post('/api/students/import', formData, { isFormData: true });
+  }
+
+  async getImportJobs(courseId?: number): Promise<StudentImportJob[]> {
+    const params = courseId ? { courseId } : {};
+    return this.get('/api/students/import-jobs', params);
+  }
+
+  async getImportJob(id: number): Promise<StudentImportJob> {
+    return this.get(`/api/students/import-jobs/${id}`);
+  }
+
   // Module Token endpoints
   async getModuleTokens(params?: TokenFilters): Promise<PaginatedResponse<ModuleAccessToken>> {
     return this.get('/api/moduleaccesstokens/', params);
@@ -1121,6 +1163,72 @@ class TutoriaAPIClient {
   // Audit Logs
   async getAuditLogs(params?: AuditLogFilters): Promise<PaginatedResponse<AuditLog>> {
     return this.get('/api/audit-logs', params);
+  }
+
+  // Provider Key endpoints (Super Admin only)
+  async getProviderKeys(): Promise<ProviderKey[]> {
+    return this.get('/api/provider-keys/');
+  }
+
+  async createProviderKey(data: ProviderKeyCreate): Promise<ProviderKey> {
+    return this.post('/api/provider-keys/', data);
+  }
+
+  async updateProviderKey(id: number, data: ProviderKeyUpdate): Promise<ProviderKey> {
+    return this.put(`/api/provider-keys/${id}`, data);
+  }
+
+  async deleteProviderKey(id: number): Promise<void> {
+    return this.delete(`/api/provider-keys/${id}`);
+  }
+
+  // Course Type Model endpoints (Super Admin only)
+  async getCourseTypeModels(courseType?: string): Promise<CourseTypeModel[]> {
+    const params = courseType ? { courseType } : undefined;
+    return this.get('/api/course-type-models/', params);
+  }
+
+  async createCourseTypeModel(data: CourseTypeModelCreate): Promise<CourseTypeModel> {
+    return this.post('/api/course-type-models/', data);
+  }
+
+  async updateCourseTypeModel(id: number, data: CourseTypeModelUpdate): Promise<CourseTypeModel> {
+    return this.put(`/api/course-type-models/${id}`, data);
+  }
+
+  async deleteCourseTypeModel(id: number): Promise<void> {
+    return this.delete(`/api/course-type-models/${id}`);
+  }
+
+  // Plan endpoints
+  async getPlans(): Promise<Plan[]> {
+    return this.get('/api/plans/');
+  }
+
+  async getPlan(id: number): Promise<Plan> {
+    return this.get(`/api/plans/${id}`);
+  }
+
+  // Subscription endpoints
+  async getCurrentSubscription(): Promise<Subscription> {
+    return this.get('/api/subscriptions/current');
+  }
+
+  async getUniversityLimits(): Promise<UniversityLimits> {
+    return this.get('/api/subscriptions/limits');
+  }
+
+  async createCheckoutSession(planSlug: string): Promise<{ checkoutUrl: string }> {
+    return this.post('/api/subscriptions/checkout', { planSlug });
+  }
+
+  async cancelSubscription(): Promise<void> {
+    return this.post('/api/subscriptions/cancel');
+  }
+
+  // University Registration (public - no auth required)
+  async registerUniversity(data: UniversityRegistration): Promise<{ checkoutUrl?: string; universityId: number }> {
+    return this.post('/api/auth/register/university', data);
   }
 
   async exportAuditLogs(filters?: Omit<AuditLogFilters, 'page' | 'size'>): Promise<Blob> {

@@ -1,4 +1,4 @@
-import type { User, UserRole, Permission, PermissionContext } from './types';
+import type { User, UserRole, Permission, PermissionContext, UniversityLimits } from './types';
 
 // Note: Permissions are scoped to user roles and their assigned universities/courses
 export const rolePermissions: Record<UserRole, Permission[]> = {
@@ -279,8 +279,58 @@ export function canAccessPage(
     '/students': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
     '/files': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
     '/tokens': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
+    '/models': (user) => user.role === 'super_admin',
+    '/subscription': (user) => ['super_admin', 'manager', 'professor'].includes(user.role),
   };
 
   const rule = pageRules[pagePath];
   return rule ? rule(user, context) : true;
+}
+
+// ==================== New Permission Checks ====================
+
+/**
+ * Check if user can access the AI Models management page (super_admin only)
+ */
+export function canAccessModelsPage(user: User | null): boolean {
+  if (!user) return false;
+  return user.role === 'super_admin';
+}
+
+/**
+ * Check if user can access the Subscription page (non-enterprise universities only)
+ * Enterprise universities manage limits directly via super_admin, not via subscription.
+ */
+export function canAccessSubscription(user: User | null, isEnterprise?: boolean): boolean {
+  if (!user) return false;
+  // Enterprise universities don't use subscription management
+  if (isEnterprise) return false;
+  // Must be a role that can manage university settings
+  return ['super_admin', 'manager', 'professor'].includes(user.role);
+}
+
+/**
+ * Check if the user's university can create a new course, based on plan limits.
+ * Returns true if within limits, false if at or over the limit.
+ */
+export function canCreateCourse(user: User | null, limits?: UniversityLimits | null): boolean {
+  if (!user) return false;
+  // Super admins bypass limits
+  if (user.role === 'super_admin') return true;
+  // If no limits data available, allow (will be enforced server-side)
+  if (!limits) return true;
+  return limits.currentCourses < limits.maxCourses;
+}
+
+/**
+ * Check if the user's university can create a new module, based on plan limits.
+ * Returns true if within limits, false if at or over the limit.
+ */
+export function canCreateModule(user: User | null, limits?: UniversityLimits | null): boolean {
+  if (!user) return false;
+  // Super admins bypass limits
+  if (user.role === 'super_admin') return true;
+  // If no limits data available, allow (will be enforced server-side)
+  if (!limits) return true;
+  return limits.currentModules < limits.maxModules;
 }

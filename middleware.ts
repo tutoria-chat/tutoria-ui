@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 // Define protected routes and their access requirements
-const protectedRoutes = ['/dashboard', '/universities', '/courses', '/modules', '/files', '/professors', '/students', '/tokens', '/admin', '/profile'];
-const authRoutes = ['/login', '/forgot-password', '/reset-password'];
+const protectedRoutes = ['/dashboard', '/universities', '/courses', '/modules', '/files', '/professors', '/students', '/tokens', '/admin', '/profile', '/models', '/subscription'];
+const authRoutes = ['/login', '/forgot-password', '/reset-password', '/signup'];
 const superAdminOnlyRoutes = ['/admin', '/universities'];
 const adminOnlyRoutes = ['/professors'];
 
