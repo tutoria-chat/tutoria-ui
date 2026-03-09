@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Combobox } from '@/components/ui/combobox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -173,22 +173,16 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
             <FormItem>
               <FormLabel htmlFor="universityId">{t('universityLabel')}</FormLabel>
               {user?.role === 'super_admin' ? (
-                <Select
+                <Combobox
+                  options={universities.map((university) => ({
+                    value: String(university.id),
+                    label: university.name,
+                  }))}
                   value={String(formData.universityId)}
                   onValueChange={(value) => handleInputChange('universityId', value)}
+                  placeholder={loadingUniversities ? t('loadingUniversities') : t('universityPlaceholder')}
                   disabled={isLoading || loadingUniversities}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={loadingUniversities ? t('loadingUniversities') : t('universityPlaceholder')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {universities.map((university) => (
-                      <SelectItem key={university.id} value={String(university.id)}>
-                        {university.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                />
               ) : (
                 <Input
                   value={user?.universityId ? t('universityIdLabel', { id: user.universityId }) : t('noUniversity')}

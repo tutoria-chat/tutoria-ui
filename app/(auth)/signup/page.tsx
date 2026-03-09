@@ -35,6 +35,8 @@ const FALLBACK_PLANS: Plan[] = [
     hasCustomModelConfig: false,
     trialDays: 30,
     isCustom: false,
+    displayOrder: 1,
+    isActive: true,
   },
   {
     id: 2,
@@ -51,6 +53,8 @@ const FALLBACK_PLANS: Plan[] = [
     hasCustomModelConfig: false,
     trialDays: 30,
     isCustom: false,
+    displayOrder: 2,
+    isActive: true,
   },
   {
     id: 3,
@@ -67,6 +71,8 @@ const FALLBACK_PLANS: Plan[] = [
     hasCustomModelConfig: true,
     trialDays: 30,
     isCustom: false,
+    displayOrder: 3,
+    isActive: true,
   },
 ];
 

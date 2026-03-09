@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Combobox } from '@/components/ui/combobox';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -17,8 +18,10 @@ import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 import type {
   AIModel,
+  AIModelCreate,
   ProviderKey,
   ProviderKeyCreate,
   CourseTypeModel,
@@ -30,20 +33,129 @@ import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
 // ==================== AI Models Tab ====================
+const EMPTY_AI_MODEL: AIModelCreate = {
+  modelName: '',
+  displayName: '',
+  provider: 'openai',
+  maxTokens: 4096,
+  supportsVision: false,
+  supportsFunctionCalling: false,
+  inputCostPer1M: 0,
+  outputCostPer1M: 0,
+  requiredTier: 3,
+  isActive: true,
+  isDeprecated: false,
+  description: '',
+  recommendedFor: '',
+};
+
 function AIModelsTab() {
   const t = useTranslations('models.aiModels');
   const tCommon = useTranslations('common');
   const [searchTerm, setSearchTerm] = useState('');
   const { confirm, dialog } = useConfirmDialog();
 
-  const { data: aiModels, loading } = useFetch<AIModel[]>('/api/ai-models/');
+  const [allModels, setAllModels] = useState<AIModel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingModel, setEditingModel] = useState<AIModel | null>(null);
+  const [formData, setFormData] = useState<AIModelCreate>(EMPTY_AI_MODEL);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const models = aiModels || [];
-  const filtered = models.filter(m =>
+  const loadModels = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await apiClient.getAIModels({ include_deprecated: true });
+      setAllModels(data);
+    } catch (error) {
+      console.error('Failed to load AI models:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => { loadModels(); }, [loadModels]);
+
+  const filtered = allModels.filter(m =>
     m.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     m.modelName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     m.provider?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const openCreate = () => {
+    setEditingModel(null);
+    setFormData(EMPTY_AI_MODEL);
+    setIsDialogOpen(true);
+  };
+
+  const openEdit = (model: AIModel) => {
+    setEditingModel(model);
+    setFormData({
+      modelName: model.modelName,
+      displayName: model.displayName,
+      provider: model.provider,
+      maxTokens: model.maxTokens,
+      supportsVision: model.supportsVision,
+      supportsFunctionCalling: model.supportsFunctionCalling,
+      inputCostPer1M: model.inputCostPer1M ?? 0,
+      outputCostPer1M: model.outputCostPer1M ?? 0,
+      requiredTier: model.requiredTier,
+      isActive: model.isActive,
+      isDeprecated: model.isDeprecated,
+      deprecationDate: model.deprecationDate,
+      description: model.description || '',
+      recommendedFor: model.recommendedFor || '',
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.modelName.trim() || !formData.displayName.trim()) {
+      toast.error(t('validationError'));
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      if (editingModel) {
+        await apiClient.updateAIModel(editingModel.id, formData);
+        toast.success(t('updateSuccess'));
+      } else {
+        await apiClient.createAIModel(formData);
+        toast.success(t('createSuccess'));
+      }
+      setIsDialogOpen(false);
+      loadModels();
+    } catch (error) {
+      console.error('Failed to save AI model:', error);
+      toast.error(editingModel ? t('updateError') : t('createError'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = (model: AIModel) => {
+    confirm({
+      title: t('deleteConfirm'),
+      description: t('deleteConfirmDesc', { name: model.displayName }),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.deleteAIModel(model.id);
+          toast.success(t('deleteSuccess'));
+          loadModels();
+        } catch (error) {
+          console.error('Failed to delete AI model:', error);
+          toast.error(t('deleteError'));
+        }
+      },
+    });
+  };
+
+  const updateField = <K extends keyof AIModelCreate>(field: K, value: AIModelCreate[K]) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const columns: TableColumn<AIModel>[] = [
     {
@@ -111,10 +223,32 @@ function AIModelsTab() {
         return <Badge variant="outline">{tierLabels[tier] || `Tier ${tier}`}</Badge>;
       }
     },
+    {
+      key: 'actions',
+      label: tCommon('buttons.actions'),
+      width: '100px',
+      render: (_, model) => (
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="sm" onClick={() => openEdit(model)}>
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => handleDelete(model)}>
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
+        </div>
+      ),
+    },
   ];
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button onClick={openCreate}>
+          <Plus className="mr-2 h-4 w-4" />
+          {t('addModel')}
+        </Button>
+      </div>
+
       <DataTable
         data={filtered}
         columns={columns}
@@ -126,6 +260,129 @@ function AIModelsTab() {
         }}
         emptyMessage={t('emptyMessage')}
       />
+
+      {/* Create / Edit Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingModel ? t('editTitle') : t('createTitle')}</DialogTitle>
+            <DialogDescription>{editingModel ? t('editDescription') : t('createDescription')}</DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('form.modelName')}</label>
+              <Input
+                value={formData.modelName}
+                onChange={(e) => updateField('modelName', e.target.value)}
+                placeholder="gpt-4o"
+                disabled={!!editingModel}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('form.displayName')}</label>
+              <Input
+                value={formData.displayName}
+                onChange={(e) => updateField('displayName', e.target.value)}
+                placeholder="GPT-4o"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('form.provider')}</label>
+              <Select value={formData.provider} onValueChange={(v) => updateField('provider', v as 'openai' | 'anthropic')}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="openai">OpenAI</SelectItem>
+                  <SelectItem value="anthropic">Anthropic</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('form.maxTokens')}</label>
+              <Input
+                type="number"
+                min="1"
+                value={formData.maxTokens}
+                onChange={(e) => updateField('maxTokens', parseInt(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('columns.inputCost')} ($)</label>
+              <Input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.inputCostPer1M ?? 0}
+                onChange={(e) => updateField('inputCostPer1M', parseFloat(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('columns.outputCost')} ($)</label>
+              <Input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.outputCostPer1M ?? 0}
+                onChange={(e) => updateField('outputCostPer1M', parseFloat(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('columns.tier')}</label>
+              <Select value={formData.requiredTier.toString()} onValueChange={(v) => updateField('requiredTier', parseInt(v))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1 - Basic</SelectItem>
+                  <SelectItem value="2">2 - Standard</SelectItem>
+                  <SelectItem value="3">3 - Premium</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-1">{t('form.description')}</label>
+              <Textarea
+                value={formData.description || ''}
+                onChange={(e) => updateField('description', e.target.value)}
+                rows={2}
+              />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium mb-1">{t('form.recommendedFor')}</label>
+              <Input
+                value={formData.recommendedFor || ''}
+                onChange={(e) => updateField('recommendedFor', e.target.value)}
+              />
+            </div>
+            <div className="col-span-2 grid grid-cols-2 gap-3">
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm font-medium">{t('form.supportsVision')}</span>
+                <Switch checked={formData.supportsVision} onCheckedChange={(v) => updateField('supportsVision', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm font-medium">{t('form.supportsFunctions')}</span>
+                <Switch checked={formData.supportsFunctionCalling} onCheckedChange={(v) => updateField('supportsFunctionCalling', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm font-medium">{t('active')}</span>
+                <Switch checked={formData.isActive} onCheckedChange={(v) => updateField('isActive', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <span className="text-sm font-medium">{t('deprecated')}</span>
+                <Switch checked={formData.isDeprecated} onCheckedChange={(v) => updateField('isDeprecated', v)} />
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              {tCommon('buttons.cancel')}
+            </Button>
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? t('saving') : editingModel ? tCommon('buttons.save') : t('addModel')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {dialog}
     </div>
   );
@@ -519,19 +776,16 @@ function CourseTypeConfigTab() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('form.aiModel')}</label>
-              <Select
+              <Combobox
+                options={allAIModels.filter(m => m.isActive).map(m => ({
+                  value: m.id.toString(),
+                  label: `${m.displayName} (${m.provider})`,
+                }))}
                 value={newConfig.aiModelId ? newConfig.aiModelId.toString() : ''}
-                onValueChange={(v) => setNewConfig(prev => ({ ...prev, aiModelId: parseInt(v) }))}
-              >
-                <SelectTrigger><SelectValue placeholder={t('form.selectModel')} /></SelectTrigger>
-                <SelectContent>
-                  {allAIModels.filter(m => m.isActive).map(m => (
-                    <SelectItem key={m.id} value={m.id.toString()}>
-                      {m.displayName} ({m.provider})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onValueChange={(v) => setNewConfig(prev => ({ ...prev, aiModelId: parseInt(v) || 0 }))}
+                placeholder={t('form.selectModel')}
+                searchPlaceholder={t('form.searchModel') ?? undefined}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('form.priority')}</label>
@@ -608,17 +862,17 @@ function UniversityOverridesTab() {
 
   return (
     <div className="space-y-4">
-      <div>
-        <Select value={selectedUniversityId} onValueChange={setSelectedUniversityId}>
-          <SelectTrigger className="w-[300px]">
-            <SelectValue placeholder={t('selectUniversity')} />
-          </SelectTrigger>
-          <SelectContent>
-            {univList.map(u => (
-              <SelectItem key={u.id} value={u.id.toString()}>{u.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div className="w-[300px]">
+        <Combobox
+          options={univList.map(u => ({
+            value: u.id.toString(),
+            label: u.name,
+          }))}
+          value={selectedUniversityId}
+          onValueChange={setSelectedUniversityId}
+          placeholder={t('selectUniversity')}
+          searchPlaceholder={t('searchUniversity') ?? undefined}
+        />
       </div>
 
       {selectedUniversityId ? (

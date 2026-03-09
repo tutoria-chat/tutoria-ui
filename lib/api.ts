@@ -16,6 +16,7 @@ import type {
   ModuleUpdate,
   ModuleWithDetails,
   AIModel,
+  AIModelCreate,
   File,
   FileResponse,
   Professor,
@@ -72,6 +73,7 @@ import type {
   CourseTypeModelCreate,
   CourseTypeModelUpdate,
   Plan,
+  PlanCreate,
   Subscription,
   UniversityLimits,
   UniversityRegistration,
@@ -609,6 +611,18 @@ class TutoriaAPIClient {
 
   async getAIModel(id: number): Promise<AIModel> {
     return this.get(`/api/ai-models/${id}`);
+  }
+
+  async createAIModel(data: AIModelCreate): Promise<AIModel> {
+    return this.post('/api/ai-models/', data);
+  }
+
+  async updateAIModel(id: number, data: Partial<AIModelCreate>): Promise<AIModel> {
+    return this.put(`/api/ai-models/${id}`, data);
+  }
+
+  async deleteAIModel(id: number): Promise<void> {
+    return this.delete(`/api/ai-models/${id}`);
   }
 
   // File endpoints
@@ -1205,11 +1219,31 @@ class TutoriaAPIClient {
     return this.get('/api/plans/');
   }
 
+  async getAllPlans(): Promise<Plan[]> {
+    return this.get('/api/plans/all');
+  }
+
   async getPlan(id: number): Promise<Plan> {
     return this.get(`/api/plans/${id}`);
   }
 
+  async createPlan(data: PlanCreate): Promise<Plan> {
+    return this.post('/api/plans/', data);
+  }
+
+  async updatePlan(id: number, data: PlanCreate): Promise<Plan> {
+    return this.put(`/api/plans/${id}`, data);
+  }
+
+  async deletePlan(id: number): Promise<void> {
+    return this.delete(`/api/plans/${id}`);
+  }
+
   // Subscription endpoints
+  async getAllSubscriptions(): Promise<Subscription[]> {
+    return this.get('/api/subscriptions/admin/all');
+  }
+
   async getCurrentSubscription(): Promise<Subscription> {
     return this.get('/api/subscriptions/current');
   }

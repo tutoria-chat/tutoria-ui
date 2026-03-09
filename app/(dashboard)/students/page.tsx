@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Combobox } from '@/components/ui/combobox';
 import { DataTable } from '@/components/shared/data-table';
 import {
   Dialog,
@@ -277,48 +278,40 @@ export default function StudentsPage() {
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <label className="block text-sm font-medium mb-2">{tList('filterByUniversity')}</label>
-                  <Select
+                  <Combobox
+                    options={[
+                      { value: 'all', label: tList('allUniversities') },
+                      ...universities.map((uni) => ({
+                        value: uni.id.toString(),
+                        label: uni.name,
+                      })),
+                    ]}
                     value={selectedUniversityId?.toString() || 'all'}
                     onValueChange={(val) => {
-                      setSelectedUniversityId(val === 'all' ? null : parseInt(val));
+                      setSelectedUniversityId(val === 'all' || !val ? null : parseInt(val));
                       setSelectedCourseId(null);
                       setPage(1);
                     }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={tList('filterByUniversityPlaceholder')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">{tList('allUniversities')}</SelectItem>
-                      {universities.map((uni) => (
-                        <SelectItem key={uni.id} value={uni.id.toString()}>
-                          {uni.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder={tList('filterByUniversityPlaceholder')}
+                  />
                 </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium mb-2">{tList('filterByCourse')}</label>
-                  <Select
+                  <Combobox
+                    options={[
+                      { value: 'all', label: tList('allCourses') },
+                      ...courses.map((course) => ({
+                        value: course.id.toString(),
+                        label: course.name,
+                      })),
+                    ]}
                     value={selectedCourseId?.toString() || 'all'}
                     onValueChange={(val) => {
-                      setSelectedCourseId(val === 'all' ? null : parseInt(val));
+                      setSelectedCourseId(val === 'all' || !val ? null : parseInt(val));
                       setPage(1);
                     }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={tList('filterByCoursePlaceholder')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">{tList('allCourses')}</SelectItem>
-                      {courses.map((course) => (
-                        <SelectItem key={course.id} value={course.id.toString()}>
-                          {course.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    placeholder={tList('filterByCoursePlaceholder')}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -329,25 +322,21 @@ export default function StudentsPage() {
         {!isSuperAdmin && (
           <div className="flex items-center gap-4">
             <div className="w-64">
-              <Select
+              <Combobox
+                options={[
+                  { value: 'all', label: tList('allCourses') },
+                  ...courses.map((course) => ({
+                    value: course.id.toString(),
+                    label: course.name,
+                  })),
+                ]}
                 value={selectedCourseId?.toString() || 'all'}
                 onValueChange={(val) => {
-                  setSelectedCourseId(val === 'all' ? null : parseInt(val));
+                  setSelectedCourseId(val === 'all' || !val ? null : parseInt(val));
                   setPage(1);
                 }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={tList('filterByCoursePlaceholder')} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{tList('allCourses')}</SelectItem>
-                  {courses.map((course) => (
-                    <SelectItem key={course.id} value={course.id.toString()}>
-                      {course.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder={tList('filterByCoursePlaceholder')}
+              />
             </div>
           </div>
         )}

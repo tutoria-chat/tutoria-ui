@@ -21,7 +21,9 @@
       "instructionsTitle": "Como fazer login:",
       "instructionUsername": "Use seu <strong>nome de usuário</strong> ou <strong>e-mail institucional</strong>",
       "instructionPassword": "Digite sua <strong>senha</strong> fornecida pelo administrador",
-      "instructionFirstAccess": "Se é seu primeiro acesso, use o link de configuração de senha que recebeu"
+      "instructionFirstAccess": "Se é seu primeiro acesso, use o link de configuração de senha que recebeu",
+      "noAccount": "Não tem uma conta?",
+      "signUp": "Cadastre-se"
     }
   },
   "dashboard": {
@@ -1571,6 +1573,8 @@
     "superAdmins": "Super Administradores",
     "globalSearch": "Busca Global",
     "aiModels": "Modelos de IA",
+    "plans": "Planos",
+    "subscriptions": "Assinaturas",
     "subscription": "Assinatura",
     "systemOnline": "Sistema Online",
     "version": "Versão 1.0.0",
@@ -4688,6 +4692,31 @@
       "inactive": "Inativo",
       "deprecated": "Depreciado",
       "searchPlaceholder": "Buscar modelos...",
+      "addModel": "Adicionar Modelo",
+      "createTitle": "Adicionar Modelo de IA",
+      "createDescription": "Adicionar um novo modelo de IA à plataforma.",
+      "editTitle": "Editar Modelo de IA",
+      "editDescription": "Atualizar detalhes e preços do modelo.",
+      "createSuccess": "Modelo criado com sucesso.",
+      "createError": "Falha ao criar o modelo.",
+      "updateSuccess": "Modelo atualizado com sucesso.",
+      "updateError": "Falha ao atualizar o modelo.",
+      "deleteConfirm": "Excluir Modelo?",
+      "deleteConfirmDesc": "Tem certeza que deseja desativar \"{name}\"?",
+      "deleteSuccess": "Modelo desativado com sucesso.",
+      "deleteError": "Falha ao desativar o modelo.",
+      "validationError": "Nome do modelo e nome de exibição são obrigatórios.",
+      "saving": "Salvando...",
+      "form": {
+        "modelName": "Nome do Modelo",
+        "displayName": "Nome de Exibição",
+        "provider": "Provedor",
+        "maxTokens": "Máx. Tokens",
+        "description": "Descrição",
+        "recommendedFor": "Recomendado Para",
+        "supportsVision": "Suporta Visão",
+        "supportsFunctions": "Chamada de Funções"
+      },
       "emptyMessage": "Nenhum modelo de IA encontrado."
     },
     "apiKeys": {
@@ -4755,6 +4784,7 @@
         "courseType": "Tipo de Curso",
         "aiModel": "Modelo de IA",
         "selectModel": "Selecione um modelo",
+        "searchModel": "Buscar modelos...",
         "priority": "Prioridade"
       }
     },
@@ -4768,8 +4798,97 @@
       "active": "Ativo",
       "inactive": "Inativo",
       "selectUniversity": "Selecione uma universidade",
+      "searchUniversity": "Buscar universidades...",
       "selectUniversityPrompt": "Selecione uma universidade para ver suas substituições de modelo por tipo de curso.",
       "emptyMessage": "Nenhuma substituição configurada para esta universidade."
+    }
+  },
+  "adminSubscriptions": {
+    "title": "Todas as Assinaturas",
+    "description": "Visão geral de todas as assinaturas universitárias ({total} no total)",
+    "breadcrumb": "Administração",
+    "loadError": "Falha ao carregar as assinaturas.",
+    "searchPlaceholder": "Buscar por universidade, plano ou ID Stripe...",
+    "emptyMessage": "Nenhuma assinatura encontrada.",
+    "all": "Todas",
+    "columns": {
+      "university": "Universidade",
+      "plan": "Plano",
+      "status": "Status",
+      "period": "Período",
+      "to": "até",
+      "trialEnd": "Fim do Teste",
+      "stripeId": "ID Stripe",
+      "createdAt": "Criada"
+    },
+    "statuses": {
+      "active": "Ativa",
+      "trialing": "Em Teste",
+      "past_due": "Vencida",
+      "canceled": "Cancelada",
+      "incomplete": "Incompleta",
+      "expired": "Expirada"
+    }
+  },
+  "plans": {
+    "title": "Gestão de Planos",
+    "description": "Gerencie planos de assinatura, preços e limites de recursos",
+    "breadcrumb": "Administração",
+    "loadError": "Falha ao carregar os planos.",
+    "createButton": "Criar Plano",
+    "searchPlaceholder": "Buscar planos por nome, slug ou ID Stripe...",
+    "emptyMessage": "Nenhum plano encontrado. Crie seu primeiro plano para começar.",
+    "createTitle": "Criar Plano",
+    "createDescription": "Definir um novo plano de assinatura com preços e limites.",
+    "editTitle": "Editar Plano",
+    "editDescription": "Atualizar detalhes do plano, preços e limites.",
+    "createSuccess": "Plano criado com sucesso.",
+    "createError": "Falha ao criar o plano.",
+    "updateSuccess": "Plano atualizado com sucesso.",
+    "updateError": "Falha ao atualizar o plano.",
+    "deleteConfirm": "Desativar Plano",
+    "deleteConfirmDesc": "Tem certeza que deseja desativar o plano \"{name}\"? As universidades neste plano não serão afetadas.",
+    "deleteSuccess": "Plano desativado com sucesso.",
+    "deleteError": "Falha ao desativar o plano.",
+    "validationError": "Nome e slug são obrigatórios.",
+    "saving": "Salvando...",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "columns": {
+      "name": "Plano",
+      "price": "Preço (R$)",
+      "stripePriceId": "ID de Preço Stripe",
+      "limits": "Limites",
+      "courses": "Disciplinas",
+      "modules": "Módulos",
+      "students": "Estudantes",
+      "features": "Recursos",
+      "order": "Ordem",
+      "status": "Status"
+    },
+    "features": {
+      "quizzes": "Quizzes IA",
+      "whatsapp": "WhatsApp",
+      "priority": "Suporte Prioritário",
+      "customModel": "Modelos Personalizados"
+    },
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "ex. Profissional",
+      "slug": "Slug",
+      "slugPlaceholder": "ex. profissional",
+      "price": "Preço Mensal (BRL)",
+      "stripePriceId": "ID de Preço Stripe",
+      "maxCourses": "Máx. Disciplinas",
+      "maxModules": "Máx. Módulos",
+      "maxStudents": "Máx. Estudantes",
+      "unlimited": "Ilimitado",
+      "trialDays": "Dias de Teste",
+      "displayOrder": "Ordem de Exibição",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Breve descrição do plano...",
+      "isActive": "Ativo",
+      "isCustom": "Plano Personalizado"
     }
   },
   "signup": {

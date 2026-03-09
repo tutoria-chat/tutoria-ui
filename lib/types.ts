@@ -223,6 +223,23 @@ export interface AIModel {
   updatedAt?: string;
 }
 
+export interface AIModelCreate {
+  modelName: string;
+  displayName: string;
+  provider: 'openai' | 'anthropic';
+  maxTokens: number;
+  supportsVision: boolean;
+  supportsFunctionCalling: boolean;
+  inputCostPer1M?: number;
+  outputCostPer1M?: number;
+  requiredTier: number;
+  isActive: boolean;
+  isDeprecated: boolean;
+  deprecationDate?: string;
+  description?: string;
+  recommendedFor?: string;
+}
+
 // Module Types
 export interface Module {
   id: number;
@@ -1077,6 +1094,7 @@ export interface Plan {
   slug: string;
   description?: string;
   monthlyPriceBRL: number;
+  stripePriceId?: string | null;
   maxCourses: number;
   maxModules: number;
   maxStudents?: number | null;
@@ -1085,6 +1103,29 @@ export interface Plan {
   hasPrioritySupport: boolean;
   hasCustomModelConfig: boolean;
   trialDays: number;
+  displayOrder: number;
+  isActive: boolean;
+  isCustom: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PlanCreate {
+  name: string;
+  slug: string;
+  description?: string;
+  monthlyPriceBRL: number;
+  stripePriceId?: string;
+  maxCourses: number;
+  maxModules: number;
+  maxStudents?: number | null;
+  hasAIQuizzes: boolean;
+  hasWhatsApp: boolean;
+  hasPrioritySupport: boolean;
+  hasCustomModelConfig: boolean;
+  trialDays: number;
+  displayOrder: number;
+  isActive: boolean;
   isCustom: boolean;
 }
 
@@ -1093,14 +1134,20 @@ export type SubscriptionStatus = 'active' | 'trialing' | 'past_due' | 'canceled'
 export interface Subscription {
   id: number;
   universityId: number;
+  universityName?: string;
   planId: number;
   plan?: Plan;
+  planName?: string;
+  planSlug?: string;
   status: SubscriptionStatus;
   stripeSubscriptionId?: string;
+  stripeCustomerId?: string;
   currentPeriodStart?: string;
   currentPeriodEnd?: string;
   trialEndsAt?: string;
   canceledAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UniversityLimits {

@@ -21,7 +21,9 @@
       "instructionsTitle": "How to log in:",
       "instructionUsername": "Use your <strong>username</strong> or <strong>institutional email</strong>",
       "instructionPassword": "Enter your <strong>password</strong> provided by the administrator",
-      "instructionFirstAccess": "If this is your first access, use the password setup link you received"
+      "instructionFirstAccess": "If this is your first access, use the password setup link you received",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
     }
   },
   "dashboard": {
@@ -1574,6 +1576,8 @@
     "superAdmins": "Super Administrators",
     "globalSearch": "Global Search",
     "aiModels": "AI Models",
+    "plans": "Plans",
+    "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "systemOnline": "System Online",
     "version": "Version 1.0.0",
@@ -3744,7 +3748,32 @@
       "inactive": "Inactive",
       "deprecated": "Deprecated",
       "searchPlaceholder": "Search models...",
-      "emptyMessage": "No AI models found."
+      "emptyMessage": "No AI models found.",
+      "addModel": "Add Model",
+      "createTitle": "Add AI Model",
+      "createDescription": "Add a new AI model to the platform.",
+      "editTitle": "Edit AI Model",
+      "editDescription": "Update AI model details and pricing.",
+      "createSuccess": "AI model created successfully.",
+      "createError": "Failed to create AI model.",
+      "updateSuccess": "AI model updated successfully.",
+      "updateError": "Failed to update AI model.",
+      "deleteConfirm": "Delete AI Model?",
+      "deleteConfirmDesc": "Are you sure you want to deactivate \"{name}\"?",
+      "deleteSuccess": "AI model deactivated successfully.",
+      "deleteError": "Failed to deactivate AI model.",
+      "validationError": "Model name and display name are required.",
+      "saving": "Saving...",
+      "form": {
+        "modelName": "Model Name",
+        "displayName": "Display Name",
+        "provider": "Provider",
+        "maxTokens": "Max Tokens",
+        "description": "Description",
+        "recommendedFor": "Recommended For",
+        "supportsVision": "Supports Vision",
+        "supportsFunctions": "Function Calling"
+      }
     },
     "apiKeys": {
       "columns": {
@@ -3811,6 +3840,7 @@
         "courseType": "Course Type",
         "aiModel": "AI Model",
         "selectModel": "Select a model",
+        "searchModel": "Search models...",
         "priority": "Priority"
       }
     },
@@ -3824,8 +3854,97 @@
       "active": "Active",
       "inactive": "Inactive",
       "selectUniversity": "Select a university",
+      "searchUniversity": "Search universities...",
       "selectUniversityPrompt": "Select a university to view its course type model overrides.",
       "emptyMessage": "No overrides configured for this university."
+    }
+  },
+  "adminSubscriptions": {
+    "title": "All Subscriptions",
+    "description": "Overview of all university subscriptions ({total} total)",
+    "breadcrumb": "Administration",
+    "loadError": "Failed to load subscriptions.",
+    "searchPlaceholder": "Search by university, plan, or Stripe ID...",
+    "emptyMessage": "No subscriptions found.",
+    "all": "All",
+    "columns": {
+      "university": "University",
+      "plan": "Plan",
+      "status": "Status",
+      "period": "Period",
+      "to": "to",
+      "trialEnd": "Trial End",
+      "stripeId": "Stripe ID",
+      "createdAt": "Created"
+    },
+    "statuses": {
+      "active": "Active",
+      "trialing": "Trialing",
+      "past_due": "Past Due",
+      "canceled": "Canceled",
+      "incomplete": "Incomplete",
+      "expired": "Expired"
+    }
+  },
+  "plans": {
+    "title": "Plans Management",
+    "description": "Manage subscription plans, pricing, and feature limits",
+    "breadcrumb": "Administration",
+    "loadError": "Failed to load plans.",
+    "createButton": "Create Plan",
+    "searchPlaceholder": "Search plans by name, slug, or Stripe ID...",
+    "emptyMessage": "No plans found. Create your first plan to get started.",
+    "createTitle": "Create Plan",
+    "createDescription": "Define a new subscription plan with pricing and limits.",
+    "editTitle": "Edit Plan",
+    "editDescription": "Update plan details, pricing, and feature limits.",
+    "createSuccess": "Plan created successfully.",
+    "createError": "Failed to create plan.",
+    "updateSuccess": "Plan updated successfully.",
+    "updateError": "Failed to update plan.",
+    "deleteConfirm": "Deactivate Plan",
+    "deleteConfirmDesc": "Are you sure you want to deactivate the plan \"{name}\"? Universities on this plan will not be affected.",
+    "deleteSuccess": "Plan deactivated successfully.",
+    "deleteError": "Failed to deactivate plan.",
+    "validationError": "Name and slug are required.",
+    "saving": "Saving...",
+    "active": "Active",
+    "inactive": "Inactive",
+    "columns": {
+      "name": "Plan",
+      "price": "Price (R$)",
+      "stripePriceId": "Stripe Price ID",
+      "limits": "Limits",
+      "courses": "Courses",
+      "modules": "Modules",
+      "students": "Students",
+      "features": "Features",
+      "order": "Order",
+      "status": "Status"
+    },
+    "features": {
+      "quizzes": "AI Quizzes",
+      "whatsapp": "WhatsApp",
+      "priority": "Priority Support",
+      "customModel": "Custom Models"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "e.g. Professional",
+      "slug": "Slug",
+      "slugPlaceholder": "e.g. professional",
+      "price": "Monthly Price (BRL)",
+      "stripePriceId": "Stripe Price ID",
+      "maxCourses": "Max Courses",
+      "maxModules": "Max Modules",
+      "maxStudents": "Max Students",
+      "unlimited": "Unlimited",
+      "trialDays": "Trial Days",
+      "displayOrder": "Display Order",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief plan description...",
+      "isActive": "Active",
+      "isCustom": "Custom Plan"
     }
   },
   "signup": {

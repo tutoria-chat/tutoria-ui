@@ -24,7 +24,8 @@ import {
   List,
   ClipboardList,
   Bot,
-  CreditCard
+  CreditCard,
+  Receipt
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -83,7 +84,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('subscription'),
       href: '/subscription',
       icon: CreditCard,
-      roles: ['super_admin', 'manager', 'professor'],
+      roles: ['manager', 'professor'],
     },
   ];
 
@@ -98,6 +99,18 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('aiModels'),
       href: '/models',
       icon: Bot,
+      roles: ['super_admin'],
+    },
+    {
+      label: t('plans'),
+      href: '/admin/plans',
+      icon: Receipt,
+      roles: ['super_admin'],
+    },
+    {
+      label: t('subscriptions'),
+      href: '/admin/subscriptions',
+      icon: CreditCard,
       roles: ['super_admin'],
     },
     {

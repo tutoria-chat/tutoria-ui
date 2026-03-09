@@ -280,7 +280,9 @@ export function canAccessPage(
     '/files': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
     '/tokens': (user) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(user.role),
     '/models': (user) => user.role === 'super_admin',
-    '/subscription': (user) => ['super_admin', 'manager', 'professor'].includes(user.role),
+    '/admin/plans': (user) => user.role === 'super_admin',
+    '/admin/subscriptions': (user) => user.role === 'super_admin',
+    '/subscription': (user) => ['manager', 'professor'].includes(user.role),
   };
 
   const rule = pageRules[pagePath];

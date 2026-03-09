@@ -143,32 +143,12 @@ export function LoginForm() {
           </Button>
         </form>
 
-        {/* <div className="mt-4 text-center text-sm space-y-2">
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-left">
-            <p className="text-blue-900 font-medium text-sm mb-2">🧪 Contas de Demonstração (Senha: admin)</p>
-            <div className="space-y-1 text-xs text-blue-700">
-              <div className="flex justify-between">
-                <code className="bg-blue-100 px-2 py-1 rounded">admin</code>
-                <span className="text-blue-600">Super Admin - Acesso Total</span>
-              </div>
-              <div className="flex justify-between">
-                <code className="bg-blue-100 px-2 py-1 rounded">professor</code>
-                <span className="text-blue-600">Admin Professor - Universidade</span>
-              </div>
-              <div className="flex justify-between">
-                <code className="bg-blue-100 px-2 py-1 rounded">teacher</code>
-                <span className="text-blue-600">Professor Regular - Disciplinas</span>
-              </div>
-            </div>
-          </div>
-          
-          <Link 
-            href="/forgot-password" 
-            className="text-primary hover:underline inline-block"
-          >
-            Esqueceu sua senha?
+        <div className="mt-4 text-center text-sm text-muted-foreground">
+          {t('noAccount')}{' '}
+          <Link href="/signup" className="text-primary font-medium hover:underline">
+            {t('signUp')}
           </Link>
-        </div> */}
+        </div>
 
         <div className="mt-6 text-center text-xs text-muted-foreground">
           <p>{t('copyright', { year: new Date().getFullYear() })}</p>
