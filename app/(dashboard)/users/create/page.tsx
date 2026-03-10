@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PermissionEditor } from '@/components/forms/permission-editor';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/api';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -34,10 +35,16 @@ export default function CreateUserPage() {
   const [universities, setUniversities] = useState<University[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [extraPermissionIds, setExtraPermissionIds] = useState<number[]>([]);
 
   useEffect(() => {
     fetchUniversities();
   }, []);
+
+  // Reset extra permissions when role changes
+  useEffect(() => {
+    setExtraPermissionIds([]);
+  }, [formData.userType]);
 
   const fetchUniversities = async () => {
     try {
@@ -115,7 +122,20 @@ export default function CreateUserPage() {
         payload.universityId = parseInt(formData.universityId);
       }
 
-      await apiClient.post('/api/users', payload);
+      const newUser = await apiClient.post<{ userId: number }>('/api/users', payload);
+
+      // If extra permissions were selected, set them on the newly created user
+      if (extraPermissionIds.length > 0 && newUser?.userId) {
+        try {
+          await apiClient.setUserExtraPermissions(newUser.userId, extraPermissionIds);
+        } catch (permError) {
+          console.error('Failed to set extra permissions:', permError);
+          // User was created but permissions failed - show partial success
+          toast.warning(t('successMessage') + ' ' + t('permissionsWarning'));
+          router.push('/users');
+          return;
+        }
+      }
 
       toast.success(t('successMessage'));
       router.push('/users');
@@ -296,12 +316,22 @@ export default function CreateUserPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pt-br">Português (Brasil)</SelectItem>
+                  <SelectItem value="pt-br">Portugues (Brasil)</SelectItem>
                   <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="es">Español</SelectItem>
+                  <SelectItem value="es">Espanol</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Permission Editor - shown after role selection */}
+            {formData.userType && (
+              <PermissionEditor
+                role={formData.userType}
+                extraPermissionIds={extraPermissionIds}
+                onChange={setExtraPermissionIds}
+                disabled={loading}
+              />
+            )}
 
             <div className="flex gap-4">
               <Button type="submit" disabled={loading}>

@@ -24,7 +24,11 @@ import {
   Info,
   Lightbulb,
   Plus,
-  RefreshCw
+  RefreshCw,
+  Brain,
+  ClipboardList,
+  Sparkles,
+  HelpCircle
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -44,6 +48,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { TokenModal } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -51,7 +57,7 @@ import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
-import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -91,6 +97,23 @@ export default function ModuleDetailsPage() {
   const [youtubeError, setYoutubeError] = useState<string | null>(null);
   // AI Config update state
   const [isUpdatingAIConfig, setIsUpdatingAIConfig] = useState(false);
+
+  // Quiz Bank state
+  const tQuiz = useTranslations('quizBank');
+  const [quizzes, setQuizzes] = useState<QuizQuestion[]>([]);
+  const [quizzesLoading, setQuizzesLoading] = useState(false);
+  const [quizUploadModalOpen, setQuizUploadModalOpen] = useState(false);
+  const [quizSelectedFile, setQuizSelectedFile] = useState<File[]>([]);
+  const [isExtractingQuiz, setIsExtractingQuiz] = useState(false);
+  const [extractedQuestions, setExtractedQuestions] = useState<ExtractedQuestion[]>([]);
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
+  const [isConfirmingQuizzes, setIsConfirmingQuizzes] = useState(false);
+  const [isGeneratingQuizzes, setIsGeneratingQuizzes] = useState(false);
+  const [viewQuizDialogOpen, setViewQuizDialogOpen] = useState(false);
+  const [viewingQuiz, setViewingQuiz] = useState<QuizQuestion | null>(null);
+  const [deleteQuizConfirmOpen, setDeleteQuizConfirmOpen] = useState(false);
+  const [quizToDelete, setQuizToDelete] = useState<number | null>(null);
+  const [universityLimits, setUniversityLimits] = useState<UniversityLimits | null>(null);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -374,6 +397,106 @@ export default function ModuleDetailsPage() {
     return file.contentType || file.fileType || t('fileTypeUnknown');
   };
 
+  // Quiz Bank functions
+  const loadQuizzes = useCallback(async () => {
+    setQuizzesLoading(true);
+    try {
+      const data = await apiClient.getModuleQuizzes(moduleId);
+      setQuizzes(data);
+    } catch (err) {
+      console.error('Failed to load quizzes:', err);
+    } finally {
+      setQuizzesLoading(false);
+    }
+  }, [moduleId]);
+
+  const loadUniversityLimits = useCallback(async () => {
+    try {
+      const limits = await apiClient.getUniversityLimits();
+      setUniversityLimits(limits);
+    } catch (err) {
+      console.error('Failed to load university limits:', err);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadQuizzes();
+    loadUniversityLimits();
+  }, [loadQuizzes, loadUniversityLimits]);
+
+  const handleQuizFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (quizSelectedFile.length === 0) return;
+
+    setIsExtractingQuiz(true);
+    try {
+      const result = await apiClient.uploadQuizFile(moduleId, quizSelectedFile[0]);
+      if (result.questions && result.questions.length > 0) {
+        const questions = result.questions.map((q: ExtractedQuestion) => ({ ...q, selected: true }));
+        setExtractedQuestions(questions);
+        setQuizUploadModalOpen(false);
+        setQuizSelectedFile([]);
+        setReviewDialogOpen(true);
+      } else {
+        toast.error(tQuiz('review.noQuestionsExtracted'));
+      }
+    } catch (err) {
+      console.error('Failed to extract quizzes:', err);
+      toast.error(tQuiz('uploadError'));
+    } finally {
+      setIsExtractingQuiz(false);
+    }
+  };
+
+  const handleConfirmQuizzes = async () => {
+    const selected = extractedQuestions.filter(q => q.selected !== false);
+    if (selected.length === 0) return;
+
+    setIsConfirmingQuizzes(true);
+    try {
+      await apiClient.confirmExtractedQuizzes(moduleId, selected);
+      toast.success(tQuiz('uploadSuccess'));
+      setReviewDialogOpen(false);
+      setExtractedQuestions([]);
+      loadQuizzes();
+    } catch (err) {
+      console.error('Failed to confirm quizzes:', err);
+      toast.error(tQuiz('uploadError'));
+    } finally {
+      setIsConfirmingQuizzes(false);
+    }
+  };
+
+  const handleGenerateQuizzes = async () => {
+    setIsGeneratingQuizzes(true);
+    try {
+      await apiClient.generateModuleQuizzes(moduleId, true, 50);
+      toast.success(tQuiz('generateSuccess'));
+      loadQuizzes();
+    } catch (err) {
+      console.error('Failed to generate quizzes:', err);
+      toast.error(tQuiz('generateError'));
+    } finally {
+      setIsGeneratingQuizzes(false);
+    }
+  };
+
+  const confirmDeleteQuiz = async () => {
+    if (!quizToDelete) return;
+    try {
+      await apiClient.deleteQuiz(moduleId, quizToDelete);
+      toast.success(tQuiz('deleteSuccess'));
+      setDeleteQuizConfirmOpen(false);
+      setQuizToDelete(null);
+      loadQuizzes();
+    } catch (err) {
+      console.error('Failed to delete quiz:', err);
+      toast.error(tQuiz('deleteError'));
+    }
+  };
+
+  const canGenerateWithAI = user?.role === 'super_admin' || universityLimits?.hasAIQuizzes;
+
   const fileColumns: TableColumn<FileType>[] = [
     {
       key: 'fileName',
@@ -620,6 +743,73 @@ export default function ModuleDetailsPage() {
     }
   ];
 
+  const quizColumns: TableColumn<QuizQuestion>[] = [
+    {
+      key: 'question_number',
+      label: tQuiz('columns.number'),
+      sortable: true,
+      width: '60px',
+      render: (value) => <span className="font-mono text-sm">{value as number}</span>,
+    },
+    {
+      key: 'question_text',
+      label: tQuiz('columns.question'),
+      sortable: false,
+      render: (_, quiz) => (
+        <div className="max-w-[300px] truncate text-sm" title={quiz.question_text}>
+          {quiz.question_text}
+        </div>
+      ),
+    },
+    {
+      key: 'difficulty',
+      label: tQuiz('columns.difficulty'),
+      sortable: true,
+      width: '100px',
+      render: (value) => {
+        const diff = value as string;
+        const variant = diff === 'easy' ? 'bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400' :
+                        diff === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400' :
+                        'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400';
+        return <Badge className={variant}>{tQuiz(`difficulty.${diff}`)}</Badge>;
+      },
+    },
+    {
+      key: 'correct_answer',
+      label: tQuiz('columns.answer'),
+      sortable: false,
+      width: '80px',
+      render: (value) => <Badge variant="outline" className="font-mono">{value as string}</Badge>,
+    },
+    {
+      key: 'source',
+      label: tQuiz('columns.source'),
+      sortable: true,
+      width: '120px',
+      render: (_, quiz) => {
+        const src = quiz.source || 'ai_generated';
+        return <Badge variant="secondary">{tQuiz(`source.${src}`)}</Badge>;
+      },
+    },
+    {
+      key: 'actions',
+      label: t('columns.actions'),
+      width: '100px',
+      render: (_, quiz) => (
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="sm" onClick={() => { setViewingQuiz(quiz); setViewQuizDialogOpen(true); }}>
+            <Eye className="h-4 w-4" />
+          </Button>
+          <ProfessorOnly>
+            <Button variant="ghost" size="sm" onClick={() => { setQuizToDelete(quiz.id); setDeleteQuizConfirmOpen(true); }}>
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </ProfessorOnly>
+        </div>
+      ),
+    },
+  ];
+
   if (moduleLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -707,165 +897,262 @@ export default function ModuleDetailsPage() {
         }
       />
 
-      {/* Module Information */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('moduleInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {module.description && (
-              <div>
-                <h4 className="font-medium text-sm text-muted-foreground mb-2">{t('description')}</h4>
-                <p className="text-sm leading-relaxed">{module.description}</p>
-              </div>
+      <Tabs defaultValue="content" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="content" className="gap-2">
+            <FileText className="h-4 w-4" />
+            {tQuiz('contentTab')}
+          </TabsTrigger>
+          <TabsTrigger value="quiz-bank" className="gap-2">
+            <ClipboardList className="h-4 w-4" />
+            {tQuiz('tabLabel')}
+            {quizzes.length > 0 && (
+              <Badge variant="secondary" className="ml-1 text-xs">{quizzes.length}</Badge>
             )}
+          </TabsTrigger>
+        </TabsList>
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              {module.code && (
-                <div>
-                  <p className="text-muted-foreground">{t('code')}</p>
-                  <p className="font-medium font-mono">{module.code}</p>
+        <TabsContent value="content" className="space-y-6">
+          {/* Module Information */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('moduleInfo')}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {module.description && (
+                  <div>
+                    <h4 className="font-medium text-sm text-muted-foreground mb-2">{t('description')}</h4>
+                    <p className="text-sm leading-relaxed">{module.description}</p>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  {module.code && (
+                    <div>
+                      <p className="text-muted-foreground">{t('code')}</p>
+                      <p className="font-medium font-mono">{module.code}</p>
+                    </div>
+                  )}
+                  {module.semester && (
+                    <div>
+                      <p className="text-muted-foreground">{t('semester')}</p>
+                      <p className="font-medium">{module.semester}</p>
+                    </div>
+                  )}
+                  {module.year && (
+                    <div>
+                      <p className="text-muted-foreground">{t('year')}</p>
+                      <p className="font-medium">{module.year}</p>
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-muted-foreground">{t('createdAt')}</p>
+                    <p className="font-medium">{formatDateShort(module.createdAt)}</p>
+                  </div>
                 </div>
-              )}
-              {module.semester && (
-                <div>
-                  <p className="text-muted-foreground">{t('semester')}</p>
-                  <p className="font-medium">{module.semester}</p>
+
+                <div className="flex items-center space-x-2 pt-2">
+                  <Bot className={`h-4 w-4 ${module.systemPrompt ? 'text-green-500' : 'text-muted-foreground'}`} />
+                  <Badge variant={module.systemPrompt ? "default" : "secondary"}>
+                    {module.systemPrompt ? t('aiTutorConfigured') : t('aiTutorNotConfigured')}
+                  </Badge>
                 </div>
-              )}
-              {module.year && (
-                <div>
-                  <p className="text-muted-foreground">{t('year')}</p>
-                  <p className="font-medium">{module.year}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>{t('stats')}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold">{files?.length || 0}</p>
+                    <p className="text-sm text-muted-foreground">{t('files')}</p>
+                  </div>
+                  <FileText className="h-8 w-8 text-blue-500" />
                 </div>
-              )}
-              <div>
-                <p className="text-muted-foreground">{t('createdAt')}</p>
-                <p className="font-medium">{formatDateShort(module.createdAt)}</p>
-              </div>
-            </div>
 
-            <div className="flex items-center space-x-2 pt-2">
-              <Bot className={`h-4 w-4 ${module.systemPrompt ? 'text-green-500' : 'text-muted-foreground'}`} />
-              <Badge variant={module.systemPrompt ? "default" : "secondary"}>
-                {module.systemPrompt ? t('aiTutorConfigured') : t('aiTutorNotConfigured')}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
+                <AdminOnly>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold">{tokens?.length || 0}</p>
+                      <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
+                    </div>
+                    <BookOpen className="h-8 w-8 text-purple-500" />
+                  </div>
+                </AdminOnly>
+              </CardContent>
+            </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('stats')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-2xl font-bold">{files?.length || 0}</p>
-                <p className="text-sm text-muted-foreground">{t('files')}</p>
-              </div>
-              <FileText className="h-8 w-8 text-blue-500" />
-            </div>
-
-            <AdminOnly>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold">{tokens?.length || 0}</p>
-                  <p className="text-sm text-muted-foreground">{t('accessTokens')}</p>
-                </div>
-                <BookOpen className="h-8 w-8 text-purple-500" />
-              </div>
-            </AdminOnly>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Upload Actions */}
-      <ProfessorOnly>
-        <div className="flex gap-4">
-          <Button
-            onClick={() => setFileUploadModalOpen(true)}
-            className="flex-1"
-          >
-            <Upload className="mr-2 h-4 w-4" />
-            {t('uploadFile')}
-          </Button>
-          <Button
-            onClick={() => setYoutubeUploadModalOpen(true)}
-            variant="outline"
-            className="flex-1"
-          >
-            <Youtube className="mr-2 h-4 w-4" />
-            {t('addYoutubeVideo') || 'Add YouTube Video'}
-          </Button>
-          <Button
-            onClick={handleUpdateAIConfig}
-            variant="outline"
-            className="flex-1"
-            disabled={isUpdatingAIConfig || !files || files.length === 0}
-            title={t('updateAIConfigDesc')}
-          >
-            {isUpdatingAIConfig ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('updateAIConfigRunning')}
-              </>
-            ) : (
-              <>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                {t('updateAIConfig')}
-              </>
-            )}
-          </Button>
-        </div>
-      </ProfessorOnly>
-
-      {/* Files List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('moduleFiles')}</CardTitle>
-          <CardDescription>
-            {t('filesAvailable')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <DataTable
-            data={files || []}
-            columns={fileColumns}
-            loading={moduleLoading}
-            emptyMessage={t('noFiles')}
-          />
-        </CardContent>
-      </Card>
-
-      {/* Module Tokens */}
-      <AdminOnly>
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>{t('moduleTokens')}</CardTitle>
-                <CardDescription>
-                  {t('tokensGenerated')}
-                </CardDescription>
-              </div>
-              <Button onClick={() => setTokenModalOpen(true)}>
-                <Key className="mr-2 h-4 w-4" />
-                {t('createToken')}
+          {/* Upload Actions */}
+          <ProfessorOnly>
+            <div className="flex gap-4">
+              <Button
+                onClick={() => setFileUploadModalOpen(true)}
+                className="flex-1"
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {t('uploadFile')}
+              </Button>
+              <Button
+                onClick={() => setYoutubeUploadModalOpen(true)}
+                variant="outline"
+                className="flex-1"
+              >
+                <Youtube className="mr-2 h-4 w-4" />
+                {t('addYoutubeVideo') || 'Add YouTube Video'}
+              </Button>
+              <Button
+                onClick={handleUpdateAIConfig}
+                variant="outline"
+                className="flex-1"
+                disabled={isUpdatingAIConfig || !files || files.length === 0}
+                title={t('updateAIConfigDesc')}
+              >
+                {isUpdatingAIConfig ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {t('updateAIConfigRunning')}
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="mr-2 h-4 w-4" />
+                    {t('updateAIConfig')}
+                  </>
+                )}
               </Button>
             </div>
-          </CardHeader>
-          <CardContent>
-            <DataTable
-              data={tokens || []}
-              columns={tokenColumns}
-              loading={tokensLoading}
-              emptyMessage={t('noTokens')}
-            />
-          </CardContent>
-        </Card>
-      </AdminOnly>
+          </ProfessorOnly>
+
+          {/* Files List */}
+          <Card>
+            <CardHeader>
+              <CardTitle>{t('moduleFiles')}</CardTitle>
+              <CardDescription>
+                {t('filesAvailable')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable
+                data={files || []}
+                columns={fileColumns}
+                loading={moduleLoading}
+                emptyMessage={t('noFiles')}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Module Tokens */}
+          <AdminOnly>
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>{t('moduleTokens')}</CardTitle>
+                    <CardDescription>
+                      {t('tokensGenerated')}
+                    </CardDescription>
+                  </div>
+                  <Button onClick={() => setTokenModalOpen(true)}>
+                    <Key className="mr-2 h-4 w-4" />
+                    {t('createToken')}
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <DataTable
+                  data={tokens || []}
+                  columns={tokenColumns}
+                  loading={tokensLoading}
+                  emptyMessage={t('noTokens')}
+                />
+              </CardContent>
+            </Card>
+          </AdminOnly>
+        </TabsContent>
+
+        <TabsContent value="quiz-bank" className="space-y-6">
+          {/* Stats bar */}
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="text-sm font-medium">
+              {tQuiz('totalQuestions', { count: quizzes.length })}
+            </div>
+            {quizzes.length > 0 && (
+              <div className="flex gap-1.5">
+                <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400">
+                  {tQuiz('difficulty.easy')}: {quizzes.filter(q => q.difficulty === 'easy').length}
+                </Badge>
+                <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400">
+                  {tQuiz('difficulty.medium')}: {quizzes.filter(q => q.difficulty === 'medium').length}
+                </Badge>
+                <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400">
+                  {tQuiz('difficulty.hard')}: {quizzes.filter(q => q.difficulty === 'hard').length}
+                </Badge>
+              </div>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <ProfessorOnly>
+            <div className="flex flex-wrap gap-2">
+              <Button onClick={() => setQuizUploadModalOpen(true)}>
+                <Upload className="mr-2 h-4 w-4" />
+                {tQuiz('uploadButton')}
+              </Button>
+
+              {canGenerateWithAI ? (
+                <Button
+                  variant="outline"
+                  onClick={handleGenerateQuizzes}
+                  disabled={isGeneratingQuizzes}
+                >
+                  {isGeneratingQuizzes ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="mr-2 h-4 w-4" />
+                  )}
+                  {isGeneratingQuizzes ? tQuiz('generating') : tQuiz('generateButton')}
+                </Button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" disabled>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {tQuiz('generateButton')}
+                  </Button>
+                  <span className="text-xs text-muted-foreground">
+                    {tQuiz('generatePremiumOnly')} —{' '}
+                    <Link href="/subscription" className="underline text-primary">
+                      {tQuiz('upgradeLink')}
+                    </Link>
+                  </span>
+                </div>
+              )}
+            </div>
+          </ProfessorOnly>
+
+          {/* Quiz DataTable */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <ClipboardList className="h-5 w-5" />
+                {tQuiz('title')}
+              </CardTitle>
+              <CardDescription>{tQuiz('description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <DataTable
+                data={quizzes}
+                columns={quizColumns}
+                loading={quizzesLoading}
+                emptyMessage={canGenerateWithAI ? tQuiz('emptyMessage') : tQuiz('emptyMessageStarterPlan')}
+              />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Token Creation Modal */}
       <TokenModal
@@ -1134,6 +1421,199 @@ export default function ModuleDetailsPage() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Quiz File Upload Dialog */}
+      <Dialog open={quizUploadModalOpen} onOpenChange={setQuizUploadModalOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{tQuiz('uploadButton')}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleQuizFileUpload} className="space-y-4">
+            <FileUpload
+              onFileSelect={setQuizSelectedFile}
+              accept=".pdf,.docx,.doc,.xlsx,.xls,.csv,.txt"
+              multiple={false}
+              maxSizeMB={10}
+              selectedFiles={quizSelectedFile}
+              translations={{
+                clickToSelect: t('fileUpload.clickToSelect'),
+                supportedFormats: 'PDF, DOCX, XLSX, CSV, TXT',
+                maxSize: t('fileUpload.maxSize', { maxSizeMB: 10 }),
+                filesSelected: `${quizSelectedFile.length} file(s) selected`
+              }}
+            />
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setQuizUploadModalOpen(false)}>
+                {tCommon('buttons.cancel')}
+              </Button>
+              <Button type="submit" disabled={quizSelectedFile.length === 0 || isExtractingQuiz}>
+                {isExtractingQuiz ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {tQuiz('uploading')}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    {tQuiz('uploadButton')}
+                  </>
+                )}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Review Extracted Questions Dialog */}
+      <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{tQuiz('review.title')}</DialogTitle>
+            <p className="text-sm text-muted-foreground">{tQuiz('review.description')}</p>
+          </DialogHeader>
+
+          <div className="flex items-center justify-between py-2">
+            <span className="text-sm font-medium">
+              {tQuiz('review.selected', {
+                selected: extractedQuestions.filter(q => q.selected !== false).length,
+                total: extractedQuestions.length
+              })}
+            </span>
+            <div className="flex gap-2">
+              <Button variant="ghost" size="sm" onClick={() => setExtractedQuestions(prev => prev.map(q => ({ ...q, selected: true })))}>
+                {tQuiz('review.selectAll')}
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setExtractedQuestions(prev => prev.map(q => ({ ...q, selected: false })))}>
+                {tQuiz('review.deselectAll')}
+              </Button>
+            </div>
+          </div>
+
+          <div className="space-y-4 max-h-[50vh] overflow-y-auto">
+            {extractedQuestions.map((q, idx) => (
+              <div key={idx} className={`border rounded-lg p-4 space-y-2 ${q.selected === false ? 'opacity-50' : ''}`}>
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    checked={q.selected !== false}
+                    onCheckedChange={(checked) => {
+                      setExtractedQuestions(prev => prev.map((item, i) => i === idx ? { ...item, selected: checked === true } : item));
+                    }}
+                  />
+                  <div className="flex-1 space-y-2">
+                    <p className="text-sm font-medium">{idx + 1}. {q.question}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                      {Object.entries(q.options || {}).map(([key, opt]) => {
+                        const isCorrect = key === q.correct_answer;
+                        const text = typeof opt === 'object' ? (opt as { text: string }).text : String(opt);
+                        return (
+                          <div key={key} className={`text-xs px-2 py-1 rounded ${isCorrect ? 'bg-green-100 dark:bg-green-950 font-medium' : 'bg-muted'}`}>
+                            <span className="font-semibold">{key})</span> {text}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <Badge variant="outline" className="text-xs">
+                      {tQuiz(`difficulty.${q.difficulty || 'medium'}`)}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setReviewDialogOpen(false)}>
+              {tQuiz('review.cancel')}
+            </Button>
+            <Button
+              onClick={handleConfirmQuizzes}
+              disabled={isConfirmingQuizzes || extractedQuestions.filter(q => q.selected !== false).length === 0}
+            >
+              {isConfirmingQuizzes && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {tQuiz('review.confirm')}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Quiz Detail Dialog */}
+      <Dialog open={viewQuizDialogOpen} onOpenChange={setViewQuizDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{tQuiz('view.title')}</DialogTitle>
+          </DialogHeader>
+          {viewingQuiz && (
+            <div className="space-y-4">
+              <p className="text-sm font-medium">{viewingQuiz.question_text}</p>
+
+              <div className="space-y-2">
+                {(['A', 'B', 'C', 'D', 'E'] as const).map((key) => {
+                  const optionText = viewingQuiz.options[key];
+                  if (!optionText) return null;
+                  const isCorrect = key === viewingQuiz.correct_answer;
+                  const explanation = viewingQuiz.explanations[key];
+                  return (
+                    <div key={key} className={`border rounded-lg p-3 ${isCorrect ? 'border-green-500 bg-green-50 dark:bg-green-950/50' : ''}`}>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={isCorrect ? 'default' : 'outline'} className={isCorrect ? 'bg-green-600' : ''}>
+                          {key}
+                        </Badge>
+                        <span className="text-sm">{optionText}</span>
+                        {isCorrect && <Badge className="bg-green-600 ml-auto">{tQuiz('view.correctAnswer')}</Badge>}
+                      </div>
+                      {explanation && (
+                        <p className="text-xs text-muted-foreground mt-2 ml-8">
+                          <span className="font-medium">{tQuiz('view.explanation')}:</span> {explanation}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {viewingQuiz.concepts_covered && viewingQuiz.concepts_covered.length > 0 && (
+                <div>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">{tQuiz('view.concepts')}</p>
+                  <div className="flex flex-wrap gap-1">
+                    {viewingQuiz.concepts_covered.map((concept, i) => (
+                      <Badge key={i} variant="secondary" className="text-xs">{concept}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Badge variant="outline">
+                  {tQuiz(`difficulty.${viewingQuiz.difficulty}`)}
+                </Badge>
+                {viewingQuiz.source && (
+                  <Badge variant="secondary">
+                    {tQuiz(`source.${viewingQuiz.source}`)}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Quiz Confirmation */}
+      <AlertDialog open={deleteQuizConfirmOpen} onOpenChange={setDeleteQuizConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{tQuiz('deleteConfirm')}</AlertDialogTitle>
+            <AlertDialogDescription>{tQuiz('deleteConfirmDesc')}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{tCommon('buttons.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteQuiz} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              {tCommon('buttons.delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -1055,6 +1055,7 @@
       "submitButton": "Create User",
       "successMessage": "User created successfully!",
       "errorMessage": "Failed to create user",
+      "permissionsWarning": "However, extra permissions could not be saved.",
       "fields": {
         "userType": {
           "label": "Role",
@@ -1577,6 +1578,7 @@
     "globalSearch": "Global Search",
     "aiModels": "AI Models",
     "plans": "Plans",
+    "permissions": "Permissions",
     "subscriptions": "Subscriptions",
     "subscription": "Subscription",
     "systemOnline": "System Online",
@@ -3886,6 +3888,56 @@
       "expired": "Expired"
     }
   },
+  "adminPermissions": {
+    "title": "Permissions Management",
+    "description": "Create and manage system permissions for the claims-based authorization system",
+    "breadcrumb": "Administration",
+    "loadError": "Failed to load permissions.",
+    "createButton": "Create Permission",
+    "searchPlaceholder": "Search by code, resource, or category...",
+    "emptyMessage": "No permissions found.",
+    "createTitle": "Create Permission",
+    "createDescription": "Define a new permission for the authorization system.",
+    "editTitle": "Edit Permission",
+    "editDescription": "Update permission details.",
+    "createSuccess": "Permission created successfully.",
+    "createError": "Failed to create permission.",
+    "updateSuccess": "Permission updated successfully.",
+    "updateError": "Failed to update permission.",
+    "deleteConfirm": "Delete Permission",
+    "deleteConfirmDesc": "Are you sure you want to delete the permission \"{code}\"? This may affect users who have this permission.",
+    "deleteSuccess": "Permission deleted successfully.",
+    "deleteError": "Failed to delete permission. It may be assigned to roles or users.",
+    "validationError": "Code, resource, action, and category are required.",
+    "saving": "Saving...",
+    "columns": {
+      "code": "Code",
+      "resource": "Resource",
+      "action": "Action",
+      "scope": "Scope",
+      "category": "Category",
+      "description": "Description",
+      "order": "Order"
+    },
+    "form": {
+      "code": "Permission Code",
+      "codePlaceholder": "e.g. reports:create",
+      "resource": "Resource",
+      "resourcePlaceholder": "e.g. report",
+      "action": "Action",
+      "scope": "Scope",
+      "category": "Category",
+      "categoryPlaceholder": "e.g. Reports",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of what this permission allows",
+      "displayOrder": "Display Order"
+    },
+    "scopes": {
+      "global": "Global",
+      "university": "University",
+      "course": "Course"
+    }
+  },
   "plans": {
     "title": "Plans Management",
     "description": "Manage subscription plans, pricing, and feature limits",
@@ -4041,6 +4093,101 @@
       "incomplete": "Incomplete",
       "expired": "Expired"
     }
+  },
+  "permissionEditor": {
+    "title": "Permissions",
+    "description": "Configure granular permissions for this user. Role defaults are shown as disabled checkboxes. Toggle extra permissions as needed.",
+    "roleDefaultsHint": "Grayed out checkboxes are included by the role and cannot be removed.",
+    "loadError": "Failed to load permissions. Please try again.",
+    "roleDefault": "role",
+    "extraCount": "{count} extra permission(s) added",
+    "savePermissions": "Save Permissions",
+    "saveSuccess": "Permissions saved successfully",
+    "saveError": "Failed to save permissions",
+    "permissionsWarning": "However, extra permissions could not be saved.",
+    "actions": {
+      "create": "Create",
+      "read": "Read",
+      "update": "Update",
+      "delete": "Delete",
+      "manage": "Manage"
+    },
+    "categories": {
+      "courses": "Courses",
+      "modules": "Modules",
+      "staff": "Staff",
+      "students": "Students",
+      "files": "Files",
+      "tokens": "Access Tokens",
+      "universities": "Universities",
+      "analytics": "Analytics",
+      "subscription": "Subscription",
+      "other": "Other"
+    }
+  },
+  "quizBank": {
+    "contentTab": "Content",
+    "tabLabel": "Quiz Bank",
+    "title": "Question Bank",
+    "description": "Manage quiz questions for this module",
+    "uploadButton": "Upload question file",
+    "generateButton": "Generate with AI",
+    "generatePremiumOnly": "Available on Professional and Business plans",
+    "upgradeLink": "Upgrade your plan",
+    "generating": "Generating questions...",
+    "uploading": "Extracting questions...",
+    "totalQuestions": "{count} questions",
+    "noQuestions": "0 questions",
+    "emptyMessage": "No quiz questions yet. Upload a question file or generate questions with AI.",
+    "emptyMessageStarterPlan": "No quiz questions yet. Upload a question file to get started.",
+    "columns": {
+      "number": "#",
+      "question": "Question",
+      "difficulty": "Difficulty",
+      "answer": "Answer",
+      "source": "Source"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "source": {
+      "ai_generated": "AI Generated",
+      "uploaded": "Uploaded",
+      "manual": "Manual"
+    },
+    "stats": {
+      "total": "Total",
+      "byDifficulty": "By difficulty",
+      "bySource": "By source"
+    },
+    "review": {
+      "title": "Review Extracted Questions",
+      "description": "Review the questions extracted from your file. Uncheck any you want to skip.",
+      "found": "{count} questions found",
+      "selected": "{selected} of {total} selected",
+      "confirm": "Confirm & Save",
+      "cancel": "Cancel",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "noQuestionsExtracted": "No questions could be extracted from this file."
+    },
+    "view": {
+      "title": "Question Details",
+      "correctAnswer": "Correct answer",
+      "explanation": "Explanation",
+      "concepts": "Concepts covered"
+    },
+    "uploadSuccess": "Questions saved successfully!",
+    "uploadError": "Failed to extract questions from file",
+    "generateSuccess": "Questions generated successfully!",
+    "generateError": "Failed to generate questions",
+    "deleteConfirm": "Delete this question?",
+    "deleteConfirmDesc": "This action cannot be undone.",
+    "deleteSuccess": "Question deleted",
+    "deleteError": "Failed to delete question",
+    "loadError": "Failed to load quiz questions"
   }
 }
 

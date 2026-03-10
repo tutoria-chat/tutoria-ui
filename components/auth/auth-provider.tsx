@@ -15,6 +15,7 @@ interface JWTPayload {
   universityId?: number;
   isAdmin?: boolean;
   assignedCourses?: number[];
+  permissions?: string; // JSON-serialized array of permission codes from JWT
   exp: number;
   iat: number;
 }
@@ -73,6 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     universityId: userData.universityId,
                     isAdmin: userData.isAdmin || false,
                     assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
+                    permissions: userData.permissions || [],
+                    extraPermissions: userData.extraPermissions || [],
                     createdAt: userData.createdAt || new Date().toISOString(),
                     updatedAt: userData.updatedAt || new Date().toISOString(),
                     lastLoginAt: userData.lastLoginAt,
@@ -92,7 +95,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   setUser(parsedUser);
                 }
               } else {
-                // User data is up to date
+                // User data has firstName but may be missing permissions - refresh if needed
+                if (!parsedUser.permissions || parsedUser.permissions.length === 0) {
+                  // First try to parse permissions directly from JWT for instant availability
+                  try {
+                    if (decoded.permissions) {
+                      const jwtPermissions = JSON.parse(decoded.permissions);
+                      if (Array.isArray(jwtPermissions) && jwtPermissions.length > 0) {
+                        parsedUser.permissions = jwtPermissions;
+                      }
+                    }
+                  } catch {
+                    // JWT parsing failed, will try /me
+                  }
+
+                  // Then refresh from /me in background for extra permissions
+                  try {
+                    apiClient.setToken(storedToken);
+                    const userData = await apiClient.getCurrentUser();
+                    parsedUser.permissions = userData.permissions || parsedUser.permissions || [];
+                    parsedUser.extraPermissions = userData.extraPermissions || [];
+                    localStorage.setItem('tutoria_user', JSON.stringify(parsedUser));
+                  } catch {
+                    // /me failed, but JWT permissions are already set above
+                  }
+                }
                 setUser(parsedUser);
               }
             } else {
@@ -143,6 +170,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           universityId: userData.universityId,
           isAdmin: userData.isAdmin || false,
           assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
+          permissions: userData.permissions || [],
+          extraPermissions: userData.extraPermissions || [],
           createdAt: userData.createdAt || new Date().toISOString(),
           updatedAt: userData.updatedAt || new Date().toISOString(),
           lastLoginAt: userData.lastLoginAt,

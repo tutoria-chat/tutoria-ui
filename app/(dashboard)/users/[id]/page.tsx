@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/layout/page-header';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { AdminOnly, SuperAdminOnly, RoleGuard } from '@/components/auth/role-guard';
+import { PermissionEditor } from '@/components/forms/permission-editor';
 import { apiClient } from '@/lib/api';
 import {
   ArrowLeft,
@@ -24,9 +25,11 @@ import {
   Edit,
   Building,
   Calendar,
-  Clock
+  Clock,
+  Save,
+  Shield
 } from 'lucide-react';
-import type { UserResponse, BreadcrumbItem } from '@/lib/types';
+import type { UserResponse, BreadcrumbItem, PermissionDefinition } from '@/lib/types';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/auth/auth-provider';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -51,6 +54,7 @@ export default function UserDetailPage() {
   const t = useTranslations('users.detail');
   const tCommon = useTranslations('common');
   const tPwValidation = useTranslations('common.passwordValidation');
+  const tPerms = useTranslations('permissionEditor');
 
   const [user, setUser] = useState<UserResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -72,9 +76,12 @@ export default function UserDetailPage() {
   const [newPassword, setNewPassword] = useState('');
   const [passwordValidation, setPasswordValidation] = useState(validatePasswordStrength(''));
 
-  const isSuperAdmin = currentUser?.role === 'super_admin';
-  const isManager = currentUser?.role === 'manager';
-  const canManageUser = isSuperAdmin || isManager;
+  // Permissions state
+  const [extraPermissionIds, setExtraPermissionIds] = useState<number[]>([]);
+  const [initialExtraPermissionIds, setInitialExtraPermissionIds] = useState<number[]>([]);
+  const [isSavingPermissions, setIsSavingPermissions] = useState(false);
+
+  const canManageUser = currentUser?.permissions?.includes('staff:update') ?? false;
 
   const loadUser = useCallback(async () => {
     setIsLoading(true);
@@ -96,9 +103,22 @@ export default function UserDetailPage() {
     }
   }, [userId, t]);
 
+  const loadPermissions = useCallback(async () => {
+    try {
+      const extras = await apiClient.getUserExtraPermissions(userId);
+      const ids = extras.map((p: PermissionDefinition) => p.id);
+      setExtraPermissionIds(ids);
+      setInitialExtraPermissionIds(ids);
+    } catch (err) {
+      console.error('Failed to load user permissions:', err);
+      // Don't block the page for permission loading failures
+    }
+  }, [userId]);
+
   useEffect(() => {
     loadUser();
-  }, [loadUser]);
+    loadPermissions();
+  }, [loadUser, loadPermissions]);
 
   useEffect(() => {
     if (newPassword) {
@@ -244,6 +264,26 @@ export default function UserDetailPage() {
       setIsUpdating(false);
     }
   };
+
+  const handleSavePermissions = async () => {
+    setIsSavingPermissions(true);
+    try {
+      await apiClient.setUserExtraPermissions(userId, extraPermissionIds);
+      setInitialExtraPermissionIds([...extraPermissionIds]);
+      toast.success(tPerms('saveSuccess'));
+    } catch (err: any) {
+      console.error('Failed to save permissions:', err);
+      toast.error(err.message || tPerms('saveError'));
+    } finally {
+      setIsSavingPermissions(false);
+    }
+  };
+
+  // Check if permissions have changed from initial state
+  const permissionsChanged =
+    extraPermissionIds.length !== initialExtraPermissionIds.length ||
+    extraPermissionIds.some(id => !initialExtraPermissionIds.includes(id)) ||
+    initialExtraPermissionIds.some(id => !extraPermissionIds.includes(id));
 
   if (isLoading) {
     return (
@@ -420,6 +460,34 @@ export default function UserDetailPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Permissions Card */}
+        {canManageUser && user.userType !== 'student' && (
+          <div className="space-y-4">
+            <PermissionEditor
+              role={user.userType}
+              extraPermissionIds={extraPermissionIds}
+              onChange={setExtraPermissionIds}
+              disabled={isSavingPermissions}
+            />
+
+            {permissionsChanged && (
+              <div className="flex justify-end">
+                <Button
+                  onClick={handleSavePermissions}
+                  disabled={isSavingPermissions}
+                >
+                  {isSavingPermissions ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="mr-2 h-4 w-4" />
+                  )}
+                  {tPerms('savePermissions')}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Actions Card - Only for users who can manage */}
         {canManageUser && !isEditing && (

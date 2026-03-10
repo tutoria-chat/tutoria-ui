@@ -78,7 +78,10 @@ import type {
   UniversityLimits,
   UniversityRegistration,
   StudentImportResult,
-  StudentImportJob
+  StudentImportJob,
+  PermissionDefinition,
+  QuizQuestion,
+  ExtractedQuestion,
 } from './types';
 
 export class ApiError extends Error {
@@ -602,6 +605,33 @@ class TutoriaAPIClient {
 
   async generateModuleQuizzes(moduleId: number, upsert: boolean = true, count: number = 50): Promise<{ status: string; message: string; quiz_count: number; module_id: number }> {
     return this.post(`/modules/${moduleId}/generate-quizzes?upsert=${upsert}&count=${count}`, {}, { usePythonAPI: true });
+  }
+
+  async getModuleQuizzes(moduleId: number, difficulty?: string, source?: string): Promise<QuizQuestion[]> {
+    const params: Record<string, string> = {};
+    if (difficulty) params.difficulty = difficulty;
+    if (source) params.source = source;
+    const response = await this.get<{ quizzes: QuizQuestion[]; total: number; module_id: number }>(
+      `/modules/${moduleId}/quizzes`, params, false, true
+    );
+    // Backend returns { quizzes: [...], total, module_id } — unwrap to array
+    return Array.isArray(response) ? response : (response?.quizzes ?? []);
+  }
+
+  async uploadQuizFile(moduleId: number, file: globalThis.File): Promise<{ status: string; message: string; extracted_count: number; questions: ExtractedQuestion[]; module_id: number; job_id?: number }> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.post(`/modules/${moduleId}/upload-quiz-file`, formData, { isFormData: true, usePythonAPI: true });
+  }
+
+  async confirmExtractedQuizzes(moduleId: number, questions: ExtractedQuestion[], uploadedFileId?: number): Promise<{ status: string; message: string; saved_count: number; module_id: number }> {
+    const body: Record<string, unknown> = { questions };
+    if (uploadedFileId !== undefined) body.uploaded_file_id = uploadedFileId;
+    return this.post(`/modules/${moduleId}/confirm-extracted-quizzes`, body, { usePythonAPI: true });
+  }
+
+  async deleteQuiz(moduleId: number, quizId: number): Promise<void> {
+    return this.delete(`/modules/${moduleId}/quizzes/${quizId}`, false, true);
   }
 
   // AI Model endpoints
@@ -1289,6 +1319,47 @@ class TutoriaAPIClient {
     }
 
     return await response.blob();
+  }
+
+  // ==================== Permissions API ====================
+
+  async getAllPermissions(): Promise<PermissionDefinition[]> {
+    return this.request('/api/permissions');
+  }
+
+  async getRolePermissions(role: string): Promise<PermissionDefinition[]> {
+    return this.request(`/api/permissions/roles/${role}`);
+  }
+
+  async getUserExtraPermissions(userId: number): Promise<PermissionDefinition[]> {
+    return this.request(`/api/permissions/users/${userId}/extra`);
+  }
+
+  async setUserExtraPermissions(userId: number, permissionIds: number[]): Promise<void> {
+    await this.request(`/api/permissions/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ permissionIds }),
+    });
+  }
+
+  async createPermission(data: Omit<PermissionDefinition, 'id'>): Promise<PermissionDefinition> {
+    return this.request('/api/permissions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updatePermission(id: number, data: Partial<PermissionDefinition>): Promise<PermissionDefinition> {
+    return this.request(`/api/permissions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deletePermission(id: number): Promise<void> {
+    await this.request(`/api/permissions/${id}`, {
+      method: 'DELETE',
+    });
   }
 }
 

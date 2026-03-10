@@ -59,32 +59,32 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('dashboard'),
       href: '/dashboard',
       icon: Home,
+      // Dashboard is always visible - no permission required
     },
     // Tutorials link - controlled by feature flag
     ...(FEATURE_FLAGS.TUTORIALS_ENABLED ? [{
       label: t('tutorials'),
       href: '/tutorials',
       icon: BookOpen,
-      roles: ['super_admin', 'professor'] as UserRole[],
+      requiredPermission: 'courses:read',
     }] : []),
     {
       label: t('universities'),
       href: '/universities',
       icon: Building2,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read',
     },
     {
       label: t('moduleTokens'),
       href: '/tokens',
       icon: Key,
-      roles: ['super_admin', 'professor'],
-      requiresAdmin: true, // Only admin professors
+      requiredPermission: 'tokens:read',
     },
     {
       label: t('subscription'),
       href: '/subscription',
       icon: CreditCard,
-      roles: ['manager', 'professor'],
+      requiredPermission: 'subscription:manage',
     },
   ];
 
@@ -93,56 +93,55 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('analytics'),
       href: '/analytics',
       icon: BarChart3,
-      roles: ['super_admin', 'manager'],
+      requiredPermission: 'analytics:read',
     },
     {
       label: t('aiModels'),
       href: '/models',
       icon: Bot,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read', // super_admin only
     },
     {
       label: t('plans'),
       href: '/admin/plans',
       icon: Receipt,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read', // super_admin only
     },
     {
       label: t('subscriptions'),
       href: '/admin/subscriptions',
       icon: CreditCard,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read', // super_admin only
+    },
+    {
+      label: t('permissions'),
+      href: '/admin/permissions',
+      icon: Shield,
+      requiredPermission: 'universities:read', // super_admin only
     },
     {
       label: t('auditLogs'),
       href: '/audit-logs',
       icon: ClipboardList,
-      roles: ['super_admin', 'manager'],
+      requiredPermission: 'analytics:read',
     },
-    // TODO: Re-enable System Overview page when backend endpoints are ready
-    // {
-    //   label: t('systemOverview'),
-    //   href: '/admin',
-    //   icon: BarChart3,
-    //   roles: ['super_admin'],
-    // },
     {
       label: t('users'),
       href: '/users',
       icon: Users,
-      roles: ['super_admin', 'manager'],
+      requiredPermission: 'staff:read',
     },
     {
       label: t('superAdmins'),
       href: '/admin/super-admins',
       icon: Shield,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read', // super_admin only
     },
     {
       label: t('globalSearch'),
       href: '/admin/global-search',
       icon: Search,
-      roles: ['super_admin'],
+      requiredPermission: 'universities:read', // super_admin only
     },
   ];
 
@@ -154,17 +153,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   };
 
   const shouldShowItem = (item: NavigationItem) => {
-    if (!item.roles || item.roles.length === 0) return true;
-
-    // Check if user's role is in the allowed roles
-    if (!item.roles.includes(user.role)) return false;
-
-    // Legacy: If requiresAdmin is true, check if user is admin professor (for backward compatibility)
-    if (item.requiresAdmin && user.role === 'professor') {
-      return user.isAdmin === true;
+    // Permission-based check (primary)
+    if (item.requiredPermission) {
+      return user.permissions?.includes(item.requiredPermission) ?? false;
     }
-
-    return true;
+    // Fallback to role-based check if no permission specified
+    if (!item.roles || item.roles.length === 0) return true;
+    return item.roles.includes(user.role);
   };
 
   const handleItemClick = () => {
@@ -172,6 +167,9 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       onClose();
     }
   };
+
+  // Check if user should see the admin section (has any admin-level permission)
+  const hasAdminAccess = user.permissions?.includes('staff:create') ?? false;
 
   return (
     <div
@@ -352,8 +350,8 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
             </ProfessorOnly>
           </nav>
 
-          {/* Admin Section - Shows for Super Admins and Admin Professors */}
-          <AdminOnly>
+          {/* Admin Section - Shows when user has admin-level permissions */}
+          {hasAdminAccess && (
             <div className="mt-8">
               <div className="mx-3 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
               <div className="px-3 py-2">
@@ -391,7 +389,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 </div>
               </div>
             </div>
-          </AdminOnly>
+          )}
         </div>
 
         {/* Footer */}

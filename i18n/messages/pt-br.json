@@ -1014,6 +1014,7 @@
       "submitButton": "Criar Usuário",
       "successMessage": "Usuário criado com sucesso!",
       "errorMessage": "Falha ao criar usuário",
+      "permissionsWarning": "Porém, as permissões extras não puderam ser salvas.",
       "fields": {
         "userType": {
           "label": "Função",
@@ -1574,6 +1575,7 @@
     "globalSearch": "Busca Global",
     "aiModels": "Modelos de IA",
     "plans": "Planos",
+    "permissions": "Permiss\u00f5es",
     "subscriptions": "Assinaturas",
     "subscription": "Assinatura",
     "systemOnline": "Sistema Online",
@@ -4830,6 +4832,56 @@
       "expired": "Expirada"
     }
   },
+  "adminPermissions": {
+    "title": "Gest\u00e3o de Permiss\u00f5es",
+    "description": "Crie e gerencie permiss\u00f5es do sistema para a autoriza\u00e7\u00e3o baseada em claims",
+    "breadcrumb": "Administra\u00e7\u00e3o",
+    "loadError": "Falha ao carregar as permiss\u00f5es.",
+    "createButton": "Criar Permiss\u00e3o",
+    "searchPlaceholder": "Buscar por c\u00f3digo, recurso ou categoria...",
+    "emptyMessage": "Nenhuma permiss\u00e3o encontrada.",
+    "createTitle": "Criar Permiss\u00e3o",
+    "createDescription": "Defina uma nova permiss\u00e3o para o sistema de autoriza\u00e7\u00e3o.",
+    "editTitle": "Editar Permiss\u00e3o",
+    "editDescription": "Atualize os detalhes da permiss\u00e3o.",
+    "createSuccess": "Permiss\u00e3o criada com sucesso.",
+    "createError": "Falha ao criar a permiss\u00e3o.",
+    "updateSuccess": "Permiss\u00e3o atualizada com sucesso.",
+    "updateError": "Falha ao atualizar a permiss\u00e3o.",
+    "deleteConfirm": "Excluir Permiss\u00e3o",
+    "deleteConfirmDesc": "Tem certeza de que deseja excluir a permiss\u00e3o \"{code}\"? Isso pode afetar usu\u00e1rios que possuem essa permiss\u00e3o.",
+    "deleteSuccess": "Permiss\u00e3o exclu\u00edda com sucesso.",
+    "deleteError": "Falha ao excluir a permiss\u00e3o. Ela pode estar atribu\u00edda a fun\u00e7\u00f5es ou usu\u00e1rios.",
+    "validationError": "C\u00f3digo, recurso, a\u00e7\u00e3o e categoria s\u00e3o obrigat\u00f3rios.",
+    "saving": "Salvando...",
+    "columns": {
+      "code": "C\u00f3digo",
+      "resource": "Recurso",
+      "action": "A\u00e7\u00e3o",
+      "scope": "Escopo",
+      "category": "Categoria",
+      "description": "Descri\u00e7\u00e3o",
+      "order": "Ordem"
+    },
+    "form": {
+      "code": "C\u00f3digo da Permiss\u00e3o",
+      "codePlaceholder": "ex. reports:create",
+      "resource": "Recurso",
+      "resourcePlaceholder": "ex. report",
+      "action": "A\u00e7\u00e3o",
+      "scope": "Escopo",
+      "category": "Categoria",
+      "categoryPlaceholder": "ex. Relat\u00f3rios",
+      "description": "Descri\u00e7\u00e3o",
+      "descriptionPlaceholder": "Breve descri\u00e7\u00e3o do que essa permiss\u00e3o permite",
+      "displayOrder": "Ordem de Exibi\u00e7\u00e3o"
+    },
+    "scopes": {
+      "global": "Global",
+      "university": "Universidade",
+      "course": "Curso"
+    }
+  },
   "plans": {
     "title": "Gestão de Planos",
     "description": "Gerencie planos de assinatura, preços e limites de recursos",
@@ -4985,6 +5037,101 @@
       "incomplete": "Incompleto",
       "expired": "Expirado"
     }
+  },
+  "permissionEditor": {
+    "title": "Permissoes",
+    "description": "Configure permissoes granulares para este usuario. Os padroes da funcao sao mostrados como caixas de selecao desabilitadas. Ative permissoes extras conforme necessario.",
+    "roleDefaultsHint": "Caixas de selecao esmaecidas estao incluidas na funcao e nao podem ser removidas.",
+    "loadError": "Falha ao carregar permissoes. Tente novamente.",
+    "roleDefault": "funcao",
+    "extraCount": "{count} permissao(oes) extra(s) adicionada(s)",
+    "savePermissions": "Salvar Permissoes",
+    "saveSuccess": "Permissoes salvas com sucesso",
+    "saveError": "Falha ao salvar permissoes",
+    "permissionsWarning": "Porem, as permissoes extras nao puderam ser salvas.",
+    "actions": {
+      "create": "Criar",
+      "read": "Ler",
+      "update": "Editar",
+      "delete": "Excluir",
+      "manage": "Gerenciar"
+    },
+    "categories": {
+      "courses": "Cursos",
+      "modules": "Modulos",
+      "staff": "Equipe",
+      "students": "Alunos",
+      "files": "Arquivos",
+      "tokens": "Chaves de Acesso",
+      "universities": "Universidades",
+      "analytics": "Analiticos",
+      "subscription": "Assinatura",
+      "other": "Outros"
+    }
+  },
+  "quizBank": {
+    "contentTab": "Conteúdo",
+    "tabLabel": "Banco de Questões",
+    "title": "Banco de Questões",
+    "description": "Gerencie as questões do quiz deste módulo",
+    "uploadButton": "Enviar arquivo de questões",
+    "generateButton": "Gerar com IA",
+    "generatePremiumOnly": "Disponível nos planos Professional e Business",
+    "upgradeLink": "Fazer upgrade do plano",
+    "generating": "Gerando questões...",
+    "uploading": "Extraindo questões...",
+    "totalQuestions": "{count} questões",
+    "noQuestions": "0 questões",
+    "emptyMessage": "Nenhuma questão ainda. Envie um arquivo de questões ou gere com IA.",
+    "emptyMessageStarterPlan": "Nenhuma questão ainda. Envie um arquivo de questões para começar.",
+    "columns": {
+      "number": "#",
+      "question": "Questão",
+      "difficulty": "Dificuldade",
+      "answer": "Resposta",
+      "source": "Origem"
+    },
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Médio",
+      "hard": "Difícil"
+    },
+    "source": {
+      "ai_generated": "Gerado por IA",
+      "uploaded": "Enviado",
+      "manual": "Manual"
+    },
+    "stats": {
+      "total": "Total",
+      "byDifficulty": "Por dificuldade",
+      "bySource": "Por origem"
+    },
+    "review": {
+      "title": "Revisar Questões Extraídas",
+      "description": "Revise as questões extraídas do seu arquivo. Desmarque as que deseja pular.",
+      "found": "{count} questões encontradas",
+      "selected": "{selected} de {total} selecionadas",
+      "confirm": "Confirmar e Salvar",
+      "cancel": "Cancelar",
+      "selectAll": "Selecionar todas",
+      "deselectAll": "Desmarcar todas",
+      "noQuestionsExtracted": "Não foi possível extrair questões deste arquivo."
+    },
+    "view": {
+      "title": "Detalhes da Questão",
+      "correctAnswer": "Resposta correta",
+      "explanation": "Explicação",
+      "concepts": "Conceitos abordados"
+    },
+    "uploadSuccess": "Questões salvas com sucesso!",
+    "uploadError": "Falha ao extrair questões do arquivo",
+    "generateSuccess": "Questões geradas com sucesso!",
+    "generateError": "Falha ao gerar questões",
+    "deleteConfirm": "Excluir esta questão?",
+    "deleteConfirmDesc": "Esta ação não pode ser desfeita.",
+    "deleteSuccess": "Questão excluída",
+    "deleteError": "Falha ao excluir questão",
+    "loadError": "Falha ao carregar questões"
   }
 }
 

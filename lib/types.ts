@@ -17,6 +17,8 @@ export interface User {
   externalId?: string; // Student registration ID, employee ID, etc.
   birthdate?: string; // ISO date string
   assignedCourses?: number[]; // For professors: list of course IDs they're assigned to
+  permissions?: string[]; // Effective permissions from backend (role defaults + extras)
+  extraPermissions?: string[]; // Only the extra permissions (for UI editing)
   createdAt: string;
   updatedAt: string;
   lastLoginAt?: string | null;
@@ -43,6 +45,8 @@ export interface UserResponse {
   birthdate?: string;
   studentCourseIds?: number[]; // For students
   professorCourseIds?: number[]; // For professors
+  permissions?: string[]; // Effective permissions (role defaults + extras)
+  extraPermissions?: string[]; // Only the extra permissions
   languagePreference?: string;
   themePreference?: string;
   createdAt?: string;
@@ -696,6 +700,54 @@ export interface PermissionContext {
   moduleId?: number;
 }
 
+// Permission definition from the backend /api/permissions endpoint
+export interface PermissionDefinition {
+  id: number;
+  code: string;
+  resource: string;
+  action: string;
+  scope: string;
+  category: string;
+  description?: string;
+  displayOrder: number;
+}
+
+// Quiz question from the database (Python backend response format via to_dict())
+export interface QuizQuestion {
+  id: number;
+  module_id: number;
+  question_number: number;
+  question_text: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+    E?: string | null;
+  };
+  correct_answer: string;
+  explanations: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+    E?: string | null;
+  };
+  concepts_covered: string[];
+  source?: string;
+}
+
+// Extracted question from AI (before professor review)
+export interface ExtractedQuestion {
+  question: string;
+  options: Record<string, { text: string; explanation: string }>;
+  correct_answer: string;
+  difficulty: string;
+  concepts: string[];
+  selected?: boolean; // UI state: whether professor wants to keep this question
+}
+
 // AI Tutor Types
 export interface TutorQuestion {
   question: string;
@@ -748,6 +800,7 @@ export interface NavigationItem {
   icon?: React.ComponentType<any>;
   roles?: UserRole[]; // 'super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor', or 'student'
   requiresAdmin?: boolean; // @deprecated Legacy field for backward compatibility with professor isAdmin flag
+  requiredPermission?: string; // Permission code required to see this item (e.g. 'courses:read')
   children?: NavigationItem[];
 }
 

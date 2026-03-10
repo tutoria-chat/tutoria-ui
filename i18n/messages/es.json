@@ -1014,6 +1014,7 @@
       "submitButton": "Crear Usuario",
       "successMessage": "¡Usuario creado exitosamente!",
       "errorMessage": "Error al crear usuario",
+      "permissionsWarning": "Sin embargo, los permisos extras no pudieron guardarse.",
       "fields": {
         "userType": {
           "label": "Rol",
@@ -1574,6 +1575,7 @@
     "globalSearch": "Búsqueda global",
     "aiModels": "Modelos de IA",
     "plans": "Planes",
+    "permissions": "Permisos",
     "subscriptions": "Suscripciones",
     "subscription": "Suscripción",
     "systemOnline": "Sistema en línea",
@@ -4120,6 +4122,56 @@
       "expired": "Expirada"
     }
   },
+  "adminPermissions": {
+    "title": "Gestión de Permisos",
+    "description": "Crea y gestiona los permisos del sistema para la autorización basada en claims",
+    "breadcrumb": "Administración",
+    "loadError": "Error al cargar los permisos.",
+    "createButton": "Crear Permiso",
+    "searchPlaceholder": "Buscar por código, recurso o categoría...",
+    "emptyMessage": "No se encontraron permisos.",
+    "createTitle": "Crear Permiso",
+    "createDescription": "Define un nuevo permiso para el sistema de autorización.",
+    "editTitle": "Editar Permiso",
+    "editDescription": "Actualiza los detalles del permiso.",
+    "createSuccess": "Permiso creado correctamente.",
+    "createError": "Error al crear el permiso.",
+    "updateSuccess": "Permiso actualizado correctamente.",
+    "updateError": "Error al actualizar el permiso.",
+    "deleteConfirm": "Eliminar Permiso",
+    "deleteConfirmDesc": "¿Estás seguro de que deseas eliminar el permiso \"{code}\"? Esto puede afectar a los usuarios que tienen este permiso.",
+    "deleteSuccess": "Permiso eliminado correctamente.",
+    "deleteError": "Error al eliminar el permiso. Puede estar asignado a roles o usuarios.",
+    "validationError": "El código, recurso, acción y categoría son obligatorios.",
+    "saving": "Guardando...",
+    "columns": {
+      "code": "Código",
+      "resource": "Recurso",
+      "action": "Acción",
+      "scope": "Alcance",
+      "category": "Categoría",
+      "description": "Descripción",
+      "order": "Orden"
+    },
+    "form": {
+      "code": "Código del Permiso",
+      "codePlaceholder": "ej. reports:create",
+      "resource": "Recurso",
+      "resourcePlaceholder": "ej. report",
+      "action": "Acción",
+      "scope": "Alcance",
+      "category": "Categoría",
+      "categoryPlaceholder": "ej. Reportes",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Breve descripción de lo que permite este permiso",
+      "displayOrder": "Orden de Visualización"
+    },
+    "scopes": {
+      "global": "Global",
+      "university": "Universidad",
+      "course": "Curso"
+    }
+  },
   "plans": {
     "title": "Gestión de Planes",
     "description": "Gestiona planes de suscripción, precios y límites de funciones",
@@ -4275,5 +4327,100 @@
       "incomplete": "Incompleto",
       "expired": "Expirado"
     }
+  },
+  "permissionEditor": {
+    "title": "Permisos",
+    "description": "Configure permisos granulares para este usuario. Los valores predeterminados del rol se muestran como casillas deshabilitadas. Active permisos adicionales segun sea necesario.",
+    "roleDefaultsHint": "Las casillas atenuadas estan incluidas en el rol y no se pueden eliminar.",
+    "loadError": "Error al cargar permisos. Intentelo de nuevo.",
+    "roleDefault": "rol",
+    "extraCount": "{count} permiso(s) extra(s) agregado(s)",
+    "savePermissions": "Guardar Permisos",
+    "saveSuccess": "Permisos guardados exitosamente",
+    "saveError": "Error al guardar permisos",
+    "permissionsWarning": "Sin embargo, los permisos extras no pudieron guardarse.",
+    "actions": {
+      "create": "Crear",
+      "read": "Leer",
+      "update": "Editar",
+      "delete": "Eliminar",
+      "manage": "Gestionar"
+    },
+    "categories": {
+      "courses": "Cursos",
+      "modules": "Modulos",
+      "staff": "Personal",
+      "students": "Estudiantes",
+      "files": "Archivos",
+      "tokens": "Claves de Acceso",
+      "universities": "Universidades",
+      "analytics": "Analiticas",
+      "subscription": "Suscripcion",
+      "other": "Otros"
+    }
+  },
+  "quizBank": {
+    "contentTab": "Contenido",
+    "tabLabel": "Banco de Preguntas",
+    "title": "Banco de Preguntas",
+    "description": "Administre las preguntas del quiz de este módulo",
+    "uploadButton": "Subir archivo de preguntas",
+    "generateButton": "Generar con IA",
+    "generatePremiumOnly": "Disponible en los planes Professional y Business",
+    "upgradeLink": "Mejorar plan",
+    "generating": "Generando preguntas...",
+    "uploading": "Extrayendo preguntas...",
+    "totalQuestions": "{count} preguntas",
+    "noQuestions": "0 preguntas",
+    "emptyMessage": "Sin preguntas aún. Suba un archivo de preguntas o genere con IA.",
+    "emptyMessageStarterPlan": "Sin preguntas aún. Suba un archivo de preguntas para comenzar.",
+    "columns": {
+      "number": "#",
+      "question": "Pregunta",
+      "difficulty": "Dificultad",
+      "answer": "Respuesta",
+      "source": "Origen"
+    },
+    "difficulty": {
+      "easy": "Fácil",
+      "medium": "Medio",
+      "hard": "Difícil"
+    },
+    "source": {
+      "ai_generated": "Generado por IA",
+      "uploaded": "Subido",
+      "manual": "Manual"
+    },
+    "stats": {
+      "total": "Total",
+      "byDifficulty": "Por dificultad",
+      "bySource": "Por origen"
+    },
+    "review": {
+      "title": "Revisar Preguntas Extraídas",
+      "description": "Revise las preguntas extraídas de su archivo. Desmarque las que desee omitir.",
+      "found": "{count} preguntas encontradas",
+      "selected": "{selected} de {total} seleccionadas",
+      "confirm": "Confirmar y Guardar",
+      "cancel": "Cancelar",
+      "selectAll": "Seleccionar todas",
+      "deselectAll": "Deseleccionar todas",
+      "noQuestionsExtracted": "No se pudieron extraer preguntas de este archivo."
+    },
+    "view": {
+      "title": "Detalles de la Pregunta",
+      "correctAnswer": "Respuesta correcta",
+      "explanation": "Explicación",
+      "concepts": "Conceptos cubiertos"
+    },
+    "uploadSuccess": "Preguntas guardadas con éxito!",
+    "uploadError": "Error al extrair preguntas del archivo",
+    "generateSuccess": "Preguntas generadas con éxito!",
+    "generateError": "Error al generar preguntas",
+    "deleteConfirm": "¿Eliminar esta pregunta?",
+    "deleteConfirmDesc": "Esta acción no se puede deshacer.",
+    "deleteSuccess": "Pregunta eliminada",
+    "deleteError": "Error al eliminar pregunta",
+    "loadError": "Error al cargar preguntas"
   }
 }
