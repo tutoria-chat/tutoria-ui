@@ -153,6 +153,9 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   };
 
   const shouldShowItem = (item: NavigationItem) => {
+    // Super admin always has full access, except the user-facing subscription page
+    // (super_admin uses /admin/subscriptions instead)
+    if (user.role === 'super_admin') return item.href !== '/subscription';
     // Permission-based check (primary)
     if (item.requiredPermission) {
       return user.permissions?.includes(item.requiredPermission) ?? false;
@@ -169,7 +172,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   };
 
   // Check if user should see the admin section (has any admin-level permission)
-  const hasAdminAccess = user.permissions?.includes('staff:create') ?? false;
+  const hasAdminAccess = user.role === 'super_admin' || (user.permissions?.includes('staff:create') ?? false);
 
   return (
     <div

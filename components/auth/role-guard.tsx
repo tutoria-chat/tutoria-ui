@@ -33,6 +33,11 @@ export function RoleGuard({
     return hideIfNoAccess ? null : fallback;
   }
 
+  // Super admin always has full access
+  if (user.role === 'super_admin') {
+    return <>{children}</>;
+  }
+
   // Check permission code directly if provided
   if (permissionCode) {
     const hasAccess = user.permissions?.includes(permissionCode) ?? false;
@@ -69,7 +74,7 @@ export function SuperAdminOnly({ children, fallback, hideIfNoAccess = true }: {
   hideIfNoAccess?: boolean;
 }) {
   const { user } = useAuth();
-  const hasAccess = user?.permissions?.includes('universities:read') ?? false;
+  const hasAccess = user?.role === 'super_admin' || (user?.permissions?.includes('universities:read') ?? false);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -88,7 +93,7 @@ export function AdminOnly({ children, fallback, hideIfNoAccess = true }: {
   hideIfNoAccess?: boolean;
 }) {
   const { user } = useAuth();
-  const hasAccess = user?.permissions?.includes('staff:create') ?? false;
+  const hasAccess = user?.role === 'super_admin' || (user?.permissions?.includes('staff:create') ?? false);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -106,7 +111,7 @@ export function AdminProfessorOnly({ children, fallback, hideIfNoAccess = true }
   hideIfNoAccess?: boolean;
 }) {
   const { user } = useAuth();
-  const hasAccess = user?.permissions?.includes('staff:create') ?? false;
+  const hasAccess = user?.role === 'super_admin' || (user?.permissions?.includes('staff:create') ?? false);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;
@@ -125,7 +130,7 @@ export function ProfessorOnly({ children, fallback, hideIfNoAccess = true }: {
   hideIfNoAccess?: boolean;
 }) {
   const { user } = useAuth();
-  const hasAccess = user?.permissions?.includes('students:read') ?? false;
+  const hasAccess = user?.role === 'super_admin' || (user?.permissions?.includes('students:read') ?? false);
 
   if (!hasAccess) {
     return hideIfNoAccess ? null : fallback;

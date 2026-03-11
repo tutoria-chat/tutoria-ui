@@ -250,6 +250,10 @@ export function canAccessPage(
 ): boolean {
   if (!user) return false;
 
+  // Super admin has full access, except the user-facing subscription page
+  // (super_admin uses /admin/subscriptions instead)
+  if (user.role === 'super_admin') return pagePath !== '/subscription';
+
   // If permissions are loaded, use permission-based page access
   if (user.permissions && user.permissions.length > 0) {
     const pagePermissions: Record<string, string[]> = {
@@ -312,6 +316,7 @@ export function canAccessPage(
  */
 export function hasPermissionCode(user: User | null, code: string): boolean {
   if (!user) return false;
+  if (user.role === 'super_admin') return true;
   return user.permissions?.includes(code) ?? false;
 }
 
@@ -332,11 +337,13 @@ export function canAccessModelsPage(user: User | null): boolean {
  */
 export function canAccessSubscription(user: User | null, isEnterprise?: boolean): boolean {
   if (!user) return false;
+  // Super admin manages subscriptions via /admin/subscriptions, not the user-facing page
+  if (user.role === 'super_admin') return false;
   if (isEnterprise) return false;
   if (user.permissions?.length) {
     return user.permissions.includes('subscription:manage');
   }
-  return ['super_admin', 'manager', 'professor'].includes(user.role);
+  return ['manager', 'professor'].includes(user.role);
 }
 
 /**
