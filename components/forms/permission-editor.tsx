@@ -117,9 +117,17 @@ export function PermissionEditor({
   };
 
   const getCategoryLabel = (category: string): string => {
-    // Try translation key first, fallback to capitalized category name
+    // Map DB category values to translation keys
+    // DB stores: "Universities", "Courses", "Access Keys", etc.
+    // Translation keys are lowercase: "universities", "courses", "tokens", etc.
+    const categoryKeyMap: Record<string, string> = {
+      'access keys': 'tokens',
+    };
+    const normalized = category.toLowerCase();
+    const translationKey = categoryKeyMap[normalized] || normalized;
+
     try {
-      return t(`categories.${category}`);
+      return t(`categories.${translationKey}`);
     } catch {
       return category.charAt(0).toUpperCase() + category.slice(1);
     }
