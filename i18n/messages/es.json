@@ -168,7 +168,26 @@
         "description": "Estudiantes actualmente inscritos en este curso",
         "managementTitle": "Gestión de estudiantes",
         "managementDescription": "La interfaz de gestión de estudiantes se implementará aquí",
-        "viewAll": "Ver todos los estudiantes"
+        "viewAll": "Ver todos los estudiantes",
+        "searchPlaceholder": "Buscar por nombre, email o matrícula...",
+        "emptyMessage": "No hay estudiantes inscritos en este curso todavía.",
+        "emptyImportHint": "Importa estudiantes desde un archivo CSV o Excel para comenzar.",
+        "importButton": "Importar Estudiantes",
+        "importTitle": "Importar Estudiantes a {course}",
+        "importDescription": "Sube un archivo CSV o XLSX con datos de estudiantes. Columnas requeridas: email. Columnas opcionales: matrícula, nombre, apellido.",
+        "columns": {
+          "name": "Nombre",
+          "email": "Email",
+          "matricula": "Matrícula",
+          "status": "Estado",
+          "enrolledAt": "Inscrito el"
+        },
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "totalStudents": "Estudiantes Inscritos",
+        "activeStudents": "Estudiantes Activos",
+        "importSuccess": "¡Estudiantes importados exitosamente!",
+        "importError": "Error al importar estudiantes"
       }
     }
   },
@@ -424,16 +443,15 @@
       "fileTypeUnknown": "Tipo desconocido",
       "openInWidget": "Abrir en Widget",
       "updateAIConfig": "Actualizar IA Ahora",
-      "updateAIConfigDesc": "Re-extraer textos de archivos y regenerar preguntas de quiz para este módulo.",
+      "updateAIConfigDesc": "Re-extraer textos de archivos para actualizar la base de conocimiento de IA.",
       "updateAIConfigRunning": "Actualizando...",
-      "updateAIConfigSuccess": "¡Configuración de IA actualizada!",
-      "updateAIConfigSuccessDesc": "Extracción de texto y generación de quiz completadas con éxito.",
+      "updateAIConfigSuccess": "¡IA actualizada!",
+      "updateAIConfigSuccessDesc": "Extracción de texto completada con éxito.",
       "updateAIConfigPartial": "Actualización parcial",
-      "updateAIConfigPartialDesc": "Extracción de texto completada, pero la generación de quiz tuvo problemas.",
-      "updateAIConfigError": "Error al actualizar configuración de IA",
-      "updateAIConfigErrorDesc": "No se pudo actualizar la configuración de IA. Inténtelo de nuevo.",
-      "extractionResult": "{count} archivo(s) extraído(s)",
-      "quizResult": "{count} preguntas de quiz generadas"
+      "updateAIConfigPartialDesc": "Extracción de texto completada con algunos problemas.",
+      "updateAIConfigError": "Error al actualizar IA",
+      "updateAIConfigErrorDesc": "No se pudieron extraer los textos. Inténtelo de nuevo.",
+      "extractionResult": "{count} archivo(s) extraído(s)"
     },
     "edit": {
       "title": "Editar módulo",

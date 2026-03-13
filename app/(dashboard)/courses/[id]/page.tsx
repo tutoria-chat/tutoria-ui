@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -13,9 +13,14 @@ import {
   FileText,
   Calendar,
   Building2,
-  Activity,
   Eye,
-  Trash2
+  Trash2,
+  Upload,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  FileSpreadsheet,
+  UserCheck
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -23,11 +28,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
 import { Loading } from '@/components/ui/loading-spinner';
-import { AdminProfessorOnly, ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { AdminProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { apiClient, ApiError } from '@/lib/api';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
-import type { CourseWithDetails, Module, Professor, Student, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -39,6 +53,7 @@ export default function CourseDetailsPage() {
   const t = useTranslations('courses.detail');
   const tCommon = useTranslations('common');
   const tModules = useTranslations('modules');
+  const tStudents = useTranslations('courses.detail.studentsTab');
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
@@ -53,6 +68,21 @@ export default function CourseDetailsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [moduleSortColumn, setModuleSortColumn] = useState<string | null>('name');
   const [moduleSortDirection, setModuleSortDirection] = useState<'asc' | 'desc' | null>('asc');
+
+  // Student tab state
+  const [studentPage, setStudentPage] = useState(1);
+  const [studentLimit, setStudentLimit] = useState(10);
+  const [studentSearch, setStudentSearch] = useState('');
+  const [studentsLoading, setStudentsLoading] = useState(false);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [totalStudents, setTotalStudents] = useState(0);
+
+  // Import dialog state
+  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [importResult, setImportResult] = useState<StudentImportResult | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Build modules API URL with pagination and filters
   const buildModulesApiUrl = () => {
@@ -77,7 +107,7 @@ export default function CourseDetailsPage() {
   const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
 
   // Fetch professors
-  const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
+  const { data: professorsResponse } = useFetch<PaginatedResponse<Professor>>(
     `/api/professors/?courseId=${courseId}`
   );
 
@@ -95,21 +125,47 @@ export default function CourseDetailsPage() {
   const availableSemesters = Array.from(new Set(allModules.map(m => m.semester).filter(Boolean))).sort();
   const availableYears = Array.from(new Set(allModules.map(m => m.year).filter(Boolean))).sort((a, b) => (b ?? 0) - (a ?? 0));
 
+  // Load students for this course
+  const loadStudents = useCallback(async () => {
+    setStudentsLoading(true);
+    try {
+      const response = await apiClient.getStudents({
+        courseId: parseInt(courseId),
+        page: studentPage,
+        size: studentLimit,
+        search: studentSearch || undefined,
+      });
+      setStudents(response.items || []);
+      setTotalStudents(response.total || 0);
+    } catch (error) {
+      console.error('Failed to load students:', error);
+      setStudents([]);
+      setTotalStudents(0);
+    } finally {
+      setStudentsLoading(false);
+    }
+  }, [courseId, studentPage, studentLimit, studentSearch]);
+
+  // Load students when tab is active
+  useEffect(() => {
+    if (activeTab === 'students') {
+      loadStudents();
+    }
+  }, [activeTab, loadStudents]);
+
   // Check if user can add modules to this course
   const canAddModule = (): boolean => {
-    // Super admins can add modules to any course
-    if (user?.role === 'super_admin') {
-      return true;
-    }
-    // Admin professors can add modules to courses in their university
-    if (user?.role === 'professor' && user?.isAdmin === true) {
-      return true;
-    }
-    // Regular professors: For now, allow them to see the button
-    // The module form will handle filtering courses by assignment
-    if (user?.role === 'professor' && user?.isAdmin === false) {
-      return true;
-    }
+    if (user?.role === 'super_admin') return true;
+    if (user?.role === 'professor' && user?.isAdmin === true) return true;
+    if (user?.role === 'professor' && user?.isAdmin === false) return true;
+    return false;
+  };
+
+  // Check if user can manage students (import, etc.)
+  const canManageStudents = (): boolean => {
+    if (user?.role === 'super_admin') return true;
+    if (user?.role === 'professor' && user?.isAdmin === true) return true;
+    if (user?.role === 'professor') return true;
     return false;
   };
 
@@ -130,13 +186,9 @@ export default function CourseDetailsPage() {
     { label: course.name, isCurrentPage: true }
   ];
 
-  const canEditModule = (module: Module): boolean => {
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) {
-      return true;
-    }
-    if (user?.role === 'professor' && user?.isAdmin === false) {
-      return true;
-    }
+  const canEditModule = (): boolean => {
+    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) return true;
+    if (user?.role === 'professor' && user?.isAdmin === false) return true;
     return false;
   };
 
@@ -149,7 +201,6 @@ export default function CourseDetailsPage() {
       cancelText: tCommon('buttons.cancel'),
       onConfirm: async () => {
         try {
-          const { apiClient } = await import('@/lib/api');
           await apiClient.delete(`/modules/${moduleId}`);
           refetchModules();
         } catch (error) {
@@ -168,6 +219,54 @@ export default function CourseDetailsPage() {
       setModuleSortDirection('asc');
     }
   };
+
+  // Import handlers
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const ext = file.name.toLowerCase();
+      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+        setSelectedFile(file);
+      } else {
+        toast.error('Please select a .csv or .xlsx file');
+      }
+    }
+  };
+
+  const handleImport = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    setImportResult(null);
+    try {
+      const result = await apiClient.importStudents(parseInt(courseId), selectedFile);
+      setImportResult(result);
+      toast.success(tStudents('importSuccess'));
+      // Refresh the student list after import
+      loadStudents();
+    } catch (error) {
+      console.error('Import failed:', error);
+      if (error instanceof ApiError && error.isPlanLimitError) {
+        toast.error(error.message);
+      } else {
+        toast.error(error instanceof Error ? error.message : tStudents('importError'));
+      }
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleCloseImport = () => {
+    setIsImportOpen(false);
+    setSelectedFile(null);
+    setImportResult(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Count active students
+  const activeStudents = students.filter(s => s.isActive).length;
 
   const moduleColumns: TableColumn<Module>[] = [
     {
@@ -243,7 +342,7 @@ export default function CourseDetailsPage() {
             </Link>
           </Button>
 
-          {canEditModule(module) && (
+          {canEditModule() && (
             <>
               <Button
                 variant="ghost"
@@ -297,6 +396,59 @@ export default function CourseDetailsPage() {
         </Badge>
       )
     }
+  ];
+
+  const studentColumns: TableColumn<Student>[] = [
+    {
+      key: 'firstName',
+      label: tStudents('columns.name'),
+      sortable: true,
+      render: (_, student) => (
+        <div className="flex items-center space-x-3">
+          <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+            <GraduationCap className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          </div>
+          <div>
+            <div className="font-medium">{student.firstName} {student.lastName}</div>
+            <div className="text-sm text-muted-foreground">{student.username}</div>
+          </div>
+        </div>
+      )
+    },
+    {
+      key: 'email',
+      label: tStudents('columns.email'),
+      sortable: true,
+      render: (value) => (
+        <span className="text-sm">{value as string}</span>
+      )
+    },
+    {
+      key: 'externalId',
+      label: tStudents('columns.matricula'),
+      render: (value) => value ? (
+        <Badge variant="outline" className="font-mono">{value as string}</Badge>
+      ) : (
+        <span className="text-muted-foreground text-sm">—</span>
+      )
+    },
+    {
+      key: 'isActive',
+      label: tStudents('columns.status'),
+      render: (value) => (
+        <Badge variant={value ? 'default' : 'secondary'} className={value ? 'bg-green-600' : ''}>
+          {value ? tStudents('active') : tStudents('inactive')}
+        </Badge>
+      )
+    },
+    {
+      key: 'createdAt',
+      label: tStudents('columns.enrolledAt'),
+      sortable: true,
+      render: (value) => (
+        <span className="text-sm">{formatDateShort(value as string)}</span>
+      )
+    },
   ];
 
   return (
@@ -368,18 +520,18 @@ export default function CourseDetailsPage() {
             </CardContent>
           </Card>
 
-          {/* Students Card - Temporarily disabled */}
-          {/* <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
+          {/* Students Card */}
+          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-2xl font-bold">{course?.students?.length || 0}</p>
+                  <p className="text-2xl font-bold">{totalStudents}</p>
                   <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
                 </div>
                 <GraduationCap className="h-8 w-8 text-green-500" />
               </div>
             </CardContent>
-          </Card> */}
+          </Card>
 
           {/* Professors Card - Admin only */}
           <AdminOnly>
@@ -415,6 +567,20 @@ export default function CourseDetailsPage() {
             </Badge>
           </button>
 
+          <button
+            onClick={() => setActiveTab('students')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'students'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+            }`}
+          >
+            {t('tabs.students')}
+            <Badge variant="secondary" className="ml-2">
+              {totalStudents}
+            </Badge>
+          </button>
+
           <AdminOnly>
             <button
               onClick={() => setActiveTab('professors')}
@@ -430,21 +596,6 @@ export default function CourseDetailsPage() {
               </Badge>
             </button>
           </AdminOnly>
-
-          {/* Students Tab - Temporarily disabled */}
-          {/* <button
-            onClick={() => setActiveTab('students')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm ${
-              activeTab === 'students'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
-            }`}
-          >
-            {t('tabs.students')}
-            <Badge variant="secondary" className="ml-2">
-              {course?.students?.length || 0}
-            </Badge>
-          </button> */}
         </nav>
       </div>
 
@@ -532,6 +683,84 @@ export default function CourseDetailsPage() {
           </Card>
         )}
 
+        {/* Students Tab */}
+        {activeTab === 'students' && (
+          <>
+            {/* Student Stats Cards */}
+            <div className="grid gap-4 md:grid-cols-2">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold">{totalStudents}</p>
+                      <p className="text-sm text-muted-foreground">{tStudents('totalStudents')}</p>
+                    </div>
+                    <GraduationCap className="h-8 w-8 text-green-500" />
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold">{activeStudents}</p>
+                      <p className="text-sm text-muted-foreground">{tStudents('activeStudents')}</p>
+                    </div>
+                    <UserCheck className="h-8 w-8 text-blue-500" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Student List */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>{tStudents('title')}</CardTitle>
+                    <CardDescription>
+                      {tStudents('description')}
+                    </CardDescription>
+                  </div>
+                  {canManageStudents() && (
+                    <div className="flex items-center space-x-2">
+                      <Button variant="outline" asChild>
+                        <Link href="/students">
+                          {tStudents('viewAll')}
+                        </Link>
+                      </Button>
+                      <Button onClick={() => setIsImportOpen(true)}>
+                        <Upload className="mr-2 h-4 w-4" />
+                        {tStudents('importButton')}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <DataTable
+                  data={students}
+                  columns={studentColumns}
+                  loading={studentsLoading}
+                  search={{
+                    value: studentSearch,
+                    placeholder: tStudents('searchPlaceholder'),
+                    onSearchChange: (val) => { setStudentSearch(val); setStudentPage(1); }
+                  }}
+                  pagination={{
+                    page: studentPage,
+                    limit: studentLimit,
+                    total: totalStudents,
+                    onPageChange: setStudentPage,
+                    onLimitChange: setStudentLimit
+                  }}
+                  emptyMessage={tStudents('emptyMessage')}
+                />
+              </CardContent>
+            </Card>
+          </>
+        )}
+
         {/* Professors Tab - Admin only */}
         <AdminOnly>
           {activeTab === 'professors' && (
@@ -552,35 +781,114 @@ export default function CourseDetailsPage() {
             </Card>
           )}
         </AdminOnly>
-
-        {/* Students Tab Content - Temporarily disabled */}
-        {/* {activeTab === 'students' && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('studentsTab.title')}</CardTitle>
-              <CardDescription>
-                {t('studentsTab.description')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <GraduationCap className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-2 text-sm font-semibold">{t('studentsTab.managementTitle')}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t('studentsTab.managementDescription')}
-                </p>
-                <div className="mt-4">
-                  <Button variant="outline" asChild>
-                    <Link href="/students">
-                      {t('studentsTab.viewAll')}
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )} */}
       </div>
+
+      {/* Import Students Dialog */}
+      <Dialog open={isImportOpen} onOpenChange={(open) => !open && handleCloseImport()}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{tStudents('importTitle', { course: course.name })}</DialogTitle>
+            <DialogDescription>{tStudents('importDescription')}</DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* File Upload */}
+            <div>
+              <div
+                className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {selectedFile ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <FileSpreadsheet className="h-5 w-5 text-green-600" />
+                    <span className="font-medium">{selectedFile.name}</span>
+                    <span className="text-sm text-muted-foreground">
+                      ({(selectedFile.size / 1024).toFixed(1)} KB)
+                    </span>
+                  </div>
+                ) : (
+                  <div>
+                    <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">
+                      {tCommon('buttons.upload') || 'Drop your file here or click to browse'}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">.csv, .xlsx</p>
+                  </div>
+                )}
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.xlsx"
+                onChange={handleFileSelect}
+                className="hidden"
+              />
+            </div>
+
+            {/* Import Results */}
+            {importResult && (
+              <div className="border rounded-lg p-4 space-y-3">
+                <h4 className="font-medium flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  {tStudents('importSuccess')}
+                </h4>
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Total:</span>
+                    <span className="font-medium">{importResult.totalRows}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Created:</span>
+                    <span className="font-medium text-green-600">{importResult.createdCount}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Enrolled:</span>
+                    <span className="font-medium text-blue-600">{importResult.enrolledCount}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Skipped:</span>
+                    <span className="font-medium">{importResult.skippedCount}</span>
+                  </div>
+                </div>
+
+                {importResult.errors.length > 0 && (
+                  <div className="mt-3">
+                    <h5 className="text-sm font-medium text-red-600 flex items-center gap-1 mb-2">
+                      <XCircle className="h-4 w-4" />
+                      Errors ({importResult.errorCount})
+                    </h5>
+                    <div className="max-h-32 overflow-y-auto space-y-1">
+                      {importResult.errors.map((err, i) => (
+                        <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
+                          <span className="font-medium">Row {err.row}:</span>{' '}
+                          {err.reason}
+                          {err.email && <span className="text-muted-foreground"> ({err.email})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={handleCloseImport}>
+              {tCommon('buttons.cancel')}
+            </Button>
+            {!importResult && (
+              <Button
+                onClick={handleImport}
+                disabled={!selectedFile || isUploading}
+              >
+                {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isUploading ? 'Importing...' : tStudents('importButton')}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {dialog}
     </div>
   );

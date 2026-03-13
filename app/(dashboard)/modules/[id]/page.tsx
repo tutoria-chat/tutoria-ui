@@ -298,30 +298,16 @@ export default function ModuleDetailsPage() {
   };
 
   /**
-   * Triggers on-demand file text extraction + quiz regeneration for this module.
+   * Triggers on-demand file text extraction for this module.
+   * Quiz generation is handled separately in the Quiz Bank tab.
    */
   const handleUpdateAIConfig = async () => {
     setIsUpdatingAIConfig(true);
     try {
-      // Step 1: Extract text from all files (force re-extraction)
       const extractResult = await apiClient.extractModuleTexts(moduleId, true);
 
-      // Step 2: Generate/regenerate quiz questions (upsert mode)
-      let quizResult;
-      try {
-        quizResult = await apiClient.generateModuleQuizzes(moduleId, true, 50);
-      } catch (quizError) {
-        console.error('Quiz generation failed:', quizError);
-        // Partial success — extraction worked, quiz failed
-        toast.warning(t('updateAIConfigPartial'), {
-          description: `${t('extractionResult', { count: extractResult.extracted_count })}. ${t('updateAIConfigPartialDesc')}`,
-        });
-        return;
-      }
-
-      // Full success
       toast.success(t('updateAIConfigSuccess'), {
-        description: `${t('extractionResult', { count: extractResult.extracted_count })} · ${t('quizResult', { count: quizResult.quiz_count })}`,
+        description: t('extractionResult', { count: extractResult.extracted_count }),
       });
     } catch (error) {
       console.error('AI config update error:', error);

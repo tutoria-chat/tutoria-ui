@@ -48,8 +48,10 @@ export default function CreateUserPage() {
 
   const fetchUniversities = async () => {
     try {
-      const data = await apiClient.get<University[]>('/api/universities');
-      setUniversities(data);
+      const response = await apiClient.get<{ items: University[]; total: number } | University[]>('/api/universities?size=100');
+      // Backend returns paginated response { items, total }
+      const items = Array.isArray(response) ? response : (response?.items ?? []);
+      setUniversities(items);
     } catch (error) {
       console.error('Failed to fetch universities:', error);
     }
