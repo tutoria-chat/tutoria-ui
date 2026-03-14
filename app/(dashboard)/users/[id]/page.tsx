@@ -29,7 +29,7 @@ import {
   Save,
   Shield
 } from 'lucide-react';
-import type { UserResponse, BreadcrumbItem, PermissionDefinition } from '@/lib/types';
+import type { UserResponse, BreadcrumbItem, PermissionDefinition, UserUniversity } from '@/lib/types';
 import { toast } from 'sonner';
 import { useAuth } from '@/components/auth/auth-provider';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -81,6 +81,11 @@ export default function UserDetailPage() {
   const [initialExtraPermissionIds, setInitialExtraPermissionIds] = useState<number[]>([]);
   const [isSavingPermissions, setIsSavingPermissions] = useState(false);
 
+  // Universities state
+  const [universities, setUniversities] = useState<UserUniversity[]>([]);
+  const [isLoadingUniversities, setIsLoadingUniversities] = useState(false);
+  const [removingUniversityId, setRemovingUniversityId] = useState<number | null>(null);
+
   const canManageUser = currentUser?.permissions?.includes('staff:update') ?? false;
 
   const loadUser = useCallback(async () => {
@@ -115,10 +120,23 @@ export default function UserDetailPage() {
     }
   }, [userId]);
 
+  const loadUniversities = useCallback(async () => {
+    setIsLoadingUniversities(true);
+    try {
+      const data = await apiClient.getUserUniversities(userId);
+      setUniversities(data);
+    } catch (err) {
+      console.error('Failed to load user universities:', err);
+    } finally {
+      setIsLoadingUniversities(false);
+    }
+  }, [userId]);
+
   useEffect(() => {
     loadUser();
     loadPermissions();
-  }, [loadUser, loadPermissions]);
+    loadUniversities();
+  }, [loadUser, loadPermissions, loadUniversities]);
 
   useEffect(() => {
     if (newPassword) {
@@ -276,6 +294,21 @@ export default function UserDetailPage() {
       toast.error(err.message || tPerms('saveError'));
     } finally {
       setIsSavingPermissions(false);
+    }
+  };
+
+  const handleRemoveFromUniversity = async (universityId: number) => {
+    setRemovingUniversityId(universityId);
+    try {
+      await apiClient.removeUserFromUniversity(userId, universityId);
+      toast.success(t('removeSuccess'));
+      loadUniversities();
+      loadUser(); // Refresh user data as active university may have changed
+    } catch (err: any) {
+      console.error('Failed to remove user from university:', err);
+      toast.error(err.message || t('removeError'));
+    } finally {
+      setRemovingUniversityId(null);
     }
   };
 
@@ -460,6 +493,89 @@ export default function UserDetailPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Universities Card */}
+        {canManageUser && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building className="h-5 w-5" />
+                {t('universities')}
+              </CardTitle>
+              <CardDescription>{t('universitiesDescription')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoadingUniversities ? (
+                <div className="flex justify-center py-4">
+                  <LoadingSpinner size="md" />
+                </div>
+              ) : universities.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4 text-center">
+                  {t('noUniversities')}
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {universities.map((uni) => (
+                    <div
+                      key={uni.id}
+                      className="flex items-center justify-between p-3 rounded-lg border"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Building className="h-4 w-4 text-muted-foreground" />
+                        <div>
+                          <p className="font-medium text-sm">{uni.name}</p>
+                          <p className="text-xs text-muted-foreground">{uni.code}</p>
+                        </div>
+                        {user.universityId === uni.id && (
+                          <Badge variant="outline" className="text-xs">
+                            {tCommon('active') || 'Active'}
+                          </Badge>
+                        )}
+                      </div>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive"
+                            disabled={removingUniversityId === uni.id}
+                          >
+                            {removingUniversityId === uni.id ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                            <span className="ml-1">{t('removeFromUniversity')}</span>
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>{t('confirmRemoveUniversityTitle')}</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              {t('confirmRemoveUniversityDescription', {
+                                name: `${user.firstName} ${user.lastName}`,
+                                university: uni.name,
+                              })}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleRemoveFromUniversity(uni.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              {t('confirmRemove')}
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Permissions Card */}
         {canManageUser && user.userType !== 'student' && (

@@ -1,20 +1,20 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Mail, X, UserPlus, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PageHeader } from '@/components/layout/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { PermissionEditor } from '@/components/forms/permission-editor';
+import { Badge } from '@/components/ui/badge';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { toast } from 'sonner';
 import { apiClient } from '@/lib/api';
 import { useAuth } from '@/components/auth/auth-provider';
-import type { UserRole, University } from '@/lib/types';
+import type { UserRole, University, BulkInviteResult } from '@/lib/types';
 
 export default function CreateUserPage() {
   const t = useTranslations('users.create');
@@ -22,33 +22,32 @@ export default function CreateUserPage() {
   const router = useRouter();
   const { user: currentUser } = useAuth();
 
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    userType: '' as UserRole | '',
-    universityId: '',
-    languagePreference: 'pt-br',
-  });
+  // Form state
+  const [emails, setEmails] = useState<string[]>([]);
+  const [emailInput, setEmailInput] = useState('');
+  const [userType, setUserType] = useState<string>('');
+  const [universityId, setUniversityId] = useState<string>('');
+  const [languagePreference, setLanguagePreference] = useState('pt-br');
   const [universities, setUniversities] = useState<University[]>([]);
   const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<BulkInviteResult | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [extraPermissionIds, setExtraPermissionIds] = useState<number[]>([]);
+  const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchUniversities();
   }, []);
 
-  // Reset extra permissions when role changes
+  // Pre-select university for non-super-admin users
   useEffect(() => {
-    setExtraPermissionIds([]);
-  }, [formData.userType]);
+    if (currentUser?.universityId) {
+      setUniversityId(currentUser.universityId.toString());
+    }
+  }, [currentUser?.universityId]);
 
   const fetchUniversities = async () => {
     try {
       const response = await apiClient.get<{ items: University[]; total: number } | University[]>('/api/universities?size=100');
-      // Backend returns paginated response { items, total }
       const items = Array.isArray(response) ? response : (response?.items ?? []);
       setUniversities(items);
     } catch (error) {
@@ -56,111 +55,133 @@ export default function CreateUserPage() {
     }
   };
 
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
-  };
-
-  const validate = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!formData.username.trim()) {
-      newErrors.username = t('errors.usernameRequired');
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = t('errors.emailRequired');
-    }
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = t('errors.firstNameRequired');
-    }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = t('errors.lastNameRequired');
-    }
-    if (!formData.userType) {
-      newErrors.userType = t('errors.userTypeRequired');
-    }
-
-    // University required for university-scoped roles
+  const isUniversityScopedRole = (role: string) => {
+    if (!role) return false;
     const universityScopedRoles: UserRole[] = ['manager', 'tutor', 'platform_coordinator', 'professor'];
-    if (formData.userType && universityScopedRoles.includes(formData.userType as UserRole) && !formData.universityId) {
-      newErrors.universityId = t('errors.universityRequired');
+    return universityScopedRoles.includes(role as UserRole);
+  };
+
+  const isSuperAdmin = currentUser?.userType === 'super_admin';
+
+  // ==================== Email Parsing Logic ====================
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const parseAndAddEmails = (input: string) => {
+    const parsed = input
+      .split(/[,;\s\n]+/)
+      .map(e => e.trim().toLowerCase())
+      .filter(e => e.length > 0);
+
+    const validEmails: string[] = [];
+    const invalidEmails: string[] = [];
+
+    for (const email of parsed) {
+      if (isValidEmail(email)) {
+        if (!emails.includes(email) && !validEmails.includes(email)) {
+          validEmails.push(email);
+        }
+      } else {
+        invalidEmails.push(email);
+      }
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (validEmails.length > 0) {
+      setEmails(prev => [...prev, ...validEmails].slice(0, 50));
+    }
+
+    if (invalidEmails.length > 0) {
+      setErrors(prev => ({ ...prev, emails: t('invite.invalidEmails', { emails: invalidEmails.join(', ') }) }));
+    } else {
+      setErrors(prev => {
+        const next = { ...prev };
+        delete next.emails;
+        return next;
+      });
+    }
+
+    setEmailInput('');
   };
+
+  const removeEmail = (email: string) => {
+    setEmails(prev => prev.filter(e => e !== email));
+  };
+
+  const handleEmailKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (['Enter', 'Tab', ',', ' '].includes(e.key) && emailInput.trim()) {
+      e.preventDefault();
+      parseAndAddEmails(emailInput);
+    }
+    // Backspace with empty input removes last email
+    if (e.key === 'Backspace' && !emailInput && emails.length > 0) {
+      setEmails(prev => prev.slice(0, -1));
+    }
+  };
+
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text');
+    parseAndAddEmails(pasted);
+  };
+
+  // ==================== Form Submission ====================
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validate()) {
+    // Add any remaining input
+    if (emailInput.trim()) {
+      parseAndAddEmails(emailInput);
+    }
+
+    // Validate
+    const newErrors: { [key: string]: string } = {};
+    if (emails.length === 0 && !emailInput.trim()) {
+      newErrors.emails = t('errors.emailRequired');
+    }
+    if (!userType) {
+      newErrors.userType = t('errors.userTypeRequired');
+    }
+    if (isUniversityScopedRole(userType) && !universityId) {
+      newErrors.universityId = t('errors.universityRequired');
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
     setLoading(true);
+    setResults(null);
 
     try {
-      // Auto-generate a secure temporary password (user will set their own via setup link)
-      const tempPassword = crypto.randomUUID().replace(/-/g, '').slice(0, 24) + '!A1';
-
-      const payload: any = {
-        username: formData.username,
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        password: tempPassword,
-        userType: formData.userType,
-        languagePreference: formData.languagePreference,
-      };
-
-      // Add universityId only for university-scoped roles
-      const universityScopedRoles: UserRole[] = ['manager', 'tutor', 'platform_coordinator', 'professor'];
-      if (formData.userType && universityScopedRoles.includes(formData.userType as UserRole)) {
-        payload.universityId = parseInt(formData.universityId);
-      }
-
-      const newUser = await apiClient.post<{ userId: number }>('/api/users', payload);
-
-      // If extra permissions were selected, set them on the newly created user
-      if (extraPermissionIds.length > 0 && newUser?.userId) {
-        try {
-          await apiClient.setUserExtraPermissions(newUser.userId, extraPermissionIds);
-        } catch (permError) {
-          console.error('Failed to set extra permissions:', permError);
-          // User was created but permissions failed - show partial success
-          toast.warning(t('successMessage') + ' ' + t('permissionsWarning'));
-          router.push('/users');
-          return;
-        }
-      }
-
-      toast.success(t('successMessage'));
-      router.push('/users');
+      const result = await apiClient.bulkInvite({
+        emails,
+        userType,
+        universityId: universityId ? parseInt(universityId) : undefined,
+        languagePreference,
+      });
+      setResults(result);
+      // Clear form emails on success
+      setEmails([]);
+      setEmailInput('');
     } catch (error: any) {
-      const errorMessage = error.message || t('errorMessage');
-
-      // Handle specific validation errors
-      if (errorMessage.toLowerCase().includes('username already exists')) {
-        setErrors({ username: t('errors.usernameExists') });
-        toast.error(t('errors.usernameExists'));
-      } else if (errorMessage.toLowerCase().includes('email already exists')) {
-        setErrors({ email: t('errors.emailExists') });
-        toast.error(t('errors.emailExists'));
-      } else {
-        toast.error(errorMessage);
-      }
+      toast.error(error.message || t('errorMessage'));
     } finally {
       setLoading(false);
     }
   };
 
-  const isUniversityScopedRole = (role: UserRole | '') => {
-    if (!role) return false;
-    const universityScopedRoles: UserRole[] = ['manager', 'tutor', 'platform_coordinator', 'professor'];
-    return universityScopedRoles.includes(role as UserRole);
+  const handleSendMore = () => {
+    setResults(null);
+    setEmails([]);
+    setEmailInput('');
+    setErrors({});
   };
+
+  // ==================== Render ====================
 
   return (
     <div className="space-y-6">
@@ -176,8 +197,8 @@ export default function CreateUserPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{t('formTitle')}</CardTitle>
-          <CardDescription>{t('formDescription')}</CardDescription>
+          <CardTitle>{t('invite.formTitle')}</CardTitle>
+          <CardDescription>{t('invite.formDescription')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -185,14 +206,19 @@ export default function CreateUserPage() {
             <div className="space-y-2">
               <Label htmlFor="userType">{t('fields.userType.label')} *</Label>
               <Select
-                value={formData.userType}
-                onValueChange={(value) => handleChange('userType', value)}
+                value={userType}
+                onValueChange={(value) => {
+                  setUserType(value);
+                  if (errors.userType) {
+                    setErrors(prev => ({ ...prev, userType: '' }));
+                  }
+                }}
               >
                 <SelectTrigger id="userType">
                   <SelectValue placeholder={t('fields.userType.placeholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  {currentUser?.userType === 'super_admin' && (
+                  {isSuperAdmin && (
                     <SelectItem value="super_admin">{tCommon('roles.super_admin')}</SelectItem>
                   )}
                   <SelectItem value="manager">{tCommon('roles.manager')}</SelectItem>
@@ -202,21 +228,27 @@ export default function CreateUserPage() {
                   <SelectItem value="student">{tCommon('roles.student')}</SelectItem>
                 </SelectContent>
               </Select>
-              {formData.userType && (
+              {userType && (
                 <p className="text-sm text-muted-foreground">
-                  {tCommon(`roles.descriptions.${formData.userType}`)}
+                  {tCommon(`roles.descriptions.${userType}`)}
                 </p>
               )}
               {errors.userType && <p className="text-sm text-destructive">{errors.userType}</p>}
             </div>
 
             {/* University Selection (for university-scoped roles) */}
-            {isUniversityScopedRole(formData.userType) && (
+            {isUniversityScopedRole(userType) && (
               <div className="space-y-2">
                 <Label htmlFor="universityId">{t('fields.university.label')} *</Label>
                 <Select
-                  value={formData.universityId}
-                  onValueChange={(value) => handleChange('universityId', value)}
+                  value={universityId}
+                  onValueChange={(value) => {
+                    setUniversityId(value);
+                    if (errors.universityId) {
+                      setErrors(prev => ({ ...prev, universityId: '' }));
+                    }
+                  }}
+                  disabled={!isSuperAdmin && !!currentUser?.universityId}
                 >
                   <SelectTrigger id="universityId">
                     <SelectValue placeholder={t('fields.university.placeholder')} />
@@ -233,68 +265,57 @@ export default function CreateUserPage() {
               </div>
             )}
 
-            {/* Username */}
+            {/* Email Input Area */}
             <div className="space-y-2">
-              <Label htmlFor="username">{t('fields.username.label')} *</Label>
-              <Input
-                id="username"
-                type="text"
-                value={formData.username}
-                onChange={(e) => handleChange('username', e.target.value)}
-                placeholder={t('fields.username.placeholder')}
-                disabled={loading}
-              />
-              {errors.username && <p className="text-sm text-destructive">{errors.username}</p>}
-            </div>
-
-            {/* Email */}
-            <div className="space-y-2">
-              <Label htmlFor="email">{t('fields.email.label')} *</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                placeholder={t('fields.email.placeholder')}
-                disabled={loading}
-              />
-              {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
-            </div>
-
-            {/* First Name */}
-            <div className="space-y-2">
-              <Label htmlFor="firstName">{t('fields.firstName.label')} *</Label>
-              <Input
-                id="firstName"
-                type="text"
-                value={formData.firstName}
-                onChange={(e) => handleChange('firstName', e.target.value)}
-                placeholder={t('fields.firstName.placeholder')}
-                disabled={loading}
-              />
-              {errors.firstName && <p className="text-sm text-destructive">{errors.firstName}</p>}
-            </div>
-
-            {/* Last Name */}
-            <div className="space-y-2">
-              <Label htmlFor="lastName">{t('fields.lastName.label')} *</Label>
-              <Input
-                id="lastName"
-                type="text"
-                value={formData.lastName}
-                onChange={(e) => handleChange('lastName', e.target.value)}
-                placeholder={t('fields.lastName.placeholder')}
-                disabled={loading}
-              />
-              {errors.lastName && <p className="text-sm text-destructive">{errors.lastName}</p>}
+              <Label>{t('invite.emailLabel')} *</Label>
+              <div
+                className={`min-h-[100px] p-2 rounded-md border bg-background flex flex-wrap gap-1.5 cursor-text ${
+                  errors.emails ? 'border-destructive' : ''
+                }`}
+                onClick={() => emailInputRef.current?.focus()}
+              >
+                {emails.map((email) => (
+                  <Badge key={email} variant="secondary" className="gap-1 pr-1">
+                    {email}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); removeEmail(email); }}
+                      className="ml-0.5 rounded-full hover:bg-muted-foreground/20 p-0.5"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+                <input
+                  ref={emailInputRef}
+                  type="text"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  onKeyDown={handleEmailKeyDown}
+                  onPaste={handlePaste}
+                  onBlur={() => { if (emailInput.trim()) parseAndAddEmails(emailInput); }}
+                  placeholder={emails.length === 0 ? t('invite.emailPlaceholder') : ''}
+                  className="flex-1 min-w-[200px] outline-none bg-transparent text-sm"
+                  disabled={loading || emails.length >= 50}
+                />
+              </div>
+              {errors.emails && <p className="text-sm text-destructive">{errors.emails}</p>}
+              <p className="text-xs text-muted-foreground">
+                {t('invite.emailHint', { count: emails.length })}
+              </p>
+              {emails.length >= 45 && (
+                <p className="text-xs text-amber-600 dark:text-amber-400">
+                  {t('invite.maxEmails')}
+                </p>
+              )}
             </div>
 
             {/* Language Preference */}
             <div className="space-y-2">
               <Label htmlFor="languagePreference">{t('fields.language.label')}</Label>
               <Select
-                value={formData.languagePreference}
-                onValueChange={(value) => handleChange('languagePreference', value)}
+                value={languagePreference}
+                onValueChange={setLanguagePreference}
               >
                 <SelectTrigger id="languagePreference">
                   <SelectValue />
@@ -307,19 +328,23 @@ export default function CreateUserPage() {
               </Select>
             </div>
 
-            {/* Permission Editor - shown after role selection */}
-            {formData.userType && (
-              <PermissionEditor
-                role={formData.userType}
-                extraPermissionIds={extraPermissionIds}
-                onChange={setExtraPermissionIds}
-                disabled={loading}
-              />
-            )}
-
+            {/* Submit Button */}
             <div className="flex gap-4">
-              <Button type="submit" disabled={loading}>
-                {loading ? tCommon('buttons.loading') : t('submitButton')}
+              <Button
+                type="submit"
+                disabled={loading || (emails.length === 0 && !emailInput.trim()) || !userType}
+              >
+                {loading ? (
+                  <>
+                    <LoadingSpinner size="sm" className="mr-2" />
+                    {t('invite.submitting')}
+                  </>
+                ) : (
+                  <>
+                    <Mail className="mr-2 h-4 w-4" />
+                    {t('invite.submitButton')}
+                  </>
+                )}
               </Button>
               <Button type="button" variant="outline" onClick={() => router.back()}>
                 {tCommon('buttons.cancel')}
@@ -328,6 +353,91 @@ export default function CreateUserPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Results Section */}
+      {results && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('invite.results.title')}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Invited (green) */}
+            {results.invited.length > 0 && (
+              <div className="rounded-lg border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/30 p-4">
+                <div className="flex items-center gap-2 font-medium text-green-700 dark:text-green-400 mb-2">
+                  <Mail className="h-4 w-4" />
+                  {t('invite.results.invited', { count: results.invited.length })}
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {results.invited.map(i => (
+                    <Badge key={i.email} variant="outline" className="text-xs">{i.email}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Added (blue) */}
+            {results.added.length > 0 && (
+              <div className="rounded-lg border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 p-4">
+                <div className="flex items-center gap-2 font-medium text-blue-700 dark:text-blue-400 mb-2">
+                  <UserPlus className="h-4 w-4" />
+                  {t('invite.results.added', { count: results.added.length })}
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {results.added.map(a => (
+                    <Badge key={a.email} variant="outline" className="text-xs">
+                      {a.name} ({a.email})
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Already Members (gray) */}
+            {results.alreadyMembers.length > 0 && (
+              <div className="rounded-lg border border-muted bg-muted/30 p-4">
+                <div className="flex items-center gap-2 font-medium text-muted-foreground mb-2">
+                  <Check className="h-4 w-4" />
+                  {t('invite.results.alreadyMembers', { count: results.alreadyMembers.length })}
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {results.alreadyMembers.map(m => (
+                    <Badge key={m.email} variant="outline" className="text-xs">
+                      {m.name} ({m.email})
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Errors (red) */}
+            {results.errors.length > 0 && (
+              <div className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30 p-4">
+                <div className="flex items-center gap-2 font-medium text-red-700 dark:text-red-400 mb-2">
+                  <AlertCircle className="h-4 w-4" />
+                  {t('invite.results.errors', { count: results.errors.length })}
+                </div>
+                <div className="space-y-1">
+                  {results.errors.map(err => (
+                    <div key={err.email} className="text-sm">
+                      <span className="font-medium">{err.email}</span>
+                      <span className="text-muted-foreground"> — {err.message}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Send More button */}
+            <div className="pt-2">
+              <Button variant="outline" onClick={handleSendMore}>
+                <Mail className="mr-2 h-4 w-4" />
+                {t('invite.sendMore')}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

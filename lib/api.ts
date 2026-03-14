@@ -82,6 +82,11 @@ import type {
   PermissionDefinition,
   QuizQuestion,
   ExtractedQuestion,
+  UserUniversity,
+  UserSearchResult,
+  InvitationResponse,
+  InvitationDetailsResponse,
+  BulkInviteResult,
 } from './types';
 
 export class ApiError extends Error {
@@ -1295,6 +1300,11 @@ class TutoriaAPIClient {
     return this.post('/api/auth/register/university', data);
   }
 
+  // User Registration (public - no auth required, self-signup without university)
+  async registerUser(data: { email: string; password: string; firstName: string; lastName: string; username?: string }): Promise<{ userId: number; email: string; message: string }> {
+    return this.post('/api/auth/register/user', data);
+  }
+
   async exportAuditLogs(filters?: Omit<AuditLogFilters, 'page' | 'size'>): Promise<Blob> {
     const searchParams = new URLSearchParams();
     if (filters) {
@@ -1360,6 +1370,70 @@ class TutoriaAPIClient {
     await this.request(`/api/permissions/${id}`, {
       method: 'DELETE',
     });
+  }
+
+  // ==================== Multi-Tenancy / University Membership API ====================
+
+  async switchUniversity(universityId: number): Promise<{ accessToken: string; refreshToken: string; universities: UserUniversity[] }> {
+    return this.post('/api/auth/switch-university', { universityId });
+  }
+
+  async getUserUniversities(userId: number): Promise<UserUniversity[]> {
+    return this.get(`/api/users/${userId}/universities`);
+  }
+
+  async addUserToUniversity(userId: number, universityId: number): Promise<void> {
+    return this.post(`/api/users/${userId}/universities`, { universityId });
+  }
+
+  async removeUserFromUniversity(userId: number, universityId: number): Promise<void> {
+    return this.delete(`/api/users/${userId}/universities/${universityId}`);
+  }
+
+  async searchUsers(query: string, excludeUniversityId?: number, page?: number, size?: number): Promise<{ items: UserSearchResult[]; total: number }> {
+    const params: Record<string, unknown> = { query };
+    if (excludeUniversityId !== undefined) params.excludeUniversityId = excludeUniversityId;
+    if (page !== undefined) params.page = page;
+    if (size !== undefined) params.size = size;
+    return this.get('/api/users/search', params);
+  }
+
+  // ==================== Invitations ====================
+
+  // Create a single invitation (admin, requires auth)
+  async createInvitation(data: { email: string; userType: string; universityId?: number; isAdmin?: boolean; languagePreference?: string }): Promise<InvitationResponse> {
+    return this.post('/api/invitations', data);
+  }
+
+  // Bulk invite - handles both existing and new users (admin, requires auth)
+  async bulkInvite(data: { emails: string[]; userType: string; universityId?: number; isAdmin?: boolean; languagePreference?: string }): Promise<BulkInviteResult> {
+    return this.post('/api/invitations/bulk', data);
+  }
+
+  // Get invitation details by token (public, no auth)
+  async getInvitationByToken(token: string): Promise<InvitationDetailsResponse> {
+    const baseUrl = this.baseURL;
+    const response = await fetch(`${baseUrl}/api/auth/invitations/${encodeURIComponent(token)}`);
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Invitation not found' }));
+      throw new Error(error.message || 'Invitation not found');
+    }
+    return response.json();
+  }
+
+  // Accept invitation (public, no auth)
+  async acceptInvitation(data: { token: string; username: string; firstName: string; lastName: string; password: string }): Promise<{ userId: number; email: string; message: string }> {
+    const baseUrl = this.baseURL;
+    const response = await fetch(`${baseUrl}/api/auth/accept-invitation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Failed to accept invitation' }));
+      throw new Error(error.message || 'Failed to accept invitation');
+    }
+    return response.json();
   }
 }
 

@@ -1,6 +1,24 @@
 // Core API Types for Tutoria Platform
 // IMPORTANT: All properties use camelCase to match C# API JSON serialization
 
+// Multi-Tenancy Types
+export interface UserUniversity {
+  id: number;
+  name: string;
+  code: string;
+  joinedAt: string;
+}
+
+export interface UserSearchResult {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  userType: string;
+  isActive: boolean;
+  universities: UserUniversity[];
+}
+
 // User Authentication Types
 export interface User {
   id: number; // Maps to userId from backend
@@ -11,7 +29,8 @@ export interface User {
   userType: UserRole; // 'super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor', or 'student' - RECOMMENDED: Use this field
   role: UserRole; // @deprecated Alias for userType (for backwards compatibility). Prefer using userType instead.
   isActive: boolean;
-  universityId?: number;
+  universityId?: number; // Active university ID
+  universities?: UserUniversity[]; // All universities the user belongs to (multi-tenancy)
   isAdmin?: boolean; // Only for professors: true = admin professor, false = regular professor
   governmentId?: string; // CPF (Brazil), SSN (US), etc.
   externalId?: string; // Student registration ID, employee ID, etc.
@@ -40,6 +59,7 @@ export interface UserResponse {
   isAdmin?: boolean;
   universityId?: number;
   universityName?: string; // Included when joined with university table
+  universities?: UserUniversity[]; // All universities the user belongs to (multi-tenancy)
   governmentId?: string;
   externalId?: string;
   birthdate?: string;
@@ -74,6 +94,32 @@ export interface AuthResult {
   success: boolean;
   user: User;
   token?: string;
+}
+
+// Invitation Types
+export interface InvitationResponse {
+  id: number;
+  email: string;
+  userType: string;
+  universityName?: string;
+  expiresAt: string;
+  status: string;
+}
+
+export interface InvitationDetailsResponse {
+  email: string;
+  userType: string;
+  universityName?: string;
+  universityCode?: string;
+  status: string;
+  isExpired: boolean;
+}
+
+export interface BulkInviteResult {
+  invited: Array<{ email: string; message: string }>;
+  added: Array<{ email: string; userId: number; name: string; message: string }>;
+  alreadyMembers: Array<{ email: string; userId: number; name: string }>;
+  errors: Array<{ email: string; message: string }>;
 }
 
 // University Types

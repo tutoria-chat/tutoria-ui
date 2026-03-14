@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { checkPermission } from '@/lib/permissions';
 import { apiClient } from '@/lib/api';
 import { jwtDecode } from 'jwt-decode';
-import type { User, Permission, PermissionContext, UserRole } from '@/lib/types';
+import type { User, Permission, PermissionContext, UserRole, UserUniversity } from '@/lib/types';
 
 interface JWTPayload {
   userId: number;
@@ -28,6 +28,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   hasPermission: (action: Permission['action'], resource: Permission['resource'], context?: PermissionContext) => boolean;
   changePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  switchUniversity: (universityId: number) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     role: userData.userType,
                     isActive: userData.isActive !== undefined ? userData.isActive : true,
                     universityId: userData.universityId,
+                    universities: userData.universities || [],
                     isAdmin: userData.isAdmin || false,
                     assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
                     permissions: userData.permissions || [],
@@ -168,6 +170,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           role: userData.userType,
           isActive: userData.isActive !== undefined ? userData.isActive : true,
           universityId: userData.universityId,
+          universities: userData.universities || [],
           isAdmin: userData.isAdmin || false,
           assignedCourses: userData.professorCourseIds || userData.studentCourseIds || [],
           permissions: userData.permissions || [],
@@ -251,6 +254,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const switchUniversity = async (universityId: number) => {
+    const response = await apiClient.switchUniversity(universityId);
+
+    // Store the new tokens
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('tutoria_token', response.accessToken);
+      localStorage.setItem('tutoria_refresh_token', response.refreshToken);
+    }
+    apiClient.setToken(response.accessToken);
+
+    // Update the user state with the new active universityId and refreshed universities list
+    if (user) {
+      const updatedUser: User = {
+        ...user,
+        universityId,
+        universities: response.universities,
+      };
+      setUser(updatedUser);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('tutoria_user', JSON.stringify(updatedUser));
+      }
+    }
+
+    // Reload the page to refresh all data for the new university context
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
+  };
+
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
@@ -259,6 +291,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     hasPermission,
     changePassword,
+    switchUniversity,
   };
 
   return (

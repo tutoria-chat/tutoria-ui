@@ -9,6 +9,7 @@ import { LogOut, User, Settings, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { UserSettingsModal } from '@/components/layout/user-settings-modal';
+import { UniversitySwitcher } from '@/components/layout/university-switcher';
 import { useAuth } from '@/components/auth/auth-provider';
 import { getUserRoleDisplayName } from '@/lib/permissions';
 
@@ -52,6 +53,9 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
             <Menu className="h-5 w-5" />
           )}
         </Button>
+
+        {/* University Switcher (shown when user belongs to multiple universities) */}
+        <UniversitySwitcher />
 
         {/* Spacer to push content to the right */}
         <div className="flex-1"></div>

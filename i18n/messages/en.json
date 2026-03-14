@@ -1066,14 +1066,28 @@
       "inactive": "Inactive"
     },
     "create": {
-      "title": "Create User",
-      "description": "Add a new user to the system",
-      "formTitle": "User Information",
-      "formDescription": "Fill in the user details. The user will receive a password setup link to create their own password.",
-      "submitButton": "Create User",
-      "successMessage": "User created successfully!",
-      "errorMessage": "Failed to create user",
-      "permissionsWarning": "However, extra permissions could not be saved.",
+      "title": "Add Users",
+      "description": "Invite new users or add existing ones to your university",
+      "errorMessage": "Failed to process invitations",
+      "invite": {
+        "formTitle": "Invite Users",
+        "formDescription": "Enter email addresses to invite new users or add existing ones. The system will handle each case automatically.",
+        "emailLabel": "Email addresses",
+        "emailPlaceholder": "Type or paste email addresses...",
+        "emailHint": "{count} email(s) entered. Separate with commas, spaces, or new lines.",
+        "maxEmails": "Maximum 50 emails per batch",
+        "invalidEmails": "Invalid email format: {emails}",
+        "submitButton": "Send Invitations",
+        "submitting": "Processing...",
+        "results": {
+          "title": "Results",
+          "invited": "{count} invitation(s) sent",
+          "added": "{count} existing user(s) added to university",
+          "alreadyMembers": "{count} user(s) already members",
+          "errors": "{count} error(s) occurred"
+        },
+        "sendMore": "Send More Invitations"
+      },
       "fields": {
         "userType": {
           "label": "Role",
@@ -1083,42 +1097,14 @@
           "label": "University",
           "placeholder": "Select a university..."
         },
-        "username": {
-          "label": "Username",
-          "placeholder": "Enter username"
-        },
-        "email": {
-          "label": "Email",
-          "placeholder": "user@example.com"
-        },
-        "firstName": {
-          "label": "First Name",
-          "placeholder": "Enter first name"
-        },
-        "lastName": {
-          "label": "Last Name",
-          "placeholder": "Enter last name"
-        },
-        "password": {
-          "label": "Initial Password",
-          "placeholder": "Enter initial password",
-          "hint": "The user will be prompted to change this password on first login"
-        },
         "language": {
           "label": "Preferred Language"
         }
       },
       "errors": {
-        "usernameRequired": "Username is required",
-        "emailRequired": "Email is required",
-        "firstNameRequired": "First name is required",
-        "lastNameRequired": "Last name is required",
-        "passwordRequired": "Password is required",
-        "passwordMinLength": "Password must be at least 6 characters",
+        "emailRequired": "At least one email address is required",
         "userTypeRequired": "Role is required",
-        "universityRequired": "University is required for this role",
-        "usernameExists": "This username already exists",
-        "emailExists": "This email is already registered"
+        "universityRequired": "University is required for this role"
       }
     },
     "detail": {
@@ -1175,7 +1161,16 @@
       "activate": "Activate",
       "confirmDeleteTitle": "Delete User Permanently",
       "confirmDeleteDescription": "Are you sure you want to permanently delete {name}? This action cannot be undone.",
-      "confirmDelete": "Delete Permanently"
+      "confirmDelete": "Delete Permanently",
+      "universities": "Universities",
+      "universitiesDescription": "Universities this user belongs to.",
+      "noUniversities": "This user is not part of any university.",
+      "removeFromUniversity": "Remove",
+      "confirmRemoveUniversityTitle": "Remove from University?",
+      "confirmRemoveUniversityDescription": "Are you sure you want to remove {name} from {university}? They will lose access to all data in this university.",
+      "confirmRemove": "Remove",
+      "removeSuccess": "User removed from university successfully.",
+      "removeError": "Failed to remove user from university."
     }
   },
   "students": {
@@ -1609,7 +1604,13 @@
   "header": {
     "profile": "Profile",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "universitySwitcher": {
+      "label": "Your Universities",
+      "select": "Select university",
+      "switching": "Switching...",
+      "error": "Failed to switch university. Please try again."
+    }
   },
   "changePassword": {
     "breadcrumbDashboard": "Dashboard",
@@ -4070,7 +4071,25 @@
       "loginLink": "Sign in"
     },
     "registrationSuccess": "Account created successfully! Please log in.",
-    "registrationError": "Registration failed. Please try again."
+    "registrationError": "Registration failed. Please try again.",
+    "emailAlreadyExists": "This email is already registered. If you already have an account, please sign in instead.",
+    "modeUniversity": "Register University",
+    "modeUniversityDesc": "Create a new university account and become its administrator.",
+    "modePersonal": "Create Personal Account",
+    "modePersonalDesc": "Create your account and wait to be invited to a university.",
+    "personalRegistrationSuccess": "Account created successfully! You can now log in.",
+    "personalForm": {
+      "title": "Create Your Account",
+      "description": "Create a personal account. A university administrator can invite you later.",
+      "infoNotice": "After creating your account, you'll be able to log in and wait for a university administrator to add you to their institution. You can also request to join a university.",
+      "emailPlaceholder": "your.email@example.com",
+      "username": "Username",
+      "usernamePlaceholder": "Choose a username",
+      "usernameRequired": "Username is required",
+      "usernameAlreadyExists": "This username is already taken. Please choose another.",
+      "submit": "Create Account",
+      "submitting": "Creating account..."
+    }
   },
   "subscription": {
     "title": "Subscription",
@@ -4257,6 +4276,40 @@
     "contact": {
       "title": "7. Contact & Data Protection Officer",
       "content": "For questions about this Privacy Policy, to exercise your data rights, or to contact our Data Protection Officer, please reach out to your university's administration or email us at the contact provided by your institution."
+    }
+  },
+  "acceptInvitation": {
+    "title": "You've been invited!",
+    "subtitle": "Join {universityName} as a {role}",
+    "subtitleNoUni": "Join Tutoria as a {role}",
+    "noToken": "No invitation token provided.",
+    "invalidToken": "This invitation link is invalid or has been removed.",
+    "expired": "This invitation has expired. Please ask your administrator to send a new one.",
+    "alreadyAccepted": "This invitation has already been used.",
+    "alreadyAcceptedTitle": "Invitation Already Accepted",
+    "cancelled": "This invitation has been cancelled.",
+    "errorTitle": "Invalid Invitation",
+    "email": "Email",
+    "username": "Username",
+    "usernamePlaceholder": "Choose a username",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 8 characters",
+    "submit": "Create Account",
+    "submitting": "Creating account...",
+    "successMessage": "Account created successfully! Please log in.",
+    "loginLink": "Already have an account?",
+    "goToLogin": "Log in",
+    "signupLink": "Create an account instead",
+    "errors": {
+      "usernameRequired": "Username is required",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "usernameTaken": "This username is already taken",
+      "generic": "Something went wrong. Please try again."
     }
   }
 }

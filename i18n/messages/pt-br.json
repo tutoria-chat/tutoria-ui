@@ -1025,14 +1025,28 @@
       "inactive": "Inativo"
     },
     "create": {
-      "title": "Criar Usuário",
-      "description": "Adicionar um novo usuário ao sistema",
-      "formTitle": "Informações do Usuário",
-      "formDescription": "Preencha os detalhes do usuário. O usuário receberá um link para configurar sua própria senha.",
-      "submitButton": "Criar Usuário",
-      "successMessage": "Usuário criado com sucesso!",
-      "errorMessage": "Falha ao criar usuário",
-      "permissionsWarning": "Porém, as permissões extras não puderam ser salvas.",
+      "title": "Adicionar Usuários",
+      "description": "Convide novos usuários ou adicione existentes à sua universidade",
+      "errorMessage": "Falha ao processar convites",
+      "invite": {
+        "formTitle": "Convidar Usuários",
+        "formDescription": "Digite os endereços de e-mail para convidar novos usuários ou adicionar existentes. O sistema tratará cada caso automaticamente.",
+        "emailLabel": "Endereços de e-mail",
+        "emailPlaceholder": "Digite ou cole endereços de e-mail...",
+        "emailHint": "{count} e-mail(s) inserido(s). Separe com vírgulas, espaços ou novas linhas.",
+        "maxEmails": "Máximo de 50 e-mails por lote",
+        "invalidEmails": "Formato de e-mail inválido: {emails}",
+        "submitButton": "Enviar Convites",
+        "submitting": "Processando...",
+        "results": {
+          "title": "Resultados",
+          "invited": "{count} convite(s) enviado(s)",
+          "added": "{count} usuário(s) existente(s) adicionado(s) à universidade",
+          "alreadyMembers": "{count} usuário(s) já são membros",
+          "errors": "{count} erro(s) ocorrido(s)"
+        },
+        "sendMore": "Enviar Mais Convites"
+      },
       "fields": {
         "userType": {
           "label": "Função",
@@ -1042,42 +1056,14 @@
           "label": "Universidade",
           "placeholder": "Selecione uma universidade..."
         },
-        "username": {
-          "label": "Nome de Usuário",
-          "placeholder": "Digite o nome de usuário"
-        },
-        "email": {
-          "label": "E-mail",
-          "placeholder": "usuario@exemplo.com"
-        },
-        "firstName": {
-          "label": "Primeiro Nome",
-          "placeholder": "Digite o primeiro nome"
-        },
-        "lastName": {
-          "label": "Sobrenome",
-          "placeholder": "Digite o sobrenome"
-        },
-        "password": {
-          "label": "Senha Inicial",
-          "placeholder": "Digite a senha inicial",
-          "hint": "O usuário será solicitado a alterar esta senha no primeiro login"
-        },
         "language": {
           "label": "Idioma Preferido"
         }
       },
       "errors": {
-        "usernameRequired": "Nome de usuário é obrigatório",
-        "emailRequired": "E-mail é obrigatório",
-        "firstNameRequired": "Primeiro nome é obrigatório",
-        "lastNameRequired": "Sobrenome é obrigatório",
-        "passwordRequired": "Senha é obrigatória",
-        "passwordMinLength": "A senha deve ter pelo menos 6 caracteres",
+        "emailRequired": "Pelo menos um endereço de e-mail é obrigatório",
         "userTypeRequired": "Função é obrigatória",
-        "universityRequired": "Universidade é obrigatória para esta função",
-        "usernameExists": "Este nome de usuário já existe",
-        "emailExists": "Este e-mail já está cadastrado"
+        "universityRequired": "Universidade é obrigatória para esta função"
       }
     },
     "detail": {
@@ -1134,7 +1120,16 @@
       "activate": "Ativar",
       "confirmDeleteTitle": "Excluir Usuário Permanentemente",
       "confirmDeleteDescription": "Tem certeza de que deseja excluir permanentemente {name}? Esta ação não pode ser desfeita.",
-      "confirmDelete": "Excluir Permanentemente"
+      "confirmDelete": "Excluir Permanentemente",
+      "universities": "Universidades",
+      "universitiesDescription": "Universidades às quais este usuário pertence.",
+      "noUniversities": "Este usuário não faz parte de nenhuma universidade.",
+      "removeFromUniversity": "Remover",
+      "confirmRemoveUniversityTitle": "Remover da Universidade?",
+      "confirmRemoveUniversityDescription": "Tem certeza de que deseja remover {name} de {university}? O usuário perderá acesso a todos os dados desta universidade.",
+      "confirmRemove": "Remover",
+      "removeSuccess": "Usuário removido da universidade com sucesso.",
+      "removeError": "Falha ao remover usuário da universidade."
     }
   },
   "students": {
@@ -1606,7 +1601,13 @@
   "header": {
     "profile": "Perfil",
     "settings": "Configurações",
-    "logout": "Sair"
+    "logout": "Sair",
+    "universitySwitcher": {
+      "label": "Suas Universidades",
+      "select": "Selecionar universidade",
+      "switching": "Alternando...",
+      "error": "Falha ao trocar de universidade. Tente novamente."
+    }
   },
   "changePassword": {
     "breadcrumbDashboard": "Painel",
@@ -5014,7 +5015,25 @@
       "loginLink": "Entrar"
     },
     "registrationSuccess": "Conta criada com sucesso! Faça login.",
-    "registrationError": "Falha no cadastro. Tente novamente."
+    "registrationError": "Falha no cadastro. Tente novamente.",
+    "emailAlreadyExists": "Este e-mail já está cadastrado. Se você já tem uma conta, faça login.",
+    "modeUniversity": "Registrar Universidade",
+    "modeUniversityDesc": "Crie uma nova conta de universidade e se torne o administrador.",
+    "modePersonal": "Criar Conta Pessoal",
+    "modePersonalDesc": "Crie sua conta e aguarde ser convidado para uma universidade.",
+    "personalRegistrationSuccess": "Conta criada com sucesso! Agora você pode fazer login.",
+    "personalForm": {
+      "title": "Criar Sua Conta",
+      "description": "Crie uma conta pessoal. Um administrador da universidade pode convidá-lo depois.",
+      "infoNotice": "Após criar sua conta, você poderá fazer login e aguardar que um administrador da universidade o adicione à instituição. Você também pode solicitar para participar de uma universidade.",
+      "emailPlaceholder": "seu.email@exemplo.com",
+      "username": "Nome de usuário",
+      "usernamePlaceholder": "Escolha um nome de usuário",
+      "usernameRequired": "Nome de usuário é obrigatório",
+      "usernameAlreadyExists": "Este nome de usuário já está em uso. Escolha outro.",
+      "submit": "Criar Conta",
+      "submitting": "Criando conta..."
+    }
   },
   "subscription": {
     "title": "Assinatura",
@@ -5201,6 +5220,40 @@
     "contact": {
       "title": "7. Contato e Encarregado de Proteção de Dados",
       "content": "Para dúvidas sobre esta Política de Privacidade, para exercer seus direitos sobre dados ou para contatar nosso Encarregado de Proteção de Dados (DPO), entre em contato com a administração da sua universidade ou pelo e-mail fornecido pela sua instituição."
+    }
+  },
+  "acceptInvitation": {
+    "title": "Você foi convidado!",
+    "subtitle": "Junte-se a {universityName} como {role}",
+    "subtitleNoUni": "Junte-se ao Tutoria como {role}",
+    "noToken": "Nenhum token de convite fornecido.",
+    "invalidToken": "Este link de convite é inválido ou foi removido.",
+    "expired": "Este convite expirou. Por favor, peça ao seu administrador para enviar um novo.",
+    "alreadyAccepted": "Este convite já foi utilizado.",
+    "alreadyAcceptedTitle": "Convite Já Aceito",
+    "cancelled": "Este convite foi cancelado.",
+    "errorTitle": "Convite Inválido",
+    "email": "E-mail",
+    "username": "Nome de usuário",
+    "usernamePlaceholder": "Escolha um nome de usuário",
+    "firstName": "Nome",
+    "lastName": "Sobrenome",
+    "password": "Senha",
+    "passwordPlaceholder": "Mínimo de 8 caracteres",
+    "submit": "Criar Conta",
+    "submitting": "Criando conta...",
+    "successMessage": "Conta criada com sucesso! Por favor, faça login.",
+    "loginLink": "Já tem uma conta?",
+    "goToLogin": "Entrar",
+    "signupLink": "Criar uma conta em vez disso",
+    "errors": {
+      "usernameRequired": "O nome de usuário é obrigatório",
+      "firstNameRequired": "O nome é obrigatório",
+      "lastNameRequired": "O sobrenome é obrigatório",
+      "passwordRequired": "A senha é obrigatória",
+      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+      "usernameTaken": "Este nome de usuário já está em uso",
+      "generic": "Algo deu errado. Por favor, tente novamente."
     }
   }
 }
