@@ -191,7 +191,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
 
       <div className="relative flex h-full w-64 flex-col bg-gradient-to-b from-background via-background to-muted/20 overflow-hidden">
         {/* Header with gradient background */}
-        <div className="flex h-20 items-center justify-center border-b border-border/50 px-4 shrink-0 bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5">
+        <div className="flex h-20 items-center justify-center px-4 shrink-0 bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5">
           <Link
             href="/dashboard"
             className="flex items-center space-x-2 overflow-hidden transition-transform hover:scale-105 duration-200"

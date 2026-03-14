@@ -36,8 +36,8 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
   if (!user) return null;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-14 items-center px-4 sm:px-6 lg:px-8 max-w-[1920px] 2xl:max-w-[2200px] mx-auto w-full">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-20 items-center px-4 sm:px-6 lg:px-8 max-w-[1920px] 2xl:max-w-[2200px] mx-auto w-full">
         <div className="max-w-[1600px] mx-auto w-full flex items-center">
         {/* Mobile menu button */}
         <Button
