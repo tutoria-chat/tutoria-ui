@@ -1069,7 +1069,7 @@
       "title": "Create User",
       "description": "Add a new user to the system",
       "formTitle": "User Information",
-      "formDescription": "Fill in the user details. A welcome email with login instructions will be sent after creation.",
+      "formDescription": "Fill in the user details. The user will receive a password setup link to create their own password.",
       "submitButton": "Create User",
       "successMessage": "User created successfully!",
       "errorMessage": "Failed to create user",
@@ -4023,6 +4023,8 @@
   "signup": {
     "title": "Create Your Tutoria Account",
     "description": "Start providing AI-powered tutoring to your students in minutes.",
+    "adminNotice": "By signing up, you will become the main administrator of your university on the platform.",
+    "notAdminNotice": "Not the administrator? Ask your university's admin to invite you, or create your account and request to be added to an existing university.",
     "selectPlan": "Choose Your Plan",
     "popular": "Popular",
     "month": "month",

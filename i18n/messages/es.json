@@ -1028,7 +1028,7 @@
       "title": "Crear Usuario",
       "description": "Agregar un nuevo usuario al sistema",
       "formTitle": "Información del Usuario",
-      "formDescription": "Complete los detalles del usuario. Se enviará un correo de bienvenida con instrucciones de inicio de sesión después de la creación.",
+      "formDescription": "Complete los detalles del usuario. El usuario recibirá un enlace para configurar su propia contraseña.",
       "submitButton": "Crear Usuario",
       "successMessage": "¡Usuario creado exitosamente!",
       "errorMessage": "Error al crear usuario",
@@ -4257,6 +4257,8 @@
   "signup": {
     "title": "Cree su Cuenta Tutoria",
     "description": "Comience a ofrecer tutoría con IA a sus estudiantes en minutos.",
+    "adminNotice": "Al registrarse, se convertirá en el administrador principal de su universidad en la plataforma.",
+    "notAdminNotice": "¿No es el administrador? Pida al admin de su universidad que lo invite, o cree su cuenta y solicite ser añadido a una universidad existente.",
     "selectPlan": "Elija su Plan",
     "popular": "Popular",
     "month": "mes",

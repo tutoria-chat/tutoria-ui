@@ -50,9 +50,11 @@ export function LoginForm() {
           <Image
             src="/Color_01.png"
             alt="Tutoria Logo"
-            width={4008}
-            height={1438}
+            width={200}
+            height={72}
             priority
+            quality={100}
+            sizes="200px"
             className="h-16 w-auto"
           />
         </div>
@@ -62,24 +64,6 @@ export function LoginForm() {
         <CardDescription className="text-center text-base">
           {t('description')}
         </CardDescription>
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg text-sm">
-          <p className="text-blue-900 dark:text-blue-100 font-medium mb-1">
-            {t('instructionsTitle')}
-          </p>
-          <ul className="text-blue-700 dark:text-blue-300 space-y-1 list-disc list-inside">
-            <li>
-              {t.rich('instructionUsername', {
-                strong: (chunks) => <strong>{chunks}</strong>
-              })}
-            </li>
-            <li>
-              {t.rich('instructionPassword', {
-                strong: (chunks) => <strong>{chunks}</strong>
-              })}
-            </li>
-            <li>{t('instructionFirstAccess')}</li>
-          </ul>
-        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

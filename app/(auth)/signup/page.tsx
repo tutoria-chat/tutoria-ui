@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Eye, EyeOff, Check, X, Loader2, Building2, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Check, X, Loader2, Building2, ArrowLeft, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -209,14 +209,31 @@ export default function SignupPage() {
             <Image
               src="/Color_01.png"
               alt="Tutoria Logo"
-              width={4008}
-              height={1438}
+              width={200}
+              height={72}
               priority
+              quality={100}
+              sizes="200px"
               className="h-16 w-auto mx-auto"
             />
           </Link>
           <h1 className="text-3xl font-bold">{t('title')}</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">{t('description')}</p>
+
+          {/* Admin context notice */}
+          <div className="max-w-2xl mx-auto p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-sm text-left">
+            <div className="flex items-start gap-3">
+              <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-medium text-amber-900 dark:text-amber-100">
+                  {t('adminNotice')}
+                </p>
+                <p className="text-amber-700 dark:text-amber-300">
+                  {t('notAdminNotice')}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Plan Selection Cards */}

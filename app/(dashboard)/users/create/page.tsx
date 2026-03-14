@@ -27,7 +27,6 @@ export default function CreateUserPage() {
     email: '',
     firstName: '',
     lastName: '',
-    password: '',
     userType: '' as UserRole | '',
     universityId: '',
     languagePreference: 'pt-br',
@@ -79,11 +78,6 @@ export default function CreateUserPage() {
     if (!formData.lastName.trim()) {
       newErrors.lastName = t('errors.lastNameRequired');
     }
-    if (!formData.password.trim()) {
-      newErrors.password = t('errors.passwordRequired');
-    } else if (formData.password.length < 6) {
-      newErrors.password = t('errors.passwordMinLength');
-    }
     if (!formData.userType) {
       newErrors.userType = t('errors.userTypeRequired');
     }
@@ -108,12 +102,15 @@ export default function CreateUserPage() {
     setLoading(true);
 
     try {
+      // Auto-generate a secure temporary password (user will set their own via setup link)
+      const tempPassword = crypto.randomUUID().replace(/-/g, '').slice(0, 24) + '!A1';
+
       const payload: any = {
         username: formData.username,
         email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        password: formData.password,
+        password: tempPassword,
         userType: formData.userType,
         languagePreference: formData.languagePreference,
       };
@@ -290,21 +287,6 @@ export default function CreateUserPage() {
                 disabled={loading}
               />
               {errors.lastName && <p className="text-sm text-destructive">{errors.lastName}</p>}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-2">
-              <Label htmlFor="password">{t('fields.password.label')} *</Label>
-              <Input
-                id="password"
-                type="password"
-                value={formData.password}
-                onChange={(e) => handleChange('password', e.target.value)}
-                placeholder={t('fields.password.placeholder')}
-                disabled={loading}
-              />
-              <p className="text-sm text-muted-foreground">{t('fields.password.hint')}</p>
-              {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
             </div>
 
             {/* Language Preference */}
