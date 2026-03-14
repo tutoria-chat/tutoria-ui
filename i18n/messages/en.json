@@ -1602,7 +1602,9 @@
     "systemOnline": "System Online",
     "version": "Version 1.0.0",
     "allCourses": "All Courses",
-    "allModules": "All Modules"
+    "allModules": "All Modules",
+    "collapse": "Collapse",
+    "expand": "Expand sidebar"
   },
   "header": {
     "profile": "Profile",

@@ -1599,7 +1599,9 @@
     "systemOnline": "Sistema Online",
     "version": "Versão 1.0.0",
     "allCourses": "Todos os Cursos",
-    "allModules": "Todos os Módulos"
+    "allModules": "Todos os Módulos",
+    "collapse": "Recolher",
+    "expand": "Expandir menu"
   },
   "header": {
     "profile": "Perfil",

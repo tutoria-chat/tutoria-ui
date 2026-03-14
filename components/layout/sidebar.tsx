@@ -25,12 +25,19 @@ import {
   ClipboardList,
   Bot,
   CreditCard,
-  Receipt
+  Receipt,
+  PanelLeftClose,
+  PanelLeftOpen
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 import { useAuth } from '@/components/auth/auth-provider';
 import { RoleGuard, SuperAdminOnly, AdminOnly, ProfessorOnly } from '@/components/auth/role-guard';
 import type { NavigationItem, UserRole } from '@/lib/types';
@@ -40,9 +47,11 @@ import { useNavigationContext } from '@/lib/hooks/use-navigation-context';
 interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
+export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuth();
   const t = useTranslations('sidebar');
@@ -59,9 +68,7 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('dashboard'),
       href: '/dashboard',
       icon: Home,
-      // Dashboard is always visible - no permission required
     },
-    // Tutorials link - controlled by feature flag
     ...(FEATURE_FLAGS.TUTORIALS_ENABLED ? [{
       label: t('tutorials'),
       href: '/tutorials',
@@ -99,25 +106,25 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('aiModels'),
       href: '/models',
       icon: Bot,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
     {
       label: t('plans'),
       href: '/admin/plans',
       icon: Receipt,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
     {
       label: t('subscriptions'),
       href: '/admin/subscriptions',
       icon: CreditCard,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
     {
       label: t('permissions'),
       href: '/admin/permissions',
       icon: Shield,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
     {
       label: t('auditLogs'),
@@ -135,13 +142,13 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       label: t('superAdmins'),
       href: '/admin/super-admins',
       icon: Shield,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
     {
       label: t('globalSearch'),
       href: '/admin/global-search',
       icon: Search,
-      requiredPermission: 'universities:read', // super_admin only
+      requiredPermission: 'universities:read',
     },
   ];
 
@@ -153,14 +160,10 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   };
 
   const shouldShowItem = (item: NavigationItem) => {
-    // Super admin always has full access, except the user-facing subscription page
-    // (super_admin uses /admin/subscriptions instead)
     if (user.role === 'super_admin') return item.href !== '/subscription';
-    // Permission-based check (primary)
     if (item.requiredPermission) {
       return user.permissions?.includes(item.requiredPermission) ?? false;
     }
-    // Fallback to role-based check if no permission specified
     if (!item.roles || item.roles.length === 0) return true;
     return item.roles.includes(user.role);
   };
@@ -171,245 +174,362 @@ export function Sidebar({ isOpen = true, onClose }: SidebarProps) {
     }
   };
 
-  // Check if user should see the admin section (has any admin-level permission)
   const hasAdminAccess = user.role === 'super_admin' || (user.permissions?.includes('staff:create') ?? false);
 
+  // Render a navigation item (handles both expanded and collapsed states)
+  const renderNavItem = (item: NavigationItem) => {
+    const active = isActive(item.href);
+    const button = (
+      <Button
+        variant={active ? "secondary" : "ghost"}
+        className={cn(
+          "w-full transition-all duration-200 text-base h-11",
+          isCollapsed
+            ? "justify-center px-0"
+            : "justify-start hover:translate-x-1",
+          active && "bg-primary/10 shadow-sm font-semibold rounded-lg",
+          !active && "rounded-lg"
+        )}
+      >
+        {item.icon && (
+          <item.icon
+            className={cn(
+              isCollapsed ? "h-5 w-5" : "mr-3 h-5 w-5",
+              active && "text-primary"
+            )}
+          />
+        )}
+        {!isCollapsed && (
+          <>
+            <span className={cn(active && "text-primary")}>{item.label}</span>
+            {active && (
+              <ChevronRight className="ml-auto h-5 w-5 text-primary" />
+            )}
+          </>
+        )}
+      </Button>
+    );
+
+    if (isCollapsed) {
+      return (
+        <Tooltip key={item.href}>
+          <TooltipTrigger asChild>
+            <Link href={item.href} onClick={handleItemClick} className="block">
+              {button}
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            {item.label}
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <Link key={item.href} href={item.href} onClick={handleItemClick} className="block">
+        {button}
+      </Link>
+    );
+  };
+
   return (
-    <div
-      className={cn(
-        "fixed inset-y-0 left-0 z-50 w-64 transform bg-muted/30 backdrop-blur-sm border-r border-border/50 shadow-lg transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}
-    >
+    <>
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 lg:hidden"
+          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
-      <div className="relative flex h-full w-64 flex-col bg-gradient-to-b from-background via-background to-muted/20 overflow-hidden">
-        {/* Header with gradient background */}
-        <div className="flex h-20 items-center justify-center px-4 shrink-0 bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5">
-          <Link
-            href="/dashboard"
-            className="flex items-center space-x-2 overflow-hidden transition-transform hover:scale-105 duration-200"
-            onClick={handleItemClick}
-          >
-            <Image
-              src="/Color_01.png"
-              alt="Tutoria Logo"
-              width={4008}
-              height={1438}
-              priority
-              className="h-12 w-auto max-w-full object-contain drop-shadow-md"
-            />
-          </Link>
-        </div>
+      {/* Sidebar container */}
+      <div
+        className={cn(
+          // Base styles
+          "fixed z-50 flex flex-col overflow-hidden",
+          "bg-gradient-to-b from-background via-background/98 to-muted/30",
+          "border border-border/30",
+          "transition-all duration-300 ease-in-out",
 
-        {/* Navigation */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden py-6">
-          <nav className="px-3 space-y-1.5">
-            {navigationItems
-              .filter(shouldShowItem)
-              .map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={handleItemClick}
-                  className="block"
-                >
-                  <Button
-                    variant={isActive(item.href) ? "secondary" : "ghost"}
-                    className={cn(
-                      "w-full justify-start transition-all duration-200 hover:translate-x-1 text-base h-11",
-                      isActive(item.href) && "bg-primary/10 border-l-2 border-primary shadow-sm font-semibold"
-                    )}
-                  >
-                    {item.icon && <item.icon className={cn("mr-3 h-5 w-5", isActive(item.href) && "text-primary")} />}
-                    <span className={cn(isActive(item.href) && "text-primary")}>{item.label}</span>
-                    {isActive(item.href) && (
-                      <ChevronRight className="ml-auto h-5 w-5 text-primary" />
-                    )}
-                  </Button>
-                </Link>
-              ))}
+          // Desktop: floating with padding from edges
+          "lg:top-3 lg:left-3 lg:bottom-3 lg:rounded-2xl lg:shadow-xl",
 
-            {/* My University - Enhanced with collapsible sub-navigation for professors */}
-            <ProfessorOnly>
-              <div>
-                {/* Main university button */}
-                <Button
-                  variant={pathname.includes('/universities/') ? "secondary" : "ghost"}
-                  className={cn(
-                    "w-full justify-start transition-all duration-200 hover:translate-x-1 text-base h-11",
-                    pathname.includes('/universities/') && "bg-primary/10 border-l-2 border-primary shadow-sm font-semibold"
-                  )}
-                  onClick={() => {
-                    if (hasUniversityContext) {
-                      setIsUniversityExpanded(!isUniversityExpanded);
-                    } else {
-                      const href = user.universityId ? `/universities/${user.universityId}` : '/universities';
-                      window.location.href = href;
-                    }
-                  }}
-                >
-                  <Building2 className={cn("mr-3 h-5 w-5", pathname.includes('/universities/') && "text-primary")} />
-                  <span className={cn(pathname.includes('/universities/') && "text-primary")}>
-                    {hasUniversityContext && navContext.university ? navContext.university.name : t('myUniversity')}
-                  </span>
-                  {hasUniversityContext && (
-                    isUniversityExpanded ?
-                      <ChevronDown className="ml-auto h-4 w-4" /> :
-                      <ChevronRight className="ml-auto h-4 w-4" />
-                  )}
-                </Button>
+          // Desktop width
+          isCollapsed
+            ? "lg:w-[72px]"
+            : "lg:w-64",
 
-                {/* Collapsible sub-navigation - only shown when inside university context */}
-                {hasUniversityContext && isUniversityExpanded && (
-                  <div className="ml-4 mt-1 space-y-1">
-                    {/* Current course */}
-                    {navContext.course && (
-                      <Link
-                        href={`/courses/${navContext.course.id}`}
-                        onClick={handleItemClick}
-                        className="block"
-                      >
+          // Mobile: full-height slide-in from left (no floating)
+          "top-0 left-0 bottom-0 w-64 shadow-lg rounded-none",
+          "lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="relative flex h-full flex-col overflow-hidden">
+          {/* Logo area */}
+          <div className={cn(
+            "flex h-20 items-center shrink-0",
+            isCollapsed ? "justify-center px-2" : "justify-center px-4"
+          )}>
+            <Link
+              href="/dashboard"
+              className="flex items-center overflow-hidden transition-transform hover:scale-105 duration-200"
+              onClick={handleItemClick}
+            >
+              {isCollapsed ? (
+                <Image
+                  src="/icon.svg"
+                  alt="Tutoria"
+                  width={32}
+                  height={32}
+                  priority
+                  className="h-8 w-8 object-contain"
+                />
+              ) : (
+                <Image
+                  src="/Color_01.png"
+                  alt="Tutoria Logo"
+                  width={4008}
+                  height={1438}
+                  priority
+                  className="h-12 w-auto max-w-full object-contain drop-shadow-md"
+                />
+              )}
+            </Link>
+          </div>
+
+          {/* Thin separator */}
+          <div className="mx-3 h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
+
+          {/* Navigation */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden py-4">
+            <nav className={cn("space-y-1", isCollapsed ? "px-2" : "px-3")}>
+              {navigationItems
+                .filter(shouldShowItem)
+                .map(renderNavItem)}
+
+              {/* My University - Professor only */}
+              <ProfessorOnly>
+                <div>
+                  {isCollapsed ? (
+                    // Collapsed: icon only with tooltip
+                    <Tooltip>
+                      <TooltipTrigger asChild>
                         <Button
-                          variant={pathname.includes(`/courses/${navContext.course.id}`) ? "secondary" : "ghost"}
-                          size="sm"
+                          variant={pathname.includes('/universities/') ? "secondary" : "ghost"}
                           className={cn(
-                            "w-full justify-start text-sm h-9 pl-3",
-                            pathname.includes(`/courses/${navContext.course.id}`) && "bg-primary/5 text-primary"
+                            "w-full justify-center px-0 transition-all duration-200 text-base h-11 rounded-lg",
+                            pathname.includes('/universities/') && "bg-primary/10 shadow-sm font-semibold"
                           )}
+                          onClick={() => {
+                            const href = user.universityId ? `/universities/${user.universityId}` : '/universities';
+                            window.location.href = href;
+                          }}
                         >
-                          <BookOpen className="mr-2 h-4 w-4" />
-                          <span className="truncate">{navContext.course.name}</span>
+                          <Building2 className={cn("h-5 w-5", pathname.includes('/universities/') && "text-primary")} />
                         </Button>
-                      </Link>
-                    )}
-
-                    {/* Current module */}
-                    {navContext.module && (
-                      <Link
-                        href={`/modules/${navContext.module.id}`}
-                        onClick={handleItemClick}
-                        className="block"
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        {hasUniversityContext && navContext.university ? navContext.university.name : t('myUniversity')}
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    // Expanded: full button with collapsible sub-nav
+                    <>
+                      <Button
+                        variant={pathname.includes('/universities/') ? "secondary" : "ghost"}
+                        className={cn(
+                          "w-full justify-start transition-all duration-200 hover:translate-x-1 text-base h-11 rounded-lg",
+                          pathname.includes('/universities/') && "bg-primary/10 shadow-sm font-semibold"
+                        )}
+                        onClick={() => {
+                          if (hasUniversityContext) {
+                            setIsUniversityExpanded(!isUniversityExpanded);
+                          } else {
+                            const href = user.universityId ? `/universities/${user.universityId}` : '/universities';
+                            window.location.href = href;
+                          }
+                        }}
                       >
-                        <Button
-                          variant={pathname.includes(`/modules/${navContext.module.id}`) ? "secondary" : "ghost"}
-                          size="sm"
-                          className={cn(
-                            "w-full justify-start text-sm h-9 pl-6",
-                            pathname.includes(`/modules/${navContext.module.id}`) && "bg-primary/5 text-primary"
+                        <Building2 className={cn("mr-3 h-5 w-5", pathname.includes('/universities/') && "text-primary")} />
+                        <span className={cn(pathname.includes('/universities/') && "text-primary")}>
+                          {hasUniversityContext && navContext.university ? navContext.university.name : t('myUniversity')}
+                        </span>
+                        {hasUniversityContext && (
+                          isUniversityExpanded ?
+                            <ChevronDown className="ml-auto h-4 w-4" /> :
+                            <ChevronRight className="ml-auto h-4 w-4" />
+                        )}
+                      </Button>
+
+                      {/* Collapsible sub-navigation */}
+                      {hasUniversityContext && isUniversityExpanded && (
+                        <div className="ml-4 mt-1 space-y-1">
+                          {navContext.course && (
+                            <Link
+                              href={`/courses/${navContext.course.id}`}
+                              onClick={handleItemClick}
+                              className="block"
+                            >
+                              <Button
+                                variant={pathname.includes(`/courses/${navContext.course.id}`) ? "secondary" : "ghost"}
+                                size="sm"
+                                className={cn(
+                                  "w-full justify-start text-sm h-9 pl-3 rounded-lg",
+                                  pathname.includes(`/courses/${navContext.course.id}`) && "bg-primary/5 text-primary"
+                                )}
+                              >
+                                <BookOpen className="mr-2 h-4 w-4" />
+                                <span className="truncate">{navContext.course.name}</span>
+                              </Button>
+                            </Link>
                           )}
-                        >
-                          <FileText className="mr-2 h-3 w-3" />
-                          <span className="truncate">{navContext.module.name}</span>
-                        </Button>
-                      </Link>
-                    )}
 
-                    {/* Separator */}
-                    {(navContext.course || navContext.module) && (
-                      <div className="h-px bg-border/50 my-2" />
-                    )}
+                          {navContext.module && (
+                            <Link
+                              href={`/modules/${navContext.module.id}`}
+                              onClick={handleItemClick}
+                              className="block"
+                            >
+                              <Button
+                                variant={pathname.includes(`/modules/${navContext.module.id}`) ? "secondary" : "ghost"}
+                                size="sm"
+                                className={cn(
+                                  "w-full justify-start text-sm h-9 pl-6 rounded-lg",
+                                  pathname.includes(`/modules/${navContext.module.id}`) && "bg-primary/5 text-primary"
+                                )}
+                              >
+                                <FileText className="mr-2 h-3 w-3" />
+                                <span className="truncate">{navContext.module.name}</span>
+                              </Button>
+                            </Link>
+                          )}
 
-                    {/* Quick link to all courses */}
-                    <Link
-                      href={`/courses?universityId=${navContext.universityId}`}
-                      onClick={handleItemClick}
-                      className="block"
-                    >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground"
-                      >
-                        <List className="mr-2 h-4 w-4" />
-                        {t('allCourses') || 'All Courses'}
-                      </Button>
-                    </Link>
+                          {(navContext.course || navContext.module) && (
+                            <div className="h-px bg-border/50 my-2" />
+                          )}
 
-                    {/* Quick link to all modules */}
-                    <Link
-                      href={`/modules?universityId=${navContext.universityId}`}
-                      onClick={handleItemClick}
-                      className="block"
-                    >
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground"
-                      >
-                        <List className="mr-2 h-4 w-4" />
-                        {t('allModules') || 'All Modules'}
-                      </Button>
-                    </Link>
+                          <Link
+                            href={`/courses?universityId=${navContext.universityId}`}
+                            onClick={handleItemClick}
+                            className="block"
+                          >
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground rounded-lg"
+                            >
+                              <List className="mr-2 h-4 w-4" />
+                              {t('allCourses') || 'All Courses'}
+                            </Button>
+                          </Link>
+
+                          <Link
+                            href={`/modules?universityId=${navContext.universityId}`}
+                            onClick={handleItemClick}
+                            className="block"
+                          >
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full justify-start text-sm h-9 pl-3 text-muted-foreground hover:text-foreground rounded-lg"
+                            >
+                              <List className="mr-2 h-4 w-4" />
+                              {t('allModules') || 'All Modules'}
+                            </Button>
+                          </Link>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </ProfessorOnly>
+            </nav>
+
+            {/* Admin Section */}
+            {hasAdminAccess && (
+              <div className="mt-6">
+                <div className={cn(
+                  "mx-3 mb-3 h-px bg-gradient-to-r from-transparent via-border to-transparent",
+                  isCollapsed && "mx-2"
+                )} />
+                {!isCollapsed && (
+                  <div className="px-3 py-2">
+                    <div className="mb-3 px-2 flex items-center space-x-2">
+                      <Shield className="h-4 w-4 text-primary" />
+                      <h3 className="text-sm font-bold text-primary uppercase tracking-wider">
+                        {t('administration')}
+                      </h3>
+                    </div>
                   </div>
                 )}
-              </div>
-            </ProfessorOnly>
-          </nav>
-
-          {/* Admin Section - Shows when user has admin-level permissions */}
-          {hasAdminAccess && (
-            <div className="mt-8">
-              <div className="mx-3 mb-4 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-              <div className="px-3 py-2">
-                <div className="mb-3 px-2 flex items-center space-x-2">
-                  <Shield className="h-4 w-4 text-primary" />
-                  <h3 className="text-sm font-bold text-primary uppercase tracking-wider">
-                    {t('administration')}
-                  </h3>
-                </div>
-                <div className="space-y-1.5">
+                <div className={cn("space-y-1", isCollapsed ? "px-2" : "px-3")}>
                   {adminItems
                     .filter(shouldShowItem)
-                    .map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={handleItemClick}
-                        className="block"
-                      >
-                        <Button
-                          variant={isActive(item.href) ? "secondary" : "ghost"}
-                          className={cn(
-                            "w-full justify-start transition-all duration-200 hover:translate-x-1 text-base h-11",
-                            isActive(item.href) && "bg-primary/10 border-l-2 border-primary shadow-sm font-semibold"
-                          )}
-                        >
-                          {item.icon && <item.icon className={cn("mr-3 h-5 w-5", isActive(item.href) && "text-primary")} />}
-                          <span className={cn(isActive(item.href) && "text-primary")}>{item.label}</span>
-                          {isActive(item.href) && (
-                            <ChevronRight className="ml-auto h-5 w-5 text-primary" />
-                          )}
-                        </Button>
-                      </Link>
-                    ))}
+                    .map(renderNavItem)}
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-border/50 bg-gradient-to-r from-muted/20 to-muted/5 p-4 shrink-0">
-          <div className="flex items-center space-x-2 text-base font-medium">
-            <div className="relative">
-              <div className="h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse"></div>
-              <div className="absolute inset-0 h-2.5 w-2.5 rounded-full bg-green-500/30 animate-ping"></div>
-            </div>
-            <span className="text-green-600 dark:text-green-400">{t('systemOnline')}</span>
+            )}
           </div>
-          <div className="mt-2 flex items-center justify-between text-sm text-muted-foreground">
-            <span>{t('version')}</span>
-            <span className="text-xs opacity-60">Tutoria AI</span>
+
+          {/* Footer */}
+          <div className={cn(
+            "shrink-0 p-3",
+            isCollapsed ? "flex flex-col items-center gap-2" : ""
+          )}>
+            {/* Thin separator above footer */}
+            <div className={cn(
+              "h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-3",
+              isCollapsed ? "mx-0 w-full" : "mx-0"
+            )} />
+
+            {!isCollapsed && (
+              <div className="flex items-center justify-between mb-2 px-1">
+                <div className="flex items-center space-x-2 text-sm font-medium">
+                  <div className="relative">
+                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                  </div>
+                  <span className="text-green-600 dark:text-green-400 text-xs">{t('systemOnline')}</span>
+                </div>
+                <span className="text-xs text-muted-foreground opacity-60">{t('version')}</span>
+              </div>
+            )}
+
+            {isCollapsed && (
+              <div className="relative mb-1">
+                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+              </div>
+            )}
+
+            {/* Collapse toggle button — desktop only */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={onToggleCollapse}
+                  className={cn(
+                    "hidden lg:flex rounded-lg text-muted-foreground hover:text-foreground",
+                    isCollapsed ? "w-full justify-center px-0" : "w-full justify-start"
+                  )}
+                >
+                  {isCollapsed ? (
+                    <PanelLeftOpen className="h-4 w-4" />
+                  ) : (
+                    <>
+                      <PanelLeftClose className="mr-2 h-4 w-4" />
+                      <span className="text-sm">{t('collapse') || 'Collapse'}</span>
+                    </>
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                {isCollapsed ? (t('expand') || 'Expand sidebar') : (t('collapse') || 'Collapse sidebar')}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
