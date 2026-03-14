@@ -1725,7 +1725,8 @@
       "loading": "Loading...",
       "search": "Search",
       "filter": "Filter",
-      "close": "Close"
+      "close": "Close",
+      "actions": "Actions"
     },
     "pagination": {
       "rowsPerPage": "Rows per page:",

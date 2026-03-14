@@ -127,23 +127,21 @@ export function DataTable<T>({
     <div className={cn("space-y-4", className)}>
       {/* Header with search and actions */}
       {(search || actions) && (
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            {search && (
-              <div className="relative flex-1 max-w-2xl">
-                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder={search.placeholder || "Search..."}
-                  value={search.value}
-                  onChange={(e) => search.onSearchChange(e.target.value)}
-                  className="pl-10 h-11 text-base"
-                />
-              </div>
-            )}
-          </div>
-          
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {search && (
+            <div className="relative w-full sm:max-w-sm lg:max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder={search.placeholder || "Search..."}
+                value={search.value}
+                onChange={(e) => search.onSearchChange(e.target.value)}
+                className="pl-9 h-10 text-sm sm:text-base"
+              />
+            </div>
+          )}
+
           {actions && (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
               {actions}
             </div>
           )}
@@ -231,14 +229,15 @@ export function DataTable<T>({
 
       {/* Pagination */}
       {pagination && (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {/* Rows per page */}
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>{t('pagination.rowsPerPage')}</span>
+            <span className="whitespace-nowrap">{t('pagination.rowsPerPage')}</span>
             <Select
               value={String(pagination.limit)}
               onValueChange={(value) => pagination.onLimitChange(Number(value))}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-[70px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -250,8 +249,9 @@ export function DataTable<T>({
             </Select>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
+          {/* Page info + navigation */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-muted-foreground whitespace-nowrap">
               {t('pagination.showing', {
                 from: (pagination.page - 1) * pagination.limit + 1,
                 to: Math.min(pagination.page * pagination.limit, pagination.total),
@@ -262,50 +262,63 @@ export function DataTable<T>({
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="h-8 w-8"
                 onClick={() => pagination.onPageChange(1)}
                 disabled={pagination.page === 1}
               >
                 <ChevronsLeft className="h-4 w-4" />
               </Button>
-              
+
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="h-8 w-8"
                 onClick={() => pagination.onPageChange(pagination.page - 1)}
                 disabled={pagination.page === 1}
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
 
-              {getPaginationRange().map((pageNum, index) => (
-                <React.Fragment key={index}>
-                  {pageNum === '...' ? (
-                    <span className="px-2">...</span>
-                  ) : (
-                    <Button
-                      variant={pageNum === pagination.page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => pagination.onPageChange(Number(pageNum))}
-                    >
-                      {pageNum}
-                    </Button>
-                  )}
-                </React.Fragment>
-              ))}
+              {/* Page numbers: hide individual numbers on very small screens, show on sm+ */}
+              <div className="hidden sm:flex items-center gap-1">
+                {getPaginationRange().map((pageNum, index) => (
+                  <React.Fragment key={index}>
+                    {pageNum === '...' ? (
+                      <span className="px-1.5 text-sm text-muted-foreground">…</span>
+                    ) : (
+                      <Button
+                        variant={pageNum === pagination.page ? "default" : "outline"}
+                        size="icon"
+                        className="h-8 w-8 text-sm"
+                        onClick={() => pagination.onPageChange(Number(pageNum))}
+                      >
+                        {pageNum}
+                      </Button>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {/* On mobile, just show current page / total */}
+              <span className="sm:hidden text-sm text-muted-foreground px-1.5 whitespace-nowrap">
+                {pagination.page} / {Math.ceil(pagination.total / pagination.limit)}
+              </span>
 
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="h-8 w-8"
                 onClick={() => pagination.onPageChange(pagination.page + 1)}
                 disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)}
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
-              
+
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="h-8 w-8"
                 onClick={() => pagination.onPageChange(Math.ceil(pagination.total / pagination.limit))}
                 disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)}
               >

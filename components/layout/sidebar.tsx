@@ -237,7 +237,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -248,8 +248,10 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
           // Base styles
           "fixed z-50 flex flex-col overflow-hidden",
           "bg-gradient-to-b from-background via-background/98 to-muted/30",
-          "border border-border/30",
           "transition-all duration-300 ease-in-out",
+
+          // Border: right-only on mobile, all sides on desktop
+          "border-r border-border/20 lg:border lg:border-border/30",
 
           // Desktop: floating with padding from edges
           "lg:top-3 lg:left-3 lg:bottom-3 lg:rounded-2xl lg:shadow-xl",
@@ -259,8 +261,8 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
             ? "lg:w-[72px]"
             : "lg:w-64",
 
-          // Mobile: full-height slide-in from left (no floating)
-          "top-0 left-0 bottom-0 w-64 shadow-lg rounded-none",
+          // Mobile: full-height slide-in from left, clean edge
+          "top-0 left-0 bottom-0 w-72 shadow-2xl rounded-none",
           "lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
@@ -278,20 +280,23 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
             >
               {isCollapsed ? (
                 <Image
-                  src="/icon.svg"
+                  src="/favicon.svg"
                   alt="Tutoria"
                   width={32}
                   height={32}
                   priority
+                  unoptimized
                   className="h-8 w-8 object-contain"
                 />
               ) : (
                 <Image
                   src="/Color_01.png"
                   alt="Tutoria Logo"
-                  width={4008}
-                  height={1438}
+                  width={200}
+                  height={72}
                   priority
+                  quality={100}
+                  sizes="200px"
                   className="h-12 w-auto max-w-full object-contain drop-shadow-md"
                 />
               )}

@@ -28,16 +28,16 @@ export function PageHeader({
       )}
       
       {/* Title and Actions */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1 min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl truncate">{title}</h1>
           {description && (
-            <p className="text-muted-foreground">{description}</p>
+            <p className="text-sm text-muted-foreground sm:text-base">{description}</p>
           )}
         </div>
-        
+
         {actions && (
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             {actions}
           </div>
         )}

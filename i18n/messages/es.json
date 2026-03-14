@@ -1722,7 +1722,8 @@
       "loading": "Cargando...",
       "search": "Buscar",
       "filter": "Filtrar",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "actions": "Acciones"
     },
     "pagination": {
       "rowsPerPage": "Filas por página:",
