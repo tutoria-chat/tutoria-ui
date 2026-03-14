@@ -5150,6 +5150,53 @@
     "deleteSuccess": "Questão excluída",
     "deleteError": "Falha ao excluir questão",
     "loadError": "Falha ao carregar questões"
+  },
+  "privacyPolicy": {
+    "title": "Política de Privacidade",
+    "lastUpdated": "Última atualização: Março de 2026",
+    "intro": {
+      "title": "1. Introdução",
+      "content": "A TutorIA é uma plataforma de tutoria educacional baseada em inteligência artificial que processa dados de estudantes para oferecer experiências de aprendizagem personalizadas. Esta Política de Privacidade explica como coletamos, utilizamos, armazenamos e protegemos seus dados pessoais em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei 13.709/2018) e as diretrizes do MEC para uso responsável de IA na educação."
+    },
+    "dataCollected": {
+      "title": "2. Dados que Coletamos",
+      "description": "Coletamos as seguintes categorias de dados pessoais:",
+      "item1": "Dados de identificação: nome, e-mail, matrícula e vínculo universitário",
+      "item2": "Dados de autenticação: credenciais de login (criptografadas) e tokens de acesso",
+      "item3": "Dados de interação acadêmica: perguntas realizadas, respostas da IA e arquivos acessados",
+      "item4": "Dados técnicos: endereço IP, tipo de navegador e informações do dispositivo",
+      "item5": "Registros de consentimento: datas e tipos de consentimento fornecidos"
+    },
+    "dataUsage": {
+      "title": "3. Como Utilizamos Seus Dados",
+      "item1": "Para fornecer tutoria baseada em IA com base nos materiais do seu curso",
+      "item2": "Para gerar análises para professores sobre engajamento e padrões de aprendizagem dos alunos",
+      "item3": "Para melhorar a qualidade e relevância das respostas geradas pela IA",
+      "item4": "Para cumprir requisitos legais e regulatórios"
+    },
+    "aiProcessing": {
+      "title": "4. Processamento por IA e Transferência Internacional de Dados",
+      "content": "A TutorIA utiliza modelos de inteligência artificial (OpenAI GPT-4) para processar suas perguntas e gerar respostas educacionais. Suas interações são processadas utilizando a tecnologia de Geração Aumentada por Recuperação (RAG), que busca nos materiais do curso para fornecer respostas contextualmente relevantes.",
+      "disclosureTitle": "Aviso de Transferência Internacional de Dados",
+      "disclosureContent": "Seus dados de interação (perguntas e conteúdo contextual do curso) são enviados para servidores da OpenAI localizados nos Estados Unidos para processamento por IA. Essa transferência é realizada em conformidade com o Artigo 33 da LGPD e está sujeita ao acordo de processamento de dados da OpenAI. Seus dados são utilizados exclusivamente para a geração de respostas e não são usados para treinar modelos de IA."
+    },
+    "rights": {
+      "title": "5. Seus Direitos (LGPD Artigos 17-18)",
+      "description": "De acordo com a Lei Geral de Proteção de Dados, você possui os seguintes direitos:",
+      "item1": "Direito de acesso: Você pode solicitar uma cópia de todos os dados pessoais que possuímos sobre você",
+      "item2": "Direito de retificação: Você pode solicitar a correção de dados imprecisos ou incompletos",
+      "item3": "Direito de exclusão: Você pode solicitar a exclusão dos seus dados pessoais",
+      "item4": "Direito à portabilidade: Você pode solicitar seus dados em formato estruturado e legível por máquina",
+      "item5": "Direito de revogar consentimento: Você pode retirar seu consentimento a qualquer momento sem afetar o processamento anterior"
+    },
+    "retention": {
+      "title": "6. Retenção de Dados",
+      "content": "Os registros de interações do chat são mantidos por até 12 meses para fins de análise acadêmica. Contas de estudantes inativas são anonimizadas após 24 meses de inatividade. Os registros de consentimento são mantidos durante a relação de processamento de dados. Você pode solicitar a exclusão antecipada dos seus dados a qualquer momento exercendo seus direitos sob a LGPD."
+    },
+    "contact": {
+      "title": "7. Contato e Encarregado de Proteção de Dados",
+      "content": "Para dúvidas sobre esta Política de Privacidade, para exercer seus direitos sobre dados ou para contatar nosso Encarregado de Proteção de Dados (DPO), entre em contato com a administração da sua universidade ou pelo e-mail fornecido pela sua instituição."
+    }
   }
 }
 

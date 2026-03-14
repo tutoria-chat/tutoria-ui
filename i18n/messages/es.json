@@ -4440,5 +4440,52 @@
     "deleteSuccess": "Pregunta eliminada",
     "deleteError": "Error al eliminar pregunta",
     "loadError": "Error al cargar preguntas"
+  },
+  "privacyPolicy": {
+    "title": "Política de Privacidad",
+    "lastUpdated": "Última actualización: Marzo de 2026",
+    "intro": {
+      "title": "1. Introducción",
+      "content": "TutorIA es una plataforma de tutoría educativa basada en inteligencia artificial que procesa datos de estudiantes para ofrecer experiencias de aprendizaje personalizadas. Esta Política de Privacidad explica cómo recopilamos, utilizamos, almacenamos y protegemos sus datos personales en cumplimiento con la Ley General de Protección de Datos de Brasil (LGPD - Ley 13.709/2018) y las directrices del MEC para el uso responsable de IA en la educación."
+    },
+    "dataCollected": {
+      "title": "2. Datos que Recopilamos",
+      "description": "Recopilamos las siguientes categorías de datos personales:",
+      "item1": "Datos de identificación: nombre, correo electrónico, matrícula y afiliación universitaria",
+      "item2": "Datos de autenticación: credenciales de inicio de sesión (cifradas) y tokens de acceso",
+      "item3": "Datos de interacción académica: preguntas realizadas, respuestas de la IA y archivos accedidos",
+      "item4": "Datos técnicos: dirección IP, tipo de navegador e información del dispositivo",
+      "item5": "Registros de consentimiento: fechas y tipos de consentimiento proporcionados"
+    },
+    "dataUsage": {
+      "title": "3. Cómo Utilizamos Sus Datos",
+      "item1": "Para proporcionar tutoría basada en IA utilizando los materiales de su curso",
+      "item2": "Para generar análisis para profesores sobre el compromiso y los patrones de aprendizaje de los estudiantes",
+      "item3": "Para mejorar la calidad y relevancia de las respuestas generadas por la IA",
+      "item4": "Para cumplir con requisitos legales y regulatorios"
+    },
+    "aiProcessing": {
+      "title": "4. Procesamiento por IA y Transferencia Internacional de Datos",
+      "content": "TutorIA utiliza modelos de inteligencia artificial (OpenAI GPT-4) para procesar sus preguntas y generar respuestas educativas. Sus interacciones se procesan utilizando la tecnología de Generación Aumentada por Recuperación (RAG), que busca en los materiales del curso para proporcionar respuestas contextualmente relevantes.",
+      "disclosureTitle": "Aviso de Transferencia Internacional de Datos",
+      "disclosureContent": "Sus datos de interacción (preguntas y contenido contextual del curso) se envían a servidores de OpenAI ubicados en Estados Unidos para el procesamiento por IA. Esta transferencia se realiza de acuerdo con el Artículo 33 de la LGPD y está sujeta al acuerdo de procesamiento de datos de OpenAI. Sus datos se utilizan exclusivamente para generar respuestas y no se usan para entrenar modelos de IA."
+    },
+    "rights": {
+      "title": "5. Sus Derechos (LGPD Artículos 17-18)",
+      "description": "De acuerdo con la Ley General de Protección de Datos de Brasil, usted tiene los siguientes derechos:",
+      "item1": "Derecho de acceso: Puede solicitar una copia de todos los datos personales que tenemos sobre usted",
+      "item2": "Derecho de rectificación: Puede solicitar la corrección de datos inexactos o incompletos",
+      "item3": "Derecho de eliminación: Puede solicitar la eliminación de sus datos personales",
+      "item4": "Derecho a la portabilidad: Puede solicitar sus datos en un formato estructurado y legible por máquina",
+      "item5": "Derecho a revocar consentimiento: Puede retirar su consentimiento en cualquier momento sin afectar el procesamiento anterior"
+    },
+    "retention": {
+      "title": "6. Retención de Datos",
+      "content": "Los registros de interacciones del chat se mantienen por hasta 12 meses para fines de análisis académico. Las cuentas de estudiantes inactivas se anonimizan después de 24 meses de inactividad. Los registros de consentimiento se mantienen durante la relación de procesamiento de datos. Puede solicitar la eliminación anticipada de sus datos en cualquier momento ejerciendo sus derechos bajo la LGPD."
+    },
+    "contact": {
+      "title": "7. Contacto y Oficial de Protección de Datos",
+      "content": "Para preguntas sobre esta Política de Privacidad, para ejercer sus derechos sobre datos o para contactar a nuestro Oficial de Protección de Datos (DPO), comuníquese con la administración de su universidad o por el correo electrónico proporcionado por su institución."
+    }
   }
 }

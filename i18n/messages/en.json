@@ -4206,6 +4206,53 @@
     "deleteSuccess": "Question deleted",
     "deleteError": "Failed to delete question",
     "loadError": "Failed to load quiz questions"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: March 2026",
+    "intro": {
+      "title": "1. Introduction",
+      "content": "TutorIA is an AI-powered educational tutoring platform that processes student data to provide personalized learning experiences. This Privacy Policy explains how we collect, use, store, and protect your personal data in compliance with the Brazilian General Data Protection Law (LGPD - Lei 13.709/2018) and the MEC guidelines for responsible AI use in education."
+    },
+    "dataCollected": {
+      "title": "2. Data We Collect",
+      "description": "We collect the following categories of personal data:",
+      "item1": "Identification data: name, email, student ID, and university affiliation",
+      "item2": "Authentication data: login credentials (encrypted) and access tokens",
+      "item3": "Academic interaction data: questions asked, AI responses received, and files accessed",
+      "item4": "Technical data: IP address, browser type, and device information",
+      "item5": "Consent records: timestamps and types of consent provided"
+    },
+    "dataUsage": {
+      "title": "3. How We Use Your Data",
+      "item1": "To provide AI-powered tutoring based on your course materials",
+      "item2": "To generate analytics for professors about student engagement and learning patterns",
+      "item3": "To improve the quality and relevance of AI-generated responses",
+      "item4": "To comply with legal and regulatory requirements"
+    },
+    "aiProcessing": {
+      "title": "4. AI Processing & International Data Transfer",
+      "content": "TutorIA uses artificial intelligence models (OpenAI GPT-4) to process your questions and generate educational responses. Your interactions are processed using Retrieval-Augmented Generation (RAG) technology, which searches course materials to provide contextually relevant answers.",
+      "disclosureTitle": "Cross-Border Data Transfer Disclosure",
+      "disclosureContent": "Your interaction data (questions and contextual course content) is sent to OpenAI servers located in the United States for AI processing. This transfer is carried out in accordance with LGPD Article 33 and is subject to OpenAI's data processing agreement. Your data is used solely for generating responses and is not used to train AI models."
+    },
+    "rights": {
+      "title": "5. Your Rights (LGPD Articles 17-18)",
+      "description": "Under the Brazilian General Data Protection Law, you have the following rights:",
+      "item1": "Right of access: You can request a copy of all personal data we hold about you",
+      "item2": "Right to rectification: You can request correction of inaccurate or incomplete data",
+      "item3": "Right to deletion: You can request the deletion of your personal data",
+      "item4": "Right to data portability: You can request your data in a structured, machine-readable format",
+      "item5": "Right to revoke consent: You can withdraw your consent at any time without affecting prior processing"
+    },
+    "retention": {
+      "title": "6. Data Retention",
+      "content": "Chat interaction logs are retained for up to 12 months for academic analytics purposes. Inactive student accounts are anonymized after 24 months of inactivity. Consent records are maintained for the duration of the data processing relationship. You may request early deletion of your data at any time by exercising your rights under LGPD."
+    },
+    "contact": {
+      "title": "7. Contact & Data Protection Officer",
+      "content": "For questions about this Privacy Policy, to exercise your data rights, or to contact our Data Protection Officer, please reach out to your university's administration or email us at the contact provided by your institution."
+    }
   }
 }
 
