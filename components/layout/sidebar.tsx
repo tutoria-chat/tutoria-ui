@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -57,6 +57,20 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
   const t = useTranslations('sidebar');
   const navContext = useNavigationContext();
   const [isUniversityExpanded, setIsUniversityExpanded] = useState(true);
+
+  // Track whether we're on a desktop-sized screen (lg: = 1024px)
+  // Collapse mode should ONLY apply on desktop — never on mobile
+  const [isLgScreen, setIsLgScreen] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    setIsLgScreen(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsLgScreen(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  // On mobile, always show expanded sidebar regardless of localStorage
+  const collapsed = isCollapsed && isLgScreen;
 
   if (!user) return null;
 
@@ -184,7 +198,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
         variant={active ? "secondary" : "ghost"}
         className={cn(
           "w-full transition-all duration-200 text-base h-11",
-          isCollapsed
+          collapsed
             ? "justify-center px-0"
             : "justify-start hover:translate-x-1",
           active && "bg-primary/10 shadow-sm font-semibold rounded-lg",
@@ -194,12 +208,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
         {item.icon && (
           <item.icon
             className={cn(
-              isCollapsed ? "h-5 w-5" : "mr-3 h-5 w-5",
+              collapsed ? "h-5 w-5" : "mr-3 h-5 w-5",
               active && "text-primary"
             )}
           />
         )}
-        {!isCollapsed && (
+        {!collapsed && (
           <>
             <span className={cn(active && "text-primary")}>{item.label}</span>
             {active && (
@@ -210,7 +224,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       </Button>
     );
 
-    if (isCollapsed) {
+    if (collapsed) {
       return (
         <Tooltip key={item.href}>
           <TooltipTrigger asChild>
@@ -257,7 +271,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
           "lg:top-3 lg:left-3 lg:bottom-3 lg:rounded-2xl lg:shadow-xl",
 
           // Desktop width
-          isCollapsed
+          collapsed
             ? "lg:w-[72px]"
             : "lg:w-64",
 
@@ -271,14 +285,14 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
           {/* Logo area */}
           <div className={cn(
             "flex h-20 items-center shrink-0",
-            isCollapsed ? "justify-center px-2" : "justify-center px-4"
+            collapsed ? "justify-center px-2" : "justify-center px-4"
           )}>
             <Link
               href="/dashboard"
               className="flex items-center overflow-hidden transition-transform hover:scale-105 duration-200"
               onClick={handleItemClick}
             >
-              {isCollapsed ? (
+              {collapsed ? (
                 <Image
                   src="/favicon.svg"
                   alt="Tutoria"
@@ -308,7 +322,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden py-4">
-            <nav className={cn("space-y-1", isCollapsed ? "px-2" : "px-3")}>
+            <nav className={cn("space-y-1", collapsed ? "px-2" : "px-3")}>
               {navigationItems
                 .filter(shouldShowItem)
                 .map(renderNavItem)}
@@ -316,7 +330,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
               {/* My University - Professor only */}
               <ProfessorOnly>
                 <div>
-                  {isCollapsed ? (
+                  {collapsed ? (
                     // Collapsed: icon only with tooltip
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -456,9 +470,9 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
               <div className="mt-6">
                 <div className={cn(
                   "mx-3 mb-3 h-px bg-gradient-to-r from-transparent via-border to-transparent",
-                  isCollapsed && "mx-2"
+                  collapsed && "mx-2"
                 )} />
-                {!isCollapsed && (
+                {!collapsed && (
                   <div className="px-3 py-2">
                     <div className="mb-3 px-2 flex items-center space-x-2">
                       <Shield className="h-4 w-4 text-primary" />
@@ -468,7 +482,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
                     </div>
                   </div>
                 )}
-                <div className={cn("space-y-1", isCollapsed ? "px-2" : "px-3")}>
+                <div className={cn("space-y-1", collapsed ? "px-2" : "px-3")}>
                   {adminItems
                     .filter(shouldShowItem)
                     .map(renderNavItem)}
@@ -480,15 +494,15 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
           {/* Footer */}
           <div className={cn(
             "shrink-0 p-3",
-            isCollapsed ? "flex flex-col items-center gap-2" : ""
+            collapsed ? "flex flex-col items-center gap-2" : ""
           )}>
             {/* Thin separator above footer */}
             <div className={cn(
               "h-px bg-gradient-to-r from-transparent via-border/50 to-transparent mb-3",
-              isCollapsed ? "mx-0 w-full" : "mx-0"
+              collapsed ? "mx-0 w-full" : "mx-0"
             )} />
 
-            {!isCollapsed && (
+            {!collapsed && (
               <div className="flex items-center justify-between mb-2 px-1">
                 <div className="flex items-center space-x-2 text-sm font-medium">
                   <div className="relative">
@@ -500,7 +514,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
               </div>
             )}
 
-            {isCollapsed && (
+            {collapsed && (
               <div className="relative mb-1">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
               </div>
@@ -515,10 +529,10 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
                   onClick={onToggleCollapse}
                   className={cn(
                     "hidden lg:flex rounded-lg text-muted-foreground hover:text-foreground",
-                    isCollapsed ? "w-full justify-center px-0" : "w-full justify-start"
+                    collapsed ? "w-full justify-center px-0" : "w-full justify-start"
                   )}
                 >
-                  {isCollapsed ? (
+                  {collapsed ? (
                     <PanelLeftOpen className="h-4 w-4" />
                   ) : (
                     <>
@@ -529,7 +543,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                {isCollapsed ? (t('expand') || 'Expand sidebar') : (t('collapse') || 'Collapse sidebar')}
+                {collapsed ? (t('expand') || 'Expand sidebar') : (t('collapse') || 'Collapse sidebar')}
               </TooltipContent>
             </Tooltip>
           </div>
