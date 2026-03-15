@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff } from 'lucide-react';
+import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import { Textarea } from '@/components/ui/textarea';
 import type {
   AIModel,
   AIModelCreate,
+  AIProvider,
   ProviderKey,
   ProviderKeyCreate,
   CourseTypeModel,
@@ -40,6 +41,7 @@ const EMPTY_AI_MODEL: AIModelCreate = {
   maxTokens: 4096,
   supportsVision: false,
   supportsFunctionCalling: false,
+  useForFileExtraction: false,
   inputCostPer1M: 0,
   outputCostPer1M: 0,
   requiredTier: 3,
@@ -97,6 +99,7 @@ function AIModelsTab() {
       maxTokens: model.maxTokens,
       supportsVision: model.supportsVision,
       supportsFunctionCalling: model.supportsFunctionCalling,
+      useForFileExtraction: model.useForFileExtraction,
       inputCostPer1M: model.inputCostPer1M ?? 0,
       outputCostPer1M: model.outputCostPer1M ?? 0,
       requiredTier: model.requiredTier,
@@ -186,12 +189,18 @@ function AIModelsTab() {
       key: 'isActive',
       label: t('columns.status'),
       render: (_, model) => (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Badge variant={model.isActive ? 'default' : 'secondary'}>
             {model.isActive ? t('active') : t('inactive')}
           </Badge>
           {model.isDeprecated && (
             <Badge variant="destructive">{t('deprecated')}</Badge>
+          )}
+          {model.useForFileExtraction && (
+            <Badge variant="outline" className="text-blue-600 border-blue-300 dark:text-blue-400 dark:border-blue-700">
+              <FileText className="h-3 w-3 mr-1" />
+              {t('fileProcessing')}
+            </Badge>
           )}
         </div>
       )
@@ -289,11 +298,15 @@ function AIModelsTab() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1">{t('form.provider')}</label>
-              <Select value={formData.provider} onValueChange={(v) => updateField('provider', v as 'openai' | 'anthropic')}>
+              <Select value={formData.provider} onValueChange={(v) => updateField('provider', v as AIProvider)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="openai">OpenAI</SelectItem>
                   <SelectItem value="anthropic">Anthropic</SelectItem>
+                  <SelectItem value="bedrock">AWS Bedrock</SelectItem>
+                  <SelectItem value="deepseek">DeepSeek</SelectItem>
+                  <SelectItem value="gemini">Google Gemini</SelectItem>
+                  <SelectItem value="xai">xAI (Grok)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -360,6 +373,13 @@ function AIModelsTab() {
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <span className="text-sm font-medium">{t('form.supportsFunctions')}</span>
                 <Switch checked={formData.supportsFunctionCalling} onCheckedChange={(v) => updateField('supportsFunctionCalling', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-blue-500" />
+                  <span className="text-sm font-medium">{t('form.useForFileProcessing')}</span>
+                </div>
+                <Switch checked={formData.useForFileExtraction} onCheckedChange={(v) => updateField('useForFileExtraction', v)} />
               </div>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <span className="text-sm font-medium">{t('active')}</span>
@@ -566,6 +586,10 @@ function APIKeysTab() {
                 <SelectContent>
                   <SelectItem value="openai">OpenAI</SelectItem>
                   <SelectItem value="anthropic">Anthropic</SelectItem>
+                  <SelectItem value="bedrock">AWS Bedrock</SelectItem>
+                  <SelectItem value="deepseek">DeepSeek</SelectItem>
+                  <SelectItem value="gemini">Google Gemini</SelectItem>
+                  <SelectItem value="xai">xAI (Grok)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -624,7 +648,18 @@ function APIKeysTab() {
 function CourseTypeConfigTab() {
   const t = useTranslations('models.courseTypeConfig');
   const tCommon = useTranslations('common');
+  const tCourseTypes = useTranslations('courseTypes');
   const { confirm, dialog } = useConfirmDialog();
+
+  const getCourseTypeLabel = (enumValue: string): string => {
+    const keyMap: Record<string, string> = {
+      'MathLogic': 'mathLogic',
+      'Programming': 'programming',
+      'TheoryText': 'theoryText',
+    };
+    const key = keyMap[enumValue];
+    return key ? tCourseTypes(`${key}.name`) : enumValue;
+  };
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [selectedCourseType, setSelectedCourseType] = useState<string>('all');
   const [newConfig, setNewConfig] = useState<CourseTypeModelCreate>({
@@ -688,7 +723,7 @@ function CourseTypeConfigTab() {
       label: t('columns.courseType'),
       sortable: true,
       render: (value) => (
-        <Badge variant="outline">{value as string}</Badge>
+        <Badge variant="outline">{getCourseTypeLabel(value as string)}</Badge>
       )
     },
     {
@@ -738,7 +773,7 @@ function CourseTypeConfigTab() {
           <SelectContent>
             <SelectItem value="all">{t('filterAll')}</SelectItem>
             {courseTypes.map(ct => (
-              <SelectItem key={ct} value={ct}>{ct}</SelectItem>
+              <SelectItem key={ct} value={ct}>{getCourseTypeLabel(ct)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -769,7 +804,7 @@ function CourseTypeConfigTab() {
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {courseTypes.map(ct => (
-                    <SelectItem key={ct} value={ct}>{ct}</SelectItem>
+                    <SelectItem key={ct} value={ct}>{getCourseTypeLabel(ct)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -816,7 +851,18 @@ function CourseTypeConfigTab() {
 // ==================== University Overrides Tab ====================
 function UniversityOverridesTab() {
   const t = useTranslations('models.universityOverrides');
+  const tCourseTypes = useTranslations('courseTypes');
   const [selectedUniversityId, setSelectedUniversityId] = useState<string>('');
+
+  const getCourseTypeLabel = (enumValue: string): string => {
+    const keyMap: Record<string, string> = {
+      'MathLogic': 'mathLogic',
+      'Programming': 'programming',
+      'TheoryText': 'theoryText',
+    };
+    const key = keyMap[enumValue];
+    return key ? tCourseTypes(`${key}.name`) : enumValue;
+  };
 
   const { data: universities } = useFetch<{ items: { id: number; name: string }[] }>('/api/universities/?page=1&size=100');
   const { data: courseTypeModels, loading } = useFetch<CourseTypeModel[]>(
@@ -832,7 +878,7 @@ function UniversityOverridesTab() {
     {
       key: 'courseType',
       label: t('columns.courseType'),
-      render: (value) => <Badge variant="outline">{value as string}</Badge>
+      render: (value) => <Badge variant="outline">{getCourseTypeLabel(value as string)}</Badge>
     },
     {
       key: 'aiModel',

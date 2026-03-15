@@ -564,6 +564,53 @@ export default function ModuleDetailsPage() {
       }
     },
     {
+      key: 'processingStatus',
+      label: t('columns.processingStatus'),
+      render: (_, file) => {
+        const status = file.processingStatus;
+        if (!status) {
+          return (
+            <Badge variant="secondary" className="text-gray-600 dark:text-gray-400">
+              {t('columns.statusUploaded')}
+            </Badge>
+          );
+        }
+        switch (status) {
+          case 'pending':
+            return (
+              <Badge variant="outline" className="text-yellow-600 border-yellow-300 dark:text-yellow-400 dark:border-yellow-700">
+                {t('columns.statusPreparing')}
+              </Badge>
+            );
+          case 'processing':
+            return (
+              <Badge variant="outline" className="text-blue-600 border-blue-300 dark:text-blue-400 dark:border-blue-700">
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                {t('columns.statusProcessing')}
+              </Badge>
+            );
+          case 'ready':
+            return (
+              <Badge variant="outline" className="text-green-600 border-green-300 dark:text-green-400 dark:border-green-700">
+                {t('columns.statusReady')}
+              </Badge>
+            );
+          case 'failed':
+            return (
+              <Badge variant="destructive">
+                {t('columns.statusFailed')}
+              </Badge>
+            );
+          default:
+            return (
+              <Badge variant="secondary" className="text-gray-600 dark:text-gray-400">
+                {t('columns.statusUploaded')}
+              </Badge>
+            );
+        }
+      }
+    },
+    {
       key: 'createdAt',
       label: t('columns.uploadedAt'),
       sortable: true,

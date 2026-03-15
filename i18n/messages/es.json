@@ -432,7 +432,13 @@
         "actions": "Acciones",
         "deleteConfirm": "¿Estás seguro de que deseas eliminar este archivo? Esta acción no se puede deshacer.",
         "deleteFileTitle": "Eliminar Archivo",
-        "deleteFileDescription": "¿Estás seguro de que deseas eliminar este archivo? Esta acción no se puede deshacer."
+        "deleteFileDescription": "¿Estás seguro de que deseas eliminar este archivo? Esta acción no se puede deshacer.",
+        "processingStatus": "Estado",
+        "statusPreparing": "Preparando",
+        "statusProcessing": "Procesando",
+        "statusReady": "Listo",
+        "statusFailed": "Fallido",
+        "statusUploaded": "Subido"
       },
       "fileUpload": {
         "clickToSelect": "Haz clic para seleccionar o arrastra el archivo aquí",
@@ -584,6 +590,61 @@
         "name": "Claude 3 Haiku",
         "description": "Modelo pequeño Claude 3 más antiguo",
         "excellsAt": "Solo soporte heredado - usa Claude Haiku 4.5 para nuevos proyectos"
+      },
+      "anthropic-claude-3-5-sonnet-20241022-v2:0": {
+        "name": "Claude 3.5 Sonnet (Bedrock)",
+        "description": "Claude 3.5 Sonnet vía AWS Bedrock para acceso económico",
+        "excellsAt": "Mismas capacidades de Claude Sonnet, facturado vía créditos AWS"
+      },
+      "anthropic-claude-3-haiku-20240307-v1:0": {
+        "name": "Claude 3 Haiku (Bedrock)",
+        "description": "Claude 3 Haiku vía AWS Bedrock",
+        "excellsAt": "Respuestas rápidas vía facturación AWS Bedrock"
+      },
+      "anthropic-claude-3-opus-20240229-v1:0": {
+        "name": "Claude 3 Opus (Bedrock)",
+        "description": "Claude 3 Opus vía AWS Bedrock para tareas complejas",
+        "excellsAt": "Razonamiento complejo vía facturación AWS Bedrock"
+      },
+      "deepseek-chat": {
+        "name": "DeepSeek Chat",
+        "description": "Modelo muy económico con fuertes capacidades de razonamiento",
+        "excellsAt": "Uso general, programación, precios extremadamente accesibles"
+      },
+      "deepseek-reasoner": {
+        "name": "DeepSeek Reasoner",
+        "description": "Modelo avanzado de razonamiento con cadena de pensamiento",
+        "excellsAt": "Razonamiento complejo, matemáticas, resolución paso a paso"
+      },
+      "gemini-2-0-flash": {
+        "name": "Gemini 2.0 Flash",
+        "description": "Modelo ultrarrápido de Google con ventana de contexto de 1M tokens",
+        "excellsAt": "Velocidad, procesamiento de contexto grande, económico"
+      },
+      "gemini-2-5-pro": {
+        "name": "Gemini 2.5 Pro",
+        "description": "Modelo más capaz de Google con contexto de 1M y razonamiento avanzado",
+        "excellsAt": "Razonamiento complejo, análisis de documentos grandes, tareas multimodales"
+      },
+      "grok-3": {
+        "name": "Grok 3",
+        "description": "Modelo grande y potente de xAI con fuerte razonamiento",
+        "excellsAt": "Razonamiento complejo, tareas creativas, uso general"
+      },
+      "grok-3-mini": {
+        "name": "Grok 3 Mini",
+        "description": "Modelo rápido y ligero de xAI para tareas cotidianas",
+        "excellsAt": "Respuestas rápidas, económico, uso general"
+      },
+      "us-amazon-nova-pro-v1:0": {
+        "name": "Amazon Nova Pro",
+        "description": "Modelo capaz de Amazon vía AWS Bedrock",
+        "excellsAt": "Uso general, análisis de documentos, facturación nativa AWS"
+      },
+      "us-amazon-nova-lite-v1:0": {
+        "name": "Amazon Nova Lite",
+        "description": "Modelo rápido y accesible de Amazon vía AWS Bedrock",
+        "excellsAt": "Velocidad, economía, tareas simples, facturación AWS"
       }
     }
   },
@@ -4029,8 +4090,11 @@
         "description": "Descripción",
         "recommendedFor": "Recomendado Para",
         "supportsVision": "Soporta Visión",
-        "supportsFunctions": "Llamada a Funciones"
+        "supportsFunctions": "Llamada a Funciones",
+        "useForFileProcessing": "Usar para Procesar Archivos"
       },
+      "fileProcessing": "Procesamiento de Archivos",
+      "fileProcessingTooltip": "Este modelo se usa para procesar archivos subidos",
       "emptyMessage": "No se encontraron modelos de IA."
     },
     "apiKeys": {

@@ -261,14 +261,15 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
         className={cn(
           // Base styles
           "fixed z-50 flex flex-col overflow-hidden",
-          "bg-gradient-to-b from-background via-background/98 to-muted/30",
+          "bg-sidebar",
           "transition-all duration-300 ease-in-out",
 
           // Border: right-only on mobile, all sides on desktop
-          "border-r border-border/20 lg:border lg:border-border/30",
+          "border-r border-sidebar-border lg:border lg:border-sidebar-border",
 
           // Desktop: floating with padding from edges
           "lg:top-3 lg:left-3 lg:bottom-3 lg:rounded-2xl lg:shadow-xl",
+          "dark:lg:shadow-[0_0_40px_rgba(0,0,0,0.5)] dark:ring-1 dark:ring-white/[0.06]",
 
           // Desktop width
           collapsed

@@ -252,14 +252,17 @@ export interface CourseWithDetails extends Course {
 }
 
 // AI Model Types
+export type AIProvider = 'openai' | 'anthropic' | 'bedrock' | 'deepseek' | 'gemini' | 'xai';
+
 export interface AIModel {
   id: number;
   modelName: string;
   displayName: string;
-  provider: 'openai' | 'anthropic';
+  provider: AIProvider;
   maxTokens: number;
   supportsVision: boolean;
   supportsFunctionCalling: boolean;
+  useForFileExtraction: boolean;
   inputCostPer1M?: number; // Capital M to match backend DTO
   outputCostPer1M?: number; // Capital M to match backend DTO
   requiredTier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
@@ -276,10 +279,11 @@ export interface AIModel {
 export interface AIModelCreate {
   modelName: string;
   displayName: string;
-  provider: 'openai' | 'anthropic';
+  provider: AIProvider;
   maxTokens: number;
   supportsVision: boolean;
   supportsFunctionCalling: boolean;
+  useForFileExtraction: boolean;
   inputCostPer1M?: number;
   outputCostPer1M?: number;
   requiredTier: number;
@@ -359,6 +363,7 @@ export interface File {
   blobUrl: string;
   blobContainer?: string;
   blobPath?: string;
+  processingStatus?: 'pending' | 'processing' | 'ready' | 'failed';
   // Video/Transcription fields
   sourceType?: 'upload' | 'youtube' | 'url';
   sourceUrl?: string;
