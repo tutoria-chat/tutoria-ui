@@ -5232,6 +5232,7 @@
     "uploadSuccess": "Questões salvas com sucesso!",
     "uploadError": "Falha ao extrair questões do arquivo",
     "generateSuccess": "Questões geradas com sucesso!",
+    "generateQueued": "Solicitada a geração de questões. Aguarde alguns minutos.",
     "generateError": "Falha ao gerar questões",
     "deleteConfirm": "Excluir esta questão?",
     "deleteConfirmDesc": "Esta ação não pode ser desfeita.",

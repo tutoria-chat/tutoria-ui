@@ -4288,6 +4288,7 @@
     "uploadSuccess": "Questions saved successfully!",
     "uploadError": "Failed to extract questions from file",
     "generateSuccess": "Questions generated successfully!",
+    "generateQueued": "Quiz generation requested. Please wait a couple of minutes.",
     "generateError": "Failed to generate questions",
     "deleteConfirm": "Delete this question?",
     "deleteConfirmDesc": "This action cannot be undone.",

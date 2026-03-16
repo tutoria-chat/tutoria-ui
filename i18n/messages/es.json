@@ -4522,6 +4522,7 @@
     "uploadSuccess": "Preguntas guardadas con éxito!",
     "uploadError": "Error al extrair preguntas del archivo",
     "generateSuccess": "Preguntas generadas con éxito!",
+    "generateQueued": "Generación de preguntas solicitada. Espere unos minutos.",
     "generateError": "Error al generar preguntas",
     "deleteConfirm": "¿Eliminar esta pregunta?",
     "deleteConfirmDesc": "Esta acción no se puede deshacer.",

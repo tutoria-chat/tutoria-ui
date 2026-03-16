@@ -456,9 +456,16 @@ export default function ModuleDetailsPage() {
   const handleGenerateQuizzes = async () => {
     setIsGeneratingQuizzes(true);
     try {
-      await apiClient.generateModuleQuizzes(moduleId, true, 50);
-      toast.success(tQuiz('generateSuccess'));
-      loadQuizzes();
+      const result = await apiClient.generateModuleQuizzes(moduleId, true, 50);
+      if (result.status === 'skipped') {
+        toast.info(result.message);
+      } else {
+        toast.success(tQuiz('generateQueued'));
+        // Poll for quizzes after a delay since generation happens in background
+        setTimeout(() => loadQuizzes(), 30000);
+        setTimeout(() => loadQuizzes(), 60000);
+        setTimeout(() => loadQuizzes(), 120000);
+      }
     } catch (err) {
       console.error('Failed to generate quizzes:', err);
       toast.error(tQuiz('generateError'));
