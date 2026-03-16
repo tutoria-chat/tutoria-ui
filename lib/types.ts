@@ -1173,6 +1173,8 @@ export interface CourseTypeModel {
   id: number;
   courseType: string;
   aiModelId: number;
+  aiModelName?: string;
+  aiModelDisplayName?: string;
   aiModel?: AIModel;
   priority: number;
   isActive: boolean;

@@ -731,8 +731,8 @@ function CourseTypeConfigTab() {
       label: t('columns.model'),
       render: (_, item) => (
         <div>
-          <div className="font-medium">{item.aiModel?.displayName || `Model #${item.aiModelId}`}</div>
-          <div className="text-sm text-muted-foreground font-mono">{item.aiModel?.modelName}</div>
+          <div className="font-medium">{item.aiModelDisplayName || item.aiModel?.displayName || `Model #${item.aiModelId}`}</div>
+          <div className="text-sm text-muted-foreground font-mono">{item.aiModelName || item.aiModel?.modelName}</div>
         </div>
       )
     },
@@ -885,8 +885,8 @@ function UniversityOverridesTab() {
       label: t('columns.model'),
       render: (_, item) => (
         <div>
-          <div className="font-medium">{item.aiModel?.displayName || `Model #${item.aiModelId}`}</div>
-          <div className="text-sm text-muted-foreground font-mono">{item.aiModel?.modelName}</div>
+          <div className="font-medium">{item.aiModelDisplayName || item.aiModel?.displayName || `Model #${item.aiModelId}`}</div>
+          <div className="text-sm text-muted-foreground font-mono">{item.aiModelName || item.aiModel?.modelName}</div>
         </div>
       )
     },
