@@ -735,7 +735,8 @@ export default function ModuleDetailsPage() {
       label: t('columns.actions'),
       width: '140px',
       render: (_, token) => {
-        const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+        const jwtToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null;
+        const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}${jwtToken ? `&auth_token=${encodeURIComponent(jwtToken)}` : ''}`;
         return (
           <div className="flex items-center space-x-1">
             {/* Copy URL */}

@@ -17,7 +17,6 @@ import {
   BarChart3,
   Settings,
   Shield,
-  Search,
   ChevronRight,
   ChevronDown,
   Folder,
@@ -156,12 +155,6 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('superAdmins'),
       href: '/admin/super-admins',
       icon: Shield,
-      requiredPermission: 'universities:read',
-    },
-    {
-      label: t('globalSearch'),
-      href: '/admin/global-search',
-      icon: Search,
       requiredPermission: 'universities:read',
     },
   ];
@@ -328,8 +321,8 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
                 .filter(shouldShowItem)
                 .map(renderNavItem)}
 
-              {/* My University - Professor only */}
-              <ProfessorOnly>
+              {/* My University - Professor only (not super admins, they have the full Universities list) */}
+              {user?.role !== 'super_admin' && <ProfessorOnly>
                 <div>
                   {collapsed ? (
                     // Collapsed: icon only with tooltip
@@ -463,7 +456,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
                     </>
                   )}
                 </div>
-              </ProfessorOnly>
+              </ProfessorOnly>}
             </nav>
 
             {/* Admin Section */}
