@@ -20,7 +20,8 @@ import {
   CheckCircle2,
   XCircle,
   FileSpreadsheet,
-  UserCheck
+  UserCheck,
+  UserMinus
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -41,7 +42,9 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient, ApiError } from '@/lib/api';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
-import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -76,6 +79,14 @@ export default function CourseDetailsPage() {
   const [studentsLoading, setStudentsLoading] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
   const [totalStudents, setTotalStudents] = useState(0);
+
+  // Active students count (from backend, across all pages)
+  const [activeStudentsCount, setActiveStudentsCount] = useState(0);
+
+  // Edit student modal state
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [editForm, setEditForm] = useState({ firstName: '', lastName: '', username: '', email: '' });
+  const [isEditSaving, setIsEditSaving] = useState(false);
 
   // Import dialog state
   const [isImportOpen, setIsImportOpen] = useState(false);
@@ -137,6 +148,9 @@ export default function CourseDetailsPage() {
       });
       setStudents(response.items || []);
       setTotalStudents(response.total || 0);
+      if (response.activeCount !== undefined) {
+        setActiveStudentsCount(response.activeCount);
+      }
     } catch (error) {
       console.error('Failed to load students:', error);
       setStudents([]);
@@ -265,8 +279,58 @@ export default function CourseDetailsPage() {
     }
   };
 
-  // Count active students
-  const activeStudents = students.filter(s => s.isActive).length;
+  // Edit student handlers
+  const handleEditStudent = (student: Student) => {
+    setEditingStudent(student);
+    setEditForm({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      username: student.username,
+      email: student.email,
+    });
+  };
+
+  const handleSaveStudent = async () => {
+    if (!editingStudent) return;
+    setIsEditSaving(true);
+    try {
+      const data: StudentUpdate = {};
+      if (editForm.firstName !== editingStudent.firstName) data.firstName = editForm.firstName;
+      if (editForm.lastName !== editingStudent.lastName) data.lastName = editForm.lastName;
+      if (editForm.username !== editingStudent.username) data.username = editForm.username;
+      // Only send email if student hasn't logged in (no account created)
+      if (editForm.email !== editingStudent.email && !editingStudent.lastLoginAt) {
+        data.email = editForm.email;
+      }
+      await apiClient.updateStudent(editingStudent.id, data);
+      toast.success(tStudents('editSuccess'));
+      setEditingStudent(null);
+      loadStudents();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : tStudents('editError'));
+    } finally {
+      setIsEditSaving(false);
+    }
+  };
+
+  const handleUnenrollStudent = (student: Student) => {
+    confirm({
+      title: tStudents('unenrollTitle'),
+      description: tStudents('unenrollDescription', { name: `${student.firstName} ${student.lastName}` }),
+      variant: 'destructive',
+      confirmText: tStudents('unenrollConfirm'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          await apiClient.unenrollStudent(student.id, parseInt(courseId));
+          toast.success(tStudents('unenrollSuccess'));
+          loadStudents();
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : tStudents('unenrollError'));
+        }
+      }
+    });
+  };
 
   const moduleColumns: TableColumn<Module>[] = [
     {
@@ -449,6 +513,31 @@ export default function CourseDetailsPage() {
         <span className="text-sm">{formatDateShort(value as string)}</span>
       )
     },
+    ...(canManageStudents() ? [{
+      key: 'actions' as keyof Student,
+      label: tCommon('buttons.actions'),
+      width: '120px',
+      render: (_: unknown, student: Student) => (
+        <div className="flex items-center space-x-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => { e.stopPropagation(); handleEditStudent(student); }}
+            title={tCommon('buttons.edit')}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => { e.stopPropagation(); handleUnenrollStudent(student); }}
+            title={tStudents('unenrollButton')}
+          >
+            <UserMinus className="h-4 w-4 text-destructive" />
+          </Button>
+        </div>
+      )
+    }] : []),
   ];
 
   return (
@@ -703,7 +792,7 @@ export default function CourseDetailsPage() {
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-2xl font-bold">{activeStudents}</p>
+                      <p className="text-2xl font-bold">{activeStudentsCount}</p>
                       <p className="text-sm text-muted-foreground">{tStudents('activeStudents')}</p>
                     </div>
                     <UserCheck className="h-8 w-8 text-blue-500" />
@@ -782,6 +871,66 @@ export default function CourseDetailsPage() {
           )}
         </AdminOnly>
       </div>
+
+      {/* Edit Student Dialog */}
+      <Dialog open={!!editingStudent} onOpenChange={(open) => !open && setEditingStudent(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{tStudents('editTitle')}</DialogTitle>
+            <DialogDescription>{tStudents('editDescription')}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-firstName">{tStudents('columns.name').split(' ')[0] || 'First Name'}</Label>
+                <Input
+                  id="edit-firstName"
+                  value={editForm.firstName}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, firstName: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-lastName">{tStudents('editLastName')}</Label>
+                <Input
+                  id="edit-lastName"
+                  value={editForm.lastName}
+                  onChange={(e) => setEditForm(prev => ({ ...prev, lastName: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-username">{tStudents('editUsername')}</Label>
+              <Input
+                id="edit-username"
+                value={editForm.username}
+                onChange={(e) => setEditForm(prev => ({ ...prev, username: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-email">{tStudents('columns.email')}</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={editForm.email}
+                onChange={(e) => setEditForm(prev => ({ ...prev, email: e.target.value }))}
+                disabled={!!editingStudent?.lastLoginAt}
+              />
+              {editingStudent?.lastLoginAt && (
+                <p className="text-xs text-muted-foreground">{tStudents('editEmailDisabled')}</p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingStudent(null)}>
+              {tCommon('buttons.cancel')}
+            </Button>
+            <Button onClick={handleSaveStudent} disabled={isEditSaving}>
+              {isEditSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {tCommon('buttons.save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Import Students Dialog */}
       <Dialog open={isImportOpen} onOpenChange={(open) => !open && handleCloseImport()}>

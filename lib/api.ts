@@ -31,6 +31,7 @@ import type {
   Student,
   StudentCreate,
   StudentUpdate,
+  StudentPaginatedResponse,
   ModuleAccessToken,
   ModuleAccessTokenCreate,
   ModuleAccessTokenUpdate,
@@ -885,7 +886,7 @@ class TutoriaAPIClient {
   }
 
   // Student endpoints
-  async getStudents(params?: StudentFilters): Promise<PaginatedResponse<Student>> {
+  async getStudents(params?: StudentFilters): Promise<StudentPaginatedResponse> {
     return this.get('/api/students/', params);
   }
 
@@ -903,6 +904,10 @@ class TutoriaAPIClient {
 
   async deleteStudent(id: number): Promise<void> {
     return this.delete(`/api/students/${id}`);
+  }
+
+  async unenrollStudent(studentId: number, courseId: number): Promise<void> {
+    return this.delete(`/api/students/${studentId}/courses/${courseId}`);
   }
 
   // Student Import endpoints

@@ -187,7 +187,20 @@
         "totalStudents": "Estudiantes Inscritos",
         "activeStudents": "Estudiantes Activos",
         "importSuccess": "¡Estudiantes importados exitosamente!",
-        "importError": "Error al importar estudiantes"
+        "importError": "Error al importar estudiantes",
+        "editTitle": "Editar Estudiante",
+        "editDescription": "Actualizar información del estudiante",
+        "editLastName": "Apellido",
+        "editUsername": "Nombre de usuario",
+        "editEmailDisabled": "El correo no se puede cambiar porque este estudiante creó una cuenta.",
+        "editSuccess": "¡Estudiante actualizado exitosamente!",
+        "editError": "Error al actualizar estudiante",
+        "unenrollTitle": "Desmatricular Estudiante",
+        "unenrollDescription": "¿Estás seguro de que deseas desmatricular a {name} de este curso? Esto eliminará su acceso a todos los módulos de este curso.",
+        "unenrollConfirm": "Desmatricular",
+        "unenrollButton": "Desmatricular del curso",
+        "unenrollSuccess": "¡Estudiante desmatriculado exitosamente!",
+        "unenrollError": "Error al desmatricular estudiante"
       }
     }
   },
@@ -1785,7 +1798,8 @@
       "search": "Buscar",
       "filter": "Filtrar",
       "close": "Cerrar",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "upload": "Subir"
     },
     "pagination": {
       "rowsPerPage": "Filas por página:",

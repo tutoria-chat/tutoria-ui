@@ -572,9 +572,15 @@ export interface StudentCreate {
 }
 
 export interface StudentUpdate {
+  username?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
+  isActive?: boolean;
+}
+
+export interface StudentPaginatedResponse extends PaginatedResponse<Student> {
+  activeCount?: number;
 }
 
 // Module Token Types (API Schema)

@@ -187,7 +187,20 @@
         "totalStudents": "Estudantes Inscritos",
         "activeStudents": "Estudantes Ativos",
         "importSuccess": "Estudantes importados com sucesso!",
-        "importError": "Erro ao importar estudantes"
+        "importError": "Erro ao importar estudantes",
+        "editTitle": "Editar Estudante",
+        "editDescription": "Atualizar informações do estudante",
+        "editLastName": "Sobrenome",
+        "editUsername": "Nome de usuário",
+        "editEmailDisabled": "O e-mail não pode ser alterado porque este estudante criou uma conta.",
+        "editSuccess": "Estudante atualizado com sucesso!",
+        "editError": "Erro ao atualizar estudante",
+        "unenrollTitle": "Desmatricular Estudante",
+        "unenrollDescription": "Tem certeza que deseja desmatricular {name} desta disciplina? Isso removerá o acesso a todos os módulos desta disciplina.",
+        "unenrollConfirm": "Desmatricular",
+        "unenrollButton": "Desmatricular da disciplina",
+        "unenrollSuccess": "Estudante desmatriculado com sucesso!",
+        "unenrollError": "Erro ao desmatricular estudante"
       }
     }
   },
@@ -1785,7 +1798,8 @@
       "search": "Buscar",
       "filter": "Filtrar",
       "close": "Fechar",
-      "actions": "Ações"
+      "actions": "Ações",
+      "upload": "Enviar"
     },
     "pagination": {
       "rowsPerPage": "Linhas por página:",

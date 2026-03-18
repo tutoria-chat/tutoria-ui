@@ -227,7 +227,20 @@
         "totalStudents": "Enrolled Students",
         "activeStudents": "Active Students",
         "importSuccess": "Students imported successfully!",
-        "importError": "Error importing students"
+        "importError": "Error importing students",
+        "editTitle": "Edit Student",
+        "editDescription": "Update student information",
+        "editLastName": "Last Name",
+        "editUsername": "Username",
+        "editEmailDisabled": "Email cannot be changed because this student has created an account.",
+        "editSuccess": "Student updated successfully!",
+        "editError": "Error updating student",
+        "unenrollTitle": "Unenroll Student",
+        "unenrollDescription": "Are you sure you want to unenroll {name} from this course? This will remove their access to all modules in this course.",
+        "unenrollConfirm": "Unenroll",
+        "unenrollButton": "Unenroll from course",
+        "unenrollSuccess": "Student unenrolled successfully!",
+        "unenrollError": "Error unenrolling student"
       }
     }
   },
@@ -1788,7 +1801,8 @@
       "search": "Search",
       "filter": "Filter",
       "close": "Close",
-      "actions": "Actions"
+      "actions": "Actions",
+      "upload": "Upload"
     },
     "pagination": {
       "rowsPerPage": "Rows per page:",

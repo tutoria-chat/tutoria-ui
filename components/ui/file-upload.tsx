@@ -150,7 +150,7 @@ export function FileUpload({
 
           <div className="space-y-2 max-h-[200px] overflow-y-auto">
             {selectedFiles.map((file, index) => (
-              <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-white dark:bg-gray-800 p-2 rounded-lg border border-green-200 dark:border-green-800">
+              <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-white dark:bg-gray-800 p-2 rounded-lg border border-green-200 dark:border-green-800 overflow-hidden">
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
                   <div className="h-8 w-8 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center flex-shrink-0">
                     <File className="h-4 w-4 text-green-600 dark:text-green-400" />
