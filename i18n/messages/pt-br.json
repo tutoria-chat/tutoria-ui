@@ -4829,10 +4829,13 @@
         "recommendedFor": "Recomendado Para",
         "supportsVision": "Suporta Visão",
         "supportsFunctions": "Chamada de Funções",
-        "useForFileProcessing": "Usar para Processamento de Arquivos"
+        "useForFileProcessing": "Usar para Processamento de Arquivos",
+        "useForFormatting": "Usar para Formatação"
       },
       "fileProcessing": "Processamento de Arquivos",
       "fileProcessingTooltip": "Este modelo é usado para processar arquivos enviados",
+      "formatting": "Formatação",
+      "formattingTooltip": "Este modelo pós-processa as respostas em Markdown e LaTeX limpo",
       "emptyMessage": "Nenhum modelo de IA encontrado."
     },
     "apiKeys": {

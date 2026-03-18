@@ -263,6 +263,7 @@ export interface AIModel {
   supportsVision: boolean;
   supportsFunctionCalling: boolean;
   useForFileExtraction: boolean;
+  useForFormatting: boolean;
   inputCostPer1M?: number; // Capital M to match backend DTO
   outputCostPer1M?: number; // Capital M to match backend DTO
   requiredTier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
@@ -284,6 +285,7 @@ export interface AIModelCreate {
   supportsVision: boolean;
   supportsFunctionCalling: boolean;
   useForFileExtraction: boolean;
+  useForFormatting: boolean;
   inputCostPer1M?: number;
   outputCostPer1M?: number;
   requiredTier: number;

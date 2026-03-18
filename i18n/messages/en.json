@@ -3886,10 +3886,13 @@
         "recommendedFor": "Recommended For",
         "supportsVision": "Supports Vision",
         "supportsFunctions": "Function Calling",
-        "useForFileProcessing": "Use for File Processing"
+        "useForFileProcessing": "Use for File Processing",
+        "useForFormatting": "Use for Formatting"
       },
       "fileProcessing": "File Processing",
-      "fileProcessingTooltip": "This model is used for processing uploaded files"
+      "fileProcessingTooltip": "This model is used for processing uploaded files",
+      "formatting": "Formatting",
+      "formattingTooltip": "This model post-processes responses into clean Markdown and LaTeX"
     },
     "apiKeys": {
       "columns": {

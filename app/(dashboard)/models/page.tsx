@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText } from 'lucide-react';
+import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 
 const PROVIDER_LOGOS: Record<string, { src: string; alt: string }> = {
@@ -60,6 +60,7 @@ const EMPTY_AI_MODEL: AIModelCreate = {
   supportsVision: false,
   supportsFunctionCalling: false,
   useForFileExtraction: false,
+  useForFormatting: false,
   inputCostPer1M: 0,
   outputCostPer1M: 0,
   requiredTier: 3,
@@ -118,6 +119,7 @@ function AIModelsTab() {
       supportsVision: model.supportsVision,
       supportsFunctionCalling: model.supportsFunctionCalling,
       useForFileExtraction: model.useForFileExtraction,
+      useForFormatting: model.useForFormatting,
       inputCostPer1M: model.inputCostPer1M ?? 0,
       outputCostPer1M: model.outputCostPer1M ?? 0,
       requiredTier: model.requiredTier,
@@ -232,6 +234,12 @@ function AIModelsTab() {
             <Badge variant="outline" className="text-blue-600 border-blue-300 dark:text-blue-400 dark:border-blue-700">
               <FileText className="h-3 w-3 mr-1" />
               {t('fileProcessing')}
+            </Badge>
+          )}
+          {model.useForFormatting && (
+            <Badge variant="outline" className="text-purple-600 border-purple-300 dark:text-purple-400 dark:border-purple-700">
+              <Sparkles className="h-3 w-3 mr-1" />
+              {t('formatting')}
             </Badge>
           )}
         </div>
@@ -416,6 +424,13 @@ function AIModelsTab() {
                   <span className="text-sm font-medium">{t('form.useForFileProcessing')}</span>
                 </div>
                 <Switch checked={formData.useForFileExtraction} onCheckedChange={(v) => updateField('useForFileExtraction', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-purple-500" />
+                  <span className="text-sm font-medium">{t('form.useForFormatting')}</span>
+                </div>
+                <Switch checked={formData.useForFormatting} onCheckedChange={(v) => updateField('useForFormatting', v)} />
               </div>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <span className="text-sm font-medium">{t('active')}</span>
