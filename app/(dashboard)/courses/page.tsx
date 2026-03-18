@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2, AlertTriangle } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, BookOpen, Users, GraduationCap, Building2, AlertTriangle, Lock } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -73,6 +73,8 @@ export default function CoursesPage() {
     user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
   );
   const courseLimitReached = limits ? limits.currentCourses >= limits.maxCourses : false;
+  const overLimitCourseIds = new Set(limits?.overLimitCourseIds || []);
+  const hasOverLimitCourses = overLimitCourseIds.size > 0;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -152,39 +154,60 @@ export default function CoursesPage() {
       key: 'actions',
       label: t('columns.actions'),
       width: '120px',
-      render: (_, course) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-          >
-            <Link href={`/courses/${course.id}`}>
-              <Eye className="h-4 w-4" />
-            </Link>
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-          >
-            <Link href={`/courses/${course.id}/edit`}>
-              <Edit className="h-4 w-4" />
-            </Link>
-          </Button>
-
-          <AdminOnly>
+      render: (_, course) => {
+        const isOverLimit = overLimitCourseIds.has(course.id);
+        if (isOverLimit) {
+          return (
+            <div className="flex items-center space-x-1">
+              <span title={t('overLimitTooltip')}>
+                <Lock className="h-4 w-4 text-muted-foreground" />
+              </span>
+              <AdminOnly>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(course.id)}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </AdminOnly>
+            </div>
+          );
+        }
+        return (
+          <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleDelete(course.id)}
+              asChild
             >
-              <Trash2 className="h-4 w-4 text-destructive" />
+              <Link href={`/courses/${course.id}`}>
+                <Eye className="h-4 w-4" />
+              </Link>
             </Button>
-          </AdminOnly>
-        </div>
-      )
+
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+            >
+              <Link href={`/courses/${course.id}/edit`}>
+                <Edit className="h-4 w-4" />
+              </Link>
+            </Button>
+
+            <AdminOnly>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleDelete(course.id)}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </AdminOnly>
+          </div>
+        );
+      }
     }
   ];
 
@@ -261,7 +284,21 @@ export default function CoursesPage() {
           }
         />
 
-      {courseLimitReached && (
+      {hasOverLimitCourses && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            <span className="text-sm text-amber-800 dark:text-amber-300">
+              {t('overLimitBanner', { excess: overLimitCourseIds.size })}
+            </span>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/subscription">{t('upgradePlan')}</Link>
+          </Button>
+        </div>
+      )}
+
+      {courseLimitReached && !hasOverLimitCourses && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800 p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -297,7 +334,14 @@ export default function CoursesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage={t('emptyMessage')}
-        onRowClick={(course) => router.push(`/courses/${course.id}`)}
+        onRowClick={(course) => {
+          if (!overLimitCourseIds.has(course.id)) {
+            router.push(`/courses/${course.id}`);
+          }
+        }}
+        rowClassName={(course) =>
+          overLimitCourseIds.has(course.id) ? 'opacity-50 bg-muted/30 cursor-not-allowed' : undefined
+        }
       />
       {dialog}
     </div>

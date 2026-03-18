@@ -1273,6 +1273,9 @@ export interface UniversityLimits {
   hasWhatsApp: boolean;
   planName: string;
   planSlug: string;
+  overLimitCourseIds?: number[];
+  overLimitModuleIds?: number[];
+  overLimitStudentIds?: number[];
 }
 
 export interface UniversityRegistration {

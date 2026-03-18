@@ -21,7 +21,8 @@ import {
   XCircle,
   FileSpreadsheet,
   UserCheck,
-  UserMinus
+  UserMinus,
+  Lock
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -44,7 +45,7 @@ import { apiClient, ApiError } from '@/lib/api';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -128,6 +129,13 @@ export default function CourseDetailsPage() {
 
   // Get all modules for filter options (using course embedded data)
   const allModules = course?.modules || [];
+
+  // Plan limits for over-limit checks
+  const { data: limits } = useFetch<UniversityLimits>(
+    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
+  );
+  const overLimitModuleIds = new Set(limits?.overLimitModuleIds || []);
+  const overLimitStudentIds = new Set(limits?.overLimitStudentIds || []);
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
@@ -394,44 +402,66 @@ export default function CourseDetailsPage() {
       key: 'actions',
       label: tCommon('buttons.edit'),
       width: '150px',
-      render: (_, module) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-          >
-            <Link href={`/modules/${module.id}`}>
-              <Eye className="h-4 w-4" />
-            </Link>
-          </Button>
+      render: (_, module) => {
+        const isOverLimit = overLimitModuleIds.has(module.id);
+        if (isOverLimit) {
+          return (
+            <div className="flex items-center space-x-1">
+              <Lock className="h-4 w-4 text-muted-foreground" />
+              {canEditModule() && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteModule(module.id);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              )}
+            </div>
+          );
+        }
+        return (
+          <div className="flex items-center space-x-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+            >
+              <Link href={`/modules/${module.id}`}>
+                <Eye className="h-4 w-4" />
+              </Link>
+            </Button>
 
-          {canEditModule() && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-              >
-                <Link href={`/modules/${module.id}/edit`}>
-                  <Edit className="h-4 w-4" />
-                </Link>
-              </Button>
+            {canEditModule() && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                >
+                  <Link href={`/modules/${module.id}/edit`}>
+                    <Edit className="h-4 w-4" />
+                  </Link>
+                </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteModule(module.id);
-                }}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </>
-          )}
-        </div>
-      )
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteModule(module.id);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </>
+            )}
+          </div>
+        );
+      }
     }
   ];
 
@@ -517,26 +547,31 @@ export default function CourseDetailsPage() {
       key: 'actions' as keyof Student,
       label: tCommon('buttons.actions'),
       width: '120px',
-      render: (_: unknown, student: Student) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => { e.stopPropagation(); handleEditStudent(student); }}
-            title={tCommon('buttons.edit')}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => { e.stopPropagation(); handleUnenrollStudent(student); }}
-            title={tStudents('unenrollButton')}
-          >
-            <UserMinus className="h-4 w-4 text-destructive" />
-          </Button>
-        </div>
-      )
+      render: (_: unknown, student: Student) => {
+        const isOverLimit = overLimitStudentIds.has(student.id);
+        return (
+          <div className="flex items-center space-x-1">
+            {!isOverLimit && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => { e.stopPropagation(); handleEditStudent(student); }}
+                title={tCommon('buttons.edit')}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => { e.stopPropagation(); handleUnenrollStudent(student); }}
+              title={tStudents('unenrollButton')}
+            >
+              <UserMinus className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        );
+      }
     }] : []),
   ];
 
@@ -766,7 +801,14 @@ export default function CourseDetailsPage() {
                 emptyMessage={searchTerm || semesterFilter !== 'all' || yearFilter !== 'all'
                   ? t('modulesTab.noModules')
                   : t('modulesTab.noModulesInitial')}
-                onRowClick={(module) => router.push(`/modules/${module.id}`)}
+                onRowClick={(module) => {
+                  if (!overLimitModuleIds.has(module.id)) {
+                    router.push(`/modules/${module.id}`);
+                  }
+                }}
+                rowClassName={(module) =>
+                  overLimitModuleIds.has(module.id) ? 'opacity-50 bg-muted/30 cursor-not-allowed' : undefined
+                }
               />
             </CardContent>
           </Card>
@@ -844,6 +886,9 @@ export default function CourseDetailsPage() {
                     onLimitChange: setStudentLimit
                   }}
                   emptyMessage={tStudents('emptyMessage')}
+                  rowClassName={(student) =>
+                    overLimitStudentIds.has(student.id) ? 'opacity-50 bg-muted/30 cursor-not-allowed' : undefined
+                  }
                 />
               </CardContent>
             </Card>

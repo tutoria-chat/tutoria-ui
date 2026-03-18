@@ -92,14 +92,20 @@ import type {
 
 export class ApiError extends Error {
   status: number;
-  constructor(message: string, status: number) {
+  validationErrors?: Record<string, string[]>;
+  constructor(message: string, status: number, validationErrors?: Record<string, string[]>) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
+    this.validationErrors = validationErrors;
   }
 
   get isPlanLimitError(): boolean {
     return this.status === 403 && /limit reached/i.test(this.message);
+  }
+
+  get isValidationError(): boolean {
+    return this.status === 400 && !!this.validationErrors && Object.keys(this.validationErrors).length > 0;
   }
 }
 
@@ -316,8 +322,10 @@ class TutoriaAPIClient {
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         // Backend uses 'detail' (FastAPI standard) or 'message' for error messages
-        const errorMessage = errorData.detail || errorData.message || `HTTP error! status: ${response.status}`;
-        throw new ApiError(errorMessage, response.status);
+        const errorMessage = errorData.detail || errorData.message || errorData.title || `HTTP error! status: ${response.status}`;
+        // ASP.NET Core ModelState validation returns { errors: { FieldName: ["error1", "error2"] } }
+        const validationErrors = errorData.errors as Record<string, string[]> | undefined;
+        throw new ApiError(errorMessage, response.status, validationErrors);
       }
 
       return await response.json();

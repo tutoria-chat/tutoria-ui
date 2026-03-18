@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
-import { apiClient } from '@/lib/api';
+import { apiClient, ApiError } from '@/lib/api';
 import { formatCNPJ, formatBrazilianPhone, formatCEP, fetchViaCEP } from '@/lib/utils';
 import { ArrowLeft, Loader2, Search } from 'lucide-react';
 import type { UniversityCreate, BreadcrumbItem } from '@/lib/types';
@@ -144,7 +144,19 @@ export default function CreateUniversityPage() {
       router.push('/universities');
     } catch (error) {
       console.error('Failed to create university:', error);
-      setErrors({ submit: t('createError') });
+      if (error instanceof ApiError && error.isValidationError && error.validationErrors) {
+        // Map backend field names (PascalCase) to frontend field names (camelCase)
+        const fieldErrors: Record<string, string> = {};
+        for (const [field, messages] of Object.entries(error.validationErrors)) {
+          const camelField = field.charAt(0).toLowerCase() + field.slice(1);
+          fieldErrors[camelField] = messages[0];
+        }
+        setErrors(fieldErrors);
+      } else if (error instanceof ApiError) {
+        setErrors({ submit: error.message });
+      } else {
+        setErrors({ submit: t('createError') });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -242,20 +254,20 @@ export default function CreateUniversityPage() {
                     <SelectContent>
                       <SelectItem value="1">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierBasic')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierBasicDesc')}</span>
+                          <span className="font-medium">{tTiers('tierStarter')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierStarterDesc')}</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="2">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierStandard')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierStandardDesc')}</span>
+                          <span className="font-medium">{tTiers('tierProfessional')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierProfessionalDesc')}</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="3">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierPremium')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierPremiumDesc')}</span>
+                          <span className="font-medium">{tTiers('tierBusiness')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierBusinessDesc')}</span>
                         </div>
                       </SelectItem>
                     </SelectContent>
@@ -457,8 +469,12 @@ export default function CreateUniversityPage() {
                       value={formData.taxId}
                       onChange={(e) => handleChange('taxId', formatCNPJ(e.target.value))}
                       placeholder={t('taxIdPlaceholder')}
+                      className={errors.taxId ? 'border-destructive' : ''}
                       maxLength={18}
                     />
+                    {errors.taxId && (
+                      <p className="text-sm text-destructive mt-1">{errors.taxId}</p>
+                    )}
                   </div>
 
                   <div>
@@ -471,8 +487,12 @@ export default function CreateUniversityPage() {
                       value={formData.contactEmail}
                       onChange={(e) => handleChange('contactEmail', e.target.value)}
                       placeholder={t('contactEmailPlaceholder')}
+                      className={errors.contactEmail ? 'border-destructive' : ''}
                       maxLength={255}
                     />
+                    {errors.contactEmail && (
+                      <p className="text-sm text-destructive mt-1">{errors.contactEmail}</p>
+                    )}
                   </div>
 
                   <div>
@@ -485,8 +505,12 @@ export default function CreateUniversityPage() {
                       value={formData.contactPhone}
                       onChange={(e) => handleChange('contactPhone', formatBrazilianPhone(e.target.value))}
                       placeholder={t('contactPhonePlaceholder')}
+                      className={errors.contactPhone ? 'border-destructive' : ''}
                       maxLength={15}
                     />
+                    {errors.contactPhone && (
+                      <p className="text-sm text-destructive mt-1">{errors.contactPhone}</p>
+                    )}
                   </div>
 
                   <div>
@@ -499,8 +523,12 @@ export default function CreateUniversityPage() {
                       value={formData.contactPerson}
                       onChange={(e) => handleChange('contactPerson', e.target.value)}
                       placeholder={t('contactPersonPlaceholder')}
+                      className={errors.contactPerson ? 'border-destructive' : ''}
                       maxLength={200}
                     />
+                    {errors.contactPerson && (
+                      <p className="text-sm text-destructive mt-1">{errors.contactPerson}</p>
+                    )}
                   </div>
 
                   <div>

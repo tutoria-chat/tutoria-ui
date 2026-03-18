@@ -46,6 +46,7 @@ interface DataTableProps<T> {
   emptyMessage?: string;
   className?: string;
   onRowClick?: (item: T, index: number) => void;
+  rowClassName?: (item: T, index: number) => string | undefined;
 }
 
 export function DataTable<T>({
@@ -59,6 +60,7 @@ export function DataTable<T>({
   emptyMessage = 'No data available',
   className,
   onRowClick,
+  rowClassName,
 }: DataTableProps<T>) {
   const t = useTranslations('common');
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
@@ -203,7 +205,8 @@ export function DataTable<T>({
                   key={index}
                   className={cn(
                     onRowClick && "cursor-pointer",
-                    hoveredRow === index && "bg-muted/50"
+                    hoveredRow === index && "bg-muted/50",
+                    rowClassName?.(item, index)
                   )}
                   onMouseEnter={() => setHoveredRow(index)}
                   onMouseLeave={() => setHoveredRow(null)}

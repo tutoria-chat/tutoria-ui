@@ -325,20 +325,20 @@ export default function EditUniversityPage() {
                     <SelectContent>
                       <SelectItem value="1">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierBasic')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierBasicDesc')}</span>
+                          <span className="font-medium">{tTiers('tierStarter')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierStarterDesc')}</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="2">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierStandard')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierStandardDesc')}</span>
+                          <span className="font-medium">{tTiers('tierProfessional')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierProfessionalDesc')}</span>
                         </div>
                       </SelectItem>
                       <SelectItem value="3">
                         <div className="flex flex-col">
-                          <span className="font-medium">{tTiers('tierPremium')}</span>
-                          <span className="text-sm text-muted-foreground">{tTiers('tierPremiumDesc')}</span>
+                          <span className="font-medium">{tTiers('tierBusiness')}</span>
+                          <span className="text-sm text-muted-foreground">{tTiers('tierBusinessDesc')}</span>
                         </div>
                       </SelectItem>
                     </SelectContent>

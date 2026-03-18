@@ -132,7 +132,7 @@ export function AIModelSelector({ open, onClose, selectedModelId, onSelectModel 
             variant={model.requiredTier === 3 ? "default" : model.requiredTier === 2 ? "secondary" : "outline"}
             className="absolute top-2 right-2"
           >
-            {model.requiredTier === 1 ? t('tierBasic') : model.requiredTier === 2 ? t('tierStandard') : t('tierPremium')}
+            {model.requiredTier === 1 ? t('tierStarter') : model.requiredTier === 2 ? t('tierProfessional') : t('tierBusiness')}
           </Badge>
         )}
 

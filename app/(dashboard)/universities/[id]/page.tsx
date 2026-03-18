@@ -534,9 +534,9 @@ export default function UniversityDetailsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {university.subscriptionTier === 1 ? tTiers('tierBasic') :
-                 university.subscriptionTier === 2 ? tTiers('tierStandard') :
-                 tTiers('tierPremium')}
+                {university.subscriptionTier === 1 ? tTiers('tierStarter') :
+                 university.subscriptionTier === 2 ? tTiers('tierProfessional') :
+                 tTiers('tierBusiness')}
               </div>
               <p className="text-xs text-muted-foreground mt-1">{tTiers('tierLabel')}</p>
             </CardContent>

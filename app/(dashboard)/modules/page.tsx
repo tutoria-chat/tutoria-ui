@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Edit, Trash2, Eye, Bot, Upload, BookOpen, AlertTriangle } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Bot, Upload, BookOpen, AlertTriangle, Lock } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -67,6 +67,8 @@ export default function ModulesPage() {
     user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
   );
   const moduleLimitReached = limits ? limits.currentModules >= limits.maxModules : false;
+  const overLimitModuleIds = new Set(limits?.overLimitModuleIds || []);
+  const hasOverLimitModules = overLimitModuleIds.size > 0;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -158,41 +160,62 @@ export default function ModulesPage() {
       key: 'actions',
       label: t('columns.actions'),
       width: '120px',
-      render: (_, module) => (
-        <div className="flex items-center space-x-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-          >
-            <Link href={`/modules/${module.id}`}>
-              <Eye className="h-4 w-4" />
-            </Link>
-          </Button>
+      render: (_, module) => {
+        const isOverLimit = overLimitModuleIds.has(module.id);
+        if (isOverLimit) {
+          return (
+            <div className="flex items-center space-x-1">
+              <span title={t('overLimitTooltip')}>
+                <Lock className="h-4 w-4 text-muted-foreground" />
+              </span>
+              {canEditModule(module) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(module.id)}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              )}
+            </div>
+          );
+        }
+        return (
+          <div className="flex items-center space-x-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+            >
+              <Link href={`/modules/${module.id}`}>
+                <Eye className="h-4 w-4" />
+              </Link>
+            </Button>
 
-          {canEditModule(module) && (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-              >
-                <Link href={`/modules/${module.id}/edit`}>
-                  <Edit className="h-4 w-4" />
-                </Link>
-              </Button>
+            {canEditModule(module) && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                >
+                  <Link href={`/modules/${module.id}/edit`}>
+                    <Edit className="h-4 w-4" />
+                  </Link>
+                </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleDelete(module.id)}
-              >
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </>
-          )}
-        </div>
-      )
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDelete(module.id)}
+                >
+                  <Trash2 className="h-4 w-4 text-destructive" />
+                </Button>
+              </>
+            )}
+          </div>
+        );
+      }
     }
   ];
 
@@ -269,7 +292,21 @@ export default function ModulesPage() {
           }
         />
 
-      {moduleLimitReached && (
+      {hasOverLimitModules && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800 p-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            <span className="text-sm text-amber-800 dark:text-amber-300">
+              {t('overLimitBanner', { excess: overLimitModuleIds.size })}
+            </span>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/subscription">{t('upgradePlan')}</Link>
+          </Button>
+        </div>
+      )}
+
+      {moduleLimitReached && !hasOverLimitModules && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800 p-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
@@ -305,7 +342,14 @@ export default function ModulesPage() {
           onSortChange: handleSortChange
         }}
         emptyMessage={t('emptyMessage')}
-        onRowClick={(module) => router.push(`/modules/${module.id}`)}
+        onRowClick={(module) => {
+          if (!overLimitModuleIds.has(module.id)) {
+            router.push(`/modules/${module.id}`);
+          }
+        }}
+        rowClassName={(module) =>
+          overLimitModuleIds.has(module.id) ? 'opacity-50 bg-muted/30 cursor-not-allowed' : undefined
+        }
       />
       {dialog}
     </div>
