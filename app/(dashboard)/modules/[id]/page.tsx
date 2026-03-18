@@ -304,7 +304,7 @@ export default function ModuleDetailsPage() {
   const handleUpdateAIConfig = async () => {
     setIsUpdatingAIConfig(true);
     try {
-      const extractResult = await apiClient.extractModuleTexts(moduleId, true);
+      const extractResult = await apiClient.extractModuleTexts(moduleId, false);
 
       toast.success(t('updateAIConfigSuccess'), {
         description: t('extractionResult', { count: extractResult.extracted_count }),
