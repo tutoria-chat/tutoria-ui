@@ -605,73 +605,70 @@ export default function CourseDetailsPage() {
       />
 
       {/* Course Overview */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('courseInfo')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-2">{t('description')}</h4>
-              <p className="text-sm leading-relaxed">{course.description}</p>
-            </div>
-
-            <div className="flex items-center space-x-4 text-sm">
-              <div className="flex items-center space-x-2">
-                <Building2 className="h-4 w-4 text-muted-foreground" />
-                <span>{course.universityName || t('courseInfo')}</span>
+      <div className="space-y-3">
+        {/* Stat cards — compact horizontal row */}
+        <div className="flex gap-4">
+          <Card className="flex-1 cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('modules')}>
+            <CardContent className="py-4 px-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-2xl font-bold">{totalModules}</p>
+                  <p className="text-sm text-muted-foreground">{t('modules')}</p>
+                </div>
+                <BookOpen className="h-6 w-6 text-blue-500" />
               </div>
+            </CardContent>
+          </Card>
+
+          <Card className="flex-1 cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
+            <CardContent className="py-4 px-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-2xl font-bold">{totalStudents}</p>
+                  <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
+                </div>
+                <GraduationCap className="h-6 w-6 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <AdminOnly>
+            <Card className="flex-1 cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('professors')}>
+              <CardContent className="py-4 px-5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold">{professors.length}</p>
+                    <p className="text-sm text-muted-foreground">{t('professors')}</p>
+                  </div>
+                  <Users className="h-6 w-6 text-purple-500" />
+                </div>
+              </CardContent>
+            </Card>
+          </AdminOnly>
+        </div>
+
+        {/* Course info — compact single strip */}
+        <Card>
+          <CardContent className="py-3 px-5">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-sm">
+              {course.description && (
+                <span className="text-muted-foreground line-clamp-1">{course.description}</span>
+              )}
+              {course.universityName && (
+                <div className="flex items-center gap-1.5">
+                  <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span>{course.universityName}</span>
+                </div>
+              )}
               {hasBeenUpdated(course.createdAt, course.updatedAt) && (
-                <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5" />
                   <span>{t('updated', { date: formatDateShort(course.updatedAt) })}</span>
                 </div>
               )}
             </div>
           </CardContent>
         </Card>
-
-        <div className="grid gap-4">
-          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('modules')}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold">{totalModules}</p>
-                  <p className="text-sm text-muted-foreground">{t('modules')}</p>
-                </div>
-                <BookOpen className="h-8 w-8 text-blue-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Students Card */}
-          <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('students')}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold">{totalStudents}</p>
-                  <p className="text-sm text-muted-foreground">{t('enrolledStudents')}</p>
-                </div>
-                <GraduationCap className="h-8 w-8 text-green-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Professors Card - Admin only */}
-          <AdminOnly>
-            <Card className="cursor-pointer hover:bg-accent/50 transition-colors" onClick={() => setActiveTab('professors')}>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-bold">{professors.length}</p>
-                    <p className="text-sm text-muted-foreground">{t('professors')}</p>
-                  </div>
-                  <Users className="h-8 w-8 text-purple-500" />
-                </div>
-              </CardContent>
-            </Card>
-          </AdminOnly>
-        </div>
       </div>
 
       {/* Tabs */}
