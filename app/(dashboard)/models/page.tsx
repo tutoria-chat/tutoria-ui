@@ -154,6 +154,17 @@ function AIModelsTab() {
     }
   };
 
+  const handleToggleActive = async (model: AIModel) => {
+    try {
+      await apiClient.updateAIModel(model.id, { isActive: !model.isActive });
+      toast.success(model.isActive ? t('deactivateSuccess') : t('activateSuccess'));
+      loadModels();
+    } catch (error) {
+      console.error('Failed to toggle AI model status:', error);
+      toast.error(t('updateError'));
+    }
+  };
+
   const handleDelete = (model: AIModel) => {
     confirm({
       title: t('deleteConfirm'),
@@ -256,9 +267,14 @@ function AIModelsTab() {
     {
       key: 'actions',
       label: tCommon('buttons.actions'),
-      width: '100px',
+      width: '150px',
       render: (_, model) => (
         <div className="flex items-center gap-1">
+          <Switch
+            checked={model.isActive}
+            onCheckedChange={() => handleToggleActive(model)}
+            className="scale-75"
+          />
           <Button variant="ghost" size="sm" onClick={() => openEdit(model)}>
             <Edit className="h-4 w-4" />
           </Button>
@@ -306,7 +322,6 @@ function AIModelsTab() {
                 value={formData.modelName}
                 onChange={(e) => updateField('modelName', e.target.value)}
                 placeholder="gpt-4o"
-                disabled={!!editingModel}
               />
             </div>
             <div>
@@ -443,6 +458,8 @@ function APIKeysTab() {
     priority: 1,
     isActive: true,
   });
+  const [awsAccessKeyId, setAwsAccessKeyId] = useState('');
+  const [awsSecretAccessKey, setAwsSecretAccessKey] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { confirm, dialog } = useConfirmDialog();
 
@@ -455,16 +472,34 @@ function APIKeysTab() {
   );
 
   const handleCreateKey = async () => {
-    if (!newKey.keyName.trim() || !newKey.apiKey.trim()) {
+    const isBedrock = newKey.provider === 'bedrock';
+    if (!newKey.keyName.trim()) {
       toast.error(t('validationError'));
       return;
     }
+    if (isBedrock) {
+      if (!awsAccessKeyId.trim() || !awsSecretAccessKey.trim()) {
+        toast.error(t('awsCredsRequired'));
+        return;
+      }
+    } else if (!newKey.apiKey.trim()) {
+      toast.error(t('validationError'));
+      return;
+    }
+
+    const payload = { ...newKey };
+    if (isBedrock) {
+      payload.apiKey = JSON.stringify({ accessKeyId: awsAccessKeyId, secretAccessKey: awsSecretAccessKey });
+    }
+
     setIsSubmitting(true);
     try {
-      await apiClient.createProviderKey(newKey);
+      await apiClient.createProviderKey(payload);
       toast.success(t('createSuccess'));
       setIsCreateOpen(false);
       setNewKey({ provider: 'openai', keyName: '', apiKey: '', region: '', priority: 1, isActive: true });
+      setAwsAccessKeyId('');
+      setAwsSecretAccessKey('');
       window.location.reload();
     } catch (error) {
       console.error('Failed to create provider key:', error);
@@ -625,23 +660,56 @@ function APIKeysTab() {
                 placeholder={t('form.keyNamePlaceholder')}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t('form.apiKey')}</label>
-              <Input
-                type="password"
-                value={newKey.apiKey}
-                onChange={(e) => setNewKey(prev => ({ ...prev, apiKey: e.target.value }))}
-                placeholder={t('form.apiKeyPlaceholder')}
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t('form.region')}</label>
-              <Input
-                value={newKey.region || ''}
-                onChange={(e) => setNewKey(prev => ({ ...prev, region: e.target.value }))}
-                placeholder={t('form.regionPlaceholder')}
-              />
-            </div>
+            {newKey.provider === 'bedrock' ? (
+              <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('form.awsAccessKeyId')}</label>
+                  <Input
+                    type="password"
+                    value={awsAccessKeyId}
+                    onChange={(e) => setAwsAccessKeyId(e.target.value)}
+                    placeholder="AKIA..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('form.awsSecretAccessKey')}</label>
+                  <Input
+                    type="password"
+                    value={awsSecretAccessKey}
+                    onChange={(e) => setAwsSecretAccessKey(e.target.value)}
+                    placeholder="wJalr..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('form.region')}</label>
+                  <Input
+                    value={newKey.region || ''}
+                    onChange={(e) => setNewKey(prev => ({ ...prev, region: e.target.value }))}
+                    placeholder="us-east-2"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('form.apiKey')}</label>
+                  <Input
+                    type="password"
+                    value={newKey.apiKey}
+                    onChange={(e) => setNewKey(prev => ({ ...prev, apiKey: e.target.value }))}
+                    placeholder={t('form.apiKeyPlaceholder')}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{t('form.region')}</label>
+                  <Input
+                    value={newKey.region || ''}
+                    onChange={(e) => setNewKey(prev => ({ ...prev, region: e.target.value }))}
+                    placeholder={t('form.regionPlaceholder')}
+                  />
+                </div>
+              </>
+            )}
             <div>
               <label className="block text-sm font-medium mb-1">{t('form.priority')}</label>
               <Input
