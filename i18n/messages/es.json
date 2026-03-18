@@ -1449,6 +1449,18 @@
       "never": "Nunca"
     }
   },
+  "forgotPassword": {
+    "title": "¿Olvidaste tu contraseña?",
+    "description": "Ingresa tu correo o nombre de usuario y te enviaremos un enlace para restablecer tu contraseña.",
+    "emailLabel": "Correo o nombre de usuario",
+    "emailPlaceholder": "Ingresa tu correo o nombre de usuario",
+    "submitButton": "Enviar enlace de restablecimiento",
+    "submitting": "Enviando...",
+    "backToLogin": "Volver al inicio de sesión",
+    "successTitle": "Revisa tu correo",
+    "successDesc": "Si existe una cuenta con ese correo o nombre de usuario, recibirás un enlace de restablecimiento en breve. No olvides revisar tu carpeta de spam.",
+    "errorGeneric": "Error al enviar el enlace de restablecimiento. Verifica tu conexión e inténtalo de nuevo."
+  },
   "setupPassword": {
     "title": "Establece tu Contraseña",
     "description": "Crea una contraseña segura para tu cuenta de Tutoria",

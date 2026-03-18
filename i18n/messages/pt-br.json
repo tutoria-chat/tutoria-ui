@@ -1449,6 +1449,18 @@
       "never": "Nunca"
     }
   },
+  "forgotPassword": {
+    "title": "Esqueceu sua senha?",
+    "description": "Digite seu e-mail ou nome de usuário e enviaremos um link para redefinir sua senha.",
+    "emailLabel": "E-mail ou nome de usuário",
+    "emailPlaceholder": "Digite seu e-mail ou nome de usuário",
+    "submitButton": "Enviar link de redefinição",
+    "submitting": "Enviando...",
+    "backToLogin": "Voltar para o login",
+    "successTitle": "Verifique seu e-mail",
+    "successDesc": "Se uma conta com esse e-mail ou nome de usuário existir, você receberá um link de redefinição de senha em breve. Não se esqueça de verificar a caixa de spam.",
+    "errorGeneric": "Erro ao enviar o link de redefinição. Verifique sua conexão e tente novamente."
+  },
   "setupPassword": {
     "title": "Defina sua Senha",
     "description": "Crie uma senha segura para sua conta Tutoria",

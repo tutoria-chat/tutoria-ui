@@ -1452,6 +1452,18 @@
       "never": "Never"
     }
   },
+  "forgotPassword": {
+    "title": "Forgot your password?",
+    "description": "Enter your email or username and we'll send you a link to reset your password.",
+    "emailLabel": "Email or username",
+    "emailPlaceholder": "Enter your email or username",
+    "submitButton": "Send reset link",
+    "submitting": "Sending...",
+    "backToLogin": "Back to login",
+    "successTitle": "Check your email",
+    "successDesc": "If an account with that email or username exists, you'll receive a password reset link shortly. Don't forget to check your spam folder.",
+    "errorGeneric": "Failed to send reset link. Please check your connection and try again."
+  },
   "setupPassword": {
     "title": "Set Your Password",
     "description": "Create a secure password for your Tutoria account",
