@@ -70,7 +70,7 @@ export default function CoursesPage() {
 
   // Plan limits — block create button when at limit
   const { data: limits } = useFetch<UniversityLimits>(
-    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
+    '/api/subscriptions/limits'
   );
   const courseLimitReached = limits ? limits.currentCourses >= limits.maxCourses : false;
   const overLimitCourseIds = new Set(limits?.overLimitCourseIds || []);

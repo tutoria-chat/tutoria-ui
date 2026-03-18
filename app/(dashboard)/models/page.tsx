@@ -3,6 +3,24 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText } from 'lucide-react';
+import Image from 'next/image';
+
+const PROVIDER_LOGOS: Record<string, { src: string; alt: string }> = {
+  openai: { src: '/providers/openai.png', alt: 'OpenAI' },
+  anthropic: { src: '/providers/anthropic.svg', alt: 'Anthropic' },
+  bedrock: { src: '/providers/bedrock.png', alt: 'AWS Bedrock' },
+  deepseek: { src: '/providers/deepseek.png', alt: 'DeepSeek' },
+  gemini: { src: '/providers/gemini.png', alt: 'Google Gemini' },
+  xai: { src: '/providers/xai.png', alt: 'xAI' },
+};
+
+function ProviderLogo({ provider, size = 20 }: { provider: string; size?: number }) {
+  const logo = PROVIDER_LOGOS[provider?.toLowerCase()];
+  if (logo) {
+    return <Image src={logo.src} alt={logo.alt} width={size} height={size} className="object-contain" />;
+  }
+  return <Bot className="h-5 w-5 text-blue-600 dark:text-blue-400" />;
+}
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -167,8 +185,8 @@ function AIModelsTab() {
       sortable: true,
       render: (_, model) => (
         <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-950 flex items-center justify-center">
-            <Bot className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center">
+            <ProviderLogo provider={model.provider} />
           </div>
           <div>
             <div className="font-medium">{model.displayName}</div>
@@ -181,8 +199,11 @@ function AIModelsTab() {
       key: 'provider',
       label: t('columns.provider'),
       sortable: true,
-      render: (value) => (
-        <Badge variant="outline" className="capitalize">{value as string}</Badge>
+      render: (_, model) => (
+        <div className="flex items-center gap-2">
+          <ProviderLogo provider={model.provider} size={16} />
+          <Badge variant="outline" className="capitalize">{model.provider}</Badge>
+        </div>
       )
     },
     {
@@ -228,7 +249,7 @@ function AIModelsTab() {
       label: t('columns.tier'),
       render: (value) => {
         const tier = value as number;
-        const tierLabels: Record<number, string> = { 1: 'Basic', 2: 'Standard', 3: 'Premium' };
+        const tierLabels: Record<number, string> = { 1: 'Starter', 2: 'Professional', 3: 'Business' };
         return <Badge variant="outline">{tierLabels[tier] || `Tier ${tier}`}</Badge>;
       }
     },
@@ -344,9 +365,9 @@ function AIModelsTab() {
               <Select value={formData.requiredTier.toString()} onValueChange={(v) => updateField('requiredTier', parseInt(v))}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 - Basic</SelectItem>
-                  <SelectItem value="2">2 - Standard</SelectItem>
-                  <SelectItem value="3">3 - Premium</SelectItem>
+                  <SelectItem value="1">1 - Starter</SelectItem>
+                  <SelectItem value="2">2 - Professional</SelectItem>
+                  <SelectItem value="3">3 - Business</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -496,8 +517,11 @@ function APIKeysTab() {
       key: 'provider',
       label: t('columns.provider'),
       sortable: true,
-      render: (value) => (
-        <Badge variant="outline" className="capitalize">{value as string}</Badge>
+      render: (_, key) => (
+        <div className="flex items-center gap-2">
+          <ProviderLogo provider={key.provider} size={16} />
+          <Badge variant="outline" className="capitalize">{key.provider}</Badge>
+        </div>
       )
     },
     {

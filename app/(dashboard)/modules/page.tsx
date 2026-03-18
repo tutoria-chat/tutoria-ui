@@ -64,7 +64,7 @@ export default function ModulesPage() {
 
   // Plan limits — block create button when at limit
   const { data: limits } = useFetch<UniversityLimits>(
-    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
+    '/api/subscriptions/limits'
   );
   const moduleLimitReached = limits ? limits.currentModules >= limits.maxModules : false;
   const overLimitModuleIds = new Set(limits?.overLimitModuleIds || []);

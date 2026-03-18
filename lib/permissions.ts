@@ -352,8 +352,6 @@ export function canAccessSubscription(user: User | null, isEnterprise?: boolean)
  */
 export function canCreateCourse(user: User | null, limits?: UniversityLimits | null): boolean {
   if (!user) return false;
-  // Super admins bypass limits
-  if (user.role === 'super_admin') return true;
   // If no limits data available, allow (will be enforced server-side)
   if (!limits) return true;
   return limits.currentCourses < limits.maxCourses;
@@ -365,8 +363,6 @@ export function canCreateCourse(user: User | null, limits?: UniversityLimits | n
  */
 export function canCreateModule(user: User | null, limits?: UniversityLimits | null): boolean {
   if (!user) return false;
-  // Super admins bypass limits
-  if (user.role === 'super_admin') return true;
   // If no limits data available, allow (will be enforced server-side)
   if (!limits) return true;
   return limits.currentModules < limits.maxModules;

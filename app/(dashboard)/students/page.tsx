@@ -103,7 +103,7 @@ export default function StudentsPage() {
 
   // Fetch limits for alert
   const { data: limitsData } = useFetch<UniversityLimits>(
-    effectiveUniversityId && !isSuperAdmin ? `/api/subscriptions/limits` : null
+    effectiveUniversityId ? `/api/subscriptions/limits` : null
   );
 
   // MaxStudents alert logic
