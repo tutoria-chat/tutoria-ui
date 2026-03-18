@@ -28,8 +28,7 @@ import {
   Brain,
   ClipboardList,
   Sparkles,
-  HelpCircle,
-  Info
+  HelpCircle
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
