@@ -452,6 +452,7 @@
       "tokenCopied": "key copied!",
       "tokenCopyError": "Error copying key",
       "widgetUrlTitle": "Widget URL",
+      "widgetUrlShareNote": "Copy is recommended when sharing the chat with students — it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
       "copyUrl": "Copy URL",
       "testUrl": "Test URL",
       "addYoutubeVideo": "Add YouTube Video",
@@ -3651,12 +3652,13 @@
       "never": "Never",
       "actions": "Actions"
     },
+    "widgetUrlShareNote": "Copy is recommended when sharing the chat with students — it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
     "actions": {
       "view": "View details",
       "edit": "Edit key",
       "delete": "Delete key",
-      "openWidget": "Open widget",
-      "copyWidgetUrl": "Copy widget URL"
+      "openWidget": "Open widget in new tab (test as yourself)",
+      "copyWidgetUrl": "Copy widget URL (safe to share with students)"
     },
     "stats": {
       "totalTokens": "Total Keys",

@@ -28,7 +28,8 @@ import {
   Brain,
   ClipboardList,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  Info
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -736,16 +737,19 @@ export default function ModuleDetailsPage() {
       width: '140px',
       render: (_, token) => {
         const jwtToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null;
-        const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}${jwtToken ? `&auth_token=${encodeURIComponent(jwtToken)}` : ''}`;
+        // shareUrl: no auth_token — safe to share with students
+        const shareUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}`;
+        // testUrl: includes auth_token — bypasses verification gate for testing as yourself
+        const testUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token.token}${jwtToken ? `&auth_token=${encodeURIComponent(jwtToken)}` : ''}`;
         return (
           <div className="flex items-center space-x-1">
-            {/* Copy URL */}
+            {/* Copy URL — no auth_token, safe for students */}
             <Button
               variant="ghost"
               size="sm"
               onClick={async () => {
                 try {
-                  await navigator.clipboard.writeText(widgetUrl);
+                  await navigator.clipboard.writeText(shareUrl);
                   toast.success(tTokens('copyWidgetUrlSuccess'));
                 } catch (error) {
                   toast.error(tTokens('copyError'));
@@ -756,12 +760,12 @@ export default function ModuleDetailsPage() {
               <Copy className="h-4 w-4" />
             </Button>
 
-            {/* View URL */}
+            {/* View URL — shows share URL without auth_token */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
-                setSelectedTokenUrl(widgetUrl);
+                setSelectedTokenUrl(shareUrl);
                 setUrlDialogOpen(true);
               }}
               title={tTokens('actionButtons.viewWidgetUrl')}
@@ -769,11 +773,11 @@ export default function ModuleDetailsPage() {
               <Eye className="h-4 w-4" />
             </Button>
 
-            {/* Open in new tab */}
+            {/* Open in new tab — includes auth_token for admin testing */}
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => window.open(widgetUrl, '_blank')}
+              onClick={() => window.open(testUrl, '_blank')}
               title={tTokens('actionButtons.openWidget')}
             >
               <ExternalLink className="h-4 w-4" />
@@ -1103,7 +1107,13 @@ export default function ModuleDetailsPage() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    {t('widgetUrlShareNote')}
+                  </AlertDescription>
+                </Alert>
                 <DataTable
                   data={tokens || []}
                   columns={tokenColumns}

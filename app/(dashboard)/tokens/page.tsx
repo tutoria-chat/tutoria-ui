@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link } from 'lucide-react';
+import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
@@ -102,7 +103,9 @@ export default function TokensPage() {
   };
 
   const handleOpenWidget = (token: string) => {
-    const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
+    const jwtToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null;
+    // Open with auth_token so admins/professors can test the widget as themselves
+    const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}${jwtToken ? `&auth_token=${encodeURIComponent(jwtToken)}` : ''}`;
     window.open(widgetUrl, '_blank');
   };
 
@@ -364,6 +367,13 @@ export default function TokensPage() {
             </CardContent>
           </Card>
         </div>
+
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            {t('widgetUrlShareNote')}
+          </AlertDescription>
+        </Alert>
 
         <DataTable
           data={paginatedTokens}

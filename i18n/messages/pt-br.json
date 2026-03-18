@@ -441,6 +441,7 @@
       "tokenCopied": "Chave copiada!",
       "tokenCopyError": "Erro ao copiar chave",
       "widgetUrlTitle": "URL do Widget",
+      "widgetUrlShareNote": "Copiar é recomendado ao compartilhar o chat com os alunos — não inclui seu token de sessão. Abrir em nova aba é para testar o widget como você mesmo (seu token de autenticação é incluído).",
       "copyUrl": "Copiar URL",
       "testUrl": "Testar URL",
       "columns": {
@@ -4680,12 +4681,13 @@
       "never": "Nunca",
       "actions": "Ações"
     },
+    "widgetUrlShareNote": "Copiar é recomendado ao compartilhar o chat com os alunos — não inclui seu token de sessão. Abrir em nova aba é para testar o widget como você mesmo (seu token de autenticação é incluído).",
     "actions": {
       "view": "Ver detalhes",
       "edit": "Editar chave",
       "delete": "Excluir chave",
-      "openWidget": "Abrir widget",
-      "copyWidgetUrl": "Copiar URL do widget"
+      "openWidget": "Abrir widget em nova aba (testar como você mesmo)",
+      "copyWidgetUrl": "Copiar URL do widget (seguro para compartilhar com alunos)"
     },
     "stats": {
       "totalTokens": "Total de Chaves",
