@@ -75,6 +75,8 @@ export default function CoursesPage() {
   const courseLimitReached = limits ? limits.currentCourses >= limits.maxCourses : false;
   const overLimitCourseIds = new Set(limits?.overLimitCourseIds || []);
   const hasOverLimitCourses = overLimitCourseIds.size > 0;
+  const coursePercent = limits?.maxCourses ? Math.round((limits.currentCourses / limits.maxCourses) * 100) : 0;
+  const showCourseAlert = limits && coursePercent >= 80;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -298,14 +300,23 @@ export default function CoursesPage() {
         </div>
       )}
 
-      {courseLimitReached && !hasOverLimitCourses && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800 p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
-            <span className="text-sm text-red-800 dark:text-red-300">
-              {t('limitReached')} ({limits?.currentCourses}/{limits?.maxCourses})
-            </span>
-          </div>
+      {showCourseAlert && !hasOverLimitCourses && (
+        <div className={`flex items-center gap-3 p-4 rounded-lg border ${
+          courseLimitReached
+            ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800'
+            : 'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
+        }`}>
+          <AlertTriangle className={`h-5 w-5 shrink-0 ${
+            courseLimitReached ? 'text-red-600' : 'text-yellow-600'
+          }`} />
+          <p className={`text-sm flex-1 ${
+            courseLimitReached ? 'text-red-800 dark:text-red-200' : 'text-yellow-800 dark:text-yellow-200'
+          }`}>
+            {courseLimitReached
+              ? t('alerts.reached', { current: limits?.currentCourses, max: limits?.maxCourses })
+              : t('alerts.approaching', { current: limits?.currentCourses, max: limits?.maxCourses, percent: coursePercent })
+            }
+          </p>
           <Button variant="outline" size="sm" asChild>
             <Link href="/subscription">{t('upgradePlan')}</Link>
           </Button>

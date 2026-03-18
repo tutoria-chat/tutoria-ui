@@ -53,6 +53,10 @@
     "overLimitBanner": "Tienes {excess} curso(s) por encima del límite de tu plan. Estos cursos están desactivados — elimínalos o actualiza tu plan.",
     "overLimitTooltip": "Este curso excede el límite de tu plan. Solo se permite la eliminación.",
     "upgradePlan": "Actualizar Plan",
+    "alerts": {
+      "approaching": "Alerta de límite de cursos: {current} de {max} cursos ({percent}% utilizado)",
+      "reached": "Límite de cursos alcanzado: {current} de {max} cursos. Actualiza tu plan para crear más."
+    },
     "viewModules": "Ver módulos",
     "searchPlaceholder": "Buscar cursos, descripciones o universidades...",
     "emptyMessage": "No se encontraron cursos. Crea tu primer curso para comenzar.",
@@ -215,6 +219,10 @@
     "overLimitBanner": "Tienes {excess} módulo(s) por encima del límite de tu plan. Estos módulos están desactivados — elimínalos o actualiza tu plan.",
     "overLimitTooltip": "Este módulo excede el límite de tu plan. Solo se permite la eliminación.",
     "upgradePlan": "Actualizar Plan",
+    "alerts": {
+      "approaching": "Alerta de límite de módulos: {current} de {max} módulos ({percent}% utilizado)",
+      "reached": "Límite de módulos alcanzado: {current} de {max} módulos. Actualiza tu plan para crear más."
+    },
     "viewCourses": "Ver cursos",
     "searchPlaceholder": "Buscar módulos, descripciones o cursos...",
     "emptyMessage": "No se encontraron módulos. Crea tu primer módulo para comenzar.",

@@ -92,6 +92,10 @@
     "overLimitBanner": "You have {excess} course(s) over your plan limit. These courses are disabled — please delete them or upgrade your plan.",
     "overLimitTooltip": "This course exceeds your plan limit. Only deletion is allowed.",
     "upgradePlan": "Upgrade Plan",
+    "alerts": {
+      "approaching": "Course limit alert: {current} of {max} courses ({percent}% used)",
+      "reached": "Course limit reached: {current} of {max} courses. Upgrade your plan to create more."
+    },
     "viewModules": "View Modules",
     "searchPlaceholder": "Search courses, descriptions or universities...",
     "emptyMessage": "No courses found. Create your first course to get started.",
@@ -255,6 +259,10 @@
     "overLimitBanner": "You have {excess} module(s) over your plan limit. These modules are disabled — please delete them or upgrade your plan.",
     "overLimitTooltip": "This module exceeds your plan limit. Only deletion is allowed.",
     "upgradePlan": "Upgrade Plan",
+    "alerts": {
+      "approaching": "Module limit alert: {current} of {max} modules ({percent}% used)",
+      "reached": "Module limit reached: {current} of {max} modules. Upgrade your plan to create more."
+    },
     "viewCourses": "View Courses",
     "searchPlaceholder": "Search modules, descriptions or courses...",
     "emptyMessage": "No modules found. Create your first module to get started.",

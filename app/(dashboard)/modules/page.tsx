@@ -69,6 +69,8 @@ export default function ModulesPage() {
   const moduleLimitReached = limits ? limits.currentModules >= limits.maxModules : false;
   const overLimitModuleIds = new Set(limits?.overLimitModuleIds || []);
   const hasOverLimitModules = overLimitModuleIds.size > 0;
+  const modulePercent = limits?.maxModules ? Math.round((limits.currentModules / limits.maxModules) * 100) : 0;
+  const showModuleAlert = limits && modulePercent >= 80;
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: t('title'), isCurrentPage: true }
@@ -306,14 +308,23 @@ export default function ModulesPage() {
         </div>
       )}
 
-      {moduleLimitReached && !hasOverLimitModules && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800 p-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
-            <span className="text-sm text-red-800 dark:text-red-300">
-              {t('limitReached')} ({limits?.currentModules}/{limits?.maxModules})
-            </span>
-          </div>
+      {showModuleAlert && !hasOverLimitModules && (
+        <div className={`flex items-center gap-3 p-4 rounded-lg border ${
+          moduleLimitReached
+            ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800'
+            : 'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
+        }`}>
+          <AlertTriangle className={`h-5 w-5 shrink-0 ${
+            moduleLimitReached ? 'text-red-600' : 'text-yellow-600'
+          }`} />
+          <p className={`text-sm flex-1 ${
+            moduleLimitReached ? 'text-red-800 dark:text-red-200' : 'text-yellow-800 dark:text-yellow-200'
+          }`}>
+            {moduleLimitReached
+              ? t('alerts.reached', { current: limits?.currentModules, max: limits?.maxModules })
+              : t('alerts.approaching', { current: limits?.currentModules, max: limits?.maxModules, percent: modulePercent })
+            }
+          </p>
           <Button variant="outline" size="sm" asChild>
             <Link href="/subscription">{t('upgradePlan')}</Link>
           </Button>

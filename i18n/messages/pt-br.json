@@ -53,6 +53,10 @@
     "overLimitBanner": "Você tem {excess} disciplina(s) acima do limite do seu plano. Essas disciplinas estão desativadas — exclua-as ou atualize seu plano.",
     "overLimitTooltip": "Esta disciplina excede o limite do seu plano. Apenas exclusão é permitida.",
     "upgradePlan": "Atualizar Plano",
+    "alerts": {
+      "approaching": "Alerta de limite de disciplinas: {current} de {max} disciplinas ({percent}% utilizado)",
+      "reached": "Limite de disciplinas atingido: {current} de {max} disciplinas. Atualize seu plano para criar mais."
+    },
     "viewModules": "Ver Módulos",
     "searchPlaceholder": "Buscar disciplinas, descrições ou universidades...",
     "emptyMessage": "Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar.",
@@ -215,6 +219,10 @@
     "overLimitBanner": "Você tem {excess} módulo(s) acima do limite do seu plano. Esses módulos estão desativados — exclua-os ou atualize seu plano.",
     "overLimitTooltip": "Este módulo excede o limite do seu plano. Apenas exclusão é permitida.",
     "upgradePlan": "Atualizar Plano",
+    "alerts": {
+      "approaching": "Alerta de limite de módulos: {current} de {max} módulos ({percent}% utilizado)",
+      "reached": "Limite de módulos atingido: {current} de {max} módulos. Atualize seu plano para criar mais."
+    },
     "viewCourses": "Ver Disciplinas",
     "searchPlaceholder": "Buscar módulos, descrições ou disciplinas...",
     "emptyMessage": "Nenhum módulo encontrado. Crie seu primeiro módulo para começar.",
