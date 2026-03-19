@@ -289,7 +289,10 @@
       "aiTutors": "AI Tutors",
       "courses": "Courses"
     },
-    "deleteConfirm": "Are you sure you want to delete this module? This action cannot be undone.",
+    "deleteTitle": "Delete Module",
+    "deleteDescription": "The module will be deactivated and hidden from students. Its data (files, quizzes, chat history) is preserved and can be recovered by your administrator if needed.",
+    "deleteConfirm": "Are you sure you want to delete this module?",
+    "deleteSuccess": "Module deleted successfully",
     "deleteError": "Error deleting module. Please try again.",
     "form": {
       "create": "Create New Module",
@@ -396,6 +399,7 @@
       }
     },
     "detail": {
+      "notFound": "This module no longer exists or has been deleted.",
       "viewCourse": "View Course",
       "prepareModule": "Prepare Module",
       "preparing": "Preparing...",

@@ -249,7 +249,10 @@
       "aiTutors": "Tutores de IA",
       "courses": "Cursos"
     },
-    "deleteConfirm": "¿Estás seguro de que deseas eliminar este módulo? Esta acción no se puede deshacer.",
+    "deleteTitle": "Eliminar Módulo",
+    "deleteDescription": "El módulo será desactivado y ocultado para los estudiantes. Sus datos (archivos, quizzes, historial de chat) se conservan y pueden ser recuperados por el administrador si es necesario.",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar este módulo?",
+    "deleteSuccess": "Módulo eliminado exitosamente",
     "deleteError": "Error al eliminar el módulo. Por favor, intenta de nuevo.",
     "form": {
       "create": "Crear módulo",
@@ -355,6 +358,7 @@
       }
     },
     "detail": {
+      "notFound": "Este módulo ya no existe o ha sido eliminado.",
       "viewCourse": "Ver curso",
       "prepareModule": "Preparar módulo",
       "preparing": "Preparando...",

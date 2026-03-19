@@ -223,8 +223,8 @@ export default function ModulesPage() {
 
   const handleDelete = async (id: number) => {
     confirm({
-      title: t('deleteConfirm'),
-      description: t('deleteConfirm'),
+      title: t('deleteTitle'),
+      description: t('deleteDescription'),
       variant: 'destructive',
       confirmText: tCommon('buttons.delete'),
       cancelText: tCommon('buttons.cancel'),
@@ -232,7 +232,8 @@ export default function ModulesPage() {
         try {
           const { apiClient } = await import('@/lib/api');
           await apiClient.deleteModule(id);
-          window.location.reload();
+          toast.success(t('deleteSuccess'));
+          router.refresh();
         } catch (error) {
           console.error('Erro ao deletar módulo:', error);
           toast.error(t('deleteError'));

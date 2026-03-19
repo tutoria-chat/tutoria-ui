@@ -894,9 +894,13 @@ export default function ModuleDetailsPage() {
       return '/dashboard';
     };
 
+    const isNotFound = moduleError?.toLowerCase().includes('not found');
+
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <p className="text-destructive">{tCommon('error')}</p>
+        <p className="text-destructive">
+          {isNotFound ? t('notFound') : tCommon('error')}
+        </p>
         <Button onClick={() => router.push(getBackUrl())}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           {tCommon('buttons.back')}
