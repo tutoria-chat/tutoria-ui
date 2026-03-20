@@ -603,12 +603,12 @@ class TutoriaAPIClient {
     return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
   }
 
-  async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ status: string; message: string; extracted_count: number; failed_count: number; module_id: number }> {
-    return this.post(`/modules/${moduleId}/extract-text?force=${force}`, {}, { usePythonAPI: true });
+  async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ queued_count: number; total_files: number; message: string }> {
+    return this.post(`/api/modules/${moduleId}/extract-text?force=${force}`, {});
   }
 
-  async generateModuleQuizzes(moduleId: number, upsert: boolean = true, count: number = 50): Promise<{ status: string; message: string; quiz_count: number; module_id: number }> {
-    return this.post(`/modules/${moduleId}/generate-quizzes?upsert=${upsert}&count=${count}`, {}, { usePythonAPI: true });
+  async generateModuleQuizzes(moduleId: number, upsert: boolean = true, count: number = 50): Promise<{ status: string; message: string }> {
+    return this.post(`/api/modules/${moduleId}/generate-quizzes?count=${count}`, {});
   }
 
   async getModuleQuizzes(moduleId: number, difficulty?: string, source?: string): Promise<QuizQuestion[]> {

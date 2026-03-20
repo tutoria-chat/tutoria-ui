@@ -307,7 +307,7 @@ export default function ModuleDetailsPage() {
       const extractResult = await apiClient.extractModuleTexts(moduleId, false);
 
       toast.success(t('updateAIConfigSuccess'), {
-        description: t('extractionResult', { count: extractResult.extracted_count }),
+        description: t('extractionResult', { count: extractResult.queued_count }),
       });
     } catch (error) {
       console.error('AI config update error:', error);
@@ -456,16 +456,12 @@ export default function ModuleDetailsPage() {
   const handleGenerateQuizzes = async () => {
     setIsGeneratingQuizzes(true);
     try {
-      const result = await apiClient.generateModuleQuizzes(moduleId, true, 50);
-      if (result.status === 'skipped') {
-        toast.info(result.message);
-      } else {
-        toast.success(tQuiz('generateQueued'));
-        // Poll for quizzes after a delay since generation happens in background
-        setTimeout(() => loadQuizzes(), 30000);
-        setTimeout(() => loadQuizzes(), 60000);
-        setTimeout(() => loadQuizzes(), 120000);
-      }
+      await apiClient.generateModuleQuizzes(moduleId, true, 50);
+      toast.success(tQuiz('generateQueued'));
+      // Poll for quizzes after a delay since generation happens asynchronously via SQS
+      setTimeout(() => loadQuizzes(), 30000);
+      setTimeout(() => loadQuizzes(), 60000);
+      setTimeout(() => loadQuizzes(), 120000);
     } catch (err) {
       console.error('Failed to generate quizzes:', err);
       toast.error(tQuiz('generateError'));
