@@ -3942,7 +3942,15 @@
       "messages": "mensajes",
       "conversations": "conversaciones",
       "noData": "Aún no hay datos de actividad de estudiantes"
-    }
+    },
+    "questionsPerModule": "Preguntas por Módulo",
+    "mostDemandedTopics": "Temas Más Demandados",
+    "quizPerformance": "Rendimiento del Quiz",
+    "quizHeatmap": "Mapa de Calor por Concepto",
+    "quizRadar": "Radar de Dominio",
+    "successRate": "Tasa de Éxito",
+    "totalAttempts": "Total de Intentos",
+    "noPrecomputedData": "Los datos analíticos se están procesando. Vuelve mañana."
   },
   "accessKeys": {
     "title": "Claves de Acceso",
@@ -4138,12 +4146,15 @@
         "supportsVision": "Soporta Visión",
         "supportsFunctions": "Llamada a Funciones",
         "useForFileProcessing": "Usar para Procesar Archivos",
-        "useForFormatting": "Usar para Formateo"
+        "useForFormatting": "Usar para Formateo",
+        "useForTopicClassification": "Usar para Clasificación de Temas"
       },
       "fileProcessing": "Procesamiento de Archivos",
       "fileProcessingTooltip": "Este modelo se usa para procesar archivos subidos",
       "formatting": "Formateo",
       "formattingTooltip": "Este modelo post-procesa las respuestas en Markdown y LaTeX limpio",
+      "topicClassification": "Clasificación de Temas",
+      "topicClassificationTooltip": "Este modelo clasifica las preguntas de los estudiantes en temas académicos para análisis",
       "emptyMessage": "No se encontraron modelos de IA."
     },
     "apiKeys": {

@@ -8,6 +8,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { SectionErrorBoundary } from '@/components/ui/error-boundary';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -37,7 +38,10 @@ import type {
   HourlyUsageResponseDto,
   AnalyticsFilterDto,
   University,
-  Module
+  Module,
+  QuestionsPerModuleDto,
+  TopTopicsResponseDto,
+  QuizPerformanceResponseDto,
 } from '@/lib/types';
 
 // Lazy load heavy components for better performance
@@ -50,6 +54,10 @@ const ModuleComparison = lazy(() => import('@/components/analytics/module-compar
 const TodayMetrics = lazy(() => import('@/components/analytics/today-metrics').then(mod => ({ default: mod.TodayMetrics })));
 const FrequentQuestions = lazy(() => import('@/components/analytics/frequent-questions').then(mod => ({ default: mod.FrequentQuestions })));
 const TopStudents = lazy(() => import('@/components/analytics/top-students').then(mod => ({ default: mod.TopStudents })));
+const QuestionsPerModuleChart = lazy(() => import("@/components/analytics/questions-per-module-chart").then(m => ({ default: m.QuestionsPerModuleChart })));
+const TopTopicsChart = lazy(() => import("@/components/analytics/top-topics-chart").then(m => ({ default: m.TopTopicsChart })));
+const QuizHeatmap = lazy(() => import("@/components/analytics/quiz-heatmap").then(m => ({ default: m.QuizHeatmap })));
+const QuizRadarChart = lazy(() => import("@/components/analytics/quiz-radar-chart").then(m => ({ default: m.QuizRadarChart })));
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -79,6 +87,9 @@ export default function AnalyticsPage() {
   const [topStudents, setTopStudents] = useState<TopActiveStudentsResponseDto | null>(null);
   const [usageTrends, setUsageTrends] = useState<UsageTrendsResponseDto | null>(null);
   const [hourlyUsage, setHourlyUsage] = useState<HourlyUsageResponseDto | null>(null);
+  const [questionsPerModule, setQuestionsPerModule] = useState<QuestionsPerModuleDto | null>(null);
+  const [topTopics, setTopTopics] = useState<TopTopicsResponseDto | null>(null);
+  const [quizPerformance, setQuizPerformance] = useState<QuizPerformanceResponseDto | null>(null);
 
   // Module list for comparison component
   const [availableModules, setAvailableModules] = useState<Module[]>([]);
@@ -202,6 +213,11 @@ export default function AnalyticsPage() {
       setTopStudents(topStudentsData);
       setUsageTrends(trendsData);
       setHourlyUsage(hourlyData);
+
+      // Load pre-computed analytics (non-blocking)
+      apiClient.getAnalyticsQuestionsPerModule(filters).then(setQuestionsPerModule).catch(() => {});
+      apiClient.getAnalyticsTopTopics(filters).then(setTopTopics).catch(() => {});
+      apiClient.getAnalyticsQuizPerformance().then(setQuizPerformance).catch(() => {});
     } catch (error: any) {
       console.error('Error loading analytics:', error);
       console.error('Error details:', {
@@ -657,6 +673,58 @@ export default function AnalyticsPage() {
           }}
         />
       </Suspense>
+
+      {/* Pre-computed Analytics */}
+      {questionsPerModule && questionsPerModule.modules.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("questionsPerModule")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div className="h-[300px] animate-pulse bg-muted rounded" />}>
+              <QuestionsPerModuleChart data={questionsPerModule.modules} />
+            </Suspense>
+          </CardContent>
+        </Card>
+      )}
+
+      {topTopics && topTopics.topics.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("mostDemandedTopics")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<div className="h-[350px] animate-pulse bg-muted rounded" />}>
+              <TopTopicsChart data={topTopics.topics} />
+            </Suspense>
+          </CardContent>
+        </Card>
+      )}
+
+      {quizPerformance && quizPerformance.concepts.length > 0 && (
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("quizHeatmap")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Suspense fallback={<div className="h-[300px] animate-pulse bg-muted rounded" />}>
+                <QuizHeatmap data={quizPerformance.concepts} />
+              </Suspense>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>{t("quizRadar")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Suspense fallback={<div className="h-[350px] animate-pulse bg-muted rounded" />}>
+                <QuizRadarChart data={quizPerformance.concepts} />
+              </Suspense>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

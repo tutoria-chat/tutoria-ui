@@ -88,6 +88,9 @@ import type {
   InvitationResponse,
   InvitationDetailsResponse,
   BulkInviteResult,
+  QuestionsPerModuleDto,
+  TopTopicsResponseDto,
+  QuizPerformanceResponseDto,
 } from './types';
 
 export class ApiError extends Error {
@@ -1202,6 +1205,31 @@ class TutoriaAPIClient {
 
   async getAnalyticsFrequentQuestions(filters?: AnalyticsFilterDto): Promise<FrequentlyAskedQuestionsResponseDto> {
     return this.get('/api/analytics/questions/frequently-asked', filters);
+  }
+
+  async getAnalyticsQuestionsPerModule(filters?: AnalyticsFilterDto): Promise<QuestionsPerModuleDto> {
+    const params = new URLSearchParams();
+    if (filters?.startDate) params.append('startDate', filters.startDate);
+    if (filters?.endDate) params.append('endDate', filters.endDate);
+    if (filters?.universityId) params.append('universityId', filters.universityId.toString());
+    const query = params.toString();
+    return this.request(`/api/analytics/modules/questions-per-module${query ? `?${query}` : ''}`);
+  }
+
+  async getAnalyticsTopTopics(filters?: AnalyticsFilterDto): Promise<TopTopicsResponseDto> {
+    const params = new URLSearchParams();
+    if (filters?.startDate) params.append('startDate', filters.startDate);
+    if (filters?.endDate) params.append('endDate', filters.endDate);
+    if (filters?.moduleId) params.append('moduleId', filters.moduleId.toString());
+    const query = params.toString();
+    return this.request(`/api/analytics/topics/most-demanded${query ? `?${query}` : ''}`);
+  }
+
+  async getAnalyticsQuizPerformance(moduleId?: number): Promise<QuizPerformanceResponseDto> {
+    const params = new URLSearchParams();
+    if (moduleId) params.append('moduleId', moduleId.toString());
+    const query = params.toString();
+    return this.request(`/api/analytics/quiz/performance${query ? `?${query}` : ''}`);
   }
 
   // Audit Logs

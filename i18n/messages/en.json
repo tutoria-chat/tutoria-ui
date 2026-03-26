@@ -3623,7 +3623,15 @@
       "messages": "messages",
       "conversations": "conversations",
       "noData": "No student activity data yet"
-    }
+    },
+    "questionsPerModule": "Questions per Module",
+    "mostDemandedTopics": "Most Demanded Subjects",
+    "quizPerformance": "Quiz Performance",
+    "quizHeatmap": "Concept Difficulty Heatmap",
+    "quizRadar": "Concept Mastery Radar",
+    "successRate": "Success Rate",
+    "totalAttempts": "Total Attempts",
+    "noPrecomputedData": "Analytics data is being processed. Check back tomorrow."
   },
   "accessKeys": {
     "title": "Access Keys",
@@ -3905,12 +3913,15 @@
         "supportsVision": "Supports Vision",
         "supportsFunctions": "Function Calling",
         "useForFileProcessing": "Use for File Processing",
-        "useForFormatting": "Use for Formatting"
+        "useForFormatting": "Use for Formatting",
+        "useForTopicClassification": "Use for Topic Classification"
       },
       "fileProcessing": "File Processing",
       "fileProcessingTooltip": "This model is used for processing uploaded files",
       "formatting": "Formatting",
-      "formattingTooltip": "This model post-processes responses into clean Markdown and LaTeX"
+      "formattingTooltip": "This model post-processes responses into clean Markdown and LaTeX",
+      "topicClassification": "Topic Classification",
+      "topicClassificationTooltip": "This model classifies student questions into academic topics for analytics"
     },
     "apiKeys": {
       "columns": {

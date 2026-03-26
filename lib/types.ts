@@ -264,6 +264,7 @@ export interface AIModel {
   supportsFunctionCalling: boolean;
   useForFileExtraction: boolean;
   useForFormatting: boolean;
+  useForTopicClassification: boolean;
   inputCostPer1M?: number; // Capital M to match backend DTO
   outputCostPer1M?: number; // Capital M to match backend DTO
   requiredTier: number; // 1 = Basic/Deprecated, 2 = Standard, 3 = Premium
@@ -286,6 +287,7 @@ export interface AIModelCreate {
   supportsFunctionCalling: boolean;
   useForFileExtraction: boolean;
   useForFormatting: boolean;
+  useForTopicClassification: boolean;
   inputCostPer1M?: number;
   outputCostPer1M?: number;
   requiredTier: number;
@@ -1109,6 +1111,56 @@ export interface UsageAnalyticsSummaryResponseDto {
     totalMessages: number;
     uniqueStudents: number;
   }>;
+}
+
+// Pre-computed Analytics Types (from nightly worker aggregation)
+export interface QuestionsPerModuleDto {
+  modules: ModuleQuestionCountDto[];
+  startDate: string;
+  endDate: string;
+}
+
+export interface ModuleQuestionCountDto {
+  moduleId: number;
+  moduleName: string;
+  courseName: string;
+  totalQuestions: number;
+  uniqueStudents: number;
+  dailyBreakdown: DailyCountDto[];
+}
+
+export interface DailyCountDto {
+  date: string;
+  count: number;
+}
+
+export interface TopTopicsResponseDto {
+  topics: TopicDto[];
+  startDate: string;
+  endDate: string;
+}
+
+export interface TopicDto {
+  topicName: string;
+  totalQuestions: number;
+  sampleQuestions: string[];
+  moduleId: number;
+  moduleName: string;
+}
+
+export interface QuizPerformanceResponseDto {
+  concepts: ConceptPerformanceDto[];
+  totalAttempts: number;
+  overallSuccessRate: number;
+}
+
+export interface ConceptPerformanceDto {
+  conceptName: string;
+  totalAttempts: number;
+  correctCount: number;
+  incorrectCount: number;
+  successRate: number;
+  difficulty?: string;
 }
 
 // Unified dashboard response combining all dashboard data

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText, Sparkles } from 'lucide-react';
+import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText, Sparkles, BarChart3 } from 'lucide-react';
 import Image from 'next/image';
 
 const PROVIDER_LOGOS: Record<string, { src: string; alt: string }> = {
@@ -61,6 +61,7 @@ const EMPTY_AI_MODEL: AIModelCreate = {
   supportsFunctionCalling: false,
   useForFileExtraction: false,
   useForFormatting: false,
+  useForTopicClassification: false,
   inputCostPer1M: 0,
   outputCostPer1M: 0,
   requiredTier: 3,
@@ -120,6 +121,7 @@ function AIModelsTab() {
       supportsFunctionCalling: model.supportsFunctionCalling,
       useForFileExtraction: model.useForFileExtraction,
       useForFormatting: model.useForFormatting,
+      useForTopicClassification: model.useForTopicClassification,
       inputCostPer1M: model.inputCostPer1M ?? 0,
       outputCostPer1M: model.outputCostPer1M ?? 0,
       requiredTier: model.requiredTier,
@@ -240,6 +242,12 @@ function AIModelsTab() {
             <Badge variant="outline" className="text-purple-600 border-purple-300 dark:text-purple-400 dark:border-purple-700">
               <Sparkles className="h-3 w-3 mr-1" />
               {t('formatting')}
+            </Badge>
+          )}
+          {model.useForTopicClassification && (
+            <Badge variant="outline" className="text-amber-600 border-amber-300 dark:text-amber-400 dark:border-amber-700">
+              <BarChart3 className="h-3 w-3 mr-1" />
+              {t('topicClassification')}
             </Badge>
           )}
         </div>
@@ -431,6 +439,13 @@ function AIModelsTab() {
                   <span className="text-sm font-medium">{t('form.useForFormatting')}</span>
                 </div>
                 <Switch checked={formData.useForFormatting} onCheckedChange={(v) => updateField('useForFormatting', v)} />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-amber-500" />
+                  <span className="text-sm font-medium">{t('form.useForTopicClassification')}</span>
+                </div>
+                <Switch checked={formData.useForTopicClassification} onCheckedChange={(v) => updateField('useForTopicClassification', v)} />
               </div>
               <div className="flex items-center justify-between rounded-lg border p-3">
                 <span className="text-sm font-medium">{t('active')}</span>
