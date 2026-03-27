@@ -27,16 +27,11 @@ import { getUserRoleDisplayName } from '@/lib/permissions';
 import { apiClient } from '@/lib/api';
 import type {
   UsageAnalyticsSummaryResponseDto,
-  UsageStatsDto,
-  TodayCostDto,
-  UsageTrendsResponseDto,
   UnifiedDashboardResponseDto
 } from '@/lib/types';
 
 // Lazy load analytics components
 const StatsCard = lazy(() => import('@/components/analytics/stats-card').then(mod => ({ default: mod.StatsCard })));
-const UsageTrendsChart = lazy(() => import('@/components/analytics/usage-trends-chart').then(mod => ({ default: mod.UsageTrendsChart })));
-const TodayMetrics = lazy(() => import('@/components/analytics/today-metrics').then(mod => ({ default: mod.TodayMetrics })));
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -45,9 +40,6 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState<UsageAnalyticsSummaryResponseDto | null>(null);
-  const [trends, setTrends] = useState<UsageTrendsResponseDto | null>(null);
-  const [todayUsage, setTodayUsage] = useState<UsageStatsDto | null>(null);
-  const [todayCost, setTodayCost] = useState<TodayCostDto | null>(null);
 
   const isAdmin = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin);
   const isSuperAdmin = user?.role === 'super_admin';
@@ -80,13 +72,9 @@ export default function DashboardPage() {
         // Load all data in a single unified API call (improves performance from ~100 DynamoDB queries to ~25)
         const unifiedData = await apiClient.getAnalyticsDashboardUnified(params).catch(() => null);
 
-        // Extract individual components from unified response
+        // Extract summary from unified response
         const summaryData = unifiedData?.summary;
-        const trendsData = unifiedData?.trends;
-        const todayUsageData = unifiedData?.todayUsage;
-        const todayCostData = unifiedData?.todayCost;
 
-        // Transform DashboardSummaryDto to match component expectations
         if (summaryData) {
           const transformedSummary: UsageAnalyticsSummaryResponseDto = {
             totalMessages: summaryData.overview.totalMessages,
@@ -98,19 +86,12 @@ export default function DashboardPage() {
               costPercentChange: summaryData.growth.costGrowth,
               studentsPercentChange: summaryData.growth.studentGrowth,
             },
-            dailyStats: trendsData?.trends.map((trend: any) => ({
-              date: trend.date,
-              totalMessages: trend.messageCount,
-              uniqueStudents: trend.uniqueStudents,
-            })) || [],
+            dailyStats: [],
           };
           setSummary(transformedSummary);
         } else {
           setSummary(null);
         }
-        setTrends(trendsData ?? null);
-        setTodayUsage(todayUsageData ?? null);
-        setTodayCost(todayCostData ?? null);
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {
@@ -295,49 +276,6 @@ export default function DashboardPage() {
                   />
                 </Suspense>
               </div>
-
-              {/* Today's Metrics */}
-              <Suspense fallback={<LoadingSpinner />}>
-                <TodayMetrics
-                  todayUsage={todayUsage}
-                  todayCost={todayCost}
-                  translations={{
-                    usageTitle: tAnalytics('today.usageTitle'),
-                    usageDescription: tAnalytics('today.usageDescription'),
-                    messages: tAnalytics('today.messages'),
-                    students: tAnalytics('today.students'),
-                    conversations: tAnalytics('today.conversations'),
-                    avgResponseTime: tAnalytics('today.avgResponseTime'),
-                    costTitle: tAnalytics('today.costTitle'),
-                    costDescription: tAnalytics('today.costDescription'),
-                    totalToday: tAnalytics('today.totalToday'),
-                    tokens: tAnalytics('today.tokens'),
-                    vsYesterday: tAnalytics('today.vsYesterday'),
-                    videoTranscriptions: tAnalytics('today.videoTranscriptions'),
-                    transcriptionCost: tAnalytics('today.transcriptionCost'),
-                    videosTranscribed: tAnalytics('today.videosTranscribed'),
-                    projectedTranscriptionCost: tAnalytics('today.projectedTranscriptionCost'),
-                  }}
-                />
-              </Suspense>
-
-              {/* Usage Trends Chart */}
-              {trends && trends.trends && trends.trends.length > 0 && (
-                <Suspense fallback={<LoadingSpinner />}>
-                  <UsageTrendsChart
-                    data={trends.trends.map(trend => ({
-                      date: trend.date,
-                      messages: trend.messageCount,
-                      students: trend.uniqueStudents,
-                      cost: trend.estimatedCostUSD,
-                    })) || []}
-                    title={tAnalytics('charts.usageTrends')}
-                    description={tAnalytics('dashboard.last30DaysDescription')}
-                    messagesLabel={tAnalytics('charts.messages')}
-                    studentsLabel={tAnalytics('charts.students')}
-                  />
-                </Suspense>
-              )}
             </>
           )}
         </>

@@ -4507,6 +4507,7 @@
     "stats": {
       "totalMessages": "Total de Mensagens",
       "uniqueStudents": "Estudantes Únicos",
+      "studentsDescription": "Alunos que fizeram perguntas no período selecionado",
       "activeModules": "Módulos Ativos",
       "estimatedCost": "Custo Estimado",
       "inPeriod": "em {period}",
@@ -4654,10 +4655,14 @@
       "noData": "Ainda não há dados de atividade de estudantes"
     },
     "questionsPerModule": "Perguntas por Módulo",
+    "questionsPerModuleDescription": "Total de perguntas feitas pelos alunos em cada módulo",
     "mostDemandedTopics": "Assuntos Mais Demandados",
+    "mostDemandedTopicsDescription": "Tópicos acadêmicos mais perguntados pelos alunos",
     "quizPerformance": "Desempenho do Quiz",
     "quizHeatmap": "Mapa de Calor por Conceito",
+    "quizHeatmapDescription": "Áreas que precisam de atenção com base nos resultados do quiz",
     "quizRadar": "Radar de Domínio",
+    "quizRadarDescription": "Resultados positivos e negativos do quiz por conceito",
     "successRate": "Taxa de Acerto",
     "totalAttempts": "Total de Tentativas",
     "noPrecomputedData": "Dados analíticos estão sendo processados. Volte amanhã."

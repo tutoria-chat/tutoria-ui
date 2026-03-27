@@ -3478,6 +3478,7 @@
     "stats": {
       "totalMessages": "Total Messages",
       "uniqueStudents": "Unique Students",
+      "studentsDescription": "Students who asked questions in the selected period",
       "activeModules": "Active Modules",
       "estimatedCost": "Estimated Cost",
       "inPeriod": "in {period}",
@@ -3625,10 +3626,14 @@
       "noData": "No student activity data yet"
     },
     "questionsPerModule": "Questions per Module",
+    "questionsPerModuleDescription": "Total questions asked by students in each module",
     "mostDemandedTopics": "Most Demanded Subjects",
+    "mostDemandedTopicsDescription": "Academic topics students ask about the most",
     "quizPerformance": "Quiz Performance",
     "quizHeatmap": "Concept Difficulty Heatmap",
+    "quizHeatmapDescription": "Areas that need attention based on quiz results",
     "quizRadar": "Concept Mastery Radar",
+    "quizRadarDescription": "Positive and negative quiz results by concept",
     "successRate": "Success Rate",
     "totalAttempts": "Total Attempts",
     "noPrecomputedData": "Analytics data is being processed. Check back tomorrow."
