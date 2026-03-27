@@ -21,7 +21,7 @@ export function TopTopicsChart({ data }: Props) {
           cx="50%"
           cy="50%"
           outerRadius={120}
-          label={({ topicName, percent }) => `${topicName} (${(percent * 100).toFixed(0)}%)`}
+          label={(props: Record<string, unknown>) => `${props.topicName} (${(Number(props.percent) * 100).toFixed(0)}%)`}
         >
           {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
