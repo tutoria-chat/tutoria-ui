@@ -41,8 +41,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState<UsageAnalyticsSummaryResponseDto | null>(null);
 
-  const isAdmin = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin);
   const isSuperAdmin = user?.role === 'super_admin';
+  const isAdmin = isSuperAdmin || user?.role === 'manager' || user?.role === 'platform_coordinator' || user?.role === 'tutor' || (user?.role === 'professor' && user?.isAdmin);
 
   useEffect(() => {
     if (!user || !isAdmin) {

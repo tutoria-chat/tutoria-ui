@@ -37,15 +37,11 @@ export default function ModulesPage() {
   // Note: For regular professors, the API already filters modules to show only those in assigned courses
   // So if a module appears in the list for a regular professor, they can edit it
   const canEditModule = (module: Module): boolean => {
-    // Super admins and admin professors can edit all modules
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) {
-      return true;
-    }
-    // Regular professors (is_admin = false) can edit modules that appear in their filtered list
-    // The API ensures they only see modules from their assigned courses
-    if (user?.role === 'professor' && user?.isAdmin === false) {
-      return true;
-    }
+    if (user?.role === 'super_admin') return true;
+    if (user?.role === 'manager') return true;
+    if (user?.role === 'platform_coordinator') return true;
+    if (user?.role === 'tutor') return true;
+    if (user?.role === 'professor') return true;
     return false;
   };
 

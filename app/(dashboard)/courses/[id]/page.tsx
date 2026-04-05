@@ -178,15 +178,19 @@ export default function CourseDetailsPage() {
   // Check if user can add modules to this course
   const canAddModule = (): boolean => {
     if (user?.role === 'super_admin') return true;
-    if (user?.role === 'professor' && user?.isAdmin === true) return true;
-    if (user?.role === 'professor' && user?.isAdmin === false) return true;
+    if (user?.role === 'manager') return true;
+    if (user?.role === 'platform_coordinator') return true;
+    if (user?.role === 'tutor') return true;
+    if (user?.role === 'professor') return true;
     return false;
   };
 
   // Check if user can manage students (import, etc.)
   const canManageStudents = (): boolean => {
     if (user?.role === 'super_admin') return true;
-    if (user?.role === 'professor' && user?.isAdmin === true) return true;
+    if (user?.role === 'manager') return true;
+    if (user?.role === 'platform_coordinator') return true;
+    if (user?.role === 'tutor') return true;
     if (user?.role === 'professor') return true;
     return false;
   };
@@ -209,8 +213,11 @@ export default function CourseDetailsPage() {
   ];
 
   const canEditModule = (): boolean => {
-    if (user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin === true)) return true;
-    if (user?.role === 'professor' && user?.isAdmin === false) return true;
+    if (user?.role === 'super_admin') return true;
+    if (user?.role === 'manager') return true;
+    if (user?.role === 'platform_coordinator') return true;
+    if (user?.role === 'tutor') return true;
+    if (user?.role === 'professor') return true;
     return false;
   };
 

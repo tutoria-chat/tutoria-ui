@@ -823,9 +823,9 @@
       "tierHelpText": "O nível de assinatura controla quais modelos de IA esta universidade pode acessar",
       "isEnterpriseLabel": "Universidade Empresarial",
       "isEnterpriseHelp": "Universidades empresariais possuem limites personalizados ao invés de limites baseados em planos",
-      "maxCoursesLabel": "Cursos Máximos",
+      "maxCoursesLabel": "Disciplinas Máximas",
       "maxCoursesPlaceholder": "ex: 100",
-      "maxCoursesHelp": "Defina 0 para cursos ilimitados",
+      "maxCoursesHelp": "Defina 0 para disciplinas ilimitadas",
       "maxModulesLabel": "Módulos Máximos",
       "maxModulesPlaceholder": "ex: 500",
       "maxModulesHelp": "Defina 0 para módulos ilimitados",
@@ -1245,20 +1245,20 @@
       "filterByUniversity": "Filtrar por Universidade",
       "filterByUniversityPlaceholder": "Selecione uma universidade...",
       "allUniversities": "Todas as Universidades",
-      "filterByCourse": "Filtrar por Curso",
-      "filterByCoursePlaceholder": "Selecione um curso...",
-      "allCourses": "Todos os Cursos",
+      "filterByCourse": "Filtrar por Disciplina",
+      "filterByCoursePlaceholder": "Selecione uma disciplina...",
+      "allCourses": "Todas as Disciplinas",
       "columns": {
         "name": "Nome",
         "email": "Email",
         "matricula": "Matrícula",
-        "courses": "Cursos",
+        "courses": "Disciplinas",
         "status": "Status",
         "createdAt": "Matriculado em"
       },
       "active": "Ativo",
       "inactive": "Inativo",
-      "noCourses": "Sem cursos"
+      "noCourses": "Sem disciplinas"
     },
     "alerts": {
       "approaching": "Alerta de limite de alunos: {current} de {max} alunos ({percent}% utilizado)",
@@ -1431,7 +1431,7 @@
       "status": "Status",
       "description": "Descrição",
       "module": "Módulo",
-      "course": "Curso",
+      "course": "Disciplina",
       "createdAt": "Criado em",
       "expiresAt": "Expira em",
       "lastUsed": "Último uso",
@@ -1696,7 +1696,7 @@
     "subscription": "Assinatura",
     "systemOnline": "Sistema Online",
     "version": "Versão 1.0.0",
-    "allCourses": "Todos os Cursos",
+    "allCourses": "Todas as Disciplinas",
     "allModules": "Todos os Módulos",
     "collapse": "Recolher",
     "expand": "Expandir menu"
@@ -4143,10 +4143,10 @@
     "subtitle": "Complete guide for course instructors",
     "overview": {
       "title": "Visão Geral da Função",
-      "description": "Como Professor, você pode gerenciar módulos para cursos aos quais foi atribuído. Você pode criar módulos, configurar tutores de IA, enviar arquivos e gerar tokens de acesso para seus alunos.",
+      "description": "Como Professor, você pode gerenciar módulos para disciplinas às quais foi atribuído. Você pode criar módulos, configurar tutores de IA, enviar arquivos e gerar tokens de acesso para seus alunos.",
       "keyResponsibilities": "Principais Responsabilidades",
       "responsibilities": [
-        "Criar e gerenciar módulos para cursos atribuídos",
+        "Criar e gerenciar módulos para disciplinas atribuídas",
         "Configurar prompts do sistema de tutor de IA",
         "Enviar conteúdo educacional e arquivos",
         "Gerar e gerenciar tokens de acesso de módulo",
@@ -4159,11 +4159,11 @@
       "step1Title": "1. Primeiro Login",
       "step1Desc": "Use o link de configuração de senha fornecido pelo seu administrador para definir sua senha. Após definir sua senha, você pode fazer login com seu nome de usuário.",
       "step2Title": "2. Visualize Seu Painel",
-      "step2Desc": "Seu painel (/dashboard) mostra ações rápidas: Criar Módulo, Ver Cursos, Ver Módulos e Gerenciar Tokens.",
-      "step3Title": "3. Visualize Seus Cursos",
-      "step3Desc": "Navegue até Cursos (/courses) para ver todos os cursos aos quais você foi atribuído pelo seu administrador.",
+      "step2Desc": "Seu painel (/dashboard) mostra ações rápidas: Criar Módulo, Ver Disciplinas, Ver Módulos e Gerenciar Tokens.",
+      "step3Title": "3. Visualize Suas Disciplinas",
+      "step3Desc": "Navegue até Disciplinas (/courses) para ver todas as disciplinas às quais você foi atribuído pelo seu administrador.",
       "step4Title": "4. Crie Seu Primeiro Módulo",
-      "step4Desc": "Selecione um curso e crie seu primeiro módulo para começar a construir seu conteúdo educacional."
+      "step4Desc": "Selecione uma disciplina e crie seu primeiro módulo para começar a construir seu conteúdo educacional."
     },
     "courses": {
       "title": "Working with Courses",
@@ -4184,7 +4184,7 @@
           "Create new courses",
           "Edit existing courses",
           "Delete courses",
-          "Atribuir outros professores a cursos"
+          "Atribuir outros professores a disciplinas"
         ],
         "note": "If you need to create or modify courses, contact your university's admin professor."
       }
@@ -4602,7 +4602,7 @@
       "totalMessages": "Total de Mensagens",
       "uniqueStudents": "Estudantes Únicos",
       "activeModules": "Módulos Ativos",
-      "activeCourses": "Cursos Ativos",
+      "activeCourses": "Disciplinas Ativas",
       "estimatedCost": "Custo Estimado",
       "todayUsageTitle": "Uso de Hoje",
       "messages": "Mensagens",
@@ -4742,7 +4742,7 @@
       "allowFileAccessDesc": "Permitir download de materiais do curso através do widget",
       "status": "Status",
       "module": "Módulo",
-      "course": "Curso",
+      "course": "Disciplina",
       "createdAt": "Criado Em",
       "expiresAt": "Expira Em",
       "never": "Nunca",
@@ -4802,7 +4802,7 @@
     "entities": {
       "user": "Usuário",
       "university": "Universidade",
-      "course": "Curso",
+      "course": "Disciplina",
       "module": "Módulo",
       "file": "Arquivo",
       "token": "Token de Acesso"
@@ -4814,11 +4814,11 @@
   },
   "models": {
     "title": "Gerenciamento de Modelos de IA",
-    "description": "Gerencie modelos de IA, chaves de API e configurações de tipo de curso",
+    "description": "Gerencie modelos de IA, chaves de API e configurações de tipo de disciplina",
     "tabs": {
       "aiModels": "Modelos de IA",
       "apiKeys": "Chaves de API",
-      "courseTypeConfig": "Config. Tipo de Curso",
+      "courseTypeConfig": "Config. Tipo de Disciplina",
       "universityOverrides": "Substituições por Universidade"
     },
     "aiModels": {
@@ -4915,7 +4915,7 @@
     },
     "courseTypeConfig": {
       "columns": {
-        "courseType": "Tipo de Curso",
+        "courseType": "Tipo de Disciplina",
         "model": "Modelo de IA",
         "priority": "Prioridade",
         "status": "Status",
@@ -4923,21 +4923,21 @@
       },
       "active": "Ativo",
       "inactive": "Inativo",
-      "filterAll": "Todos os Tipos de Curso",
+      "filterAll": "Todos os Tipos de Disciplina",
       "addConfig": "Adicionar Configuração",
-      "emptyMessage": "Nenhuma configuração de tipo de curso encontrada.",
-      "createTitle": "Adicionar Configuração de Tipo de Curso",
-      "createDescription": "Atribua um modelo de IA a um tipo de curso com um nível de prioridade.",
+      "emptyMessage": "Nenhuma configuração de tipo de disciplina encontrada.",
+      "createTitle": "Adicionar Configuração de Tipo de Disciplina",
+      "createDescription": "Atribua um modelo de IA a um tipo de disciplina com um nível de prioridade.",
       "createSuccess": "Configuração criada com sucesso.",
       "createError": "Falha ao criar configuração.",
       "creating": "Criando...",
       "selectModelError": "Por favor, selecione um modelo de IA.",
       "deleteConfirm": "Excluir Configuração?",
-      "deleteConfirmDesc": "Isso removerá a atribuição do modelo para este tipo de curso.",
+      "deleteConfirmDesc": "Isso removerá a atribuição do modelo para este tipo de disciplina.",
       "deleteSuccess": "Configuração excluída com sucesso.",
       "deleteError": "Falha ao excluir configuração.",
       "form": {
-        "courseType": "Tipo de Curso",
+        "courseType": "Tipo de Disciplina",
         "aiModel": "Modelo de IA",
         "selectModel": "Selecione um modelo",
         "searchModel": "Buscar modelos...",
@@ -4946,7 +4946,7 @@
     },
     "universityOverrides": {
       "columns": {
-        "courseType": "Tipo de Curso",
+        "courseType": "Tipo de Disciplina",
         "model": "Modelo de IA",
         "priority": "Prioridade",
         "status": "Status"
@@ -4955,7 +4955,7 @@
       "inactive": "Inativo",
       "selectUniversity": "Selecione uma universidade",
       "searchUniversity": "Buscar universidades...",
-      "selectUniversityPrompt": "Selecione uma universidade para ver suas substituições de modelo por tipo de curso.",
+      "selectUniversityPrompt": "Selecione uma universidade para ver suas substituições de modelo por tipo de disciplina.",
       "emptyMessage": "Nenhuma substituição configurada para esta universidade."
     }
   },
@@ -5033,7 +5033,7 @@
     "scopes": {
       "global": "Global",
       "university": "Universidade",
-      "course": "Curso"
+      "course": "Disciplina"
     }
   },
   "plans": {
@@ -5107,7 +5107,7 @@
     "month": "mês",
     "trialDays": "{days} dias de teste grátis",
     "features": {
-      "courses": "Até {count} cursos",
+      "courses": "Até {count} disciplinas",
       "modules": "Até {count} módulos",
       "students": "Até {count} alunos",
       "aiQuizzes": "Quizzes Gerados por IA",
@@ -5178,13 +5178,13 @@
     "trialEnds": "Seu teste gratuito termina em {date}",
     "usage": "Uso",
     "usageDescription": "Acompanhe seu uso atual em relação aos limites do plano.",
-    "coursesUsed": "Cursos",
+    "coursesUsed": "Disciplinas",
     "modulesUsed": "Módulos",
     "includedFeatures": "Recursos Incluídos",
     "features": {
       "aiTutoring": "Tutoria com IA",
       "fileUpload": "Upload de Arquivos e RAG",
-      "courses": "Até {count} cursos",
+      "courses": "Até {count} disciplinas",
       "modules": "Até {count} módulos",
       "students": "Até {count} alunos",
       "aiQuizzes": "Quizzes Gerados por IA",
@@ -5231,7 +5231,7 @@
       "manage": "Gerenciar"
     },
     "categories": {
-      "courses": "Cursos",
+      "courses": "Disciplinas",
       "modules": "Modulos",
       "staff": "Equipe",
       "students": "Alunos",

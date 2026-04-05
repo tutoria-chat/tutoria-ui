@@ -127,7 +127,7 @@ export default function UniversityDetailsPage() {
 
   // Fetch professors ONLY for admin users (super admin or admin professor)
   // Regular professors get 403 Forbidden and don't need this data
-  const isAdmin = user?.role === 'super_admin' || (user?.role === 'professor' && user?.isAdmin);
+  const isAdmin = user?.role === 'super_admin' || user?.role === 'manager' || user?.role === 'platform_coordinator' || user?.role === 'tutor' || (user?.role === 'professor' && user?.isAdmin);
   const professorsApiUrl = isAdmin ? buildProfessorsApiUrl() : null;
   const { data: professorsResponse, loading: professorsLoading } = useFetch<PaginatedResponse<Professor>>(
     professorsApiUrl
