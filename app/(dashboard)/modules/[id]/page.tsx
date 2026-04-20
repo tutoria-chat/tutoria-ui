@@ -57,7 +57,10 @@ import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
-import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits } from '@/lib/types';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits, Assignment } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -114,6 +117,20 @@ export default function ModuleDetailsPage() {
   const [deleteQuizConfirmOpen, setDeleteQuizConfirmOpen] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState<number | null>(null);
   const [universityLimits, setUniversityLimits] = useState<UniversityLimits | null>(null);
+
+  // Assignments state
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  const [assignmentFormOpen, setAssignmentFormOpen] = useState(false);
+  const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
+  const [assignmentTitle, setAssignmentTitle] = useState('');
+  const [assignmentDescription, setAssignmentDescription] = useState('');
+  const [assignmentDueDate, setAssignmentDueDate] = useState('');
+  const [assignmentFile, setAssignmentFile] = useState<globalThis.File | null>(null);
+  const [isSavingAssignment, setIsSavingAssignment] = useState(false);
+  const [deleteAssignmentConfirmOpen, setDeleteAssignmentConfirmOpen] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<number | null>(null);
+  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState<boolean | null>(null);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -405,10 +422,102 @@ export default function ModuleDetailsPage() {
     }
   }, []);
 
+  const loadAssignments = useCallback(async () => {
+    setAssignmentsLoading(true);
+    try {
+      const data = await apiClient.getAssignments(moduleId);
+      setAssignments(data.items);
+      setAssignmentsFeatureEnabled(true);
+    } catch (err: unknown) {
+      const status = (err as { status?: number })?.status;
+      if (status === 400 || status === 403) {
+        setAssignmentsFeatureEnabled(false);
+      } else {
+        console.error('Failed to load assignments:', err);
+      }
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  }, [moduleId]);
+
   useEffect(() => {
     loadQuizzes();
     loadUniversityLimits();
-  }, [loadQuizzes, loadUniversityLimits]);
+    loadAssignments();
+  }, [loadQuizzes, loadUniversityLimits, loadAssignments]);
+
+  const openCreateAssignment = () => {
+    setEditingAssignment(null);
+    setAssignmentTitle('');
+    setAssignmentDescription('');
+    setAssignmentDueDate('');
+    setAssignmentFile(null);
+    setAssignmentFormOpen(true);
+  };
+
+  const openEditAssignment = (a: Assignment) => {
+    setEditingAssignment(a);
+    setAssignmentTitle(a.title);
+    setAssignmentDescription(a.description || '');
+    setAssignmentDueDate(a.dueDate ? a.dueDate.slice(0, 16) : '');
+    setAssignmentFile(null);
+    setAssignmentFormOpen(true);
+  };
+
+  const handleSaveAssignment = async () => {
+    if (!assignmentTitle.trim() || !assignmentDueDate) return;
+    setIsSavingAssignment(true);
+    try {
+      if (editingAssignment) {
+        await apiClient.updateAssignment(editingAssignment.id, {
+          title: assignmentTitle,
+          description: assignmentDescription || undefined,
+          dueDate: assignmentDueDate,
+        });
+        toast.success('Assignment updated');
+      } else {
+        if (!assignmentFile) { toast.error('Please select a file'); return; }
+        await apiClient.createAssignment({
+          moduleId,
+          title: assignmentTitle,
+          description: assignmentDescription || undefined,
+          dueDate: assignmentDueDate,
+          file: assignmentFile,
+        });
+        toast.success('Assignment created');
+      }
+      setAssignmentFormOpen(false);
+      loadAssignments();
+    } catch (err) {
+      console.error('Failed to save assignment:', err);
+      toast.error('Failed to save assignment');
+    } finally {
+      setIsSavingAssignment(false);
+    }
+  };
+
+  const handleTogglePublishAssignment = async (id: number) => {
+    try {
+      await apiClient.togglePublishAssignment(id);
+      loadAssignments();
+    } catch (err) {
+      console.error('Failed to toggle publish:', err);
+      toast.error('Failed to update assignment');
+    }
+  };
+
+  const handleDeleteAssignment = async () => {
+    if (!assignmentToDelete) return;
+    try {
+      await apiClient.deleteAssignment(assignmentToDelete);
+      toast.success('Assignment deleted');
+      setDeleteAssignmentConfirmOpen(false);
+      loadAssignments();
+    } catch (err) {
+      console.error('Failed to delete assignment:', err);
+      toast.error('Failed to delete assignment');
+    }
+  };
 
   const handleQuizFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -954,6 +1063,15 @@ export default function ModuleDetailsPage() {
               <Badge variant="secondary" className="ml-1 text-xs">{quizzes.length}</Badge>
             )}
           </TabsTrigger>
+          {assignmentsFeatureEnabled !== false && (
+            <TabsTrigger value="assignments" className="gap-2">
+              <FileText className="h-4 w-4" />
+              Assignments
+              {assignments.length > 0 && (
+                <Badge variant="secondary" className="ml-1 text-xs">{assignments.length}</Badge>
+              )}
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="content" className="space-y-6">
@@ -1202,7 +1320,137 @@ export default function ModuleDetailsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Assignments Tab */}
+        <TabsContent value="assignments" className="space-y-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Assignments</CardTitle>
+                <CardDescription>Publish assignments for students with deadlines and AI-powered feedback.</CardDescription>
+              </div>
+              <Button size="sm" onClick={openCreateAssignment}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Assignment
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {assignmentsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : assignments.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <ClipboardList className="h-10 w-10 mx-auto mb-2 opacity-40" />
+                  <p className="text-sm">No assignments yet. Create your first assignment.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {assignments.map((a) => {
+                    const isPastDue = new Date(a.dueDate) < new Date();
+                    return (
+                      <div key={a.id} className="flex items-center justify-between p-4 border rounded-lg bg-card">
+                        <div className="space-y-1 flex-1 min-w-0 mr-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium truncate">{a.title}</span>
+                            {a.isPublished ? (
+                              <Badge variant="default" className="text-xs shrink-0">Published</Badge>
+                            ) : (
+                              <Badge variant="secondary" className="text-xs shrink-0">Draft</Badge>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span className={isPastDue ? 'text-destructive font-medium' : ''}>
+                              Due: {formatDateTimeShort(a.dueDate)}
+                              {isPastDue && ' (Past due)'}
+                            </span>
+                            <span>·</span>
+                            <span className="truncate">{a.originalFileName}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Switch
+                            checked={a.isPublished}
+                            onCheckedChange={() => handleTogglePublishAssignment(a.id)}
+                            title={a.isPublished ? 'Unpublish' : 'Publish'}
+                          />
+                          <Button variant="ghost" size="sm" onClick={() => openEditAssignment(a)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive"
+                            onClick={() => { setAssignmentToDelete(a.id); setDeleteAssignmentConfirmOpen(true); }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
+
+      {/* Assignment Form Dialog */}
+      <Dialog open={assignmentFormOpen} onOpenChange={setAssignmentFormOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editingAssignment ? 'Edit Assignment' : 'New Assignment'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div>
+              <label className="block text-sm font-medium mb-1">Title</label>
+              <Input value={assignmentTitle} onChange={(e) => setAssignmentTitle(e.target.value)} placeholder="Assignment title" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Instructions (optional)</label>
+              <Textarea value={assignmentDescription} onChange={(e) => setAssignmentDescription(e.target.value)} placeholder="Describe the assignment requirements..." rows={4} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Due Date</label>
+              <Input type="datetime-local" value={assignmentDueDate} onChange={(e) => setAssignmentDueDate(e.target.value)} />
+            </div>
+            {!editingAssignment && (
+              <div>
+                <label className="block text-sm font-medium mb-1">File (PDF or DOCX, max 30 MB)</label>
+                <input
+                  type="file"
+                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80"
+                  onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
+                />
+              </div>
+            )}
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setAssignmentFormOpen(false)}>Cancel</Button>
+              <Button onClick={handleSaveAssignment} disabled={isSavingAssignment || !assignmentTitle.trim() || !assignmentDueDate}>
+                {isSavingAssignment && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {editingAssignment ? 'Save Changes' : 'Create Assignment'}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Assignment Confirm */}
+      <AlertDialog open={deleteAssignmentConfirmOpen} onOpenChange={setDeleteAssignmentConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
+            <AlertDialogDescription>This will hide the assignment from students. Are you sure?</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteAssignment} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Token Creation Modal */}
       <TokenModal

@@ -831,7 +831,9 @@
       "maxModulesHelp": "Establezca 0 para módulos ilimitados",
       "maxStudentsLabel": "Estudiantes Máximos",
       "maxStudentsPlaceholder": "ej: 1000",
-      "maxStudentsHelp": "Establezca 0 para estudiantes ilimitados"
+      "maxStudentsHelp": "Establezca 0 para estudiantes ilimitados",
+      "hasAssignmentsLabel": "Función de Actividades",
+      "hasAssignmentsHelp": "Permite a los profesores publicar actividades con fechas límite y retroalimentación de IA para los estudiantes"
     }
   },
   "professors": {

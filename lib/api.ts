@@ -91,6 +91,9 @@ import type {
   QuestionsPerModuleDto,
   TopTopicsResponseDto,
   QuizPerformanceResponseDto,
+  Assignment,
+  AssignmentCreate,
+  AssignmentUpdate,
 } from './types';
 
 export class ApiError extends Error {
@@ -639,6 +642,37 @@ class TutoriaAPIClient {
 
   async deleteQuiz(moduleId: number, quizId: number): Promise<void> {
     return this.delete(`/modules/${moduleId}/quizzes/${quizId}`, false, true);
+  }
+
+  // Assignment endpoints
+  async getAssignments(moduleId: number, page = 1, size = 20): Promise<PaginatedResponse<Assignment>> {
+    return this.get('/api/assignments', { moduleId, page, size });
+  }
+
+  async getAssignment(id: number): Promise<Assignment> {
+    return this.get(`/api/assignments/${id}`);
+  }
+
+  async createAssignment(data: AssignmentCreate): Promise<Assignment> {
+    const formData = new FormData();
+    formData.append('ModuleId', data.moduleId.toString());
+    formData.append('Title', data.title);
+    if (data.description) formData.append('Description', data.description);
+    formData.append('DueDate', data.dueDate);
+    formData.append('File', data.file);
+    return this.post('/api/assignments', formData, { isFormData: true });
+  }
+
+  async updateAssignment(id: number, data: AssignmentUpdate): Promise<Assignment> {
+    return this.put(`/api/assignments/${id}`, data);
+  }
+
+  async deleteAssignment(id: number): Promise<void> {
+    return this.delete(`/api/assignments/${id}`);
+  }
+
+  async togglePublishAssignment(id: number): Promise<Assignment> {
+    return this.post(`/api/assignments/${id}/publish`, {});
   }
 
   // AI Model endpoints

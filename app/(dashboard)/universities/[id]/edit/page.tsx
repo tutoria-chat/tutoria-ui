@@ -53,6 +53,7 @@ export default function EditUniversityPage() {
 
   // Enterprise fields (super_admin only)
   const [isEnterprise, setIsEnterprise] = useState(false);
+  const [hasAssignments, setHasAssignments] = useState(false);
   const [maxCourses, setMaxCourses] = useState<number>(0);
   const [maxModules, setMaxModules] = useState<number>(0);
   const [maxStudents, setMaxStudents] = useState<number>(0);
@@ -92,6 +93,7 @@ export default function EditUniversityPage() {
       });
       // Populate enterprise/plan limits
       setIsEnterprise(data.isEnterprise || false);
+      setHasAssignments(data.hasAssignments || false);
       setMaxCourses(data.maxCourses ?? 999);
       setMaxModules(data.maxModules ?? 9999);
       setMaxStudents(data.maxStudents ?? 0);
@@ -190,6 +192,7 @@ export default function EditUniversityPage() {
         country: addressFields.country || null,
         // Plan limits & enterprise config
         isEnterprise,
+        hasAssignments: isEnterprise ? hasAssignments : false,
         maxCourses: isEnterprise ? maxCourses : null,
         maxModules: isEnterprise ? maxModules : null,
         maxStudents: isEnterprise ? maxStudents : null,
@@ -364,48 +367,65 @@ export default function EditUniversityPage() {
                     />
                   </div>
                   {isEnterprise && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                      <div>
-                        <label htmlFor="maxCourses" className="block text-sm font-medium mb-1">
-                          {tTiers('maxCoursesLabel')}
-                        </label>
-                        <Input
-                          id="maxCourses"
-                          type="number"
-                          min={0}
-                          value={maxCourses}
-                          onChange={(e) => setMaxCourses(parseInt(e.target.value) || 0)}
-                          placeholder={tTiers('maxCoursesPlaceholder')}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxCoursesHelp')}</p>
+                    <div className="space-y-4 mt-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label htmlFor="maxCourses" className="block text-sm font-medium mb-1">
+                            {tTiers('maxCoursesLabel')}
+                          </label>
+                          <Input
+                            id="maxCourses"
+                            type="number"
+                            min={0}
+                            value={maxCourses}
+                            onChange={(e) => setMaxCourses(parseInt(e.target.value) || 0)}
+                            placeholder={tTiers('maxCoursesPlaceholder')}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">{tTiers('maxCoursesHelp')}</p>
+                        </div>
+                        <div>
+                          <label htmlFor="maxModules" className="block text-sm font-medium mb-1">
+                            {tTiers('maxModulesLabel')}
+                          </label>
+                          <Input
+                            id="maxModules"
+                            type="number"
+                            min={0}
+                            value={maxModules}
+                            onChange={(e) => setMaxModules(parseInt(e.target.value) || 0)}
+                            placeholder={tTiers('maxModulesPlaceholder')}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">{tTiers('maxModulesHelp')}</p>
+                        </div>
+                        <div>
+                          <label htmlFor="maxStudents" className="block text-sm font-medium mb-1">
+                            {tTiers('maxStudentsLabel')}
+                          </label>
+                          <Input
+                            id="maxStudents"
+                            type="number"
+                            min={0}
+                            value={maxStudents}
+                            onChange={(e) => setMaxStudents(parseInt(e.target.value) || 0)}
+                            placeholder={tTiers('maxStudentsPlaceholder')}
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">{tTiers('maxStudentsHelp')}</p>
+                        </div>
                       </div>
-                      <div>
-                        <label htmlFor="maxModules" className="block text-sm font-medium mb-1">
-                          {tTiers('maxModulesLabel')}
-                        </label>
-                        <Input
-                          id="maxModules"
-                          type="number"
-                          min={0}
-                          value={maxModules}
-                          onChange={(e) => setMaxModules(parseInt(e.target.value) || 0)}
-                          placeholder={tTiers('maxModulesPlaceholder')}
+                      <div className="flex items-center justify-between p-3 border rounded-md bg-background">
+                        <div>
+                          <label htmlFor="hasAssignments" className="text-sm font-medium">
+                            {tTiers('hasAssignmentsLabel')}
+                          </label>
+                          <p className="text-xs text-muted-foreground">
+                            {tTiers('hasAssignmentsHelp')}
+                          </p>
+                        </div>
+                        <Switch
+                          id="hasAssignments"
+                          checked={hasAssignments}
+                          onCheckedChange={setHasAssignments}
                         />
-                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxModulesHelp')}</p>
-                      </div>
-                      <div>
-                        <label htmlFor="maxStudents" className="block text-sm font-medium mb-1">
-                          {tTiers('maxStudentsLabel')}
-                        </label>
-                        <Input
-                          id="maxStudents"
-                          type="number"
-                          min={0}
-                          value={maxStudents}
-                          onChange={(e) => setMaxStudents(parseInt(e.target.value) || 0)}
-                          placeholder={tTiers('maxStudentsPlaceholder')}
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">{tTiers('maxStudentsHelp')}</p>
                       </div>
                     </div>
                   )}

@@ -872,7 +872,9 @@
       "maxModulesHelp": "Set to 0 for unlimited modules",
       "maxStudentsLabel": "Maximum Students",
       "maxStudentsPlaceholder": "e.g., 1000",
-      "maxStudentsHelp": "Set to 0 for unlimited students"
+      "maxStudentsHelp": "Set to 0 for unlimited students",
+      "hasAssignmentsLabel": "Assignments Feature",
+      "hasAssignmentsHelp": "Allow professors to publish assignments with deadlines and AI-powered student feedback"
     }
   },
   "professors": {

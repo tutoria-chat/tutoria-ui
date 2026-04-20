@@ -146,6 +146,7 @@ export interface University {
   subscriptionTier: number; // 1 = Basic, 2 = Standard, 3 = Premium
   // Plan limits & enterprise config
   isEnterprise?: boolean;
+  hasAssignments?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;
@@ -180,6 +181,7 @@ export interface UniversityCreate {
   subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
   // Plan limits & enterprise config
   isEnterprise?: boolean;
+  hasAssignments?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;
@@ -207,6 +209,7 @@ export interface UniversityUpdate {
   subscriptionTier?: number; // 1 = Basic, 2 = Standard, 3 = Premium
   // Plan limits & enterprise config
   isEnterprise?: boolean;
+  hasAssignments?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;
@@ -1376,4 +1379,36 @@ export interface StudentImportJob {
   errorDetails?: string;
   processedAt?: string;
   createdAt: string;
+}
+
+// Assignments
+export interface Assignment {
+  id: number;
+  moduleId: number;
+  title: string;
+  description?: string;
+  dueDate: string;
+  isPublished: boolean;
+  isActive: boolean;
+  originalFileName: string;
+  fileSizeBytes: number;
+  contentType: string;
+  createdByUserId: number;
+  downloadUrl?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AssignmentCreate {
+  moduleId: number;
+  title: string;
+  description?: string;
+  dueDate: string;
+  file: globalThis.File;
+}
+
+export interface AssignmentUpdate {
+  title: string;
+  description?: string;
+  dueDate: string;
 }
