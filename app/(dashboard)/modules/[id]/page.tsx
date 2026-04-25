@@ -28,7 +28,10 @@ import {
   Brain,
   ClipboardList,
   Sparkles,
-  HelpCircle
+  HelpCircle,
+  X,
+  Tag,
+  FileCheck2
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -70,6 +73,7 @@ export default function ModuleDetailsPage() {
   const t = useTranslations('modules.detail');
   const tCommon = useTranslations('common');
   const tTokens = useTranslations('tokens.columns');
+  const tA = useTranslations('modules.detail.assignments');
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
   const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/api/modules/${moduleId}`);
@@ -126,7 +130,10 @@ export default function ModuleDetailsPage() {
   const [assignmentTitle, setAssignmentTitle] = useState('');
   const [assignmentDescription, setAssignmentDescription] = useState('');
   const [assignmentDueDate, setAssignmentDueDate] = useState('');
+  const [assignmentKeywords, setAssignmentKeywords] = useState<string[]>([]);
+  const [assignmentKeywordInput, setAssignmentKeywordInput] = useState('');
   const [assignmentFile, setAssignmentFile] = useState<globalThis.File | null>(null);
+  const [assignmentRubricFile, setAssignmentRubricFile] = useState<globalThis.File | null>(null);
   const [isSavingAssignment, setIsSavingAssignment] = useState(false);
   const [deleteAssignmentConfirmOpen, setDeleteAssignmentConfirmOpen] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<number | null>(null);
@@ -451,7 +458,10 @@ export default function ModuleDetailsPage() {
     setAssignmentTitle('');
     setAssignmentDescription('');
     setAssignmentDueDate('');
+    setAssignmentKeywords([]);
+    setAssignmentKeywordInput('');
     setAssignmentFile(null);
+    setAssignmentRubricFile(null);
     setAssignmentFormOpen(true);
   };
 
@@ -460,8 +470,32 @@ export default function ModuleDetailsPage() {
     setAssignmentTitle(a.title);
     setAssignmentDescription(a.description || '');
     setAssignmentDueDate(a.dueDate ? a.dueDate.slice(0, 16) : '');
+    setAssignmentKeywords(a.keywords || []);
+    setAssignmentKeywordInput('');
     setAssignmentFile(null);
+    setAssignmentRubricFile(null);
     setAssignmentFormOpen(true);
+  };
+
+  const addKeyword = (raw: string) => {
+    const kw = raw.trim().replace(/,+$/, '').trim();
+    if (kw && !assignmentKeywords.includes(kw)) {
+      setAssignmentKeywords(prev => [...prev, kw]);
+    }
+    setAssignmentKeywordInput('');
+  };
+
+  const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === ',' || e.key === 'Enter') {
+      e.preventDefault();
+      addKeyword(assignmentKeywordInput);
+    } else if (e.key === 'Backspace' && assignmentKeywordInput === '' && assignmentKeywords.length > 0) {
+      setAssignmentKeywords(prev => prev.slice(0, -1));
+    }
+  };
+
+  const removeKeyword = (kw: string) => {
+    setAssignmentKeywords(prev => prev.filter(k => k !== kw));
   };
 
   const handleSaveAssignment = async () => {
@@ -473,36 +507,41 @@ export default function ModuleDetailsPage() {
           title: assignmentTitle,
           description: assignmentDescription || undefined,
           dueDate: assignmentDueDate,
+          keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
         });
-        toast.success('Assignment updated');
+        toast.success(tA('toastUpdated'));
       } else {
-        if (!assignmentFile) { toast.error('Please select a file'); return; }
+        if (!assignmentFile) { toast.error(tA('toastFileRequired')); return; }
         await apiClient.createAssignment({
           moduleId,
           title: assignmentTitle,
           description: assignmentDescription || undefined,
           dueDate: assignmentDueDate,
+          keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
           file: assignmentFile,
+          rubricFile: assignmentRubricFile || undefined,
         });
-        toast.success('Assignment created');
+        toast.success(tA('toastCreated'));
       }
       setAssignmentFormOpen(false);
       loadAssignments();
     } catch (err) {
       console.error('Failed to save assignment:', err);
-      toast.error('Failed to save assignment');
+      toast.error(tA('toastSaveError'));
     } finally {
       setIsSavingAssignment(false);
     }
   };
 
   const handleTogglePublishAssignment = async (id: number) => {
+    const current = assignments.find(a => a.id === id);
     try {
       await apiClient.togglePublishAssignment(id);
+      toast.success(current?.isPublished ? tA('toastUnpublished') : tA('toastPublished'));
       loadAssignments();
     } catch (err) {
       console.error('Failed to toggle publish:', err);
-      toast.error('Failed to update assignment');
+      toast.error(tA('toastPublishError'));
     }
   };
 
@@ -510,12 +549,12 @@ export default function ModuleDetailsPage() {
     if (!assignmentToDelete) return;
     try {
       await apiClient.deleteAssignment(assignmentToDelete);
-      toast.success('Assignment deleted');
+      toast.success(tA('toastDeleted'));
       setDeleteAssignmentConfirmOpen(false);
       loadAssignments();
     } catch (err) {
       console.error('Failed to delete assignment:', err);
-      toast.error('Failed to delete assignment');
+      toast.error(tA('toastDeleteError'));
     }
   };
 
@@ -1065,8 +1104,8 @@ export default function ModuleDetailsPage() {
           </TabsTrigger>
           {assignmentsFeatureEnabled !== false && (
             <TabsTrigger value="assignments" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Assignments
+              <ClipboardList className="h-4 w-4" />
+              {t('assignmentsTab')}
               {assignments.length > 0 && (
                 <Badge variant="secondary" className="ml-1 text-xs">{assignments.length}</Badge>
               )}
@@ -1326,12 +1365,12 @@ export default function ModuleDetailsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Assignments</CardTitle>
-                <CardDescription>Publish assignments for students with deadlines and AI-powered feedback.</CardDescription>
+                <CardTitle>{tA('title')}</CardTitle>
+                <CardDescription>{tA('description')}</CardDescription>
               </div>
               <Button size="sm" onClick={openCreateAssignment}>
                 <Plus className="mr-2 h-4 w-4" />
-                New Assignment
+                {tA('newButton')}
               </Button>
             </CardHeader>
             <CardContent>
@@ -1342,38 +1381,53 @@ export default function ModuleDetailsPage() {
               ) : assignments.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <ClipboardList className="h-10 w-10 mx-auto mb-2 opacity-40" />
-                  <p className="text-sm">No assignments yet. Create your first assignment.</p>
+                  <p className="text-sm font-medium">{tA('emptyTitle')}</p>
+                  <p className="text-xs mt-1">{tA('emptyDescription')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {assignments.map((a) => {
                     const isPastDue = new Date(a.dueDate) < new Date();
                     return (
-                      <div key={a.id} className="flex items-center justify-between p-4 border rounded-lg bg-card">
-                        <div className="space-y-1 flex-1 min-w-0 mr-4">
-                          <div className="flex items-center gap-2">
+                      <div key={a.id} className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-muted/30 transition-colors">
+                        <div className="space-y-1.5 flex-1 min-w-0 mr-4">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-medium truncate">{a.title}</span>
                             {a.isPublished ? (
-                              <Badge variant="default" className="text-xs shrink-0">Published</Badge>
+                              <Badge variant="default" className="text-xs shrink-0">{tA('badgePublished')}</Badge>
                             ) : (
-                              <Badge variant="secondary" className="text-xs shrink-0">Draft</Badge>
+                              <Badge variant="secondary" className="text-xs shrink-0">{tA('badgeDraft')}</Badge>
+                            )}
+                            {a.rubricOriginalFileName && (
+                              <Badge variant="outline" className="text-xs shrink-0 gap-1">
+                                <FileCheck2 className="h-3 w-3" />
+                                {tA('rubricIndicator')}
+                              </Badge>
                             )}
                           </div>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
+                            <Calendar className="h-3 w-3 shrink-0" />
                             <span className={isPastDue ? 'text-destructive font-medium' : ''}>
-                              Due: {formatDateTimeShort(a.dueDate)}
-                              {isPastDue && ' (Past due)'}
+                              {tA('dueLabel')} {formatDateTimeShort(a.dueDate)}
+                              {isPastDue && ` ${tA('pastDue')}`}
                             </span>
                             <span>·</span>
                             <span className="truncate">{a.originalFileName}</span>
                           </div>
+                          {a.keywords?.length > 0 && (
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <Tag className="h-3 w-3 text-muted-foreground shrink-0" />
+                              {a.keywords.map(kw => (
+                                <span key={kw} className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs">{kw}</span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <Switch
                             checked={a.isPublished}
                             onCheckedChange={() => handleTogglePublishAssignment(a.id)}
-                            title={a.isPublished ? 'Unpublish' : 'Publish'}
+                            title={a.isPublished ? tA('switchUnpublishTitle') : tA('switchPublishTitle')}
                           />
                           <Button variant="ghost" size="sm" onClick={() => openEditAssignment(a)}>
                             <Edit className="h-4 w-4" />
@@ -1399,39 +1453,122 @@ export default function ModuleDetailsPage() {
 
       {/* Assignment Form Dialog */}
       <Dialog open={assignmentFormOpen} onOpenChange={setAssignmentFormOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingAssignment ? 'Edit Assignment' : 'New Assignment'}</DialogTitle>
+            <DialogTitle>{editingAssignment ? tA('formEditTitle') : tA('formCreateTitle')}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 pt-2">
+          <div className="space-y-5 pt-2">
+            {/* Title */}
             <div>
-              <label className="block text-sm font-medium mb-1">Title</label>
-              <Input value={assignmentTitle} onChange={(e) => setAssignmentTitle(e.target.value)} placeholder="Assignment title" />
+              <label className="block text-sm font-medium mb-1">{tA('fieldTitle')}</label>
+              <Input
+                value={assignmentTitle}
+                onChange={(e) => setAssignmentTitle(e.target.value)}
+                placeholder={tA('fieldTitlePlaceholder')}
+              />
             </div>
+
+            {/* Instructions */}
             <div>
-              <label className="block text-sm font-medium mb-1">Instructions (optional)</label>
-              <Textarea value={assignmentDescription} onChange={(e) => setAssignmentDescription(e.target.value)} placeholder="Describe the assignment requirements..." rows={4} />
+              <label className="block text-sm font-medium mb-1">{tA('fieldInstructions')}</label>
+              <Textarea
+                value={assignmentDescription}
+                onChange={(e) => setAssignmentDescription(e.target.value)}
+                placeholder={tA('fieldInstructionsPlaceholder')}
+                rows={4}
+              />
             </div>
+
+            {/* Due Date */}
             <div>
-              <label className="block text-sm font-medium mb-1">Due Date</label>
-              <Input type="datetime-local" value={assignmentDueDate} onChange={(e) => setAssignmentDueDate(e.target.value)} />
+              <label className="block text-sm font-medium mb-1">{tA('fieldDueDate')}</label>
+              <Input
+                type="datetime-local"
+                value={assignmentDueDate}
+                onChange={(e) => setAssignmentDueDate(e.target.value)}
+              />
             </div>
+
+            {/* Keywords chip input */}
+            <div>
+              <label className="block text-sm font-medium mb-1">{tA('fieldKeywords')}</label>
+              <div className="flex flex-wrap gap-1.5 p-2 border rounded-md min-h-[42px] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-0 bg-background">
+                {assignmentKeywords.map(kw => (
+                  <span
+                    key={kw}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium"
+                  >
+                    {kw}
+                    <button
+                      type="button"
+                      onClick={() => removeKeyword(kw)}
+                      className="hover:opacity-70 transition-opacity"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+                <input
+                  type="text"
+                  value={assignmentKeywordInput}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (v.endsWith(',')) { addKeyword(v); }
+                    else { setAssignmentKeywordInput(v); }
+                  }}
+                  onKeyDown={handleKeywordKeyDown}
+                  onBlur={() => { if (assignmentKeywordInput.trim()) addKeyword(assignmentKeywordInput); }}
+                  placeholder={assignmentKeywords.length === 0 ? tA('fieldKeywordsPlaceholder') : ''}
+                  className="flex-1 min-w-[140px] bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">{tA('fieldKeywordsHelp')}</p>
+            </div>
+
+            {/* Assignment file — only on create */}
             {!editingAssignment && (
               <div>
-                <label className="block text-sm font-medium mb-1">File (PDF or DOCX, max 30 MB)</label>
+                <label className="block text-sm font-medium mb-1">{tA('fieldFile')}</label>
                 <input
                   type="file"
                   accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80"
+                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
                   onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
                 />
+                {assignmentFile && (
+                  <p className="text-xs text-muted-foreground mt-1">{assignmentFile.name}</p>
+                )}
               </div>
             )}
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="outline" onClick={() => setAssignmentFormOpen(false)}>Cancel</Button>
-              <Button onClick={handleSaveAssignment} disabled={isSavingAssignment || !assignmentTitle.trim() || !assignmentDueDate}>
+
+            {/* Rubric file — only on create */}
+            {!editingAssignment && (
+              <div>
+                <label className="block text-sm font-medium mb-1">{tA('fieldRubric')}</label>
+                <input
+                  type="file"
+                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
+                  onChange={(e) => setAssignmentRubricFile(e.target.files?.[0] || null)}
+                />
+                {assignmentRubricFile ? (
+                  <p className="text-xs text-muted-foreground mt-1">{assignmentRubricFile.name}</p>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-1">{tA('fieldRubricHelp')}</p>
+                )}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-2 pt-2 border-t">
+              <Button variant="outline" onClick={() => setAssignmentFormOpen(false)}>
+                {tA('cancelButton')}
+              </Button>
+              <Button
+                onClick={handleSaveAssignment}
+                disabled={isSavingAssignment || !assignmentTitle.trim() || !assignmentDueDate}
+              >
                 {isSavingAssignment && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {editingAssignment ? 'Save Changes' : 'Create Assignment'}
+                {editingAssignment ? tA('saveButton') : tA('createButton')}
               </Button>
             </div>
           </div>
@@ -1442,12 +1579,12 @@ export default function ModuleDetailsPage() {
       <AlertDialog open={deleteAssignmentConfirmOpen} onOpenChange={setDeleteAssignmentConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
-            <AlertDialogDescription>This will hide the assignment from students. Are you sure?</AlertDialogDescription>
+            <AlertDialogTitle>{tA('deleteTitle')}</AlertDialogTitle>
+            <AlertDialogDescription>{tA('deleteDescription')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAssignment} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
+            <AlertDialogCancel>{tA('deleteCancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteAssignment} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{tA('deleteConfirm')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

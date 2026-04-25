@@ -659,12 +659,17 @@ class TutoriaAPIClient {
     formData.append('Title', data.title);
     if (data.description) formData.append('Description', data.description);
     formData.append('DueDate', data.dueDate);
+    if (data.keywords?.length) formData.append('Keywords', data.keywords.join(','));
     formData.append('File', data.file);
+    if (data.rubricFile) formData.append('RubricFile', data.rubricFile);
     return this.post('/api/assignments', formData, { isFormData: true });
   }
 
   async updateAssignment(id: number, data: AssignmentUpdate): Promise<Assignment> {
-    return this.put(`/api/assignments/${id}`, data);
+    return this.put(`/api/assignments/${id}`, {
+      ...data,
+      keywords: data.keywords?.length ? data.keywords.join(',') : undefined,
+    });
   }
 
   async deleteAssignment(id: number): Promise<void> {

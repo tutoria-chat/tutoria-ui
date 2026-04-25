@@ -1393,8 +1393,11 @@ export interface Assignment {
   originalFileName: string;
   fileSizeBytes: number;
   contentType: string;
+  keywords: string[];
+  rubricOriginalFileName?: string;
   createdByUserId: number;
   downloadUrl?: string;
+  rubricDownloadUrl?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -1404,11 +1407,14 @@ export interface AssignmentCreate {
   title: string;
   description?: string;
   dueDate: string;
+  keywords?: string[];
   file: globalThis.File;
+  rubricFile?: globalThis.File;
 }
 
 export interface AssignmentUpdate {
   title: string;
   description?: string;
   dueDate: string;
+  keywords?: string[];
 }
