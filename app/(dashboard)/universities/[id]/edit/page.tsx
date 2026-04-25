@@ -192,7 +192,7 @@ export default function EditUniversityPage() {
         country: addressFields.country || null,
         // Plan limits & enterprise config
         isEnterprise,
-        hasAssignments: isEnterprise ? hasAssignments : false,
+        hasAssignments,
         maxCourses: isEnterprise ? maxCourses : null,
         maxModules: isEnterprise ? maxModules : null,
         maxStudents: isEnterprise ? maxStudents : null,
@@ -366,6 +366,23 @@ export default function EditUniversityPage() {
                       onCheckedChange={setIsEnterprise}
                     />
                   </div>
+                  {/* Assignments — available on all plans, not just enterprise */}
+                  <div className="flex items-center justify-between p-3 border rounded-md bg-background mt-3">
+                    <div>
+                      <label htmlFor="hasAssignments" className="text-sm font-medium">
+                        {tTiers('hasAssignmentsLabel')}
+                      </label>
+                      <p className="text-xs text-muted-foreground">
+                        {tTiers('hasAssignmentsHelp')}
+                      </p>
+                    </div>
+                    <Switch
+                      id="hasAssignments"
+                      checked={hasAssignments}
+                      onCheckedChange={setHasAssignments}
+                    />
+                  </div>
+
                   {isEnterprise && (
                     <div className="space-y-4 mt-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -411,21 +428,6 @@ export default function EditUniversityPage() {
                           />
                           <p className="text-xs text-muted-foreground mt-1">{tTiers('maxStudentsHelp')}</p>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between p-3 border rounded-md bg-background">
-                        <div>
-                          <label htmlFor="hasAssignments" className="text-sm font-medium">
-                            {tTiers('hasAssignmentsLabel')}
-                          </label>
-                          <p className="text-xs text-muted-foreground">
-                            {tTiers('hasAssignmentsHelp')}
-                          </p>
-                        </div>
-                        <Switch
-                          id="hasAssignments"
-                          checked={hasAssignments}
-                          onCheckedChange={setHasAssignments}
-                        />
                       </div>
                     </div>
                   )}
