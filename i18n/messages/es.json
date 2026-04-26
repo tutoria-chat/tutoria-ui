@@ -531,7 +531,8 @@
         "toastFileRequired": "Selecciona un archivo para la actividad",
         "toastSaveError": "Error al guardar la actividad",
         "toastDeleteError": "Error al eliminar la actividad",
-        "toastPublishError": "Error al cambiar estado de publicación"
+        "toastPublishError": "Error al cambiar estado de publicación",
+        "fieldDueDatePlaceholder": "Selecciona fecha y hora"
       }
     },
     "edit": {

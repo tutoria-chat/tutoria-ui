@@ -531,7 +531,8 @@
         "toastFileRequired": "Selecione um arquivo para a atividade",
         "toastSaveError": "Erro ao salvar atividade",
         "toastDeleteError": "Erro ao excluir atividade",
-        "toastPublishError": "Erro ao alterar publicação"
+        "toastPublishError": "Erro ao alterar publicação",
+        "fieldDueDatePlaceholder": "Escolha data e hora"
       }
     },
     "edit": {
@@ -1738,7 +1739,7 @@
     "globalSearch": "Busca Global",
     "aiModels": "Modelos de IA",
     "plans": "Planos",
-    "permissions": "Permiss\u00f5es",
+    "permissions": "Permissões",
     "subscriptions": "Assinaturas",
     "subscription": "Assinatura",
     "systemOnline": "Sistema Online",
@@ -5034,48 +5035,48 @@
     }
   },
   "adminPermissions": {
-    "title": "Gest\u00e3o de Permiss\u00f5es",
-    "description": "Crie e gerencie permiss\u00f5es do sistema para a autoriza\u00e7\u00e3o baseada em claims",
-    "breadcrumb": "Administra\u00e7\u00e3o",
-    "loadError": "Falha ao carregar as permiss\u00f5es.",
-    "createButton": "Criar Permiss\u00e3o",
-    "searchPlaceholder": "Buscar por c\u00f3digo, recurso ou categoria...",
-    "emptyMessage": "Nenhuma permiss\u00e3o encontrada.",
-    "createTitle": "Criar Permiss\u00e3o",
-    "createDescription": "Defina uma nova permiss\u00e3o para o sistema de autoriza\u00e7\u00e3o.",
-    "editTitle": "Editar Permiss\u00e3o",
-    "editDescription": "Atualize os detalhes da permiss\u00e3o.",
-    "createSuccess": "Permiss\u00e3o criada com sucesso.",
-    "createError": "Falha ao criar a permiss\u00e3o.",
-    "updateSuccess": "Permiss\u00e3o atualizada com sucesso.",
-    "updateError": "Falha ao atualizar a permiss\u00e3o.",
-    "deleteConfirm": "Excluir Permiss\u00e3o",
-    "deleteConfirmDesc": "Tem certeza de que deseja excluir a permiss\u00e3o \"{code}\"? Isso pode afetar usu\u00e1rios que possuem essa permiss\u00e3o.",
-    "deleteSuccess": "Permiss\u00e3o exclu\u00edda com sucesso.",
-    "deleteError": "Falha ao excluir a permiss\u00e3o. Ela pode estar atribu\u00edda a fun\u00e7\u00f5es ou usu\u00e1rios.",
-    "validationError": "C\u00f3digo, recurso, a\u00e7\u00e3o e categoria s\u00e3o obrigat\u00f3rios.",
+    "title": "Gestão de Permissões",
+    "description": "Crie e gerencie permissões do sistema para a autorização baseada em claims",
+    "breadcrumb": "Administração",
+    "loadError": "Falha ao carregar as permissões.",
+    "createButton": "Criar Permissão",
+    "searchPlaceholder": "Buscar por código, recurso ou categoria...",
+    "emptyMessage": "Nenhuma permissão encontrada.",
+    "createTitle": "Criar Permissão",
+    "createDescription": "Defina uma nova permissão para o sistema de autorização.",
+    "editTitle": "Editar Permissão",
+    "editDescription": "Atualize os detalhes da permissão.",
+    "createSuccess": "Permissão criada com sucesso.",
+    "createError": "Falha ao criar a permissão.",
+    "updateSuccess": "Permissão atualizada com sucesso.",
+    "updateError": "Falha ao atualizar a permissão.",
+    "deleteConfirm": "Excluir Permissão",
+    "deleteConfirmDesc": "Tem certeza de que deseja excluir a permissão \"{code}\"? Isso pode afetar usuários que possuem essa permissão.",
+    "deleteSuccess": "Permissão excluída com sucesso.",
+    "deleteError": "Falha ao excluir a permissão. Ela pode estar atribuída a funções ou usuários.",
+    "validationError": "Código, recurso, ação e categoria são obrigatórios.",
     "saving": "Salvando...",
     "columns": {
-      "code": "C\u00f3digo",
+      "code": "Código",
       "resource": "Recurso",
-      "action": "A\u00e7\u00e3o",
+      "action": "Ação",
       "scope": "Escopo",
       "category": "Categoria",
-      "description": "Descri\u00e7\u00e3o",
+      "description": "Descrição",
       "order": "Ordem"
     },
     "form": {
-      "code": "C\u00f3digo da Permiss\u00e3o",
+      "code": "Código da Permissão",
       "codePlaceholder": "ex. reports:create",
       "resource": "Recurso",
       "resourcePlaceholder": "ex. report",
-      "action": "A\u00e7\u00e3o",
+      "action": "Ação",
       "scope": "Escopo",
       "category": "Categoria",
-      "categoryPlaceholder": "ex. Relat\u00f3rios",
-      "description": "Descri\u00e7\u00e3o",
-      "descriptionPlaceholder": "Breve descri\u00e7\u00e3o do que essa permiss\u00e3o permite",
-      "displayOrder": "Ordem de Exibi\u00e7\u00e3o"
+      "categoryPlaceholder": "ex. Relatórios",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Breve descrição do que essa permissão permite",
+      "displayOrder": "Ordem de Exibição"
     },
     "scopes": {
       "global": "Global",
@@ -5437,4 +5438,3 @@
     }
   }
 }
-

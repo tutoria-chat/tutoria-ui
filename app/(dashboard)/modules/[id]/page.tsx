@@ -64,6 +64,7 @@ import type { Module, File as FileType, ModuleAccessToken, TableColumn, Breadcru
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -1482,10 +1483,11 @@ export default function ModuleDetailsPage() {
             {/* Due Date */}
             <div>
               <label className="block text-sm font-medium mb-1">{tA('fieldDueDate')}</label>
-              <Input
-                type="datetime-local"
+              <DateTimePicker
                 value={assignmentDueDate}
-                onChange={(e) => setAssignmentDueDate(e.target.value)}
+                onChange={setAssignmentDueDate}
+                placeholder={tA('fieldDueDatePlaceholder')}
+                fromDate={new Date()}
               />
             </div>
 

@@ -123,7 +123,7 @@
     "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
     "deleteError": "Error deleting course. Please try again.",
     "form": {
-      "create": "Create New Course",
+      "create": "Create Course",
       "edit": "Edit Course",
       "nameLabel": "Course Name *",
       "namePlaceholder": "e.g., Fundamentals of Computer Science",
@@ -140,7 +140,6 @@
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "Describe the course objectives, content, and target audience...",
       "cancel": "Cancel",
-      "create": "Create Course",
       "update": "Update Course",
       "creating": "Creating...",
       "updating": "Updating...",
@@ -295,7 +294,7 @@
     "deleteSuccess": "Module deleted successfully",
     "deleteError": "Error deleting module. Please try again.",
     "form": {
-      "create": "Create New Module",
+      "create": "Create Module",
       "edit": "Edit Module",
       "steps": {
         "basic": "Basic Info",
@@ -359,7 +358,6 @@
       "noCourseTypeSelected": "No course type selected",
       "modelSelectionHint": "🧠 Each AI model has different strengths, costs, and capabilities. Choose the one that best fits your module's needs - you can change it later if needed!",
       "cancel": "Cancel",
-      "create": "Create Module",
       "update": "Update Module",
       "creating": "Creating...",
       "updating": "Updating...",
@@ -572,7 +570,8 @@
         "toastFileRequired": "Please select a file for the assignment",
         "toastSaveError": "Failed to save assignment",
         "toastDeleteError": "Failed to delete assignment",
-        "toastPublishError": "Failed to update publish status"
+        "toastPublishError": "Failed to update publish status",
+        "fieldDueDatePlaceholder": "Pick a date and time"
       }
     },
     "edit": {
@@ -2926,565 +2925,565 @@
         "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
         "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
       },
-        "viewing": {
-          "title": "Viewing Course Details",
-          "description": "The course detail page shows:",
-          "tabs": [
-            "Modules Tab: All modules for this course, filterable by semester and year",
-            "Professors Tab: All professors assigned to this course",
-            "Students Tab: All students enrolled in this course (when implemented)"
-          ],
-          "actions": [
-            "Add Module: Create a new module for this course",
-            "Edit Course: Update course information",
-            "View University: Navigate to your university page"
-          ]
-        },
-        "editing": {
-          "title": "Editing a Course",
-          "steps": [
-            "From the course detail page, click 'Edit Course'",
-            "Update the course name, code, or description",
-            "Click 'Save Changes' to update"
-          ]
-        },
-        "deleting": {
-          "title": "Deleting a Course",
-          "warning": "⚠️ Warning: Deleting a course will also delete all its modules and associated content. This cannot be undone.",
-          "steps": [
-            "From the Courses list, click the delete icon on the course row",
-            "Confirm the deletion",
-            "The course and all its modules will be permanently removed"
-          ]
-        }
+      "viewing": {
+        "title": "Viewing Course Details",
+        "description": "The course detail page shows:",
+        "tabs": [
+          "Modules Tab: All modules for this course, filterable by semester and year",
+          "Professors Tab: All professors assigned to this course",
+          "Students Tab: All students enrolled in this course (when implemented)"
+        ],
+        "actions": [
+          "Add Module: Create a new module for this course",
+          "Edit Course: Update course information",
+          "View University: Navigate to your university page"
+        ]
       },
-      "modules": {
-        "title": "Managing Modules",
-        "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and Access Keys.",
-        "creating": {
-          "title": "Creating a Module",
-          "steps": [
-            "Navigate to Modules (/modules) or click 'Create Module' from the dashboard",
-            "Fill in the required information:",
-            "  • Module Name (e.g., 'Data Structures and Algorithms')",
-            "  • Module Code (e.g., 'CS101-M1')",
-            "  • Course (select from your courses)",
-            "  • Semester and Year (optional)",
-            "  • Description (optional but recommended)",
-            "Configure the AI Tutor (optional):",
-            "  • Choose a template or write a custom system prompt",
-            "  • The system prompt defines how the AI tutor behaves",
-            "  • Select the AI tutor language",
-            "  • You can improve the prompt up to 3 times in 72 hours",
-            "Click 'Create Module' to save"
-          ]
-        },
-        "aiTutor": {
-          "title": "Configuring the AI Tutor",
-          "description": "The AI tutor system prompt defines how the AI assistant responds to student questions.",
-          "templates": {
-            "title": "Quick Templates",
-            "list": [
-              "General Tutor: A helpful tutor for general learning",
-              "Programming Tutor: Specialized for programming and CS concepts",
-              "Math & Science Tutor: Focused on mathematical and scientific concepts",
-              "Research Assistant: Support for academic research and writing"
-            ]
-          },
-          "customizing": {
-            "title": "Writing Custom Prompts",
-            "tips": [
-              "Define the AI's role and expertise clearly",
-              "Specify teaching style and approach",
-              "Include guidelines for different question types",
-              "Set expectations for response format and tone",
-              "Consider your target audience and their level",
-              "Example: 'You are a patient programming teacher who uses everyday examples and always breaks down complex concepts into simple steps'"
-            ]
-          },
-          "improving": {
-            "title": "Improving Prompts with AI",
-            "description": "After saving a module, you can use the 'Improve with AI' feature to enhance your system prompt. You get 3 improvements per module every 72 hours."
-          }
-        },
-        "uploadingFiles": {
-          "title": "Uploading Files to Modules",
-          "description": "Upload educational materials that students can access through the AI tutor widget.",
-          "steps": [
-            "Navigate to the module detail page (/modules/{id})",
-            "Click 'Upload File' button",
-            "Select a file from your computer (or drag and drop)",
-            "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
-            "Maximum file size: 10MB",
-            "Click 'Upload File' to add it to the module",
-            "Files are automatically indexed for the AI tutor"
-          ],
-          "managing": {
-            "title": "Managing Files",
-            "actions": [
-              "Download: Download a copy of any file",
-              "Delete: Remove a file from the module (with confirmation)"
-            ]
-          }
-        },
-        "preparingModule": {
-          "title": "Preparing a Module",
-          "description": "Before students can use the AI tutor, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
-          "prerequisites": [
-            "The module must have at least one active key with chat permission",
-            "The module should have an AI tutor system prompt configured",
-            "Files should be uploaded (optional but recommended)"
-          ],
-          "steps": [
-            "Navigate to the module detail page",
-            "Click 'Prepare Module' button",
-            "Wait for the preparation process to complete",
-            "Once prepared, the AI tutor is ready for students"
-          ],
-          "note": "Note: You can update files and re-prepare the module at any time."
-        }
-      },
-      "keys": {
-        "title": "Managing module access keys",
-        "description": "module access keys provide secure access to AI tutoring widgets. Each key controls what students can do (chat, access files, etc.).",
-        "creating": {
-          "title": "Creating a key",
-          "steps": [
-            "Navigate to module access keys (/keys)",
-            "Click 'Generate key'",
-            "Fill in the key details:",
-            "  • Select the module",
-            "  • key Name (e.g., 'Moodle Widget 2024')",
-            "  • Description (optional)",
-            "  • Expiration (optional, in days)",
-            "Configure permissions:",
-            "  • Allow Chat: Students can ask questions to the AI tutor",
-            "  • Allow File Access: Students can download module files",
-            "Click 'CREATE KEY'",
-            "Copy the generated key - you'll need it for the widget"
-          ]
-        },
-        "using": {
-          "title": "Using keys",
-          "description": "keys are used to embed the AI tutor widget in your LMS or website.",
-          "example": "Widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE",
-          "security": "Keep keys secure and only share them through official channels."
-        },
-        "managing": {
-          "title": "Managing keys",
-          "actions": [
-            "View: See key details and statistics",
-            "Edit: Update key name, description, or permissions",
-            "Copy: Copy the key to clipboard",
-            "Revoke/Delete: Disable a key permanently"
-          ]
-        },
-        "bestPractices": {
-          "title": "key Best Practices",
-          "list": [
-            "Use descriptive names that indicate where the key is used",
-            "Set expiration dates for keys used in temporary contexts",
-            "Disable chat or file access if not needed",
-            "Monitor key usage through the statistics",
-            "Revoke keys that are no longer in use",
-            "Create separate keys for different LMS courses or contexts"
-          ]
-        }
-      },
-      "professors": {
-        "title": "Managing Professors",
-        "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your university.",
-        "creating": {
-          "title": "Creating a Regular Professor",
-          "steps": [
-            "Navigate to Professors (/professors)",
-            "Click 'Add Professor'",
-            "Select 'Regular Professor' type",
-            "Fill in the professor information:",
-            "  • First Name and Last Name",
-            "  • Username (will be used for login)",
-            "  • Email address",
-            "  • Temporary Password",
-            "Your university is automatically selected",
-            "Select one or more courses to assign",
-            "Click 'Create Professor'",
-            "Copy and securely share the password setup link",
-            "The link expires in 72 hours"
-          ]
-        },
-        "assigning": {
-          "title": "Course Assignments",
-          "description": "Regular professors can only view and manage modules for courses they are assigned to. You can assign multiple courses during creation.",
-          "updating": "To change course assignments, you'll need to edit the professor from their detail page (coming soon)."
-        },
-        "managing": {
-          "title": "Managing Professor Accounts",
-          "actions": [
-            "Activate: Enable a deactivated professor account",
-            "Deactivate: Temporarily disable a professor account",
-            "Delete: Permanently remove a professor (super admin only)"
-          ]
-        }
-      },
-      "workflow": {
-        "title": "Recommended Workflow",
-        "description": "Follow this workflow for setting up a new course:",
+      "editing": {
+        "title": "Editing a Course",
         "steps": [
-          "1. Create the course with name, code, and description",
-          "2. Create modules for the course (one per topic/unit)",
-          "3. Configure AI tutor prompts for each module",
-          "4. Upload educational files to modules",
-          "5. Create regular professors and assign them to the course",
-          "6. Generate module Access Keys",
-          "7. Prepare modules for student use",
-          "8. Share widget links with students through your LMS"
+          "From the course detail page, click 'Edit Course'",
+          "Update the course name, code, or description",
+          "Click 'Save Changes' to update"
+        ]
+      },
+      "deleting": {
+        "title": "Deleting a Course",
+        "warning": "⚠️ Warning: Deleting a course will also delete all its modules and associated content. This cannot be undone.",
+        "steps": [
+          "From the Courses list, click the delete icon on the course row",
+          "Confirm the deletion",
+          "The course and all its modules will be permanently removed"
+        ]
+      }
+    },
+    "modules": {
+      "title": "Managing Modules",
+      "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and Access Keys.",
+      "creating": {
+        "title": "Creating a Module",
+        "steps": [
+          "Navigate to Modules (/modules) or click 'Create Module' from the dashboard",
+          "Fill in the required information:",
+          "  • Module Name (e.g., 'Data Structures and Algorithms')",
+          "  • Module Code (e.g., 'CS101-M1')",
+          "  • Course (select from your courses)",
+          "  • Semester and Year (optional)",
+          "  • Description (optional but recommended)",
+          "Configure the AI Tutor (optional):",
+          "  • Choose a template or write a custom system prompt",
+          "  • The system prompt defines how the AI tutor behaves",
+          "  • Select the AI tutor language",
+          "  • You can improve the prompt up to 3 times in 72 hours",
+          "Click 'Create Module' to save"
+        ]
+      },
+      "aiTutor": {
+        "title": "Configuring the AI Tutor",
+        "description": "The AI tutor system prompt defines how the AI assistant responds to student questions.",
+        "templates": {
+          "title": "Quick Templates",
+          "list": [
+            "General Tutor: A helpful tutor for general learning",
+            "Programming Tutor: Specialized for programming and CS concepts",
+            "Math & Science Tutor: Focused on mathematical and scientific concepts",
+            "Research Assistant: Support for academic research and writing"
+          ]
+        },
+        "customizing": {
+          "title": "Writing Custom Prompts",
+          "tips": [
+            "Define the AI's role and expertise clearly",
+            "Specify teaching style and approach",
+            "Include guidelines for different question types",
+            "Set expectations for response format and tone",
+            "Consider your target audience and their level",
+            "Example: 'You are a patient programming teacher who uses everyday examples and always breaks down complex concepts into simple steps'"
+          ]
+        },
+        "improving": {
+          "title": "Improving Prompts with AI",
+          "description": "After saving a module, you can use the 'Improve with AI' feature to enhance your system prompt. You get 3 improvements per module every 72 hours."
+        }
+      },
+      "uploadingFiles": {
+        "title": "Uploading Files to Modules",
+        "description": "Upload educational materials that students can access through the AI tutor widget.",
+        "steps": [
+          "Navigate to the module detail page (/modules/{id})",
+          "Click 'Upload File' button",
+          "Select a file from your computer (or drag and drop)",
+          "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+          "Maximum file size: 10MB",
+          "Click 'Upload File' to add it to the module",
+          "Files are automatically indexed for the AI tutor"
+        ],
+        "managing": {
+          "title": "Managing Files",
+          "actions": [
+            "Download: Download a copy of any file",
+            "Delete: Remove a file from the module (with confirmation)"
+          ]
+        }
+      },
+      "preparingModule": {
+        "title": "Preparing a Module",
+        "description": "Before students can use the AI tutor, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
+        "prerequisites": [
+          "The module must have at least one active key with chat permission",
+          "The module should have an AI tutor system prompt configured",
+          "Files should be uploaded (optional but recommended)"
+        ],
+        "steps": [
+          "Navigate to the module detail page",
+          "Click 'Prepare Module' button",
+          "Wait for the preparation process to complete",
+          "Once prepared, the AI tutor is ready for students"
+        ],
+        "note": "Note: You can update files and re-prepare the module at any time."
+      }
+    },
+    "keys": {
+      "title": "Managing module access keys",
+      "description": "module access keys provide secure access to AI tutoring widgets. Each key controls what students can do (chat, access files, etc.).",
+      "creating": {
+        "title": "Creating a key",
+        "steps": [
+          "Navigate to module access keys (/keys)",
+          "Click 'Generate key'",
+          "Fill in the key details:",
+          "  • Select the module",
+          "  • key Name (e.g., 'Moodle Widget 2024')",
+          "  • Description (optional)",
+          "  • Expiration (optional, in days)",
+          "Configure permissions:",
+          "  • Allow Chat: Students can ask questions to the AI tutor",
+          "  • Allow File Access: Students can download module files",
+          "Click 'CREATE KEY'",
+          "Copy the generated key - you'll need it for the widget"
+        ]
+      },
+      "using": {
+        "title": "Using keys",
+        "description": "keys are used to embed the AI tutor widget in your LMS or website.",
+        "example": "Widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE",
+        "security": "Keep keys secure and only share them through official channels."
+      },
+      "managing": {
+        "title": "Managing keys",
+        "actions": [
+          "View: See key details and statistics",
+          "Edit: Update key name, description, or permissions",
+          "Copy: Copy the key to clipboard",
+          "Revoke/Delete: Disable a key permanently"
         ]
       },
       "bestPractices": {
-        "title": "Best Practices",
+        "title": "key Best Practices",
         "list": [
-          "Use clear, descriptive names for courses and modules",
-          "Write detailed AI tutor prompts that match your teaching style",
-          "Upload comprehensive materials before preparing modules",
-          "Create separate keys for different student groups or LMS courses",
-          "Regularly review and update module content",
-          "Use the 'Improve with AI' feature to refine tutor prompts",
-          "Set expiration dates on keys for semester-based courses",
-          "Monitor professor and key usage regularly",
-          "Keep course codes consistent across semesters",
-          "Document your course structure and key usage"
+          "Use descriptive names that indicate where the key is used",
+          "Set expiration dates for keys used in temporary contexts",
+          "Disable chat or file access if not needed",
+          "Monitor key usage through the statistics",
+          "Revoke keys that are no longer in use",
+          "Create separate keys for different LMS courses or contexts"
         ]
       }
     },
-    "regularProfessor": {
-      "title": "Professor Guide",
-      "subtitle": "Complete guide for course instructors",
-      "overview": {
-        "title": "Role Overview",
-        "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate Access Keys for your students.",
-        "keyResponsibilities": "Key Responsibilities",
-        "responsibilities": [
-          "Creating and managing modules for assigned courses",
-          "Configuring AI tutor system prompts",
-          "Uploading educational content and files",
-          "Generating and managing module Access Keys",
-          "Preparing modules for student use",
-          "Monitoring module usage and student engagement"
+    "professors": {
+      "title": "Managing Professors",
+      "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your university.",
+      "creating": {
+        "title": "Creating a Regular Professor",
+        "steps": [
+          "Navigate to Professors (/professors)",
+          "Click 'Add Professor'",
+          "Select 'Regular Professor' type",
+          "Fill in the professor information:",
+          "  • First Name and Last Name",
+          "  • Username (will be used for login)",
+          "  • Email address",
+          "  • Temporary Password",
+          "Your university is automatically selected",
+          "Select one or more courses to assign",
+          "Click 'Create Professor'",
+          "Copy and securely share the password setup link",
+          "The link expires in 72 hours"
         ]
       },
-      "gettingStarted": {
-        "title": "Getting Started",
-        "step1Title": "1. First Login",
-        "step1Desc": "Use the password setup link provided by your administrator to set your password. After setting your password, you can log in with your username.",
-        "step2Title": "2. View Your Dashboard",
-        "step2Desc": "Your dashboard (/dashboard) shows quick actions: Create Module, View Courses, View Modules, and Manage keys.",
-        "step3Title": "3. View Your Courses",
-        "step3Desc": "Navigate to Courses (/courses) to see all courses you've been assigned to by your administrator.",
-        "step4Title": "4. Create Your First Module",
-        "step4Desc": "Select a course and create your first module to start building your educational content."
+      "assigning": {
+        "title": "Course Assignments",
+        "description": "Regular professors can only view and manage modules for courses they are assigned to. You can assign multiple courses during creation.",
+        "updating": "To change course assignments, you'll need to edit the professor from their detail page (coming soon)."
       },
-      "courses": {
-        "title": "Working with Courses",
-        "description": "You can view details of courses you've been assigned to, but you cannot create or edit courses. Contact your admin professor if you need course changes.",
-        "viewing": {
-          "title": "Viewing Course Details",
-          "steps": [
-            "Navigate to Courses (/courses)",
-            "Click on any course you're assigned to",
-            "View course information, modules, professors, and students",
-            "Use the 'Add Module' button to create a new module for this course"
+      "managing": {
+        "title": "Managing Professor Accounts",
+        "actions": [
+          "Activate: Enable a deactivated professor account",
+          "Deactivate: Temporarily disable a professor account",
+          "Delete: Permanently remove a professor (super admin only)"
+        ]
+      }
+    },
+    "workflow": {
+      "title": "Recommended Workflow",
+      "description": "Follow this workflow for setting up a new course:",
+      "steps": [
+        "1. Create the course with name, code, and description",
+        "2. Create modules for the course (one per topic/unit)",
+        "3. Configure AI tutor prompts for each module",
+        "4. Upload educational files to modules",
+        "5. Create regular professors and assign them to the course",
+        "6. Generate module Access Keys",
+        "7. Prepare modules for student use",
+        "8. Share widget links with students through your LMS"
+      ]
+    },
+    "bestPractices": {
+      "title": "Best Practices",
+      "list": [
+        "Use clear, descriptive names for courses and modules",
+        "Write detailed AI tutor prompts that match your teaching style",
+        "Upload comprehensive materials before preparing modules",
+        "Create separate keys for different student groups or LMS courses",
+        "Regularly review and update module content",
+        "Use the 'Improve with AI' feature to refine tutor prompts",
+        "Set expiration dates on keys for semester-based courses",
+        "Monitor professor and key usage regularly",
+        "Keep course codes consistent across semesters",
+        "Document your course structure and key usage"
+      ]
+    }
+  },
+  "regularProfessor": {
+    "title": "Professor Guide",
+    "subtitle": "Complete guide for course instructors",
+    "overview": {
+      "title": "Role Overview",
+      "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate Access Keys for your students.",
+      "keyResponsibilities": "Key Responsibilities",
+      "responsibilities": [
+        "Creating and managing modules for assigned courses",
+        "Configuring AI tutor system prompts",
+        "Uploading educational content and files",
+        "Generating and managing module Access Keys",
+        "Preparing modules for student use",
+        "Monitoring module usage and student engagement"
+      ]
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "step1Title": "1. First Login",
+      "step1Desc": "Use the password setup link provided by your administrator to set your password. After setting your password, you can log in with your username.",
+      "step2Title": "2. View Your Dashboard",
+      "step2Desc": "Your dashboard (/dashboard) shows quick actions: Create Module, View Courses, View Modules, and Manage keys.",
+      "step3Title": "3. View Your Courses",
+      "step3Desc": "Navigate to Courses (/courses) to see all courses you've been assigned to by your administrator.",
+      "step4Title": "4. Create Your First Module",
+      "step4Desc": "Select a course and create your first module to start building your educational content."
+    },
+    "courses": {
+      "title": "Working with Courses",
+      "description": "You can view details of courses you've been assigned to, but you cannot create or edit courses. Contact your admin professor if you need course changes.",
+      "viewing": {
+        "title": "Viewing Course Details",
+        "steps": [
+          "Navigate to Courses (/courses)",
+          "Click on any course you're assigned to",
+          "View course information, modules, professors, and students",
+          "Use the 'Add Module' button to create a new module for this course"
+        ]
+      },
+      "limitations": {
+        "title": "Course Limitations",
+        "description": "As a regular professor, you cannot:",
+        "list": [
+          "Create new courses",
+          "Edit existing courses",
+          "Delete courses",
+          "Assign other professors to courses"
+        ],
+        "note": "If you need to create or modify courses, contact your university's admin professor."
+      }
+    },
+    "modules": {
+      "title": "Managing Your Modules",
+      "description": "Modules are the core of your teaching content. You can create, edit, and manage modules for your assigned courses.",
+      "creating": {
+        "title": "Creating a Module",
+        "steps": [
+          "Navigate to Modules (/modules) or click 'Create Module'",
+          "Fill in the module details:",
+          "  • Module Name (e.g., 'Introduction to Python Programming')",
+          "  • Module Code (e.g., 'CS101-W1')",
+          "  • Select your course from the dropdown",
+          "  • Semester and Year (optional but recommended)",
+          "  • Description (optional but helpful for students)",
+          "Configure the AI Tutor:",
+          "  • Choose a quick template OR write a custom prompt",
+          "  • Define how the AI tutor should interact with students",
+          "  • Select the tutor's response language",
+          "Click 'Create Module' to save"
+        ]
+      },
+      "aiTutor": {
+        "title": "Configuring the AI Tutor",
+        "description": "The AI tutor is your virtual teaching assistant. Configure it to match your teaching style and course objectives.",
+        "templates": {
+          "title": "Using Templates",
+          "description": "Quick templates provide pre-written prompts for common teaching scenarios:",
+          "options": [
+            "General Tutor: All-purpose teaching assistant",
+            "Programming Tutor: For computer science and coding courses",
+            "Math & Science Tutor: For STEM subjects",
+            "Research Assistant: For research methods and academic writing"
           ]
         },
-        "limitations": {
-          "title": "Course Limitations",
-          "description": "As a regular professor, you cannot:",
-          "list": [
-            "Create new courses",
-            "Edit existing courses",
-            "Delete courses",
-            "Assign other professors to courses"
+        "customPrompts": {
+          "title": "Writing Custom Prompts",
+          "description": "Create a unique teaching personality for your AI tutor:",
+          "tips": [
+            "Start with: 'You are a [type] tutor for [subject]...'",
+            "Describe the teaching approach (e.g., 'patient', 'socratic', 'step-by-step')",
+            "Set boundaries (e.g., 'Don't give direct answers, guide students to solutions')",
+            "Specify response format (e.g., 'Use bullet points for lists')",
+            "Consider student level (e.g., 'Assume basic high school math knowledge')"
           ],
-          "note": "If you need to create or modify courses, contact your university's admin professor."
+          "example": "Example: 'You are a patient Python programming tutor for beginners. Always explain concepts using real-world analogies. When a student asks for code, provide it with detailed comments explaining each line. Encourage students to try solutions before giving the answer.'"
+        },
+        "improving": {
+          "title": "Improving Prompts",
+          "steps": [
+            "After saving your module, click 'Edit Module'",
+            "Scroll to the AI Tutor Configuration section",
+            "Click 'Improve with AI' to enhance your prompt",
+            "The AI will rewrite your prompt to be more effective",
+            "You can improve up to 3 times per module every 72 hours",
+            "Review the improved prompt and save if satisfied"
+          ]
+        },
+        "language": {
+          "title": "Tutor Language Settings",
+          "description": "Select the language your AI tutor should use when responding to students. This is independent of the student's question language - the tutor will respond in the selected language regardless of how the question is asked."
         }
       },
-      "modules": {
-        "title": "Managing Your Modules",
-        "description": "Modules are the core of your teaching content. You can create, edit, and manage modules for your assigned courses.",
-        "creating": {
-          "title": "Creating a Module",
+      "files": {
+        "title": "Managing Module Files",
+        "description": "Upload course materials that the AI tutor can reference when helping students.",
+        "uploading": {
+          "title": "Uploading Files",
           "steps": [
-            "Navigate to Modules (/modules) or click 'Create Module'",
-            "Fill in the module details:",
-            "  • Module Name (e.g., 'Introduction to Python Programming')",
-            "  • Module Code (e.g., 'CS101-W1')",
-            "  • Select your course from the dropdown",
-            "  • Semester and Year (optional but recommended)",
-            "  • Description (optional but helpful for students)",
-            "Configure the AI Tutor:",
-            "  • Choose a quick template OR write a custom prompt",
-            "  • Define how the AI tutor should interact with students",
-            "  • Select the tutor's response language",
-            "Click 'Create Module' to save"
+            "Navigate to your module detail page (/modules/{id})",
+            "Click 'Upload File' in the Files section",
+            "Select or drag and drop your file",
+            "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+            "Maximum size: 10MB per file",
+            "Click 'Upload File' to add it",
+            "The file will be indexed and available to the AI tutor"
           ]
         },
-        "aiTutor": {
-          "title": "Configuring the AI Tutor",
-          "description": "The AI tutor is your virtual teaching assistant. Configure it to match your teaching style and course objectives.",
-          "templates": {
-            "title": "Using Templates",
-            "description": "Quick templates provide pre-written prompts for common teaching scenarios:",
-            "options": [
-              "General Tutor: All-purpose teaching assistant",
-              "Programming Tutor: For computer science and coding courses",
-              "Math & Science Tutor: For STEM subjects",
-              "Research Assistant: For research methods and academic writing"
-            ]
-          },
-          "customPrompts": {
-            "title": "Writing Custom Prompts",
-            "description": "Create a unique teaching personality for your AI tutor:",
-            "tips": [
-              "Start with: 'You are a [type] tutor for [subject]...'",
-              "Describe the teaching approach (e.g., 'patient', 'socratic', 'step-by-step')",
-              "Set boundaries (e.g., 'Don't give direct answers, guide students to solutions')",
-              "Specify response format (e.g., 'Use bullet points for lists')",
-              "Consider student level (e.g., 'Assume basic high school math knowledge')"
-            ],
-            "example": "Example: 'You are a patient Python programming tutor for beginners. Always explain concepts using real-world analogies. When a student asks for code, provide it with detailed comments explaining each line. Encourage students to try solutions before giving the answer.'"
-          },
-          "improving": {
-            "title": "Improving Prompts",
-            "steps": [
-              "After saving your module, click 'Edit Module'",
-              "Scroll to the AI Tutor Configuration section",
-              "Click 'Improve with AI' to enhance your prompt",
-              "The AI will rewrite your prompt to be more effective",
-              "You can improve up to 3 times per module every 72 hours",
-              "Review the improved prompt and save if satisfied"
-            ]
-          },
-          "language": {
-            "title": "Tutor Language Settings",
-            "description": "Select the language your AI tutor should use when responding to students. This is independent of the student's question language - the tutor will respond in the selected language regardless of how the question is asked."
-          }
-        },
-        "files": {
-          "title": "Managing Module Files",
-          "description": "Upload course materials that the AI tutor can reference when helping students.",
-          "uploading": {
-            "title": "Uploading Files",
-            "steps": [
-              "Navigate to your module detail page (/modules/{id})",
-              "Click 'Upload File' in the Files section",
-              "Select or drag and drop your file",
-              "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
-              "Maximum size: 10MB per file",
-              "Click 'Upload File' to add it",
-              "The file will be indexed and available to the AI tutor"
-            ]
-          },
-          "bestPractices": {
-            "title": "File Upload Best Practices",
-            "list": [
-              "Upload lecture slides, notes, and readings",
-              "Include problem sets and examples",
-              "Add supplementary materials and references",
-              "Use clear, descriptive filenames",
-              "Upload files before preparing the module",
-              "Update files as your course progresses",
-              "Remove outdated materials regularly"
-            ]
-          },
-          "managing": {
-            "title": "Managing Files",
-            "actions": [
-              "Download: Get a copy of any uploaded file",
-              "Delete: Remove a file from the module (requires confirmation)"
-            ]
-          }
-        },
-        "preparing": {
-          "title": "Preparing Modules",
-          "description": "Before students can use your module, you must 'prepare' it. This process uploads your files to OpenAI and creates the AI assistant.",
-          "requirements": {
-            "title": "Prerequisites",
-            "list": [
-              "At least one active module access key with chat permission",
-              "AI tutor system prompt configured (recommended)",
-              "Files uploaded (optional but recommended)"
-            ]
-          },
-          "steps": {
-            "title": "Preparation Steps",
-            "list": [
-              "Ensure you have created a key for the module",
-              "Navigate to the module detail page",
-              "Click 'Prepare Module' button",
-              "Wait for the preparation to complete (usually a few seconds)",
-              "You'll see a success message when ready",
-              "The AI tutor is now ready for students"
-            ]
-          },
-          "updating": {
-            "title": "Updating a Prepared Module",
-            "description": "You can add or remove files at any time. After making changes, click 'Prepare Module' again to update the AI tutor with the new content."
-          }
-        },
-        "editing": {
-          "title": "Editing Modules",
-          "steps": [
-            "From the Modules list or module detail page, click 'Edit'",
-            "Update module information, AI tutor prompt, or settings",
-            "You cannot change the course after creation",
-            "Click 'Save Changes' to update"
-          ]
-        },
-        "deleting": {
-          "title": "Deleting Modules",
-          "warning": "⚠️ Warning: Deleting a module removes all its files, keys, and student interaction history. This cannot be undone.",
-          "steps": [
-            "From the Modules list, click the delete icon",
-            "Confirm the deletion",
-            "The module and all its content will be permanently removed"
-          ]
-        }
-      },
-      "keys": {
-        "title": "Module Access Keys",
-        "description": "keys provide secure access to your AI tutor widget. CREATE KEYs to share your modules with students.",
-        "creating": {
-          "title": "Creating a key",
-          "steps": [
-            "Navigate to module access keys (/keys)",
-            "Click 'Generate key'",
-            "Select your module from the dropdown",
-            "Fill in key details:",
-            "  • key Name (e.g., 'Fall 2024 - Section A')",
-            "  • Description (optional, e.g., 'For CS101 Moodle course')",
-            "  • Expiration in days (optional, e.g., 120 for semester-long)",
-            "Set permissions:",
-            "  • Allow Chat: Let students ask questions",
-            "  • Allow File Access: Let students download files",
-            "Click 'CREATE KEY'",
-            "Copy the key - you'll need it for the widget"
-          ]
-        },
-        "permissions": {
-          "title": "Understanding Permissions",
-          "chat": {
-            "title": "Allow Chat",
-            "description": "When enabled, students can ask questions to the AI tutor. Disable this if you only want to share files without AI interaction."
-          },
-          "fileAccess": {
-            "title": "Allow File Access",
-            "description": "When enabled, students can download module files. Disable this if you want files to be AI-accessible only without direct downloads."
-          }
-        },
-        "using": {
-          "title": "Using keys in Your LMS",
-          "description": "Embed the AI tutor widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
-          "steps": [
-            "Copy your module access key",
-            "Use the widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN",
-            "Add this URL as an external tool or iframe in your LMS",
-            "Students can now interact with your AI tutor through the LMS"
+        "bestPractices": {
+          "title": "File Upload Best Practices",
+          "list": [
+            "Upload lecture slides, notes, and readings",
+            "Include problem sets and examples",
+            "Add supplementary materials and references",
+            "Use clear, descriptive filenames",
+            "Upload files before preparing the module",
+            "Update files as your course progresses",
+            "Remove outdated materials regularly"
           ]
         },
         "managing": {
-          "title": "Managing keys",
-          "viewing": {
-            "title": "Viewing key Details",
-            "description": "Click the 'View' icon to see:",
-            "details": [
-              "key string and quick copy",
-              "Module and course information",
-              "Creation and expiration dates",
-              "Usage statistics (request count)",
-              "Current status and permissions"
-            ]
-          },
-          "editing": {
-            "title": "Editing keys",
-            "description": "Update key name, description, or permissions without changing the key string."
-          },
-          "revoking": {
-            "title": "Revoking keys",
-            "description": "Delete a key to immediately revoke access. Students will no longer be able to use the widget with that key."
-          }
-        },
-        "bestPractices": {
-          "title": "key Best Practices",
-          "list": [
-            "Create separate keys for different sections or semesters",
-            "Use descriptive names that include course code and term",
-            "Set expiration dates aligned with your course end date",
-            "Monitor key usage to track student engagement",
-            "Revoke keys after the course ends",
-            "Keep keys secure - don't share them publicly",
-            "Test the widget with the key before sharing with students",
-            "Create a backup key in case you need to revoke the primary one"
+          "title": "Managing Files",
+          "actions": [
+            "Download: Get a copy of any uploaded file",
+            "Delete: Remove a file from the module (requires confirmation)"
           ]
         }
       },
-      "workflow": {
-        "title": "Typical Workflow",
-        "description": "Follow this workflow for each module you create:",
-        "steps": [
-          "1. Create the module with basic information",
-          "2. Write or select an AI tutor system prompt",
-          "3. Upload your course materials (slides, notes, readings)",
-          "4. Review and improve the AI tutor prompt if needed",
-          "5. Create a module access key for your students",
-          "6. Prepare the module (uploads files to AI and creates assistant)",
-          "7. Test the widget with your key to ensure it works",
-          "8. Share the widget link in your LMS or with students",
-          "9. Monitor usage and update content as needed",
-          "10. At the end of the semester, revoke keys or set new ones for next term"
-        ]
-      },
-      "troubleshooting": {
-        "title": "Troubleshooting",
-        "modulePreparation": {
-          "title": "Module Preparation Issues",
-          "noTokens": "Error: 'No keys available' - Create at least one active key with chat permission before preparing.",
-          "invalidToken": "Error: 'Invalid key' - Ensure the key is active and has chat permission enabled.",
-          "preparationFailed": "If preparation fails, check that your files are under 10MB and in supported formats."
+      "preparing": {
+        "title": "Preparing Modules",
+        "description": "Before students can use your module, you must 'prepare' it. This process uploads your files to OpenAI and creates the AI assistant.",
+        "requirements": {
+          "title": "Prerequisites",
+          "list": [
+            "At least one active module access key with chat permission",
+            "AI tutor system prompt configured (recommended)",
+            "Files uploaded (optional but recommended)"
+          ]
         },
-        "fileUploads": {
-          "title": "File Upload Issues",
-          "tooLarge": "File too large: Split large PDFs or compress files to under 10MB.",
-          "unsupportedFormat": "Unsupported format: Convert files to PDF, DOC, DOCX, TXT, PPT, or PPTX.",
-          "uploadFailed": "Upload failed: Check your internet connection and try again."
+        "steps": {
+          "title": "Preparation Steps",
+          "list": [
+            "Ensure you have created a key for the module",
+            "Navigate to the module detail page",
+            "Click 'Prepare Module' button",
+            "Wait for the preparation to complete (usually a few seconds)",
+            "You'll see a success message when ready",
+            "The AI tutor is now ready for students"
+          ]
         },
-        "tokenIssues": {
-          "title": "key Issues",
-          "widgetNotWorking": "Widget not working: Verify the key is active and the module is prepared.",
-          "chatDisabled": "Students can't chat: Enable 'Allow Chat' permission on the key.",
-          "filesNotAccessible": "Files not accessible: Enable 'Allow File Access' permission or re-prepare the module."
-        },
-        "permissions": {
-          "title": "Permission Issues",
-          "cannotCreateCourse": "Cannot create courses: Only admin professors can create courses. Ask your administrator.",
-          "cannotEditCourse": "Cannot edit courses: Contact your admin professor to modify course details.",
-          "cannotSeeModule": "Cannot see a module: Modules are filtered by your assigned courses. Ask to be assigned to the course."
+        "updating": {
+          "title": "Updating a Prepared Module",
+          "description": "You can add or remove files at any time. After making changes, click 'Prepare Module' again to update the AI tutor with the new content."
         }
       },
-      "tips": {
-        "title": "Pro Tips",
-        "list": [
-          "Use the 'Improve with AI' feature to refine your tutor prompts - it often produces better results",
-          "Upload files in a logical order (e.g., Week 1, Week 2) for better AI organization",
-          "Test your AI tutor by asking it questions students might ask",
-          "Include course policies and FAQ documents for the AI to reference",
-          "Update your tutor prompt mid-semester if you notice areas for improvement",
-          "Create multiple keys for A/B testing different AI configurations",
-          "Use semester/year in module names for easy identification across terms",
-          "Monitor which topics generate the most student questions",
-          "Share successful AI tutor prompts with your colleagues",
-          "Keep a backup of your system prompts for reuse in future semesters"
+      "editing": {
+        "title": "Editing Modules",
+        "steps": [
+          "From the Modules list or module detail page, click 'Edit'",
+          "Update module information, AI tutor prompt, or settings",
+          "You cannot change the course after creation",
+          "Click 'Save Changes' to update"
+        ]
+      },
+      "deleting": {
+        "title": "Deleting Modules",
+        "warning": "⚠️ Warning: Deleting a module removes all its files, keys, and student interaction history. This cannot be undone.",
+        "steps": [
+          "From the Modules list, click the delete icon",
+          "Confirm the deletion",
+          "The module and all its content will be permanently removed"
         ]
       }
     },
+    "keys": {
+      "title": "Module Access Keys",
+      "description": "keys provide secure access to your AI tutor widget. CREATE KEYs to share your modules with students.",
+      "creating": {
+        "title": "Creating a key",
+        "steps": [
+          "Navigate to module access keys (/keys)",
+          "Click 'Generate key'",
+          "Select your module from the dropdown",
+          "Fill in key details:",
+          "  • key Name (e.g., 'Fall 2024 - Section A')",
+          "  • Description (optional, e.g., 'For CS101 Moodle course')",
+          "  • Expiration in days (optional, e.g., 120 for semester-long)",
+          "Set permissions:",
+          "  • Allow Chat: Let students ask questions",
+          "  • Allow File Access: Let students download files",
+          "Click 'CREATE KEY'",
+          "Copy the key - you'll need it for the widget"
+        ]
+      },
+      "permissions": {
+        "title": "Understanding Permissions",
+        "chat": {
+          "title": "Allow Chat",
+          "description": "When enabled, students can ask questions to the AI tutor. Disable this if you only want to share files without AI interaction."
+        },
+        "fileAccess": {
+          "title": "Allow File Access",
+          "description": "When enabled, students can download module files. Disable this if you want files to be AI-accessible only without direct downloads."
+        }
+      },
+      "using": {
+        "title": "Using keys in Your LMS",
+        "description": "Embed the AI tutor widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
+        "steps": [
+          "Copy your module access key",
+          "Use the widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN",
+          "Add this URL as an external tool or iframe in your LMS",
+          "Students can now interact with your AI tutor through the LMS"
+        ]
+      },
+      "managing": {
+        "title": "Managing keys",
+        "viewing": {
+          "title": "Viewing key Details",
+          "description": "Click the 'View' icon to see:",
+          "details": [
+            "key string and quick copy",
+            "Module and course information",
+            "Creation and expiration dates",
+            "Usage statistics (request count)",
+            "Current status and permissions"
+          ]
+        },
+        "editing": {
+          "title": "Editing keys",
+          "description": "Update key name, description, or permissions without changing the key string."
+        },
+        "revoking": {
+          "title": "Revoking keys",
+          "description": "Delete a key to immediately revoke access. Students will no longer be able to use the widget with that key."
+        }
+      },
+      "bestPractices": {
+        "title": "key Best Practices",
+        "list": [
+          "Create separate keys for different sections or semesters",
+          "Use descriptive names that include course code and term",
+          "Set expiration dates aligned with your course end date",
+          "Monitor key usage to track student engagement",
+          "Revoke keys after the course ends",
+          "Keep keys secure - don't share them publicly",
+          "Test the widget with the key before sharing with students",
+          "Create a backup key in case you need to revoke the primary one"
+        ]
+      }
+    },
+    "workflow": {
+      "title": "Typical Workflow",
+      "description": "Follow this workflow for each module you create:",
+      "steps": [
+        "1. Create the module with basic information",
+        "2. Write or select an AI tutor system prompt",
+        "3. Upload your course materials (slides, notes, readings)",
+        "4. Review and improve the AI tutor prompt if needed",
+        "5. Create a module access key for your students",
+        "6. Prepare the module (uploads files to AI and creates assistant)",
+        "7. Test the widget with your key to ensure it works",
+        "8. Share the widget link in your LMS or with students",
+        "9. Monitor usage and update content as needed",
+        "10. At the end of the semester, revoke keys or set new ones for next term"
+      ]
+    },
+    "troubleshooting": {
+      "title": "Troubleshooting",
+      "modulePreparation": {
+        "title": "Module Preparation Issues",
+        "noTokens": "Error: 'No keys available' - Create at least one active key with chat permission before preparing.",
+        "invalidToken": "Error: 'Invalid key' - Ensure the key is active and has chat permission enabled.",
+        "preparationFailed": "If preparation fails, check that your files are under 10MB and in supported formats."
+      },
+      "fileUploads": {
+        "title": "File Upload Issues",
+        "tooLarge": "File too large: Split large PDFs or compress files to under 10MB.",
+        "unsupportedFormat": "Unsupported format: Convert files to PDF, DOC, DOCX, TXT, PPT, or PPTX.",
+        "uploadFailed": "Upload failed: Check your internet connection and try again."
+      },
+      "tokenIssues": {
+        "title": "key Issues",
+        "widgetNotWorking": "Widget not working: Verify the key is active and the module is prepared.",
+        "chatDisabled": "Students can't chat: Enable 'Allow Chat' permission on the key.",
+        "filesNotAccessible": "Files not accessible: Enable 'Allow File Access' permission or re-prepare the module."
+      },
+      "permissions": {
+        "title": "Permission Issues",
+        "cannotCreateCourse": "Cannot create courses: Only admin professors can create courses. Ask your administrator.",
+        "cannotEditCourse": "Cannot edit courses: Contact your admin professor to modify course details.",
+        "cannotSeeModule": "Cannot see a module: Modules are filtered by your assigned courses. Ask to be assigned to the course."
+      }
+    },
+    "tips": {
+      "title": "Pro Tips",
+      "list": [
+        "Use the 'Improve with AI' feature to refine your tutor prompts - it often produces better results",
+        "Upload files in a logical order (e.g., Week 1, Week 2) for better AI organization",
+        "Test your AI tutor by asking it questions students might ask",
+        "Include course policies and FAQ documents for the AI to reference",
+        "Update your tutor prompt mid-semester if you notice areas for improvement",
+        "Create multiple keys for A/B testing different AI configurations",
+        "Use semester/year in module names for easy identification across terms",
+        "Monitor which topics generate the most student questions",
+        "Share successful AI tutor prompts with your colleagues",
+        "Keep a backup of your system prompts for reuse in future semesters"
+      ]
+    }
+  },
   "courseTypes": {
     "typeRequired": "Course type is required",
     "selectCourseType": "Select Course Type",
@@ -4493,4 +4492,3 @@
     }
   }
 }
-
