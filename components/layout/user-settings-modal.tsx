@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -261,12 +262,11 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
               )}
 
               <div>
-                <Label htmlFor="birthdate">{t('birthdateLabel')}</Label>
-                <Input
-                  id="birthdate"
-                  type="date"
+                <Label>{t('birthdateLabel')}</Label>
+                <DateTimePicker
                   value={birthdate}
-                  onChange={(e) => setBirthdate(e.target.value)}
+                  onChange={setBirthdate}
+                  showTime={false}
                 />
               </div>
 
