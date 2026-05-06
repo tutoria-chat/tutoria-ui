@@ -122,7 +122,7 @@ export const API_CONFIG = {
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:6969',
   // Python API (AI/Tutor endpoints - improve-prompt only)
   pythonBaseURL: process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000/api/v2',
-  timeout: 30000,
+  timeout: 300000,
 } as const;
 
 /**
