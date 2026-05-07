@@ -171,34 +171,23 @@ export default function EditProfessorPage() {
 
     setIsLoading(true);
     try {
-      // Update basic info
-      await apiClient.updateProfessor(professorId, {
+      // Update basic info + course assignments in one call.
+      // course_ids is admin/super_admin only; this form is gated by AdminOnly,
+      // so we always send the full selected list (replace, not delta).
+      const updated = await apiClient.updateProfessor(professorId, {
         email: formData.email,
         firstName: formData.firstName,
         lastName: formData.lastName,
         isAdmin: formData.isAdmin,
         ...(isSuperAdmin && formData.username ? { username: formData.username } : {}),
         ...(isSuperAdmin && formData.universityId ? { universityId: formData.universityId } : {}),
+        courseIds: assignedCourseIds,
       });
 
-      // Update course assignments
-      const toAdd = assignedCourseIds.filter(id => !originalAssignedCourseIds.includes(id));
-      const toRemove = originalAssignedCourseIds.filter(id => !assignedCourseIds.includes(id));
-
-      for (const courseId of toAdd) {
-        try {
-          await apiClient.assignProfessorToCourse(courseId, professorId);
-        } catch (error) {
-          console.error(`Error assigning course ${courseId}:`, error);
-        }
-      }
-
-      for (const courseId of toRemove) {
-        try {
-          await apiClient.unassignProfessorFromCourse(courseId, professorId);
-        } catch (error) {
-          console.error(`Error unassigning course ${courseId}:`, error);
-        }
+      // Refresh state from response instead of re-fetching.
+      if (updated.assignedCourseIds) {
+        setAssignedCourseIds(updated.assignedCourseIds);
+        setOriginalAssignedCourseIds(updated.assignedCourseIds);
       }
 
       // Handle password reset if requested
@@ -222,7 +211,13 @@ export default function EditProfessorPage() {
       }
     } catch (error: any) {
       console.error('Failed to update professor:', error);
-      toast.error(error.message || t('updateError'));
+      const msg: string = error?.message || '';
+      // Surface course-assignment 400s inline on the courses field.
+      if (error?.status === 400 && /^Course \d+ (not found|does not belong)/i.test(msg)) {
+        setErrors((prev) => ({ ...prev, assignedCourses: msg }));
+      } else {
+        toast.error(msg || t('updateError'));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -366,30 +361,38 @@ export default function EditProfessorPage() {
                   {t('noCoursesAvailable')}
                 </p>
               ) : (
-                <MultiSelect
-                  options={courses.map((course) => ({
-                    value: String(course.id),
-                    label: course.code ? `${course.name} (${course.code})` : course.name,
-                  }))}
-                  selected={assignedCourseIds.map(String)}
-                  onChange={(selected) => {
-                    const courseIds = selected.map(Number);
-                    courseIds.forEach((courseId) => {
-                      if (!assignedCourseIds.includes(courseId)) {
-                        toggleCourse(courseId);
+                <>
+                  <MultiSelect
+                    options={courses.map((course) => ({
+                      value: String(course.id),
+                      label: course.code ? `${course.name} (${course.code})` : course.name,
+                    }))}
+                    selected={assignedCourseIds.map(String)}
+                    onChange={(selected) => {
+                      const courseIds = selected.map(Number);
+                      courseIds.forEach((courseId) => {
+                        if (!assignedCourseIds.includes(courseId)) {
+                          toggleCourse(courseId);
+                        }
+                      });
+                      assignedCourseIds.forEach((courseId) => {
+                        if (!courseIds.includes(courseId)) {
+                          toggleCourse(courseId);
+                        }
+                      });
+                      if (errors.assignedCourses) {
+                        setErrors((prev) => ({ ...prev, assignedCourses: '' }));
                       }
-                    });
-                    assignedCourseIds.forEach((courseId) => {
-                      if (!courseIds.includes(courseId)) {
-                        toggleCourse(courseId);
-                      }
-                    });
-                  }}
-                  placeholder={t('selectCourses') || 'Select courses...'}
-                  searchPlaceholder={t('searchCourses') || 'Search courses...'}
-                  emptyMessage={t('noCoursesFound') || 'No courses found.'}
-                  disabled={isLoading}
-                />
+                    }}
+                    placeholder={t('selectCourses') || 'Select courses...'}
+                    searchPlaceholder={t('searchCourses') || 'Search courses...'}
+                    emptyMessage={t('noCoursesFound') || 'No courses found.'}
+                    disabled={isLoading}
+                  />
+                  {errors.assignedCourses && (
+                    <p className="text-sm text-destructive mt-2">{errors.assignedCourses}</p>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>
