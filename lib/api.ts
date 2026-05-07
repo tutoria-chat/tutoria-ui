@@ -877,8 +877,7 @@ class TutoriaAPIClient {
   }
 
   async updateProfessor(id: number, data: ProfessorUpdate): Promise<Professor> {
-    // Use unified Users API
-    interface BackendUserResponse {
+    interface BackendProfessorResponse {
       userId: number;
       username: string;
       email: string;
@@ -894,15 +893,18 @@ class TutoriaAPIClient {
       lastLoginAt?: string | null;
       languagePreference?: string;
       themePreference?: string;
+      assignedCourseIds?: number[];
     }
 
-    const response = await this.put<BackendUserResponse>(`/api/users/${id}`, {
+    const body: Record<string, unknown> = {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-    });
+    };
+    if (data.courseIds !== undefined) body.courseIds = data.courseIds;
 
-    // Map backend UserResponse to Professor interface
+    const response = await this.put<BackendProfessorResponse>(`/api/professors/${id}`, body);
+
     return {
       id: response.userId,
       username: response.username,
@@ -918,6 +920,7 @@ class TutoriaAPIClient {
       lastLoginAt: response.lastLoginAt,
       languagePreference: response.languagePreference,
       themePreference: response.themePreference,
+      assignedCourseIds: response.assignedCourseIds,
     };
   }
 

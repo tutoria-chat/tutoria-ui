@@ -472,6 +472,8 @@ export interface ProfessorUpdate {
   firstName?: string;
   lastName?: string;
   isAdmin?: boolean;
+  // null = leave assignments unchanged, [] = unassign all, [ids] = replace
+  courseIds?: number[] | null;
 }
 
 // Professor Agent Types
