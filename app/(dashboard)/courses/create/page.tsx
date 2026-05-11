@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
@@ -18,9 +18,11 @@ export default function CreateCoursePage() {
   const t = useTranslations('courses.create');
   const tCommon = useTranslations('common');
 
-  // Get universityId from query params (e.g., ?universityId=11)
   const universityIdParam = searchParams.get('universityId');
   const initialUniversityId = universityIdParam ? Number(universityIdParam) : undefined;
+
+  // Captured from CourseForm when the user picks professors
+  const selectedProfessorIds = useRef<number[]>([]);
 
   const breadcrumbs: BreadcrumbItem[] = [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -30,20 +32,24 @@ export default function CreateCoursePage() {
   const handleSubmit = async (data: CourseCreate | CourseUpdate) => {
     setIsLoading(true);
     try {
-      // Ensure we have all required fields for course creation
       const courseData: CourseCreate = {
         name: data.name || '',
         code: data.code || '',
         description: data.description,
-        universityId: 'universityId' in data ? data.universityId :
-                      user?.universityId || 1,
+        universityId: 'universityId' in data ? data.universityId : user?.universityId || 1,
       };
 
-      // Make POST request to courses/ endpoint
       const newCourse = await apiClient.createCourse(courseData);
-      console.log('Course created successfully:', newCourse);
 
-      // Redirecionar para a página de detalhes da disciplina
+      // Assign selected professors (best-effort, non-blocking)
+      if (selectedProfessorIds.current.length > 0) {
+        await Promise.allSettled(
+          selectedProfessorIds.current.map(professorId =>
+            apiClient.assignProfessorToCourse(newCourse.id, professorId)
+          )
+        );
+      }
+
       router.push(`/courses/${newCourse.id}`);
     } catch (error) {
       console.error('Failed to create course:', error);
@@ -51,10 +57,6 @@ export default function CreateCoursePage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleCancel = () => {
-    router.back();
   };
 
   return (
@@ -69,9 +71,10 @@ export default function CreateCoursePage() {
         <div className="flex justify-center">
           <CourseForm
             onSubmit={handleSubmit}
-            onCancel={handleCancel}
+            onCancel={() => router.back()}
             isLoading={isLoading}
             initialUniversityId={initialUniversityId}
+            onProfessorsChange={(ids) => { selectedProfessorIds.current = ids; }}
           />
         </div>
       </div>

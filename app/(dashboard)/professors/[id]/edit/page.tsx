@@ -57,7 +57,10 @@ export default function EditProfessorPage() {
   const loadProfessor = useCallback(async () => {
     setIsLoadingData(true);
     try {
-      const data = await apiClient.getProfessor(professorId);
+      const [data, coursesResult] = await Promise.all([
+        apiClient.getProfessor(professorId),
+        apiClient.getProfessorCourses(professorId).catch(() => ({ courseIds: [] as number[] })),
+      ]);
       setProfessor(data);
       setFormData({
         email: data.email,
@@ -68,13 +71,13 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
-      // Set assigned course IDs from professor data
-      if (data.assignedCourseIds && data.assignedCourseIds.length > 0) {
-        setAssignedCourseIds(data.assignedCourseIds);
-        setOriginalAssignedCourseIds(data.assignedCourseIds);
-      } else if (data.assignedCourses && data.assignedCourses.length > 0) {
-        // Fallback to extracting from assignedCourses (for backward compatibility)
-        const courseIds = data.assignedCourses.map(course => course.id);
+      // Prefer dedicated courses endpoint; fall back to professor data fields
+      const courseIds =
+        coursesResult.courseIds.length > 0
+          ? coursesResult.courseIds
+          : data.assignedCourseIds ?? data.assignedCourses?.map(c => c.id) ?? [];
+
+      if (courseIds.length > 0) {
         setAssignedCourseIds(courseIds);
         setOriginalAssignedCourseIds(courseIds);
       }

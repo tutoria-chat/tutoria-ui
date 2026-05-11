@@ -253,7 +253,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       <div
         className={cn(
           // Base styles
-          "fixed z-50 flex flex-col overflow-hidden",
+          "fixed z-[60] flex flex-col overflow-hidden",
           "bg-sidebar",
           "transition-all duration-300 ease-in-out",
 

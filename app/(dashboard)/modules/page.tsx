@@ -45,14 +45,14 @@ export default function ModulesPage() {
     return false;
   };
 
-  // Check for university_id from URL query parameter
+  // Check for university_id from URL query parameter (only trusted for super_admin)
   const urlUniversityId = searchParams.get('universityId');
 
-  // Build API URL with pagination params and university filter
-  // Priority: URL parameter > user's university (for professors)
-  const universityFilter = urlUniversityId
-    ? `&universityId=${urlUniversityId}`
-    : (user?.universityId && user.role !== 'super_admin' ? `&universityId=${user.universityId}` : '');
+  // Build API URL with pagination params and university filter.
+  // Non-super-admins are always scoped to their own university regardless of URL params.
+  const universityFilter = user?.role === 'super_admin'
+    ? (urlUniversityId ? `&universityId=${urlUniversityId}` : '')
+    : (user?.universityId ? `&universityId=${user.universityId}` : '');
   const apiUrl = `/api/modules/?page=${page}&size=${limit}${searchTerm ? `&search=${encodeURIComponent(searchTerm)}` : ''}${universityFilter}`;
 
   // API call to get modules (paginated for display)
@@ -78,8 +78,8 @@ export default function ModulesPage() {
       label: t('columns.module'),
       sortable: true,
       render: (value, module) => (
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-purple-100 flex items-center justify-center">
+        <div className="flex items-start space-x-3">
+          <div className="h-10 w-10 shrink-0 rounded-lg bg-purple-100 flex items-center justify-center mt-0.5">
             <BookOpen className="h-5 w-5 text-purple-600" />
           </div>
           <div>

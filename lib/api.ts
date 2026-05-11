@@ -523,7 +523,7 @@ class TutoriaAPIClient {
     return this.get(`/api/users/${userId}`, undefined, false); // Management API
   }
 
-  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string }): Promise<UserResponse> {
+  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string; userType?: string; isAdmin?: boolean }): Promise<UserResponse> {
     return this.put(`/api/users/${userId}`, data, false); // Management API
   }
 

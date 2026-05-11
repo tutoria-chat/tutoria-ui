@@ -33,14 +33,11 @@ export default function CoursesPage() {
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
 
-  // Check for university_id from URL query parameter
+  // Check for university_id from URL query parameter (only trusted for super_admin)
   const urlUniversityId = searchParams.get('universityId');
 
-  // Build API URL with pagination params and filters
-  // Backend now handles role-based filtering:
-  // - Super admins: see all courses (no filter)
-  // - Admin professors: see all courses in their university (universityId filter)
-  // - Regular professors: see ONLY their assigned courses (professorId filter)
+  // Build API URL with pagination params and filters.
+  // Non-super-admins are always scoped to their own university regardless of URL params.
   const buildApiUrl = () => {
     let filters = `page=${page}&size=${limit}`;
 
@@ -48,19 +45,18 @@ export default function CoursesPage() {
       filters += `&search=${encodeURIComponent(searchTerm)}`;
     }
 
-    // If URL has universityId, use it (for navigation from university page)
-    if (urlUniversityId) {
-      filters += `&universityId=${urlUniversityId}`;
-    }
-    // Regular professor (not admin) - backend filters by professorId
-    else if (user?.role === 'professor' && user.isAdmin === false && user.id) {
+    if (user?.role === 'super_admin') {
+      // Super admin: can filter by URL-provided universityId or see all
+      if (urlUniversityId) {
+        filters += `&universityId=${urlUniversityId}`;
+      }
+    } else if (user?.role === 'professor' && user.isAdmin === false && user.id) {
+      // Regular professor: backend filters by their assigned courses via professorId
       filters += `&professorId=${user.id}`;
-    }
-    // Admin professor - backend filters by universityId
-    else if (user?.universityId && user.role !== 'super_admin') {
+    } else if (user?.universityId) {
+      // Manager / admin professor / tutor / coordinator: always scope to own university
       filters += `&universityId=${user.universityId}`;
     }
-    // Super admin sees all courses (no filter)
 
     return `/api/courses/?${filters}`;
   };
@@ -88,8 +84,8 @@ export default function CoursesPage() {
       label: t('columns.discipline'),
       sortable: true,
       render: (value, course) => (
-        <div className="flex items-center space-x-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+        <div className="flex items-start space-x-3">
+          <div className="h-10 w-10 shrink-0 rounded-lg bg-primary/10 flex items-center justify-center mt-0.5">
             <BookOpen className="h-5 w-5 text-primary" />
           </div>
           <div>

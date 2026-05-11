@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PageHeader } from '@/components/layout/page-header';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { AdminOnly, SuperAdminOnly, RoleGuard } from '@/components/auth/role-guard';
@@ -68,6 +69,7 @@ export default function UserDetailPage() {
     lastName: '',
     email: '',
     username: '',
+    userType: '',
   });
   const [editErrors, setEditErrors] = useState<Record<string, string>>({});
 
@@ -99,6 +101,7 @@ export default function UserDetailPage() {
         lastName: data.lastName,
         email: data.email,
         username: data.username,
+        userType: data.userType,
       });
     } catch (err) {
       console.error('Failed to load user:', err);
@@ -210,6 +213,7 @@ export default function UserDetailPage() {
         lastName: editForm.lastName,
         email: editForm.email,
         username: editForm.username,
+        ...(editForm.userType !== user?.userType ? { userType: editForm.userType } : {}),
       });
       toast.success(t('updateSuccess'));
       setIsEditing(false);
@@ -433,6 +437,30 @@ export default function UserDetailPage() {
                     <p className="text-sm text-destructive">{editErrors.email}</p>
                   )}
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="userType">{t('roleLabel')}</Label>
+                  <Select
+                    value={editForm.userType}
+                    onValueChange={(v) => setEditForm(prev => ({ ...prev, userType: v }))}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger id="userType">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentUser?.role === 'super_admin' && (
+                        <>
+                          <SelectItem value="super_admin">{tCommon('roles.super_admin')}</SelectItem>
+                          <SelectItem value="manager">{tCommon('roles.manager')}</SelectItem>
+                        </>
+                      )}
+                      <SelectItem value="tutor">{tCommon('roles.tutor')}</SelectItem>
+                      <SelectItem value="platform_coordinator">{tCommon('roles.platform_coordinator')}</SelectItem>
+                      <SelectItem value="professor">{tCommon('roles.professor')}</SelectItem>
+                      <SelectItem value="student">{tCommon('roles.student')}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setIsEditing(false)} disabled={isUpdating}>
                     {t('cancel')}
@@ -613,8 +641,8 @@ export default function UserDetailPage() {
               <CardDescription>{t('actionsDescription')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Edit Button - Super Admin Only */}
-              <SuperAdminOnly>
+              {/* Edit Button - Admins and Managers */}
+              <AdminOnly>
                 <Button
                   variant="outline"
                   className="w-full justify-start"
@@ -624,7 +652,7 @@ export default function UserDetailPage() {
                   <Edit className="mr-2 h-4 w-4" />
                   {t('editUser')}
                 </Button>
-              </SuperAdminOnly>
+              </AdminOnly>
 
               {/* Password Reset */}
               <div className="space-y-2">

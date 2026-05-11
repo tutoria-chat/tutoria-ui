@@ -22,6 +22,7 @@ import {
   FileSpreadsheet,
   UserCheck,
   UserMinus,
+  UserPlus,
   Lock
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
@@ -58,6 +59,7 @@ export default function CourseDetailsPage() {
   const tCommon = useTranslations('common');
   const tModules = useTranslations('modules');
   const tStudents = useTranslations('courses.detail.studentsTab');
+  const tProfTab = useTranslations('courses.detail.professorsTab');
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
 
@@ -119,13 +121,21 @@ export default function CourseDetailsPage() {
   const { data: modulesResponse, loading: modulesLoading, refetch: refetchModules } = useFetch<PaginatedResponse<Module>>(buildModulesApiUrl());
 
   // Fetch professors
-  const { data: professorsResponse } = useFetch<PaginatedResponse<Professor>>(
+  const { data: professorsResponse, refetch: refetchProfessors } = useFetch<PaginatedResponse<Professor>>(
     `/api/professors/?courseId=${courseId}`
   );
 
   const modules = modulesResponse?.items || [];
   const totalModules = modulesResponse?.total || 0;
   const professors = professorsResponse?.items || [];
+
+  // Add Professor modal state
+  const [showAddProfessor, setShowAddProfessor] = useState(false);
+  const [addProfessorMode, setAddProfessorMode] = useState<'choose' | 'existing'>('choose');
+  const [availableProfessors, setAvailableProfessors] = useState<Professor[]>([]);
+  const [loadingAvailable, setLoadingAvailable] = useState(false);
+  const [professorSearch, setProfessorSearch] = useState('');
+  const [assigningId, setAssigningId] = useState<number | null>(null);
 
   // Get all modules for filter options (using course embedded data)
   const allModules = course?.modules || [];
@@ -230,7 +240,7 @@ export default function CourseDetailsPage() {
       cancelText: tCommon('buttons.cancel'),
       onConfirm: async () => {
         try {
-          await apiClient.delete(`/modules/${moduleId}`);
+          await apiClient.deleteModule(moduleId);
           refetchModules();
         } catch (error) {
           console.error('Erro ao deletar módulo:', error);
@@ -246,6 +256,41 @@ export default function CourseDetailsPage() {
     } else {
       setModuleSortColumn(column);
       setModuleSortDirection('asc');
+    }
+  };
+
+  // Add Professor modal handlers
+  const openAddProfessor = async () => {
+    setAddProfessorMode('choose');
+    setProfessorSearch('');
+    setShowAddProfessor(true);
+  };
+
+  const loadAvailableProfessors = async () => {
+    if (!course?.universityId) return;
+    setLoadingAvailable(true);
+    try {
+      const response = await apiClient.getProfessors({ universityId: course.universityId, size: 200 });
+      const assignedIds = new Set(professors.map(p => p.id));
+      setAvailableProfessors(response.items.filter(p => !assignedIds.has(p.id)));
+    } catch {
+      toast.error(tProfTab('addModal.loadError'));
+    } finally {
+      setLoadingAvailable(false);
+    }
+  };
+
+  const handleAssignProfessor = async (professorId: number) => {
+    setAssigningId(professorId);
+    try {
+      await apiClient.assignProfessorToCourse(parseInt(courseId), professorId);
+      toast.success(tProfTab('addModal.assignSuccess'));
+      setShowAddProfessor(false);
+      refetchProfessors();
+    } catch {
+      toast.error(tProfTab('addModal.assignError'));
+    } finally {
+      setAssigningId(null);
     }
   };
 
@@ -904,10 +949,16 @@ export default function CourseDetailsPage() {
           {activeTab === 'professors' && (
             <Card>
               <CardHeader>
-                <CardTitle>{t('professorsTab.title')}</CardTitle>
-                <CardDescription>
-                  {t('professorsTab.description')}
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>{t('professorsTab.title')}</CardTitle>
+                    <CardDescription>{t('professorsTab.description')}</CardDescription>
+                  </div>
+                  <Button onClick={openAddProfessor}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    {tProfTab('addButton')}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <DataTable
@@ -1084,6 +1135,89 @@ export default function CourseDetailsPage() {
               </Button>
             )}
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add Professor Modal */}
+      <Dialog open={showAddProfessor} onOpenChange={(open) => { setShowAddProfessor(open); if (!open) setAddProfessorMode('choose'); }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{tProfTab('addModal.title')}</DialogTitle>
+            <DialogDescription>{tProfTab('addModal.description')}</DialogDescription>
+          </DialogHeader>
+
+          {addProfessorMode === 'choose' && (
+            <div className="grid grid-cols-1 gap-3 py-4">
+              {/* Option A: New professor */}
+              <button
+                onClick={() => router.push(`/professors/create?universityId=${course?.universityId}`)}
+                className="flex items-start gap-4 rounded-lg border p-4 text-left hover:bg-muted transition-colors"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <UserPlus className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <p className="font-medium">{tProfTab('addModal.newTitle')}</p>
+                  <p className="text-sm text-muted-foreground">{tProfTab('addModal.newDesc')}</p>
+                </div>
+              </button>
+
+              {/* Option B: Existing professor */}
+              <button
+                onClick={() => { setAddProfessorMode('existing'); loadAvailableProfessors(); }}
+                className="flex items-start gap-4 rounded-lg border p-4 text-left hover:bg-muted transition-colors"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">
+                  <Users className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <p className="font-medium">{tProfTab('addModal.existingTitle')}</p>
+                  <p className="text-sm text-muted-foreground">{tProfTab('addModal.existingDesc')}</p>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {addProfessorMode === 'existing' && (
+            <div className="py-4 space-y-3">
+              <Input
+                placeholder={tProfTab('addModal.searchPlaceholder')}
+                value={professorSearch}
+                onChange={(e) => setProfessorSearch(e.target.value)}
+              />
+              <div className="max-h-64 overflow-y-auto space-y-1">
+                {loadingAvailable ? (
+                  <p className="text-sm text-muted-foreground py-4 text-center">{tProfTab('addModal.loading')}</p>
+                ) : availableProfessors.length === 0 ? (
+                  <p className="text-sm text-muted-foreground py-4 text-center">{tProfTab('addModal.noProfessors')}</p>
+                ) : (
+                  availableProfessors
+                    .filter(p => {
+                      const q = professorSearch.toLowerCase();
+                      return !q || `${p.firstName} ${p.lastName} ${p.email}`.toLowerCase().includes(q);
+                    })
+                    .map(p => (
+                      <div key={p.id} className="flex items-center justify-between rounded-md px-3 py-2 hover:bg-muted">
+                        <div>
+                          <p className="text-sm font-medium">{p.firstName} {p.lastName}</p>
+                          <p className="text-xs text-muted-foreground">{p.email}</p>
+                        </div>
+                        <Button
+                          size="sm"
+                          onClick={() => handleAssignProfessor(p.id)}
+                          disabled={assigningId === p.id}
+                        >
+                          {assigningId === p.id ? <Loader2 className="h-3 w-3 animate-spin" /> : tProfTab('addModal.assign')}
+                        </Button>
+                      </div>
+                    ))
+                )}
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => setAddProfessorMode('choose')}>
+                ← {tCommon('buttons.back')}
+              </Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

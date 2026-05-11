@@ -244,7 +244,13 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
         });
         setErrors({ submit: error.message });
       } else {
-        setErrors({ submit: error instanceof Error ? error.message : t('saveError') });
+        const raw = error instanceof Error ? error.message.toLowerCase() : '';
+        const friendlyMessage =
+          raw.includes('code') && raw.includes('already') ? t('codeAlreadyExists') :
+          raw.includes('name') && raw.includes('already') ? t('nameAlreadyExists') :
+          t('saveError');
+        toast.error(friendlyMessage);
+        setErrors({ submit: friendlyMessage });
       }
     }
   };

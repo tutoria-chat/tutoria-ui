@@ -8,20 +8,22 @@ import { Textarea } from '@/components/ui/textarea';
 import { Combobox } from '@/components/ui/combobox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { MultiSelect } from '@/components/ui/multi-select';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
-import type { Course, CourseCreate, CourseUpdate, University } from '@/lib/types';
+import type { Course, CourseCreate, CourseUpdate, Professor, University } from '@/lib/types';
 
 interface CourseFormProps {
   course?: Course;
   onSubmit: (data: CourseCreate | CourseUpdate) => Promise<void>;
   onCancel: () => void;
   isLoading?: boolean;
-  initialUniversityId?: number; // Pre-select university from query param
+  initialUniversityId?: number;
+  onProfessorsChange?: (ids: number[]) => void;
 }
 
-export function CourseForm({ course, onSubmit, onCancel, isLoading = false, initialUniversityId }: CourseFormProps) {
+export function CourseForm({ course, onSubmit, onCancel, isLoading = false, initialUniversityId, onProfessorsChange }: CourseFormProps) {
   const { user } = useAuth();
   const t = useTranslations('courses.form');
   const [formData, setFormData] = useState({
@@ -31,8 +33,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     universityId: course?.universityId || initialUniversityId || user?.universityId || '',
   });
   const [universities, setUniversities] = useState<University[]>([]);
+  const [professors, setProfessors] = useState<Professor[]>([]);
+  const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
+  const [loadingProfessors, setLoadingProfessors] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingUniversities, setLoadingUniversities] = useState(false);
+
+  const isCreateMode = !course;
 
   // Load universities for super admin
   useEffect(() => {
@@ -41,12 +48,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
 
       setLoadingUniversities(true);
       try {
-        // Optimization: If initialUniversityId is provided, fetch only that university
         if (initialUniversityId) {
           const university = await apiClient.getUniversity(initialUniversityId);
           setUniversities([university]);
         } else {
-          // Fetch all universities only if no specific ID provided
           const response = await apiClient.getUniversities({ size: 1000 });
           setUniversities(response.items);
         }
@@ -60,37 +65,52 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     loadUniversities();
   }, [user?.role, initialUniversityId]);
 
+  // Load professors when university changes (create mode only)
+  useEffect(() => {
+    if (!isCreateMode || !formData.universityId) {
+      setProfessors([]);
+      setSelectedProfessorIds([]);
+      return;
+    }
+
+    const load = async () => {
+      setLoadingProfessors(true);
+      try {
+        const response = await apiClient.getProfessors({ universityId: Number(formData.universityId), size: 200 });
+        setProfessors(response.items);
+      } catch {
+        // Non-critical: professor selection is optional
+      } finally {
+        setLoadingProfessors(false);
+      }
+    };
+
+    load();
+  }, [formData.universityId, isCreateMode]);
+
+  const handleProfessorsChange = (ids: string[]) => {
+    setSelectedProfessorIds(ids);
+    onProfessorsChange?.(ids.map(Number));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate form
+
     const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) {
-      newErrors.name = t('nameRequired');
-    }
-    if (!formData.code.trim()) {
-      newErrors.code = t('codeRequired');
-    }
-    if (!formData.universityId) {
-      newErrors.universityId = t('universityRequired');
-    }
-    
+    if (!formData.name.trim()) newErrors.name = t('nameRequired');
+    if (!formData.code.trim()) newErrors.code = t('codeRequired');
+    if (!formData.universityId) newErrors.universityId = t('universityRequired');
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
-      // Show toast notification for validation errors
-      toast.error(t('validationError'), {
-        description: t('validationErrorDesc'),
-      });
-
-      // Scroll to first error field
+      toast.error(t('validationError'), { description: t('validationErrorDesc') });
       const firstErrorField = Object.keys(newErrors)[0];
       const errorElement = document.getElementById(firstErrorField);
       if (errorElement) {
         errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         errorElement.focus();
       }
-
       return;
     }
 
@@ -116,19 +136,13 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
 
   return (
     <Card className="w-full max-w-4xl">
       <CardHeader>
-        <CardTitle>
-          {course ? t('edit') : t('create')}
-        </CardTitle>
+        <CardTitle>{course ? t('edit') : t('create')}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -210,25 +224,45 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
             </FormItem>
           </FormField>
 
-          {/* Submit Error */}
-          {errors.submit && (
-            <FormMessage>{errors.submit}</FormMessage>
+          {/* Optional Professor Selection — create mode only, shown when university is set */}
+          {isCreateMode && formData.universityId && (
+            <FormField>
+              <FormItem>
+                <FormLabel htmlFor="professors">
+                  {t('professorsOptionalLabel')}
+                  <span className="ml-1 text-xs font-normal text-muted-foreground">({t('optional')})</span>
+                </FormLabel>
+                {loadingProfessors ? (
+                  <p className="text-sm text-muted-foreground">{t('loadingProfessors')}</p>
+                ) : professors.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">{t('noProfessorsAvailable')}</p>
+                ) : (
+                  <MultiSelect
+                    options={professors.map(p => ({
+                      value: String(p.id),
+                      label: `${p.firstName} ${p.lastName}`.trim() || p.email,
+                    }))}
+                    selected={selectedProfessorIds}
+                    onChange={handleProfessorsChange}
+                    placeholder={t('selectProfessors')}
+                    searchPlaceholder={t('searchProfessors')}
+                    emptyMessage={t('noProfessorsFound')}
+                  />
+                )}
+                <p className="text-xs text-muted-foreground">{t('professorsHint')}</p>
+              </FormItem>
+            </FormField>
           )}
+
+          {/* Submit Error */}
+          {errors.submit && <FormMessage>{errors.submit}</FormMessage>}
 
           {/* Actions */}
           <div className="flex items-center justify-end space-x-2 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={isLoading}
-            >
+            <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
               {t('cancel')}
             </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-            >
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? (course ? t('updating') : t('creating')) : (course ? t('update') : t('create'))}
             </Button>
           </div>
