@@ -48,39 +48,58 @@
     "title": "Professor AI Agent",
     "description": "Your personal AI assistant for course material feedback",
     "noAgent": {
-      "title": "No AI Agent",
       "message": "You don't have an AI agent yet. Please contact your university admin to create one for you.",
       "adminOnly": "Only administrators can create professor AI agents."
     },
-    "loadError": "Failed to load agent information.",
-    "info": {
-      "language": "Language",
-      "aiModel": "AI Model",
-      "status": "Status",
-      "default": "Default",
+    "agentInfo": {
+      "title": "Agent Information",
+      "language": "Language:",
+      "languagePortuguese": "Portuguese (Brazil)",
+      "languageEnglish": "English",
+      "languageSpanish": "Spanish",
+      "aiModel": "AI Model:",
+      "defaultModel": "Default",
+      "status": "Status:",
       "active": "Active",
-      "inactive": "Inactive",
-      "portuguese": "Portuguese (Brazil)",
-      "english": "English",
-      "spanish": "Spanish"
+      "inactive": "Inactive"
     },
-    "keys": {
-      "title": "Access Keys",
-      "description": "Generate keys to access your AI agent via the widget",
-      "newButton": "New key",
-      "empty": "No keys yet. Create one to access your AI agent.",
-      "instructions": "Click on a key to access the widget and get AI feedback on your course materials.",
-      "createSuccess": "key created successfully!",
-      "createError": "Failed to CREATE KEY",
-      "copySuccess": "key copied to clipboard!",
-      "copyError": "Failed to copy key"
+    "tokens": {
+      "title": "Access Tokens",
+      "description": "Generate tokens to access your AI agent via the widget",
+      "newButton": "New Token",
+      "createSuccess": "Token created successfully!",
+      "createError": "Failed to create token",
+      "copySuccess": "Token copied to clipboard!",
+      "copyError": "Failed to copy token",
+      "noTokens": "No tokens yet. Create one to access your AI agent.",
+      "clickToAccess": "Click on a token to access the widget and get AI feedback on your course materials.",
+      "name": "Name",
+      "createdAt": "Created",
+      "expires": "Expires",
+      "expired": "Expired",
+      "noExpiry": "No expiry",
+      "openWidget": "Open Widget",
+      "copy": "Copy",
+      "deleteSuccess": "Token deleted",
+      "deleteError": "Failed to delete token"
+    },
+    "files": {
+      "title": "Reference Files",
+      "description": "Upload extra files for your AI agent to use as reference in all conversations",
+      "uploadButton": "Upload File",
+      "noFiles": "No files uploaded yet. Upload files to give your agent extra knowledge.",
+      "uploadSuccess": "File uploaded successfully!",
+      "uploadError": "Failed to upload file",
+      "deleteSuccess": "File deleted",
+      "deleteError": "Failed to delete file",
+      "processing": "Processing..."
     },
     "howToUse": {
       "title": "How to Use",
-      "step1": "1. Create an access key above",
-      "step2": "2. Click on the key to open the widget",
+      "step1": "1. Create an access token above",
+      "step2": "2. Click \"Open Widget\" to open the AI assistant in a new tab",
       "step3": "3. Ask questions about your course materials and get AI-powered feedback",
-      "step4": "4. The AI will analyze your content and provide suggestions for improvement"
+      "step4": "4. Share the widget URL with colleagues using the token"
     }
   },
   "courses": {

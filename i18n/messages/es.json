@@ -1409,14 +1409,34 @@
       "copySuccess": "¡Token copiado al portapapeles!",
       "copyError": "Error al copiar token",
       "noTokens": "No hay tokens aún. Crea uno para acceder a tu agente de IA.",
-      "clickToAccess": "Haz clic en un token para acceder al widget y obtener retroalimentación de IA sobre tus materiales del curso."
+      "clickToAccess": "Haz clic en un token para acceder al widget y obtener retroalimentación de IA sobre tus materiales del curso.",
+      "name": "Nombre",
+      "createdAt": "Creado",
+      "expires": "Vence",
+      "expired": "Expirado",
+      "noExpiry": "Sin vencimiento",
+      "openWidget": "Abrir Widget",
+      "copy": "Copiar",
+      "deleteSuccess": "Token eliminado",
+      "deleteError": "Error al eliminar token"
+    },
+    "files": {
+      "title": "Archivos de Referencia",
+      "description": "Sube archivos extra para que tu agente de IA los use como referencia en todas las conversaciones",
+      "uploadButton": "Subir Archivo",
+      "noFiles": "Ningún archivo subido aún. Sube archivos para dar conocimiento extra a tu agente.",
+      "uploadSuccess": "¡Archivo subido con éxito!",
+      "uploadError": "Error al subir archivo",
+      "deleteSuccess": "Archivo eliminado",
+      "deleteError": "Error al eliminar archivo",
+      "processing": "Procesando..."
     },
     "howToUse": {
       "title": "Cómo Usar",
       "step1": "1. Crea un token de acceso arriba",
-      "step2": "2. Haz clic en el token para abrir el widget",
+      "step2": "2. Haz clic en \"Abrir Widget\" para abrir el asistente de IA en una nueva pestaña",
       "step3": "3. Haz preguntas sobre tus materiales del curso y recibe retroalimentación impulsada por IA",
-      "step4": "4. La IA analizará tu contenido y proporcionará sugerencias de mejora"
+      "step4": "4. Comparte la URL del widget con colegas usando el token"
     }
   },
   "tokens": {

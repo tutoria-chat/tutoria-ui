@@ -494,6 +494,7 @@ export interface ProfessorAgent {
   aiModelDisplayName?: string;
   isActive: boolean;
   tokensCount?: number;
+  tokens?: ProfessorAgentToken[];
   createdAt: string;
   updatedAt?: string;
 }
@@ -547,6 +548,19 @@ export interface ProfessorAgentStatus {
   agentName?: string;
   agentIsActive?: boolean;
   agentCreatedAt?: string;
+}
+
+export interface ProfessorAgentFile {
+  id: number;
+  name: string;
+  fileType: string;
+  fileName?: string;
+  contentType?: string;
+  fileSize?: number;
+  isActive: boolean;
+  processingStatus?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Student Types

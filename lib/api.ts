@@ -28,6 +28,7 @@ import type {
   ProfessorAgentToken,
   ProfessorAgentTokenCreate,
   ProfessorAgentStatus,
+  ProfessorAgentFile,
   Student,
   StudentCreate,
   StudentUpdate,
@@ -1189,6 +1190,18 @@ class TutoriaAPIClient {
 
   async deactivateProfessorAgent(agentId: number): Promise<void> {
     return this.patch(`/api/professoragents/${agentId}/deactivate`, {});
+  }
+
+  async getProfessorAgentFiles(agentId: number): Promise<ProfessorAgentFile[]> {
+    return this.get(`/api/professoragents/${agentId}/files`);
+  }
+
+  async uploadProfessorAgentFile(agentId: number, formData: FormData): Promise<ProfessorAgentFile> {
+    return this.post(`/api/professoragents/${agentId}/files`, formData, { isFormData: true });
+  }
+
+  async deleteProfessorAgentFile(agentId: number, fileId: number): Promise<void> {
+    return this.delete(`/api/professoragents/${agentId}/files/${fileId}`);
   }
 
   // AI Tutor endpoints

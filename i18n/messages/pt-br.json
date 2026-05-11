@@ -1409,14 +1409,34 @@
       "copySuccess": "Token copiado para a área de transferência!",
       "copyError": "Falha ao copiar token",
       "noTokens": "Nenhum token ainda. Crie um para acessar seu agente de IA.",
-      "clickToAccess": "Clique em um token para acessar o widget e obter feedback de IA sobre seus materiais didáticos."
+      "clickToAccess": "Clique em um token para acessar o widget e obter feedback de IA sobre seus materiais didáticos.",
+      "name": "Nome",
+      "createdAt": "Criado em",
+      "expires": "Expira",
+      "expired": "Expirado",
+      "noExpiry": "Sem expiração",
+      "openWidget": "Abrir Widget",
+      "copy": "Copiar",
+      "deleteSuccess": "Token excluído",
+      "deleteError": "Falha ao excluir token"
+    },
+    "files": {
+      "title": "Arquivos de Referência",
+      "description": "Envie arquivos extras para seu agente de IA usar como referência em todas as conversas",
+      "uploadButton": "Enviar Arquivo",
+      "noFiles": "Nenhum arquivo enviado ainda. Envie arquivos para dar conhecimento extra ao seu agente.",
+      "uploadSuccess": "Arquivo enviado com sucesso!",
+      "uploadError": "Falha ao enviar arquivo",
+      "deleteSuccess": "Arquivo excluído",
+      "deleteError": "Falha ao excluir arquivo",
+      "processing": "Processando..."
     },
     "howToUse": {
       "title": "Como Usar",
       "step1": "1. Crie um token de acesso acima",
-      "step2": "2. Clique no token para abrir o widget",
+      "step2": "2. Clique em \"Abrir Widget\" para abrir o assistente de IA em uma nova aba",
       "step3": "3. Faça perguntas sobre seus materiais didáticos e receba feedback baseado em IA",
-      "step4": "4. A IA analisará seu conteúdo e fornecerá sugestões de melhoria"
+      "step4": "4. Compartilhe a URL do widget com colegas usando o token"
     }
   },
   "tokens": {
