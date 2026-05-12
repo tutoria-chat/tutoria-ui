@@ -964,6 +964,25 @@
       "maxStudentsHelp": "Set to 0 for unlimited students",
       "hasAssignmentsLabel": "Assignments Feature",
       "hasAssignmentsHelp": "Allow professors to publish assignments with deadlines and AI-powered student feedback"
+    },
+    "appearance": {
+      "title": "Widget Appearance",
+      "description": "Customize the chat widget branding for {name}",
+      "buttonLabel": "Appearance",
+      "primaryColorLabel": "Primary Color",
+      "primaryColorHelp": "Used for the send button and user message bubbles",
+      "secondaryColorLabel": "Secondary Color",
+      "secondaryColorHelp": "Used for agent message bubbles",
+      "defaultThemeLabel": "Default Theme",
+      "defaultThemeHelp": "The initial color scheme shown to students when the widget loads",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "themeAuto": "Auto (system)",
+      "resetDefaults": "Reset to Defaults",
+      "save": "Save Appearance",
+      "saving": "Saving...",
+      "saveSuccess": "Appearance saved successfully",
+      "saveError": "Failed to save appearance settings"
     }
   },
   "professors": {

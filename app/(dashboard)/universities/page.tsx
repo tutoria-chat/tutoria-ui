@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Edit, Trash2, Eye, Building2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Building2, Palette } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { formatDateShort } from '@/lib/utils';
 import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
+import { UniversityAppearanceModal } from '@/components/universities/UniversityAppearanceModal';
 
 export default function UniversitiesPage() {
   const { user } = useAuth();
@@ -32,6 +33,8 @@ export default function UniversitiesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [appearanceModalOpen, setAppearanceModalOpen] = useState(false);
+  const [selectedUniversityForAppearance, setSelectedUniversityForAppearance] = useState<University | null>(null);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
@@ -102,6 +105,18 @@ export default function UniversitiesPage() {
           <Button
             variant="ghost"
             size="sm"
+            title={t('appearance.buttonLabel')}
+            onClick={() => {
+              setSelectedUniversityForAppearance(university);
+              setAppearanceModalOpen(true);
+            }}
+          >
+            <Palette className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => handleDelete(university.id)}
           >
             <Trash2 className="h-4 w-4 text-destructive" />
@@ -129,6 +144,24 @@ export default function UniversitiesPage() {
         }
       }
     });
+  };
+
+  const handleAppearanceSave = async (data: {
+    widgetPrimaryColor: string | null;
+    widgetSecondaryColor: string | null;
+    widgetDefaultTheme: string;
+  }) => {
+    if (!selectedUniversityForAppearance) return;
+    try {
+      const { apiClient } = await import('@/lib/api');
+      await apiClient.updateUniversityAppearance(selectedUniversityForAppearance.id, data);
+      toast.success(t('appearance.saveSuccess'));
+      refetch();
+    } catch (error) {
+      console.error('Error saving university appearance:', error);
+      toast.error(t('appearance.saveError'));
+      throw error; // re-throw so modal stays open
+    }
   };
 
   const handleSortChange = (column: string) => {
@@ -217,6 +250,22 @@ export default function UniversitiesPage() {
       />
       {dialog}
     </div>
+
+    {selectedUniversityForAppearance && (
+      <UniversityAppearanceModal
+        open={appearanceModalOpen}
+        onClose={() => {
+          setAppearanceModalOpen(false);
+          setSelectedUniversityForAppearance(null);
+        }}
+        universityId={selectedUniversityForAppearance.id}
+        universityName={selectedUniversityForAppearance.name}
+        initialPrimaryColor={selectedUniversityForAppearance.widgetPrimaryColor}
+        initialSecondaryColor={selectedUniversityForAppearance.widgetSecondaryColor}
+        initialDefaultTheme={selectedUniversityForAppearance.widgetDefaultTheme}
+        onSave={handleAppearanceSave}
+      />
+    )}
     </SuperAdminOnly>
   );
 }

@@ -157,6 +157,9 @@ export interface University {
   coursesCount?: number;
   professorsCount?: number;
   studentsCount?: number;
+  widgetPrimaryColor?: string;
+  widgetSecondaryColor?: string;
+  widgetDefaultTheme?: string;
 }
 
 export interface UniversityCreate {

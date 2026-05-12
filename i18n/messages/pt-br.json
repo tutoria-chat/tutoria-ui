@@ -906,6 +906,25 @@
       "maxStudentsHelp": "Defina 0 para estudantes ilimitados",
       "hasAssignmentsLabel": "Funcionalidade de Atividades",
       "hasAssignmentsHelp": "Permite que professores publiquem atividades com prazos e feedback de IA para os alunos"
+    },
+    "appearance": {
+      "title": "Aparência do Widget",
+      "description": "Personalize o visual do widget de chat para {name}",
+      "buttonLabel": "Aparência",
+      "primaryColorLabel": "Cor Primária",
+      "primaryColorHelp": "Usada para o botão de envio e as bolhas de mensagem do estudante",
+      "secondaryColorLabel": "Cor Secundária",
+      "secondaryColorHelp": "Usada para as bolhas de mensagem do agente",
+      "defaultThemeLabel": "Tema Padrão",
+      "defaultThemeHelp": "O esquema de cores inicial exibido aos estudantes quando o widget carrega",
+      "themeLight": "Claro",
+      "themeDark": "Escuro",
+      "themeAuto": "Auto (sistema)",
+      "resetDefaults": "Redefinir para Padrões",
+      "save": "Salvar Aparência",
+      "saving": "Salvando...",
+      "saveSuccess": "Aparência salva com sucesso",
+      "saveError": "Falha ao salvar configurações de aparência"
     }
   },
   "professors": {
