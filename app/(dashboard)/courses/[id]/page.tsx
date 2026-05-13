@@ -178,7 +178,13 @@ export default function CourseDetailsPage() {
     }
   }, [courseId, studentPage, studentLimit, studentSearch]);
 
-  // Load students when tab is active
+  // Load student count on mount so the stat card isn't stuck at 0
+  useEffect(() => {
+    loadStudents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Reload when tab becomes active, pagination changes, or search changes
   useEffect(() => {
     if (activeTab === 'students') {
       loadStudents();
