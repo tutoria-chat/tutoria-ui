@@ -24,12 +24,20 @@ export default function TokensPage() {
   const t = useTranslations('accessKeys');
   const tCommon = useTranslations('common');
 
-  // Build API URL with university filter for professors
-  const universityFilter = user?.universityId && user.role !== 'super_admin' ? `?universityId=${user.universityId}` : '';
-  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/api/moduleaccesstokens/${universityFilter}`);
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+
+  // Build API URL — server-side pagination, filtering and search
+  const buildApiUrl = () => {
+    const params = new URLSearchParams();
+    params.set('page', page.toString());
+    params.set('size', limit.toString());
+    if (searchTerm) params.set('search', searchTerm);
+    if (user?.universityId && user.role !== 'super_admin') params.set('universityId', user.universityId.toString());
+    return `/api/moduleaccesstokens/?${params.toString()}`;
+  };
+  const { data: tokensResponse, loading, refetch } = useFetch<PaginatedResponse<ModuleAccessToken>>(buildApiUrl());
   const [sortColumn, setSortColumn] = useState<string | null>('createdAt');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('desc');
 
@@ -269,34 +277,23 @@ export default function TokensPage() {
   ];
 
   const tokens = tokensResponse?.items || [];
+  const serverTotal = tokensResponse?.total ?? 0;
 
-  const filteredTokens = tokens.filter(token => {
-    const matchesSearch = token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (token.description && token.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (token.moduleName && token.moduleName.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesSearch;
-  });
-
-  const sortedTokens = [...filteredTokens].sort((a, b) => {
+  // Client-side sort of the current page returned by the server
+  const sortedTokens = [...tokens].sort((a, b) => {
     if (!sortColumn || !sortDirection) return 0;
-
     const aValue = a[sortColumn as keyof ModuleAccessToken];
     const bValue = b[sortColumn as keyof ModuleAccessToken];
-
     if (aValue === null || aValue === undefined) return 1;
     if (bValue === null || bValue === undefined) return -1;
-
     const result = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
     return sortDirection === 'asc' ? result : -result;
   });
 
-  const startIndex = (page - 1) * limit;
-  const paginatedTokens = sortedTokens.slice(startIndex, startIndex + limit);
-
   const stats = {
-    total: filteredTokens.length,
-    active: filteredTokens.filter(t => t.isActive).length,
-    expiringSoon: filteredTokens.filter(t => {
+    total: serverTotal,
+    active: tokens.filter(t => t.isActive).length,
+    expiringSoon: tokens.filter(t => {
       if (!t.expiresAt) return false;
       const daysUntilExpiry = Math.floor((new Date(t.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
       return daysUntilExpiry <= 30 && daysUntilExpiry > 0;
@@ -376,20 +373,20 @@ export default function TokensPage() {
         </Alert>
 
         <DataTable
-          data={paginatedTokens}
+          data={sortedTokens}
           columns={columns}
           loading={loading}
           search={{
             value: searchTerm,
             placeholder: t('searchPlaceholder'),
-            onSearchChange: setSearchTerm
+            onSearchChange: (value) => { setSearchTerm(value); setPage(1); }
           }}
           pagination={{
             page,
             limit,
-            total: sortedTokens.length,
+            total: serverTotal,
             onPageChange: setPage,
-            onLimitChange: setLimit
+            onLimitChange: (newLimit) => { setLimit(newLimit); setPage(1); }
           }}
           sorting={{
             column: sortColumn,
