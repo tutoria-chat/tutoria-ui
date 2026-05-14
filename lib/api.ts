@@ -667,6 +667,9 @@ class TutoriaAPIClient {
     if (data.keywords?.length) formData.append('Keywords', data.keywords.join(','));
     formData.append('File', data.file);
     if (data.rubricFile) formData.append('RubricFile', data.rubricFile);
+    if (data.contextFiles?.length) {
+      data.contextFiles.forEach(f => formData.append('ContextFiles', f));
+    }
     return this.post('/api/assignments', formData, { isFormData: true });
   }
 

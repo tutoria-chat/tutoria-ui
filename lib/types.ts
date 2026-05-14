@@ -1401,6 +1401,14 @@ export interface StudentImportJob {
 }
 
 // Assignments
+export interface AssignmentContextFile {
+  id: number;
+  originalFileName: string;
+  fileSizeBytes: number;
+  contentType: string;
+  downloadUrl?: string;
+}
+
 export interface Assignment {
   id: number;
   moduleId: number;
@@ -1417,6 +1425,7 @@ export interface Assignment {
   createdByUserId: number;
   downloadUrl?: string;
   rubricDownloadUrl?: string;
+  contextFiles: AssignmentContextFile[];
   createdAt: string;
   updatedAt: string;
 }
@@ -1429,6 +1438,7 @@ export interface AssignmentCreate {
   keywords?: string[];
   file: globalThis.File;
   rubricFile?: globalThis.File;
+  contextFiles?: globalThis.File[];
 }
 
 export interface AssignmentUpdate {

@@ -133,12 +133,13 @@ export default function ModuleDetailsPage() {
   const [assignmentDueDate, setAssignmentDueDate] = useState('');
   const [assignmentKeywords, setAssignmentKeywords] = useState<string[]>([]);
   const [assignmentKeywordInput, setAssignmentKeywordInput] = useState('');
+  const [assignmentFiles, setAssignmentFiles] = useState<globalThis.File[]>([]);
   const [assignmentFile, setAssignmentFile] = useState<globalThis.File | null>(null);
   const [assignmentRubricFile, setAssignmentRubricFile] = useState<globalThis.File | null>(null);
   const [isSavingAssignment, setIsSavingAssignment] = useState(false);
   const [deleteAssignmentConfirmOpen, setDeleteAssignmentConfirmOpen] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<number | null>(null);
-  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState<boolean | null>(null);
+  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState(false);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -464,6 +465,7 @@ export default function ModuleDetailsPage() {
     setAssignmentKeywordInput('');
     setAssignmentFile(null);
     setAssignmentRubricFile(null);
+    setAssignmentFiles([]);
     setAssignmentFormOpen(true);
   };
 
@@ -476,6 +478,7 @@ export default function ModuleDetailsPage() {
     setAssignmentKeywordInput('');
     setAssignmentFile(null);
     setAssignmentRubricFile(null);
+    setAssignmentFiles([]);
     setAssignmentFormOpen(true);
   };
 
@@ -522,6 +525,7 @@ export default function ModuleDetailsPage() {
           keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
           file: assignmentFile,
           rubricFile: assignmentRubricFile || undefined,
+          contextFiles: assignmentFiles.length ? assignmentFiles : undefined,
         });
         toast.success(tA('toastCreated'));
       }
@@ -1424,6 +1428,12 @@ export default function ModuleDetailsPage() {
                               ))}
                             </div>
                           )}
+                          {a.contextFiles?.length > 0 && (
+                            <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground">
+                              <FileText className="h-3 w-3 shrink-0" />
+                              <span>{tA('contextFilesCount', { count: a.contextFiles.length })}</span>
+                            </div>
+                          )}
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
                           <Switch
@@ -1528,38 +1538,57 @@ export default function ModuleDetailsPage() {
               <p className="text-xs text-muted-foreground mt-1">{tA('fieldKeywordsHelp')}</p>
             </div>
 
-            {/* Assignment file — only on create */}
+            {/* Files — only on create */}
             {!editingAssignment && (
-              <div>
-                <label className="block text-sm font-medium mb-1">{tA('fieldFile')}</label>
-                <input
-                  type="file"
-                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
-                  onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
-                />
-                {assignmentFile && (
-                  <p className="text-xs text-muted-foreground mt-1">{assignmentFile.name}</p>
-                )}
-              </div>
-            )}
+              <>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{tA('fieldFile')}</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
+                    onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
+                  />
+                  {assignmentFile && (
+                    <p className="text-xs text-muted-foreground mt-1">{assignmentFile.name}</p>
+                  )}
+                </div>
 
-            {/* Rubric file — only on create */}
-            {!editingAssignment && (
-              <div>
-                <label className="block text-sm font-medium mb-1">{tA('fieldRubric')}</label>
-                <input
-                  type="file"
-                  accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
-                  onChange={(e) => setAssignmentRubricFile(e.target.files?.[0] || null)}
-                />
-                {assignmentRubricFile ? (
-                  <p className="text-xs text-muted-foreground mt-1">{assignmentRubricFile.name}</p>
-                ) : (
-                  <p className="text-xs text-muted-foreground mt-1">{tA('fieldRubricHelp')}</p>
-                )}
-              </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">{tA('fieldRubric')}</label>
+                  <input
+                    type="file"
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
+                    onChange={(e) => setAssignmentRubricFile(e.target.files?.[0] || null)}
+                  />
+                  {assignmentRubricFile ? (
+                    <p className="text-xs text-muted-foreground mt-1">{assignmentRubricFile.name}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground mt-1">{tA('fieldRubricHelp')}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">{tA('fieldContextFiles')}</label>
+                  <input
+                    type="file"
+                    multiple
+                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
+                    onChange={(e) => setAssignmentFiles(e.target.files ? Array.from(e.target.files) : [])}
+                  />
+                  {assignmentFiles.length > 0 ? (
+                    <ul className="mt-1 space-y-0.5">
+                      {assignmentFiles.map((f, i) => (
+                        <li key={i} className="text-xs text-muted-foreground">• {f.name}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-xs text-muted-foreground mt-1">{tA('fieldContextFilesHelp')}</p>
+                  )}
+                </div>
+              </>
             )}
 
             <div className="flex justify-end gap-2 pt-2 border-t">
