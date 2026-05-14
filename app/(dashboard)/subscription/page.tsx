@@ -87,7 +87,9 @@ export default function SubscriptionPage() {
   const [isCanceling, setIsCanceling] = useState(false);
 
   const { data: subscription, loading: loadingSub } = useFetch<Subscription>('/api/subscriptions/current');
-  const { data: limits, loading: loadingLimits } = useFetch<UniversityLimits>('/api/subscriptions/limits');
+  const { data: limits, loading: loadingLimits } = useFetch<UniversityLimits>(
+    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
+  );
   const { data: plans, loading: loadingPlans } = useFetch<Plan[]>('/api/plans/');
 
   const breadcrumbs: BreadcrumbItem[] = [

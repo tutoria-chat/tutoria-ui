@@ -422,13 +422,14 @@ export default function ModuleDetailsPage() {
   }, [moduleId]);
 
   const loadUniversityLimits = useCallback(async () => {
+    if (user?.role === 'super_admin') return; // super_admin has no university
     try {
       const limits = await apiClient.getUniversityLimits();
       setUniversityLimits(limits);
     } catch (err) {
       console.error('Failed to load university limits:', err);
     }
-  }, []);
+  }, [user?.role]);
 
   const loadAssignments = useCallback(async () => {
     setAssignmentsLoading(true);

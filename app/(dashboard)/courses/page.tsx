@@ -64,9 +64,9 @@ export default function CoursesPage() {
   // API call to get courses
   const { data: coursesResponse, loading, error } = useFetch<PaginatedResponse<Course>>(buildApiUrl());
 
-  // Plan limits — block create button when at limit
+  // Plan limits — block create button when at limit (super_admin has no university, skip)
   const { data: limits } = useFetch<UniversityLimits>(
-    '/api/subscriptions/limits'
+    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
   );
   const courseLimitReached = limits ? limits.currentCourses >= limits.maxCourses : false;
   const overLimitCourseIds = new Set(limits?.overLimitCourseIds || []);

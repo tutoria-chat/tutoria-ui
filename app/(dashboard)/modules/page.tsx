@@ -58,9 +58,9 @@ export default function ModulesPage() {
   // API call to get modules (paginated for display)
   const { data: modulesResponse, loading, error } = useFetch<PaginatedResponse<Module>>(apiUrl);
 
-  // Plan limits — block create button when at limit
+  // Plan limits — block create button when at limit (super_admin has no university, skip)
   const { data: limits } = useFetch<UniversityLimits>(
-    '/api/subscriptions/limits'
+    user?.role !== 'super_admin' ? '/api/subscriptions/limits' : null
   );
   const moduleLimitReached = limits ? limits.currentModules >= limits.maxModules : false;
   const overLimitModuleIds = new Set(limits?.overLimitModuleIds || []);
