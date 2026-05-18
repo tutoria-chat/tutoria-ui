@@ -537,7 +537,7 @@
         "fieldInstructionsPlaceholder": "Describe los requisitos de la actividad...",
         "fieldDueDate": "Fecha de Entrega",
         "fieldKeywords": "Palabras clave (opcional)",
-        "fieldKeywordsPlaceholder": "Escribe y presiona coma o Enter para agregar...",
+        "fieldKeywordsPlaceholder": "Escribe y presiona coma, punto y coma, punto o Enter para agregar...",
         "fieldKeywordsHelp": "La IA se enfocará en estos aspectos al evaluar el trabajo del estudiante.",
         "fieldFile": "Archivo de Actividad (PDF o DOCX, máx. 30 MB)",
         "fieldRubric": "Rúbrica de Evaluación (opcional, PDF o DOCX, máx. 30 MB)",

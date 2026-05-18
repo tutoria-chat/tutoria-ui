@@ -537,7 +537,7 @@
         "fieldInstructionsPlaceholder": "Descreva os requisitos da atividade...",
         "fieldDueDate": "Data de Entrega",
         "fieldKeywords": "Palavras-chave (opcional)",
-        "fieldKeywordsPlaceholder": "Digite e pressione vírgula ou Enter para adicionar...",
+        "fieldKeywordsPlaceholder": "Digite e pressione vírgula, ponto e vírgula, ponto ou Enter para adicionar...",
         "fieldKeywordsHelp": "A IA irá focar nestes aspectos ao avaliar o trabalho do aluno.",
         "fieldFile": "Arquivo da Atividade (PDF ou DOCX, máx. 30 MB)",
         "fieldRubric": "Rubrica de Avaliação (opcional, PDF ou DOCX, máx. 30 MB)",

@@ -595,7 +595,7 @@
         "fieldInstructionsPlaceholder": "Describe the assignment requirements...",
         "fieldDueDate": "Due Date",
         "fieldKeywords": "Keywords (optional)",
-        "fieldKeywordsPlaceholder": "Type and press comma or Enter to add...",
+        "fieldKeywordsPlaceholder": "Type and press comma, semicolon, period, or Enter to add...",
         "fieldKeywordsHelp": "The AI will focus on these aspects when evaluating the student's work.",
         "fieldFile": "Assignment File (PDF or DOCX, max 30 MB)",
         "fieldRubric": "Evaluation Rubric (optional, PDF or DOCX, max 30 MB)",

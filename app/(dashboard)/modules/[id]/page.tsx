@@ -483,7 +483,7 @@ export default function ModuleDetailsPage() {
   };
 
   const addKeyword = (raw: string) => {
-    const kw = raw.trim().replace(/,+$/, '').trim();
+    const kw = raw.trim().replace(/[,;.]+$/, '').trim();
     if (kw && !assignmentKeywords.includes(kw)) {
       setAssignmentKeywords(prev => [...prev, kw]);
     }
@@ -491,7 +491,7 @@ export default function ModuleDetailsPage() {
   };
 
   const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ',' || e.key === 'Enter') {
+    if (e.key === ',' || e.key === ';' || e.key === '.' || e.key === 'Enter') {
       e.preventDefault();
       addKeyword(assignmentKeywordInput);
     } else if (e.key === 'Backspace' && assignmentKeywordInput === '' && assignmentKeywords.length > 0) {
@@ -1526,7 +1526,7 @@ export default function ModuleDetailsPage() {
                   value={assignmentKeywordInput}
                   onChange={(e) => {
                     const v = e.target.value;
-                    if (v.endsWith(',')) { addKeyword(v); }
+                    if (v.endsWith(',') || v.endsWith(';') || v.endsWith('.')) { addKeyword(v); }
                     else { setAssignmentKeywordInput(v); }
                   }}
                   onKeyDown={handleKeywordKeyDown}
