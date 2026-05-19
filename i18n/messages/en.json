@@ -262,7 +262,7 @@
         "emptyImportHint": "Import students from a CSV or Excel file to get started.",
         "importButton": "Import Students",
         "importTitle": "Import Students to {course}",
-        "importDescription": "Upload a CSV or XLSX file with student data. Required columns: email. Optional columns: matricula, first_name/nome, last_name/sobrenome.",
+        "importDescription": "Upload a CSV or XLSX file with student data. Required columns: email, matricula. Optional columns: first_name/nome, last_name/sobrenome.",
         "columns": {
           "name": "Name",
           "email": "Email",
@@ -1428,7 +1428,7 @@
     "import": {
       "button": "Import Students",
       "title": "Import Students from File",
-      "description": "Upload a CSV or XLSX file with student data. Required columns: email. Optional columns: matricula, first_name/nome, last_name/sobrenome.",
+      "description": "Upload a CSV or XLSX file with student data. Required columns: email, matricula. Optional columns: first_name/nome, last_name/sobrenome.",
       "selectCourse": "Select Course",
       "selectCoursePlaceholder": "Choose a course to enroll students in...",
       "selectFile": "Select File",

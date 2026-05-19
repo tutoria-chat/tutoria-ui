@@ -204,7 +204,7 @@
         "emptyImportHint": "Importa estudiantes desde un archivo CSV o Excel para comenzar.",
         "importButton": "Importar Estudiantes",
         "importTitle": "Importar Estudiantes a {course}",
-        "importDescription": "Sube un archivo CSV o XLSX con datos de estudiantes. Columnas requeridas: email. Columnas opcionales: matrícula, nombre, apellido.",
+        "importDescription": "Sube un archivo CSV o XLSX con datos de estudiantes. Columnas requeridas: email, matrícula. Columnas opcionales: nombre, apellido.",
         "columns": {
           "name": "Nombre",
           "email": "Email",
