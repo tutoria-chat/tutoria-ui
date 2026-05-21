@@ -71,16 +71,15 @@ export default function EditProfessorPage() {
         universityId: data.universityId,
       });
 
-      // Prefer dedicated courses endpoint; fall back to professor data fields
-      const courseIds =
-        coursesResult.courseIds.length > 0
+      // Prefer dedicated courses endpoint; fall back to professor data fields.
+      // Guard against casing mismatches: backend previously returned course_ids (snake_case).
+      const resolvedCourseIds: number[] =
+        coursesResult.courseIds?.length > 0
           ? coursesResult.courseIds
-          : data.assignedCourseIds ?? data.assignedCourses?.map(c => c.id) ?? [];
+          : data.assignedCourseIds ?? data.assignedCourses?.map((c) => c.id) ?? [];
 
-      if (courseIds.length > 0) {
-        setAssignedCourseIds(courseIds);
-        setOriginalAssignedCourseIds(courseIds);
-      }
+      setAssignedCourseIds(resolvedCourseIds);
+      setOriginalAssignedCourseIds(resolvedCourseIds);
 
       // Load courses for this professor's university
       if (data.universityId) {
@@ -130,13 +129,6 @@ export default function EditProfessorPage() {
     }
   };
 
-  const toggleCourse = (courseId: number) => {
-    setAssignedCourseIds(prev =>
-      prev.includes(courseId)
-        ? prev.filter(id => id !== courseId)
-        : [...prev, courseId]
-    );
-  };
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -372,17 +364,7 @@ export default function EditProfessorPage() {
                     }))}
                     selected={assignedCourseIds.map(String)}
                     onChange={(selected) => {
-                      const courseIds = selected.map(Number);
-                      courseIds.forEach((courseId) => {
-                        if (!assignedCourseIds.includes(courseId)) {
-                          toggleCourse(courseId);
-                        }
-                      });
-                      assignedCourseIds.forEach((courseId) => {
-                        if (!courseIds.includes(courseId)) {
-                          toggleCourse(courseId);
-                        }
-                      });
+                      setAssignedCourseIds(selected.map(Number));
                       if (errors.assignedCourses) {
                         setErrors((prev) => ({ ...prev, assignedCourses: '' }));
                       }
