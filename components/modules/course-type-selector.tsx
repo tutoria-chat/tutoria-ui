@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useTranslations } from 'next-intl';
 import { type CourseType } from '@/lib/course-type-utils';
@@ -33,19 +33,19 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }
   const courseTypes: CourseTypeOption[] = [
     {
       id: 'MathLogic',
-      icon: <Calculator />,
+      icon: <Calculator className="h-5 w-5" />,
       name: t('mathLogic.name') || 'Mathematics & Logic',
       description: t('mathLogic.description') || 'Courses focused on mathematical reasoning, formulas, proofs, and logical problem-solving',
     },
     {
       id: 'Programming',
-      icon: <Code />,
+      icon: <Code className="h-5 w-5" />,
       name: t('programming.name') || 'Programming & Computer Science',
       description: t('programming.description') || 'Coding, algorithms, software development, and technical computer science topics',
     },
     {
       id: 'TheoryText',
-      icon: <BookText />,
+      icon: <BookText className="h-5 w-5" />,
       name: t('theoryText.name') || 'Theory & Humanities',
       description: t('theoryText.description') || 'Theoretical concepts, essays, humanities, literature, and text-heavy subjects',
     }
@@ -88,7 +88,7 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }
                 )}
 
                 <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 text-primary mb-3">
-                  {React.cloneElement(courseType.icon as React.ReactElement, { className: 'h-5 w-5' })}
+                  {courseType.icon}
                 </div>
 
                 <h4 className="font-semibold text-sm mb-1">{courseType.name}</h4>
