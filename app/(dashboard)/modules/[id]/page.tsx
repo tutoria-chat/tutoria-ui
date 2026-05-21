@@ -1792,17 +1792,36 @@ export default function ModuleDetailsPage() {
           </DialogHeader>
 
           {/* Tips for better transcription */}
-          <Alert className="border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
-            <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <AlertDescription className="text-sm text-blue-900 dark:text-blue-100">
-              <p className="font-medium mb-2">{t('youtubeTranscriptionTips') || 'Tips for Best Results:'}</p>
-              <ul className="space-y-1 ml-4 list-disc text-blue-800 dark:text-blue-200">
-                <li>{t('enableYoutubeTranscripts') || 'Enable subtitles/transcripts on your video for more accurate results'}</li>
-                <li>{t('avoidRegionLocks') || 'Avoid region-restricted videos when possible for faster processing'}</li>
-                <li>{t('publicVideos') || 'Use public or unlisted videos (private videos cannot be processed)'}</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
+          <div className="rounded-lg border border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+              <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">
+                {t('youtubeTranscriptionTips') || 'Tips for a Successful Transcription'}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="space-y-1.5">
+                <p className="font-medium text-green-700 dark:text-green-400">{t('youtubeTranscriptionWorksTitle') || 'What works'}</p>
+                <ul className="space-y-1 text-blue-800 dark:text-blue-200">
+                  <li className="flex gap-1.5"><span className="text-green-600 shrink-0">✓</span>{t('tipPublicUnlisted') || 'Public or Unlisted videos'}</li>
+                  <li className="flex gap-1.5"><span className="text-green-600 shrink-0">✓</span>{t('tipCaptionsEnabled') || 'Captions/CC enabled — auto-generated or manual'}</li>
+                  <li className="flex gap-1.5"><span className="text-green-600 shrink-0">✓</span>{t('tipNormalLength') || 'Videos of any length'}</li>
+                </ul>
+              </div>
+              <div className="space-y-1.5">
+                <p className="font-medium text-red-600 dark:text-red-400">{t('youtubeTranscriptionFailsTitle') || "What won't work"}</p>
+                <ul className="space-y-1 text-blue-800 dark:text-blue-200">
+                  <li className="flex gap-1.5"><span className="text-red-500 shrink-0">✕</span>{t('tipPrivate') || "Private videos — they can't be accessed"}</li>
+                  <li className="flex gap-1.5"><span className="text-red-500 shrink-0">✕</span>{t('tipNoTranscripts') || 'Videos with captions disabled'}</li>
+                  <li className="flex gap-1.5"><span className="text-red-500 shrink-0">✕</span>{t('tipAgeRestricted') || 'Age-restricted or members-only content'}</li>
+                  <li className="flex gap-1.5"><span className="text-red-500 shrink-0">✕</span>{t('tipRegionLocked') || 'Region-locked videos'}</li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-xs text-blue-700 dark:text-blue-300 border-t border-blue-200 dark:border-blue-800 pt-2">
+              💡 {t('tipCaptionsWait') || "If you just uploaded the video, wait a few minutes for YouTube to generate auto-captions before adding it here."}
+            </p>
+          </div>
 
           <form onSubmit={handleAddYoutubeVideo} className="space-y-4">
             <div className="space-y-2">
