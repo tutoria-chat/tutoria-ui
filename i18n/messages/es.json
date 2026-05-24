@@ -571,7 +571,11 @@
         "toastSaveError": "Error al guardar la actividad",
         "toastDeleteError": "Error al eliminar la actividad",
         "toastPublishError": "Error al cambiar estado de publicación",
-        "fieldDueDatePlaceholder": "Selecciona fecha y hora"
+        "fieldDueDatePlaceholder": "Selecciona fecha y hora",
+        "courseAssignmentsTitle": "Otras Actividades del Curso",
+        "courseAssignmentsDescription": "Actividades publicadas de otros módulos en este curso. Solo lectura — gestionadas por sus respectivos módulos.",
+        "courseAssignmentsEmpty": "No hay actividades publicadas de otros módulos en este curso.",
+        "moduleLabel": "Módulo:"
       }
     },
     "edit": {

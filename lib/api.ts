@@ -650,8 +650,17 @@ class TutoriaAPIClient {
   }
 
   // Assignment endpoints
-  async getAssignments(moduleId: number, page = 1, size = 20): Promise<PaginatedResponse<Assignment>> {
-    return this.get('/api/assignments', { moduleId, page, size });
+  async getAssignments(moduleId: number, page?: number, size?: number): Promise<PaginatedResponse<Assignment>>;
+  async getAssignments(params: { courseId: number }): Promise<PaginatedResponse<Assignment>>;
+  async getAssignments(
+    moduleIdOrParams: number | { courseId: number },
+    page = 1,
+    size = 20,
+  ): Promise<PaginatedResponse<Assignment>> {
+    if (typeof moduleIdOrParams === 'object') {
+      return this.get('/api/assignments', { courseId: moduleIdOrParams.courseId });
+    }
+    return this.get('/api/assignments', { moduleId: moduleIdOrParams, page, size });
   }
 
   async getAssignment(id: number): Promise<Assignment> {

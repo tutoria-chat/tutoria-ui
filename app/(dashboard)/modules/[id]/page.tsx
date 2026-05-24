@@ -125,6 +125,7 @@ export default function ModuleDetailsPage() {
 
   // Assignments state
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [courseAssignments, setCourseAssignments] = useState<Assignment[]>([]);
   const [assignmentsLoading, setAssignmentsLoading] = useState(false);
   const [assignmentFormOpen, setAssignmentFormOpen] = useState(false);
   const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
@@ -438,6 +439,17 @@ export default function ModuleDetailsPage() {
       const data = await apiClient.getAssignments(moduleId);
       setAssignments(data.items);
       setAssignmentsFeatureEnabled(true);
+
+      // Also load published assignments from the rest of the course (read-only context)
+      if (module?.courseId) {
+        try {
+          const courseData = await apiClient.getAssignments({ courseId: module.courseId });
+          // Filter out assignments that belong to this module (already shown above)
+          setCourseAssignments(courseData.items.filter(a => a.moduleId !== moduleId));
+        } catch {
+          // Course-level fetch is best-effort — don't break the tab
+        }
+      }
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
       if (status === 400 || status === 403) {
@@ -451,7 +463,7 @@ export default function ModuleDetailsPage() {
     } finally {
       setAssignmentsLoading(false);
     }
-  }, [moduleId]);
+  }, [moduleId, module?.courseId]);
 
   useEffect(() => {
     loadQuizzes();
@@ -1463,6 +1475,68 @@ export default function ModuleDetailsPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* Read-only: published assignments from other modules in this course */}
+          {module?.courseId && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">{tA('courseAssignmentsTitle')}</CardTitle>
+                <CardDescription>{tA('courseAssignmentsDescription')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {assignmentsLoading ? (
+                  <div className="flex items-center justify-center py-6">
+                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                  </div>
+                ) : courseAssignments.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">{tA('courseAssignmentsEmpty')}</p>
+                ) : (
+                  <div className="space-y-3">
+                    {courseAssignments.map((a) => {
+                      const isPastDue = new Date(a.dueDate) < new Date();
+                      return (
+                        <div key={a.id} className="flex items-start gap-3 p-4 border rounded-lg bg-muted/20">
+                          <div className="space-y-1.5 flex-1 min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-medium truncate">{a.title}</span>
+                              <Badge variant="outline" className="text-xs shrink-0">{tA('badgePublished')}</Badge>
+                              {a.rubricOriginalFileName && (
+                                <Badge variant="outline" className="text-xs shrink-0 gap-1">
+                                  <FileCheck2 className="h-3 w-3" />
+                                  {tA('rubricIndicator')}
+                                </Badge>
+                              )}
+                            </div>
+                            {a.moduleName && (
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <BookOpen className="h-3 w-3 shrink-0" />
+                                <span>{tA('moduleLabel')} {a.moduleName}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <Calendar className="h-3 w-3 shrink-0" />
+                              <span className={isPastDue ? 'text-destructive font-medium' : ''}>
+                                {tA('dueLabel')} {formatDateTimeShort(a.dueDate)}
+                                {isPastDue && ` ${tA('pastDue')}`}
+                              </span>
+                            </div>
+                            {a.keywords?.length > 0 && (
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <Tag className="h-3 w-3 text-muted-foreground shrink-0" />
+                                {a.keywords.map(kw => (
+                                  <span key={kw} className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs">{kw}</span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
 

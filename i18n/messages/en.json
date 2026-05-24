@@ -629,7 +629,11 @@
         "toastSaveError": "Failed to save assignment",
         "toastDeleteError": "Failed to delete assignment",
         "toastPublishError": "Failed to update publish status",
-        "fieldDueDatePlaceholder": "Pick a date and time"
+        "fieldDueDatePlaceholder": "Pick a date and time",
+        "courseAssignmentsTitle": "Other Course Assignments",
+        "courseAssignmentsDescription": "Published assignments from other modules in this course. Read-only — managed by their respective modules.",
+        "courseAssignmentsEmpty": "No published assignments from other modules in this course.",
+        "moduleLabel": "Module:"
       }
     },
     "edit": {

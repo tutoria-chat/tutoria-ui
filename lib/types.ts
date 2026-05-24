@@ -1412,6 +1412,7 @@ export interface AssignmentContextFile {
 export interface Assignment {
   id: number;
   moduleId: number;
+  moduleName?: string;
   title: string;
   description?: string;
   dueDate: string;
