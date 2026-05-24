@@ -139,7 +139,7 @@ export default function ModuleDetailsPage() {
   const [isSavingAssignment, setIsSavingAssignment] = useState(false);
   const [deleteAssignmentConfirmOpen, setDeleteAssignmentConfirmOpen] = useState(false);
   const [assignmentToDelete, setAssignmentToDelete] = useState<number | null>(null);
-  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState(false);
+  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState<boolean | null>(null);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -441,9 +441,12 @@ export default function ModuleDetailsPage() {
     } catch (err: unknown) {
       const status = (err as { status?: number })?.status;
       if (status === 400 || status === 403) {
+        // Feature explicitly disabled for this university or access denied
         setAssignmentsFeatureEnabled(false);
       } else {
+        // Transient error (500, network, etc.) — don't hide the tab permanently
         console.error('Failed to load assignments:', err);
+        setAssignmentsFeatureEnabled(true);
       }
     } finally {
       setAssignmentsLoading(false);
@@ -1108,7 +1111,7 @@ export default function ModuleDetailsPage() {
               <Badge variant="secondary" className="ml-1 text-xs">{quizzes.length}</Badge>
             )}
           </TabsTrigger>
-          {assignmentsFeatureEnabled !== false && (
+          {assignmentsFeatureEnabled === true && (
             <TabsTrigger value="assignments" className="gap-2">
               <ClipboardList className="h-4 w-4" />
               {t('assignmentsTab')}
