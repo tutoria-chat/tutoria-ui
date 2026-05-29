@@ -173,7 +173,10 @@
       "saveError": "Failed to save course. Please try again.",
       "upgradePlan": "Upgrade Plan",
       "validationError": "Validation Error",
-      "validationErrorDesc": "Please check the form fields and fix the errors before saving."
+      "validationErrorDesc": "Please check the form fields and fix the errors before saving.",
+      "externalCourseIdLabel": "Platform Course ID",
+      "externalCourseIdPlaceholder": "e.g. 12345 or paste a URL",
+      "externalCourseIdHelp": "This ID must match your external platform's Course ID to enable automatic grading of written assessments."
     },
     "edit": {
       "title": "Edit Course",
@@ -207,7 +210,9 @@
       "tabs": {
         "modules": "Modules",
         "professors": "Professors",
-        "students": "Students"
+        "students": "Students",
+        "assignments": "Assignments",
+        "grading": "Test Grading"
       },
       "modulesTab": {
         "title": "Course Modules",
@@ -289,6 +294,38 @@
         "unenrollButton": "Unenroll from course",
         "unenrollSuccess": "Student unenrolled successfully!",
         "unenrollError": "Error unenrolling student"
+      },
+      "assignmentsTab": {
+        "title": "Course Assignments",
+        "description": "Published assignments from all modules in this course. Read-only.",
+        "openModule": "Open Module",
+        "empty": "No published assignments in this course yet."
+      },
+      "gradingTab": {
+        "title": "Test Grading",
+        "description": "Upload a JSON file with student answers to grade them automatically using AI.",
+        "uploadTitle": "Upload Answers",
+        "uploadAccept": "JSON file, max 10 MB",
+        "uploadButton": "Grade Answers",
+        "processing": "Processing in the background — come back later to download your results.",
+        "historyTitle": "Grading History",
+        "downloadJson": "Download JSON Template",
+        "downloadCsv": "Download CSV Template",
+        "colCreated": "Created",
+        "colSubmissions": "Submissions",
+        "colStatus": "Status",
+        "colProgress": "Progress",
+        "colActions": "Actions",
+        "downloadCsvButton": "Download CSV",
+        "statusPending": "Pending",
+        "statusProcessing": "Processing",
+        "statusCompleted": "Completed",
+        "statusFailed": "Failed",
+        "emptyHistory": "No grading jobs yet.",
+        "templateNote": "The JSON must contain an array of student submissions with questions and answers. Download the template to see the expected format.",
+        "uploadSuccess": "Grading job created! Processing in the background.",
+        "uploadError": "Failed to upload grading file.",
+        "downloadError": "Failed to get download URL."
       }
     }
   },

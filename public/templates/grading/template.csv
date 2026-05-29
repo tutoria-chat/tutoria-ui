@@ -1,0 +1,5 @@
+matricula,email,cmid,slot,nota,comentario
+1234567,joao.silva@university.edu,100001,1,1.5,"Good understanding of OOP. Consider expanding on polymorphism and abstraction."
+1234567,joao.silva@university.edu,100001,2,1.0,"Correct and concise. Full marks."
+7654321,maria.santos@university.edu,100001,1,0,"Resposta não fornecida"
+7654321,maria.santos@university.edu,100001,2,0.7,"Partially correct. The answer identifies the relationship but lacks detail on attributes and methods."

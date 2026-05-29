@@ -11,7 +11,8 @@ import { PageHeader } from '@/components/layout/page-header';
 import { AdminProfessorOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import type { Course, CourseUpdate, BreadcrumbItem } from '@/lib/types';
+import type { Course, CourseUpdate, BreadcrumbItem, University } from '@/lib/types';
+import { parseExternalCourseId } from '@/components/forms/course-form';
 
 export default function EditCoursePage() {
   const router = useRouter();
@@ -22,15 +23,18 @@ export default function EditCoursePage() {
   const tCommon = useTranslations('common');
 
   const [course, setCourse] = useState<Course | null>(null);
+  const [university, setUniversity] = useState<University | null>(null);
   const [originalFormData, setOriginalFormData] = useState<CourseUpdate>({
     name: '',
     code: '',
     description: '',
+    externalCourseId: null,
   });
   const [formData, setFormData] = useState<CourseUpdate>({
     name: '',
     code: '',
     description: '',
+    externalCourseId: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +45,8 @@ export default function EditCoursePage() {
     return (
       formData.name !== originalFormData.name ||
       formData.code !== originalFormData.code ||
-      formData.description !== originalFormData.description
+      formData.description !== originalFormData.description ||
+      formData.externalCourseId !== originalFormData.externalCourseId
     );
   };
 
@@ -54,9 +59,19 @@ export default function EditCoursePage() {
         name: data.name,
         code: data.code,
         description: data.description || '',
+        externalCourseId: data.externalCourseId ?? null,
       };
       setFormData(initialData);
       setOriginalFormData(initialData);
+      // Load university to check hasAssignments
+      if (data.universityId) {
+        try {
+          const uni = await apiClient.getUniversity(data.universityId);
+          setUniversity(uni);
+        } catch {
+          // Non-critical
+        }
+      }
     } catch (error) {
       console.error('Failed to load course:', error);
       setErrors({ load: t('loadError') });
@@ -221,6 +236,29 @@ export default function EditCoursePage() {
                   rows={4}
                 />
               </div>
+
+              {university?.hasAssignments && (
+                <div>
+                  <label htmlFor="externalCourseId" className="block text-sm font-medium mb-1">
+                    {tForm('externalCourseIdLabel')}
+                    <span className="ml-1 text-xs font-normal text-muted-foreground">({tForm('optional')})</span>
+                  </label>
+                  <Input
+                    id="externalCourseId"
+                    type="text"
+                    value={formData.externalCourseId?.toString() ?? ''}
+                    onChange={(e) => {
+                      const parsed = parseExternalCourseId(e.target.value);
+                      setFormData(prev => ({
+                        ...prev,
+                        externalCourseId: parsed ? parseInt(parsed, 10) : null,
+                      }));
+                    }}
+                    placeholder={tForm('externalCourseIdPlaceholder')}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{tForm('externalCourseIdHelp')}</p>
+                </div>
+              )}
 
               {errors.submit && (
                 <p className="text-sm text-destructive">{errors.submit}</p>

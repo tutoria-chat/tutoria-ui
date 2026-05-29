@@ -1,0 +1,54 @@
+[
+  {
+    "attempt": 1,
+    "name": "João Silva",
+    "id": "1234567",
+    "email": "joao.silva@university.edu",
+    "questions": [
+      {
+        "slot": 1,
+        "question_text": "Explain the concept of object-oriented programming and its main principles.",
+        "answer": "Object-oriented programming organizes code into reusable objects that combine data and behavior. The main principles are encapsulation, inheritance, polymorphism, and abstraction.",
+        "current_mark": "",
+        "max_mark": "2",
+        "_quiz_cmid": "100001"
+      },
+      {
+        "slot": 2,
+        "question_text": "What is the difference between a class and an object?",
+        "answer": "A class is a blueprint or template that defines the structure and behavior. An object is an instance of a class created at runtime.",
+        "current_mark": "",
+        "max_mark": "1",
+        "_quiz_cmid": "100001"
+      }
+    ],
+    "course_id": "12345",
+    "quiz_cmid": "100001"
+  },
+  {
+    "attempt": 1,
+    "name": "Maria Santos",
+    "id": "7654321",
+    "email": "maria.santos@university.edu",
+    "questions": [
+      {
+        "slot": 1,
+        "question_text": "Explain the concept of object-oriented programming and its main principles.",
+        "answer": "",
+        "current_mark": "",
+        "max_mark": "2",
+        "_quiz_cmid": "100001"
+      },
+      {
+        "slot": 2,
+        "question_text": "What is the difference between a class and an object?",
+        "answer": "A class defines the structure and an object is created from it.",
+        "current_mark": "",
+        "max_mark": "1",
+        "_quiz_cmid": "100001"
+      }
+    ],
+    "course_id": "12345",
+    "quiz_cmid": "100001"
+  }
+]

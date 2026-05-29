@@ -115,7 +115,10 @@
       "saveError": "Falha ao salvar a disciplina. Tente novamente.",
       "upgradePlan": "Atualizar Plano",
       "validationError": "Erro de Validação",
-      "validationErrorDesc": "Por favor, verifique os campos do formulário e corrija os erros antes de salvar."
+      "validationErrorDesc": "Por favor, verifique os campos do formulário e corrija os erros antes de salvar.",
+      "externalCourseIdLabel": "ID da Disciplina na Plataforma",
+      "externalCourseIdPlaceholder": "ex.: 12345 ou cole uma URL",
+      "externalCourseIdHelp": "Este ID deve corresponder ao ID da disciplina na sua plataforma externa para habilitar a correção automática de avaliações dissertativas."
     },
     "edit": {
       "title": "Editar Disciplina",
@@ -149,7 +152,9 @@
       "tabs": {
         "modules": "Módulos",
         "professors": "Professores",
-        "students": "Estudantes"
+        "students": "Estudantes",
+        "assignments": "Atividades",
+        "grading": "Correção de Provas"
       },
       "modulesTab": {
         "title": "Módulos da Disciplina",
@@ -231,6 +236,38 @@
         "unenrollButton": "Desmatricular da disciplina",
         "unenrollSuccess": "Estudante desmatriculado com sucesso!",
         "unenrollError": "Erro ao desmatricular estudante"
+      },
+      "assignmentsTab": {
+        "title": "Atividades do Curso",
+        "description": "Atividades publicadas de todos os módulos desta disciplina. Somente leitura.",
+        "openModule": "Abrir Módulo",
+        "empty": "Nenhuma atividade publicada nesta disciplina ainda."
+      },
+      "gradingTab": {
+        "title": "Correção de Provas",
+        "description": "Envie um arquivo JSON com as respostas dos estudantes para corrigi-las automaticamente com IA.",
+        "uploadTitle": "Enviar Respostas",
+        "uploadAccept": "Arquivo JSON, máx. 10 MB",
+        "uploadButton": "Corrigir Respostas",
+        "processing": "Processando em segundo plano — volte mais tarde para baixar os resultados.",
+        "historyTitle": "Histórico de Correções",
+        "downloadJson": "Baixar Template JSON",
+        "downloadCsv": "Baixar Template CSV",
+        "colCreated": "Criado em",
+        "colSubmissions": "Submissões",
+        "colStatus": "Status",
+        "colProgress": "Progresso",
+        "colActions": "Ações",
+        "downloadCsvButton": "Baixar CSV",
+        "statusPending": "Pendente",
+        "statusProcessing": "Processando",
+        "statusCompleted": "Concluído",
+        "statusFailed": "Falhou",
+        "emptyHistory": "Nenhuma correção realizada ainda.",
+        "templateNote": "O JSON deve conter um array de submissões de estudantes com perguntas e respostas. Baixe o template para ver o formato esperado.",
+        "uploadSuccess": "Correção criada! Processando em segundo plano.",
+        "uploadError": "Falha ao enviar o arquivo de correção.",
+        "downloadError": "Falha ao obter o link de download."
       }
     }
   },

@@ -23,7 +23,10 @@ import {
   UserCheck,
   UserMinus,
   UserPlus,
-  Lock
+  Lock,
+  Download,
+  ClipboardList,
+  BarChart3
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -46,7 +49,7 @@ import { apiClient, ApiError } from '@/lib/api';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits } from '@/lib/types';
+import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits, Assignment, GradingJob } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -61,7 +64,9 @@ export default function CourseDetailsPage() {
   const tStudents = useTranslations('courses.detail.studentsTab');
   const tProfTab = useTranslations('courses.detail.professorsTab');
 
-  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'assignments' | 'grading'>('modules');
+  const tGrading = useTranslations('courses.detail.gradingTab');
+  const tAssignments = useTranslations('courses.detail.assignmentsTab');
 
   // Fetch course basic info
   const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/api/courses/${courseId}`);
@@ -137,6 +142,17 @@ export default function CourseDetailsPage() {
   const [professorSearch, setProfessorSearch] = useState('');
   const [assigningId, setAssigningId] = useState<number | null>(null);
 
+  // Assignments tab state
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+
+  // Grading tab state
+  const [gradingJobs, setGradingJobs] = useState<GradingJob[]>([]);
+  const [gradingJobsLoading, setGradingJobsLoading] = useState(false);
+  const [gradingFile, setGradingFile] = useState<File | null>(null);
+  const [isGradingUploading, setIsGradingUploading] = useState(false);
+  const gradingFileInputRef = useRef<HTMLInputElement>(null);
+
   // Get all modules for filter options (using course embedded data)
   const allModules = course?.modules || [];
 
@@ -190,6 +206,53 @@ export default function CourseDetailsPage() {
       loadStudents();
     }
   }, [activeTab, loadStudents]);
+
+  // Load assignments when tab becomes active
+  const loadAssignments = useCallback(async () => {
+    setAssignmentsLoading(true);
+    try {
+      const response = await apiClient.getAssignments({ courseId: parseInt(courseId) });
+      setAssignments(response.items.filter(a => a.isPublished));
+    } catch {
+      setAssignments([]);
+    } finally {
+      setAssignmentsLoading(false);
+    }
+  }, [courseId]);
+
+  useEffect(() => {
+    if (activeTab === 'assignments') {
+      loadAssignments();
+    }
+  }, [activeTab, loadAssignments]);
+
+  // Load grading jobs
+  const loadGradingJobs = useCallback(async () => {
+    setGradingJobsLoading(true);
+    try {
+      const jobs = await apiClient.getGradingJobs(parseInt(courseId));
+      setGradingJobs(jobs);
+    } catch {
+      setGradingJobs([]);
+    } finally {
+      setGradingJobsLoading(false);
+    }
+  }, [courseId]);
+
+  useEffect(() => {
+    if (activeTab === 'grading') {
+      loadGradingJobs();
+    }
+  }, [activeTab, loadGradingJobs]);
+
+  // Poll grading jobs every 10 seconds while any are pending/processing
+  useEffect(() => {
+    if (activeTab !== 'grading') return;
+    const hasActive = gradingJobs.some(j => j.status === 'pending' || j.status === 'processing');
+    if (!hasActive) return;
+    const interval = setInterval(() => loadGradingJobs(), 10000);
+    return () => clearInterval(interval);
+  }, [activeTab, gradingJobs, loadGradingJobs]);
 
   // Check if user can add modules to this course
   const canAddModule = (): boolean => {
@@ -342,6 +405,46 @@ export default function CourseDetailsPage() {
     setImportResult(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  // Grading handlers
+  const handleGradingFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.json')) {
+      toast.error('Please select a .json file');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File must be under 10 MB');
+      return;
+    }
+    setGradingFile(file);
+  };
+
+  const handleGradingUpload = async () => {
+    if (!gradingFile) return;
+    setIsGradingUploading(true);
+    try {
+      await apiClient.createGradingJob(parseInt(courseId), gradingFile);
+      toast.success(tGrading('uploadSuccess'));
+      setGradingFile(null);
+      if (gradingFileInputRef.current) gradingFileInputRef.current.value = '';
+      loadGradingJobs();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : tGrading('uploadError'));
+    } finally {
+      setIsGradingUploading(false);
+    }
+  };
+
+  const handleGradingDownload = async (jobId: number) => {
+    try {
+      const { downloadUrl } = await apiClient.getGradingJobDownloadUrl(jobId);
+      window.open(downloadUrl, '_blank');
+    } catch {
+      toast.error(tGrading('downloadError'));
     }
   };
 
@@ -775,6 +878,32 @@ export default function CourseDetailsPage() {
               </Badge>
             </button>
           </AdminOnly>
+
+          {course.university?.hasAssignments && (
+            <>
+              <button
+                onClick={() => setActiveTab('assignments')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'assignments'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                }`}
+              >
+                {t('tabs.assignments')}
+              </button>
+
+              <button
+                onClick={() => setActiveTab('grading')}
+                className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'grading'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                }`}
+              >
+                {t('tabs.grading')}
+              </button>
+            </>
+          )}
         </nav>
       </div>
 
@@ -976,6 +1105,210 @@ export default function CourseDetailsPage() {
             </Card>
           )}
         </AdminOnly>
+        {/* Assignments Tab */}
+        {activeTab === 'assignments' && (
+          <Card>
+            <CardHeader>
+              <CardTitle>{tAssignments('title')}</CardTitle>
+              <CardDescription>{tAssignments('description')}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {assignmentsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : assignments.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <ClipboardList className="h-10 w-10 text-muted-foreground mb-3" />
+                  <p className="text-muted-foreground">{tAssignments('empty')}</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {assignments.map(assignment => (
+                    <div key={assignment.id} className="flex items-center justify-between rounded-lg border p-4">
+                      <div className="flex items-start gap-3">
+                        <FileText className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
+                        <div>
+                          <p className="font-medium">{assignment.title}</p>
+                          {assignment.description && (
+                            <p className="text-sm text-muted-foreground line-clamp-1">{assignment.description}</p>
+                          )}
+                          <div className="flex items-center gap-2 mt-1">
+                            {assignment.moduleName && (
+                              <Badge variant="secondary" className="text-xs">{assignment.moduleName}</Badge>
+                            )}
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {formatDateShort(assignment.dueDate)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/modules/${assignment.moduleId}`}>
+                          {tAssignments('openModule')}
+                        </Link>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Grading Tab */}
+        {activeTab === 'grading' && (
+          <div className="space-y-4">
+            {/* Upload Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle>{tGrading('uploadTitle')}</CardTitle>
+                <CardDescription>{tGrading('description')}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Drag/drop area */}
+                <div
+                  className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+                  onClick={() => gradingFileInputRef.current?.click()}
+                >
+                  {gradingFile ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <FileText className="h-5 w-5 text-green-600" />
+                      <span className="font-medium">{gradingFile.name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        ({(gradingFile.size / 1024).toFixed(1)} KB)
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm font-medium">{tGrading('uploadButton')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tGrading('uploadAccept')}</p>
+                    </div>
+                  )}
+                </div>
+                <input
+                  ref={gradingFileInputRef}
+                  type="file"
+                  accept=".json"
+                  onChange={handleGradingFileSelect}
+                  className="hidden"
+                />
+
+                {/* Template downloads */}
+                <div className="flex items-center gap-4 text-sm">
+                  <a
+                    href="/templates/grading/template.json"
+                    download
+                    className="flex items-center gap-1 text-primary hover:underline"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    {tGrading('downloadJson')}
+                  </a>
+                  <a
+                    href="/templates/grading/template.csv"
+                    download
+                    className="flex items-center gap-1 text-primary hover:underline"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    {tGrading('downloadCsv')}
+                  </a>
+                </div>
+                <p className="text-xs text-muted-foreground">{tGrading('templateNote')}</p>
+
+                <Button
+                  onClick={handleGradingUpload}
+                  disabled={!gradingFile || isGradingUploading}
+                  className="w-full"
+                >
+                  {isGradingUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {tGrading('uploadButton')}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* History Table */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    {tGrading('historyTitle')}
+                  </CardTitle>
+                  <Button variant="ghost" size="sm" onClick={loadGradingJobs} disabled={gradingJobsLoading}>
+                    {gradingJobsLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {gradingJobsLoading && gradingJobs.length === 0 ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  </div>
+                ) : gradingJobs.length === 0 ? (
+                  <p className="text-center text-sm text-muted-foreground py-8">{tGrading('emptyHistory')}</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colCreated')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colSubmissions')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colStatus')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colProgress')}</th>
+                          <th className="text-left py-2 font-medium text-muted-foreground">{tGrading('colActions')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {gradingJobs.map(job => (
+                          <tr key={job.id} className="border-b last:border-0">
+                            <td className="py-3 pr-4">{formatDateShort(job.createdAt)}</td>
+                            <td className="py-3 pr-4">{job.totalSubmissions}</td>
+                            <td className="py-3 pr-4">
+                              <Badge
+                                variant={
+                                  job.status === 'completed' ? 'default' :
+                                  job.status === 'failed' ? 'destructive' :
+                                  'secondary'
+                                }
+                                className={
+                                  job.status === 'completed' ? 'bg-green-600' :
+                                  job.status === 'processing' ? 'animate-pulse' : ''
+                                }
+                              >
+                                {tGrading(`status${job.status.charAt(0).toUpperCase() + job.status.slice(1)}` as `status${string}`)}
+                              </Badge>
+                            </td>
+                            <td className="py-3 pr-4 text-muted-foreground">
+                              {job.processedSubmissions}/{job.totalSubmissions}
+                            </td>
+                            <td className="py-3">
+                              {job.status === 'completed' && job.hasResult && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleGradingDownload(job.id)}
+                                  className="flex items-center gap-1"
+                                >
+                                  <Download className="h-3.5 w-3.5" />
+                                  {tGrading('downloadCsvButton')}
+                                </Button>
+                              )}
+                              {job.status === 'failed' && job.errorMessage && (
+                                <span className="text-xs text-destructive">{job.errorMessage}</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
 
       {/* Edit Student Dialog */}

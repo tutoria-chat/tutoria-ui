@@ -95,6 +95,7 @@ import type {
   Assignment,
   AssignmentCreate,
   AssignmentUpdate,
+  GradingJob,
 } from './types';
 
 export class ApiError extends Error {
@@ -695,6 +696,22 @@ class TutoriaAPIClient {
 
   async togglePublishAssignment(id: number): Promise<Assignment> {
     return this.post(`/api/assignments/${id}/publish`, {});
+  }
+
+  // Grading job endpoints
+  async getGradingJobs(courseId: number): Promise<GradingJob[]> {
+    return this.get('/api/grading-jobs', { courseId });
+  }
+
+  async createGradingJob(courseId: number, file: globalThis.File): Promise<GradingJob> {
+    const formData = new FormData();
+    formData.append('CourseId', courseId.toString());
+    formData.append('File', file);
+    return this.post('/api/grading-jobs', formData, { isFormData: true });
+  }
+
+  async getGradingJobDownloadUrl(jobId: number): Promise<{ downloadUrl: string }> {
+    return this.get(`/api/grading-jobs/${jobId}/download`);
   }
 
   // AI Model endpoints

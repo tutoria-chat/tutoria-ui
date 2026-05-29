@@ -230,6 +230,7 @@ export interface Course {
   description?: string;
   universityId: number;
   universityName?: string;
+  externalCourseId?: number | null;
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -242,12 +243,28 @@ export interface CourseCreate {
   code: string;
   description?: string;
   universityId: number;
+  externalCourseId?: number | null;
 }
 
 export interface CourseUpdate {
   name?: string;
   code?: string;
   description?: string;
+  externalCourseId?: number | null;
+}
+
+// Grading Jobs
+export interface GradingJob {
+  id: number;
+  courseId: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  totalSubmissions: number;
+  processedSubmissions: number;
+  errorMessage?: string;
+  processedAt?: string;
+  hasResult: boolean;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface CourseWithDetails extends Course {

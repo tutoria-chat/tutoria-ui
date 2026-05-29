@@ -14,6 +14,21 @@ import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
 import type { Course, CourseCreate, CourseUpdate, Professor, University } from '@/lib/types';
 
+/** Extract an integer course ID from a plain number string or a URL that contains it. */
+export function parseExternalCourseId(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return '';
+  // Plain integer?
+  if (/^\d+$/.test(trimmed)) return trimmed;
+  // Try common URL query params: courseId, course_id, id
+  const urlMatch = trimmed.match(/[?&](?:courseId|course_id|id)=(\d+)/i);
+  if (urlMatch) return urlMatch[1];
+  // Last numeric segment in path (e.g., /course/view.php?id=1234)
+  const lastNumber = trimmed.match(/(\d+)(?:\D*)$/);
+  if (lastNumber) return lastNumber[1];
+  return trimmed;
+}
+
 interface CourseFormProps {
   course?: Course;
   onSubmit: (data: CourseCreate | CourseUpdate) => Promise<void>;
@@ -21,9 +36,10 @@ interface CourseFormProps {
   isLoading?: boolean;
   initialUniversityId?: number;
   onProfessorsChange?: (ids: number[]) => void;
+  universityHasAssignments?: boolean;
 }
 
-export function CourseForm({ course, onSubmit, onCancel, isLoading = false, initialUniversityId, onProfessorsChange }: CourseFormProps) {
+export function CourseForm({ course, onSubmit, onCancel, isLoading = false, initialUniversityId, onProfessorsChange, universityHasAssignments = false }: CourseFormProps) {
   const { user } = useAuth();
   const t = useTranslations('courses.form');
   const [formData, setFormData] = useState({
@@ -31,6 +47,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     code: course?.code || '',
     description: course?.description || '',
     universityId: course?.universityId || initialUniversityId || user?.universityId || '',
+    externalCourseId: course?.externalCourseId?.toString() ?? '',
   });
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
@@ -40,6 +57,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   const [loadingUniversities, setLoadingUniversities] = useState(false);
 
   const isCreateMode = !course;
+
+  // Derive effective hasAssignments: prop OR selected university's flag (for super_admin with loaded list)
+  const effectiveHasAssignments = universityHasAssignments ||
+    (universities.find(u => u.id === Number(formData.universityId))?.hasAssignments ?? false);
 
   // Load universities for super admin
   useEffect(() => {
@@ -120,6 +141,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         code: formData.code.trim(),
         description: formData.description.trim() || undefined,
         universityId: Number(formData.universityId),
+        externalCourseId: formData.externalCourseId ? parseInt(formData.externalCourseId, 10) : null,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -137,6 +159,12 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+  };
+
+  const handleExternalCourseIdChange = (raw: string) => {
+    const parsed = parseExternalCourseId(raw);
+    setFormData(prev => ({ ...prev, externalCourseId: parsed }));
+    if (errors.externalCourseId) setErrors(prev => ({ ...prev, externalCourseId: '' }));
   };
 
   return (
@@ -223,6 +251,29 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
               {errors.description && <FormMessage>{errors.description}</FormMessage>}
             </FormItem>
           </FormField>
+
+          {/* Platform Course ID — only shown when university has HasAssignments=true */}
+          {effectiveHasAssignments && (
+            <FormField>
+              <FormItem>
+                <FormLabel htmlFor="externalCourseId">
+                  {t('externalCourseIdLabel')}
+                  <span className="ml-1 text-xs font-normal text-muted-foreground">({t('optional')})</span>
+                </FormLabel>
+                <Input
+                  id="externalCourseId"
+                  type="text"
+                  placeholder={t('externalCourseIdPlaceholder')}
+                  value={formData.externalCourseId}
+                  onChange={(e) => handleExternalCourseIdChange(e.target.value)}
+                  disabled={isLoading}
+                  className={errors.externalCourseId ? 'border-destructive' : ''}
+                />
+                <p className="text-xs text-muted-foreground">{t('externalCourseIdHelp')}</p>
+                {errors.externalCourseId && <FormMessage>{errors.externalCourseId}</FormMessage>}
+              </FormItem>
+            </FormField>
+          )}
 
           {/* Optional Professor Selection — create mode only, shown when university is set */}
           {isCreateMode && formData.universityId && (
