@@ -60,7 +60,7 @@ import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
-import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits, Assignment } from '@/lib/types';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits, Assignment, QuizUploadJob } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
@@ -122,6 +122,9 @@ export default function ModuleDetailsPage() {
   const [deleteQuizConfirmOpen, setDeleteQuizConfirmOpen] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState<number | null>(null);
   const [universityLimits, setUniversityLimits] = useState<UniversityLimits | null>(null);
+  const [quizUploadJobs, setQuizUploadJobs] = useState<QuizUploadJob[]>([]);
+  const [quizUploadJobsLoading, setQuizUploadJobsLoading] = useState(false);
+  const [reviewingJobId, setReviewingJobId] = useState<number | null>(null);
 
   // Assignments state
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -131,6 +134,7 @@ export default function ModuleDetailsPage() {
   const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
   const [assignmentTitle, setAssignmentTitle] = useState('');
   const [assignmentDescription, setAssignmentDescription] = useState('');
+  const [assignmentGradingCriteria, setAssignmentGradingCriteria] = useState('');
   const [assignmentDueDate, setAssignmentDueDate] = useState('');
   const [assignmentKeywords, setAssignmentKeywords] = useState<string[]>([]);
   const [assignmentKeywordInput, setAssignmentKeywordInput] = useState('');
@@ -423,6 +427,18 @@ export default function ModuleDetailsPage() {
     }
   }, [moduleId]);
 
+  const loadQuizUploadJobs = useCallback(async () => {
+    setQuizUploadJobsLoading(true);
+    try {
+      const data = await apiClient.getQuizUploadJobs(moduleId);
+      setQuizUploadJobs(data);
+    } catch (err) {
+      console.error('Failed to load quiz upload jobs:', err);
+    } finally {
+      setQuizUploadJobsLoading(false);
+    }
+  }, [moduleId]);
+
   const loadUniversityLimits = useCallback(async () => {
     if (user?.role === 'super_admin') return; // super_admin has no university
     try {
@@ -467,14 +483,24 @@ export default function ModuleDetailsPage() {
 
   useEffect(() => {
     loadQuizzes();
+    loadQuizUploadJobs();
     loadUniversityLimits();
     loadAssignments();
-  }, [loadQuizzes, loadUniversityLimits, loadAssignments]);
+  }, [loadQuizzes, loadQuizUploadJobs, loadUniversityLimits, loadAssignments]);
+
+  // Poll quiz upload jobs every 10s while any is pending/processing
+  useEffect(() => {
+    const hasPending = quizUploadJobs.some(j => j.status === 'pending' || j.status === 'processing');
+    if (!hasPending) return;
+    const interval = setInterval(() => loadQuizUploadJobs(), 10000);
+    return () => clearInterval(interval);
+  }, [quizUploadJobs, loadQuizUploadJobs]);
 
   const openCreateAssignment = () => {
     setEditingAssignment(null);
     setAssignmentTitle('');
     setAssignmentDescription('');
+    setAssignmentGradingCriteria('');
     setAssignmentDueDate('');
     setAssignmentKeywords([]);
     setAssignmentKeywordInput('');
@@ -488,6 +514,7 @@ export default function ModuleDetailsPage() {
     setEditingAssignment(a);
     setAssignmentTitle(a.title);
     setAssignmentDescription(a.description || '');
+    setAssignmentGradingCriteria(a.gradingCriteria || '');
     setAssignmentDueDate(a.dueDate ? a.dueDate.slice(0, 16) : '');
     setAssignmentKeywords(a.keywords || []);
     setAssignmentKeywordInput('');
@@ -528,6 +555,7 @@ export default function ModuleDetailsPage() {
           description: assignmentDescription || undefined,
           dueDate: assignmentDueDate,
           keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
+          gradingCriteria: assignmentGradingCriteria || undefined,
         });
         toast.success(tA('toastUpdated'));
       } else {
@@ -538,6 +566,7 @@ export default function ModuleDetailsPage() {
           description: assignmentDescription || undefined,
           dueDate: assignmentDueDate,
           keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
+          gradingCriteria: assignmentGradingCriteria || undefined,
           file: assignmentFile,
           rubricFile: assignmentRubricFile || undefined,
           contextFiles: assignmentFiles.length ? assignmentFiles : undefined,
@@ -585,21 +614,35 @@ export default function ModuleDetailsPage() {
 
     setIsExtractingQuiz(true);
     try {
-      const result = await apiClient.uploadQuizFile(moduleId, quizSelectedFile[0]);
+      await apiClient.uploadQuizFile(moduleId, quizSelectedFile[0]);
+      setQuizUploadModalOpen(false);
+      setQuizSelectedFile([]);
+      toast.success(tQuiz('uploadQueued'));
+      loadQuizUploadJobs();
+    } catch (err) {
+      console.error('Failed to upload quiz file:', err);
+      toast.error(tQuiz('uploadError'));
+    } finally {
+      setIsExtractingQuiz(false);
+    }
+  };
+
+  const handleReviewQuizJob = async (jobId: number) => {
+    setReviewingJobId(jobId);
+    try {
+      const result = await apiClient.getQuizUploadJobQuestions(moduleId, jobId);
       if (result.questions && result.questions.length > 0) {
         const questions = result.questions.map((q: ExtractedQuestion) => ({ ...q, selected: true }));
         setExtractedQuestions(questions);
-        setQuizUploadModalOpen(false);
-        setQuizSelectedFile([]);
         setReviewDialogOpen(true);
       } else {
         toast.error(tQuiz('review.noQuestionsExtracted'));
       }
     } catch (err) {
-      console.error('Failed to extract quizzes:', err);
+      console.error('Failed to load quiz job questions:', err);
       toast.error(tQuiz('uploadError'));
     } finally {
-      setIsExtractingQuiz(false);
+      setReviewingJobId(null);
     }
   };
 
@@ -1379,6 +1422,82 @@ export default function ModuleDetailsPage() {
               />
             </CardContent>
           </Card>
+
+          {/* Upload Jobs History */}
+          <ProfessorOnly>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">{tQuiz('uploadJobsTitle')}</CardTitle>
+                <CardDescription>{tQuiz('uploadJobsDescription')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {quizUploadJobsLoading && quizUploadJobs.length === 0 ? (
+                  <div className="flex items-center justify-center py-6">
+                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                  </div>
+                ) : quizUploadJobs.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-6">{tQuiz('uploadJobsEmpty')}</p>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colFile')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colStatus')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colExtracted')}</th>
+                          <th className="text-left py-2 font-medium text-muted-foreground">{tQuiz('colActions')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {quizUploadJobs.map(job => (
+                          <tr key={job.id} className="border-b last:border-0">
+                            <td className="py-2 pr-4 text-muted-foreground max-w-[200px] truncate">{job.originalFilename || '-'}</td>
+                            <td className="py-2 pr-4">
+                              {job.status === 'pending' && (
+                                <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-0">{tQuiz('statusPending')}</Badge>
+                              )}
+                              {job.status === 'processing' && (
+                                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-400 border-0">
+                                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />{tQuiz('statusProcessing')}
+                                </Badge>
+                              )}
+                              {job.status === 'completed' && (
+                                <Badge className="bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-0">{tQuiz('statusCompleted')}</Badge>
+                              )}
+                              {job.status === 'failed' && (
+                                <Badge className="bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-0">{tQuiz('statusFailed')}</Badge>
+                              )}
+                            </td>
+                            <td className="py-2 pr-4">{job.status === 'completed' ? job.extractedCount : '-'}</td>
+                            <td className="py-2">
+                              {job.status === 'completed' && job.extractedCount > 0 && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  disabled={reviewingJobId === job.id}
+                                  onClick={() => handleReviewQuizJob(job.id)}
+                                >
+                                  {reviewingJobId === job.id ? (
+                                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                                  ) : (
+                                    <Eye className="mr-1 h-3 w-3" />
+                                  )}
+                                  {tQuiz('reviewButton')}
+                                </Button>
+                              )}
+                              {job.status === 'failed' && job.errorMessage && (
+                                <span className="text-xs text-red-600 dark:text-red-400">{job.errorMessage}</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </ProfessorOnly>
         </TabsContent>
 
         {/* Assignments Tab */}
@@ -1566,6 +1685,22 @@ export default function ModuleDetailsPage() {
                 placeholder={tA('fieldInstructionsPlaceholder')}
                 rows={4}
               />
+            </div>
+
+            {/* Grading Criteria */}
+            <div>
+              <label className="block text-sm font-medium mb-1">
+                {tA('fieldGradingCriteria')}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">({tCommon('optional')})</span>
+              </label>
+              <Textarea
+                value={assignmentGradingCriteria}
+                onChange={(e) => setAssignmentGradingCriteria(e.target.value)}
+                placeholder={tA('fieldGradingCriteriaPlaceholder')}
+                rows={3}
+                maxLength={2000}
+              />
+              <p className="text-xs text-muted-foreground mt-1">{tA('fieldGradingCriteriaHelp')}</p>
             </div>
 
             {/* Due Date */}

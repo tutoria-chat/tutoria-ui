@@ -263,8 +263,21 @@ export interface GradingJob {
   errorMessage?: string;
   processedAt?: string;
   hasResult: boolean;
+  gradingCriteria?: string;
   createdAt: string;
   updatedAt?: string;
+}
+
+// Quiz Upload Jobs
+export interface QuizUploadJob {
+  id: number;
+  moduleId: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  extractedCount: number;
+  errorMessage?: string;
+  originalFilename?: string;
+  processedAt?: string;
+  createdAt?: string;
 }
 
 export interface CourseWithDetails extends Course {
@@ -1439,6 +1452,7 @@ export interface Assignment {
   fileSizeBytes: number;
   contentType: string;
   keywords: string[];
+  gradingCriteria?: string;
   rubricOriginalFileName?: string;
   createdByUserId: number;
   downloadUrl?: string;
@@ -1454,6 +1468,7 @@ export interface AssignmentCreate {
   description?: string;
   dueDate: string;
   keywords?: string[];
+  gradingCriteria?: string;
   file: globalThis.File;
   rubricFile?: globalThis.File;
   contextFiles?: globalThis.File[];
@@ -1464,4 +1479,5 @@ export interface AssignmentUpdate {
   description?: string;
   dueDate: string;
   keywords?: string[];
+  gradingCriteria?: string;
 }

@@ -49,6 +49,7 @@ import { apiClient, ApiError } from '@/lib/api';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits, Assignment, GradingJob } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -151,6 +152,7 @@ export default function CourseDetailsPage() {
   const [gradingJobsLoading, setGradingJobsLoading] = useState(false);
   const [gradingFile, setGradingFile] = useState<File | null>(null);
   const [isGradingUploading, setIsGradingUploading] = useState(false);
+  const [gradingCriteria, setGradingCriteria] = useState('');
   const gradingFileInputRef = useRef<HTMLInputElement>(null);
 
   // Get all modules for filter options (using course embedded data)
@@ -427,7 +429,7 @@ export default function CourseDetailsPage() {
     if (!gradingFile) return;
     setIsGradingUploading(true);
     try {
-      await apiClient.createGradingJob(parseInt(courseId), gradingFile);
+      await apiClient.createGradingJob(parseInt(courseId), gradingFile, gradingCriteria);
       toast.success(tGrading('uploadSuccess'));
       setGradingFile(null);
       if (gradingFileInputRef.current) gradingFileInputRef.current.value = '';
@@ -1167,6 +1169,24 @@ export default function CourseDetailsPage() {
                 <CardDescription>{tGrading('description')}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Grading Criteria */}
+                <div>
+                  <Label htmlFor="gradingCriteria" className="text-sm font-medium">
+                    {tGrading('criteriaLabel')}
+                    <span className="ml-1 text-xs font-normal text-muted-foreground">({tCommon('optional')})</span>
+                  </Label>
+                  <Textarea
+                    id="gradingCriteria"
+                    value={gradingCriteria}
+                    onChange={(e) => setGradingCriteria(e.target.value)}
+                    placeholder={tGrading('criteriaPlaceholder')}
+                    rows={3}
+                    className="mt-1"
+                    maxLength={2000}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">{tGrading('criteriaHelp')}</p>
+                </div>
+
                 {/* Drag/drop area */}
                 <div
                   className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"

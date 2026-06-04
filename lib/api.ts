@@ -96,6 +96,7 @@ import type {
   AssignmentCreate,
   AssignmentUpdate,
   GradingJob,
+  QuizUploadJob,
 } from './types';
 
 export class ApiError extends Error {
@@ -675,6 +676,7 @@ class TutoriaAPIClient {
     if (data.description) formData.append('Description', data.description);
     formData.append('DueDate', data.dueDate);
     if (data.keywords?.length) formData.append('Keywords', data.keywords.join(','));
+    if (data.gradingCriteria?.trim()) formData.append('GradingCriteria', data.gradingCriteria.trim());
     formData.append('File', data.file);
     if (data.rubricFile) formData.append('RubricFile', data.rubricFile);
     if (data.contextFiles?.length) {
@@ -687,6 +689,7 @@ class TutoriaAPIClient {
     return this.put(`/api/assignments/${id}`, {
       ...data,
       keywords: data.keywords?.length ? data.keywords.join(',') : undefined,
+      gradingCriteria: data.gradingCriteria?.trim() || undefined,
     });
   }
 
@@ -703,15 +706,27 @@ class TutoriaAPIClient {
     return this.get('/api/grading-jobs', { courseId });
   }
 
-  async createGradingJob(courseId: number, file: globalThis.File): Promise<GradingJob> {
+  async createGradingJob(courseId: number, file: globalThis.File, gradingCriteria?: string): Promise<GradingJob> {
     const formData = new FormData();
     formData.append('CourseId', courseId.toString());
     formData.append('File', file);
+    if (gradingCriteria?.trim()) {
+      formData.append('GradingCriteria', gradingCriteria.trim());
+    }
     return this.post('/api/grading-jobs', formData, { isFormData: true });
   }
 
   async getGradingJobDownloadUrl(jobId: number): Promise<{ downloadUrl: string }> {
     return this.get(`/api/grading-jobs/${jobId}/download`);
+  }
+
+  // Quiz upload job endpoints (tutoria-worker / Python API)
+  async getQuizUploadJobs(moduleId: number): Promise<QuizUploadJob[]> {
+    return this.get(`/modules/${moduleId}/quiz-upload-jobs`, {}, false, true);
+  }
+
+  async getQuizUploadJobQuestions(moduleId: number, jobId: number): Promise<{ status: string; message: string; extracted_count: number; questions: ExtractedQuestion[]; module_id: number; job_id: number }> {
+    return this.get(`/modules/${moduleId}/quiz-upload-jobs/${jobId}/questions`, {}, false, true);
   }
 
   // AI Model endpoints
