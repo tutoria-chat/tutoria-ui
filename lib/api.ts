@@ -635,10 +635,11 @@ class TutoriaAPIClient {
     return Array.isArray(response) ? response : (response?.quizzes ?? []);
   }
 
-  async uploadQuizFile(moduleId: number, file: globalThis.File): Promise<{ status: string; message: string; extracted_count: number; questions: ExtractedQuestion[]; module_id: number; job_id?: number }> {
+  async uploadQuizFile(moduleId: number, file: globalThis.File): Promise<QuizUploadJob> {
     const formData = new FormData();
+    formData.append('moduleId', String(moduleId));
     formData.append('file', file);
-    return this.post(`/modules/${moduleId}/upload-quiz-file`, formData, { isFormData: true, usePythonAPI: true });
+    return this.post('/api/quiz-upload-jobs', formData, { isFormData: true });
   }
 
   async confirmExtractedQuizzes(moduleId: number, questions: ExtractedQuestion[], uploadedFileId?: number): Promise<{ status: string; message: string; saved_count: number; module_id: number }> {
@@ -720,13 +721,13 @@ class TutoriaAPIClient {
     return this.get(`/api/grading-jobs/${jobId}/download`);
   }
 
-  // Quiz upload job endpoints (tutoria-worker / Python API)
+  // Quiz upload job endpoints (.NET API)
   async getQuizUploadJobs(moduleId: number): Promise<QuizUploadJob[]> {
-    return this.get(`/modules/${moduleId}/quiz-upload-jobs`, {}, false, true);
+    return this.get('/api/quiz-upload-jobs', { moduleId });
   }
 
-  async getQuizUploadJobQuestions(moduleId: number, jobId: number): Promise<{ status: string; message: string; extracted_count: number; questions: ExtractedQuestion[]; module_id: number; job_id: number }> {
-    return this.get(`/modules/${moduleId}/quiz-upload-jobs/${jobId}/questions`, {}, false, true);
+  async getQuizUploadJobQuestions(moduleId: number, jobId: number): Promise<{ jobId: number; moduleId: number; status: string; extractedCount: number; questions: ExtractedQuestion[] }> {
+    return this.get(`/api/quiz-upload-jobs/${jobId}/questions`);
   }
 
   // AI Model endpoints
