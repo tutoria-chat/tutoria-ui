@@ -215,11 +215,9 @@ export default function StudentsPage() {
     {
       key: 'isActive',
       label: tList('columns.status'),
-      render: (value) => (
-        <Badge variant={value ? 'default' : 'secondary'} className={value ? 'bg-green-600' : ''}>
-          {value ? tList('active') : tList('inactive')}
-        </Badge>
-      )
+      render: (value) => value
+        ? <span title={tList('active')}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={tList('inactive')}><XCircle className="h-4 w-4 text-muted-foreground" /></span>
     },
     {
       key: 'createdAt',

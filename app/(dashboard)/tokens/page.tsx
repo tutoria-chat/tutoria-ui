@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info } from 'lucide-react';
+import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info, CheckCircle2, XCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -171,20 +171,16 @@ export default function TokensPage() {
     {
       key: 'allowChat',
       label: t('columns.chat'),
-      render: (value) => (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? t('columns.allowed') : t('columns.blocked')}
-        </Badge>
-      )
+      render: (value) => value
+        ? <span title={t('columns.allowed')}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={t('columns.blocked')}><XCircle className="h-4 w-4 text-muted-foreground" /></span>
     },
     {
       key: 'allowFileAccess',
       label: t('columns.files'),
-      render: (value) => (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? t('columns.allowed') : t('columns.blocked')}
-        </Badge>
-      )
+      render: (value) => value
+        ? <span title={t('columns.allowed')}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={t('columns.blocked')}><XCircle className="h-4 w-4 text-muted-foreground" /></span>
     },
     {
       key: 'usageCount',
@@ -215,11 +211,9 @@ export default function TokensPage() {
     {
       key: 'isActive',
       label: t('columns.status'),
-      render: (value) => (
-        <Badge variant={value ? "default" : "secondary"}>
-          {value ? t('columns.active') : t('columns.inactive')}
-        </Badge>
-      )
+      render: (value) => value
+        ? <span title={t('columns.active')}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={t('columns.inactive')}><XCircle className="h-4 w-4 text-muted-foreground" /></span>
     },
     {
       key: 'actions',

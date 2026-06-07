@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Search, Filter } from 'lucide-react';
+import { Plus, Search, Filter, CheckCircle2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/layout/page-header';
@@ -125,11 +125,9 @@ export default function UsersPage() {
       key: 'isActive',
       label: t('table.status'),
       sortable: true,
-      render: (value: boolean) => (
-        <Badge variant={value ? 'default' : 'secondary'}>
-          {value ? t('table.active') : t('table.inactive')}
-        </Badge>
-      ),
+      render: (value: boolean) => value
+        ? <span title={t('table.active')}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={t('table.inactive')}><XCircle className="h-4 w-4 text-muted-foreground" /></span>,
     },
     {
       key: 'actions',

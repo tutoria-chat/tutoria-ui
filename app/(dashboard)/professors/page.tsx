@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, Edit, Bot } from 'lucide-react';
+import { Plus, Trash2, Shield, Users, Mail, Calendar, UserCheck, UserX, Ban, CheckCircle, CheckCircle2, XCircle, Edit, Bot } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -317,17 +317,9 @@ export default function ProfessorsPage() {
     {
       key: 'isActive',
       label: t('columns.status') || 'Status',
-      render: (_, professor) => (
-        professor.isActive ? (
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            {t('columns.active') || 'Active'}
-          </Badge>
-        ) : (
-          <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-            {t('columns.inactive') || 'Inactive'}
-          </Badge>
-        )
-      )
+      render: (_, professor) => professor.isActive
+        ? <span title={t('columns.active') || 'Active'}><CheckCircle2 className="h-4 w-4 text-green-500" /></span>
+        : <span title={t('columns.inactive') || 'Inactive'}><XCircle className="h-4 w-4 text-muted-foreground" /></span>
     },
     {
       key: 'agentStatus',
@@ -335,23 +327,11 @@ export default function ProfessorsPage() {
       render: (_, professor) => {
         const agentStatus = getAgentStatus(professor.id);
         if (!agentStatus || !agentStatus.hasAgent) {
-          return (
-            <Badge variant="outline" className="bg-gray-50 text-gray-700 border-gray-200">
-              {t('columns.noAgent') || 'No Agent'}
-            </Badge>
-          );
+          return <span className="text-muted-foreground" title={t('columns.noAgent') || 'No Agent'}>—</span>;
         }
-        return agentStatus.agentIsActive ? (
-          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-            <Bot className="h-3 w-3 mr-1" />
-            {t('columns.agentActive') || 'Active'}
-          </Badge>
-        ) : (
-          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-            <Bot className="h-3 w-3 mr-1" />
-            {t('columns.agentInactive') || 'Inactive'}
-          </Badge>
-        );
+        return agentStatus.agentIsActive
+          ? <span title={t('columns.agentActive') || 'Active'}><Bot className="h-4 w-4 text-green-500" /></span>
+          : <span title={t('columns.agentInactive') || 'Inactive'}><Bot className="h-4 w-4 text-amber-500" /></span>;
       }
     },
     {

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText, Sparkles, BarChart3 } from 'lucide-react';
+import { Bot, Key, Settings2, Building2, Plus, Edit, Trash2, Power, PowerOff, FileText, Sparkles, BarChart3, CheckCircle2, XCircle } from 'lucide-react';
 import Image from 'next/image';
 
 const PROVIDER_LOGOS: Record<string, { src: string; alt: string }> = {
@@ -226,9 +226,10 @@ function AIModelsTab() {
       label: t('columns.status'),
       render: (_, model) => (
         <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant={model.isActive ? 'default' : 'secondary'}>
-            {model.isActive ? t('active') : t('inactive')}
-          </Badge>
+          {model.isActive
+            ? <span title={t('active')}><CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" /></span>
+            : <span title={t('inactive')}><XCircle className="h-4 w-4 text-muted-foreground shrink-0" /></span>
+          }
           {model.isDeprecated && (
             <Badge variant="destructive">{t('deprecated')}</Badge>
           )}
