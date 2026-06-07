@@ -2055,6 +2055,7 @@
     "error": "Error",
     "success": "Success",
     "cancel": "Cancel",
+    "optional": "optional",
     "previous": "Previous",
     "next": "Next",
     "passwordSetup": {
