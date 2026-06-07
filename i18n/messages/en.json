@@ -4552,7 +4552,8 @@
     "statusProcessing": "Processing",
     "statusCompleted": "Completed",
     "statusFailed": "Failed",
-    "reviewButton": "Review & Import"
+    "reviewButton": "Review & Import",
+    "importedLabel": "Imported"
   },
   "privacyPolicy": {
     "title": "Privacy Policy",

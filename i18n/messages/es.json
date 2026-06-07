@@ -4789,7 +4789,8 @@
     "statusProcessing": "Procesando",
     "statusCompleted": "Completado",
     "statusFailed": "Fallido",
-    "reviewButton": "Revisar e Importar"
+    "reviewButton": "Revisar e Importar",
+    "importedLabel": "Importado"
   },
   "privacyPolicy": {
     "title": "Política de Privacidad",

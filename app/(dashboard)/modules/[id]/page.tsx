@@ -31,7 +31,8 @@ import {
   HelpCircle,
   X,
   Tag,
-  FileCheck2
+  FileCheck2,
+  CheckCircle2
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
@@ -125,6 +126,8 @@ export default function ModuleDetailsPage() {
   const [quizUploadJobs, setQuizUploadJobs] = useState<QuizUploadJob[]>([]);
   const [quizUploadJobsLoading, setQuizUploadJobsLoading] = useState(false);
   const [reviewingJobId, setReviewingJobId] = useState<number | null>(null);
+  const [activeReviewJobId, setActiveReviewJobId] = useState<number | null>(null);
+  const [importedJobIds, setImportedJobIds] = useState<Set<number>>(new Set());
 
   // Assignments state
   const [assignments, setAssignments] = useState<Assignment[]>([]);
@@ -634,6 +637,7 @@ export default function ModuleDetailsPage() {
       if (result.questions && result.questions.length > 0) {
         const questions = result.questions.map((q: ExtractedQuestion) => ({ ...q, selected: true }));
         setExtractedQuestions(questions);
+        setActiveReviewJobId(jobId);
         setReviewDialogOpen(true);
       } else {
         toast.error(tQuiz('review.noQuestionsExtracted'));
@@ -654,8 +658,12 @@ export default function ModuleDetailsPage() {
     try {
       await apiClient.confirmExtractedQuizzes(moduleId, selected);
       toast.success(tQuiz('uploadSuccess'));
+      if (activeReviewJobId !== null) {
+        setImportedJobIds(prev => new Set(prev).add(activeReviewJobId));
+      }
       setReviewDialogOpen(false);
       setExtractedQuestions([]);
+      setActiveReviewJobId(null);
       loadQuizzes();
     } catch (err) {
       console.error('Failed to confirm quizzes:', err);
@@ -1471,19 +1479,26 @@ export default function ModuleDetailsPage() {
                             <td className="py-2 pr-4">{job.status === 'completed' ? job.extractedCount : '-'}</td>
                             <td className="py-2">
                               {job.status === 'completed' && job.extractedCount > 0 && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  disabled={reviewingJobId === job.id}
-                                  onClick={() => handleReviewQuizJob(job.id)}
-                                >
-                                  {reviewingJobId === job.id ? (
-                                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                                  ) : (
-                                    <Eye className="mr-1 h-3 w-3" />
-                                  )}
-                                  {tQuiz('reviewButton')}
-                                </Button>
+                                importedJobIds.has(job.id) ? (
+                                  <span className="inline-flex items-center gap-1 text-sm text-green-600 dark:text-green-400 font-medium">
+                                    <CheckCircle2 className="h-4 w-4" />
+                                    {tQuiz('importedLabel')}
+                                  </span>
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    disabled={reviewingJobId === job.id}
+                                    onClick={() => handleReviewQuizJob(job.id)}
+                                  >
+                                    {reviewingJobId === job.id ? (
+                                      <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                                    ) : (
+                                      <Eye className="mr-1 h-3 w-3" />
+                                    )}
+                                    {tQuiz('reviewButton')}
+                                  </Button>
+                                )
                               )}
                               {job.status === 'failed' && job.errorMessage && (
                                 <span className="text-xs text-red-600 dark:text-red-400">{job.errorMessage}</span>
