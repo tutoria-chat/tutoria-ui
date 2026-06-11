@@ -17,12 +17,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Upload, Loader2, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, Clock, AlertTriangle, GraduationCap } from 'lucide-react';
+import { Upload, Loader2, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, Clock, AlertTriangle, GraduationCap, UserMinus } from 'lucide-react';
 import { ProfessorOnly, SuperAdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { useFetch } from '@/lib/hooks';
-import type { Course, Student, StudentImportResult, StudentImportJob, University, PaginatedResponse, TableColumn, UniversityLimits } from '@/lib/types';
+import type { Course, Student, StudentImportResult, StudentMassUnenrollResult, StudentImportJob, University, PaginatedResponse, TableColumn, UniversityLimits } from '@/lib/types';
 import { toast } from 'sonner';
 import { formatDateShort } from '@/lib/utils';
 
@@ -31,6 +31,7 @@ export default function StudentsPage() {
   const tImport = useTranslations('students.import');
   const tList = useTranslations('students.list');
   const tAlerts = useTranslations('students.alerts');
+  const tUnenroll = useTranslations('students.unenroll');
   const { user } = useAuth();
 
   // Filters
@@ -48,7 +49,17 @@ export default function StudentsPage() {
   const [importResult, setImportResult] = useState<StudentImportResult | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Mass-unenroll dialog
+  const [isUnenrollOpen, setIsUnenrollOpen] = useState(false);
+  const [unenrollCourseId, setUnenrollCourseId] = useState<number | null>(null); // null = whole institution
+  const [unenrollFile, setUnenrollFile] = useState<File | null>(null);
+  const [isUnenrolling, setIsUnenrolling] = useState(false);
+  const [unenrollResult, setUnenrollResult] = useState<StudentMassUnenrollResult | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const unenrollFileRef = useRef<HTMLInputElement>(null);
+
   const isSuperAdmin = user?.role === 'super_admin';
+  const canMassUnenroll = isSuperAdmin || user?.isAdmin === true;
 
   // Auto-set universityId for non-super-admins
   const effectiveUniversityId = isSuperAdmin ? selectedUniversityId : user?.universityId ?? null;
@@ -90,6 +101,7 @@ export default function StudentsPage() {
     if (effectiveUniversityId) params.set('universityId', effectiveUniversityId.toString());
     if (selectedCourseId) params.set('courseId', selectedCourseId.toString());
     if (searchTerm) params.set('search', searchTerm);
+    if (refreshKey > 0) params.set('_r', refreshKey.toString());
     return `/api/students/?${params.toString()}`;
   };
 
@@ -156,6 +168,52 @@ export default function StudentsPage() {
     setImportCourseId(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  // Mass-unenroll handlers
+  const handleUnenrollFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const ext = file.name.toLowerCase();
+      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+        setUnenrollFile(file);
+      } else {
+        toast.error('Please select a .csv or .xlsx file');
+      }
+    }
+  };
+
+  const handleMassUnenroll = async () => {
+    if (!unenrollFile) return;
+    // Whole-institution scope needs a resolvable university
+    if (!unenrollCourseId && !effectiveUniversityId) return;
+
+    setIsUnenrolling(true);
+    setUnenrollResult(null);
+    try {
+      const result = await apiClient.massUnenrollStudents(unenrollFile, {
+        courseId: unenrollCourseId ?? undefined,
+        universityId: unenrollCourseId ? undefined : effectiveUniversityId ?? undefined,
+      });
+      setUnenrollResult(result);
+      setRefreshKey((k) => k + 1);
+      toast.success(tUnenroll('success', { count: result.unenrolledStudents }));
+    } catch (error) {
+      console.error('Mass unenroll failed:', error);
+      toast.error(error instanceof Error ? error.message : tUnenroll('error'));
+    } finally {
+      setIsUnenrolling(false);
+    }
+  };
+
+  const handleCloseUnenroll = () => {
+    setIsUnenrollOpen(false);
+    setUnenrollFile(null);
+    setUnenrollResult(null);
+    setUnenrollCourseId(null);
+    if (unenrollFileRef.current) {
+      unenrollFileRef.current.value = '';
     }
   };
 
@@ -234,14 +292,22 @@ export default function StudentsPage() {
           title={t('title')}
           description={t('description')}
           actions={
-            <Button
-              onClick={() => setIsDialogOpen(true)}
-              disabled={!!limitReached}
-              title={limitReached ? tAlerts('reached', { current: currentStudents, max: maxStudents }) : undefined}
-            >
-              {limitReached ? <AlertTriangle className="mr-2 h-4 w-4" /> : <Upload className="mr-2 h-4 w-4" />}
-              {tImport('button')}
-            </Button>
+            <div className="flex items-center gap-2">
+              {canMassUnenroll && (
+                <Button variant="outline" onClick={() => setIsUnenrollOpen(true)}>
+                  <UserMinus className="mr-2 h-4 w-4" />
+                  {tUnenroll('button')}
+                </Button>
+              )}
+              <Button
+                onClick={() => setIsDialogOpen(true)}
+                disabled={!!limitReached}
+                title={limitReached ? tAlerts('reached', { current: currentStudents, max: maxStudents }) : undefined}
+              >
+                {limitReached ? <AlertTriangle className="mr-2 h-4 w-4" /> : <Upload className="mr-2 h-4 w-4" />}
+                {tImport('button')}
+              </Button>
+            </div>
           }
         />
 
@@ -503,6 +569,156 @@ export default function StudentsPage() {
                 >
                   {isUploading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {isUploading ? tImport('uploading') : tImport('upload')}
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* Mass-Unenroll Dialog */}
+        <Dialog open={isUnenrollOpen} onOpenChange={(open) => !open && handleCloseUnenroll()}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <UserMinus className="h-5 w-5 text-destructive" />
+                {tUnenroll('title')}
+              </DialogTitle>
+              <DialogDescription>{tUnenroll('description')}</DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-4 py-4">
+              {/* Scope */}
+              <div>
+                <label className="block text-sm font-medium mb-2">{tUnenroll('scope')}</label>
+                <Select
+                  value={unenrollCourseId?.toString() || 'all'}
+                  onValueChange={(val) => setUnenrollCourseId(val === 'all' ? null : parseInt(val))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{tUnenroll('wholeInstitution')}</SelectItem>
+                    {courses.map((course) => (
+                      <SelectItem key={course.id} value={course.id.toString()}>
+                        {course.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isSuperAdmin && !unenrollCourseId && !effectiveUniversityId && (
+                  <p className="text-xs text-destructive mt-1">{tUnenroll('selectUniversityFirst')}</p>
+                )}
+              </div>
+
+              {/* File Upload */}
+              <div>
+                <label className="block text-sm font-medium mb-2">{tImport('selectFile')}</label>
+                <div
+                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-destructive/50 transition-colors"
+                  onClick={() => unenrollFileRef.current?.click()}
+                >
+                  {unenrollFile ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <FileSpreadsheet className="h-5 w-5 text-destructive" />
+                      <span className="font-medium">{unenrollFile.name}</span>
+                      <span className="text-sm text-muted-foreground">
+                        ({(unenrollFile.size / 1024).toFixed(1)} KB)
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">{tUnenroll('dropzone')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tImport('acceptedFormats')}</p>
+                    </div>
+                  )}
+                </div>
+                <input
+                  ref={unenrollFileRef}
+                  type="file"
+                  accept=".csv,.xlsx"
+                  onChange={handleUnenrollFileSelect}
+                  className="hidden"
+                />
+              </div>
+
+              {/* Warning */}
+              {!unenrollResult && (
+                <div className="flex items-start gap-2 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20 p-3">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
+                  <p className="text-xs text-amber-800 dark:text-amber-200">{tUnenroll('warning')}</p>
+                </div>
+              )}
+
+              {/* Results */}
+              {unenrollResult && (
+                <div className="border rounded-lg p-4 space-y-3">
+                  <h4 className="font-medium flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    {tUnenroll('results')}
+                  </h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{tImport('totalRows')}:</span>
+                      <span className="font-medium">{unenrollResult.totalRows}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{tUnenroll('unenrolledStudents')}:</span>
+                      <span className="font-medium text-destructive">{unenrollResult.unenrolledStudents}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{tUnenroll('removedEnrollments')}:</span>
+                      <span className="font-medium">{unenrollResult.removedEnrollments}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{tUnenroll('notFound')}:</span>
+                      <span className="font-medium">{unenrollResult.notFoundCount}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">{tUnenroll('alreadyUnenrolled')}:</span>
+                      <span className="font-medium">{unenrollResult.skippedCount}</span>
+                    </div>
+                  </div>
+
+                  {unenrollResult.errors.length > 0 && (
+                    <div className="mt-3">
+                      <h5 className="text-sm font-medium text-red-600 flex items-center gap-1 mb-2">
+                        <XCircle className="h-4 w-4" />
+                        {tImport('errorDetails')} ({unenrollResult.errors.length})
+                      </h5>
+                      <div className="max-h-32 overflow-y-auto space-y-1">
+                        {unenrollResult.errors.map((err, i) => (
+                          <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
+                            <span className="font-medium">{tImport('row')} {err.row}:</span>{' '}
+                            {err.reason}
+                            {(err.email || err.matricula) && (
+                              <span className="text-muted-foreground"> ({err.email || err.matricula})</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" onClick={handleCloseUnenroll}>
+                {tImport('cancel')}
+              </Button>
+              {!unenrollResult && (
+                <Button
+                  variant="destructive"
+                  onClick={handleMassUnenroll}
+                  disabled={
+                    !unenrollFile ||
+                    isUnenrolling ||
+                    (!unenrollCourseId && !effectiveUniversityId)
+                  }
+                >
+                  {isUnenrolling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isUnenrolling ? tUnenroll('processing') : tUnenroll('confirm')}
                 </Button>
               )}
             </DialogFooter>

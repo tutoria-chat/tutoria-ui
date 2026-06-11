@@ -85,6 +85,7 @@ import type {
   UniversityLimits,
   UniversityRegistration,
   StudentImportResult,
+  StudentMassUnenrollResult,
   StudentImportJob,
   PermissionDefinition,
   QuizQuestion,
@@ -1024,6 +1025,18 @@ class TutoriaAPIClient {
     formData.append('courseId', courseId.toString());
     formData.append('file', file);
     return this.post('/api/students/import', formData, { isFormData: true });
+  }
+
+  /** Bulk-unenroll via CSV/XLSX. courseId scopes to one course; otherwise the whole institution. */
+  async massUnenrollStudents(
+    file: globalThis.File,
+    options?: { courseId?: number; universityId?: number }
+  ): Promise<StudentMassUnenrollResult> {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (options?.courseId) formData.append('courseId', options.courseId.toString());
+    if (options?.universityId) formData.append('universityId', options.universityId.toString());
+    return this.post('/api/students/mass-unenroll', formData, { isFormData: true });
   }
 
   async getImportJobs(courseId?: number): Promise<StudentImportJob[]> {

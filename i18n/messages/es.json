@@ -1478,6 +1478,25 @@
       "reached": "Límite de estudiantes alcanzado: {current} de {max} estudiantes. Actualice su plan para agregar más.",
       "upgrade": "Actualizar Plan"
     },
+    "unenroll": {
+      "button": "Desmatricular en Masa",
+      "title": "Desmatriculación en Masa",
+      "description": "Sube un CSV o XLSX con los estudiantes a desmatricular (columnas: matrícula y/o email). Ideal para graduaciones y fin de semestre.",
+      "scope": "Alcance",
+      "wholeInstitution": "Toda la institución (todas las disciplinas)",
+      "selectUniversityFirst": "Selecciona una institución educativa en el filtro de arriba primero.",
+      "dropzone": "Arrastra el archivo con los estudiantes a desmatricular",
+      "warning": "Esta acción elimina las matrículas de los estudiantes listados en el archivo. Los registros e historial se conservan, pero pierden acceso al tutor. No se puede deshacer.",
+      "results": "Resultado de la Desmatriculación",
+      "unenrolledStudents": "Estudiantes desmatriculados",
+      "removedEnrollments": "Matrículas eliminadas",
+      "notFound": "No encontrados",
+      "alreadyUnenrolled": "Ya desmatriculados",
+      "processing": "Procesando...",
+      "confirm": "Desmatricular",
+      "success": "{count} estudiante(s) desmatriculado(s) con éxito",
+      "error": "No se pudo procesar el archivo."
+    },
     "import": {
       "button": "Importar Estudiantes",
       "title": "Importar Estudiantes desde Archivo",
@@ -1914,6 +1933,7 @@
     "universities": "Instituciones Educativas",
     "myUniversity": "Mi institución educativa",
     "moduleTokens": "Claves de Acceso",
+    "students": "Estudiantes",
     "professors": "Profesores",
     "users": "Usuarios",
     "administration": "Administración",

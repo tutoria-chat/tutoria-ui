@@ -101,6 +101,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       requiredPermission: 'tokens:read',
     },
     {
+      label: t('students'),
+      href: '/students',
+      icon: GraduationCap,
+      requiredPermission: 'students:read',
+    },
+    {
       label: t('subscription'),
       href: '/subscription',
       icon: CreditCard,

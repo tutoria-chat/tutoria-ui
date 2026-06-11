@@ -1494,6 +1494,15 @@ export interface StudentImportError {
   reason: string;
 }
 
+export interface StudentMassUnenrollResult {
+  totalRows: number;
+  unenrolledStudents: number;
+  removedEnrollments: number;
+  notFoundCount: number;
+  skippedCount: number;
+  errors: StudentImportError[];
+}
+
 export interface StudentImportJob {
   id: number;
   universityId: number;

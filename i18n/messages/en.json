@@ -1536,6 +1536,25 @@
       "reached": "Student limit reached: {current} of {max} students. Upgrade your plan to add more.",
       "upgrade": "Upgrade Plan"
     },
+    "unenroll": {
+      "button": "Mass Unenroll",
+      "title": "Mass Unenrollment",
+      "description": "Upload a CSV or XLSX with the students to unenroll (columns: matricula and/or email). Ideal for graduations and end of semester.",
+      "scope": "Scope",
+      "wholeInstitution": "Whole institution (all courses)",
+      "selectUniversityFirst": "Select an institution in the filter above first.",
+      "dropzone": "Drop the file with the students to unenroll",
+      "warning": "This removes the enrollments of the students listed in the file. Student records and history are kept, but they lose tutor access. This cannot be undone.",
+      "results": "Unenrollment Results",
+      "unenrolledStudents": "Students unenrolled",
+      "removedEnrollments": "Enrollments removed",
+      "notFound": "Not found",
+      "alreadyUnenrolled": "Already unenrolled",
+      "processing": "Processing...",
+      "confirm": "Unenroll",
+      "success": "{count} student(s) unenrolled successfully",
+      "error": "Could not process the file."
+    },
     "import": {
       "button": "Import Students",
       "title": "Import Students from File",
@@ -1914,6 +1933,7 @@
     "universities": "Institutions",
     "myUniversity": "My Institution",
     "moduleTokens": "Access Keys",
+    "students": "Students",
     "professors": "Professors",
     "users": "Users",
     "administration": "Administration",
