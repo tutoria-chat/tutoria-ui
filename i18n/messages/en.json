@@ -4611,7 +4611,7 @@
     },
     "retention": {
       "title": "6. Data Retention",
-      "content": "Chat interaction logs are retained for up to 12 months for academic analytics purposes. Inactive student accounts are anonymized after 24 months of inactivity. Consent records are maintained for the duration of the data processing relationship. You may request early deletion of your data at any time by exercising your rights under LGPD."
+      "content": "Chat conversations are retained for 90 days and automatically deleted after that period (data minimization — LGPD Art. 6, III). Aggregated, anonymized academic statistics may be kept longer. Inactive student accounts are anonymized after 24 months of inactivity. Consent records are maintained for the duration of the data processing relationship. You may request early deletion of your data at any time by exercising your rights under LGPD."
     },
     "contact": {
       "title": "7. Contact & Data Protection Officer",

@@ -5558,7 +5558,7 @@
     },
     "retention": {
       "title": "6. Retenção de Dados",
-      "content": "Os registros de interações do chat são mantidos por até 12 meses para fins de análise acadêmica. Contas de estudantes inativas são anonimizadas após 24 meses de inatividade. Os registros de consentimento são mantidos durante a relação de processamento de dados. Você pode solicitar a exclusão antecipada dos seus dados a qualquer momento exercendo seus direitos sob a LGPD."
+      "content": "As conversas do chat são retidas por 90 dias e excluídas automaticamente após esse período (minimização de dados — LGPD Art. 6º, III). Estatísticas acadêmicas agregadas e anonimizadas podem ser mantidas por mais tempo. Contas de estudantes inativas são anonimizadas após 24 meses de inatividade. Os registros de consentimento são mantidos durante a relação de processamento de dados. Você pode solicitar a exclusão antecipada dos seus dados a qualquer momento exercendo seus direitos sob a LGPD."
     },
     "contact": {
       "title": "7. Contato e Encarregado de Proteção de Dados",
