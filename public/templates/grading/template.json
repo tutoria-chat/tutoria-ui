@@ -7,18 +7,34 @@
     "questions": [
       {
         "slot": 1,
+        "question_db_id": "2587001",
         "question_text": "Explain the concept of object-oriented programming and its main principles.",
         "answer": "Object-oriented programming organizes code into reusable objects that combine data and behavior. The main principles are encapsulation, inheritance, polymorphism, and abstraction.",
         "current_mark": "",
         "max_mark": "2",
+        "grade_display": "Vale 2,00 ponto(s).",
+        "comment": "",
+        "_sequencecheck": "1",
+        "_comment_itemid": "100000001",
+        "_minfraction": "0",
+        "_maxfraction": "1",
+        "_qid": "5000001",
         "_quiz_cmid": "100001"
       },
       {
         "slot": 2,
+        "question_db_id": "2587002",
         "question_text": "What is the difference between a class and an object?",
         "answer": "A class is a blueprint or template that defines the structure and behavior. An object is an instance of a class created at runtime.",
         "current_mark": "",
         "max_mark": "1",
+        "grade_display": "Vale 1,00 ponto(s).",
+        "comment": "",
+        "_sequencecheck": "1",
+        "_comment_itemid": "100000002",
+        "_minfraction": "0",
+        "_maxfraction": "1",
+        "_qid": "5000002",
         "_quiz_cmid": "100001"
       }
     ],
@@ -33,18 +49,34 @@
     "questions": [
       {
         "slot": 1,
+        "question_db_id": "2587001",
         "question_text": "Explain the concept of object-oriented programming and its main principles.",
         "answer": "",
         "current_mark": "",
         "max_mark": "2",
+        "grade_display": "Vale 2,00 ponto(s).",
+        "comment": "",
+        "_sequencecheck": "1",
+        "_comment_itemid": "100000003",
+        "_minfraction": "0",
+        "_maxfraction": "1",
+        "_qid": "5000001",
         "_quiz_cmid": "100001"
       },
       {
         "slot": 2,
+        "question_db_id": "2587002",
         "question_text": "What is the difference between a class and an object?",
         "answer": "A class defines the structure and an object is created from it.",
         "current_mark": "",
         "max_mark": "1",
+        "grade_display": "Vale 1,00 ponto(s).",
+        "comment": "",
+        "_sequencecheck": "1",
+        "_comment_itemid": "100000004",
+        "_minfraction": "0",
+        "_maxfraction": "1",
+        "_qid": "5000002",
         "_quiz_cmid": "100001"
       }
     ],

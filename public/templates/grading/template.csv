@@ -1,5 +1,5 @@
-matricula,email,cmid,slot,nota,comentario
-1234567,joao.silva@university.edu,100001,1,1.5,"Good understanding of OOP. Consider expanding on polymorphism and abstraction."
-1234567,joao.silva@university.edu,100001,2,1.0,"Correct and concise. Full marks."
-7654321,maria.santos@university.edu,100001,1,0,"Resposta não fornecida"
-7654321,maria.santos@university.edu,100001,2,0.7,"Partially correct. The answer identifies the relationship but lacks detail on attributes and methods."
+matricula,email,cmid,slot,nota,comentario,max_mark,name,question_text,answer
+1234567,joao.silva@university.edu,100001,1,1.5,"Good understanding of OOP. Consider expanding on polymorphism and abstraction.",2,João Silva,"Explain the concept of object-oriented programming and its main principles.","Object-oriented programming organizes code into reusable objects that combine data and behavior. The main principles are encapsulation, inheritance, polymorphism, and abstraction."
+1234567,joao.silva@university.edu,100001,2,1.0,"Correct and concise. Full marks.",1,João Silva,"What is the difference between a class and an object?","A class is a blueprint or template that defines the structure and behavior. An object is an instance of a class created at runtime."
+7654321,maria.santos@university.edu,100001,1,0,"Resposta não fornecida",2,Maria Santos,"Explain the concept of object-oriented programming and its main principles.",""
+7654321,maria.santos@university.edu,100001,2,0.7,"Partially correct. The answer identifies the relationship but lacks detail on attributes and methods.",1,Maria Santos,"What is the difference between a class and an object?","A class defines the structure and an object is created from it."
