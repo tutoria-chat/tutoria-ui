@@ -288,7 +288,7 @@ export default function CourseDetailsPage() {
 
   const breadcrumbs: BreadcrumbItem[] = course.universityId ? [
     { label: t('breadcrumbUniversities'), href: user?.role === 'super_admin' ? '/universities' : `/universities/${course.universityId}` },
-    { label: course.universityName || 'University', href: `/universities/${course.universityId}` },
+    { label: course.universityName || 'Instituição de Ensino', href: `/universities/${course.universityId}` },
     { label: course.name, isCurrentPage: true }
   ] : [
     { label: t('breadcrumbCourses'), href: '/courses' },

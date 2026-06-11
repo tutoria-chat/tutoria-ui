@@ -332,7 +332,7 @@ export default function UniversityDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={university.name}
-        description={university.description || `Universidade ${university.code}`}
+        description={university.description || `Instituição de Ensino ${university.code}`}
         breadcrumbs={breadcrumbs}
         actions={
           <div className="flex items-center space-x-2">

@@ -32,8 +32,8 @@
     "quickActions": {
       "title": "Acciones rápidas",
       "description": "Acceso rápido a tareas comunes",
-      "createUniversity": "Crear universidad",
-      "viewUniversities": "Ver universidades",
+      "createUniversity": "Crear institución educativa",
+      "viewUniversities": "Ver instituciones educativas",
       "createCourse": "Crear curso",
       "viewProfessors": "Ver profesores",
       "createModule": "Crear módulo",
@@ -60,7 +60,7 @@
       "reached": "Límite de cursos alcanzado: {current} de {max} cursos. Actualiza tu plan para crear más."
     },
     "viewModules": "Ver módulos",
-    "searchPlaceholder": "Buscar cursos, descripciones o universidades...",
+    "searchPlaceholder": "Buscar cursos, descripciones o instituciones educativas...",
     "emptyMessage": "No se encontraron cursos. Crea tu primer curso para comenzar.",
     "create": {
       "title": "Crear Nuevo Curso",
@@ -69,7 +69,7 @@
     },
     "columns": {
       "discipline": "Curso",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "modules": "Módulos",
       "modulesCount": "{count} módulos",
       "professors": "Profesores",
@@ -81,7 +81,7 @@
       "totalCourses": "Total de cursos",
       "totalStudents": "Total de estudiantes",
       "totalModules": "Total de módulos",
-      "universities": "Universidades"
+      "universities": "Instituciones Educativas"
     },
     "deleteConfirm": "¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.",
     "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo.",
@@ -94,18 +94,18 @@
       "codeLabel": "Código *",
       "codePlaceholder": "ej., CS101, COMP200",
       "codeRequired": "El código del curso es requerido",
-      "universityLabel": "Universidad *",
-      "universityPlaceholder": "Selecciona una universidad",
-      "loadingUniversities": "Cargando universidades...",
-      "universityRequired": "La universidad es requerida",
-      "universityIdLabel": "ID de universidad: {id}",
-      "noUniversity": "Sin universidad asignada",
+      "universityLabel": "Institución Educativa *",
+      "universityPlaceholder": "Selecciona una institución educativa",
+      "loadingUniversities": "Cargando instituciones educativas...",
+      "universityRequired": "La institución educativa es requerida",
+      "universityIdLabel": "ID de institución educativa: {id}",
+      "noUniversity": "Sin institución educativa asignada",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Describe los objetivos del curso, contenido y público objetivo...",
       "professorsOptionalLabel": "Profesores",
       "optional": "opcional",
       "loadingProfessors": "Cargando profesores...",
-      "noProfessorsAvailable": "No hay profesores disponibles para esta universidad",
+      "noProfessorsAvailable": "No hay profesores disponibles para esta institución educativa",
       "selectProfessors": "Seleccionar profesores...",
       "searchProfessors": "Buscar profesores...",
       "noProfessorsFound": "No se encontraron profesores",
@@ -140,9 +140,9 @@
       "updateError": "Error al actualizar el curso. Por favor, intenta de nuevo."
     },
     "detail": {
-      "breadcrumbUniversities": "Universidades",
+      "breadcrumbUniversities": "Instituciones Educativas",
       "breadcrumbCourses": "Cursos",
-      "viewUniversity": "Ver universidad",
+      "viewUniversity": "Ver institución educativa",
       "addModule": "Agregar módulo",
       "editCourse": "Editar curso",
       "courseInfo": "Información del curso",
@@ -238,12 +238,12 @@
           "newTitle": "Crear Nuevo Profesor",
           "newDesc": "Invitar a un nuevo profesor y asignarlo al curso después",
           "existingTitle": "Seleccionar Profesor Existente",
-          "existingDesc": "Asignar un profesor ya registrado en tu universidad",
+          "existingDesc": "Asignar un profesor ya registrado en tu institución educativa",
           "searchPlaceholder": "Buscar por nombre o correo...",
           "assign": "Asignar",
           "assignSuccess": "Profesor asignado exitosamente",
           "assignError": "Error al asignar el profesor",
-          "noProfessors": "Todos los profesores de la universidad ya están asignados a este curso",
+          "noProfessors": "Todos los profesores de la institución educativa ya están asignados a este curso",
           "loadError": "Error al cargar profesores",
           "loading": "Cargando profesores..."
         }
@@ -863,25 +863,25 @@
     }
   },
   "universities": {
-    "title": "Universidades",
-    "description": "Gestiona universidades y sus programas académicos",
-    "createButton": "Crear universidad",
+    "title": "Instituciones Educativas",
+    "description": "Gestiona instituciones educativas y sus programas académicos",
+    "createButton": "Crear institución educativa",
     "viewAllCourses": "Ver todos los cursos",
     "viewAllModules": "Ver todos los módulos",
-    "searchPlaceholder": "Buscar universidades...",
-    "emptyMessage": "No se encontraron universidades",
+    "searchPlaceholder": "Buscar instituciones educativas...",
+    "emptyMessage": "No se encontraron instituciones educativas",
     "columns": {
-      "universityName": "Nombre de la universidad",
+      "universityName": "Nombre de la institución educativa",
       "createdAt": "Creado el",
       "actions": "Acciones"
     },
-    "deleteConfirm": "¿Estás seguro de que deseas eliminar esta universidad? Esta acción no se puede deshacer.",
-    "deleteError": "Error al eliminar la universidad. Por favor, intenta de nuevo.",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar esta institución educativa? Esta acción no se puede deshacer.",
+    "deleteError": "Error al eliminar la institución educativa. Por favor, intenta de nuevo.",
     "detail": {
-      "breadcrumb": "Universidades",
+      "breadcrumb": "Instituciones Educativas",
       "edit": "Editar",
       "myAIAgent": "Mi Agente IA",
-      "notFound": "Universidad no encontrada",
+      "notFound": "Institución Educativa no encontrada",
       "stats": {
         "courses": "Cursos",
         "professors": "Profesores",
@@ -894,9 +894,9 @@
         "professors": "Profesores"
       },
       "info": {
-        "title": "Información de la Universidad",
+        "title": "Información de la Institución Educativa",
         "description": "Detalles de contacto y administrativos",
-        "code": "Código de la Universidad",
+        "code": "Código de la Institución Educativa",
         "contactEmail": "Correo Electrónico de Contacto",
         "contactPhone": "Teléfono de Contacto",
         "contactPerson": "Persona de Contacto",
@@ -924,14 +924,14 @@
       },
       "coursesTab": {
         "title": "Cursos",
-        "description": "Cursos ofrecidos por esta universidad",
+        "description": "Cursos ofrecidos por esta institución educativa",
         "newCourse": "Nuevo curso",
         "searchPlaceholder": "Buscar cursos...",
         "emptyMessage": "Aún no hay cursos registrados."
       },
       "professorsTab": {
         "title": "Profesores",
-        "description": "Profesores asociados con esta universidad",
+        "description": "Profesores asociados con esta institución educativa",
         "newProfessor": "Nuevo profesor",
         "searchPlaceholder": "Buscar profesores...",
         "emptyMessage": "Aún no hay profesores registrados."
@@ -940,24 +940,24 @@
       "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo."
     },
     "form": {
-      "breadcrumb": "Universidades",
-      "createTitle": "Crear universidad",
-      "createDescription": "Crea una nueva universidad en el sistema",
-      "editTitle": "Editar universidad",
-      "editDescription": "Edita la información de la universidad",
-      "breadcrumbCreate": "Crear universidad",
+      "breadcrumb": "Instituciones Educativas",
+      "createTitle": "Crear institución educativa",
+      "createDescription": "Crea una nueva institución educativa en el sistema",
+      "editTitle": "Editar institución educativa",
+      "editDescription": "Edita la información de la institución educativa",
+      "breadcrumbCreate": "Crear institución educativa",
       "breadcrumbEdit": "Editar",
       "back": "Volver",
-      "universityInfo": "Información de la universidad",
+      "universityInfo": "Información de la institución educativa",
       "contactInfo": "Información de contacto",
-      "nameLabel": "Nombre de la universidad *",
-      "namePlaceholder": "Ej: Universidad Federal de São Paulo",
-      "nameRequired": "El nombre de la universidad es requerido",
+      "nameLabel": "Nombre de la institución educativa *",
+      "namePlaceholder": "Ej: Institución Educativa Federal de São Paulo",
+      "nameRequired": "El nombre de la institución educativa es requerido",
       "codeLabel": "Nombre de fantasía *",
       "codePlaceholder": "Ej: USP, UNIFESP, BYU",
       "codeRequired": "El nombre de fantasía es requerido",
       "descriptionLabel": "Descripción",
-      "descriptionPlaceholder": "Descripción de la universidad (opcional)",
+      "descriptionPlaceholder": "Descripción de la institución educativa (opcional)",
       "cepLabel": "Código Postal (CEP)",
       "cepPlaceholder": "00000-000",
       "cepHelpText": "Ingrese el código postal brasileño para autocompletar la dirección",
@@ -976,23 +976,23 @@
       "taxIdLabel": "Número de identificación fiscal",
       "taxIdPlaceholder": "Ej: 00.000.000/0000-00",
       "contactEmailLabel": "Correo electrónico de contacto",
-      "contactEmailPlaceholder": "Ej: contacto@universidad.edu",
+      "contactEmailPlaceholder": "Ej: contacto@institución educativa.edu",
       "contactPhoneLabel": "Teléfono de contacto",
       "contactPhonePlaceholder": "Ej: (11) 3091-3300",
       "contactPersonLabel": "Persona de contacto",
       "contactPersonPlaceholder": "Ej: Juan Silva - Coordinador",
       "websiteLabel": "Sitio web",
-      "websitePlaceholder": "Ej: https://www.universidad.edu",
-      "create": "Crear universidad",
-      "update": "Actualizar universidad",
+      "websitePlaceholder": "Ej: https://www.institución educativa.edu",
+      "create": "Crear institución educativa",
+      "update": "Actualizar institución educativa",
       "cancel": "Cancelar",
       "creating": "Creando...",
       "updating": "Actualizando...",
-      "createError": "Error al crear la universidad. Por favor, intenta de nuevo.",
-      "updateError": "Error al actualizar la universidad. Por favor, intenta de nuevo.",
-      "loadError": "Error al cargar los datos de la universidad.",
+      "createError": "Error al crear la institución educativa. Por favor, intenta de nuevo.",
+      "updateError": "Error al actualizar la institución educativa. Por favor, intenta de nuevo.",
+      "loadError": "Error al cargar los datos de la institución educativa.",
       "loadErrorTitle": "Error",
-      "loadErrorDescription": "No se pudieron cargar los datos de la universidad"
+      "loadErrorDescription": "No se pudieron cargar los datos de la institución educativa"
     },
     "subscription": {
       "title": "Plan de Suscripción",
@@ -1004,9 +1004,9 @@
       "tierStarterDesc": "Funciones esenciales de tutoría con IA",
       "tierProfessionalDesc": "Modelos avanzados de IA y analíticas",
       "tierBusinessDesc": "Acceso completo a todos los modelos y funciones de IA",
-      "tierHelpText": "El nivel de suscripción controla qué modelos de IA puede acceder esta universidad",
-      "isEnterpriseLabel": "Universidad Empresarial",
-      "isEnterpriseHelp": "Las universidades empresariales tienen límites personalizados en lugar de límites basados en planes",
+      "tierHelpText": "El nivel de suscripción controla qué modelos de IA puede acceder esta institución educativa",
+      "isEnterpriseLabel": "Institución Educativa Empresarial",
+      "isEnterpriseHelp": "Las instituciones educativas empresariales tienen límites personalizados en lugar de límites basados en planes",
       "maxCoursesLabel": "Cursos Máximos",
       "maxCoursesPlaceholder": "ej: 100",
       "maxCoursesHelp": "Establezca 0 para cursos ilimitados",
@@ -1084,7 +1084,7 @@
       "type": "Tipo",
       "admin": "Administrador",
       "professor": "Profesor",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "createdAt": "Creado el",
       "status": "Estado",
       "active": "Activo",
@@ -1104,7 +1104,7 @@
       "regularProfessor": "Profesor Regular",
       "regularDescription": "Puede ver y gestionar cursos y módulos asignados",
       "adminProfessor": "Profesor Administrador",
-      "adminDescription": "Puede gestionar todos los cursos, módulos y profesores en su universidad"
+      "adminDescription": "Puede gestionar todos los cursos, módulos y profesores en su institución educativa"
     },
     "create": {
       "title": "Crear Profesor",
@@ -1116,29 +1116,29 @@
       "successCardDescription": "El profesor {firstName} {lastName} ha sido creado.",
       "usernameLabel": "Nombre de Usuario",
       "emailLabel": "Correo Electrónico",
-      "universityLabel": "Universidad",
+      "universityLabel": "Institución Educativa",
       "assignedCoursesLabel": "Cursos Asignados",
       "successTitleAdded": "¡Profesor Agregado!",
       "inviteSentSuccess": "¡Invitación enviada exitosamente!",
       "emailSentTitle": "Invitación Enviada",
       "emailSentDescription": "Se ha enviado un enlace de invitación a {email}. El profesor completará su nombre y creará su propia contraseña.",
-      "emailSentDescriptionAdded": "{email} ya tenía una cuenta y ha sido agregado a tu universidad.",
+      "emailSentDescriptionAdded": "{email} ya tenía una cuenta y ha sido agregado a tu institución educativa.",
       "emailInstructions": "El profesor recibirá un correo con un enlace para completar su registro. El enlace expirará en 24 horas.",
       "emailFormHint": "Se enviará una invitación por correo para que el profesor configure su propia cuenta.",
       "coursesAfterRegistration": "Nota: los cursos deberán asignarse manualmente después de que el profesor acepte la invitación y se registre.",
       "backToList": "Volver a la Lista",
-      "backToUniversity": "Volver a Detalles de la Universidad",
+      "backToUniversity": "Volver a Detalles de la Institución Educativa",
       "createAnother": "Crear Otro Profesor",
       "someCoursesFailed": "Profesor creado, pero algunas asignaciones de cursos fallaron. Por favor verifica los cursos asignados.",
       "permissions": "Permisos: Los profesores regulares pueden ver cursos y gestionar módulos que les son asignados.",
       "professorInfoTitle": "Información del Profesor",
       "professorInfoDescription": "Ingresa el correo del profesor y asígnalo a los cursos. Recibirá un correo de bienvenida con instrucciones de acceso.",
-      "universityLabelRequired": "Universidad *",
-      "selectUniversity": "Selecciona una universidad",
+      "universityLabelRequired": "Institución Educativa *",
+      "selectUniversity": "Selecciona una institución educativa",
       "coursesLabelRequired": "Cursos *",
       "loadingCourses": "Cargando cursos...",
-      "noCoursesAvailable": "No hay cursos disponibles para esta universidad.",
-      "selectUniversityFirst": "Selecciona una universidad primero para ver los cursos disponibles.",
+      "noCoursesAvailable": "No hay cursos disponibles para esta institución educativa.",
+      "selectUniversityFirst": "Selecciona una institución educativa primero para ver los cursos disponibles.",
       "selectCourses": "Seleccionar cursos...",
       "searchCourses": "Buscar cursos...",
       "noCoursesFound": "No se encontraron cursos.",
@@ -1150,7 +1150,7 @@
       "usernamePlaceholder": "ej., juan.silva",
       "usernameHint": "Se usará para iniciar sesión. Usa solo letras, números, puntos y guiones bajos.",
       "emailFormLabel": "Correo Electrónico *",
-      "emailPlaceholder": "ej., juan.silva@universidad.edu",
+      "emailPlaceholder": "ej., juan.silva@institución educativa.edu",
       "tempPasswordLabel": "Contraseña Temporal *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordHint": "Esta contraseña se usará para generar el enlace de configuración. El usuario definirá su propia contraseña.",
@@ -1163,7 +1163,7 @@
       "lastNameRequired": "El apellido es requerido",
       "passwordRequired": "La contraseña temporal es requerida",
       "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-      "universityRequired": "La universidad es requerida",
+      "universityRequired": "La institución educativa es requerida",
       "coursesRequired": "Selecciona al menos un curso",
       "emailInvalid": "Correo electrónico inválido",
       "usernameAlreadyExists": "El nombre de usuario ya existe",
@@ -1173,7 +1173,7 @@
       "errorCreatingProfessor": "Error al crear profesor",
       "linkCopied": "¡Enlace copiado al portapapeles!",
       "errorCopyingLink": "Error al copiar enlace",
-      "errorLoadingUniversities": "Error al cargar universidades",
+      "errorLoadingUniversities": "Error al cargar instituciones educativas",
       "errorLoadingCourses": "Error al cargar cursos",
       "languageLabel": "Idioma Preferido",
       "languagePlaceholder": "Seleccionar idioma",
@@ -1181,19 +1181,19 @@
       "languageEnglish": "English (Estados Unidos)",
       "languageSpanish": "Español",
       "languageHint": "La interfaz del profesor se mostrará en este idioma",
-      "universityPreselected": "Universidad preseleccionada desde la URL",
-      "universityLockedForAdmin": "Universidad bloqueada a su institución como profesor administrador"
+      "universityPreselected": "Institución Educativa preseleccionada desde la URL",
+      "universityLockedForAdmin": "Institución Educativa bloqueada a su institución como profesor administrador"
     },
     "createAdmin": {
       "title": "Crear Profesor Administrador",
-      "description": "Crear una nueva cuenta de profesor administrador con acceso de gestión universitaria",
+      "description": "Crear una nueva cuenta de profesor administrador con acceso de gestión institucional",
       "createAdminProfessor": "Crear Profesor Administrador",
       "breadcrumbCreate": "Crear Profesor Administrador",
-      "securityWarning": "Advertencia: Los profesores administradores pueden gestionar cursos, módulos y crear profesores regulares en su universidad.",
+      "securityWarning": "Advertencia: Los profesores administradores pueden gestionar cursos, módulos y crear profesores regulares en su institución educativa.",
       "professorInfoTitle": "Información del Profesor Administrador",
       "professorInfoDescription": "Completa los datos del nuevo profesor administrador. Se generará un enlace de configuración de contraseña después de la creación.",
-      "universityLabel": "Universidad *",
-      "selectUniversity": "Selecciona una universidad",
+      "universityLabel": "Institución Educativa *",
+      "selectUniversity": "Selecciona una institución educativa",
       "firstNameLabel": "Nombre *",
       "firstNamePlaceholder": "ej., Juan",
       "lastNameLabel": "Apellido *",
@@ -1202,7 +1202,7 @@
       "usernamePlaceholder": "ej., juan.silva",
       "usernameHint": "Se usará para iniciar sesión. Usa solo letras, números, puntos y guiones bajos.",
       "emailLabel": "Correo Electrónico *",
-      "emailPlaceholder": "ej., juan.silva@universidad.edu",
+      "emailPlaceholder": "ej., juan.silva@institución educativa.edu",
       "tempPasswordLabel": "Contraseña Temporal *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordHint": "Esta contraseña se usará para generar el enlace de configuración. El usuario definirá su propia contraseña.",
@@ -1215,7 +1215,7 @@
       "lastNameRequired": "El apellido es requerido",
       "passwordRequired": "La contraseña temporal es requerida",
       "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
-      "universityRequired": "La universidad es requerida",
+      "universityRequired": "La institución educativa es requerida",
       "emailInvalid": "Correo electrónico inválido",
       "usernameAlreadyExists": "El nombre de usuario ya existe",
       "emailAlreadyExists": "El correo electrónico ya existe",
@@ -1226,7 +1226,7 @@
       "successCardDescription": "El profesor administrador {firstName} {lastName} ha sido creado.",
       "usernameDisplay": "Nombre de Usuario",
       "emailDisplay": "Correo Electrónico",
-      "universityDisplay": "Universidad",
+      "universityDisplay": "Institución Educativa",
       "emailSentTitle": "Correo de Bienvenida Enviado",
       "emailSentDescription": "Se ha enviado un correo electrónico con instrucciones de inicio de sesión a {email}",
       "emailInstructions": "El nuevo profesor recibirá un correo electrónico con su contraseña temporal y un enlace para establecer su contraseña permanente. El enlace expirará en 24 horas.",
@@ -1236,7 +1236,7 @@
       "errorCreatingAdmin": "Error al crear profesor administrador",
       "linkCopied": "¡Enlace copiado al portapapeles!",
       "errorCopyingLink": "Error al copiar enlace",
-      "errorLoadingUniversities": "Error al cargar universidades",
+      "errorLoadingUniversities": "Error al cargar instituciones educativas",
       "languageLabel": "Idioma Preferido",
       "languagePlaceholder": "Seleccionar idioma",
       "languagePortuguese": "Português (Brasil)",
@@ -1259,7 +1259,7 @@
       "usernamePlaceholder": "Ingrese el nombre de usuario",
       "usernameRequired": "El nombre de usuario es requerido",
       "emailLabel": "Correo Electrónico",
-      "emailPlaceholder": "email@universidad.edu",
+      "emailPlaceholder": "email@institución educativa.edu",
       "adminProfessorLabel": "Profesor Administrador",
       "adminDescription": "Los administradores pueden gestionar cursos y asignar profesores",
       "assignedCourses": "Cursos Asignados",
@@ -1267,7 +1267,7 @@
       "selectCourses": "Seleccionar cursos...",
       "searchCourses": "Buscar cursos...",
       "noCoursesFound": "No se encontraron cursos.",
-      "noCoursesAvailable": "No hay cursos disponibles para esta universidad",
+      "noCoursesAvailable": "No hay cursos disponibles para esta institución educativa",
       "errorLoadingCourses": "Error al cargar cursos",
       "passwordReset": "Restablecer Contraseña",
       "passwordResetDescription": "Restablece la contraseña del profesor",
@@ -1321,7 +1321,7 @@
       "username": "Nombre de Usuario",
       "name": "Nombre",
       "role": "Rol",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "status": "Estado",
       "actions": "Acciones",
       "active": "Activo",
@@ -1329,7 +1329,7 @@
     },
     "create": {
       "title": "Agregar Usuarios",
-      "description": "Invite nuevos usuarios o agregue existentes a su universidad",
+      "description": "Invite nuevos usuarios o agregue existentes a su institución educativa",
       "errorMessage": "Error al procesar las invitaciones",
       "invite": {
         "formTitle": "Invitar Usuarios",
@@ -1344,7 +1344,7 @@
         "results": {
           "title": "Resultados",
           "invited": "{count} invitación(es) enviada(s)",
-          "added": "{count} usuario(s) existente(s) agregado(s) a la universidad",
+          "added": "{count} usuario(s) existente(s) agregado(s) a la institución educativa",
           "alreadyMembers": "{count} usuario(s) ya son miembros",
           "errors": "{count} error(es) ocurrido(s)"
         },
@@ -1356,8 +1356,8 @@
           "placeholder": "Seleccione un rol..."
         },
         "university": {
-          "label": "Universidad",
-          "placeholder": "Seleccione una universidad..."
+          "label": "Institución Educativa",
+          "placeholder": "Seleccione una institución educativa..."
         },
         "language": {
           "label": "Idioma Preferido"
@@ -1366,7 +1366,7 @@
       "errors": {
         "emailRequired": "Se requiere al menos una dirección de correo",
         "userTypeRequired": "El rol es obligatorio",
-        "universityRequired": "La universidad es obligatoria para este rol"
+        "universityRequired": "La institución educativa es obligatoria para este rol"
       }
     },
     "detail": {
@@ -1382,7 +1382,7 @@
       "emailLabel": "Correo Electrónico",
       "firstNameLabel": "Nombre",
       "lastNameLabel": "Apellido",
-      "universityLabel": "Universidad",
+      "universityLabel": "Institución Educativa",
       "createdAt": "Creado",
       "lastLogin": "Último Acceso",
       "active": "Activo",
@@ -1425,15 +1425,15 @@
       "confirmDeleteTitle": "Eliminar Usuario Permanentemente",
       "confirmDeleteDescription": "¿Estás seguro de que deseas eliminar permanentemente a {name}? Esta acción no se puede deshacer.",
       "confirmDelete": "Eliminar Permanentemente",
-      "universities": "Universidades",
-      "universitiesDescription": "Universidades a las que pertenece este usuario.",
-      "noUniversities": "Este usuario no pertenece a ninguna universidad.",
+      "universities": "Instituciones Educativas",
+      "universitiesDescription": "Instituciones Educativas a las que pertenece este usuario.",
+      "noUniversities": "Este usuario no pertenece a ninguna institución educativa.",
       "removeFromUniversity": "Eliminar",
-      "confirmRemoveUniversityTitle": "¿Eliminar de la Universidad?",
-      "confirmRemoveUniversityDescription": "¿Está seguro de que desea eliminar a {name} de {university}? Perderá el acceso a todos los datos de esta universidad.",
+      "confirmRemoveUniversityTitle": "¿Eliminar de la Institución Educativa?",
+      "confirmRemoveUniversityDescription": "¿Está seguro de que desea eliminar a {name} de {university}? Perderá el acceso a todos los datos de esta institución educativa.",
       "confirmRemove": "Eliminar",
-      "removeSuccess": "Usuario eliminado de la universidad con éxito.",
-      "removeError": "Error al eliminar al usuario de la universidad."
+      "removeSuccess": "Usuario eliminado de la institución educativa con éxito.",
+      "removeError": "Error al eliminar al usuario de la institución educativa."
     }
   },
   "students": {
@@ -1455,9 +1455,9 @@
       "description": "Ver todos los estudiantes matriculados",
       "searchPlaceholder": "Buscar por nombre, email o matrícula...",
       "emptyMessage": "No se encontraron estudiantes.",
-      "filterByUniversity": "Filtrar por Universidad",
-      "filterByUniversityPlaceholder": "Seleccionar una universidad...",
-      "allUniversities": "Todas las Universidades",
+      "filterByUniversity": "Filtrar por Institución Educativa",
+      "filterByUniversityPlaceholder": "Seleccionar una institución educativa...",
+      "allUniversities": "Todas las Instituciones Educativas",
       "filterByCourse": "Filtrar por Curso",
       "filterByCoursePlaceholder": "Seleccionar un curso...",
       "allCourses": "Todos los Cursos",
@@ -1518,7 +1518,7 @@
     "title": "Agente de IA del Profesor",
     "description": "Tu asistente de IA personal para retroalimentación sobre materiales del curso",
     "noAgent": {
-      "message": "Aún no tienes un agente de IA. Por favor, contacta al administrador de tu universidad para crear uno para ti.",
+      "message": "Aún no tienes un agente de IA. Por favor, contacta al administrador de tu institución educativa para crear uno para ti.",
       "adminOnly": "Solo los administradores pueden crear agentes de IA para profesores."
     },
     "agentInfo": {
@@ -1814,7 +1814,7 @@
       "_comment": "Activity section commented out - TODO: Implement real activity tracking",
       "title": "Actividad Reciente de Super Administradores",
       "description": "Acciones administrativas más recientes realizadas por super administradores",
-      "example1": "Nueva universidad \"Universidad de Tecnología\" creada",
+      "example1": "Nueva institución educativa \"Institución Educativa de Tecnología\" creada",
       "example2": "Configuración del sistema actualizada",
       "example3": "Nueva cuenta de super administrador creada",
       "by": "por",
@@ -1844,7 +1844,7 @@
       "usernameRequired": "El nombre de usuario es requerido",
       "usernameHint": "🔑 Usado para iniciar sesión en el sistema. Usa solo letras, números, puntos (.) y guiones bajos (_). Ejemplo: juan.silva o j.silva",
       "emailLabel": "Correo Electrónico *",
-      "emailPlaceholder": "ej., juan.silva@universidad.edu",
+      "emailPlaceholder": "ej., juan.silva@institución educativa.edu",
       "emailRequired": "El correo electrónico es requerido",
       "emailInvalid": "Correo electrónico inválido",
       "emailHint": "📧 Correo institucional o personal del super administrador. Se usará para recuperación de contraseña y notificaciones del sistema.",
@@ -1894,7 +1894,7 @@
       "usernamePlaceholder": "ej., juan.silva",
       "usernameRequired": "El nombre de usuario es requerido",
       "emailLabel": "Correo Electrónico",
-      "emailPlaceholder": "ej., juan.silva@universidad.edu",
+      "emailPlaceholder": "ej., juan.silva@institución educativa.edu",
       "emailRequired": "El correo electrónico es requerido",
       "emailInvalid": "Correo electrónico inválido",
       "update": "Actualizar Super Administrador",
@@ -1911,8 +1911,8 @@
   "sidebar": {
     "dashboard": "Panel",
     "tutorials": "Tutoriales y Guías",
-    "universities": "Universidades",
-    "myUniversity": "Mi universidad",
+    "universities": "Instituciones Educativas",
+    "myUniversity": "Mi institución educativa",
     "moduleTokens": "Claves de Acceso",
     "professors": "Profesores",
     "users": "Usuarios",
@@ -1939,10 +1939,10 @@
     "settings": "Configuración",
     "logout": "Cerrar sesión",
     "universitySwitcher": {
-      "label": "Sus Universidades",
-      "select": "Seleccionar universidad",
+      "label": "Sus Instituciones Educativas",
+      "select": "Seleccionar institución educativa",
       "switching": "Cambiando...",
-      "error": "Error al cambiar de universidad. Inténtelo de nuevo."
+      "error": "Error al cambiar de institución educativa. Inténtelo de nuevo."
     }
   },
   "changePassword": {
@@ -2081,8 +2081,8 @@
       "course": "Curso",
       "modules": "Módulos",
       "module": "Módulo",
-      "universities": "Universidades",
-      "university": "Universidad",
+      "universities": "Instituciones Educativas",
+      "university": "Institución Educativa",
       "professors": "Profesores",
       "professor": "Profesor",
       "users": "Usuarios",
@@ -2096,8 +2096,8 @@
       "professor": "Profesor",
       "student": "Estudiante",
       "descriptions": {
-        "super_admin": "Acceso completo al sistema en todas las universidades",
-        "manager": "Gestión de universidad con acceso a análisis",
+        "super_admin": "Acceso completo al sistema en todas las instituciones educativas",
+        "manager": "Gestión de institución educativa con acceso a análisis",
         "tutor": "Puede crear cursos, módulos y tokens",
         "platform_coordinator": "Ver cursos/módulos y generar tokens de acceso",
         "professor": "Gestionar cursos y módulos asignados",
@@ -2167,7 +2167,7 @@
           "Panel: Tu página de inicio con acciones rápidas",
           "Tokens de módulo: Ver y gestionar tokens de acceso"
         ],
-        "roleSpecific": "Aparecen elementos adicionales según tu rol (Universidades, Cursos, Módulos, Profesores, Administración)."
+        "roleSpecific": "Aparecen elementos adicionales según tu rol (Instituciones Educativas, Cursos, Módulos, Profesores, Administración)."
       },
       "breadcrumbs": {
         "title": "Migas de pan",
@@ -2221,15 +2221,15 @@
       "subtitle": "Guía completa para administradores del sistema",
       "overview": {
         "title": "Descripción del rol",
-        "description": "Como Super Administrador, tienes acceso completo a todas las funciones y configuraciones del sistema. Eres responsable de gestionar toda la plataforma, incluyendo universidades, administradores y configuraciones del sistema.",
+        "description": "Como Super Administrador, tienes acceso completo a todas las funciones y configuraciones del sistema. Eres responsable de gestionar toda la plataforma, incluyendo instituciones educativas, administradores y configuraciones del sistema.",
         "keyResponsibilities": "Responsabilidades clave",
         "responsibilities": [
-          "Crear y gestionar universidades en el sistema",
+          "Crear y gestionar instituciones educativas en el sistema",
           "Crear y gestionar cuentas de super administrador",
-          "Crear profesores administradores para cada universidad",
+          "Crear profesores administradores para cada institución educativa",
           "Monitorear la actividad y seguridad de todo el sistema",
           "Gestionar la búsqueda global y las estadísticas del sistema",
-          "Supervisar todo el contenido en todas las universidades"
+          "Supervisar todo el contenido en todas las instituciones educativas"
         ]
       },
       "gettingStarted": {
@@ -2237,49 +2237,49 @@
         "step1Title": "1. Vista general del panel",
         "step1Desc": "Después de iniciar sesión, verás tu panel en /dashboard con acciones rápidas y una vista general del sistema. El panel proporciona acceso a todas las funciones principales.",
         "step2Title": "2. Entendiendo tu navegación",
-        "step2Desc": "Tu barra lateral contiene: Panel, Universidades, Tokens de módulo y la sección de Administración (Super Administradores, Búsqueda Global). Usa estos para navegar por el sistema de manera eficiente.",
+        "step2Desc": "Tu barra lateral contiene: Panel, Instituciones Educativas, Tokens de módulo y la sección de Administración (Super Administradores, Búsqueda Global). Usa estos para navegar por el sistema de manera eficiente.",
         "step3Title": "3. Primeros pasos",
-        "step3Desc": "Comienza creando tu primera universidad, luego crea un profesor administrador para esa universidad. El profesor administrador puede entonces gestionar cursos y profesores regulares."
+        "step3Desc": "Comienza creando tu primera institución educativa, luego crea un profesor administrador para esa institución educativa. El profesor administrador puede entonces gestionar cursos y profesores regulares."
       },
       "universities": {
-        "title": "Gestión de universidades",
-        "description": "Las universidades son las unidades organizativas de nivel superior en Tutoria. Cada universidad puede tener múltiples cursos, profesores y estudiantes.",
+        "title": "Gestión de instituciones educativas",
+        "description": "Las instituciones educativas son las unidades organizativas de nivel superior en Tutoria. Cada institución educativa puede tener múltiples cursos, profesores y estudiantes.",
         "creating": {
-          "title": "Crear una universidad",
+          "title": "Crear una institución educativa",
           "steps": [
-            "Navega a Universidades (/universities) desde la barra lateral",
-            "Haz clic en el botón 'Crear Universidad'",
-            "Completa la información requerida: Nombre de la universidad y Código",
+            "Navega a Instituciones Educativas (/institutions) desde la barra lateral",
+            "Haz clic en el botón 'Crear Institución Educativa'",
+            "Completa la información requerida: Nombre de la institución educativa y Código",
             "Agrega una descripción opcional",
-            "Haz clic en 'Crear Universidad' para guardar",
-            "Serás redirigido a la página de detalles de la universidad"
+            "Haz clic en 'Crear Institución Educativa' para guardar",
+            "Serás redirigido a la página de detalles de la institución educativa"
           ]
         },
         "viewing": {
-          "title": "Ver detalles de la universidad",
-          "description": "Haz clic en cualquier universidad de la lista para ver sus detalles. Verás:",
+          "title": "Ver detalles de la institución educativa",
+          "description": "Haz clic en cualquier institución educativa de la lista para ver sus detalles. Verás:",
           "features": [
-            "Información y estadísticas de la universidad",
-            "Lista de cursos ofrecidos por la universidad",
-            "Lista de profesores asociados con la universidad",
+            "Información y estadísticas de la institución educativa",
+            "Lista de cursos ofrecidos por la institución educativa",
+            "Lista de profesores asociados con la institución educativa",
             "Acciones rápidas para agregar cursos o profesores"
           ]
         },
         "editing": {
-          "title": "Editar una universidad",
+          "title": "Editar una institución educativa",
           "steps": [
-            "Desde la página de detalles de la universidad, haz clic en 'Editar'",
-            "Actualiza el nombre, código o descripción de la universidad",
-            "Haz clic en 'Actualizar Universidad' para guardar los cambios"
+            "Desde la página de detalles de la institución educativa, haz clic en 'Editar'",
+            "Actualiza el nombre, código o descripción de la institución educativa",
+            "Haz clic en 'Actualizar Institución Educativa' para guardar los cambios"
           ]
         },
         "deleting": {
-          "title": "Eliminar una universidad",
-          "warning": "⚠️ Advertencia: Eliminar una universidad también eliminará todos los cursos, módulos y contenido asociados. Esta acción no se puede deshacer.",
+          "title": "Eliminar una institución educativa",
+          "warning": "⚠️ Advertencia: Eliminar una institución educativa también eliminará todos los cursos, módulos y contenido asociados. Esta acción no se puede deshacer.",
           "steps": [
-            "Desde la lista de Universidades, haz clic en el ícono de eliminar",
+            "Desde la lista de Instituciones Educativas, haz clic en el ícono de eliminar",
             "Confirma la eliminación en el diálogo",
-            "La universidad y todo su contenido serán eliminados permanentemente"
+            "La institución educativa y todo su contenido serán eliminados permanentemente"
           ]
         }
       },
@@ -2320,14 +2320,14 @@
       },
       "professors": {
         "title": "Gestión de Profesores Administradores",
-        "description": "Los profesores administradores gestionan los cursos, módulos y profesores regulares de su universidad. Los super administradores pueden crear profesores administradores para cualquier universidad.",
+        "description": "Los profesores administradores gestionan los cursos, módulos y profesores regulares de su institución educativa. Los super administradores pueden crear profesores administradores para cualquier institución educativa.",
         "creating": {
           "title": "Crear un Profesor Administrador",
           "steps": [
             "Navega a Profesores (/professors)",
             "Haz clic en 'Agregar Profesor'",
             "Selecciona el tipo 'Profesor Administrador'",
-            "Selecciona la universidad",
+            "Selecciona la institución educativa",
             "Completa: Nombre, Apellido, Nombre de usuario, Correo electrónico y Contraseña temporal",
             "Haz clic en 'Crear Profesor Administrador'",
             "Copia y comparte el enlace de configuración de contraseña de forma segura",
@@ -2338,7 +2338,7 @@
           "title": "Permisos del Profesor Administrador",
           "description": "Los profesores administradores pueden:",
           "list": [
-            "Ver y gestionar todos los cursos de su universidad",
+            "Ver y gestionar todos los cursos de su institución educativa",
             "Crear y editar cursos",
             "Crear y gestionar módulos para cursos",
             "Crear profesores regulares y asignarlos a cursos",
@@ -2350,13 +2350,13 @@
       },
       "globalSearch": {
         "title": "Búsqueda Global",
-        "description": "La función de Búsqueda Global (/admin/global-search) te permite buscar en todas las universidades, cursos, módulos y usuarios del sistema.",
+        "description": "La función de Búsqueda Global (/admin/global-search) te permite buscar en todas las instituciones educativas, cursos, módulos y usuarios del sistema.",
         "usage": {
           "title": "Uso de la Búsqueda Global",
           "steps": [
             "Navega a Administración > Búsqueda Global",
             "Ingresa tu consulta de búsqueda en el cuadro de búsqueda",
-            "Filtra los resultados por tipo (Universidades, Cursos, Módulos, Usuarios)",
+            "Filtra los resultados por tipo (Instituciones Educativas, Cursos, Módulos, Usuarios)",
             "Haz clic en cualquier resultado para navegar a su página de detalles"
           ]
         },
@@ -2364,7 +2364,7 @@
           "title": "Consejos de búsqueda",
           "list": [
             "Usa palabras clave específicas para mejores resultados",
-            "Busca por código de universidad, nombre de curso o código de módulo",
+            "Busca por código de institución educativa, nombre de curso o código de módulo",
             "Usa direcciones de correo electrónico para encontrar usuarios específicos",
             "Combina filtros para reducir los resultados"
           ]
@@ -2372,13 +2372,13 @@
       },
       "moduleTokens": {
         "title": "Vista general de claves de acceso de módulo",
-        "description": "Las claves de acceso de módulo proporcionan acceso a widgets de tutoría IA. Los super administradores pueden ver claves en todas las universidades.",
+        "description": "Las claves de acceso de módulo proporcionan acceso a widgets de tutoría IA. Los super administradores pueden ver claves en todas las instituciones educativas.",
         "viewing": {
           "title": "Ver claves de acceso de módulo",
           "steps": [
             "Navega a Claves de Acceso de Módulo (/tokens) desde la barra lateral",
             "Ver todas las claves en todo el sistema",
-            "Filtrar claves por universidad usando el parámetro de URL",
+            "Filtrar claves por institución educativa usando el parámetro de URL",
             "Ver permisos de claves, fechas de expiración y estadísticas de uso"
           ]
         },
@@ -2387,26 +2387,26 @@
       "bestPractices": {
         "title": "Mejores prácticas",
         "list": [
-          "Crea profesores administradores para distribuir las responsabilidades de gestión de la universidad",
-          "Usa nombres y códigos descriptivos para las universidades",
+          "Crea profesores administradores para distribuir las responsabilidades de gestión de la institución educativa",
+          "Usa nombres y códigos descriptivos para las instituciones educativas",
           "Revisa regularmente la actividad del sistema a través de la Búsqueda Global",
           "Mantén las cuentas de super administrador al mínimo",
           "Usa enlaces de configuración de contraseña en lugar de compartir contraseñas directamente",
           "Monitorea el uso de tokens para garantizar el cumplimiento de seguridad",
-          "Documenta las estructuras y políticas de las universidades",
+          "Documenta las estructuras y políticas de las instituciones educativas",
           "Realiza auditorías de seguridad regulares"
         ]
       }
     },
     "adminProfessor": {
       "title": "Guía del Profesor Administrador",
-      "subtitle": "¡Guía COMPLETA y súper detallada para profesores que administran una universidad. Aprenderás TODO paso a paso!",
+      "subtitle": "¡Guía COMPLETA y súper detallada para profesores que administran una institución educativa. Aprenderás TODO paso a paso!",
       "overview": {
         "title": "Entendiendo Tu Rol - ¿Qué es un Profesor Administrador?",
-        "whatIs": "Imagina que el sistema Tutoria es un gran edificio de apartamentos, donde cada apartamento es una universidad. Si el Super Administrador es el administrador general del edificio entero, el Profesor Administrador es el ADMINISTRADOR DE TU APARTAMENTO - cuidas TODO dentro de tu universidad, pero solo de la tuya. No tocas otras universidades.",
+        "whatIs": "Imagina que el sistema Tutoria es un gran edificio de apartamentos, donde cada apartamento es una institución educativa. Si el Super Administrador es el administrador general del edificio entero, el Profesor Administrador es el ADMINISTRADOR DE TU APARTAMENTO - cuidas TODO dentro de tu institución educativa, pero solo de la tuya. No tocas otras instituciones educativas.",
         "keyResponsibilities": "Responsabilidades Clave",
         "responsibilities": [
-          "📚 Crear y gestionar CURSOS de TU universidad - Por ejemplo: 'Matemáticas 1', 'Programación Python', etc.",
+          "📚 Crear y gestionar CURSOS de TU institución educativa - Por ejemplo: 'Matemáticas 1', 'Programación Python', etc.",
           "📖 Crear y gestionar MÓDULOS dentro de cursos - Los módulos son como 'capítulos' o 'unidades' de un curso",
           "👨‍🏫 Crear cuentas de PROFESORES REGULARES - Otros profesores que te ayudarán a enseñar y gestionar módulos",
           "🤖 Configurar TUTORES IA - El 'cerebro' que conversará con los estudiantes y los ayudará a estudiar"
@@ -2424,7 +2424,7 @@
           {
             "number": "2",
             "title": "Crear Cursos (Disciplinas)",
-            "desc": "Entra al sistema y crea las DISCIPLINAS de tu universidad. Ejemplo: 'Introducción a la Programación', 'Matemáticas Avanzadas', etc."
+            "desc": "Entra al sistema y crea las DISCIPLINAS de tu institución educativa. Ejemplo: 'Introducción a la Programación', 'Matemáticas Avanzadas', etc."
           },
           {
             "number": "3",
@@ -2506,8 +2506,8 @@
           },
           {
             "number": "7",
-            "title": "VERIFICA que TU UNIVERSIDAD esté SELECCIONADA",
-            "desc": "Debe haber un campo llamado 'Universidad'. Usualmente TU universidad ya está AUTOMÁTICAMENTE SELECCIONADA (porque eres un Profesor Administrador de esta universidad). ¡Solo VERIFICA que sea correcta!"
+            "title": "VERIFICA que TU INSTITUCIÓN EDUCATIVA esté SELECCIONADA",
+            "desc": "Debe haber un campo llamado 'Institución Educativa'. Usualmente TU institución educativa ya está AUTOMÁTICAMENTE SELECCIONADA (porque eres un Profesor Administrador de esta institución educativa). ¡Solo VERIFICA que sea correcta!"
           },
           {
             "number": "8",
@@ -2565,8 +2565,8 @@
             "solution": "¡Genial! ¡Completaste el primer paso! Ahora ve a la sección 'CÓMO CREAR MÓDULOS' más abajo en este tutorial. ¡Ahí aprenderás cómo crear módulos DENTRO de este curso que acabas de crear!"
           },
           {
-            "problem": "¡Creé un curso para la universidad equivocada!",
-            "solution": "Como Profesor Administrador, ¡solo puedes crear cursos para TU universidad! Si apareció la universidad equivocada, algo está mal con tu cuenta. Contacta al Super Administrador para verificar la configuración de tu cuenta."
+            "problem": "¡Creé un curso para la institución educativa equivocada!",
+            "solution": "Como Profesor Administrador, ¡solo puedes crear cursos para TU institución educativa! Si apareció la institución educativa equivocada, algo está mal con tu cuenta. Contacta al Super Administrador para verificar la configuración de tu cuenta."
           },
           {
             "problem": "¡No sé qué escribir en la Descripción!",
@@ -3139,7 +3139,7 @@
       "regularProfessor": {
         "title": "Guía para Profesores Regulares",
         "subtitle": "Guía súper detallada para profesores regulares. ¡Esta guía es MUY similar a la guía del Profesor Administrador, pero tendrás algunas diferencias de acceso!",
-        "note": "NOTA: Como Profesor Regular, puedes hacer CASI TODO lo que hace un Profesor Administrador, EXCEPTO: Crear otros profesores, Ver todos los cursos de la universidad (solo ves los tuyos). Para crear módulos, subir archivos, configurar tutores IA, crear tokens, preparar módulos - ¡ES TODO IGUAL! Sigue los mismos tutoriales de la sección 'Profesor Administrador' arriba."
+        "note": "NOTA: Como Profesor Regular, puedes hacer CASI TODO lo que hace un Profesor Administrador, EXCEPTO: Crear otros profesores, Ver todos los cursos de la institución educativa (solo ves los tuyos). Para crear módulos, subir archivos, configurar tutores IA, crear tokens, preparar módulos - ¡ES TODO IGUAL! Sigue los mismos tutoriales de la sección 'Profesor Administrador' arriba."
       }
     },
     "modules": {
@@ -3380,7 +3380,7 @@
             "Eliminar cursos",
             "Asignar otros profesores a cursos"
           ],
-          "note": "Si necesitas crear o modificar cursos, contacta al profesor administrador de tu universidad."
+          "note": "Si necesitas crear o modificar cursos, contacta al profesor administrador de tu institución educativa."
         }
       },
       "modules": {
@@ -3710,7 +3710,7 @@
           "Eliminar cursos",
           "Asignar otros profesores a cursos"
         ],
-        "note": "Si necesitas crear o modificar cursos, contacta al profesor administrador de tu universidad."
+        "note": "Si necesitas crear o modificar cursos, contacta al profesor administrador de tu institución educativa."
       }
     },
     "modules": {
@@ -3998,7 +3998,7 @@
     "selectedModel": "Modelo de IA:",
     "autoOptimized": "Modelo de IA optimizado automáticamente para este tipo de curso",
     "tierNote": "Nota",
-    "tierDescription": "El modelo de IA se optimiza automáticamente según el nivel de suscripción de tu universidad para el mejor equilibrio costo-rendimiento.",
+    "tierDescription": "El modelo de IA se optimiza automáticamente según el nivel de suscripción de tu institución educativa para el mejor equilibrio costo-rendimiento.",
     "mathLogic": {
       "name": "Matemáticas y Lógica",
       "description": "Cursos centrados en razonamiento matemático, fórmulas, demostraciones y resolución de problemas lógicos"
@@ -4018,9 +4018,9 @@
     "loadError": "Error al cargar datos de analíticas. Por favor, inténtelo de nuevo.",
     "refreshSuccess": "Datos de analíticas actualizados correctamente",
     "refresh": "Actualizar",
-    "allUniversities": "Todas las Universidades",
-    "searchUniversities": "Buscar universidades...",
-    "noUniversitiesFound": "No se encontraron universidades.",
+    "allUniversities": "Todas las Instituciones Educativas",
+    "searchUniversities": "Buscar instituciones educativas...",
+    "noUniversitiesFound": "No se encontraron instituciones educativas.",
     "exportSuccess": "Informe {format} exportado correctamente",
     "period": {
       "day": "Hoy",
@@ -4037,7 +4037,7 @@
       "totalMessages": "Mensajes Totales",
       "uniqueStudents": "Estudiantes Únicos",
       "studentsDescription": "Estudiantes que hicieron preguntas en el período seleccionado",
-      "activeStudents": "Estudiantes Activos",
+      "activeStudents": "Estudiantes activos",
       "activeStudentsDescription": "Activos en los últimos {days} días vs. total matriculado",
       "atRiskStudents": "Estudiantes en Riesgo",
       "atRiskStudentsDescription": "Sin actividad en los últimos {days} días",
@@ -4046,7 +4046,6 @@
       "inPeriod": "en {period}",
       "inSelectedPeriod": "en período seleccionado",
       "vsYesterday": "vs. ayer",
-      "activeStudents": "Estudiantes activos",
       "modulesWithActivity": "Módulos con actividad",
       "totalCost": "Costo total de IA",
       "allTime": "Todo el tiempo",
@@ -4129,7 +4128,7 @@
       "period": "Período",
       "dateRange": "Rango de Fechas",
       "generated": "Generado",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "overviewTitle": "Estadísticas Generales",
       "metric": "Métrica",
       "value": "Valor",
@@ -4341,7 +4340,7 @@
     },
     "entities": {
       "user": "Usuario",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "course": "Curso",
       "module": "Módulo",
       "file": "Archivo",
@@ -4359,7 +4358,7 @@
       "aiModels": "Modelos de IA",
       "apiKeys": "Claves de API",
       "courseTypeConfig": "Config. Tipo de Curso",
-      "universityOverrides": "Sobrecargas por Universidad"
+      "universityOverrides": "Sobrecargas por Institución Educativa"
     },
     "aiModels": {
       "columns": {
@@ -4493,22 +4492,22 @@
       },
       "active": "Activo",
       "inactive": "Inactivo",
-      "selectUniversity": "Seleccione una universidad",
-      "searchUniversity": "Buscar universidades...",
-      "selectUniversityPrompt": "Seleccione una universidad para ver sus sobrecargas de modelo por tipo de curso.",
-      "emptyMessage": "No hay sobrecargas configuradas para esta universidad."
+      "selectUniversity": "Seleccione una institución educativa",
+      "searchUniversity": "Buscar instituciones educativas...",
+      "selectUniversityPrompt": "Seleccione una institución educativa para ver sus sobrecargas de modelo por tipo de curso.",
+      "emptyMessage": "No hay sobrecargas configuradas para esta institución educativa."
     }
   },
   "adminSubscriptions": {
     "title": "Todas las Suscripciones",
-    "description": "Resumen de todas las suscripciones universitarias ({total} en total)",
+    "description": "Resumen de todas las suscripciones institucionales ({total} en total)",
     "breadcrumb": "Administración",
     "loadError": "Error al cargar las suscripciones.",
-    "searchPlaceholder": "Buscar por universidad, plan o ID de Stripe...",
+    "searchPlaceholder": "Buscar por institución educativa, plan o ID de Stripe...",
     "emptyMessage": "No se encontraron suscripciones.",
     "all": "Todas",
     "columns": {
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "plan": "Plan",
       "status": "Estado",
       "period": "Período",
@@ -4572,7 +4571,7 @@
     },
     "scopes": {
       "global": "Global",
-      "university": "Universidad",
+      "university": "Institución Educativa",
       "course": "Curso"
     }
   },
@@ -4593,7 +4592,7 @@
     "updateSuccess": "Plan actualizado exitosamente.",
     "updateError": "Error al actualizar el plan.",
     "deleteConfirm": "Desactivar Plan",
-    "deleteConfirmDesc": "¿Estás seguro de que deseas desactivar el plan \"{name}\"? Las universidades en este plan no se verán afectadas.",
+    "deleteConfirmDesc": "¿Estás seguro de que deseas desactivar el plan \"{name}\"? Las instituciones educativas en este plan no se verán afectadas.",
     "deleteSuccess": "Plan desactivado exitosamente.",
     "deleteError": "Error al desactivar el plan.",
     "validationError": "Nombre y slug son obligatorios.",
@@ -4641,8 +4640,8 @@
   "signup": {
     "title": "Cree su Cuenta Tutoria",
     "description": "Comience a ofrecer tutoría con IA a sus estudiantes en minutos.",
-    "adminNotice": "Al registrarse, se convertirá en el administrador principal de su universidad en la plataforma.",
-    "notAdminNotice": "¿No es el administrador? Pida al admin de su universidad que lo invite, o cree su cuenta y solicite ser añadido a una universidad existente.",
+    "adminNotice": "Al registrarse, se convertirá en el administrador principal de su institución educativa en la plataforma.",
+    "notAdminNotice": "¿No es el administrador? Pida al admin de su institución educativa que lo invite, o cree su cuenta y solicite ser añadido a una institución educativa existente.",
     "selectPlan": "Elija su Plan",
     "popular": "Popular",
     "month": "mes",
@@ -4658,16 +4657,16 @@
       "assignments": "Actividades y Retroalimentación por IA"
     },
     "form": {
-      "title": "Registro de Universidad",
-      "description": "Cree su cuenta de universidad y usuario administrador.",
-      "universitySection": "Datos de la Universidad",
+      "title": "Registro de Institución Educativa",
+      "description": "Cree su cuenta de institución educativa y usuario administrador.",
+      "universitySection": "Datos de la Institución Educativa",
       "adminSection": "Cuenta de Administrador",
-      "universityNameLabel": "Nombre de la Universidad *",
-      "universityNamePlaceholder": "ej: Universidad de Tecnología",
-      "universityNameRequired": "El nombre de la universidad es obligatorio.",
+      "universityNameLabel": "Nombre de la Institución Educativa *",
+      "universityNamePlaceholder": "ej: Institución Educativa de Tecnología",
+      "universityNameRequired": "El nombre de la institución educativa es obligatorio.",
       "universityCodeLabel": "Código (Nombre Comercial) *",
       "universityCodePlaceholder": "ej: UniTech",
-      "universityCodeRequired": "El código de la universidad es obligatorio.",
+      "universityCodeRequired": "El código de la institución educativa es obligatorio.",
       "firstNameLabel": "Nombre *",
       "firstNamePlaceholder": "Ingrese su nombre",
       "firstNameRequired": "El nombre es obligatorio.",
@@ -4675,7 +4674,7 @@
       "lastNamePlaceholder": "Ingrese su apellido",
       "lastNameRequired": "El apellido es obligatorio.",
       "emailLabel": "Correo electrónico *",
-      "emailPlaceholder": "admin@universidad.edu",
+      "emailPlaceholder": "admin@institución educativa.edu",
       "emailRequired": "El correo electrónico es obligatorio.",
       "emailInvalid": "Por favor, ingrese un correo electrónico válido.",
       "passwordLabel": "Contraseña *",
@@ -4691,15 +4690,15 @@
     "registrationSuccess": "Cuenta creada exitosamente. Inicie sesión.",
     "registrationError": "Error en el registro. Inténtelo de nuevo.",
     "emailAlreadyExists": "Este correo ya está registrado. Si ya tiene una cuenta, inicie sesión.",
-    "modeUniversity": "Registrar Universidad",
-    "modeUniversityDesc": "Cree una nueva cuenta de universidad y conviértase en su administrador.",
+    "modeUniversity": "Registrar Institución Educativa",
+    "modeUniversityDesc": "Cree una nueva cuenta de institución educativa y conviértase en su administrador.",
     "modePersonal": "Crear Cuenta Personal",
-    "modePersonalDesc": "Cree su cuenta y espere a ser invitado a una universidad.",
+    "modePersonalDesc": "Cree su cuenta y espere a ser invitado a una institución educativa.",
     "personalRegistrationSuccess": "¡Cuenta creada con éxito! Ahora puede iniciar sesión.",
     "personalForm": {
       "title": "Crear Su Cuenta",
-      "description": "Cree una cuenta personal. Un administrador de la universidad puede invitarlo después.",
-      "infoNotice": "Después de crear su cuenta, podrá iniciar sesión y esperar a que un administrador de la universidad lo agregue a su institución. También puede solicitar unirse a una universidad.",
+      "description": "Cree una cuenta personal. Un administrador de la institución educativa puede invitarlo después.",
+      "infoNotice": "Después de crear su cuenta, podrá iniciar sesión y esperar a que un administrador de la institución educativa lo agregue a su institución. También puede solicitar unirse a una institución educativa.",
       "emailPlaceholder": "su.correo@ejemplo.com",
       "username": "Nombre de usuario",
       "usernamePlaceholder": "Elija un nombre de usuario",
@@ -4780,7 +4779,7 @@
       "students": "Estudiantes",
       "files": "Archivos",
       "tokens": "Claves de Acceso",
-      "universities": "Universidades",
+      "universities": "Instituciones Educativas",
       "analytics": "Analiticas",
       "subscription": "Suscripcion",
       "other": "Otros"
@@ -4875,7 +4874,7 @@
     "dataCollected": {
       "title": "2. Datos que Recopilamos",
       "description": "Recopilamos las siguientes categorías de datos personales:",
-      "item1": "Datos de identificación: nombre, correo electrónico, matrícula y afiliación universitaria",
+      "item1": "Datos de identificación: nombre, correo electrónico, matrícula y afiliación institucional",
       "item2": "Datos de autenticación: credenciales de inicio de sesión (cifradas) y tokens de acceso",
       "item3": "Datos de interacción académica: preguntas realizadas, respuestas de la IA y archivos accedidos",
       "item4": "Datos técnicos: dirección IP, tipo de navegador e información del dispositivo",
@@ -4909,7 +4908,7 @@
     },
     "contact": {
       "title": "7. Contacto y Oficial de Protección de Datos",
-      "content": "Para preguntas sobre esta Política de Privacidad, para ejercer sus derechos sobre datos o para contactar a nuestro Oficial de Protección de Datos (DPO), comuníquese con la administración de su universidad o por el correo electrónico proporcionado por su institución."
+      "content": "Para preguntas sobre esta Política de Privacidad, para ejercer sus derechos sobre datos o para contactar a nuestro Oficial de Protección de Datos (DPO), comuníquese con la administración de su institución educativa o por el correo electrónico proporcionado por su institución."
     }
   },
   "acceptInvitation": {

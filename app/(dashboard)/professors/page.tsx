@@ -307,7 +307,7 @@ export default function ProfessorsPage() {
     },
     {
       key: 'universityName',
-      label: t('columns.university') || 'University',
+      label: t('columns.university') || 'Instituição de Ensino',
       render: (_, professor) => (
         <div className="text-sm">
           {professor.universityName || 'N/A'}

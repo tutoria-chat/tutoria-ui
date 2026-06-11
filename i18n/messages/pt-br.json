@@ -32,8 +32,8 @@
     "quickActions": {
       "title": "Ações Rápidas",
       "description": "Acesso rápido às tarefas mais comuns",
-      "createUniversity": "Criar Universidade",
-      "viewUniversities": "Ver Universidades",
+      "createUniversity": "Criar Instituição de Ensino",
+      "viewUniversities": "Ver Instituições de Ensino",
       "createCourse": "Criar Disciplina",
       "viewProfessors": "Ver Professores",
       "createModule": "Criar Módulo",
@@ -60,7 +60,7 @@
       "reached": "Limite de disciplinas atingido: {current} de {max} disciplinas. Atualize seu plano para criar mais."
     },
     "viewModules": "Ver Módulos",
-    "searchPlaceholder": "Buscar disciplinas, descrições ou universidades...",
+    "searchPlaceholder": "Buscar disciplinas, descrições ou instituições de ensino...",
     "emptyMessage": "Nenhuma disciplina encontrada. Crie sua primeira disciplina para começar.",
     "create": {
       "title": "Criar Nova Disciplina",
@@ -69,7 +69,7 @@
     },
     "columns": {
       "discipline": "Disciplina",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "modules": "Módulos",
       "modulesCount": "{count} módulos",
       "professors": "Professores",
@@ -81,7 +81,7 @@
       "totalCourses": "Total de Disciplinas",
       "totalStudents": "Total de Estudantes",
       "totalModules": "Total de Módulos",
-      "universities": "Universidades"
+      "universities": "Instituições de Ensino"
     },
     "deleteConfirm": "Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.",
     "deleteError": "Erro ao deletar disciplina. Tente novamente.",
@@ -94,18 +94,18 @@
       "codeLabel": "Código *",
       "codePlaceholder": "ex: CS101, COMP200",
       "codeRequired": "Código da disciplina é obrigatório",
-      "universityLabel": "Universidade *",
-      "universityPlaceholder": "Selecione uma universidade",
-      "loadingUniversities": "Carregando universidades...",
-      "universityRequired": "Universidade é obrigatória",
-      "universityIdLabel": "ID da Universidade: {id}",
-      "noUniversity": "Nenhuma universidade atribuída",
+      "universityLabel": "Instituição de Ensino *",
+      "universityPlaceholder": "Selecione uma instituição de ensino",
+      "loadingUniversities": "Carregando instituições de ensino...",
+      "universityRequired": "Instituição de Ensino é obrigatória",
+      "universityIdLabel": "ID da Instituição de Ensino: {id}",
+      "noUniversity": "Nenhuma instituição de ensino atribuída",
       "descriptionLabel": "Descrição",
       "descriptionPlaceholder": "Descreva os objetivos da disciplina, conteúdo e público-alvo...",
       "professorsOptionalLabel": "Professores",
       "optional": "opcional",
       "loadingProfessors": "Carregando professores...",
-      "noProfessorsAvailable": "Nenhum professor disponível para esta universidade",
+      "noProfessorsAvailable": "Nenhum professor disponível para esta instituição de ensino",
       "selectProfessors": "Selecionar professores...",
       "searchProfessors": "Buscar professores...",
       "noProfessorsFound": "Nenhum professor encontrado",
@@ -140,9 +140,9 @@
       "updateError": "Erro ao atualizar disciplina. Tente novamente."
     },
     "detail": {
-      "breadcrumbUniversities": "Universidades",
+      "breadcrumbUniversities": "Instituições de Ensino",
       "breadcrumbCourses": "Disciplinas",
-      "viewUniversity": "Ver Universidade",
+      "viewUniversity": "Ver Instituição de Ensino",
       "addModule": "Adicionar Módulo",
       "editCourse": "Editar Disciplina",
       "courseInfo": "Informações da Disciplina",
@@ -238,12 +238,12 @@
           "newTitle": "Criar Novo Professor",
           "newDesc": "Convidar um novo professor e atribuí-lo à disciplina depois",
           "existingTitle": "Selecionar Professor Existente",
-          "existingDesc": "Atribuir um professor já cadastrado na sua universidade",
+          "existingDesc": "Atribuir um professor já cadastrado na sua instituição de ensino",
           "searchPlaceholder": "Buscar por nome ou email...",
           "assign": "Atribuir",
           "assignSuccess": "Professor atribuído com sucesso",
           "assignError": "Erro ao atribuir professor",
-          "noProfessors": "Todos os professores da universidade já estão atribuídos a esta disciplina",
+          "noProfessors": "Todos os professores da instituição de ensino já estão atribuídos a esta disciplina",
           "loadError": "Erro ao carregar professores",
           "loading": "Carregando professores..."
         }
@@ -863,25 +863,25 @@
     }
   },
   "universities": {
-    "title": "Universidades",
-    "description": "Gerencie universidades e seus programas acadêmicos",
-    "createButton": "Criar Universidade",
+    "title": "Instituições de Ensino",
+    "description": "Gerencie instituições de ensino e seus programas acadêmicos",
+    "createButton": "Criar Instituição de Ensino",
     "viewAllCourses": "Ver Todas as Disciplinas",
     "viewAllModules": "Ver Todos os Módulos",
-    "searchPlaceholder": "Buscar universidades...",
-    "emptyMessage": "Nenhuma universidade encontrada",
+    "searchPlaceholder": "Buscar instituições de ensino...",
+    "emptyMessage": "Nenhuma instituição de ensino encontrada",
     "columns": {
-      "universityName": "Nome da Universidade",
+      "universityName": "Nome da Instituição de Ensino",
       "createdAt": "Criado em",
       "actions": "Ações"
     },
-    "deleteConfirm": "Tem certeza que deseja deletar esta universidade? Esta ação não pode ser desfeita.",
-    "deleteError": "Erro ao deletar universidade. Tente novamente.",
+    "deleteConfirm": "Tem certeza que deseja deletar esta instituição de ensino? Esta ação não pode ser desfeita.",
+    "deleteError": "Erro ao deletar instituição de ensino. Tente novamente.",
     "detail": {
-      "breadcrumb": "Universidades",
+      "breadcrumb": "Instituições de Ensino",
       "edit": "Editar",
       "myAIAgent": "Meu Agente IA",
-      "notFound": "Universidade não encontrada",
+      "notFound": "Instituição de Ensino não encontrada",
       "stats": {
         "courses": "Disciplinas",
         "professors": "Professores",
@@ -894,9 +894,9 @@
         "professors": "Professores"
       },
       "info": {
-        "title": "Informações da Universidade",
+        "title": "Informações da Instituição de Ensino",
         "description": "Detalhes de contato e administrativos",
-        "code": "Código da Universidade",
+        "code": "Código da Instituição de Ensino",
         "contactEmail": "E-mail de Contato",
         "contactPhone": "Telefone de Contato",
         "contactPerson": "Pessoa de Contato",
@@ -924,14 +924,14 @@
       },
       "coursesTab": {
         "title": "Disciplinas",
-        "description": "Disciplinas oferecidas por esta universidade",
+        "description": "Disciplinas oferecidas por esta instituição de ensino",
         "newCourse": "Nova Disciplina",
         "searchPlaceholder": "Buscar disciplinas...",
         "emptyMessage": "Nenhuma disciplina cadastrada ainda."
       },
       "professorsTab": {
         "title": "Professores",
-        "description": "Professores vinculados a esta universidade",
+        "description": "Professores vinculados a esta instituição de ensino",
         "newProfessor": "Novo Professor",
         "searchPlaceholder": "Buscar professores...",
         "emptyMessage": "Nenhum professor cadastrado ainda."
@@ -940,24 +940,24 @@
       "deleteError": "Erro ao deletar disciplina. Tente novamente."
     },
     "form": {
-      "breadcrumb": "Universidades",
-      "createTitle": "Criar Universidade",
-      "createDescription": "Crie uma nova universidade no sistema",
-      "editTitle": "Editar Universidade",
-      "editDescription": "Edite as informações da universidade",
-      "breadcrumbCreate": "Criar Universidade",
+      "breadcrumb": "Instituições de Ensino",
+      "createTitle": "Criar Instituição de Ensino",
+      "createDescription": "Crie uma nova instituição de ensino no sistema",
+      "editTitle": "Editar Instituição de Ensino",
+      "editDescription": "Edite as informações da instituição de ensino",
+      "breadcrumbCreate": "Criar Instituição de Ensino",
       "breadcrumbEdit": "Editar",
       "back": "Voltar",
-      "universityInfo": "Informações da Universidade",
+      "universityInfo": "Informações da Instituição de Ensino",
       "contactInfo": "Informações de Contato",
-      "nameLabel": "Nome da Universidade *",
-      "namePlaceholder": "Ex: Universidade Federal de São Paulo",
-      "nameRequired": "Nome da universidade é obrigatório",
+      "nameLabel": "Nome da Instituição de Ensino *",
+      "namePlaceholder": "Ex: Instituição de Ensino Federal de São Paulo",
+      "nameRequired": "Nome da instituição de ensino é obrigatório",
       "codeLabel": "Nome Fantasia *",
       "codePlaceholder": "Ex: USP, UNIFESP, BYU",
       "codeRequired": "Nome fantasia é obrigatório",
       "descriptionLabel": "Descrição",
-      "descriptionPlaceholder": "Descrição da universidade (opcional)",
+      "descriptionPlaceholder": "Descrição da instituição de ensino (opcional)",
       "cepLabel": "CEP",
       "cepPlaceholder": "00000-000",
       "cepHelpText": "Digite o CEP para preencher automaticamente o endereço",
@@ -976,23 +976,23 @@
       "taxIdLabel": "CNPJ",
       "taxIdPlaceholder": "Ex: 00.000.000/0000-00",
       "contactEmailLabel": "E-mail de Contato",
-      "contactEmailPlaceholder": "Ex: contato@universidade.edu.br",
+      "contactEmailPlaceholder": "Ex: contato@instituição de ensino.edu.br",
       "contactPhoneLabel": "Telefone de Contato",
       "contactPhonePlaceholder": "Ex: (11) 3091-3300",
       "contactPersonLabel": "Pessoa de Contato",
       "contactPersonPlaceholder": "Ex: João Silva - Coordenador",
       "websiteLabel": "Website",
-      "websitePlaceholder": "Ex: https://www.universidade.edu.br",
-      "create": "Criar Universidade",
-      "update": "Atualizar Universidade",
+      "websitePlaceholder": "Ex: https://www.instituição de ensino.edu.br",
+      "create": "Criar Instituição de Ensino",
+      "update": "Atualizar Instituição de Ensino",
       "cancel": "Cancelar",
       "creating": "Criando...",
       "updating": "Atualizando...",
-      "createError": "Erro ao criar universidade. Tente novamente.",
-      "updateError": "Erro ao atualizar universidade. Tente novamente.",
-      "loadError": "Erro ao carregar dados da universidade.",
+      "createError": "Erro ao criar instituição de ensino. Tente novamente.",
+      "updateError": "Erro ao atualizar instituição de ensino. Tente novamente.",
+      "loadError": "Erro ao carregar dados da instituição de ensino.",
       "loadErrorTitle": "Erro",
-      "loadErrorDescription": "Não foi possível carregar os dados da universidade"
+      "loadErrorDescription": "Não foi possível carregar os dados da instituição de ensino"
     },
     "subscription": {
       "title": "Plano de Assinatura",
@@ -1004,9 +1004,9 @@
       "tierStarterDesc": "Recursos essenciais de tutoria com IA",
       "tierProfessionalDesc": "Modelos avançados de IA e analytics",
       "tierBusinessDesc": "Acesso completo a todos os modelos e recursos de IA",
-      "tierHelpText": "O nível de assinatura controla quais modelos de IA esta universidade pode acessar",
-      "isEnterpriseLabel": "Universidade Empresarial",
-      "isEnterpriseHelp": "Universidades empresariais possuem limites personalizados ao invés de limites baseados em planos",
+      "tierHelpText": "O nível de assinatura controla quais modelos de IA esta instituição de ensino pode acessar",
+      "isEnterpriseLabel": "Instituição de Ensino Empresarial",
+      "isEnterpriseHelp": "Instituições de Ensino empresariais possuem limites personalizados ao invés de limites baseados em planos",
       "maxCoursesLabel": "Disciplinas Máximas",
       "maxCoursesPlaceholder": "ex: 100",
       "maxCoursesHelp": "Defina 0 para disciplinas ilimitadas",
@@ -1084,7 +1084,7 @@
       "type": "Tipo",
       "admin": "Administrador",
       "professor": "Professor",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "createdAt": "Criado em",
       "status": "Status",
       "active": "Ativo",
@@ -1104,7 +1104,7 @@
       "regularProfessor": "Professor Regular",
       "regularDescription": "Pode visualizar e gerenciar disciplinas e módulos atribuídos",
       "adminProfessor": "Professor Administrador",
-      "adminDescription": "Pode gerenciar todas as disciplinas, módulos e professores em sua universidade"
+      "adminDescription": "Pode gerenciar todas as disciplinas, módulos e professores em sua instituição de ensino"
     },
     "create": {
       "title": "Criar Professor",
@@ -1116,29 +1116,29 @@
       "successCardDescription": "O professor {firstName} {lastName} foi criado.",
       "usernameLabel": "Nome de Usuário",
       "emailLabel": "Email",
-      "universityLabel": "Universidade",
+      "universityLabel": "Instituição de Ensino",
       "assignedCoursesLabel": "Disciplinas Atribuídas",
       "successTitleAdded": "Professor Adicionado!",
       "inviteSentSuccess": "Convite enviado com sucesso!",
       "emailSentTitle": "Convite Enviado",
       "emailSentDescription": "Um link de convite foi enviado para {email}. O professor preencherá seu nome e criará sua própria senha.",
-      "emailSentDescriptionAdded": "{email} já possuía uma conta e foi adicionado à sua universidade.",
+      "emailSentDescriptionAdded": "{email} já possuía uma conta e foi adicionado à sua instituição de ensino.",
       "emailInstructions": "O professor receberá um email com um link para concluir o cadastro. O link expirará em 24 horas.",
       "emailFormHint": "Um email de convite será enviado para que o professor configure sua própria conta.",
       "coursesAfterRegistration": "Atenção: as disciplinas precisarão ser atribuídas manualmente após o professor aceitar o convite e se cadastrar.",
       "backToList": "Voltar para Lista",
-      "backToUniversity": "Voltar para Detalhes da Universidade",
+      "backToUniversity": "Voltar para Detalhes da Instituição de Ensino",
       "createAnother": "Criar Outro Professor",
       "someCoursesFailed": "Professor criado, mas algumas atribuições de disciplinas falharam. Por favor verifique as disciplinas atribuídas.",
       "permissions": "Permissões: Professores regulares podem visualizar disciplinas e gerenciar módulos que lhes são atribuídos.",
       "professorInfoTitle": "Informações do Professor",
       "professorInfoDescription": "Informe o email do professor e atribua-o às disciplinas. Ele receberá um email de boas-vindas com as instruções de acesso.",
-      "universityLabelRequired": "Universidade *",
-      "selectUniversity": "Selecione uma universidade",
+      "universityLabelRequired": "Instituição de Ensino *",
+      "selectUniversity": "Selecione uma instituição de ensino",
       "coursesLabelRequired": "Disciplinas *",
       "loadingCourses": "Carregando disciplinas...",
-      "noCoursesAvailable": "Nenhuma disciplina disponível para esta universidade.",
-      "selectUniversityFirst": "Selecione uma universidade primeiro para ver as disciplinas disponíveis.",
+      "noCoursesAvailable": "Nenhuma disciplina disponível para esta instituição de ensino.",
+      "selectUniversityFirst": "Selecione uma instituição de ensino primeiro para ver as disciplinas disponíveis.",
       "selectCourses": "Selecionar disciplinas...",
       "searchCourses": "Buscar disciplinas...",
       "noCoursesFound": "Nenhuma disciplina encontrada.",
@@ -1150,7 +1150,7 @@
       "usernamePlaceholder": "Ex: joao.silva",
       "usernameHint": "Será usado para login. Use apenas letras, números, pontos e underscores.",
       "emailFormLabel": "Email *",
-      "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
+      "emailPlaceholder": "Ex: joao.silva@instituição de ensino.edu.br",
       "tempPasswordLabel": "Senha Temporária *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordHint": "Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.",
@@ -1163,7 +1163,7 @@
       "lastNameRequired": "Sobrenome é obrigatório",
       "passwordRequired": "Senha temporária é obrigatória",
       "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-      "universityRequired": "Universidade é obrigatória",
+      "universityRequired": "Instituição de Ensino é obrigatória",
       "coursesRequired": "Selecione pelo menos uma disciplina",
       "emailInvalid": "Email inválido",
       "usernameAlreadyExists": "Nome de usuário já existe",
@@ -1173,7 +1173,7 @@
       "errorCreatingProfessor": "Erro ao criar professor",
       "linkCopied": "Link copiado para a área de transferência!",
       "errorCopyingLink": "Erro ao copiar link",
-      "errorLoadingUniversities": "Erro ao carregar universidades",
+      "errorLoadingUniversities": "Erro ao carregar instituições de ensino",
       "errorLoadingCourses": "Erro ao carregar disciplinas",
       "languageLabel": "Idioma Preferido",
       "languagePlaceholder": "Selecione o idioma",
@@ -1181,19 +1181,19 @@
       "languageEnglish": "English (Estados Unidos)",
       "languageSpanish": "Español",
       "languageHint": "A interface do professor será exibida neste idioma",
-      "universityPreselected": "Universidade pré-selecionada pela URL",
-      "universityLockedForAdmin": "Universidade bloqueada para sua instituição como professor administrador"
+      "universityPreselected": "Instituição de Ensino pré-selecionada pela URL",
+      "universityLockedForAdmin": "Instituição de Ensino bloqueada para sua instituição como professor administrador"
     },
     "createAdmin": {
       "title": "Criar Professor Administrador",
-      "description": "Criar uma nova conta de professor administrador com acesso de gestão à universidade",
+      "description": "Criar uma nova conta de professor administrador com acesso de gestão à instituição de ensino",
       "createAdminProfessor": "Criar Professor Administrador",
       "breadcrumbCreate": "Criar Professor Administrador",
-      "securityWarning": "Aviso: Professores administradores podem gerenciar disciplinas, módulos e criar professores regulares em sua universidade.",
+      "securityWarning": "Aviso: Professores administradores podem gerenciar disciplinas, módulos e criar professores regulares em sua instituição de ensino.",
       "professorInfoTitle": "Informações do Professor Administrador",
       "professorInfoDescription": "Preencha os dados do novo professor administrador. Um link de configuração de senha será gerado após a criação.",
-      "universityLabel": "Universidade *",
-      "selectUniversity": "Selecione a universidade",
+      "universityLabel": "Instituição de Ensino *",
+      "selectUniversity": "Selecione a instituição de ensino",
       "firstNameLabel": "Primeiro Nome *",
       "firstNamePlaceholder": "Ex: João",
       "lastNameLabel": "Sobrenome *",
@@ -1202,7 +1202,7 @@
       "usernamePlaceholder": "Ex: joao.silva",
       "usernameHint": "Será usado para login. Use apenas letras, números, pontos e underscores.",
       "emailLabel": "Email *",
-      "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
+      "emailPlaceholder": "Ex: joao.silva@instituição de ensino.edu.br",
       "tempPasswordLabel": "Senha Temporária *",
       "passwordPlaceholder": "Mínimo 6 caracteres",
       "passwordHint": "Esta senha será usada para gerar o link de configuração. O usuário definirá sua própria senha.",
@@ -1215,7 +1215,7 @@
       "lastNameRequired": "Sobrenome é obrigatório",
       "passwordRequired": "Senha temporária é obrigatória",
       "passwordMinLength": "Senha deve ter pelo menos 6 caracteres",
-      "universityRequired": "Universidade é obrigatória",
+      "universityRequired": "Instituição de Ensino é obrigatória",
       "emailInvalid": "Email inválido",
       "usernameAlreadyExists": "Nome de usuário já existe",
       "emailAlreadyExists": "Email já existe",
@@ -1226,7 +1226,7 @@
       "successCardDescription": "O professor administrador {firstName} {lastName} foi criado.",
       "usernameDisplay": "Nome de Usuário",
       "emailDisplay": "Email",
-      "universityDisplay": "Universidade",
+      "universityDisplay": "Instituição de Ensino",
       "emailSentTitle": "Email de Boas-Vindas Enviado",
       "emailSentDescription": "Um email com instruções de login foi enviado para {email}",
       "emailInstructions": "O novo professor receberá um email com sua senha temporária e um link para definir sua senha permanente. O link expirará em 24 horas.",
@@ -1236,7 +1236,7 @@
       "errorCreatingAdmin": "Erro ao criar professor administrador",
       "linkCopied": "Link copiado para a área de transferência!",
       "errorCopyingLink": "Erro ao copiar link",
-      "errorLoadingUniversities": "Erro ao carregar universidades",
+      "errorLoadingUniversities": "Erro ao carregar instituições de ensino",
       "languageLabel": "Idioma Preferido",
       "languagePlaceholder": "Selecione o idioma",
       "languagePortuguese": "Português (Brasil)",
@@ -1259,7 +1259,7 @@
       "usernamePlaceholder": "Digite o nome de usuário",
       "usernameRequired": "Nome de usuário é obrigatório",
       "emailLabel": "Email",
-      "emailPlaceholder": "email@universidade.edu.br",
+      "emailPlaceholder": "email@instituição de ensino.edu.br",
       "adminProfessorLabel": "Professor Administrador",
       "adminDescription": "Administradores podem gerenciar disciplinas e atribuir professores",
       "assignedCourses": "Disciplinas Atribuídas",
@@ -1267,7 +1267,7 @@
       "selectCourses": "Selecionar disciplinas...",
       "searchCourses": "Buscar disciplinas...",
       "noCoursesFound": "Nenhuma disciplina encontrada.",
-      "noCoursesAvailable": "Nenhuma disciplina disponível para esta universidade",
+      "noCoursesAvailable": "Nenhuma disciplina disponível para esta instituição de ensino",
       "errorLoadingCourses": "Erro ao carregar disciplinas",
       "passwordReset": "Redefinir Senha",
       "passwordResetDescription": "Redefina a senha do professor",
@@ -1321,7 +1321,7 @@
       "username": "Nome de Usuário",
       "name": "Nome",
       "role": "Função",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "status": "Status",
       "actions": "Ações",
       "active": "Ativo",
@@ -1329,7 +1329,7 @@
     },
     "create": {
       "title": "Adicionar Usuários",
-      "description": "Convide novos usuários ou adicione existentes à sua universidade",
+      "description": "Convide novos usuários ou adicione existentes à sua instituição de ensino",
       "errorMessage": "Falha ao processar convites",
       "invite": {
         "formTitle": "Convidar Usuários",
@@ -1344,7 +1344,7 @@
         "results": {
           "title": "Resultados",
           "invited": "{count} convite(s) enviado(s)",
-          "added": "{count} usuário(s) existente(s) adicionado(s) à universidade",
+          "added": "{count} usuário(s) existente(s) adicionado(s) à instituição de ensino",
           "alreadyMembers": "{count} usuário(s) já são membros",
           "errors": "{count} erro(s) ocorrido(s)"
         },
@@ -1356,8 +1356,8 @@
           "placeholder": "Selecione uma função..."
         },
         "university": {
-          "label": "Universidade",
-          "placeholder": "Selecione uma universidade..."
+          "label": "Instituição de Ensino",
+          "placeholder": "Selecione uma instituição de ensino..."
         },
         "language": {
           "label": "Idioma Preferido"
@@ -1366,7 +1366,7 @@
       "errors": {
         "emailRequired": "Pelo menos um endereço de e-mail é obrigatório",
         "userTypeRequired": "Função é obrigatória",
-        "universityRequired": "Universidade é obrigatória para esta função"
+        "universityRequired": "Instituição de Ensino é obrigatória para esta função"
       }
     },
     "detail": {
@@ -1382,7 +1382,7 @@
       "emailLabel": "E-mail",
       "firstNameLabel": "Nome",
       "lastNameLabel": "Sobrenome",
-      "universityLabel": "Universidade",
+      "universityLabel": "Instituição de Ensino",
       "createdAt": "Criado em",
       "lastLogin": "Último Acesso",
       "active": "Ativo",
@@ -1425,15 +1425,15 @@
       "confirmDeleteTitle": "Excluir Usuário Permanentemente",
       "confirmDeleteDescription": "Tem certeza de que deseja excluir permanentemente {name}? Esta ação não pode ser desfeita.",
       "confirmDelete": "Excluir Permanentemente",
-      "universities": "Universidades",
-      "universitiesDescription": "Universidades às quais este usuário pertence.",
-      "noUniversities": "Este usuário não faz parte de nenhuma universidade.",
+      "universities": "Instituições de Ensino",
+      "universitiesDescription": "Instituições de Ensino às quais este usuário pertence.",
+      "noUniversities": "Este usuário não faz parte de nenhuma instituição de ensino.",
       "removeFromUniversity": "Remover",
-      "confirmRemoveUniversityTitle": "Remover da Universidade?",
-      "confirmRemoveUniversityDescription": "Tem certeza de que deseja remover {name} de {university}? O usuário perderá acesso a todos os dados desta universidade.",
+      "confirmRemoveUniversityTitle": "Remover da Instituição de Ensino?",
+      "confirmRemoveUniversityDescription": "Tem certeza de que deseja remover {name} de {university}? O usuário perderá acesso a todos os dados desta instituição de ensino.",
       "confirmRemove": "Remover",
-      "removeSuccess": "Usuário removido da universidade com sucesso.",
-      "removeError": "Falha ao remover usuário da universidade."
+      "removeSuccess": "Usuário removido da instituição de ensino com sucesso.",
+      "removeError": "Falha ao remover usuário da instituição de ensino."
     }
   },
   "students": {
@@ -1455,9 +1455,9 @@
       "description": "Visualize todos os alunos matriculados",
       "searchPlaceholder": "Buscar por nome, email ou matrícula...",
       "emptyMessage": "Nenhum aluno encontrado.",
-      "filterByUniversity": "Filtrar por Universidade",
-      "filterByUniversityPlaceholder": "Selecione uma universidade...",
-      "allUniversities": "Todas as Universidades",
+      "filterByUniversity": "Filtrar por Instituição de Ensino",
+      "filterByUniversityPlaceholder": "Selecione uma instituição de ensino...",
+      "allUniversities": "Todas as Instituições de Ensino",
       "filterByCourse": "Filtrar por Disciplina",
       "filterByCoursePlaceholder": "Selecione uma disciplina...",
       "allCourses": "Todas as Disciplinas",
@@ -1518,7 +1518,7 @@
     "title": "Agente de IA do Professor",
     "description": "Seu assistente de IA pessoal para feedback sobre materiais didáticos",
     "noAgent": {
-      "message": "Você ainda não possui um agente de IA. Por favor, entre em contato com o administrador da sua universidade para criar um para você.",
+      "message": "Você ainda não possui um agente de IA. Por favor, entre em contato com o administrador da sua instituição de ensino para criar um para você.",
       "adminOnly": "Apenas administradores podem criar agentes de IA para professores."
     },
     "agentInfo": {
@@ -1814,7 +1814,7 @@
       "_comment": "Activity section commented out - TODO: Implement real activity tracking",
       "title": "Atividade Recente de Super Administradores",
       "description": "Ações administrativas mais recentes realizadas por super administradores",
-      "example1": "Nova universidade \"Universidade de Tecnologia\" criada",
+      "example1": "Nova instituição de ensino \"Instituição de Ensino de Tecnologia\" criada",
       "example2": "Configurações do sistema atualizadas",
       "example3": "Nova conta de super administrador criada",
       "by": "por",
@@ -1844,7 +1844,7 @@
       "usernameRequired": "Nome de usuário é obrigatório",
       "usernameHint": "🔑 Usado para fazer login no sistema. Use apenas letras, números, pontos (.) e underscores (_). Exemplo: joao.silva ou j.silva",
       "emailLabel": "Email *",
-      "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
+      "emailPlaceholder": "Ex: joao.silva@instituição de ensino.edu.br",
       "emailRequired": "Email é obrigatório",
       "emailInvalid": "Email inválido",
       "emailHint": "📧 Email institucional ou pessoal do super administrador. Será usado para recuperação de senha e notificações do sistema.",
@@ -1894,7 +1894,7 @@
       "usernamePlaceholder": "Ex: joao.silva",
       "usernameRequired": "Nome de usuário é obrigatório",
       "emailLabel": "Email",
-      "emailPlaceholder": "Ex: joao.silva@universidade.edu.br",
+      "emailPlaceholder": "Ex: joao.silva@instituição de ensino.edu.br",
       "emailRequired": "Email é obrigatório",
       "emailInvalid": "Email inválido",
       "update": "Atualizar Super Administrador",
@@ -1911,8 +1911,8 @@
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutoriais e Guias",
-    "universities": "Universidades",
-    "myUniversity": "Minha Universidade",
+    "universities": "Instituições de Ensino",
+    "myUniversity": "Minha Instituição de Ensino",
     "moduleTokens": "Chaves de Acesso",
     "professors": "Professores",
     "users": "Usuários",
@@ -1939,10 +1939,10 @@
     "settings": "Configurações",
     "logout": "Sair",
     "universitySwitcher": {
-      "label": "Suas Universidades",
-      "select": "Selecionar universidade",
+      "label": "Suas Instituições de Ensino",
+      "select": "Selecionar instituição de ensino",
       "switching": "Alternando...",
-      "error": "Falha ao trocar de universidade. Tente novamente."
+      "error": "Falha ao trocar de instituição de ensino. Tente novamente."
     }
   },
   "changePassword": {
@@ -2081,8 +2081,8 @@
       "course": "Disciplina",
       "modules": "Módulos",
       "module": "Módulo",
-      "universities": "Universidades",
-      "university": "Universidade",
+      "universities": "Instituições de Ensino",
+      "university": "Instituição de Ensino",
       "professors": "Professores",
       "professor": "Professor",
       "users": "Usuários",
@@ -2096,8 +2096,8 @@
       "professor": "Professor",
       "student": "Estudante",
       "descriptions": {
-        "super_admin": "Acesso completo ao sistema em todas as universidades",
-        "manager": "Gerenciamento da universidade com acesso a análises",
+        "super_admin": "Acesso completo ao sistema em todas as instituições de ensino",
+        "manager": "Gerenciamento da instituição de ensino com acesso a análises",
         "tutor": "Pode criar disciplinas, módulos e tokens",
         "platform_coordinator": "Visualizar disciplinas/módulos e gerar tokens de acesso",
         "professor": "Gerenciar disciplinas e módulos atribuídos",
@@ -2167,7 +2167,7 @@
           "Dashboard: Your home page with quick actions",
           "Module Tokens: View and manage access tokens"
         ],
-        "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
+        "roleSpecific": "Additional items appear based on your role (Institutions, Courses, Modules, Professors, Administration)."
       },
       "breadcrumbs": {
         "title": "Breadcrumbs",
@@ -2308,8 +2308,8 @@
         },
         "breadcrumbs": {
           "title": "As 'Migalhas de Pão' (Breadcrumbs)",
-          "whatIs": "Logo abaixo da barra superior, em algumas páginas, você verá um caminho de palavras separadas por uma barrinha inclinada assim: / ou setinha assim: >. Exemplo: 'Universidades > UNIFESP > Disciplinas'. Isso mostra onde você está no sistema.",
-          "why": "É como se fossem migalhas de pão te mostrando o caminho de volta (igual no conto João e Maria). Se você clicar em qualquer uma dessas palavras, você volta para aquela página. Por exemplo, se você está em 'Universidades > UNIFESP > Disciplinas > Matemática' e clica em 'Disciplinas', você volta para a lista de todas as disciplinas.",
+          "whatIs": "Logo abaixo da barra superior, em algumas páginas, você verá um caminho de palavras separadas por uma barrinha inclinada assim: / ou setinha assim: >. Exemplo: 'Instituições de Ensino > UNIFESP > Disciplinas'. Isso mostra onde você está no sistema.",
+          "why": "É como se fossem migalhas de pão te mostrando o caminho de volta (igual no conto João e Maria). Se você clicar em qualquer uma dessas palavras, você volta para aquela página. Por exemplo, se você está em 'Instituições de Ensino > UNIFESP > Disciplinas > Matemática' e clica em 'Disciplinas', você volta para a lista de todas as disciplinas.",
           "tip": "Se você se perder no sistema, olhe para estas 'migalhas' e clique em uma das palavras mais à esquerda para voltar para trás!"
         },
         "mainContent": {
@@ -2423,16 +2423,16 @@
       "subtitle": "Guia completo e super detalhado para administradores do sistema. Este guia vai te ensinar TUDO, passo a passo!",
       "overview": {
         "title": "Entendendo Seu Papel - O Que É um Super Administrador?",
-        "whatIs": "Pense no sistema Tutoria como um grande prédio de apartamentos. Cada apartamento é uma universidade diferente. O Super Administrador seria como o SÍNDICO GERAL do prédio inteiro - a pessoa que tem as chaves de tudo e pode gerenciar tudo no sistema.",
-        "description": "Como Super Administrador, você é a pessoa com MAIS poder no sistema. Você pode criar universidades, criar outros administradores, ver tudo que está acontecendo, e muito mais. É uma grande responsabilidade!",
+        "whatIs": "Pense no sistema Tutoria como um grande prédio de apartamentos. Cada apartamento é uma instituição de ensino diferente. O Super Administrador seria como o SÍNDICO GERAL do prédio inteiro - a pessoa que tem as chaves de tudo e pode gerenciar tudo no sistema.",
+        "description": "Como Super Administrador, você é a pessoa com MAIS poder no sistema. Você pode criar instituições de ensino, criar outros administradores, ver tudo que está acontecendo, e muito mais. É uma grande responsabilidade!",
         "keyResponsibilities": "Suas Principais Responsabilidades (O Que Você Faz)",
         "responsibilities": [
-          "🏛️ Criar e gerenciar universidades - Você cria 'prédios' novos no sistema (cada universidade é como um prédio independente)",
+          "🏛️ Criar e gerenciar instituições de ensino - Você cria 'prédios' novos no sistema (cada instituição de ensino é como um prédio independente)",
           "👥 Criar outros super administradores - Você pode criar contas para outras pessoas que vão te ajudar a administrar tudo",
-          "🎓 Criar professores administradores para cada universidade - São como os 'síndicos de cada apartamento', que cuidam de uma universidade específica",
+          "🎓 Criar professores administradores para cada instituição de ensino - São como os 'síndicos de cada apartamento', que cuidam de uma instituição de ensino específica",
           "🔍 Monitorar tudo no sistema - Você pode ver estatísticas, procurar por qualquer coisa, acompanhar atividades",
           "🔐 Manter o sistema seguro - Garantir que apenas pessoas autorizadas tenham acesso",
-          "📊 Ver relatórios e estatísticas gerais - Quantas universidades existem, quantos professores, quantos módulos, etc."
+          "📊 Ver relatórios e estatísticas gerais - Quantas instituições de ensino existem, quantos professores, quantos módulos, etc."
         ],
         "important": "IMPORTANTE: Com grandes poderes vêm grandes responsabilidades! Tenha muito cuidado ao criar ou deletar coisas, pois suas ações afetam o sistema inteiro e todos os usuários."
       },
@@ -2461,7 +2461,7 @@
         },
         "step6": {
           "title": "Passo 6: Bem-vindo! Você Entrou no Sistema",
-          "whatYouShouldSee": "Se tudo estiver correto, a tela vai mudar e você vai ser levado para o 'Dashboard' (painel principal). Você verá: 1) No topo: 'Bem-vindo de volta, [SEU NOME]!' em letras grandes, 2) No lado esquerdo: um menu vertical com várias opções (Dashboard, Tutoriais e Guias, Universidades, etc.), 3) No centro: caixas coloridas mostrando estatísticas e botões de ações rápidas, 4) No canto superior direito: um círculo ou quadrado com suas iniciais."
+          "whatYouShouldSee": "Se tudo estiver correto, a tela vai mudar e você vai ser levado para o 'Dashboard' (painel principal). Você verá: 1) No topo: 'Bem-vindo de volta, [SEU NOME]!' em letras grandes, 2) No lado esquerdo: um menu vertical com várias opções (Dashboard, Tutoriais e Guias, Instituições de Ensino, etc.), 3) No centro: caixas coloridas mostrando estatísticas e botões de ações rápidas, 4) No canto superior direito: um círculo ou quadrado com suas iniciais."
         },
         "commonMistakes": [
           "ERRO: Digitar o usuário ou senha errados - SOLUÇÃO: Você verá uma mensagem em vermelho dizendo 'Login failed' ou 'Falha no login'. Verifique se você digitou tudo corretamente, prestando atenção em letras maiúsculas/minúsculas. Se continuar com problemas, entre em contato com quem criou sua conta.",
@@ -2484,170 +2484,170 @@
         ]
       },
       "universities": {
-        "title": "Gerenciando Universidades - Criando os 'Prédios' do Sistema",
-        "whatIs": "Universidades são como 'prédios' ou 'empresas' no sistema Tutoria. Cada universidade é um espaço independente onde professores podem criar disciplinas e módulos. Por exemplo, você pode criar uma universidade chamada 'UNIFESP', outra chamada 'USP', e cada uma terá seus próprios professores, disciplinas e alunos separados. Como Super Administrador, VOCÊ é quem cria estas universidades.",
-        "why": "Por que criar universidades? Porque cada instituição de ensino precisa do seu próprio espaço no sistema. Imagine que você está administrando um sistema para várias faculdades diferentes - cada uma precisa ser separada das outras, com seus próprios administradores. É como ter vários prédios diferentes, cada um com seu próprio síndico (professor administrador).",
+        "title": "Gerenciando Instituições de Ensino - Criando os 'Prédios' do Sistema",
+        "whatIs": "Instituições de Ensino são como 'prédios' ou 'empresas' no sistema Tutoria. Cada instituição de ensino é um espaço independente onde professores podem criar disciplinas e módulos. Por exemplo, você pode criar uma instituição de ensino chamada 'UNIFESP', outra chamada 'USP', e cada uma terá seus próprios professores, disciplinas e alunos separados. Como Super Administrador, VOCÊ é quem cria estas instituições de ensino.",
+        "why": "Por que criar instituições de ensino? Porque cada instituição de ensino precisa do seu próprio espaço no sistema. Imagine que você está administrando um sistema para várias faculdades diferentes - cada uma precisa ser separada das outras, com seus próprios administradores. É como ter vários prédios diferentes, cada um com seu próprio síndico (professor administrador).",
         "creating": {
-          "title": "CRIANDO uma Nova Universidade - Passo a Passo COMPLETO",
+          "title": "CRIANDO uma Nova Instituição de Ensino - Passo a Passo COMPLETO",
           "step1": {
-            "title": "Passo 1: Vá para a Página de Universidades",
-            "desc": "Olhe para o lado ESQUERDO da sua tela, onde fica o menu vertical (a barra lateral). Procure pela palavra 'Universidades' - geralmente está logo abaixo de 'Dashboard' ou 'Tutoriais e Guias'. Você verá um ícone de prédio 🏛️ ao lado da palavra. Clique UMA VEZ com o mouse na palavra 'Universidades'. A página vai carregar (demora de 1 a 3 segundos).",
-            "whatYouShouldSee": "Depois que carregar, você verá no topo da página um título grande 'Universidades'. Logo abaixo, você verá uma tabela (se já houver universidades criadas) ou uma mensagem dizendo 'Nenhuma universidade encontrada'."
+            "title": "Passo 1: Vá para a Página de Instituições de Ensino",
+            "desc": "Olhe para o lado ESQUERDO da sua tela, onde fica o menu vertical (a barra lateral). Procure pela palavra 'Instituições de Ensino' - geralmente está logo abaixo de 'Dashboard' ou 'Tutoriais e Guias'. Você verá um ícone de prédio 🏛️ ao lado da palavra. Clique UMA VEZ com o mouse na palavra 'Instituições de Ensino'. A página vai carregar (demora de 1 a 3 segundos).",
+            "whatYouShouldSee": "Depois que carregar, você verá no topo da página um título grande 'Instituições de Ensino'. Logo abaixo, você verá uma tabela (se já houver instituições de ensino criadas) ou uma mensagem dizendo 'Nenhuma instituição de ensino encontrada'."
           },
           "step2": {
-            "title": "Passo 2: Clique no Botão 'Criar Universidade'",
-            "desc": "No canto superior DIREITO da página (não confunda com o canto da tela inteira, é o canto direito da área de conteúdo), você verá um botão AZUL com o texto branco 'Criar Universidade'. Este botão pode ter um ícone de '+' (sinal de mais) ao lado do texto. Mova o mouse até este botão azul e clique UMA VEZ.",
-            "whatYouShouldSee": "Uma janela vai aparecer BEM NO CENTRO da sua tela, por cima de tudo. Esta janela tem um fundo um pouco escuro por trás dela (isso é para você focar na janela). No topo desta janela estará escrito 'Criar Nova Universidade'."
+            "title": "Passo 2: Clique no Botão 'Criar Instituição de Ensino'",
+            "desc": "No canto superior DIREITO da página (não confunda com o canto da tela inteira, é o canto direito da área de conteúdo), você verá um botão AZUL com o texto branco 'Criar Instituição de Ensino'. Este botão pode ter um ícone de '+' (sinal de mais) ao lado do texto. Mova o mouse até este botão azul e clique UMA VEZ.",
+            "whatYouShouldSee": "Uma janela vai aparecer BEM NO CENTRO da sua tela, por cima de tudo. Esta janela tem um fundo um pouco escuro por trás dela (isso é para você focar na janela). No topo desta janela estará escrito 'Criar Nova Instituição de Ensino'."
           },
           "step3": {
-            "title": "Passo 3: Preencha o Nome da Universidade",
-            "desc": "Dentro da janela que apareceu, você verá campos (caixinhas) para preencher. O PRIMEIRO campo está marcado com um asterisco vermelho (*) e tem escrito 'Nome da Universidade *' em cima dele. Clique DENTRO desta caixinha branca (você verá a linha piscando). Agora digite o nome completo da universidade. Exemplos: 'Universidade Federal de São Paulo', 'Universidade de São Paulo', 'Faculdade de Tecnologia do ABC'. Seja claro e use o nome oficial completo da instituição. Você pode usar letras maiúsculas e minúsculas normalmente, espaços, e acentos.",
-            "important": "IMPORTANTE: Este nome é o que vai aparecer em todo o sistema quando alguém mencionar esta universidade. Escolha um nome claro e profissional!"
+            "title": "Passo 3: Preencha o Nome da Instituição de Ensino",
+            "desc": "Dentro da janela que apareceu, você verá campos (caixinhas) para preencher. O PRIMEIRO campo está marcado com um asterisco vermelho (*) e tem escrito 'Nome da Instituição de Ensino *' em cima dele. Clique DENTRO desta caixinha branca (você verá a linha piscando). Agora digite o nome completo da instituição de ensino. Exemplos: 'Instituição de Ensino Federal de São Paulo', 'Instituição de Ensino de São Paulo', 'Faculdade de Tecnologia do ABC'. Seja claro e use o nome oficial completo da instituição. Você pode usar letras maiúsculas e minúsculas normalmente, espaços, e acentos.",
+            "important": "IMPORTANTE: Este nome é o que vai aparecer em todo o sistema quando alguém mencionar esta instituição de ensino. Escolha um nome claro e profissional!"
           },
           "step4": {
-            "title": "Passo 4: Preencha o Código da Universidade",
-            "desc": "Logo abaixo do campo de nome, você verá outro campo obrigatório (também com asterisco vermelho *) escrito 'Código da Universidade *'. Clique dentro desta caixinha. Agora digite uma SIGLA ou CÓDIGO curto para identificar a universidade. Geralmente são de 3 a 6 letras. Exemplos: 'UNIFESP' (para Universidade Federal de São Paulo), 'USP' (para Universidade de São Paulo), 'FATEC' (para Faculdade de Tecnologia). Este código é como a 'placa' ou 'sigla' da universidade - deve ser fácil de lembrar e único.",
-            "tip": "DICA: Use códigos que as pessoas já conhecem. Se a universidade já tem uma sigla famosa (como USP, UNESP, etc.), use esta sigla! Evite inventar siglas complicadas."
+            "title": "Passo 4: Preencha o Código da Instituição de Ensino",
+            "desc": "Logo abaixo do campo de nome, você verá outro campo obrigatório (também com asterisco vermelho *) escrito 'Código da Instituição de Ensino *'. Clique dentro desta caixinha. Agora digite uma SIGLA ou CÓDIGO curto para identificar a instituição de ensino. Geralmente são de 3 a 6 letras. Exemplos: 'UNIFESP' (para Instituição de Ensino Federal de São Paulo), 'USP' (para Instituição de Ensino de São Paulo), 'FATEC' (para Faculdade de Tecnologia). Este código é como a 'placa' ou 'sigla' da instituição de ensino - deve ser fácil de lembrar e único.",
+            "tip": "DICA: Use códigos que as pessoas já conhecem. Se a instituição de ensino já tem uma sigla famosa (como USP, UNESP, etc.), use esta sigla! Evite inventar siglas complicadas."
           },
           "step5": {
             "title": "Passo 5: Adicione uma Descrição (Opcional mas Recomendado)",
-            "desc": "Mais abaixo, você verá um campo maior escrito 'Descrição' (este NÃO tem asterisco, então é opcional). Clique dentro desta caixa maior. Aqui você pode escrever informações sobre a universidade. Por exemplo: 'Universidade federal localizada em São Paulo, focada em ciências da saúde e exatas'. Você pode escrever várias linhas se quiser - esta caixa é maior justamente para textos longos. A descrição ajuda outros administradores a entenderem sobre o que é esta universidade.",
-            "tip": "DICA: Mesmo sendo opcional, é BOM preencher! No futuro, quando você tiver muitas universidades, esta descrição ajuda a lembrar qual é qual."
+            "desc": "Mais abaixo, você verá um campo maior escrito 'Descrição' (este NÃO tem asterisco, então é opcional). Clique dentro desta caixa maior. Aqui você pode escrever informações sobre a instituição de ensino. Por exemplo: 'Instituição de Ensino federal localizada em São Paulo, focada em ciências da saúde e exatas'. Você pode escrever várias linhas se quiser - esta caixa é maior justamente para textos longos. A descrição ajuda outros administradores a entenderem sobre o que é esta instituição de ensino.",
+            "tip": "DICA: Mesmo sendo opcional, é BOM preencher! No futuro, quando você tiver muitas instituições de ensino, esta descrição ajuda a lembrar qual é qual."
           },
           "step6": {
             "title": "Passo 6: Revise o Que Você Digitou",
             "desc": "ANTES de clicar no botão para salvar, leia novamente tudo que você digitou. Verifique se: 1) O nome está correto (sem erros de digitação), 2) O código está certo (você vai usar este código em vários lugares), 3) A descrição faz sentido. Se encontrar algum erro, clique na caixinha que tem erro e corrija. Use as teclas de setas do teclado para mover o cursor, Delete para apagar à frente, Backspace para apagar atrás."
           },
           "step7": {
-            "title": "Passo 7: Clique em 'Criar Universidade'",
-            "desc": "No final da janela (role para baixo se necessário), você verá DOIS botões lado a lado: Um botão CINZA escrito 'Cancelar' e um botão AZUL escrito 'Criar Universidade'. Se você quiser DESISTIR e não criar a universidade, clique no botão CINZA 'Cancelar' - a janela vai fechar e nada será salvo. Se você quer mesmo criar a universidade, clique no botão AZUL 'Criar Universidade'.",
-            "whatYouShouldSee": "Depois de clicar no botão azul: 1) O botão vai mudar para 'Criando...' com um círculo girando, 2) Aguarde de 2 a 5 segundos, 3) Uma mensagem VERDE vai aparecer no canto superior direito dizendo algo como 'Universidade criada com sucesso!', 4) A janela vai fechar sozinha, 5) Você será levado automaticamente para a página de detalhes da universidade que acabou de criar."
+            "title": "Passo 7: Clique em 'Criar Instituição de Ensino'",
+            "desc": "No final da janela (role para baixo se necessário), você verá DOIS botões lado a lado: Um botão CINZA escrito 'Cancelar' e um botão AZUL escrito 'Criar Instituição de Ensino'. Se você quiser DESISTIR e não criar a instituição de ensino, clique no botão CINZA 'Cancelar' - a janela vai fechar e nada será salvo. Se você quer mesmo criar a instituição de ensino, clique no botão AZUL 'Criar Instituição de Ensino'.",
+            "whatYouShouldSee": "Depois de clicar no botão azul: 1) O botão vai mudar para 'Criando...' com um círculo girando, 2) Aguarde de 2 a 5 segundos, 3) Uma mensagem VERDE vai aparecer no canto superior direito dizendo algo como 'Instituição de Ensino criada com sucesso!', 4) A janela vai fechar sozinha, 5) Você será levado automaticamente para a página de detalhes da instituição de ensino que acabou de criar."
           },
           "step8": {
-            "title": "Passo 8: Você Está na Página da Nova Universidade!",
-            "whatYouShouldSee": "Agora você está vendo a página de detalhes da universidade que acabou de criar. Você verá: 1) No topo: O nome da universidade em letras GRANDES, 2) Logo abaixo: O código da universidade, 3) Caixinhas mostrando estatísticas (número de disciplinas, professores), 4) Abas (tabs) para ver 'Disciplinas' e 'Professores', 5) Botões como 'Editar' (se você quiser mudar algo) e 'Nova Disciplina' (para criar uma disciplina nesta universidade)."
+            "title": "Passo 8: Você Está na Página da Nova Instituição de Ensino!",
+            "whatYouShouldSee": "Agora você está vendo a página de detalhes da instituição de ensino que acabou de criar. Você verá: 1) No topo: O nome da instituição de ensino em letras GRANDES, 2) Logo abaixo: O código da instituição de ensino, 3) Caixinhas mostrando estatísticas (número de disciplinas, professores), 4) Abas (tabs) para ver 'Disciplinas' e 'Professores', 5) Botões como 'Editar' (se você quiser mudar algo) e 'Nova Disciplina' (para criar uma disciplina nesta instituição de ensino)."
           },
           "commonMistakes": [
-            "ERRO: Usar o mesmo código para universidades diferentes - SOLUÇÃO: Cada universidade PRECISA ter um código ÚNICO. Se você tentar criar uma universidade com um código que já existe, vai aparecer um erro. Escolha outro código!",
+            "ERRO: Usar o mesmo código para instituições de ensino diferentes - SOLUÇÃO: Cada instituição de ensino PRECISA ter um código ÚNICO. Se você tentar criar uma instituição de ensino com um código que já existe, vai aparecer um erro. Escolha outro código!",
             "ERRO: Deixar campos obrigatórios (com *) em branco - SOLUÇÃO: Você não conseguirá salvar se não preencher os campos com asterisco vermelho (*). Preencha o Nome e o Código antes de tentar salvar.",
             "ERRO: Usar caracteres especiais estranhos no código - SOLUÇÃO: O código deve ter apenas letras (A-Z), números (0-9), e alguns símbolos simples como hífen (-). Evite usar @, #, $, %, espaços, etc.",
-            "ERRO: Escrever o nome muito curto ou apenas siglas - SOLUÇÃO: No campo 'Nome', escreva o nome COMPLETO da universidade. No campo 'Código', aí sim use a sigla curta.",
+            "ERRO: Escrever o nome muito curto ou apenas siglas - SOLUÇÃO: No campo 'Nome', escreva o nome COMPLETO da instituição de ensino. No campo 'Código', aí sim use a sigla curta.",
             "ERRO: Clicar em 'Cancelar' por engano - SOLUÇÃO: Se você clicou em Cancelar sem querer, não tem problema! Apenas comece o processo de novo do Passo 1. Nada foi salvo."
           ],
           "troubleshooting": [
-            "PROBLEMA: O botão 'Criar Universidade' não clica (está desabilitado/cinza) - SOLUÇÃO: Isso acontece quando você não preencheu todos os campos obrigatórios. Verifique se você preencheu TANTO o 'Nome' QUANTO o 'Código'. Os dois têm asterisco vermelho (*) e são obrigatórios.",
-            "PROBLEMA: Aparece erro 'Código já existe' - SOLUÇÃO: Outra universidade no sistema já está usando este código. Você precisa escolher um código diferente. Tente adicionar números no final (exemplo: se 'UNIFESP' já existe, tente 'UNIFESP2') ou use uma variação.",
-            "PROBLEMA: A janela não abre quando clico em 'Criar Universidade' - SOLUÇÃO: 1) Aguarde alguns segundos e tente novamente, 2) Atualize a página (F5), 3) Verifique sua conexão com internet, 4) Tente fazer logout e login novamente.",
-            "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos (às vezes a internet está lenta), 2) Se continuar, verifique sua conexão, 3) NÃO clique várias vezes no botão (isso pode criar universidades duplicadas!), 4) Se travar, feche a janela e verifique se a universidade foi criada voltando para a lista de universidades.",
-            "PROBLEMA: Criei a universidade mas quero mudar o nome - SOLUÇÃO: Não tem problema! Vá para a seção 'Editando uma Universidade' deste tutorial para aprender como mudar o nome."
+            "PROBLEMA: O botão 'Criar Instituição de Ensino' não clica (está desabilitado/cinza) - SOLUÇÃO: Isso acontece quando você não preencheu todos os campos obrigatórios. Verifique se você preencheu TANTO o 'Nome' QUANTO o 'Código'. Os dois têm asterisco vermelho (*) e são obrigatórios.",
+            "PROBLEMA: Aparece erro 'Código já existe' - SOLUÇÃO: Outra instituição de ensino no sistema já está usando este código. Você precisa escolher um código diferente. Tente adicionar números no final (exemplo: se 'UNIFESP' já existe, tente 'UNIFESP2') ou use uma variação.",
+            "PROBLEMA: A janela não abre quando clico em 'Criar Instituição de Ensino' - SOLUÇÃO: 1) Aguarde alguns segundos e tente novamente, 2) Atualize a página (F5), 3) Verifique sua conexão com internet, 4) Tente fazer logout e login novamente.",
+            "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos (às vezes a internet está lenta), 2) Se continuar, verifique sua conexão, 3) NÃO clique várias vezes no botão (isso pode criar instituições de ensino duplicadas!), 4) Se travar, feche a janela e verifique se a instituição de ensino foi criada voltando para a lista de instituições de ensino.",
+            "PROBLEMA: Criei a instituição de ensino mas quero mudar o nome - SOLUÇÃO: Não tem problema! Vá para a seção 'Editando uma Instituição de Ensino' deste tutorial para aprender como mudar o nome."
           ],
           "tips": [
-            "DICA: Crie as universidades UMA POR VEZ e com calma. Não tente fazer correndo - é melhor fazer direito uma vez do que ter que corrigir depois!",
-            "DICA: Mantenha uma lista (pode ser no papel ou Excel) com o nome e código de cada universidade que você criar. Isso ajuda você a lembrar e a evitar duplicatas.",
-            "DICA: Use códigos consistentes. Se você usa siglas oficiais para algumas universidades, use para todas! Isso mantém o padrão.",
-            "DICA: Se você vai criar várias universidades, comece pelas mais importantes ou maiores primeiro.",
-            "DICA: Depois de criar a universidade, o próximo passo geralmente é criar um Professor Administrador para ela. Vá para a seção 'Criando Professores Administradores' deste tutorial!"
+            "DICA: Crie as instituições de ensino UMA POR VEZ e com calma. Não tente fazer correndo - é melhor fazer direito uma vez do que ter que corrigir depois!",
+            "DICA: Mantenha uma lista (pode ser no papel ou Excel) com o nome e código de cada instituição de ensino que você criar. Isso ajuda você a lembrar e a evitar duplicatas.",
+            "DICA: Use códigos consistentes. Se você usa siglas oficiais para algumas instituições de ensino, use para todas! Isso mantém o padrão.",
+            "DICA: Se você vai criar várias instituições de ensino, comece pelas mais importantes ou maiores primeiro.",
+            "DICA: Depois de criar a instituição de ensino, o próximo passo geralmente é criar um Professor Administrador para ela. Vá para a seção 'Criando Professores Administradores' deste tutorial!"
           ],
           "steps": [
-            "Navigate to Universities (/universities) from the sidebar",
-            "Clique no botão 'Criar Universidade'",
-            "Fill in the required information: University Name and Code",
+            "Navigate to Institutions (/institutions) from the sidebar",
+            "Clique no botão 'Criar Instituição de Ensino'",
+            "Fill in the required information: Institution Name and Code",
             "Add an optional description",
-            "Click 'Create University' to save",
-            "You'll be redirected to the university detail page"
+            "Click 'Create Institution' to save",
+            "You'll be redirected to the institution detail page"
           ]
         },
         "viewing": {
-          "title": "VISUALIZANDO Detalhes de uma Universidade",
-          "whatIs": "Visualizar uma universidade significa ver TODAS as informações sobre ela - nome, código, descrição, quantas disciplinas tem, quais professores estão nela, etc. É como abrir uma pasta e ver tudo que tem dentro.",
+          "title": "VISUALIZANDO Detalhes de uma Instituição de Ensino",
+          "whatIs": "Visualizar uma instituição de ensino significa ver TODAS as informações sobre ela - nome, código, descrição, quantas disciplinas tem, quais professores estão nela, etc. É como abrir uma pasta e ver tudo que tem dentro.",
           "step1": {
-            "title": "Passo 1: Vá para Lista de Universidades",
-            "desc": "No menu lateral esquerdo, clique em 'Universidades'. Você verá uma tabela com TODAS as universidades que existem no sistema."
+            "title": "Passo 1: Vá para Lista de Instituições de Ensino",
+            "desc": "No menu lateral esquerdo, clique em 'Instituições de Ensino'. Você verá uma tabela com TODAS as instituições de ensino que existem no sistema."
           },
           "step2": {
-            "title": "Passo 2: Encontre a Universidade que Quer Ver",
-            "desc": "Na tabela, você verá as universidades listadas em linhas. Cada linha mostra: o nome da universidade, quando foi criada, e botões de ações. Se tiver MUITAS universidades e você não está achando a que quer, use a caixinha de busca no topo da tabela. Digite o nome ou código da universidade que procura e a tabela vai filtrar mostrando apenas as que combinam com o que você digitou."
+            "title": "Passo 2: Encontre a Instituição de Ensino que Quer Ver",
+            "desc": "Na tabela, você verá as instituições de ensino listadas em linhas. Cada linha mostra: o nome da instituição de ensino, quando foi criada, e botões de ações. Se tiver MUITAS instituições de ensino e você não está achando a que quer, use a caixinha de busca no topo da tabela. Digite o nome ou código da instituição de ensino que procura e a tabela vai filtrar mostrando apenas as que combinam com o que você digitou."
           },
           "step3": {
-            "title": "Passo 3: Clique no Nome da Universidade",
-            "desc": "Na tabela, o NOME de cada universidade é um link azul e sublinhado. Clique UMA VEZ no nome da universidade que você quer ver. A página vai mudar e carregar os detalhes."
+            "title": "Passo 3: Clique no Nome da Instituição de Ensino",
+            "desc": "Na tabela, o NOME de cada instituição de ensino é um link azul e sublinhado. Clique UMA VEZ no nome da instituição de ensino que você quer ver. A página vai mudar e carregar os detalhes."
           },
           "step4": {
             "title": "Passo 4: Explore a Página de Detalhes",
-            "whatYouShouldSee": "Agora você está na página de detalhes da universidade. Veja o que você tem aqui: TOPO: Nome da universidade em letras grandes e em negrito. LOGO ABAIXO: Código da universidade e descrição (se tiver). ESTATÍSTICAS: Caixinhas coloridas mostrando números importantes: Quantas disciplinas esta universidade tem, Quantos professores, O código. ABAS (TABS): Você verá abas clicáveis como 'Disciplinas' e 'Professores'. Clique em cada aba para ver informações diferentes. BOTÕES DE AÇÃO: No canto superior direito, botões como 'Editar' (para modificar a universidade) e 'Nova Disciplina' (para criar uma disciplina nova)."
+            "whatYouShouldSee": "Agora você está na página de detalhes da instituição de ensino. Veja o que você tem aqui: TOPO: Nome da instituição de ensino em letras grandes e em negrito. LOGO ABAIXO: Código da instituição de ensino e descrição (se tiver). ESTATÍSTICAS: Caixinhas coloridas mostrando números importantes: Quantas disciplinas esta instituição de ensino tem, Quantos professores, O código. ABAS (TABS): Você verá abas clicáveis como 'Disciplinas' e 'Professores'. Clique em cada aba para ver informações diferentes. BOTÕES DE AÇÃO: No canto superior direito, botões como 'Editar' (para modificar a instituição de ensino) e 'Nova Disciplina' (para criar uma disciplina nova)."
           },
           "step5": {
-            "title": "Passo 5: Veja as Disciplinas da Universidade",
-            "desc": "Clique na aba 'Disciplinas' (se não estiver já selecionada). Você verá uma lista de TODAS as disciplinas que foram criadas nesta universidade. Para cada disciplina, você vê: nome, quantos módulos tem, quantos professores, quando foi criada. Se não aparecer nenhuma disciplina, significa que ainda não criaram disciplinas para esta universidade - isso é normal em universidades novas!"
+            "title": "Passo 5: Veja as Disciplinas da Instituição de Ensino",
+            "desc": "Clique na aba 'Disciplinas' (se não estiver já selecionada). Você verá uma lista de TODAS as disciplinas que foram criadas nesta instituição de ensino. Para cada disciplina, você vê: nome, quantos módulos tem, quantos professores, quando foi criada. Se não aparecer nenhuma disciplina, significa que ainda não criaram disciplinas para esta instituição de ensino - isso é normal em instituições de ensino novas!"
           },
           "step6": {
-            "title": "Passo 6: Veja os Professores da Universidade",
-            "desc": "Clique na aba 'Professores'. Você verá uma lista de todos os professores (administradores e regulares) que pertencem a esta universidade. Para cada professor, você vê: nome completo, tipo (Administrador ou Professor regular), quantas disciplinas leciona."
+            "title": "Passo 6: Veja os Professores da Instituição de Ensino",
+            "desc": "Clique na aba 'Professores'. Você verá uma lista de todos os professores (administradores e regulares) que pertencem a esta instituição de ensino. Para cada professor, você vê: nome completo, tipo (Administrador ou Professor regular), quantas disciplinas leciona."
           },
           "tips": [
-            "DICA: A página de detalhes da universidade é como um 'resumo geral' de tudo que acontece naquela universidade. É um ótimo lugar para ter uma visão rápida!",
-            "DICA: Se você quiser EDITAR algo, clique no botão 'Editar' no topo. Se quiser DELETAR a universidade, veja a seção 'Deletando uma Universidade' - mas CUIDADO, deletar é irreversível!",
+            "DICA: A página de detalhes da instituição de ensino é como um 'resumo geral' de tudo que acontece naquela instituição de ensino. É um ótimo lugar para ter uma visão rápida!",
+            "DICA: Se você quiser EDITAR algo, clique no botão 'Editar' no topo. Se quiser DELETAR a instituição de ensino, veja a seção 'Deletando uma Instituição de Ensino' - mas CUIDADO, deletar é irreversível!",
             "DICA: Use as abas para navegar entre diferentes informações. Não precisa sair e voltar - tudo está ali nas abas!"
           ],
-          "description": "Click on any university from the list to view its details. You'll see:",
+          "description": "Click on any institution from the list to view its details. You'll see:",
           "features": [
-            "University information and statistics",
-            "List of courses offered by the university",
-            "List of professors associated with the university",
+            "Institution information and statistics",
+            "List of courses offered by the institution",
+            "List of professors associated with the institution",
             "Quick actions to add courses or professors"
           ]
         },
         "editing": {
-          "title": "EDITANDO uma Universidade Existente",
-          "whatIs": "Editar significa MODIFICAR informações de uma universidade que já foi criada. Por exemplo: corrigir um erro no nome, mudar o código, atualizar a descrição. É como usar uma borracha e escrever de novo.",
-          "when": "Quando editar? Quando você perceber que tem um erro de digitação, quando a universidade mudar de nome oficialmente, quando quiser melhorar a descrição, ou quando precisar corrigir o código.",
+          "title": "EDITANDO uma Instituição de Ensino Existente",
+          "whatIs": "Editar significa MODIFICAR informações de uma instituição de ensino que já foi criada. Por exemplo: corrigir um erro no nome, mudar o código, atualizar a descrição. É como usar uma borracha e escrever de novo.",
+          "when": "Quando editar? Quando você perceber que tem um erro de digitação, quando a instituição de ensino mudar de nome oficialmente, quando quiser melhorar a descrição, ou quando precisar corrigir o código.",
           "step1": {
-            "title": "Passo 1: Vá para Página da Universidade",
-            "desc": "Primeiro, navegue até a universidade que você quer editar. Vá em 'Universidades' no menu lateral, encontre a universidade na lista, e clique no nome dela para abrir a página de detalhes."
+            "title": "Passo 1: Vá para Página da Instituição de Ensino",
+            "desc": "Primeiro, navegue até a instituição de ensino que você quer editar. Vá em 'Instituições de Ensino' no menu lateral, encontre a instituição de ensino na lista, e clique no nome dela para abrir a página de detalhes."
           },
           "step2": {
             "title": "Passo 2: Clique no Botão 'Editar'",
-            "desc": "Na página de detalhes da universidade, procure no canto superior direito (perto dos outros botões) um botão que pode estar escrito 'Editar' ou ter um ícone de lápis ✏️. Clique neste botão UMA VEZ.",
-            "whatYouShouldSee": "Uma janela (popup) vai aparecer no centro da tela, bem parecida com a janela de criar universidade. Mas desta vez, os campos já vão estar PREENCHIDOS com as informações atuais da universidade."
+            "desc": "Na página de detalhes da instituição de ensino, procure no canto superior direito (perto dos outros botões) um botão que pode estar escrito 'Editar' ou ter um ícone de lápis ✏️. Clique neste botão UMA VEZ.",
+            "whatYouShouldSee": "Uma janela (popup) vai aparecer no centro da tela, bem parecida com a janela de criar instituição de ensino. Mas desta vez, os campos já vão estar PREENCHIDOS com as informações atuais da instituição de ensino."
           },
           "step3": {
             "title": "Passo 3: Modifique o Que Você Quer Mudar",
-            "desc": "Agora você verá os mesmos campos de quando criou a universidade: 'Nome da Universidade', 'Código da Universidade', e 'Descrição'. A diferença é que agora eles já estão preenchidos. Clique DENTRO do campo que você quer modificar (por exemplo, se quer mudar o nome, clique na caixinha do nome). Você pode: APAGAR tudo e escrever de novo (selecione tudo com Ctrl+A e delete), EDITAR apenas parte (use as setinhas do teclado para posicionar o cursor onde quer mudar), ADICIONAR mais texto (clique onde quer adicionar e digite)."
+            "desc": "Agora você verá os mesmos campos de quando criou a instituição de ensino: 'Nome da Instituição de Ensino', 'Código da Instituição de Ensino', e 'Descrição'. A diferença é que agora eles já estão preenchidos. Clique DENTRO do campo que você quer modificar (por exemplo, se quer mudar o nome, clique na caixinha do nome). Você pode: APAGAR tudo e escrever de novo (selecione tudo com Ctrl+A e delete), EDITAR apenas parte (use as setinhas do teclado para posicionar o cursor onde quer mudar), ADICIONAR mais texto (clique onde quer adicionar e digite)."
           },
           "step4": {
             "title": "Passo 4: Salve as Mudanças",
-            "desc": "Depois de fazer todas as mudanças que queria, role para baixo até o final da janela. Você verá dois botões: 'Cancelar' (cinza) e 'Atualizar Universidade' (azul). Se mudou de ideia e NÃO quer salvar as mudanças, clique em 'Cancelar' - tudo volta a ser como era antes. Se quer mesmo salvar as mudanças, clique no botão AZUL 'Atualizar Universidade'.",
-            "whatYouShouldSee": "O botão vai mudar para 'Atualizando...' com círculo girando, aguarde 2-5 segundos, uma mensagem verde vai aparecer dizendo 'Universidade atualizada com sucesso!', a janela vai fechar, e você vai ver as informações já atualizadas na página."
+            "desc": "Depois de fazer todas as mudanças que queria, role para baixo até o final da janela. Você verá dois botões: 'Cancelar' (cinza) e 'Atualizar Instituição de Ensino' (azul). Se mudou de ideia e NÃO quer salvar as mudanças, clique em 'Cancelar' - tudo volta a ser como era antes. Se quer mesmo salvar as mudanças, clique no botão AZUL 'Atualizar Instituição de Ensino'.",
+            "whatYouShouldSee": "O botão vai mudar para 'Atualizando...' com círculo girando, aguarde 2-5 segundos, uma mensagem verde vai aparecer dizendo 'Instituição de Ensino atualizada com sucesso!', a janela vai fechar, e você vai ver as informações já atualizadas na página."
           },
           "commonMistakes": [
-            "ERRO: Mudar o código para um que já existe - SOLUÇÃO: Cada código precisa ser único. Se tentar usar um código que outra universidade já usa, vai dar erro. Escolha outro código!",
+            "ERRO: Mudar o código para um que já existe - SOLUÇÃO: Cada código precisa ser único. Se tentar usar um código que outra instituição de ensino já usa, vai dar erro. Escolha outro código!",
             "ERRO: Apagar tudo sem querer - SOLUÇÃO: Se você apagou algo sem querer, antes de salvar, clique em 'Cancelar' para desistir das mudanças. Depois abra a edição de novo e faça com mais cuidado.",
-            "ERRO: Esquecer de clicar em 'Atualizar Universidade' - SOLUÇÃO: Se você fizer mudanças mas fechar a janela sem salvar (clicando fora dela ou no X), as mudanças serão PERDIDAS. Sempre certifique-se de clicar no botão azul 'Atualizar'!"
+            "ERRO: Esquecer de clicar em 'Atualizar Instituição de Ensino' - SOLUÇÃO: Se você fizer mudanças mas fechar a janela sem salvar (clicando fora dela ou no X), as mudanças serão PERDIDAS. Sempre certifique-se de clicar no botão azul 'Atualizar'!"
           ],
           "tips": [
             "DICA: Antes de editar, anote em um papel como está agora (especialmente o código). Assim se você fizer alguma confusão, você sabe como voltar.",
             "DICA: Você pode editar quantas vezes quiser! Não tenha medo de fazer mudanças - você sempre pode voltar aqui e editar de novo se precisar.",
-            "DICA: Se você mudar o CÓDIGO da universidade, saiba que este código é usado em vários lugares. Informe professores e administradores sobre a mudança!"
+            "DICA: Se você mudar o CÓDIGO da instituição de ensino, saiba que este código é usado em vários lugares. Informe professores e administradores sobre a mudança!"
           ],
           "steps": [
-            "From the university detail page, click 'Edit'",
-            "Update the university name, code, or description",
-            "Click 'Update University' to save changes"
+            "From the institution detail page, click 'Edit'",
+            "Update the institution name, code, or description",
+            "Click 'Update Institution' to save changes"
           ]
         },
         "deleting": {
-          "title": "DELETANDO uma Universidade - ⚠️ MUITO CUIDADO!",
-          "warning": "⚠️⚠️⚠️ ATENÇÃO MÁXIMA! ⚠️⚠️⚠️ Deletar uma universidade é UMA AÇÃO PERMANENTE E IRREVERSÍVEL! Quando você deleta uma universidade, você também deleta AUTOMATICAMENTE: TODAS as disciplinas da universidade, TODOS os módulos de todas as disciplinas, TODOS os tokens criados, TODOS os arquivos enviados pelos professores, TODAS as configurações de tutores de IA, Todas as atribuições de professores. É como DEMOLIR o prédio inteiro - tudo que estava dentro é destruído também! NÃO HÁ COMO DESFAZER! NÃO HÁ BOTÃO DE 'VOLTAR ATRÁS'!",
-          "when": "Quando deletar? APENAS delete uma universidade se: A universidade foi criada por engano e NUNCA foi usada, A universidade está vazia (sem professores, sem disciplinas, sem módulos), Você tem ABSOLUTA CERTEZA que nunca mais vai precisar dela, Você conversou com todos os envolvidos e eles confirmaram que pode deletar.",
-          "never": "NUNCA delete uma universidade que: Tem professores ativos usando, Tem disciplinas e módulos criados, Tem alunos estudando, Você tem dúvida se deve deletar ou não (se tiver dúvida, NÃO DELETA!).",
-          "alternative": "ALTERNATIVA SEGURA: Em vez de deletar, você pode 'desativar' professores, arquivar disciplinas, ou simplesmente deixar a universidade parada sem usar. Isso mantém o histórico seguro caso precise no futuro!",
+          "title": "DELETANDO uma Instituição de Ensino - ⚠️ MUITO CUIDADO!",
+          "warning": "⚠️⚠️⚠️ ATENÇÃO MÁXIMA! ⚠️⚠️⚠️ Deletar uma instituição de ensino é UMA AÇÃO PERMANENTE E IRREVERSÍVEL! Quando você deleta uma instituição de ensino, você também deleta AUTOMATICAMENTE: TODAS as disciplinas da instituição de ensino, TODOS os módulos de todas as disciplinas, TODOS os tokens criados, TODOS os arquivos enviados pelos professores, TODAS as configurações de tutores de IA, Todas as atribuições de professores. É como DEMOLIR o prédio inteiro - tudo que estava dentro é destruído também! NÃO HÁ COMO DESFAZER! NÃO HÁ BOTÃO DE 'VOLTAR ATRÁS'!",
+          "when": "Quando deletar? APENAS delete uma instituição de ensino se: A instituição de ensino foi criada por engano e NUNCA foi usada, A instituição de ensino está vazia (sem professores, sem disciplinas, sem módulos), Você tem ABSOLUTA CERTEZA que nunca mais vai precisar dela, Você conversou com todos os envolvidos e eles confirmaram que pode deletar.",
+          "never": "NUNCA delete uma instituição de ensino que: Tem professores ativos usando, Tem disciplinas e módulos criados, Tem alunos estudando, Você tem dúvida se deve deletar ou não (se tiver dúvida, NÃO DELETA!).",
+          "alternative": "ALTERNATIVA SEGURA: Em vez de deletar, você pode 'desativar' professores, arquivar disciplinas, ou simplesmente deixar a instituição de ensino parada sem usar. Isso mantém o histórico seguro caso precise no futuro!",
           "step1": {
-            "title": "Passo 1: Vá para Lista de Universidades",
-            "desc": "No menu lateral esquerdo, clique em 'Universidades'. Você verá a tabela com todas as universidades."
+            "title": "Passo 1: Vá para Lista de Instituições de Ensino",
+            "desc": "No menu lateral esquerdo, clique em 'Instituições de Ensino'. Você verá a tabela com todas as instituições de ensino."
           },
           "step2": {
-            "title": "Passo 2: Encontre a Universidade que Quer Deletar",
-            "desc": "Procure na tabela a universidade que você (tem CERTEZA ABSOLUTA) que quer deletar. Use a busca se necessário. Verifique NOVAMENTE se é realmente esta universidade - olhe o nome, o código, tudo! Certeza ABSOLUTA?"
+            "title": "Passo 2: Encontre a Instituição de Ensino que Quer Deletar",
+            "desc": "Procure na tabela a instituição de ensino que você (tem CERTEZA ABSOLUTA) que quer deletar. Use a busca se necessário. Verifique NOVAMENTE se é realmente esta instituição de ensino - olhe o nome, o código, tudo! Certeza ABSOLUTA?"
           },
           "step3": {
             "title": "Passo 3: Clique no Ícone de Lixeira Vermelha",
@@ -2656,41 +2656,41 @@
           },
           "step4": {
             "title": "Passo 4: Leia o Aviso com ATENÇÃO",
-            "desc": "Na janela de confirmação, você verá uma mensagem mais ou menos assim: 'Tem certeza que deseja deletar esta universidade? Esta ação NÃO pode ser desfeita.' Ou em inglês: 'Are you sure you want to delete this university? This action cannot be undone.' LEIA ESTA MENSAGEM COM MUITA ATENÇÃO! Este é o ÚLTIMO momento para desistir!"
+            "desc": "Na janela de confirmação, você verá uma mensagem mais ou menos assim: 'Tem certeza que deseja deletar esta instituição de ensino? Esta ação NÃO pode ser desfeita.' Ou em inglês: 'Are you sure you want to delete this institution? This action cannot be undone.' LEIA ESTA MENSAGEM COM MUITA ATENÇÃO! Este é o ÚLTIMO momento para desistir!"
           },
           "step5": {
             "title": "Passo 5: Confirme ou Cancele",
             "desc": "Na janela de confirmação, você verá dois botões: Um botão geralmente CINZA ou com borda dizendo 'Cancelar' ou 'Cancel', Um botão VERMELHO dizendo 'Deletar', 'Confirmar', 'Delete', ou 'Confirm'. Se você quer DESISTIR de deletar (isso é o mais seguro!), clique no botão CINZA 'Cancelar'. A janela vai fechar e NADA será deletado - ufa! Se você tem CERTEZA ABSOLUTA que quer deletar, clique no botão VERMELHO.",
-            "whatYouShouldSee": "Se você clicou no botão vermelho para confirmar: O botão vai mostrar 'Deletando...' ou 'Deleting...', Aguarde alguns segundos (pode demorar até 10 segundos se a universidade tiver muito conteúdo), Uma mensagem verde vai aparecer dizendo 'Universidade deletada com sucesso' ou similar, A universidade vai DESAPARECER da lista, TUDO relacionado a ela foi deletado permanentemente."
+            "whatYouShouldSee": "Se você clicou no botão vermelho para confirmar: O botão vai mostrar 'Deletando...' ou 'Deleting...', Aguarde alguns segundos (pode demorar até 10 segundos se a instituição de ensino tiver muito conteúdo), Uma mensagem verde vai aparecer dizendo 'Instituição de Ensino deletada com sucesso' ou similar, A instituição de ensino vai DESAPARECER da lista, TUDO relacionado a ela foi deletado permanentemente."
           },
           "commonMistakes": [
-            "ERRO: Deletar a universidade errada - PREVENÇÃO: SEMPRE verifique duas ou três vezes o nome e código antes de clicar em deletar. Se tiver duas universidades com nomes parecidos, tome cuidado REDOBRADO!",
-            "ERRO: Deletar sem avisar os professores - PREVENÇÃO: Antes de deletar, avise TODOS os professores e administradores da universidade que ela será deletada. Dê tempo para eles salvarem o que precisam!",
-            "ERRO: Deletar uma universidade ativa por engano - PREVENÇÃO: Se a universidade tem disciplinas, módulos, professores, NÃO DELETE! Você vai destruir o trabalho de muitas pessoas!",
-            "ERRO: Clicar em deletar só para 'ver o que acontece' - SOLUÇÃO: NUNCA faça isso! Deletar não é brincadeira. Se quiser testar o sistema, crie uma universidade de TESTE e delete aquela, não universidades reais!"
+            "ERRO: Deletar a instituição de ensino errada - PREVENÇÃO: SEMPRE verifique duas ou três vezes o nome e código antes de clicar em deletar. Se tiver duas instituições de ensino com nomes parecidos, tome cuidado REDOBRADO!",
+            "ERRO: Deletar sem avisar os professores - PREVENÇÃO: Antes de deletar, avise TODOS os professores e administradores da instituição de ensino que ela será deletada. Dê tempo para eles salvarem o que precisam!",
+            "ERRO: Deletar uma instituição de ensino ativa por engano - PREVENÇÃO: Se a instituição de ensino tem disciplinas, módulos, professores, NÃO DELETE! Você vai destruir o trabalho de muitas pessoas!",
+            "ERRO: Clicar em deletar só para 'ver o que acontece' - SOLUÇÃO: NUNCA faça isso! Deletar não é brincadeira. Se quiser testar o sistema, crie uma instituição de ensino de TESTE e delete aquela, não instituições de ensino reais!"
           ],
           "troubleshooting": [
-            "PROBLEMA: Deletei a universidade errada - O QUE FAZER: Infelizmente, NÃO HÁ COMO DESFAZER. Os dados foram permanentemente deletados. Você precisará: 1) Criar a universidade novamente, 2) Recriar todas as disciplinas, 3) Recriar todos os módulos, 4) Pedir aos professores para fazer upload dos arquivos novamente. Por isso que deletar é IRREVERSÍVEL e perigoso!",
-            "PROBLEMA: A universidade não deleta (aparece erro) - SOLUÇÃO: Pode haver alguma restrição do sistema. Verifique se há outros dados dependentes. Entre em contato com suporte técnico.",
+            "PROBLEMA: Deletei a instituição de ensino errada - O QUE FAZER: Infelizmente, NÃO HÁ COMO DESFAZER. Os dados foram permanentemente deletados. Você precisará: 1) Criar a instituição de ensino novamente, 2) Recriar todas as disciplinas, 3) Recriar todos os módulos, 4) Pedir aos professores para fazer upload dos arquivos novamente. Por isso que deletar é IRREVERSÍVEL e perigoso!",
+            "PROBLEMA: A instituição de ensino não deleta (aparece erro) - SOLUÇÃO: Pode haver alguma restrição do sistema. Verifique se há outros dados dependentes. Entre em contato com suporte técnico.",
             "PROBLEMA: Quero deletar mas estou com medo de fazer errado - SOLUÇÃO: Se você tem QUALQUER dúvida, NÃO DELETE! Peça ajuda a outro super administrador, ou entre em contato com suporte técnico primeiro."
           ],
-          "finalWarning": "LEMB RETE FINAL: Deletar é como queimar um livro - uma vez feito, não tem volta. Se você tem QUALQUER dúvida, NÃO DELETE. É sempre melhor deixar uma universidade parada/vazia do que deletar por engano e perder tudo. Só delete se você tem 100% de certeza, conversou com todos os envolvidos, e não há nenhuma chance de precisar daqueles dados no futuro. Em caso de dúvida, NÃO DELETE!",
+          "finalWarning": "LEMB RETE FINAL: Deletar é como queimar um livro - uma vez feito, não tem volta. Se você tem QUALQUER dúvida, NÃO DELETE. É sempre melhor deixar uma instituição de ensino parada/vazia do que deletar por engano e perder tudo. Só delete se você tem 100% de certeza, conversou com todos os envolvidos, e não há nenhuma chance de precisar daqueles dados no futuro. Em caso de dúvida, NÃO DELETE!",
           "steps": [
-            "From the Universities list, click the delete icon",
+            "From the Institutions list, click the delete icon",
             "Confirme a exclusão no diálogo",
-            "The university and all its content will be permanently removed"
+            "The institution and all its content will be permanently removed"
           ]
         },
-        "description": "Universities are the top-level organizational units in Tutoria. Each university can have multiple courses, professors, and students."
+        "description": "Institutions are the top-level organizational units in Tutoria. Each institution can have multiple courses, professors, and students."
       },
       "gettingStarted": {
         "title": "Primeiros Passos",
         "step1Title": "1. Dashboard Overview",
         "step1Desc": "After logging in, you'll see your dashboard at /dashboard with quick actions and system overview. The dashboard provides access to all major features.",
         "step2Title": "2. Understanding Your Navigation",
-        "step2Desc": "Your sidebar contains: Dashboard, Universities, Module Tokens, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
+        "step2Desc": "Your sidebar contains: Dashboard, Institutions, Module Tokens, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
         "step3Title": "3. First Steps",
-        "step3Desc": "Start by creating your first university, then create an admin professor for that university. The admin professor can then manage courses and regular professors."
+        "step3Desc": "Start by creating your first institution, then create an admin professor for that institution. The admin professor can then manage courses and regular professors."
       },
       "superAdmins": {
         "title": "Managing Super Administrators",
@@ -2729,14 +2729,14 @@
       },
       "professors": {
         "title": "Managing Admin Professors",
-        "description": "Admin professors manage their university's courses, modules, and regular professors. Super admins can create admin professors for any university.",
+        "description": "Admin professors manage their institution's courses, modules, and regular professors. Super admins can create admin professors for any institution.",
         "creating": {
           "title": "Creating an Admin Professor",
           "steps": [
             "Navigate to Professors (/professors)",
             "Click 'Add Professor'",
             "Select 'Admin Professor' type",
-            "Select the university",
+            "Select the institution",
             "Fill in: First Name, Last Name, Username, Email, and Temporary Password",
             "Click 'Create Admin Professor'",
             "Copy and share the password setup link securely",
@@ -2747,7 +2747,7 @@
           "title": "Admin Professor Permissions",
           "description": "Admin professors can:",
           "list": [
-            "View and manage all courses in their university",
+            "View and manage all courses in their institution",
             "Create and edit courses",
             "Create and manage modules for courses",
             "Create regular professors and assign them to courses",
@@ -2759,13 +2759,13 @@
       },
       "globalSearch": {
         "title": "Pesquisa Global",
-        "description": "The Global Search feature (/admin/global-search) allows you to search across all universities, courses, modules, and users in the system.",
+        "description": "The Global Search feature (/admin/global-search) allows you to search across all institutions, courses, modules, and users in the system.",
         "usage": {
           "title": "Usando a Pesquisa Global",
           "steps": [
             "Navigate to Administration > Global Search",
             "Enter your search query in the search box",
-            "Filter results by type (Universities, Courses, Modules, Users)",
+            "Filter results by type (Institutions, Courses, Modules, Users)",
             "Click on any result to navigate to its detail page"
           ]
         },
@@ -2773,7 +2773,7 @@
           "title": "Dicas de Pesquisa",
           "list": [
             "Use palavras-chave específicas para melhores resultados",
-            "Pesquise por código de universidade, nome de curso ou código de módulo",
+            "Pesquise por código de instituição de ensino, nome de curso ou código de módulo",
             "Use endereços de e-mail para encontrar usuários específicos",
             "Combine filtros para refinar resultados"
           ]
@@ -2781,13 +2781,13 @@
       },
       "moduleTokens": {
         "title": "Visão Geral das Chaves de Acesso de Módulo",
-        "description": "As chaves de acesso de módulo fornecem acesso aos widgets de tutoria IA. Super administradores podem ver chaves de todas as universidades.",
+        "description": "As chaves de acesso de módulo fornecem acesso aos widgets de tutoria IA. Super administradores podem ver chaves de todas as instituições de ensino.",
         "viewing": {
           "title": "Visualizando Chaves de Acesso de Módulo",
           "steps": [
             "Navegue até Chaves de Acesso de Módulo (/tokens) na barra lateral",
             "Visualize todas as chaves do sistema",
-            "Filtre chaves por universidade usando o parâmetro de URL",
+            "Filtre chaves por instituição de ensino usando o parâmetro de URL",
             "Veja permissões, datas de expiração e estatísticas de uso das chaves"
           ]
         },
@@ -2796,36 +2796,36 @@
       "bestPractices": {
         "title": "Melhores Práticas",
         "list": [
-          "Create admin professors to distribute university management responsibilities",
-          "Use descriptive names and codes for universities",
+          "Create admin professors to distribute institution management responsibilities",
+          "Use descriptive names and codes for institutions",
           "Regularly review system activity through Global Search",
           "Keep super administrator accounts to a minimum",
           "Use password setup links instead of sharing passwords directly",
           "Monitor token usage to ensure security compliance",
-          "Document university structures and policies",
+          "Document institution structures and policies",
           "Perform regular security audits"
         ]
       }
     },
     "adminProfessor": {
       "title": "Guia do Professor Administrador",
-      "subtitle": "Guia COMPLETO e super detalhado para professores que administram uma universidade. Você vai aprender TUDO passo a passo!",
+      "subtitle": "Guia COMPLETO e super detalhado para professores que administram uma instituição de ensino. Você vai aprender TUDO passo a passo!",
       "overview": {
         "title": "Entendendo Seu Papel - O Que É um Professor Administrador?",
-        "whatIs": "Imagine que o sistema Tutoria é um grande prédio de apartamentos, onde cada apartamento é uma universidade. Se o Super Administrador é o síndico geral do prédio todo, o Professor Administrador é o SÍNDICO DO SEU APARTAMENTO - você cuida de TUDO dentro da sua universidade, mas só da sua. Você não mexe nas outras universidades.",
-        "description": "Como Professor Administrador, você é a pessoa MAIS importante da SUA universidade no sistema. Você pode criar disciplinas, criar módulos, adicionar professores regulares, fazer upload de arquivos, configurar tutores de IA, gerar tokens de acesso - TUDO relacionado à sua universidade você pode fazer!",
+        "whatIs": "Imagine que o sistema Tutoria é um grande prédio de apartamentos, onde cada apartamento é uma instituição de ensino. Se o Super Administrador é o síndico geral do prédio todo, o Professor Administrador é o SÍNDICO DO SEU APARTAMENTO - você cuida de TUDO dentro da sua instituição de ensino, mas só da sua. Você não mexe nas outras instituições de ensino.",
+        "description": "Como Professor Administrador, você é a pessoa MAIS importante da SUA instituição de ensino no sistema. Você pode criar disciplinas, criar módulos, adicionar professores regulares, fazer upload de arquivos, configurar tutores de IA, gerar tokens de acesso - TUDO relacionado à sua instituição de ensino você pode fazer!",
         "keyResponsibilities": "Suas Principais Responsabilidades (O Que Você Faz)",
         "responsibilities": [
-          "📚 Criar e gerenciar DISCIPLINAS da sua universidade - Por exemplo: 'Matemática 1', 'Programação em Python', etc.",
+          "📚 Criar e gerenciar DISCIPLINAS da sua instituição de ensino - Por exemplo: 'Matemática 1', 'Programação em Python', etc.",
           "📖 Criar e gerenciar MÓDULOS dentro das disciplinas - Módulos são como 'capítulos' ou 'unidades' de uma disciplina",
           "👨‍🏫 Criar contas de PROFESSORES REGULARES - Outros professores que vão ajudar você a dar aula e gerenciar módulos",
           "🤖 Configurar TUTORES DE IA - O 'cérebro' que vai conversar com os alunos e ajudá-los a estudar",
           "📁 Fazer UPLOAD DE ARQUIVOS - PDFs, apresentações, apostilas que os alunos vão usar",
           "🔑 Gerar TOKENS DE ACESSO - São como 'chaves' que dão acesso aos widgets (janelinhas) do tutor de IA",
           "⚙️ PREPARAR MÓDULOS - Deixar tudo pronto para os alunos começarem a usar",
-          "📊 ACOMPANHAR tudo que acontece na sua universidade"
+          "📊 ACOMPANHAR tudo que acontece na sua instituição de ensino"
         ],
-        "important": "IMPORTANTE: Você tem MUITO PODER dentro da sua universidade! Mas lembre-se: você NÃO pode criar ou editar outras universidades, e NÃO pode criar Super Administradores. Seu poder é limitado à SUA universidade."
+        "important": "IMPORTANTE: Você tem MUITO PODER dentro da sua instituição de ensino! Mas lembre-se: você NÃO pode criar ou editar outras instituições de ensino, e NÃO pode criar Super Administradores. Seu poder é limitado à SUA instituição de ensino."
       },
       "firstSteps": {
         "title": "Primeiros Passos - Como Começar do ZERO",
@@ -2835,7 +2835,7 @@
           "why": "Por que seguir uma ordem? Porque algumas coisas dependem de outras! Por exemplo: você NÃO pode criar um módulo se não tiver uma disciplina primeiro. É como construir uma casa - você não coloca o telhado antes das paredes!",
           "order": [
             "1️⃣ PRIMEIRO: Configure sua senha e faça login - Veja a seção 'Configurando Sua Senha' se ainda não fez",
-            "2️⃣ SEGUNDO: Crie suas DISCIPLINAS - Comece pelas disciplinas principais da sua universidade",
+            "2️⃣ SEGUNDO: Crie suas DISCIPLINAS - Comece pelas disciplinas principais da sua instituição de ensino",
             "3️⃣ TERCEIRO: Crie MÓDULOS para cada disciplina - Cada disciplina pode ter vários módulos (unidades/capítulos)",
             "4️⃣ QUARTO: Configure o TUTOR DE IA de cada módulo - Defina como ele vai conversar com os alunos",
             "5️⃣ QUINTO: Faça UPLOAD DE ARQUIVOS nos módulos - PDFs, slides, apostilas, exercícios",
@@ -2876,8 +2876,8 @@
             "tip": "DICA: Use códigos que façam sentido! Se é a primeira disciplina de matemática, use 'MAT1' ou 'MAT101'. Se é a segunda, use 'MAT2' ou 'MAT102'. Mantenha um padrão! Exemplo de padrão: MAT = Matemática, FIS = Física, PROG = Programação, e os números indicam o nível (1, 2, 3...) ou (101, 102, 103...)."
           },
           "step5": {
-            "title": "Passo 5: Verifique a Universidade (Já Está Selecionada)",
-            "desc": "Mais abaixo você verá um campo 'Universidade' ou 'University'. Este campo já vai estar PREENCHIDO automaticamente com o nome DA SUA universidade - você NÃO precisa mexer nele! O sistema já sabe que você é Professor Administrador de uma universidade específica, então ele seleciona automaticamente. Apenas CONFIRA se está mostrando o nome correto da sua universidade. Se estiver correto (e deve estar!), pode prosseguir para o próximo passo."
+            "title": "Passo 5: Verifique a Instituição de Ensino (Já Está Selecionada)",
+            "desc": "Mais abaixo você verá um campo 'Instituição de Ensino' ou 'Institution'. Este campo já vai estar PREENCHIDO automaticamente com o nome DA SUA instituição de ensino - você NÃO precisa mexer nele! O sistema já sabe que você é Professor Administrador de uma instituição de ensino específica, então ele seleciona automaticamente. Apenas CONFIRA se está mostrando o nome correto da sua instituição de ensino. Se estiver correto (e deve estar!), pode prosseguir para o próximo passo."
           },
           "step6": {
             "title": "Passo 6: Adicione uma DESCRIÇÃO (Opcional mas MUITO Recomendado)",
@@ -2896,20 +2896,20 @@
           },
           "step9": {
             "title": "Passo 9: Você Está na Página da Disciplina Nova!",
-            "whatYouShouldSee": "Agora você está vendo a página de detalhes da disciplina recém-criada. Veja o que tem aqui: TOPO: Nome da disciplina em letras GRANDES e NEGRITO. LOGO ABAIXO: O código e a descrição. BOTÕES: No canto superior direito você vê botões como 'Adicionar Módulo' (AZUL), 'Editar Disciplina' (talvez com ícone de lápis ✏️), 'Ver Universidade'. ABAS (TABS): Você verá abas clicáveis: 'Módulos' - para ver/criar módulos desta disciplina, 'Professores' - para ver quais professores estão atribuídos, 'Estudantes' - para ver alunos (quando tiver). TABELA DE MÓDULOS: No centro, uma tabela mostrando os módulos da disciplina (se você acabou de criar, estará vazia e mostrará 'Nenhum módulo encontrado').",
+            "whatYouShouldSee": "Agora você está vendo a página de detalhes da disciplina recém-criada. Veja o que tem aqui: TOPO: Nome da disciplina em letras GRANDES e NEGRITO. LOGO ABAIXO: O código e a descrição. BOTÕES: No canto superior direito você vê botões como 'Adicionar Módulo' (AZUL), 'Editar Disciplina' (talvez com ícone de lápis ✏️), 'Ver Instituição de Ensino'. ABAS (TABS): Você verá abas clicáveis: 'Módulos' - para ver/criar módulos desta disciplina, 'Professores' - para ver quais professores estão atribuídos, 'Estudantes' - para ver alunos (quando tiver). TABELA DE MÓDULOS: No centro, uma tabela mostrando os módulos da disciplina (se você acabou de criar, estará vazia e mostrará 'Nenhum módulo encontrado').",
             "nextStep": "PRÓXIMO PASSO RECOMENDADO: Agora que você criou a disciplina, o próximo passo é criar MÓDULOS para ela! Vá para a seção 'Criando Módulos' deste tutorial para continuar!"
           },
           "commonMistakes": [
             "ERRO: Deixar o nome ou código em branco - SOLUÇÃO: Os campos com asterisco vermelho (*) são OBRIGATÓRIOS! Você NÃO consegue salvar sem preencher. Preencha o nome E o código antes de clicar em salvar.",
-            "ERRO: Usar o mesmo código de outra disciplina - SOLUÇÃO: Cada disciplina precisa ter um código ÚNICO. Se você tentar usar um código que já existe em outra disciplina da sua universidade, vai dar erro 'Código já existe'. Escolha outro código! Exemplo: se já existe 'MAT1', use 'MAT2', 'MAT1A', 'MAT101', etc.",
+            "ERRO: Usar o mesmo código de outra disciplina - SOLUÇÃO: Cada disciplina precisa ter um código ÚNICO. Se você tentar usar um código que já existe em outra disciplina da sua instituição de ensino, vai dar erro 'Código já existe'. Escolha outro código! Exemplo: se já existe 'MAT1', use 'MAT2', 'MAT1A', 'MAT101', etc.",
             "ERRO: Escrever o nome muito curto tipo 'Mat' ou 'Calc' - SOLUÇÃO: No campo NOME use o nome COMPLETO e descritivo! O código é que pode ser curto. Nome bom: 'Matemática Aplicada', código: 'MAT1'.",
             "ERRO: Colocar caracteres estranhos no código como @, #, $, espaços - SOLUÇÃO: Use apenas letras (A-Z), números (0-9) e hífen (-). Nada mais!",
             "ERRO: Clicar em 'Cancelar' por engano - SOLUÇÃO: Se clicou sem querer, tudo que digitou foi perdido. Não tem problema! Apenas volte e comece de novo. Da próxima vez, tenha mais cuidado ao clicar nos botões - o CINZA cancela, o AZUL salva!",
             "ERRO: Criar disciplinas duplicadas (mesma disciplina duas vezes) - PREVENÇÃO: Antes de criar, confira na lista se aquela disciplina já existe! Use a caixinha de busca para procurar."
           ],
           "troubleshooting": [
-            "PROBLEMA: O botão 'Criar Disciplina' não clica (está cinza/desabilitado) - SOLUÇÃO: Você não preencheu todos os campos obrigatórios! Verifique se preencheu: Nome (com *), Código (com *). A universidade é preenchida automaticamente, você não precisa mexer.",
-            "PROBLEMA: Aparece erro 'Código já existe' ou 'Code already exists' - SOLUÇÃO: Outra disciplina na sua universidade já está usando este código. Você precisa escolher um código DIFERENTE. Tente adicionar um número, letra, ou modificar um pouco. Exemplo: se 'PROG1' já existe, tente 'PROG2', 'PROG1A', 'PROG101', etc.",
+            "PROBLEMA: O botão 'Criar Disciplina' não clica (está cinza/desabilitado) - SOLUÇÃO: Você não preencheu todos os campos obrigatórios! Verifique se preencheu: Nome (com *), Código (com *). A instituição de ensino é preenchida automaticamente, você não precisa mexer.",
+            "PROBLEMA: Aparece erro 'Código já existe' ou 'Code already exists' - SOLUÇÃO: Outra disciplina na sua instituição de ensino já está usando este código. Você precisa escolher um código DIFERENTE. Tente adicionar um número, letra, ou modificar um pouco. Exemplo: se 'PROG1' já existe, tente 'PROG2', 'PROG1A', 'PROG101', etc.",
             "PROBLEMA: A janela não abre quando clico em 'Criar Disciplina' - SOLUÇÃO: 1) Espere alguns segundos e tente novamente (às vezes demora), 2) Atualize a página do navegador (aperte F5), 3) Verifique sua internet, 4) Tente fazer logout e login novamente, 5) Tente em outro navegador (Chrome, Firefox, Edge).",
             "PROBLEMA: Depois de clicar em 'Criar', fica carregando para sempre - SOLUÇÃO: 1) Aguarde pelo menos 30 segundos antes de fazer qualquer coisa (pode ser internet lenta), 2) NÃO fique clicando várias vezes no botão (isso pode criar disciplinas duplicadas!), 3) Se realmente travou, feche a janela (clique no X) e volte para a lista de disciplinas para verificar se foi criada, 4) Se não foi criada, tente novamente com internet melhor.",
             "PROBLEMA: Criei mas quero mudar o nome ou código - SOLUÇÃO: Sem problemas! Você pode EDITAR a disciplina depois. Vá para a seção 'Editando Disciplinas' deste tutorial.",
@@ -3250,7 +3250,7 @@
             "methods": [
               {
                 "name": "1. Via MOODLE (Plataforma de Ensino)",
-                "desc": "Se sua universidade usa Moodle: Entre no Moodle como professor, Vá para a DISCIPLINA/CURSO no Moodle, Adicione um novo RECURSO ou ATIVIDADE, Escolha tipo 'URL' ou 'Link Externo' ou 'HTML', Cole o LINK do token que você copiou, Dê um nome tipo 'Tutor de IA - Módulo 1', Salve. PRONTO! Os alunos vão ver o link no Moodle, clicar, e acessar o tutor!"
+                "desc": "Se sua instituição de ensino usa Moodle: Entre no Moodle como professor, Vá para a DISCIPLINA/CURSO no Moodle, Adicione um novo RECURSO ou ATIVIDADE, Escolha tipo 'URL' ou 'Link Externo' ou 'HTML', Cole o LINK do token que você copiou, Dê um nome tipo 'Tutor de IA - Módulo 1', Salve. PRONTO! Os alunos vão ver o link no Moodle, clicar, e acessar o tutor!"
               },
               {
                 "name": "2. Via EMAIL",
@@ -3451,7 +3451,7 @@
           {
             "number": "2",
             "title": "Create Courses (Disciplines)",
-            "desc": "Enter the system and create the DISCIPLINES of your university. Example: 'Introduction to Programming', 'Advanced Mathematics', etc."
+            "desc": "Enter the system and create the DISCIPLINES of your institution. Example: 'Introduction to Programming', 'Advanced Mathematics', etc."
           },
           {
             "number": "3",
@@ -3533,8 +3533,8 @@
           },
           {
             "number": "7",
-            "title": "CHECK if YOUR UNIVERSITY is SELECTED",
-            "desc": "There should be a field called 'University'. Usually YOUR university is ALREADY AUTOMATICALLY SELECTED (because you are an Admin Professor of this university). Just CHECK if it's correct!"
+            "title": "CHECK if YOUR INSTITUTION is SELECTED",
+            "desc": "There should be a field called 'Institution'. Usually YOUR institution is ALREADY AUTOMATICALLY SELECTED (because you are an Admin Professor of this institution). Just CHECK if it's correct!"
           },
           {
             "number": "8",
@@ -3592,8 +3592,8 @@
             "solution": "Great! You've completed the first step! Now go to the section 'HOW TO CREATE MODULES' below in this tutorial. There you'll learn how to create modules INSIDE this course you just created!"
           },
           {
-            "problem": "I created a course for the wrong university!",
-            "solution": "As an Admin Professor, you can ONLY create courses for YOUR university! If the wrong university appeared, something is wrong with your account. Contact the Super Administrator to check your account settings."
+            "problem": "I created a course for the wrong institution!",
+            "solution": "As an Admin Professor, you can ONLY create courses for YOUR institution! If the wrong institution appeared, something is wrong with your account. Contact the Super Administrator to check your account settings."
           },
           {
             "problem": "I don't know what to write in the Description!",
@@ -4135,7 +4135,7 @@
       "regularProfessor": {
         "title": "Guide for Regular Professors",
         "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
-        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating tokens, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
+        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all institution courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating tokens, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
       },
       "viewing": {
         "title": "Viewing Course Details",
@@ -4148,7 +4148,7 @@
         "actions": [
           "Add Module: Create a new module for this course",
           "Edit Course: Update course information",
-          "View University: Navigate to your university page"
+          "View Institution: Navigate to your institution page"
         ]
       },
       "editing": {
@@ -4172,7 +4172,7 @@
     "regularProfessor": {
       "title": "Guia do Professor Regular",
       "subtitle": "Guia super detalhado para professores regulares. Este guia é MUITO similar ao guia de Professor Administrador, mas você terá algumas diferenças de acesso!",
-      "note": "NOTA: Como Professor Regular, você pode fazer QUASE TUDO que o Professor Administrador faz, EXCETO: Criar outros professores, Ver todas as disciplinas da universidade (só vê as suas). Para criar módulos, fazer upload de arquivos, configurar tutores de IA, criar tokens, preparar módulos - É TUDO IGUAL! Siga os mesmos tutoriais da seção 'Professor Administrador' acima. Todas as instruções de módulos, arquivos, tokens e preparação se aplicam a você também!"
+      "note": "NOTA: Como Professor Regular, você pode fazer QUASE TUDO que o Professor Administrador faz, EXCETO: Criar outros professores, Ver todas as disciplinas da instituição de ensino (só vê as suas). Para criar módulos, fazer upload de arquivos, configurar tutores de IA, criar tokens, preparar módulos - É TUDO IGUAL! Siga os mesmos tutoriais da seção 'Professor Administrador' acima. Todas as instruções de módulos, arquivos, tokens e preparação se aplicam a você também!"
     },
     "modules": {
       "title": "Managing Modules",
@@ -4309,7 +4309,7 @@
     },
     "professors": {
       "title": "Gerenciando Professores",
-      "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your university.",
+      "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your institution.",
       "creating": {
         "title": "Creating a Regular Professor",
         "steps": [
@@ -4321,7 +4321,7 @@
           "  • Username (will be used for login)",
           "  • Email address",
           "  • Temporary Password",
-          "Your university is automatically selected",
+          "Your institution is automatically selected",
           "Select one or more courses to assign",
           "Click 'Create Professor'",
           "Copy and securely share the password setup link",
@@ -4420,7 +4420,7 @@
           "Delete courses",
           "Atribuir outros professores a disciplinas"
         ],
-        "note": "If you need to create or modify courses, contact your university's admin professor."
+        "note": "If you need to create or modify courses, contact your institution's admin professor."
       }
     },
     "modules": {
@@ -4708,7 +4708,7 @@
     "selectedModel": "Modelo de IA:",
     "autoOptimized": "Modelo de IA automaticamente otimizado para este tipo de disciplina",
     "tierNote": "Nota",
-    "tierDescription": "O modelo de IA é automaticamente otimizado com base no plano de assinatura da sua universidade para o melhor equilíbrio custo-desempenho.",
+    "tierDescription": "O modelo de IA é automaticamente otimizado com base no plano de assinatura da sua instituição de ensino para o melhor equilíbrio custo-desempenho.",
     "mathLogic": {
       "name": "Matemática e Lógica",
       "description": "Disciplinas focadas em raciocínio matemático, fórmulas, provas e resolução de problemas lógicos"
@@ -4728,9 +4728,9 @@
     "loadError": "Falha ao carregar dados de analíticas. Por favor, tente novamente.",
     "refreshSuccess": "Dados de analíticas atualizados com sucesso",
     "refresh": "Atualizar",
-    "allUniversities": "Todas as Universidades",
-    "searchUniversities": "Buscar universidades...",
-    "noUniversitiesFound": "Nenhuma universidade encontrada.",
+    "allUniversities": "Todas as Instituições de Ensino",
+    "searchUniversities": "Buscar instituições de ensino...",
+    "noUniversitiesFound": "Nenhuma instituição de ensino encontrada.",
     "exportSuccess": "Relatório {format} exportado com sucesso",
     "period": {
       "day": "Hoje",
@@ -4747,7 +4747,7 @@
       "totalMessages": "Total de Mensagens",
       "uniqueStudents": "Estudantes Únicos",
       "studentsDescription": "Alunos que fizeram perguntas no período selecionado",
-      "activeStudents": "Alunos Ativos",
+      "activeStudents": "Estudantes ativos",
       "activeStudentsDescription": "Ativos nos últimos {days} dias vs. total matriculado",
       "atRiskStudents": "Alunos em Risco",
       "atRiskStudentsDescription": "Sem atividade nos últimos {days} dias",
@@ -4756,7 +4756,6 @@
       "inPeriod": "em {period}",
       "inSelectedPeriod": "no período selecionado",
       "vsYesterday": "vs. ontem",
-      "activeStudents": "Estudantes ativos",
       "modulesWithActivity": "Módulos com atividade",
       "totalCost": "Custo total de IA",
       "allTime": "Todo o período",
@@ -4839,7 +4838,7 @@
       "period": "Período",
       "dateRange": "Intervalo de Datas",
       "generated": "Gerado",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "overviewTitle": "Estatísticas Gerais",
       "metric": "Métrica",
       "value": "Valor",
@@ -5051,7 +5050,7 @@
     },
     "entities": {
       "user": "Usuário",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "course": "Disciplina",
       "module": "Módulo",
       "file": "Arquivo",
@@ -5069,7 +5068,7 @@
       "aiModels": "Modelos de IA",
       "apiKeys": "Chaves de API",
       "courseTypeConfig": "Config. Tipo de Disciplina",
-      "universityOverrides": "Substituições por Universidade"
+      "universityOverrides": "Substituições por Instituição de Ensino"
     },
     "aiModels": {
       "columns": {
@@ -5203,22 +5202,22 @@
       },
       "active": "Ativo",
       "inactive": "Inativo",
-      "selectUniversity": "Selecione uma universidade",
-      "searchUniversity": "Buscar universidades...",
-      "selectUniversityPrompt": "Selecione uma universidade para ver suas substituições de modelo por tipo de disciplina.",
-      "emptyMessage": "Nenhuma substituição configurada para esta universidade."
+      "selectUniversity": "Selecione uma instituição de ensino",
+      "searchUniversity": "Buscar instituições de ensino...",
+      "selectUniversityPrompt": "Selecione uma instituição de ensino para ver suas substituições de modelo por tipo de disciplina.",
+      "emptyMessage": "Nenhuma substituição configurada para esta instituição de ensino."
     }
   },
   "adminSubscriptions": {
     "title": "Todas as Assinaturas",
-    "description": "Visão geral de todas as assinaturas universitárias ({total} no total)",
+    "description": "Visão geral de todas as assinaturas institucionais ({total} no total)",
     "breadcrumb": "Administração",
     "loadError": "Falha ao carregar as assinaturas.",
-    "searchPlaceholder": "Buscar por universidade, plano ou ID Stripe...",
+    "searchPlaceholder": "Buscar por instituição de ensino, plano ou ID Stripe...",
     "emptyMessage": "Nenhuma assinatura encontrada.",
     "all": "Todas",
     "columns": {
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "plan": "Plano",
       "status": "Status",
       "period": "Período",
@@ -5282,7 +5281,7 @@
     },
     "scopes": {
       "global": "Global",
-      "university": "Universidade",
+      "university": "Instituição de Ensino",
       "course": "Disciplina"
     }
   },
@@ -5303,7 +5302,7 @@
     "updateSuccess": "Plano atualizado com sucesso.",
     "updateError": "Falha ao atualizar o plano.",
     "deleteConfirm": "Desativar Plano",
-    "deleteConfirmDesc": "Tem certeza que deseja desativar o plano \"{name}\"? As universidades neste plano não serão afetadas.",
+    "deleteConfirmDesc": "Tem certeza que deseja desativar o plano \"{name}\"? As instituições de ensino neste plano não serão afetadas.",
     "deleteSuccess": "Plano desativado com sucesso.",
     "deleteError": "Falha ao desativar o plano.",
     "validationError": "Nome e slug são obrigatórios.",
@@ -5351,8 +5350,8 @@
   "signup": {
     "title": "Crie sua Conta Tutoria",
     "description": "Comece a oferecer tutoria com IA para seus alunos em minutos.",
-    "adminNotice": "Ao se cadastrar, você se tornará o administrador principal da sua universidade na plataforma.",
-    "notAdminNotice": "Não é o administrador? Peça ao admin da sua universidade para convidá-lo, ou crie sua conta e solicite para ser adicionado a uma universidade existente.",
+    "adminNotice": "Ao se cadastrar, você se tornará o administrador principal da sua instituição de ensino na plataforma.",
+    "notAdminNotice": "Não é o administrador? Peça ao admin da sua instituição de ensino para convidá-lo, ou crie sua conta e solicite para ser adicionado a uma instituição de ensino existente.",
     "selectPlan": "Escolha seu Plano",
     "popular": "Popular",
     "month": "mês",
@@ -5368,16 +5367,16 @@
       "assignments": "Atividades e Feedback por IA"
     },
     "form": {
-      "title": "Cadastro da Universidade",
-      "description": "Crie sua conta de universidade e usuário administrador.",
-      "universitySection": "Dados da Universidade",
+      "title": "Cadastro da Instituição de Ensino",
+      "description": "Crie sua conta de instituição de ensino e usuário administrador.",
+      "universitySection": "Dados da Instituição de Ensino",
       "adminSection": "Conta de Administrador",
-      "universityNameLabel": "Nome da Universidade *",
-      "universityNamePlaceholder": "ex: Universidade de Tecnologia",
-      "universityNameRequired": "Nome da universidade é obrigatório.",
+      "universityNameLabel": "Nome da Instituição de Ensino *",
+      "universityNamePlaceholder": "ex: Instituição de Ensino de Tecnologia",
+      "universityNameRequired": "Nome da instituição de ensino é obrigatório.",
       "universityCodeLabel": "Código (Nome Fantasia) *",
       "universityCodePlaceholder": "ex: UniTech",
-      "universityCodeRequired": "Código da universidade é obrigatório.",
+      "universityCodeRequired": "Código da instituição de ensino é obrigatório.",
       "firstNameLabel": "Nome *",
       "firstNamePlaceholder": "Digite seu nome",
       "firstNameRequired": "Nome é obrigatório.",
@@ -5385,7 +5384,7 @@
       "lastNamePlaceholder": "Digite seu sobrenome",
       "lastNameRequired": "Sobrenome é obrigatório.",
       "emailLabel": "E-mail *",
-      "emailPlaceholder": "admin@universidade.edu.br",
+      "emailPlaceholder": "admin@instituição de ensino.edu.br",
       "emailRequired": "E-mail é obrigatório.",
       "emailInvalid": "Por favor, insira um e-mail válido.",
       "passwordLabel": "Senha *",
@@ -5401,15 +5400,15 @@
     "registrationSuccess": "Conta criada com sucesso! Faça login.",
     "registrationError": "Falha no cadastro. Tente novamente.",
     "emailAlreadyExists": "Este e-mail já está cadastrado. Se você já tem uma conta, faça login.",
-    "modeUniversity": "Registrar Universidade",
-    "modeUniversityDesc": "Crie uma nova conta de universidade e se torne o administrador.",
+    "modeUniversity": "Registrar Instituição de Ensino",
+    "modeUniversityDesc": "Crie uma nova conta de instituição de ensino e se torne o administrador.",
     "modePersonal": "Criar Conta Pessoal",
-    "modePersonalDesc": "Crie sua conta e aguarde ser convidado para uma universidade.",
+    "modePersonalDesc": "Crie sua conta e aguarde ser convidado para uma instituição de ensino.",
     "personalRegistrationSuccess": "Conta criada com sucesso! Agora você pode fazer login.",
     "personalForm": {
       "title": "Criar Sua Conta",
-      "description": "Crie uma conta pessoal. Um administrador da universidade pode convidá-lo depois.",
-      "infoNotice": "Após criar sua conta, você poderá fazer login e aguardar que um administrador da universidade o adicione à instituição. Você também pode solicitar para participar de uma universidade.",
+      "description": "Crie uma conta pessoal. Um administrador da instituição de ensino pode convidá-lo depois.",
+      "infoNotice": "Após criar sua conta, você poderá fazer login e aguardar que um administrador da instituição de ensino o adicione à instituição. Você também pode solicitar para participar de uma instituição de ensino.",
       "emailPlaceholder": "seu.email@exemplo.com",
       "username": "Nome de usuário",
       "usernamePlaceholder": "Escolha um nome de usuário",
@@ -5490,7 +5489,7 @@
       "students": "Alunos",
       "files": "Arquivos",
       "tokens": "Chaves de Acesso",
-      "universities": "Universidades",
+      "universities": "Instituições de Ensino",
       "analytics": "Analiticos",
       "subscription": "Assinatura",
       "other": "Outros"
@@ -5585,7 +5584,7 @@
     "dataCollected": {
       "title": "2. Dados que Coletamos",
       "description": "Coletamos as seguintes categorias de dados pessoais:",
-      "item1": "Dados de identificação: nome, e-mail, matrícula e vínculo universitário",
+      "item1": "Dados de identificação: nome, e-mail, matrícula e vínculo institucional",
       "item2": "Dados de autenticação: credenciais de login (criptografadas) e tokens de acesso",
       "item3": "Dados de interação acadêmica: perguntas realizadas, respostas da IA e arquivos acessados",
       "item4": "Dados técnicos: endereço IP, tipo de navegador e informações do dispositivo",
@@ -5619,7 +5618,7 @@
     },
     "contact": {
       "title": "7. Contato e Encarregado de Proteção de Dados",
-      "content": "Para dúvidas sobre esta Política de Privacidade, para exercer seus direitos sobre dados ou para contatar nosso Encarregado de Proteção de Dados (DPO), entre em contato com a administração da sua universidade ou pelo e-mail fornecido pela sua instituição."
+      "content": "Para dúvidas sobre esta Política de Privacidade, para exercer seus direitos sobre dados ou para contatar nosso Encarregado de Proteção de Dados (DPO), entre em contato com a administração da sua instituição de ensino ou pelo e-mail fornecido pela sua instituição."
     }
   },
   "acceptInvitation": {

@@ -32,8 +32,8 @@
     "quickActions": {
       "title": "Quick Actions",
       "description": "Quick access to common tasks",
-      "createUniversity": "Create University",
-      "viewUniversities": "View Universities",
+      "createUniversity": "Create Institution",
+      "viewUniversities": "View Institutions",
       "createCourse": "Create Course",
       "viewProfessors": "View Professors",
       "createModule": "Create Module",
@@ -48,7 +48,7 @@
     "title": "Professor AI Agent",
     "description": "Your personal AI assistant for course material feedback",
     "noAgent": {
-      "message": "You don't have an AI agent yet. Please contact your university admin to create one for you.",
+      "message": "You don't have an AI agent yet. Please contact your institution admin to create one for you.",
       "adminOnly": "Only administrators can create professor AI agents."
     },
     "agentInfo": {
@@ -118,7 +118,7 @@
       "reached": "Course limit reached: {current} of {max} courses. Upgrade your plan to create more."
     },
     "viewModules": "View Modules",
-    "searchPlaceholder": "Search courses, descriptions or universities...",
+    "searchPlaceholder": "Search courses, descriptions or institutions...",
     "emptyMessage": "No courses found. Create your first course to get started.",
     "create": {
       "title": "Create New Course",
@@ -127,7 +127,7 @@
     },
     "columns": {
       "discipline": "Course",
-      "university": "University",
+      "university": "Institution",
       "modules": "Modules",
       "modulesCount": "{count} modules",
       "professors": "Professors",
@@ -139,7 +139,7 @@
       "totalCourses": "Total Courses",
       "totalStudents": "Total Students",
       "totalModules": "Total Modules",
-      "universities": "Universities"
+      "universities": "Institutions"
     },
     "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
     "deleteError": "Error deleting course. Please try again.",
@@ -152,18 +152,18 @@
       "codeLabel": "Code *",
       "codePlaceholder": "e.g., CS101, COMP200",
       "codeRequired": "Course code is required",
-      "universityLabel": "University *",
-      "universityPlaceholder": "Select a university",
-      "loadingUniversities": "Loading universities...",
-      "universityRequired": "University is required",
-      "universityIdLabel": "University ID: {id}",
-      "noUniversity": "No university assigned",
+      "universityLabel": "Institution *",
+      "universityPlaceholder": "Select a institution",
+      "loadingUniversities": "Loading institutions...",
+      "universityRequired": "Institution is required",
+      "universityIdLabel": "Institution ID: {id}",
+      "noUniversity": "No institution assigned",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "Describe the course objectives, content, and target audience...",
       "professorsOptionalLabel": "Professors",
       "optional": "optional",
       "loadingProfessors": "Loading professors...",
-      "noProfessorsAvailable": "No professors available for this university",
+      "noProfessorsAvailable": "No professors available for this institution",
       "selectProfessors": "Select professors...",
       "searchProfessors": "Search professors...",
       "noProfessorsFound": "No professors found",
@@ -198,9 +198,9 @@
       "updateError": "Error updating course. Please try again."
     },
     "detail": {
-      "breadcrumbUniversities": "Universities",
+      "breadcrumbUniversities": "Institutions",
       "breadcrumbCourses": "Courses",
-      "viewUniversity": "View University",
+      "viewUniversity": "View Institution",
       "addModule": "Add Module",
       "editCourse": "Edit Course",
       "courseInfo": "Course Information",
@@ -296,12 +296,12 @@
           "newTitle": "Create New Professor",
           "newDesc": "Invite a new professor and assign them to this course afterwards",
           "existingTitle": "Select Existing Professor",
-          "existingDesc": "Assign a professor already registered in your university",
+          "existingDesc": "Assign a professor already registered in your institution",
           "searchPlaceholder": "Search by name or email...",
           "assign": "Assign",
           "assignSuccess": "Professor assigned successfully",
           "assignError": "Error assigning professor",
-          "noProfessors": "All university professors are already assigned to this course",
+          "noProfessors": "All institution professors are already assigned to this course",
           "loadError": "Error loading professors",
           "loading": "Loading professors..."
         }
@@ -921,25 +921,25 @@
     }
   },
   "universities": {
-    "title": "Universities",
-    "description": "Manage universities and their academic programs",
-    "createButton": "Create University",
+    "title": "Institutions",
+    "description": "Manage institutions and their academic programs",
+    "createButton": "Create Institution",
     "viewAllCourses": "View All Courses",
     "viewAllModules": "View All Modules",
-    "searchPlaceholder": "Search universities...",
-    "emptyMessage": "No universities found",
+    "searchPlaceholder": "Search institutions...",
+    "emptyMessage": "No institutions found",
     "columns": {
-      "universityName": "University Name",
+      "universityName": "Institution Name",
       "createdAt": "Created at",
       "actions": "Actions"
     },
-    "deleteConfirm": "Are you sure you want to delete this university? This action cannot be undone.",
-    "deleteError": "Error deleting university. Please try again.",
+    "deleteConfirm": "Are you sure you want to delete this institution? This action cannot be undone.",
+    "deleteError": "Error deleting institution. Please try again.",
     "detail": {
-      "breadcrumb": "Universities",
+      "breadcrumb": "Institutions",
       "edit": "Edit",
       "myAIAgent": "My AI Agent",
-      "notFound": "University not found",
+      "notFound": "Institution not found",
       "stats": {
         "courses": "Courses",
         "professors": "Professors",
@@ -952,9 +952,9 @@
         "professors": "Professors"
       },
       "info": {
-        "title": "University Information",
+        "title": "Institution Information",
         "description": "Contact and administrative details",
-        "code": "University Code",
+        "code": "Institution Code",
         "contactEmail": "Contact Email",
         "contactPhone": "Contact Phone",
         "contactPerson": "Contact Person",
@@ -982,14 +982,14 @@
       },
       "coursesTab": {
         "title": "Courses",
-        "description": "Courses offered by this university",
+        "description": "Courses offered by this institution",
         "newCourse": "New Course",
         "searchPlaceholder": "Search courses...",
         "emptyMessage": "No courses registered yet."
       },
       "professorsTab": {
         "title": "Professors",
-        "description": "Professors associated with this university",
+        "description": "Professors associated with this institution",
         "newProfessor": "New Professor",
         "searchPlaceholder": "Search professors...",
         "emptyMessage": "No professors registered yet."
@@ -998,24 +998,24 @@
       "deleteError": "Error deleting course. Please try again."
     },
     "form": {
-      "breadcrumb": "Universities",
-      "createTitle": "Create University",
-      "createDescription": "Create a new university in the system",
-      "editTitle": "Edit University",
-      "editDescription": "Edit university information",
-      "breadcrumbCreate": "Create University",
+      "breadcrumb": "Institutions",
+      "createTitle": "Create Institution",
+      "createDescription": "Create a new institution in the system",
+      "editTitle": "Edit Institution",
+      "editDescription": "Edit institution information",
+      "breadcrumbCreate": "Create Institution",
       "breadcrumbEdit": "Edit",
       "back": "Back",
-      "universityInfo": "University Information",
+      "universityInfo": "Institution Information",
       "contactInfo": "Contact Information",
-      "nameLabel": "University Name *",
-      "namePlaceholder": "Ex: Federal University of São Paulo",
-      "nameRequired": "University name is required",
+      "nameLabel": "Institution Name *",
+      "namePlaceholder": "Ex: Federal Institution of São Paulo",
+      "nameRequired": "Institution name is required",
       "codeLabel": "Fantasy Name *",
       "codePlaceholder": "Ex: USP, UNIFESP, BYU",
       "codeRequired": "Fantasy name is required",
       "descriptionLabel": "Description",
-      "descriptionPlaceholder": "University description (optional)",
+      "descriptionPlaceholder": "Institution description (optional)",
       "cepLabel": "ZIP Code (CEP)",
       "cepPlaceholder": "00000-000",
       "cepHelpText": "Enter the Brazilian ZIP code to auto-fill the address",
@@ -1034,23 +1034,23 @@
       "taxIdLabel": "Tax ID",
       "taxIdPlaceholder": "Ex: 00-0000000",
       "contactEmailLabel": "Contact Email",
-      "contactEmailPlaceholder": "Ex: contact@university.edu",
+      "contactEmailPlaceholder": "Ex: contact@institution.edu",
       "contactPhoneLabel": "Contact Phone",
       "contactPhonePlaceholder": "Ex: (123) 456-7890",
       "contactPersonLabel": "Contact Person",
       "contactPersonPlaceholder": "Ex: John Doe - Coordinator",
       "websiteLabel": "Website",
-      "websitePlaceholder": "Ex: https://www.university.edu",
-      "create": "Create University",
-      "update": "Update University",
+      "websitePlaceholder": "Ex: https://www.institution.edu",
+      "create": "Create Institution",
+      "update": "Update Institution",
       "cancel": "Cancel",
       "creating": "Creating...",
       "updating": "Updating...",
-      "createError": "Error creating university. Please try again.",
-      "updateError": "Error updating university. Please try again.",
-      "loadError": "Error loading university data.",
+      "createError": "Error creating institution. Please try again.",
+      "updateError": "Error updating institution. Please try again.",
+      "loadError": "Error loading institution data.",
       "loadErrorTitle": "Error",
-      "loadErrorDescription": "Could not load university data"
+      "loadErrorDescription": "Could not load institution data"
     },
     "subscription": {
       "title": "Subscription Plan",
@@ -1062,9 +1062,9 @@
       "tierStarterDesc": "Essential AI tutoring features",
       "tierProfessionalDesc": "Advanced AI models and analytics",
       "tierBusinessDesc": "Full access to all AI models and features",
-      "tierHelpText": "The subscription tier controls which AI models this university can access",
-      "isEnterpriseLabel": "Enterprise University",
-      "isEnterpriseHelp": "Enterprise universities have custom limits instead of plan-based limits",
+      "tierHelpText": "The subscription tier controls which AI models this institution can access",
+      "isEnterpriseLabel": "Enterprise Institution",
+      "isEnterpriseHelp": "Enterprise institutions have custom limits instead of plan-based limits",
       "maxCoursesLabel": "Maximum Courses",
       "maxCoursesPlaceholder": "e.g., 100",
       "maxCoursesHelp": "Set to 0 for unlimited courses",
@@ -1142,7 +1142,7 @@
       "type": "Type",
       "admin": "Administrator",
       "professor": "Professor",
-      "university": "University",
+      "university": "Institution",
       "createdAt": "Created at",
       "status": "Status",
       "active": "Active",
@@ -1162,7 +1162,7 @@
       "regularProfessor": "Regular Professor",
       "regularDescription": "Can view and manage assigned courses and modules",
       "adminProfessor": "Admin Professor",
-      "adminDescription": "Can manage all courses, modules, and professors in their university"
+      "adminDescription": "Can manage all courses, modules, and professors in their institution"
     },
     "agentDialog": {
       "title": "Manage AI Agent",
@@ -1184,29 +1184,29 @@
       "successCardDescription": "Professor {firstName} {lastName} has been created.",
       "usernameLabel": "Username",
       "emailLabel": "Email",
-      "universityLabel": "University",
+      "universityLabel": "Institution",
       "assignedCoursesLabel": "Assigned Courses",
       "successTitleAdded": "Professor Added!",
       "inviteSentSuccess": "Invitation sent successfully!",
       "emailSentTitle": "Invitation Email Sent",
       "emailSentDescription": "An invitation link has been sent to {email}. They will fill in their name and create their own password.",
-      "emailSentDescriptionAdded": "{email} already had an account and has been added to your university.",
+      "emailSentDescriptionAdded": "{email} already had an account and has been added to your institution.",
       "emailInstructions": "The professor will receive an email with a link to complete their registration. The link will expire in 24 hours.",
       "emailFormHint": "An invitation email will be sent to this address so the professor can set up their own account.",
       "coursesAfterRegistration": "Note: course assignments will need to be done manually after the professor accepts the invitation and registers.",
       "backToList": "Back to List",
-      "backToUniversity": "Back to University Details",
+      "backToUniversity": "Back to Institution Details",
       "createAnother": "Create Another Professor",
       "someCoursesFailed": "Professor created, but some course assignments failed. Please check the assigned courses.",
       "permissions": "Permissions: Regular professors can view courses and manage modules they are assigned to.",
       "professorInfoTitle": "Professor Information",
       "professorInfoDescription": "Enter the professor's email and assign them to courses. They will receive a welcome email with login instructions.",
-      "universityLabelRequired": "University *",
-      "selectUniversity": "Select a university",
+      "universityLabelRequired": "Institution *",
+      "selectUniversity": "Select a institution",
       "coursesLabelRequired": "Courses *",
       "loadingCourses": "Loading courses...",
-      "noCoursesAvailable": "No courses available for this university.",
-      "selectUniversityFirst": "Select a university first to see available courses.",
+      "noCoursesAvailable": "No courses available for this institution.",
+      "selectUniversityFirst": "Select a institution first to see available courses.",
       "selectCourses": "Select courses...",
       "searchCourses": "Search courses...",
       "noCoursesFound": "No courses found.",
@@ -1218,7 +1218,7 @@
       "usernamePlaceholder": "e.g., john.smith",
       "usernameHint": "Will be used for login. Use only letters, numbers, dots and underscores.",
       "emailFormLabel": "Email *",
-      "emailPlaceholder": "e.g., john.smith@university.edu",
+      "emailPlaceholder": "e.g., john.smith@institution.edu",
       "tempPasswordLabel": "Temporary Password *",
       "passwordPlaceholder": "Minimum 6 characters",
       "passwordHint": "This password will be used to generate the setup link. The user will set their own password.",
@@ -1231,7 +1231,7 @@
       "lastNameRequired": "Last name is required",
       "passwordRequired": "Temporary password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "universityRequired": "University is required",
+      "universityRequired": "Institution is required",
       "coursesRequired": "Select at least one course",
       "emailInvalid": "Invalid email",
       "usernameAlreadyExists": "Username already exists",
@@ -1241,7 +1241,7 @@
       "errorCreatingProfessor": "Error creating professor",
       "linkCopied": "Link copied to clipboard!",
       "errorCopyingLink": "Error copying link",
-      "errorLoadingUniversities": "Error loading universities",
+      "errorLoadingUniversities": "Error loading institutions",
       "errorLoadingCourses": "Error loading courses",
       "languageLabel": "Preferred Language",
       "languagePlaceholder": "Select language",
@@ -1249,19 +1249,19 @@
       "languageEnglish": "English (United States)",
       "languageSpanish": "Español",
       "languageHint": "The professor's interface will be displayed in this language",
-      "universityPreselected": "University pre-selected from URL",
-      "universityLockedForAdmin": "University is locked to your institution as an admin professor"
+      "universityPreselected": "Institution pre-selected from URL",
+      "universityLockedForAdmin": "Institution is locked to your institution as an admin professor"
     },
     "createAdmin": {
       "title": "Create Admin Professor",
-      "description": "Create a new admin professor account with university management access",
+      "description": "Create a new admin professor account with institution management access",
       "createAdminProfessor": "Create Admin Professor",
       "breadcrumbCreate": "Create Admin Professor",
-      "securityWarning": "Warning: Admin professors can manage courses, modules and create regular professors in their university.",
+      "securityWarning": "Warning: Admin professors can manage courses, modules and create regular professors in their institution.",
       "professorInfoTitle": "Admin Professor Information",
       "professorInfoDescription": "Fill in the new admin professor's details. A password setup link will be generated after creation.",
-      "universityLabel": "University *",
-      "selectUniversity": "Select a university",
+      "universityLabel": "Institution *",
+      "selectUniversity": "Select a institution",
       "firstNameLabel": "First Name *",
       "firstNamePlaceholder": "e.g., John",
       "lastNameLabel": "Last Name *",
@@ -1270,7 +1270,7 @@
       "usernamePlaceholder": "e.g., john.smith",
       "usernameHint": "Will be used for login. Use only letters, numbers, dots and underscores.",
       "emailLabel": "Email *",
-      "emailPlaceholder": "e.g., john.smith@university.edu",
+      "emailPlaceholder": "e.g., john.smith@institution.edu",
       "tempPasswordLabel": "Temporary Password *",
       "passwordPlaceholder": "Minimum 6 characters",
       "passwordHint": "This password will be used to generate the setup link. The user will set their own password.",
@@ -1283,7 +1283,7 @@
       "lastNameRequired": "Last name is required",
       "passwordRequired": "Temporary password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "universityRequired": "University is required",
+      "universityRequired": "Institution is required",
       "emailInvalid": "Invalid email",
       "usernameAlreadyExists": "Username already exists",
       "emailAlreadyExists": "Email already exists",
@@ -1294,7 +1294,7 @@
       "successCardDescription": "Admin professor {firstName} {lastName} has been created.",
       "usernameDisplay": "Username",
       "emailDisplay": "Email",
-      "universityDisplay": "University",
+      "universityDisplay": "Institution",
       "emailSentTitle": "Welcome Email Sent",
       "emailSentDescription": "An email with login instructions has been sent to {email}",
       "emailInstructions": "The new professor will receive an email with their temporary password and a link to set their permanent password. The link will expire in 24 hours.",
@@ -1304,7 +1304,7 @@
       "errorCreatingAdmin": "Error creating admin professor",
       "linkCopied": "Link copied to clipboard!",
       "errorCopyingLink": "Error copying link",
-      "errorLoadingUniversities": "Error loading universities",
+      "errorLoadingUniversities": "Error loading institutions",
       "languageLabel": "Preferred Language",
       "languagePlaceholder": "Select language",
       "languagePortuguese": "Português (Brasil)",
@@ -1327,7 +1327,7 @@
       "usernamePlaceholder": "Enter username",
       "usernameRequired": "Username is required",
       "emailLabel": "Email",
-      "emailPlaceholder": "email@university.edu",
+      "emailPlaceholder": "email@institution.edu",
       "adminProfessorLabel": "Admin Professor",
       "adminDescription": "Administrators can manage courses and assign professors",
       "assignedCourses": "Assigned Courses",
@@ -1335,7 +1335,7 @@
       "selectCourses": "Select courses...",
       "searchCourses": "Search courses...",
       "noCoursesFound": "No courses found.",
-      "noCoursesAvailable": "No courses available for this university",
+      "noCoursesAvailable": "No courses available for this institution",
       "errorLoadingCourses": "Error loading courses",
       "passwordReset": "Password Reset",
       "passwordResetDescription": "Reset the professor's password",
@@ -1379,7 +1379,7 @@
       "username": "Username",
       "name": "Name",
       "role": "Role",
-      "university": "University",
+      "university": "Institution",
       "status": "Status",
       "actions": "Actions",
       "active": "Active",
@@ -1387,7 +1387,7 @@
     },
     "create": {
       "title": "Add Users",
-      "description": "Invite new users or add existing ones to your university",
+      "description": "Invite new users or add existing ones to your institution",
       "errorMessage": "Failed to process invitations",
       "invite": {
         "formTitle": "Invite Users",
@@ -1402,7 +1402,7 @@
         "results": {
           "title": "Results",
           "invited": "{count} invitation(s) sent",
-          "added": "{count} existing user(s) added to university",
+          "added": "{count} existing user(s) added to institution",
           "alreadyMembers": "{count} user(s) already members",
           "errors": "{count} error(s) occurred"
         },
@@ -1414,8 +1414,8 @@
           "placeholder": "Select a role..."
         },
         "university": {
-          "label": "University",
-          "placeholder": "Select a university..."
+          "label": "Institution",
+          "placeholder": "Select a institution..."
         },
         "language": {
           "label": "Preferred Language"
@@ -1424,7 +1424,7 @@
       "errors": {
         "emailRequired": "At least one email address is required",
         "userTypeRequired": "Role is required",
-        "universityRequired": "University is required for this role"
+        "universityRequired": "Institution is required for this role"
       }
     },
     "detail": {
@@ -1440,7 +1440,7 @@
       "emailLabel": "Email",
       "firstNameLabel": "First Name",
       "lastNameLabel": "Last Name",
-      "universityLabel": "University",
+      "universityLabel": "Institution",
       "createdAt": "Created",
       "lastLogin": "Last Login",
       "active": "Active",
@@ -1483,15 +1483,15 @@
       "confirmDeleteTitle": "Delete User Permanently",
       "confirmDeleteDescription": "Are you sure you want to permanently delete {name}? This action cannot be undone.",
       "confirmDelete": "Delete Permanently",
-      "universities": "Universities",
-      "universitiesDescription": "Universities this user belongs to.",
-      "noUniversities": "This user is not part of any university.",
+      "universities": "Institutions",
+      "universitiesDescription": "Institutions this user belongs to.",
+      "noUniversities": "This user is not part of any institution.",
       "removeFromUniversity": "Remove",
-      "confirmRemoveUniversityTitle": "Remove from University?",
-      "confirmRemoveUniversityDescription": "Are you sure you want to remove {name} from {university}? They will lose access to all data in this university.",
+      "confirmRemoveUniversityTitle": "Remove from Institution?",
+      "confirmRemoveUniversityDescription": "Are you sure you want to remove {name} from {university}? They will lose access to all data in this institution.",
       "confirmRemove": "Remove",
-      "removeSuccess": "User removed from university successfully.",
-      "removeError": "Failed to remove user from university."
+      "removeSuccess": "User removed from institution successfully.",
+      "removeError": "Failed to remove user from institution."
     }
   },
   "students": {
@@ -1513,9 +1513,9 @@
       "description": "View all enrolled students",
       "searchPlaceholder": "Search by name, email or matricula...",
       "emptyMessage": "No students found.",
-      "filterByUniversity": "Filter by University",
-      "filterByUniversityPlaceholder": "Select a university...",
-      "allUniversities": "All Universities",
+      "filterByUniversity": "Filter by Institution",
+      "filterByUniversityPlaceholder": "Select a institution...",
+      "allUniversities": "All Institutions",
       "filterByCourse": "Filter by Course",
       "filterByCoursePlaceholder": "Select a course...",
       "allCourses": "All Courses",
@@ -1814,7 +1814,7 @@
       "_comment": "Activity section commented out - TODO: Implement real activity tracking",
       "title": "Recent Super Administrator Activity",
       "description": "Most recent administrative actions performed by super administrators",
-      "example1": "New university \"Technology University\" created",
+      "example1": "New institution \"Technology Institution\" created",
       "example2": "System settings updated",
       "example3": "New super administrator account created",
       "by": "by",
@@ -1844,7 +1844,7 @@
       "usernameRequired": "Username is required",
       "usernameHint": "🔑 Used to log into the system. Use only letters, numbers, dots (.) and underscores (_). Example: john.smith or j.smith",
       "emailLabel": "Email *",
-      "emailPlaceholder": "e.g., john.smith@university.edu",
+      "emailPlaceholder": "e.g., john.smith@institution.edu",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
       "emailHint": "📧 Institutional or personal email of the super administrator. Will be used for password recovery and system notifications.",
@@ -1894,7 +1894,7 @@
       "usernamePlaceholder": "e.g., john.smith",
       "usernameRequired": "Username is required",
       "emailLabel": "Email",
-      "emailPlaceholder": "e.g., john.smith@university.edu",
+      "emailPlaceholder": "e.g., john.smith@institution.edu",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
       "update": "Update Super Administrator",
@@ -1911,8 +1911,8 @@
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutorials & Guides",
-    "universities": "Universities",
-    "myUniversity": "My University",
+    "universities": "Institutions",
+    "myUniversity": "My Institution",
     "moduleTokens": "Access Keys",
     "professors": "Professors",
     "users": "Users",
@@ -1939,10 +1939,10 @@
     "settings": "Settings",
     "logout": "Logout",
     "universitySwitcher": {
-      "label": "Your Universities",
-      "select": "Select university",
+      "label": "Your Institutions",
+      "select": "Select institution",
       "switching": "Switching...",
-      "error": "Failed to switch university. Please try again."
+      "error": "Failed to switch institution. Please try again."
     }
   },
   "changePassword": {
@@ -2081,8 +2081,8 @@
       "course": "Course",
       "modules": "Modules",
       "module": "Module",
-      "universities": "Universities",
-      "university": "University",
+      "universities": "Institutions",
+      "university": "Institution",
       "professors": "Professors",
       "professor": "Professor",
       "users": "Users",
@@ -2096,8 +2096,8 @@
       "professor": "Professor",
       "student": "Student",
       "descriptions": {
-        "super_admin": "Full system access across all universities",
-        "manager": "University management with analytics access",
+        "super_admin": "Full system access across all institutions",
+        "manager": "Institution management with analytics access",
         "tutor": "Can create courses, modules, and tokens",
         "platform_coordinator": "View courses/modules and generate access tokens",
         "professor": "Manage assigned courses and modules",
@@ -2167,7 +2167,7 @@
           "Dashboard: Your home page with quick actions",
           "Module Access Keys: View and manage access keys"
         ],
-        "roleSpecific": "Additional items appear based on your role (Universities, Courses, Modules, Professors, Administration)."
+        "roleSpecific": "Additional items appear based on your role (Institutions, Courses, Modules, Professors, Administration)."
       },
       "breadcrumbs": {
         "title": "Breadcrumbs",
@@ -2221,15 +2221,15 @@
       "subtitle": "Complete guide for system administrators",
       "overview": {
         "title": "Role Overview",
-        "description": "As a Super Administrator, you have complete access to all system features and settings. You are responsible for managing the entire platform, including universities, administrators, and system-wide configurations.",
+        "description": "As a Super Administrator, you have complete access to all system features and settings. You are responsible for managing the entire platform, including institutions, administrators, and system-wide configurations.",
         "keyResponsibilities": "Key Responsibilities",
         "responsibilities": [
-          "Creating and managing universities in the system",
+          "Creating and managing institutions in the system",
           "Creating and managing super administrator accounts",
-          "Creating admin professors for each university",
+          "Creating admin professors for each institution",
           "Monitoring system-wide activity and security",
           "Managing global search and system statistics",
-          "Overseeing all content across universities"
+          "Overseeing all content across institutions"
         ]
       },
       "gettingStarted": {
@@ -2237,49 +2237,49 @@
         "step1Title": "1. Dashboard Overview",
         "step1Desc": "After logging in, you'll see your dashboard at /dashboard with quick actions and system overview. The dashboard provides access to all major features.",
         "step2Title": "2. Understanding Your Navigation",
-        "step2Desc": "Your sidebar contains: Dashboard, Universities, Module Access Keys, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
+        "step2Desc": "Your sidebar contains: Dashboard, Institutions, Module Access Keys, and Administration section (Super Administrators, Global Search). Use these to navigate the system efficiently.",
         "step3Title": "3. First Steps",
-        "step3Desc": "Start by creating your first university, then create an admin professor for that university. The admin professor can then manage courses and regular professors."
+        "step3Desc": "Start by creating your first institution, then create an admin professor for that institution. The admin professor can then manage courses and regular professors."
       },
       "universities": {
-        "title": "Managing Universities",
-        "description": "Universities are the top-level organizational units in Tutoria. Each university can have multiple courses, professors, and students.",
+        "title": "Managing Institutions",
+        "description": "Institutions are the top-level organizational units in Tutoria. Each institution can have multiple courses, professors, and students.",
         "creating": {
-          "title": "Creating a University",
+          "title": "Creating a Institution",
           "steps": [
-            "Navigate to Universities (/universities) from the sidebar",
-            "Click 'Create University' button",
-            "Fill in the required information: University Name and Code",
+            "Navigate to Institutions (/institutions) from the sidebar",
+            "Click 'Create Institution' button",
+            "Fill in the required information: Institution Name and Code",
             "Add an optional description",
-            "Click 'Create University' to save",
-            "You'll be redirected to the university detail page"
+            "Click 'Create Institution' to save",
+            "You'll be redirected to the institution detail page"
           ]
         },
         "viewing": {
-          "title": "Viewing University Details",
-          "description": "Click on any university from the list to view its details. You'll see:",
+          "title": "Viewing Institution Details",
+          "description": "Click on any institution from the list to view its details. You'll see:",
           "features": [
-            "University information and statistics",
-            "List of courses offered by the university",
-            "List of professors associated with the university",
+            "Institution information and statistics",
+            "List of courses offered by the institution",
+            "List of professors associated with the institution",
             "Quick actions to add courses or professors"
           ]
         },
         "editing": {
-          "title": "Editing a University",
+          "title": "Editing a Institution",
           "steps": [
-            "From the university detail page, click 'Edit'",
-            "Update the university name, code, or description",
-            "Click 'Update University' to save changes"
+            "From the institution detail page, click 'Edit'",
+            "Update the institution name, code, or description",
+            "Click 'Update Institution' to save changes"
           ]
         },
         "deleting": {
-          "title": "Deleting a University",
-          "warning": "⚠️ Warning: Deleting a university will also delete all associated courses, modules, and content. This action cannot be undone.",
+          "title": "Deleting a Institution",
+          "warning": "⚠️ Warning: Deleting a institution will also delete all associated courses, modules, and content. This action cannot be undone.",
           "steps": [
-            "From the Universities list, click the delete icon",
+            "From the Institutions list, click the delete icon",
             "Confirm the deletion in the dialog",
-            "The university and all its content will be permanently removed"
+            "The institution and all its content will be permanently removed"
           ]
         }
       },
@@ -2320,14 +2320,14 @@
       },
       "professors": {
         "title": "Managing Admin Professors",
-        "description": "Admin professors manage their university's courses, modules, and regular professors. Super admins can create admin professors for any university.",
+        "description": "Admin professors manage their institution's courses, modules, and regular professors. Super admins can create admin professors for any institution.",
         "creating": {
           "title": "Creating an Admin Professor",
           "steps": [
             "Navigate to Professors (/professors)",
             "Click 'Add Professor'",
             "Select 'Admin Professor' type",
-            "Select the university",
+            "Select the institution",
             "Fill in: First Name, Last Name, Username, Email, and Temporary Password",
             "Click 'Create Admin Professor'",
             "Copy and share the password setup link securely",
@@ -2338,7 +2338,7 @@
           "title": "Admin Professor Permissions",
           "description": "Admin professors can:",
           "list": [
-            "View and manage all courses in their university",
+            "View and manage all courses in their institution",
             "Create and edit courses",
             "Create and manage modules for courses",
             "Create regular professors and assign them to courses",
@@ -2350,13 +2350,13 @@
       },
       "globalSearch": {
         "title": "Global Search",
-        "description": "The Global Search feature (/admin/global-search) allows you to search across all universities, courses, modules, and users in the system.",
+        "description": "The Global Search feature (/admin/global-search) allows you to search across all institutions, courses, modules, and users in the system.",
         "usage": {
           "title": "Using Global Search",
           "steps": [
             "Navigate to Administration > Global Search",
             "Enter your search query in the search box",
-            "Filter results by type (Universities, Courses, Modules, Users)",
+            "Filter results by type (Institutions, Courses, Modules, Users)",
             "Click on any result to navigate to its detail page"
           ]
         },
@@ -2364,7 +2364,7 @@
           "title": "Search Tips",
           "list": [
             "Use specific keywords for better results",
-            "Search by university code, course name, or module code",
+            "Search by institution code, course name, or module code",
             "Use email addresses to find specific users",
             "Combine filters to narrow down results"
           ]
@@ -2372,13 +2372,13 @@
       },
       "moduleTokens": {
         "title": "Module Access Keys Overview",
-        "description": "Module access keys provide access to AI tutoring widgets. Super admins can view keys across all universities.",
+        "description": "Module access keys provide access to AI tutoring widgets. Super admins can view keys across all institutions.",
         "viewing": {
           "title": "Viewing Module Access Keys",
           "steps": [
             "Navigate to Module Access Keys (/keys) from the sidebar",
             "View all keys across the system",
-            "Filter keys by university using the URL parameter",
+            "Filter keys by institution using the URL parameter",
             "See key permissions, expiration dates, and usage statistics"
           ]
         },
@@ -2387,26 +2387,26 @@
       "bestPractices": {
         "title": "Best Practices",
         "list": [
-          "Create admin professors to distribute university management responsibilities",
-          "Use descriptive names and codes for universities",
+          "Create admin professors to distribute institution management responsibilities",
+          "Use descriptive names and codes for institutions",
           "Regularly review system activity through Global Search",
           "Keep super administrator accounts to a minimum",
           "Use password setup links instead of sharing passwords directly",
           "Monitor key usage to ensure security compliance",
-          "Document university structures and policies",
+          "Document institution structures and policies",
           "Perform regular security audits"
         ]
       }
     },
     "adminProfessor": {
       "title": "Admin Professor Guide",
-      "subtitle": "COMPLETE and SUPER detailed guide for professors who manage a university. You will learn EVERYTHING step by step!",
+      "subtitle": "COMPLETE and SUPER detailed guide for professors who manage a institution. You will learn EVERYTHING step by step!",
       "overview": {
         "title": "Understanding Your Role - What Is an Admin Professor?",
-        "whatIs": "Imagine that the Tutoria system is a large apartment building, where each apartment is a university. If the Super Administrator is the general building manager for the entire building, the Admin Professor is the MANAGER OF YOUR APARTMENT - you take care of EVERYTHING inside your university, but only yours. You don't touch other universities.",
+        "whatIs": "Imagine that the Tutoria system is a large apartment building, where each apartment is a institution. If the Super Administrator is the general building manager for the entire building, the Admin Professor is the MANAGER OF YOUR APARTMENT - you take care of EVERYTHING inside your institution, but only yours. You don't touch other institutions.",
         "keyResponsibilities": "Key Responsibilities",
         "responsibilities": [
-          "📚 Create and manage YOUR university's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
+          "📚 Create and manage YOUR institution's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
           "📖 Create and manage MODULES within courses - Modules are like 'chapters' or 'units' of a course",
           "👨‍🏫 Create REGULAR PROFESSOR accounts - Other professors who will help you teach and manage modules",
           "🤖 Configure AI TUTORS - The 'brain' that will chat with students and help them study"
@@ -2424,7 +2424,7 @@
           {
             "number": "2",
             "title": "Create Courses (Disciplines)",
-            "desc": "Enter the system and create the DISCIPLINES of your university. Example: 'Introduction to Programming', 'Advanced Mathematics', etc."
+            "desc": "Enter the system and create the DISCIPLINES of your institution. Example: 'Introduction to Programming', 'Advanced Mathematics', etc."
           },
           {
             "number": "3",
@@ -2506,8 +2506,8 @@
           },
           {
             "number": "7",
-            "title": "CHECK if YOUR UNIVERSITY is SELECTED",
-            "desc": "There should be a field called 'University'. Usually YOUR university is ALREADY AUTOMATICALLY SELECTED (because you are an Admin Professor of this university). Just CHECK if it's correct!"
+            "title": "CHECK if YOUR INSTITUTION is SELECTED",
+            "desc": "There should be a field called 'Institution'. Usually YOUR institution is ALREADY AUTOMATICALLY SELECTED (because you are an Admin Professor of this institution). Just CHECK if it's correct!"
           },
           {
             "number": "8",
@@ -2565,8 +2565,8 @@
             "solution": "Great! You've completed the first step! Now go to the section 'HOW TO CREATE MODULES' below in this tutorial. There you'll learn how to create modules INSIDE this course you just created!"
           },
           {
-            "problem": "I created a course for the wrong university!",
-            "solution": "As an Admin Professor, you can ONLY create courses for YOUR university! If the wrong university appeared, something is wrong with your account. Contact the Super Administrator to check your account settings."
+            "problem": "I created a course for the wrong institution!",
+            "solution": "As an Admin Professor, you can ONLY create courses for YOUR institution! If the wrong institution appeared, something is wrong with your account. Contact the Super Administrator to check your account settings."
           },
           {
             "problem": "I don't know what to write in the Description!",
@@ -3108,7 +3108,7 @@
       "regularProfessor": {
         "title": "Guide for Regular Professors",
         "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
-        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all university courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
+        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all institution courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
       },
       "viewing": {
         "title": "Viewing Course Details",
@@ -3121,7 +3121,7 @@
         "actions": [
           "Add Module: Create a new module for this course",
           "Edit Course: Update course information",
-          "View University: Navigate to your university page"
+          "View Institution: Navigate to your institution page"
         ]
       },
       "editing": {
@@ -3277,7 +3277,7 @@
     },
     "professors": {
       "title": "Managing Professors",
-      "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your university.",
+      "description": "As an admin professor, you can create regular professor accounts and assign them to courses within your institution.",
       "creating": {
         "title": "Creating a Regular Professor",
         "steps": [
@@ -3289,7 +3289,7 @@
           "  • Username (will be used for login)",
           "  • Email address",
           "  • Temporary Password",
-          "Your university is automatically selected",
+          "Your institution is automatically selected",
           "Select one or more courses to assign",
           "Click 'Create Professor'",
           "Copy and securely share the password setup link",
@@ -3388,7 +3388,7 @@
           "Delete courses",
           "Assign other professors to courses"
         ],
-        "note": "If you need to create or modify courses, contact your university's admin professor."
+        "note": "If you need to create or modify courses, contact your institution's admin professor."
       }
     },
     "modules": {
@@ -3676,7 +3676,7 @@
     "selectedModel": "AI Model:",
     "autoOptimized": "AI model automatically optimized for this course type",
     "tierNote": "Note",
-    "tierDescription": "The AI model is automatically optimized based on your university's subscription tier for best cost-performance balance.",
+    "tierDescription": "The AI model is automatically optimized based on your institution's subscription tier for best cost-performance balance.",
     "mathLogic": {
       "name": "Mathematics & Logic",
       "description": "Courses focused on mathematical reasoning, formulas, proofs, and logical problem-solving"
@@ -3696,9 +3696,9 @@
     "loadError": "Failed to load analytics data. Please try again.",
     "refreshSuccess": "Analytics data refreshed successfully",
     "refresh": "Refresh",
-    "allUniversities": "All Universities",
-    "searchUniversities": "Search universities...",
-    "noUniversitiesFound": "No universities found.",
+    "allUniversities": "All Institutions",
+    "searchUniversities": "Search institutions...",
+    "noUniversitiesFound": "No institutions found.",
     "exportSuccess": "{format} report exported successfully",
     "period": {
       "day": "Today",
@@ -3715,7 +3715,7 @@
       "totalMessages": "Total Messages",
       "uniqueStudents": "Unique Students",
       "studentsDescription": "Students who asked questions in the selected period",
-      "activeStudents": "Active Students",
+      "activeStudents": "Active students",
       "activeStudentsDescription": "Active in the last {days} days vs. total enrolled",
       "atRiskStudents": "At-Risk Students",
       "atRiskStudentsDescription": "No activity in the last {days} days",
@@ -3724,7 +3724,6 @@
       "inPeriod": "in {period}",
       "inSelectedPeriod": "in selected period",
       "vsYesterday": "vs. yesterday",
-      "activeStudents": "Active students",
       "modulesWithActivity": "Modules with activity",
       "totalCost": "Total AI cost",
       "allTime": "All time",
@@ -3807,7 +3806,7 @@
       "period": "Period",
       "dateRange": "Date Range",
       "generated": "Generated",
-      "university": "University",
+      "university": "Institution",
       "overviewTitle": "Overview Statistics",
       "metric": "Metric",
       "value": "Value",
@@ -4104,7 +4103,7 @@
     },
     "entities": {
       "user": "User",
-      "university": "University",
+      "university": "Institution",
       "course": "Course",
       "module": "Module",
       "file": "File",
@@ -4122,7 +4121,7 @@
       "aiModels": "AI Models",
       "apiKeys": "API Keys",
       "courseTypeConfig": "Course Type Config",
-      "universityOverrides": "University Overrides"
+      "universityOverrides": "Institution Overrides"
     },
     "aiModels": {
       "columns": {
@@ -4256,22 +4255,22 @@
       },
       "active": "Active",
       "inactive": "Inactive",
-      "selectUniversity": "Select a university",
-      "searchUniversity": "Search universities...",
-      "selectUniversityPrompt": "Select a university to view its course type model overrides.",
-      "emptyMessage": "No overrides configured for this university."
+      "selectUniversity": "Select a institution",
+      "searchUniversity": "Search institutions...",
+      "selectUniversityPrompt": "Select a institution to view its course type model overrides.",
+      "emptyMessage": "No overrides configured for this institution."
     }
   },
   "adminSubscriptions": {
     "title": "All Subscriptions",
-    "description": "Overview of all university subscriptions ({total} total)",
+    "description": "Overview of all institution subscriptions ({total} total)",
     "breadcrumb": "Administration",
     "loadError": "Failed to load subscriptions.",
-    "searchPlaceholder": "Search by university, plan, or Stripe ID...",
+    "searchPlaceholder": "Search by institution, plan, or Stripe ID...",
     "emptyMessage": "No subscriptions found.",
     "all": "All",
     "columns": {
-      "university": "University",
+      "university": "Institution",
       "plan": "Plan",
       "status": "Status",
       "period": "Period",
@@ -4335,7 +4334,7 @@
     },
     "scopes": {
       "global": "Global",
-      "university": "University",
+      "university": "Institution",
       "course": "Course"
     }
   },
@@ -4356,7 +4355,7 @@
     "updateSuccess": "Plan updated successfully.",
     "updateError": "Failed to update plan.",
     "deleteConfirm": "Deactivate Plan",
-    "deleteConfirmDesc": "Are you sure you want to deactivate the plan \"{name}\"? Universities on this plan will not be affected.",
+    "deleteConfirmDesc": "Are you sure you want to deactivate the plan \"{name}\"? Institutions on this plan will not be affected.",
     "deleteSuccess": "Plan deactivated successfully.",
     "deleteError": "Failed to deactivate plan.",
     "validationError": "Name and slug are required.",
@@ -4404,8 +4403,8 @@
   "signup": {
     "title": "Create Your Tutoria Account",
     "description": "Start providing AI-powered tutoring to your students in minutes.",
-    "adminNotice": "By signing up, you will become the main administrator of your university on the platform.",
-    "notAdminNotice": "Not the administrator? Ask your university's admin to invite you, or create your account and request to be added to an existing university.",
+    "adminNotice": "By signing up, you will become the main administrator of your institution on the platform.",
+    "notAdminNotice": "Not the administrator? Ask your institution's admin to invite you, or create your account and request to be added to an existing institution.",
     "selectPlan": "Choose Your Plan",
     "popular": "Popular",
     "month": "month",
@@ -4421,16 +4420,16 @@
       "assignments": "Assignments & AI Feedback"
     },
     "form": {
-      "title": "University Registration",
-      "description": "Create your university account and admin user.",
-      "universitySection": "University Details",
+      "title": "Institution Registration",
+      "description": "Create your institution account and admin user.",
+      "universitySection": "Institution Details",
       "adminSection": "Administrator Account",
-      "universityNameLabel": "University Name *",
-      "universityNamePlaceholder": "e.g., University of Technology",
-      "universityNameRequired": "University name is required.",
-      "universityCodeLabel": "University Code (Fantasy Name) *",
+      "universityNameLabel": "Institution Name *",
+      "universityNamePlaceholder": "e.g., Institution of Technology",
+      "universityNameRequired": "Institution name is required.",
+      "universityCodeLabel": "Institution Code (Fantasy Name) *",
       "universityCodePlaceholder": "e.g., UniTech",
-      "universityCodeRequired": "University code is required.",
+      "universityCodeRequired": "Institution code is required.",
       "firstNameLabel": "First Name *",
       "firstNamePlaceholder": "Enter your first name",
       "firstNameRequired": "First name is required.",
@@ -4438,7 +4437,7 @@
       "lastNamePlaceholder": "Enter your last name",
       "lastNameRequired": "Last name is required.",
       "emailLabel": "Email *",
-      "emailPlaceholder": "admin@university.edu",
+      "emailPlaceholder": "admin@institution.edu",
       "emailRequired": "Email is required.",
       "emailInvalid": "Please enter a valid email address.",
       "passwordLabel": "Password *",
@@ -4454,15 +4453,15 @@
     "registrationSuccess": "Account created successfully! Please log in.",
     "registrationError": "Registration failed. Please try again.",
     "emailAlreadyExists": "This email is already registered. If you already have an account, please sign in instead.",
-    "modeUniversity": "Register University",
-    "modeUniversityDesc": "Create a new university account and become its administrator.",
+    "modeUniversity": "Register Institution",
+    "modeUniversityDesc": "Create a new institution account and become its administrator.",
     "modePersonal": "Create Personal Account",
-    "modePersonalDesc": "Create your account and wait to be invited to a university.",
+    "modePersonalDesc": "Create your account and wait to be invited to a institution.",
     "personalRegistrationSuccess": "Account created successfully! You can now log in.",
     "personalForm": {
       "title": "Create Your Account",
-      "description": "Create a personal account. A university administrator can invite you later.",
-      "infoNotice": "After creating your account, you'll be able to log in and wait for a university administrator to add you to their institution. You can also request to join a university.",
+      "description": "Create a personal account. A institution administrator can invite you later.",
+      "infoNotice": "After creating your account, you'll be able to log in and wait for a institution administrator to add you to their institution. You can also request to join a institution.",
       "emailPlaceholder": "your.email@example.com",
       "username": "Username",
       "usernamePlaceholder": "Choose a username",
@@ -4543,7 +4542,7 @@
       "students": "Students",
       "files": "Files",
       "tokens": "Access Tokens",
-      "universities": "Universities",
+      "universities": "Institutions",
       "analytics": "Analytics",
       "subscription": "Subscription",
       "other": "Other"
@@ -4638,7 +4637,7 @@
     "dataCollected": {
       "title": "2. Data We Collect",
       "description": "We collect the following categories of personal data:",
-      "item1": "Identification data: name, email, student ID, and university affiliation",
+      "item1": "Identification data: name, email, student ID, and institution affiliation",
       "item2": "Authentication data: login credentials (encrypted) and access tokens",
       "item3": "Academic interaction data: questions asked, AI responses received, and files accessed",
       "item4": "Technical data: IP address, browser type, and device information",
@@ -4672,7 +4671,7 @@
     },
     "contact": {
       "title": "7. Contact & Data Protection Officer",
-      "content": "For questions about this Privacy Policy, to exercise your data rights, or to contact our Data Protection Officer, please reach out to your university's administration or email us at the contact provided by your institution."
+      "content": "For questions about this Privacy Policy, to exercise your data rights, or to contact our Data Protection Officer, please reach out to your institution's administration or email us at the contact provided by your institution."
     }
   },
   "acceptInvitation": {

@@ -142,7 +142,7 @@ export default function AdminDashboardPage() {
               </Button>
               <Button asChild>
                 <Link href="/universities/create">
-                  Criar Universidade
+                  Criar Instituição de Ensino
                 </Link>
               </Button>
             </div>
@@ -153,7 +153,7 @@ export default function AdminDashboardPage() {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Universidades</CardTitle>
+              <CardTitle className="text-sm font-medium">Instituições de Ensino</CardTitle>
               <Building2 className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -350,7 +350,7 @@ export default function AdminDashboardPage() {
               <Button variant="outline" className="h-20 flex flex-col items-center justify-center space-y-2" asChild>
                 <Link href="/universities/create">
                   <Building2 className="h-6 w-6" />
-                  <span>Criar Universidade</span>
+                  <span>Criar Instituição de Ensino</span>
                 </Link>
               </Button>
 
