@@ -10,7 +10,8 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { SectionErrorBoundary } from '@/components/ui/error-boundary';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
-import { Users, RefreshCw, Download, Sparkles, UserX } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Users, RefreshCw, Download, Sparkles, UserX, Building2 } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -22,6 +23,7 @@ import type {
   QuizPerformanceResponseDto,
   AtRiskStudentsDto,
   DailyAISummaryDto,
+  University,
 } from '@/lib/types';
 
 const StatsCard = lazy(() => import('@/components/analytics/stats-card').then(mod => ({ default: mod.StatsCard })));
@@ -43,6 +45,10 @@ export default function AnalyticsPage() {
     thirtyDaysAgo.setDate(today.getDate() - 30);
     return { from: thirtyDaysAgo, to: today };
   });
+
+  const isSuperAdmin = user?.role === 'super_admin';
+  const [universities, setUniversities] = useState<University[]>([]);
+  const [selectedUniversityId, setSelectedUniversityId] = useState<number | undefined>(undefined);
 
   const [uniqueStudents, setUniqueStudents] = useState(0);
   const [questionsPerModule, setQuestionsPerModule] = useState<QuestionsPerModuleDto | null>(null);
@@ -76,9 +82,17 @@ export default function AnalyticsPage() {
     setDateRange(newDateRange);
   };
 
+  // Super admins can scope every panel to a single institution
+  useEffect(() => {
+    if (!isSuperAdmin) return;
+    apiClient.getUniversities({ size: 1000 })
+      .then(response => setUniversities(response.items))
+      .catch(() => {});
+  }, [isSuperAdmin]);
+
   useEffect(() => {
     loadAnalytics();
-  }, [dateRange]);
+  }, [dateRange, selectedUniversityId]);
 
   const loadAnalytics = async () => {
     if (!user) return;
@@ -89,6 +103,7 @@ export default function AnalyticsPage() {
       const filters: AnalyticsFilterDto = {
         ...(dateRange?.from && { startDate: format(dateRange.from, 'yyyy-MM-dd') }),
         ...(dateRange?.to && { endDate: format(dateRange.to, 'yyyy-MM-dd') }),
+        ...(selectedUniversityId && { universityId: selectedUniversityId }),
       };
 
       // Load summary for unique students count
@@ -98,9 +113,9 @@ export default function AnalyticsPage() {
       // Load the 3 pre-computed panels (non-blocking)
       apiClient.getAnalyticsQuestionsPerModule(filters).then(setQuestionsPerModule).catch(() => {});
       apiClient.getAnalyticsTopTopics(filters).then(setTopTopics).catch(() => {});
-      apiClient.getAnalyticsQuizPerformance().then(setQuizPerformance).catch(() => {});
-      apiClient.getAnalyticsAtRiskStudents(14).then(setAtRisk).catch(() => {});
-      apiClient.getAnalyticsDailyAISummaries(1).then(setAiSummaries).catch(() => {});
+      apiClient.getAnalyticsQuizPerformance(undefined, selectedUniversityId).then(setQuizPerformance).catch(() => {});
+      apiClient.getAnalyticsAtRiskStudents(14, selectedUniversityId).then(setAtRisk).catch(() => {});
+      apiClient.getAnalyticsDailyAISummaries(1, selectedUniversityId).then(setAiSummaries).catch(() => {});
     } catch (error: any) {
       console.error('Error loading analytics:', error);
       toast.error(`${t('loadError')}: ${error?.message ?? 'Unknown error'}`);
@@ -181,6 +196,26 @@ export default function AnalyticsPage() {
 
         <div className="flex flex-wrap items-center gap-4 mt-6">
           <DateRangePicker date={dateRange} onDateChange={handleDateRangeChange} />
+
+          {isSuperAdmin && (
+            <Select
+              value={selectedUniversityId ? String(selectedUniversityId) : 'all'}
+              onValueChange={(value) => setSelectedUniversityId(value === 'all' ? undefined : Number(value))}
+            >
+              <SelectTrigger className="w-[260px]">
+                <Building2 className="mr-2 h-4 w-4 shrink-0 text-muted-foreground" />
+                <SelectValue placeholder={t('filters.allInstitutions')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('filters.allInstitutions')}</SelectItem>
+                {universities.map((university) => (
+                  <SelectItem key={university.id} value={String(university.id)}>
+                    {university.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
 
           <Button onClick={handleExportPDF} variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />

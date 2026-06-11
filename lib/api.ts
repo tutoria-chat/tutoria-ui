@@ -1330,13 +1330,15 @@ class TutoriaAPIClient {
     if (filters?.startDate) params.append('startDate', filters.startDate);
     if (filters?.endDate) params.append('endDate', filters.endDate);
     if (filters?.moduleId) params.append('moduleId', filters.moduleId.toString());
+    if (filters?.universityId) params.append('universityId', filters.universityId.toString());
     const query = params.toString();
     return this.request(`/api/analytics/topics/most-demanded${query ? `?${query}` : ''}`);
   }
 
-  async getAnalyticsQuizPerformance(moduleId?: number): Promise<QuizPerformanceResponseDto> {
+  async getAnalyticsQuizPerformance(moduleId?: number, universityId?: number): Promise<QuizPerformanceResponseDto> {
     const params = new URLSearchParams();
     if (moduleId) params.append('moduleId', moduleId.toString());
+    if (universityId) params.append('universityId', universityId.toString());
     const query = params.toString();
     return this.request(`/api/analytics/quiz/performance${query ? `?${query}` : ''}`);
   }
@@ -1383,12 +1385,12 @@ class TutoriaAPIClient {
 
   // Plan endpoints
   // ─── Engagement / evasion analytics ───────────────────────────────────
-  async getAnalyticsAtRiskStudents(days = 14): Promise<AtRiskStudentsDto> {
-    return this.get('/api/analytics/at-risk-students', { days });
+  async getAnalyticsAtRiskStudents(days = 14, universityId?: number): Promise<AtRiskStudentsDto> {
+    return this.get('/api/analytics/at-risk-students', { days, universityId });
   }
 
-  async getAnalyticsDailyAISummaries(count = 7): Promise<DailyAISummaryDto[]> {
-    return this.get('/api/analytics/daily-ai-summary', { count });
+  async getAnalyticsDailyAISummaries(count = 7, universityId?: number): Promise<DailyAISummaryDto[]> {
+    return this.get('/api/analytics/daily-ai-summary', { count, universityId });
   }
 
   // ─── Course calendar events ───────────────────────────────────────────

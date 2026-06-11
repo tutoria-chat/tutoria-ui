@@ -4098,6 +4098,7 @@
       "costUSD": "Costo (USD)"
     },
     "filters": {
+      "allInstitutions": "Todas las instituciones",
       "noFutureDates": "No se permiten fechas futuras",
       "noFutureDatesDescription": "Por favor seleccione un rango de fechas hasta hoy.",
       "maxRangeExceeded": "Rango de fechas demasiado grande",

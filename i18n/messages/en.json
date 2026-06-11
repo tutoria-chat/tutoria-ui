@@ -3776,6 +3776,7 @@
       "costUSD": "Cost (USD)"
     },
     "filters": {
+      "allInstitutions": "All institutions",
       "noFutureDates": "Future dates are not allowed",
       "noFutureDatesDescription": "Please select a date range up to today.",
       "maxRangeExceeded": "Date range too large",
