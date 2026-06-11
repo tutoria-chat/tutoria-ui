@@ -33,6 +33,9 @@ import type {
   StudentCreate,
   StudentUpdate,
   StudentPaginatedResponse,
+  CourseEvent,
+  CourseEventCreate,
+  CourseEventUpdate,
   ModuleAccessToken,
   ModuleAccessTokenCreate,
   ModuleAccessTokenUpdate,
@@ -1377,6 +1380,23 @@ class TutoriaAPIClient {
   }
 
   // Plan endpoints
+  // ─── Course calendar events ───────────────────────────────────────────
+  async getCourseEvents(courseId: number, from?: string, to?: string): Promise<CourseEvent[]> {
+    return this.get('/api/course-events', { courseId, from, to });
+  }
+
+  async createCourseEvent(data: CourseEventCreate): Promise<CourseEvent> {
+    return this.post('/api/course-events', data);
+  }
+
+  async updateCourseEvent(id: number, data: CourseEventUpdate): Promise<CourseEvent> {
+    return this.put(`/api/course-events/${id}`, data);
+  }
+
+  async deleteCourseEvent(id: number): Promise<void> {
+    return this.delete(`/api/course-events/${id}`);
+  }
+
   async getPlans(): Promise<Plan[]> {
     return this.get('/api/plans/');
   }

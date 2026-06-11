@@ -1310,6 +1310,56 @@ export interface CourseTypeModelUpdate {
   isActive?: boolean;
 }
 
+// Course calendar events
+export type CourseEventType = 'test' | 'assignment' | 'holiday' | 'field_event' | 'other';
+
+export interface CourseEvent {
+  /** Null for synthesized assignment entries (assignment without a linked event). */
+  id: number | null;
+  courseId: number;
+  moduleId?: number | null;
+  moduleName?: string | null;
+  assignmentId?: number | null;
+  title: string;
+  description?: string | null;
+  eventType: CourseEventType;
+  startsAtUtc: string;
+  endsAtUtc?: string | null;
+  remind7Days: boolean;
+  remind3Days: boolean;
+  remind2Days: boolean;
+  remind24Hours: boolean;
+  isSynthesized: boolean;
+}
+
+export interface CourseEventCreate {
+  courseId: number;
+  moduleId?: number | null;
+  assignmentId?: number | null;
+  title: string;
+  description?: string;
+  eventType: CourseEventType;
+  startsAtUtc: string;
+  endsAtUtc?: string | null;
+  remind7Days: boolean;
+  remind3Days: boolean;
+  remind2Days: boolean;
+  remind24Hours: boolean;
+}
+
+export interface CourseEventUpdate {
+  title: string;
+  description?: string;
+  eventType: CourseEventType;
+  startsAtUtc: string;
+  endsAtUtc?: string | null;
+  moduleId?: number | null;
+  remind7Days: boolean;
+  remind3Days: boolean;
+  remind2Days: boolean;
+  remind24Hours: boolean;
+}
+
 // Plans & Subscriptions
 export interface Plan {
   id: number;

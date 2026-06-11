@@ -30,6 +30,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
+import { CourseCalendarTab } from '@/components/courses/course-calendar-tab';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -66,7 +67,7 @@ export default function CourseDetailsPage() {
   const tStudents = useTranslations('courses.detail.studentsTab');
   const tProfTab = useTranslations('courses.detail.professorsTab');
 
-  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'assignments' | 'grading'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'calendar' | 'assignments' | 'grading'>('modules');
   const tGrading = useTranslations('courses.detail.gradingTab');
   const tAssignments = useTranslations('courses.detail.assignmentsTab');
 
@@ -904,6 +905,17 @@ export default function CourseDetailsPage() {
             </button>
           </AdminOnly>
 
+          <button
+            onClick={() => setActiveTab('calendar')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'calendar'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+            }`}
+          >
+            {t('tabs.calendar')}
+          </button>
+
           {course.university?.hasAssignments && (
             <>
               <button
@@ -934,6 +946,15 @@ export default function CourseDetailsPage() {
 
       {/* Tab Content */}
       <div className="space-y-4">
+        {activeTab === 'calendar' && (
+          <CourseCalendarTab
+            courseId={Number(courseId)}
+            modules={modules || []}
+            canManage={true}
+            onGoToAssignments={() => setActiveTab('assignments')}
+          />
+        )}
+
         {activeTab === 'modules' && (
           <Card>
             <CardHeader>
