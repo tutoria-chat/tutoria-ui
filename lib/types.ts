@@ -1310,6 +1310,30 @@ export interface CourseTypeModelUpdate {
   isActive?: boolean;
 }
 
+// Engagement / evasion analytics
+export interface AtRiskStudentsDto {
+  totalEnrolled: number;
+  activeStudents: number;
+  atRiskCount: number;
+  windowDays: number;
+  students: AtRiskStudentDto[];
+}
+
+export interface AtRiskStudentDto {
+  studentId: number;
+  name: string;
+  email: string;
+  lastActivityAt?: string | null;
+  courseNames: string[];
+}
+
+export interface DailyAISummaryDto {
+  date: string;
+  summaryText: string;
+  highlights: string[];
+  generatedAt?: string | null;
+}
+
 // Course calendar events
 export type CourseEventType = 'test' | 'assignment' | 'holiday' | 'field_event' | 'other';
 

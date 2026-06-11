@@ -36,6 +36,8 @@ import type {
   CourseEvent,
   CourseEventCreate,
   CourseEventUpdate,
+  AtRiskStudentsDto,
+  DailyAISummaryDto,
   ModuleAccessToken,
   ModuleAccessTokenCreate,
   ModuleAccessTokenUpdate,
@@ -1380,6 +1382,15 @@ class TutoriaAPIClient {
   }
 
   // Plan endpoints
+  // ─── Engagement / evasion analytics ───────────────────────────────────
+  async getAnalyticsAtRiskStudents(days = 14): Promise<AtRiskStudentsDto> {
+    return this.get('/api/analytics/at-risk-students', { days });
+  }
+
+  async getAnalyticsDailyAISummaries(count = 7): Promise<DailyAISummaryDto[]> {
+    return this.get('/api/analytics/daily-ai-summary', { count });
+  }
+
   // ─── Course calendar events ───────────────────────────────────────────
   async getCourseEvents(courseId: number, from?: string, to?: string): Promise<CourseEvent[]> {
     return this.get('/api/course-events', { courseId, from, to });

@@ -10,7 +10,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { SectionErrorBoundary } from '@/components/ui/error-boundary';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { DateRangePicker } from '@/components/ui/date-range-picker';
-import { Users, RefreshCw, Download } from 'lucide-react';
+import { Users, RefreshCw, Download, Sparkles, UserX } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -20,6 +20,8 @@ import type {
   QuestionsPerModuleDto,
   TopTopicsResponseDto,
   QuizPerformanceResponseDto,
+  AtRiskStudentsDto,
+  DailyAISummaryDto,
 } from '@/lib/types';
 
 const StatsCard = lazy(() => import('@/components/analytics/stats-card').then(mod => ({ default: mod.StatsCard })));
@@ -46,6 +48,8 @@ export default function AnalyticsPage() {
   const [questionsPerModule, setQuestionsPerModule] = useState<QuestionsPerModuleDto | null>(null);
   const [topTopics, setTopTopics] = useState<TopTopicsResponseDto | null>(null);
   const [quizPerformance, setQuizPerformance] = useState<QuizPerformanceResponseDto | null>(null);
+  const [atRisk, setAtRisk] = useState<AtRiskStudentsDto | null>(null);
+  const [aiSummaries, setAiSummaries] = useState<DailyAISummaryDto[]>([]);
 
   const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
     if (!newDateRange?.from) {
@@ -95,6 +99,8 @@ export default function AnalyticsPage() {
       apiClient.getAnalyticsQuestionsPerModule(filters).then(setQuestionsPerModule).catch(() => {});
       apiClient.getAnalyticsTopTopics(filters).then(setTopTopics).catch(() => {});
       apiClient.getAnalyticsQuizPerformance().then(setQuizPerformance).catch(() => {});
+      apiClient.getAnalyticsAtRiskStudents(14).then(setAtRisk).catch(() => {});
+      apiClient.getAnalyticsDailyAISummaries(1).then(setAiSummaries).catch(() => {});
     } catch (error: any) {
       console.error('Error loading analytics:', error);
       toast.error(`${t('loadError')}: ${error?.message ?? 'Unknown error'}`);
@@ -188,7 +194,37 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* How many students asked */}
+      {/* Daily AI briefing (worker-generated, only when there was new data) */}
+      {aiSummaries.length > 0 && (
+        <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-transparent">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#5e17eb] to-[#5ce1e6] text-white">
+                <Sparkles className="h-4 w-4" />
+              </span>
+              {t('aiSummaryTitle')}
+            </CardTitle>
+            <CardDescription>
+              {t('aiSummaryDescription', { date: new Date(aiSummaries[0].date).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) })}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm leading-relaxed">{aiSummaries[0].summaryText}</p>
+            {aiSummaries[0].highlights.length > 0 && (
+              <ul className="space-y-1.5">
+                {aiSummaries[0].highlights.map((highlight, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* How many students asked + engagement */}
       <Suspense fallback={<LoadingSpinner />}>
         <div className="grid gap-4 md:grid-cols-3">
           <StatsCard
@@ -197,8 +233,57 @@ export default function AnalyticsPage() {
             description={t('stats.studentsDescription')}
             icon={Users}
           />
+          {atRisk && atRisk.totalEnrolled > 0 && (
+            <>
+              <StatsCard
+                title={t('stats.activeStudents')}
+                value={`${atRisk.activeStudents.toLocaleString()} / ${atRisk.totalEnrolled.toLocaleString()}`}
+                description={t('stats.activeStudentsDescription', { days: atRisk.windowDays })}
+                icon={Users}
+              />
+              <StatsCard
+                title={t('stats.atRiskStudents')}
+                value={atRisk.atRiskCount.toLocaleString()}
+                description={t('stats.atRiskStudentsDescription', { days: atRisk.windowDays })}
+                icon={UserX}
+              />
+            </>
+          )}
         </div>
       </Suspense>
+
+      {/* Evasion signal: enrolled students gone quiet */}
+      {atRisk && atRisk.students.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UserX className="h-5 w-5 text-amber-500" />
+              {t('atRiskTitle')}
+            </CardTitle>
+            <CardDescription>{t('atRiskDescription', { days: atRisk.windowDays })}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-2 md:grid-cols-2">
+              {atRisk.students.slice(0, 20).map((student) => (
+                <div key={student.studentId} className="flex items-center justify-between gap-3 rounded-md border p-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{student.name}</p>
+                    <p className="truncate text-xs text-muted-foreground">{student.email}</p>
+                  </div>
+                  <p className="shrink-0 truncate text-xs text-muted-foreground max-w-[40%]">
+                    {student.courseNames.join(', ')}
+                  </p>
+                </div>
+              ))}
+            </div>
+            {atRisk.students.length > 20 && (
+              <p className="mt-3 text-xs text-muted-foreground">
+                {t('atRiskMore', { count: atRisk.atRiskCount - 20 })}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Questions per module */}
       {questionsPerModule && questionsPerModule.modules.length > 0 && (
