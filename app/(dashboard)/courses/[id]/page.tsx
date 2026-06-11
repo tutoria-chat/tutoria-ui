@@ -1274,6 +1274,8 @@ export default function CourseDetailsPage() {
                       <thead>
                         <tr className="border-b">
                           <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colCreated')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colFile')}</th>
+                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colUploadedBy')}</th>
                           <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colSubmissions')}</th>
                           <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colStatus')}</th>
                           <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tGrading('colProgress')}</th>
@@ -1283,8 +1285,12 @@ export default function CourseDetailsPage() {
                       <tbody>
                         {gradingJobs.map(job => (
                           <tr key={job.id} className="border-b last:border-0">
-                            <td className="py-3 pr-4">{formatDateShort(job.createdAt)}</td>
-                            <td className="py-3 pr-4">{job.totalSubmissions}</td>
+                            <td className="py-3 pr-4 text-sm">{formatDateShort(job.createdAt)}</td>
+                            <td className="py-3 pr-4 text-sm max-w-[180px] truncate" title={job.originalFilename}>
+                              {job.originalFilename ?? '—'}
+                            </td>
+                            <td className="py-3 pr-4 text-sm text-muted-foreground">{job.createdByName ?? '—'}</td>
+                            <td className="py-3 pr-4 text-sm">{job.totalSubmissions}</td>
                             <td className="py-3 pr-4">
                               <Badge
                                 variant={

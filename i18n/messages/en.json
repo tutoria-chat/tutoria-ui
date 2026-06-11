@@ -1,4 +1,4 @@
-{
+﻿{
   "pages": {
     "login": "Login"
   },
@@ -15,7 +15,7 @@
       "submitButton": "Sign In",
       "submitting": "Signing in...",
       "forgotPassword": "Forgot your password?",
-      "copyright": "© {year} Tutoria. All rights reserved.",
+      "copyright": "Â© {year} Tutoria. All rights reserved.",
       "loginFailed": "Invalid credentials. Please try again.",
       "unexpectedError": "An unexpected error occurred. Please try again.",
       "instructionsTitle": "How to log in:",
@@ -108,7 +108,7 @@
     "descriptionSimple": "Manage courses and academic programs",
     "createButton": "Create Course",
     "limitReached": "Course limit reached. Upgrade your plan to create more courses.",
-    "overLimitBanner": "You have {excess} course(s) over your plan limit. These courses are disabled — please delete them or upgrade your plan.",
+    "overLimitBanner": "You have {excess} course(s) over your plan limit. These courses are disabled â€” please delete them or upgrade your plan.",
     "overLimitTooltip": "This course exceeds your plan limit. Only deletion is allowed.",
     "upgradePlan": "Upgrade Plan",
     "alerts": {
@@ -219,7 +219,7 @@
         "description": "Manage learning modules and content for this course",
         "search": "Search modules...",
         "allSemesters": "All Semesters",
-        "semester": "{num}º Semester",
+        "semester": "{num}Âº Semester",
         "semesterYear": "Semester/Year",
         "allYears": "All Years",
         "noModules": "No modules found with the applied filters.",
@@ -310,11 +310,13 @@
         "criteriaLabel": "Grading Criteria",
         "criteriaPlaceholder": "e.g. Evaluate correct use of key concepts, logical argumentation, and completeness of the answer...",
         "criteriaHelp": "Optional. The AI will use this to guide grading. Leave blank to grade based on course content alone.",
-        "processing": "Processing in the background — come back later to download your results.",
+        "processing": "Processing in the background â€” come back later to download your results.",
         "historyTitle": "Grading History",
         "downloadJson": "Download JSON Template",
         "downloadCsv": "Download CSV Template",
         "colCreated": "Created",
+        "colFile": "File",
+        "colUploadedBy": "Uploaded by",
         "colSubmissions": "Submissions",
         "colStatus": "Status",
         "colProgress": "Progress",
@@ -338,7 +340,7 @@
     "descriptionSimple": "Manage learning modules and AI tutor configuration",
     "createButton": "Create Module",
     "limitReached": "Module limit reached. Upgrade your plan to create more modules.",
-    "overLimitBanner": "You have {excess} module(s) over your plan limit. These modules are disabled — please delete them or upgrade your plan.",
+    "overLimitBanner": "You have {excess} module(s) over your plan limit. These modules are disabled â€” please delete them or upgrade your plan.",
     "overLimitTooltip": "This module exceeds your plan limit. Only deletion is allowed.",
     "upgradePlan": "Upgrade Plan",
     "alerts": {
@@ -421,17 +423,17 @@
       "improveWithAI": "Improve with AI",
       "improving": "Improving...",
       "promptExplanation": "What is this? Think of this as the \"personality instructions\" for the AI tutor. For example: \"You are a patient programming teacher who uses everyday examples\" or \"You are a math tutor who always solves step by step\". This defines how the tutor will respond to students' questions in this specific module.",
-      "promptImprovementHint": "💡 Don't like your prompt? After creating this module, you can improve it a few times using AI!",
+      "promptImprovementHint": "ðŸ’¡ Don't like your prompt? After creating this module, you can improve it a few times using AI!",
       "systemPromptPlaceholder": "Define how the AI tutor should behave, its expertise level, teaching style, and interaction guidelines...",
       "charactersCount": "{count} characters",
-      "configured": "✓ Configured",
+      "configured": "âœ“ Configured",
       "remainingImprovements": "Remaining improvements: {count}/3 (72h)",
-      "promptTips": "💡 Tips for Writing Prompts",
-      "promptTip1": "• Define the AI's role and expertise clearly",
-      "promptTip2": "• Specify teaching style and approach",
-      "promptTip3": "• Include guidelines for different question types",
-      "promptTip4": "• Set expectations for response format and tone",
-      "promptTip5": "• Consider target audience and their level",
+      "promptTips": "ðŸ’¡ Tips for Writing Prompts",
+      "promptTip1": "â€¢ Define the AI's role and expertise clearly",
+      "promptTip2": "â€¢ Specify teaching style and approach",
+      "promptTip3": "â€¢ Include guidelines for different question types",
+      "promptTip4": "â€¢ Set expectations for response format and tone",
+      "promptTip5": "â€¢ Consider target audience and their level",
       "tutorLanguageLabel": "AI Tutor Language",
       "tutorLanguageHint": "Important: Select which language the AI tutor should respond to student questions in. This defines the response language, regardless of the question language.",
       "courseTypeLabel": "Course Type",
@@ -439,7 +441,7 @@
       "changeCourseType": "Change Type",
       "courseTypeHint": "Select your course type and we'll automatically choose the best AI model for optimal performance and cost.",
       "noCourseTypeSelected": "No course type selected",
-      "modelSelectionHint": "🧠 Each AI model has different strengths, costs, and capabilities. Choose the one that best fits your module's needs - you can change it later if needed!",
+      "modelSelectionHint": "ðŸ§  Each AI model has different strengths, costs, and capabilities. Choose the one that best fits your module's needs - you can change it later if needed!",
       "cancel": "Cancel",
       "update": "Update Module",
       "creating": "Creating...",
@@ -539,7 +541,7 @@
       "tokenCopied": "key copied!",
       "tokenCopyError": "Error copying key",
       "widgetUrlTitle": "Widget URL",
-      "widgetUrlShareNote": "Copy is recommended when sharing the chat with students — it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
+      "widgetUrlShareNote": "Copy is recommended when sharing the chat with students â€” it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
       "copyUrl": "Copy URL",
       "testUrl": "Test URL",
       "addYoutubeVideo": "Add YouTube Video",
@@ -567,10 +569,10 @@
       "youtubeTranscriptionWorksTitle": "What works",
       "youtubeTranscriptionFailsTitle": "What won't work",
       "tipPublicUnlisted": "Public or Unlisted videos",
-      "tipCaptionsEnabled": "Captions/CC enabled — auto-generated or manual",
+      "tipCaptionsEnabled": "Captions/CC enabled â€” auto-generated or manual",
       "tipCaptionsWait": "If you just uploaded the video, wait a few minutes for YouTube to generate auto-captions before adding it here",
       "tipNormalLength": "Videos of any length (longer ones just take more time)",
-      "tipPrivate": "Private videos — they can't be accessed",
+      "tipPrivate": "Private videos â€” they can't be accessed",
       "tipNoTranscripts": "Videos with captions disabled or unavailable in the selected language",
       "tipAgeRestricted": "Age-restricted or members-only content",
       "tipRegionLocked": "Region-locked videos (may fail depending on server location)",
@@ -674,7 +676,7 @@
         "toastPublishError": "Failed to update publish status",
         "fieldDueDatePlaceholder": "Pick a date and time",
         "courseAssignmentsTitle": "Other Course Assignments",
-        "courseAssignmentsDescription": "Published assignments from other modules in this course. Read-only — managed by their respective modules.",
+        "courseAssignmentsDescription": "Published assignments from other modules in this course. Read-only â€” managed by their respective modules.",
         "courseAssignmentsEmpty": "No published assignments from other modules in this course.",
         "moduleLabel": "Module:"
       }
@@ -957,7 +959,7 @@
       "universityInfo": "University Information",
       "contactInfo": "Contact Information",
       "nameLabel": "University Name *",
-      "namePlaceholder": "Ex: Federal University of São Paulo",
+      "namePlaceholder": "Ex: Federal University of SÃ£o Paulo",
       "nameRequired": "University name is required",
       "codeLabel": "Fantasy Name *",
       "codePlaceholder": "Ex: USP, UNIFESP, BYU",
@@ -1191,9 +1193,9 @@
       "errorLoadingCourses": "Error loading courses",
       "languageLabel": "Preferred Language",
       "languagePlaceholder": "Select language",
-      "languagePortuguese": "Português (Brasil)",
+      "languagePortuguese": "PortuguÃªs (Brasil)",
       "languageEnglish": "English (United States)",
-      "languageSpanish": "Español",
+      "languageSpanish": "EspaÃ±ol",
       "languageHint": "The professor's interface will be displayed in this language",
       "universityPreselected": "University pre-selected from URL",
       "universityLockedForAdmin": "University is locked to your institution as an admin professor"
@@ -1253,9 +1255,9 @@
       "errorLoadingUniversities": "Error loading universities",
       "languageLabel": "Preferred Language",
       "languagePlaceholder": "Select language",
-      "languagePortuguese": "Português (Brasil)",
+      "languagePortuguese": "PortuguÃªs (Brasil)",
       "languageEnglish": "English (United States)",
-      "languageSpanish": "Español",
+      "languageSpanish": "EspaÃ±ol",
       "languageHint": "The admin professor's interface will be displayed in this language"
     },
     "edit": {
@@ -1304,9 +1306,9 @@
       "backToProfessors": "Back to Professors",
       "languageLabel": "Preferred Language",
       "languagePlaceholder": "Select language",
-      "languagePortuguese": "Português (Brasil)",
+      "languagePortuguese": "PortuguÃªs (Brasil)",
       "languageEnglish": "English (United States)",
-      "languageSpanish": "Español",
+      "languageSpanish": "EspaÃ±ol",
       "languageHint": "The professor's interface will be displayed in this language"
     }
   },
@@ -1788,17 +1790,17 @@
       "usernameLabel": "Username *",
       "usernamePlaceholder": "e.g., john.smith",
       "usernameRequired": "Username is required",
-      "usernameHint": "🔑 Used to log into the system. Use only letters, numbers, dots (.) and underscores (_). Example: john.smith or j.smith",
+      "usernameHint": "ðŸ”‘ Used to log into the system. Use only letters, numbers, dots (.) and underscores (_). Example: john.smith or j.smith",
       "emailLabel": "Email *",
       "emailPlaceholder": "e.g., john.smith@university.edu",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email",
-      "emailHint": "📧 Institutional or personal email of the super administrator. Will be used for password recovery and system notifications.",
+      "emailHint": "ðŸ“§ Institutional or personal email of the super administrator. Will be used for password recovery and system notifications.",
       "passwordLabel": "Temporary Password *",
       "passwordPlaceholder": "Minimum 6 characters",
       "passwordRequired": "Temporary password is required",
       "passwordMinLength": "Password must be at least 6 characters",
-      "passwordHint": "🔐 This is only a temporary password to generate the secure link. The user will create their own personal password when accessing the link.",
+      "passwordHint": "ðŸ” This is only a temporary password to generate the secure link. The user will create their own personal password when accessing the link.",
       "cancel": "Cancel",
       "submit": "Create Super Administrator",
       "submitting": "Creating...",
@@ -1818,9 +1820,9 @@
       "linkCopyError": "Error copying link",
       "languageLabel": "Preferred Language *",
       "languagePlaceholder": "Select interface language",
-      "languagePortuguese": "Português (Brasil)",
+      "languagePortuguese": "PortuguÃªs (Brasil)",
       "languageEnglish": "English (United States)",
-      "languageSpanish": "Español",
+      "languageSpanish": "EspaÃ±ol",
       "languageHint": "The language will be used throughout the super administrator's interface"
     },
     "edit": {
@@ -1969,9 +1971,9 @@
     "themeLightDesc": "Interface always in light mode",
     "themeDarkDesc": "Interface always in dark mode",
     "languageLabel": "Interface Language",
-    "languagePtBr": "Português (Brasil)",
+    "languagePtBr": "PortuguÃªs (Brasil)",
     "languageEn": "English (United States)",
-    "languageEs": "Español",
+    "languageEs": "EspaÃ±ol",
     "languageDesc": "The language will be applied throughout the interface",
     "cancel": "Cancel",
     "save": "Save Settings",
@@ -2098,8 +2100,8 @@
         "description": "Select your preferred language:",
         "options": [
           "English (United States)",
-          "Español (Spanish)",
-          "Português (Brasil)"
+          "EspaÃ±ol (Spanish)",
+          "PortuguÃªs (Brasil)"
         ],
         "note": "The page will reload when you change the language."
       }
@@ -2221,7 +2223,7 @@
         },
         "deleting": {
           "title": "Deleting a University",
-          "warning": "⚠️ Warning: Deleting a university will also delete all associated courses, modules, and content. This action cannot be undone.",
+          "warning": "âš ï¸ Warning: Deleting a university will also delete all associated courses, modules, and content. This action cannot be undone.",
           "steps": [
             "From the Universities list, click the delete icon",
             "Confirm the deletion in the dialog",
@@ -2352,10 +2354,10 @@
         "whatIs": "Imagine that the Tutoria system is a large apartment building, where each apartment is a university. If the Super Administrator is the general building manager for the entire building, the Admin Professor is the MANAGER OF YOUR APARTMENT - you take care of EVERYTHING inside your university, but only yours. You don't touch other universities.",
         "keyResponsibilities": "Key Responsibilities",
         "responsibilities": [
-          "📚 Create and manage YOUR university's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
-          "📖 Create and manage MODULES within courses - Modules are like 'chapters' or 'units' of a course",
-          "👨‍🏫 Create REGULAR PROFESSOR accounts - Other professors who will help you teach and manage modules",
-          "🤖 Configure AI TUTORS - The 'brain' that will chat with students and help them study"
+          "ðŸ“š Create and manage YOUR university's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
+          "ðŸ“– Create and manage MODULES within courses - Modules are like 'chapters' or 'units' of a course",
+          "ðŸ‘¨â€ðŸ« Create REGULAR PROFESSOR accounts - Other professors who will help you teach and manage modules",
+          "ðŸ¤– Configure AI TUTORS - The 'brain' that will chat with students and help them study"
         ]
       },
       "workflow": {
@@ -2413,7 +2415,7 @@
             "desc": "Keep an eye on how students are using it! You can add more files, improve the AI tutor, create more keys, etc."
           }
         ],
-        "tip": "💡 TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 key, and TEST everything before creating more!"
+        "tip": "ðŸ’¡ TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 key, and TEST everything before creating more!"
       },
       "creatingCourses": {
         "title": "HOW TO CREATE COURSES (DISCIPLINES) - COMPLETE TUTORIAL",
@@ -2423,7 +2425,7 @@
           {
             "number": "1",
             "title": "OPEN the SIDE MENU (left side of the screen)",
-            "desc": "Look at the left side of the screen. There is a MENU with several options. Find the option that says 'COURSES' or 'Courses'. It usually has a BOOK icon 📚 next to it."
+            "desc": "Look at the left side of the screen. There is a MENU with several options. Find the option that says 'COURSES' or 'Courses'. It usually has a BOOK icon ðŸ“š next to it."
           },
           {
             "number": "2",
@@ -2490,7 +2492,7 @@
           },
           {
             "mistake": "I created a course by mistake and want to delete it!",
-            "solution": "Go to the COURSES page (click 'Courses' in the left menu). Find the course you want to delete in the list. Click the RED DELETE ICON (usually a trash can 🗑️) on the right side of the row. Confirm deletion. ⚠️ WARNING: This will DELETE ALL MODULES of the course too!"
+            "solution": "Go to the COURSES page (click 'Courses' in the left menu). Find the course you want to delete in the list. Click the RED DELETE ICON (usually a trash can ðŸ—‘ï¸) on the right side of the row. Confirm deletion. âš ï¸ WARNING: This will DELETE ALL MODULES of the course too!"
           }
         ],
         "troubleshooting": [
@@ -2520,11 +2522,11 @@
           }
         ],
         "tips": [
-          "💡 Use DESCRIPTIVE NAMES! Instead of 'Math', use 'Introduction to Differential Mathematics' or 'Linear Algebra I'. This helps identify the course later!",
-          "💡 Create CODES WITH A PATTERN! Example: CS101, CS102, CS103 for Computer Science courses. This makes organization easier!",
-          "💡 FILL IN THE DESCRIPTION even though it's optional! Your future self will thank you when you have 20 courses and can't remember what each one is about!",
-          "💡 START SIMPLE! Create 1 or 2 courses first, create modules for them, TEST everything, THEN create more courses! Don't try to create 10 courses at once on the first day!",
-          "💡 If you're not sure about the course name, CREATE IT anyway! You can CHANGE the name later by editing the course!"
+          "ðŸ’¡ Use DESCRIPTIVE NAMES! Instead of 'Math', use 'Introduction to Differential Mathematics' or 'Linear Algebra I'. This helps identify the course later!",
+          "ðŸ’¡ Create CODES WITH A PATTERN! Example: CS101, CS102, CS103 for Computer Science courses. This makes organization easier!",
+          "ðŸ’¡ FILL IN THE DESCRIPTION even though it's optional! Your future self will thank you when you have 20 courses and can't remember what each one is about!",
+          "ðŸ’¡ START SIMPLE! Create 1 or 2 courses first, create modules for them, TEST everything, THEN create more courses! Don't try to create 10 courses at once on the first day!",
+          "ðŸ’¡ If you're not sure about the course name, CREATE IT anyway! You can CHANGE the name later by editing the course!"
         ]
       },
       "creatingModules": {
@@ -2619,7 +2621,7 @@
           },
           {
             "mistake": "I selected the wrong Course and want to change it!",
-            "solution": "⚠️ IMPORTANT: You CANNOT change the course after creating the module! If you selected the wrong course, you'll need to: 1) DELETE this module (from the modules list), 2) CREATE A NEW module with the correct course. This is a system limitation to maintain data integrity!"
+            "solution": "âš ï¸ IMPORTANT: You CANNOT change the course after creating the module! If you selected the wrong course, you'll need to: 1) DELETE this module (from the modules list), 2) CREATE A NEW module with the correct course. This is a system limitation to maintain data integrity!"
           },
           {
             "mistake": "My System Prompt is too long and the system is complaining!",
@@ -2665,20 +2667,20 @@
           }
         ],
         "tips": [
-          "💡 START WITH A TEMPLATE! Don't try to write the perfect System Prompt from scratch. Use a Quick Template and EDIT it to match your style!",
-          "💡 Be SPECIFIC in your System Prompt! Instead of 'Help students', write 'You are a patient tutor who explains step by step and asks guiding questions.'",
-          "💡 TEST your AI Tutor! After creating the module, uploading files, and preparing it, test by asking questions like students would. See if the AI responds the way you want!",
-          "💡 Use the 'IMPROVE WITH AI' feature! After saving your module, edit it and click 'Improve with AI'. The system often makes your prompt much better!",
-          "💡 ORGANIZE your modules! Use codes like 'CS101-W1' (Week 1), 'CS101-W2' (Week 2). This makes it easy to find and sort later!",
-          "💡 Don't create ALL modules at once! Create 1 module, upload files to it, test with students, SEE HOW IT GOES, then create more. This way you learn what works best!",
-          "💡 The Description field is for HUMANS, the System Prompt is for the AI! Description = what students will learn. System Prompt = how the AI should teach!"
+          "ðŸ’¡ START WITH A TEMPLATE! Don't try to write the perfect System Prompt from scratch. Use a Quick Template and EDIT it to match your style!",
+          "ðŸ’¡ Be SPECIFIC in your System Prompt! Instead of 'Help students', write 'You are a patient tutor who explains step by step and asks guiding questions.'",
+          "ðŸ’¡ TEST your AI Tutor! After creating the module, uploading files, and preparing it, test by asking questions like students would. See if the AI responds the way you want!",
+          "ðŸ’¡ Use the 'IMPROVE WITH AI' feature! After saving your module, edit it and click 'Improve with AI'. The system often makes your prompt much better!",
+          "ðŸ’¡ ORGANIZE your modules! Use codes like 'CS101-W1' (Week 1), 'CS101-W2' (Week 2). This makes it easy to find and sort later!",
+          "ðŸ’¡ Don't create ALL modules at once! Create 1 module, upload files to it, test with students, SEE HOW IT GOES, then create more. This way you learn what works best!",
+          "ðŸ’¡ The Description field is for HUMANS, the System Prompt is for the AI! Description = what students will learn. System Prompt = how the AI should teach!"
         ]
       },
       "uploadingFiles": {
         "title": "HOW TO UPLOAD FILES TO MODULES - Complete Tutorial",
         "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the AI TUTOR will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
         "why": "WHY upload files? Because the AI needs CONTENT to work with! If you don't upload files, the AI will only have its general knowledge. But if you upload YOUR lecture slides, YOUR notes, YOUR PDFs, the AI can answer questions SPECIFICALLY about YOUR course content!",
-        "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 10MB per file.",
+        "supportedFormats": "SUPPORTED FILE TYPES: ðŸ“„ PDF (.pdf), ðŸ“ Word Documents (.doc, .docx), ðŸ“ƒ Text Files (.txt), ðŸ“Š PowerPoint Presentations (.ppt, .pptx). Maximum file size: 10MB per file.",
         "steps": [
           {
             "number": "1",
@@ -2727,7 +2729,7 @@
           },
           {
             "mistake": "I uploaded the wrong file and want to delete it!",
-            "solution": "Easy! Find the file in the FILES LIST. On the right side of the file row, you'll see ACTION BUTTONS. Click the RED DELETE ICON (🗑️ trash can). A confirmation will appear asking 'Are you sure?'. Click YES or CONFIRM. The file will be REMOVED!"
+            "solution": "Easy! Find the file in the FILES LIST. On the right side of the file row, you'll see ACTION BUTTONS. Click the RED DELETE ICON (ðŸ—‘ï¸ trash can). A confirmation will appear asking 'Are you sure?'. Click YES or CONFIRM. The file will be REMOVED!"
           },
           {
             "mistake": "I uploaded a file but the AI isn't using it when answering questions!",
@@ -2741,7 +2743,7 @@
         "troubleshooting": [
           {
             "problem": "Every time I try to upload, it says 'Error uploading file'!",
-            "solution": "Several possible causes: 1) Your internet disconnected mid-upload - check connection and try again, 2) The file is corrupted - try opening the file on your computer first to make sure it's not broken, 3) Server is down - wait a few minutes and try again, 4) File name has special characters - try renaming the file to something simple (like 'lecture1.pdf' instead of 'Aula #1 - Introdução @2024!.pdf')."
+            "solution": "Several possible causes: 1) Your internet disconnected mid-upload - check connection and try again, 2) The file is corrupted - try opening the file on your computer first to make sure it's not broken, 3) Server is down - wait a few minutes and try again, 4) File name has special characters - try renaming the file to something simple (like 'lecture1.pdf' instead of 'Aula #1 - IntroduÃ§Ã£o @2024!.pdf')."
           },
           {
             "problem": "I uploaded multiple files but only some appear in the list!",
@@ -2761,12 +2763,12 @@
           }
         ],
         "tips": [
-          "💡 Use DESCRIPTIVE FILE NAMES! Instead of 'doc1.pdf', use 'Week1-Introduction-To-Programming.pdf'. This makes it easy to find files later!",
-          "💡 ORGANIZE files by topic or week! If you have 'Week 1 Lecture.pdf', 'Week 1 Exercises.pdf', 'Week 1 Solutions.pdf', they'll appear together in the list (usually alphabetically)!",
-          "💡 Upload files BEFORE preparing the module! It's more efficient to upload ALL your files first, THEN click 'Prepare Module' once. This saves time!",
-          "💡 You can DOWNLOAD your own files! Click the DOWNLOAD icon next to any file to get a copy back. This is useful if you need to check what version you uploaded!",
-          "💡 Regularly UPDATE old files! If you have an updated version of a lecture, DELETE the old one and UPLOAD the new one. Then RE-PREPARE the module so the AI uses the latest version!",
-          "💡 Don't upload EVERYTHING at once! Start with the most important files (like main lecture slides and required readings). You can always add more files later!"
+          "ðŸ’¡ Use DESCRIPTIVE FILE NAMES! Instead of 'doc1.pdf', use 'Week1-Introduction-To-Programming.pdf'. This makes it easy to find files later!",
+          "ðŸ’¡ ORGANIZE files by topic or week! If you have 'Week 1 Lecture.pdf', 'Week 1 Exercises.pdf', 'Week 1 Solutions.pdf', they'll appear together in the list (usually alphabetically)!",
+          "ðŸ’¡ Upload files BEFORE preparing the module! It's more efficient to upload ALL your files first, THEN click 'Prepare Module' once. This saves time!",
+          "ðŸ’¡ You can DOWNLOAD your own files! Click the DOWNLOAD icon next to any file to get a copy back. This is useful if you need to check what version you uploaded!",
+          "ðŸ’¡ Regularly UPDATE old files! If you have an updated version of a lecture, DELETE the old one and UPLOAD the new one. Then RE-PREPARE the module so the AI uses the latest version!",
+          "ðŸ’¡ Don't upload EVERYTHING at once! Start with the most important files (like main lecture slides and required readings). You can always add more files later!"
         ]
       },
       "creatingTokens": {
@@ -2830,23 +2832,23 @@
           "title": "HOW TO DISTRIBUTE keys TO STUDENTS",
           "methods": [
             {
-              "method": "📚 MOODLE (or other LMS)",
+              "method": "ðŸ“š MOODLE (or other LMS)",
               "desc": "BEST METHOD for most professors! In Moodle: 1) Create an 'External Tool' or 'URL' resource, 2) Paste the widget URL with your key: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE, 3) Students click on it inside Moodle and the widget opens!"
             },
             {
-              "method": "📧 EMAIL",
+              "method": "ðŸ“§ EMAIL",
               "desc": "Send an email to all students with: 'Click this link to access the AI tutor: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students click the link and the widget opens in their browser!"
             },
             {
-              "method": "📱 WHATSAPP / TELEGRAM",
+              "method": "ðŸ“± WHATSAPP / TELEGRAM",
               "desc": "Post the widget link in your class WhatsApp/Telegram group: 'AI Tutor link: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students can save it and access anytime!"
             },
             {
-              "method": "🌐 GOOGLE CLASSROOM",
+              "method": "ðŸŒ GOOGLE CLASSROOM",
               "desc": "Post an 'Announcement' or 'Material' in Google Classroom with the widget URL. Students can access it directly from Classroom!"
             },
             {
-              "method": "📱 QR CODE (advanced)",
+              "method": "ðŸ“± QR CODE (advanced)",
               "desc": "Use a QR Code generator website (like qr-code-generator.com) to convert the widget URL into a QR CODE. Put the QR code on slides, printouts, or show on screen. Students scan with their phones to access!"
             }
           ]
@@ -2858,7 +2860,7 @@
           },
           {
             "mistake": "I forgot to copy the key after creating it!",
-            "solution": "No problem! Go to the module access keyS page, find your key in the list, and click the VIEW icon (👁️ eye) or COPY icon (📋 clipboard) to see/copy the key again!"
+            "solution": "No problem! Go to the module access keyS page, find your key in the list, and click the VIEW icon (ðŸ‘ï¸ eye) or COPY icon (ðŸ“‹ clipboard) to see/copy the key again!"
           },
           {
             "mistake": "Students can chat but say they can't download files!",
@@ -2900,13 +2902,13 @@
           }
         ],
         "tips": [
-          "💡 Use DESCRIPTIVE NAMES! 'Fall 2024 Moodle Section A' is way better than 'key 1'!",
-          "💡 Set EXPIRATION DATES for semester-based courses! Example: If your semester ends in 120 days, set expiration to 120 days. This prevents students from using it in future semesters with different content!",
-          "💡 Create BACKUP keys! Make 2 keys for the same module - one PRIMARY (share with students) and one BACKUP (keep secret). If you need to revoke the primary, you have a backup ready!",
-          "💡 Test the key YOURSELF before sharing with students! Copy the widget URL and open it in your browser. Ask the AI a question to make sure everything works!",
-          "💡 MONITOR key usage! Check the usage count periodically. If a key has 0 uses after a week, maybe students didn't get the link or don't know how to use it - check in with them!",
-          "💡 For LARGE CLASSES, use LMS integration (Moodle/Canvas)! Don't send individual links - embed the widget in your LMS so students access it where they're already comfortable!",
-          "💡 Keep a SPREADSHEET or NOTE of which keys you created for which purpose! With many modules and keys, it's easy to forget which is which!"
+          "ðŸ’¡ Use DESCRIPTIVE NAMES! 'Fall 2024 Moodle Section A' is way better than 'key 1'!",
+          "ðŸ’¡ Set EXPIRATION DATES for semester-based courses! Example: If your semester ends in 120 days, set expiration to 120 days. This prevents students from using it in future semesters with different content!",
+          "ðŸ’¡ Create BACKUP keys! Make 2 keys for the same module - one PRIMARY (share with students) and one BACKUP (keep secret). If you need to revoke the primary, you have a backup ready!",
+          "ðŸ’¡ Test the key YOURSELF before sharing with students! Copy the widget URL and open it in your browser. Ask the AI a question to make sure everything works!",
+          "ðŸ’¡ MONITOR key usage! Check the usage count periodically. If a key has 0 uses after a week, maybe students didn't get the link or don't know how to use it - check in with them!",
+          "ðŸ’¡ For LARGE CLASSES, use LMS integration (Moodle/Canvas)! Don't send individual links - embed the widget in your LMS so students access it where they're already comfortable!",
+          "ðŸ’¡ Keep a SPREADSHEET or NOTE of which keys you created for which purpose! With many modules and keys, it's easy to forget which is which!"
         ]
       },
       "preparingModules": {
@@ -2916,9 +2918,9 @@
         "prerequisites": {
           "title": "BEFORE YOU PREPARE - Checklist",
           "items": [
-            "✅ You MUST have created at least ONE key with 'Allow Chat' permission! (The system needs a key to create the AI assistant)",
-            "✅ You SHOULD have uploaded files to the module (optional but highly recommended - otherwise the AI only has general knowledge)",
-            "✅ You SHOULD have configured a System Prompt (optional but recommended - this tells the AI how to behave)"
+            "âœ… You MUST have created at least ONE key with 'Allow Chat' permission! (The system needs a key to create the AI assistant)",
+            "âœ… You SHOULD have uploaded files to the module (optional but highly recommended - otherwise the AI only has general knowledge)",
+            "âœ… You SHOULD have configured a System Prompt (optional but recommended - this tells the AI how to behave)"
           ]
         },
         "steps": [
@@ -3027,27 +3029,27 @@
           }
         ],
         "tips": [
-          "💡 PREPARE EARLY! Don't wait until the day before class starts! Prepare a week early and TEST thoroughly so you have time to fix issues!",
-          "💡 RE-PREPARE after ANY changes! Changed the System Prompt? Re-prepare. Added files? Re-prepare. This ensures students always have the latest version!",
-          "💡 TEST YOURSELF before sharing with students! After preparing, use the widget yourself! Ask questions, download files, make sure everything works!",
-          "💡 If you're updating files mid-semester, TELL STUDENTS! Send a message like 'I updated the study materials - the AI tutor now has the latest version!' so they know to ask questions about the new content!",
-          "💡 Keep a PREPARATION LOG! Write down when you prepared each module (like 'CS101-W1: Prepared on Jan 15, 2024 with 5 PDFs'). This helps track what's current!",
-          "💡 Don't OVER-PREPARE! You don't need to prepare every hour! Only re-prepare when you make actual changes. Preparing 50 times in a day doesn't make it better!",
-          "💡 If you have 10 modules, you need to prepare each one SEPARATELY! Preparing Module 1 doesn't automatically prepare Modules 2-10. Do them one by one!"
+          "ðŸ’¡ PREPARE EARLY! Don't wait until the day before class starts! Prepare a week early and TEST thoroughly so you have time to fix issues!",
+          "ðŸ’¡ RE-PREPARE after ANY changes! Changed the System Prompt? Re-prepare. Added files? Re-prepare. This ensures students always have the latest version!",
+          "ðŸ’¡ TEST YOURSELF before sharing with students! After preparing, use the widget yourself! Ask questions, download files, make sure everything works!",
+          "ðŸ’¡ If you're updating files mid-semester, TELL STUDENTS! Send a message like 'I updated the study materials - the AI tutor now has the latest version!' so they know to ask questions about the new content!",
+          "ðŸ’¡ Keep a PREPARATION LOG! Write down when you prepared each module (like 'CS101-W1: Prepared on Jan 15, 2024 with 5 PDFs'). This helps track what's current!",
+          "ðŸ’¡ Don't OVER-PREPARE! You don't need to prepare every hour! Only re-prepare when you make actual changes. Preparing 50 times in a day doesn't make it better!",
+          "ðŸ’¡ If you have 10 modules, you need to prepare each one SEPARATELY! Preparing Module 1 doesn't automatically prepare Modules 2-10. Do them one by one!"
         ],
         "finalChecklist": {
           "title": "FINAL CHECKLIST - Is My Module REALLY Ready for Students?",
           "items": [
-            "✅ Module created with good name and description?",
-            "✅ System Prompt configured (AI knows how to teach)?",
-            "✅ Files uploaded (lecture slides, notes, readings)?",
-            "✅ At least 1 key created with proper permissions?",
-            "✅ Module PREPARED (clicked the Prepare button and saw success)?",
-            "✅ TESTED the widget yourself (asked questions, downloaded files)?",
-            "✅ Widget link shared with students (Moodle, email, WhatsApp, etc.)?",
-            "✅ Students know HOW to use the AI tutor (maybe provide instructions)?",
-            "✅ You're monitoring usage (checking key stats occasionally)?",
-            "✅ You have a plan to update content and re-prepare as needed?"
+            "âœ… Module created with good name and description?",
+            "âœ… System Prompt configured (AI knows how to teach)?",
+            "âœ… Files uploaded (lecture slides, notes, readings)?",
+            "âœ… At least 1 key created with proper permissions?",
+            "âœ… Module PREPARED (clicked the Prepare button and saw success)?",
+            "âœ… TESTED the widget yourself (asked questions, downloaded files)?",
+            "âœ… Widget link shared with students (Moodle, email, WhatsApp, etc.)?",
+            "âœ… Students know HOW to use the AI tutor (maybe provide instructions)?",
+            "âœ… You're monitoring usage (checking key stats occasionally)?",
+            "âœ… You have a plan to update content and re-prepare as needed?"
           ]
         }
       },
@@ -3080,7 +3082,7 @@
       },
       "deleting": {
         "title": "Deleting a Course",
-        "warning": "⚠️ Warning: Deleting a course will also delete all its modules and associated content. This cannot be undone.",
+        "warning": "âš ï¸ Warning: Deleting a course will also delete all its modules and associated content. This cannot be undone.",
         "steps": [
           "From the Courses list, click the delete icon on the course row",
           "Confirm the deletion",
@@ -3096,16 +3098,16 @@
         "steps": [
           "Navigate to Modules (/modules) or click 'Create Module' from the dashboard",
           "Fill in the required information:",
-          "  • Module Name (e.g., 'Data Structures and Algorithms')",
-          "  • Module Code (e.g., 'CS101-M1')",
-          "  • Course (select from your courses)",
-          "  • Semester and Year (optional)",
-          "  • Description (optional but recommended)",
+          "  â€¢ Module Name (e.g., 'Data Structures and Algorithms')",
+          "  â€¢ Module Code (e.g., 'CS101-M1')",
+          "  â€¢ Course (select from your courses)",
+          "  â€¢ Semester and Year (optional)",
+          "  â€¢ Description (optional but recommended)",
           "Configure the AI Tutor (optional):",
-          "  • Choose a template or write a custom system prompt",
-          "  • The system prompt defines how the AI tutor behaves",
-          "  • Select the AI tutor language",
-          "  • You can improve the prompt up to 3 times in 72 hours",
+          "  â€¢ Choose a template or write a custom system prompt",
+          "  â€¢ The system prompt defines how the AI tutor behaves",
+          "  â€¢ Select the AI tutor language",
+          "  â€¢ You can improve the prompt up to 3 times in 72 hours",
           "Click 'Create Module' to save"
         ]
       },
@@ -3183,13 +3185,13 @@
           "Navigate to module access keys (/keys)",
           "Click 'Generate key'",
           "Fill in the key details:",
-          "  • Select the module",
-          "  • key Name (e.g., 'Moodle Widget 2024')",
-          "  • Description (optional)",
-          "  • Expiration (optional, in days)",
+          "  â€¢ Select the module",
+          "  â€¢ key Name (e.g., 'Moodle Widget 2024')",
+          "  â€¢ Description (optional)",
+          "  â€¢ Expiration (optional, in days)",
           "Configure permissions:",
-          "  • Allow Chat: Students can ask questions to the AI tutor",
-          "  • Allow File Access: Students can download module files",
+          "  â€¢ Allow Chat: Students can ask questions to the AI tutor",
+          "  â€¢ Allow File Access: Students can download module files",
           "Click 'CREATE KEY'",
           "Copy the generated key - you'll need it for the widget"
         ]
@@ -3231,10 +3233,10 @@
           "Click 'Add Professor'",
           "Select 'Regular Professor' type",
           "Fill in the professor information:",
-          "  • First Name and Last Name",
-          "  • Username (will be used for login)",
-          "  • Email address",
-          "  • Temporary Password",
+          "  â€¢ First Name and Last Name",
+          "  â€¢ Username (will be used for login)",
+          "  â€¢ Email address",
+          "  â€¢ Temporary Password",
           "Your university is automatically selected",
           "Select one or more courses to assign",
           "Click 'Create Professor'",
@@ -3345,15 +3347,15 @@
         "steps": [
           "Navigate to Modules (/modules) or click 'Create Module'",
           "Fill in the module details:",
-          "  • Module Name (e.g., 'Introduction to Python Programming')",
-          "  • Module Code (e.g., 'CS101-W1')",
-          "  • Select your course from the dropdown",
-          "  • Semester and Year (optional but recommended)",
-          "  • Description (optional but helpful for students)",
+          "  â€¢ Module Name (e.g., 'Introduction to Python Programming')",
+          "  â€¢ Module Code (e.g., 'CS101-W1')",
+          "  â€¢ Select your course from the dropdown",
+          "  â€¢ Semester and Year (optional but recommended)",
+          "  â€¢ Description (optional but helpful for students)",
           "Configure the AI Tutor:",
-          "  • Choose a quick template OR write a custom prompt",
-          "  • Define how the AI tutor should interact with students",
-          "  • Select the tutor's response language",
+          "  â€¢ Choose a quick template OR write a custom prompt",
+          "  â€¢ Define how the AI tutor should interact with students",
+          "  â€¢ Select the tutor's response language",
           "Click 'Create Module' to save"
         ]
       },
@@ -3471,7 +3473,7 @@
       },
       "deleting": {
         "title": "Deleting Modules",
-        "warning": "⚠️ Warning: Deleting a module removes all its files, keys, and student interaction history. This cannot be undone.",
+        "warning": "âš ï¸ Warning: Deleting a module removes all its files, keys, and student interaction history. This cannot be undone.",
         "steps": [
           "From the Modules list, click the delete icon",
           "Confirm the deletion",
@@ -3489,12 +3491,12 @@
           "Click 'Generate key'",
           "Select your module from the dropdown",
           "Fill in key details:",
-          "  • key Name (e.g., 'Fall 2024 - Section A')",
-          "  • Description (optional, e.g., 'For CS101 Moodle course')",
-          "  • Expiration in days (optional, e.g., 120 for semester-long)",
+          "  â€¢ key Name (e.g., 'Fall 2024 - Section A')",
+          "  â€¢ Description (optional, e.g., 'For CS101 Moodle course')",
+          "  â€¢ Expiration in days (optional, e.g., 120 for semester-long)",
           "Set permissions:",
-          "  • Allow Chat: Let students ask questions",
-          "  • Allow File Access: Let students download files",
+          "  â€¢ Allow Chat: Let students ask questions",
+          "  â€¢ Allow File Access: Let students download files",
           "Click 'CREATE KEY'",
           "Copy the key - you'll need it for the widget"
         ]
@@ -3846,7 +3848,7 @@
       "never": "Never",
       "actions": "Actions"
     },
-    "widgetUrlShareNote": "Copy is recommended when sharing the chat with students — it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
+    "widgetUrlShareNote": "Copy is recommended when sharing the chat with students â€” it does not include your session token. Open in new tab is for testing the widget yourself (your auth token is included).",
     "actions": {
       "view": "View details",
       "edit": "Edit key",
@@ -4531,7 +4533,7 @@
       "concepts": "Concepts covered"
     },
     "uploadSuccess": "Questions saved successfully!",
-    "uploadQueued": "File uploaded — extracting questions in the background. Check the history below.",
+    "uploadQueued": "File uploaded â€” extracting questions in the background. Check the history below.",
     "uploadError": "Failed to extract questions from file",
     "generateSuccess": "Questions generated successfully!",
     "generateQueued": "Quiz generation requested. Please wait a couple of minutes.",

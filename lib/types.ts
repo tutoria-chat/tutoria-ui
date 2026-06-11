@@ -264,6 +264,8 @@ export interface GradingJob {
   processedAt?: string;
   hasResult: boolean;
   gradingCriteria?: string;
+  originalFilename?: string;
+  createdByName?: string;
   createdAt: string;
   updatedAt?: string;
 }
