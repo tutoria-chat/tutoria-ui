@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
+  AlertTriangle,
   Edit,
   Plus,
   Users,
@@ -766,6 +767,28 @@ export default function CourseDetailsPage() {
           </div>
         }
       />
+
+      {/* Roster required: without imported students nobody can verify a matricula,
+          so the student widget is unusable for this course */}
+      {totalStudents === 0 && (
+        <Card className="border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+          <CardContent className="py-3 px-5">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 shrink-0" />
+                <div>
+                  <p className="text-sm font-medium">{t('rosterRequired.title')}</p>
+                  <p className="text-sm text-muted-foreground">{t('rosterRequired.description')}</p>
+                </div>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setActiveTab('students')}>
+                <Upload className="mr-2 h-4 w-4" />
+                {t('rosterRequired.action')}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Course Overview */}
       <div className="space-y-3">

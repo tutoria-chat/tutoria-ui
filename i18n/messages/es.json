@@ -52,6 +52,8 @@
     "limitReached": "Limite de cursos alcanzado. Actualiza tu plan para crear mas cursos.",
     "overLimitBanner": "Tienes {excess} curso(s) por encima del límite de tu plan. Estos cursos están desactivados — elimínalos o actualiza tu plan.",
     "overLimitTooltip": "Este curso excede el límite de tu plan. Solo se permite la eliminación.",
+    "noStudentsWarning": "Sin estudiantes",
+    "noStudentsTooltip": "Importa la lista de estudiantes (CSV) — sin ella, los estudiantes no pueden verificar su matrícula y el widget no funcionará para este curso.",
     "upgradePlan": "Actualizar Plan",
     "alerts": {
       "approaching": "Alerta de límite de cursos: {current} de {max} cursos ({percent}% utilizado)",
@@ -144,6 +146,11 @@
       "addModule": "Agregar módulo",
       "editCourse": "Editar curso",
       "courseInfo": "Información del curso",
+      "rosterRequired": {
+        "title": "Lista de estudiantes obligatoria",
+        "description": "Los estudiantes deben verificar su matrícula para usar el widget. Importa el CSV de estudiantes para que este curso sea totalmente funcional.",
+        "action": "Importar estudiantes"
+      },
       "description": "Descripción",
       "updated": "Actualizado el {date}",
       "modules": "Módulos",
@@ -4141,7 +4148,7 @@
   },
   "accessKeys": {
     "title": "Claves de Acceso",
-    "description": "Gestionar claves de acceso de módulos para integración de widgets",
+    "description": "Las claves de acceso abren el widget del estudiante con un módulo predeterminado. Tras verificar su matrícula, el estudiante puede cambiar entre los cursos en los que está inscrito.",
     "createButton": "Crear Clave de Acceso",
     "searchPlaceholder": "Buscar por nombre, descripción o módulo...",
     "emptyMessage": "No se encontraron claves de acceso. Crea tu primera clave para comenzar.",
@@ -4152,6 +4159,7 @@
     "copySuccess": "Clave de acceso copiada al portapapeles",
     "copyError": "Error al copiar la clave de acceso",
     "copyWidgetUrlSuccess": "URL del widget copiada al portapapeles",
+    "copyEmbedSuccess": "Código de inserción copiado al portapapeles",
     "columns": {
       "tokenName": "Nombre de Clave",
       "module": "Módulo",
@@ -4176,7 +4184,8 @@
       "edit": "Editar clave",
       "delete": "Eliminar clave",
       "openWidget": "Abrir widget en nueva pestaña (probar como tú mismo)",
-      "copyWidgetUrl": "Copiar URL del widget (seguro para compartir con estudiantes)"
+      "copyWidgetUrl": "Copiar URL del widget (seguro para compartir con estudiantes)",
+      "copyEmbedCode": "Copiar código iframe (pégalo en la página de tu LMS)"
     },
     "stats": {
       "totalTokens": "Total de Claves",
@@ -4548,7 +4557,8 @@
       "quizzes": "Quizzes IA",
       "whatsapp": "WhatsApp",
       "priority": "Soporte Prioritario",
-      "customModel": "Modelos Personalizados"
+      "customModel": "Modelos Personalizados",
+      "assignments": "Actividades"
     },
     "form": {
       "name": "Nombre",
@@ -4585,7 +4595,8 @@
       "aiQuizzes": "Cuestionarios Generados por IA",
       "whatsapp": "Integración WhatsApp",
       "prioritySupport": "Soporte Prioritario",
-      "customModels": "Configuración de Modelos Personalizados"
+      "customModels": "Configuración de Modelos Personalizados",
+      "assignments": "Actividades y Retroalimentación por IA"
     },
     "form": {
       "title": "Registro de Universidad",
@@ -4662,7 +4673,8 @@
       "aiQuizzes": "Cuestionarios Generados por IA",
       "whatsapp": "Integración WhatsApp",
       "prioritySupport": "Soporte Prioritario",
-      "customModels": "Configuración de Modelos Personalizados"
+      "customModels": "Configuración de Modelos Personalizados",
+      "assignments": "Actividades y Retroalimentación por IA"
     },
     "allPlans": "Planes Disponibles",
     "upgrade": "Mejorar Plan",

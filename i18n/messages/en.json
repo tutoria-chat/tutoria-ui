@@ -110,6 +110,8 @@
     "limitReached": "Course limit reached. Upgrade your plan to create more courses.",
     "overLimitBanner": "You have {excess} course(s) over your plan limit. These courses are disabled — please delete them or upgrade your plan.",
     "overLimitTooltip": "This course exceeds your plan limit. Only deletion is allowed.",
+    "noStudentsWarning": "No students",
+    "noStudentsTooltip": "Import the student roster (CSV) — without it, students cannot verify their matricula and the widget will not work for this course.",
     "upgradePlan": "Upgrade Plan",
     "alerts": {
       "approaching": "Course limit alert: {current} of {max} courses ({percent}% used)",
@@ -202,6 +204,11 @@
       "addModule": "Add Module",
       "editCourse": "Edit Course",
       "courseInfo": "Course Information",
+      "rosterRequired": {
+        "title": "Student roster required",
+        "description": "Students must verify their matricula to use the widget. Import the student CSV to make this course fully functional.",
+        "action": "Import students"
+      },
       "description": "Description",
       "updated": "Updated on {date}",
       "modules": "Modules",
@@ -3819,7 +3826,7 @@
   },
   "accessKeys": {
     "title": "Access Keys",
-    "description": "Manage module access keys for widget integration",
+    "description": "Access keys open the student widget with a default module. After verifying their matricula, students can switch to any course they are enrolled in.",
     "createButton": "Create Access Key",
     "searchPlaceholder": "Search by name, description, or module...",
     "emptyMessage": "No access keys found. Create your first key to get started.",
@@ -3830,6 +3837,7 @@
     "copySuccess": "Access key copied to clipboard",
     "copyError": "Failed to copy access key",
     "copyWidgetUrlSuccess": "Widget URL copied to clipboard",
+    "copyEmbedSuccess": "Embed code copied to clipboard",
     "columns": {
       "tokenName": "Key Name",
       "module": "Module",
@@ -3854,7 +3862,8 @@
       "edit": "Edit key",
       "delete": "Delete key",
       "openWidget": "Open widget in new tab (test as yourself)",
-      "copyWidgetUrl": "Copy widget URL (safe to share with students)"
+      "copyWidgetUrl": "Copy widget URL (safe to share with students)",
+      "copyEmbedCode": "Copy iframe embed code (paste into your LMS page)"
     },
     "stats": {
       "totalTokens": "Total Keys",
@@ -4311,7 +4320,8 @@
       "quizzes": "AI Quizzes",
       "whatsapp": "WhatsApp",
       "priority": "Priority Support",
-      "customModel": "Custom Models"
+      "customModel": "Custom Models",
+      "assignments": "Assignments"
     },
     "form": {
       "name": "Name",
@@ -4348,7 +4358,8 @@
       "aiQuizzes": "AI-Generated Quizzes",
       "whatsapp": "WhatsApp Integration",
       "prioritySupport": "Priority Support",
-      "customModels": "Custom Model Configuration"
+      "customModels": "Custom Model Configuration",
+      "assignments": "Assignments & AI Feedback"
     },
     "form": {
       "title": "University Registration",
@@ -4425,7 +4436,8 @@
       "aiQuizzes": "AI-Generated Quizzes",
       "whatsapp": "WhatsApp Integration",
       "prioritySupport": "Priority Support",
-      "customModels": "Custom Model Configuration"
+      "customModels": "Custom Model Configuration",
+      "assignments": "Assignments & AI Feedback"
     },
     "allPlans": "Available Plans",
     "upgrade": "Upgrade",

@@ -33,6 +33,7 @@ const FALLBACK_PLANS: Plan[] = [
     hasWhatsApp: false,
     hasPrioritySupport: false,
     hasCustomModelConfig: false,
+    hasAssignments: false,
     trialDays: 30,
     isCustom: false,
     displayOrder: 1,
@@ -51,6 +52,7 @@ const FALLBACK_PLANS: Plan[] = [
     hasWhatsApp: false,
     hasPrioritySupport: false,
     hasCustomModelConfig: false,
+    hasAssignments: false,
     trialDays: 30,
     isCustom: false,
     displayOrder: 2,
@@ -69,6 +71,7 @@ const FALLBACK_PLANS: Plan[] = [
     hasWhatsApp: true,
     hasPrioritySupport: true,
     hasCustomModelConfig: true,
+    hasAssignments: true,
     trialDays: 30,
     isCustom: false,
     displayOrder: 3,
@@ -404,6 +407,7 @@ export default function SignupPage() {
                       <FeatureItem included={plan.hasWhatsApp} label={t('features.whatsapp')} />
                       <FeatureItem included={plan.hasPrioritySupport} label={t('features.prioritySupport')} />
                       <FeatureItem included={plan.hasCustomModelConfig} label={t('features.customModels')} />
+                      <FeatureItem included={plan.hasAssignments} label={t('features.assignments')} />
                     </CardContent>
                   </Card>
                 ))}

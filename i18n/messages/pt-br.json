@@ -52,6 +52,8 @@
     "limitReached": "Limite de disciplinas atingido. Atualize seu plano para criar mais disciplinas.",
     "overLimitBanner": "Você tem {excess} disciplina(s) acima do limite do seu plano. Essas disciplinas estão desativadas — exclua-as ou atualize seu plano.",
     "overLimitTooltip": "Esta disciplina excede o limite do seu plano. Apenas exclusão é permitida.",
+    "noStudentsWarning": "Sem alunos",
+    "noStudentsTooltip": "Importe a lista de alunos (CSV) — sem ela, os alunos não conseguem verificar a matrícula e o widget não funcionará para esta disciplina.",
     "upgradePlan": "Atualizar Plano",
     "alerts": {
       "approaching": "Alerta de limite de disciplinas: {current} de {max} disciplinas ({percent}% utilizado)",
@@ -144,6 +146,11 @@
       "addModule": "Adicionar Módulo",
       "editCourse": "Editar Disciplina",
       "courseInfo": "Informações da Disciplina",
+      "rosterRequired": {
+        "title": "Lista de alunos obrigatória",
+        "description": "Os alunos precisam verificar a matrícula para usar o widget. Importe o CSV de alunos para que esta disciplina fique totalmente funcional.",
+        "action": "Importar alunos"
+      },
       "description": "Descrição",
       "updated": "Atualizado em {date}",
       "modules": "Módulos",
@@ -4851,7 +4858,7 @@
   },
   "accessKeys": {
     "title": "Chaves de Acesso",
-    "description": "Gerenciar chaves de acesso de módulos para integração de widgets",
+    "description": "As chaves de acesso abrem o widget do aluno com um módulo padrão. Após verificar a matrícula, o aluno pode alternar entre as disciplinas em que está matriculado.",
     "createButton": "Criar Chave de Acesso",
     "searchPlaceholder": "Buscar por nome, descrição ou módulo...",
     "emptyMessage": "Nenhuma chave de acesso encontrada. Crie sua primeira chave para começar.",
@@ -4862,6 +4869,7 @@
     "copySuccess": "Chave de acesso copiada para a área de transferência",
     "copyError": "Erro ao copiar chave de acesso",
     "copyWidgetUrlSuccess": "URL do widget copiada para a área de transferência",
+    "copyEmbedSuccess": "Código de incorporação copiado para a área de transferência",
     "columns": {
       "tokenName": "Nome da Chave",
       "module": "Módulo",
@@ -4886,7 +4894,8 @@
       "edit": "Editar chave",
       "delete": "Excluir chave",
       "openWidget": "Abrir widget em nova aba (testar como você mesmo)",
-      "copyWidgetUrl": "Copiar URL do widget (seguro para compartilhar com alunos)"
+      "copyWidgetUrl": "Copiar URL do widget (seguro para compartilhar com alunos)",
+      "copyEmbedCode": "Copiar código iframe (cole na página do seu AVA/LMS)"
     },
     "stats": {
       "totalTokens": "Total de Chaves",
@@ -5258,7 +5267,8 @@
       "quizzes": "Quizzes IA",
       "whatsapp": "WhatsApp",
       "priority": "Suporte Prioritário",
-      "customModel": "Modelos Personalizados"
+      "customModel": "Modelos Personalizados",
+      "assignments": "Atividades"
     },
     "form": {
       "name": "Nome",
@@ -5295,7 +5305,8 @@
       "aiQuizzes": "Quizzes Gerados por IA",
       "whatsapp": "Integração WhatsApp",
       "prioritySupport": "Suporte Prioritário",
-      "customModels": "Configuração de Modelos Personalizados"
+      "customModels": "Configuração de Modelos Personalizados",
+      "assignments": "Atividades e Feedback por IA"
     },
     "form": {
       "title": "Cadastro da Universidade",
@@ -5372,7 +5383,8 @@
       "aiQuizzes": "Quizzes Gerados por IA",
       "whatsapp": "Integração WhatsApp",
       "prioritySupport": "Suporte Prioritário",
-      "customModels": "Configuração de Modelos Personalizados"
+      "customModels": "Configuração de Modelos Personalizados",
+      "assignments": "Atividades e Feedback por IA"
     },
     "allPlans": "Planos Disponíveis",
     "upgrade": "Fazer Upgrade",

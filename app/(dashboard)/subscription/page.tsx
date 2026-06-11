@@ -277,6 +277,7 @@ export default function SubscriptionPage() {
                   <FeatureCheck included={plan.hasWhatsApp} label={t('features.whatsapp')} />
                   <FeatureCheck included={plan.hasPrioritySupport} label={t('features.prioritySupport')} />
                   <FeatureCheck included={plan.hasCustomModelConfig} label={t('features.customModels')} />
+                  <FeatureCheck included={plan.hasAssignments} label={t('features.assignments')} />
 
                   <div className="pt-4">
                     {isCurrent ? (

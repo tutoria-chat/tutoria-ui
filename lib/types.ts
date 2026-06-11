@@ -1322,6 +1322,7 @@ export interface Plan {
   hasWhatsApp: boolean;
   hasPrioritySupport: boolean;
   hasCustomModelConfig: boolean;
+  hasAssignments: boolean;
   trialDays: number;
   displayOrder: number;
   isActive: boolean;
@@ -1343,6 +1344,7 @@ export interface PlanCreate {
   hasWhatsApp: boolean;
   hasPrioritySupport: boolean;
   hasCustomModelConfig: boolean;
+  hasAssignments: boolean;
   trialDays: number;
   displayOrder: number;
   isActive: boolean;
@@ -1379,6 +1381,7 @@ export interface UniversityLimits {
   currentStudents?: number;
   hasAIQuizzes: boolean;
   hasWhatsApp: boolean;
+  hasAssignments?: boolean;
   planName: string;
   planSlug: string;
   overLimitCourseIds?: number[];

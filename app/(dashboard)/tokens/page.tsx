@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info, CheckCircle2, XCircle } from 'lucide-react';
+import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info, CheckCircle2, XCircle, Code2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -106,6 +106,18 @@ export default function TokensPage() {
       toast.success(t('copyWidgetUrlSuccess'));
     } catch (error) {
       console.error('Erro ao copiar URL do widget:', error);
+      toast.error(t('copyError'));
+    }
+  };
+
+  const handleCopyEmbedCode = async (token: string) => {
+    try {
+      const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
+      const embedCode = `<iframe\n  src="${widgetUrl}"\n  width="100%"\n  height="700"\n  style="border: 0; border-radius: 12px;"\n  allow="clipboard-write"\n  title="TutorIA"\n></iframe>`;
+      await navigator.clipboard.writeText(embedCode);
+      toast.success(t('copyEmbedSuccess'));
+    } catch (error) {
+      console.error('Erro ao copiar código de incorporação:', error);
       toast.error(t('copyError'));
     }
   };
@@ -255,6 +267,15 @@ export default function TokensPage() {
             title={t('actions.copyWidgetUrl')}
           >
             <Link className="h-4 w-4 text-green-500" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleCopyEmbedCode(token.token)}
+            title={t('actions.copyEmbedCode')}
+          >
+            <Code2 className="h-4 w-4 text-purple-500" />
           </Button>
 
           <Button

@@ -38,6 +38,7 @@ const EMPTY_PLAN: PlanCreate = {
   hasWhatsApp: false,
   hasPrioritySupport: false,
   hasCustomModelConfig: false,
+  hasAssignments: false,
   trialDays: 7,
   displayOrder: 0,
   isActive: true,
@@ -109,6 +110,7 @@ export default function PlansPage() {
       hasWhatsApp: plan.hasWhatsApp,
       hasPrioritySupport: plan.hasPrioritySupport,
       hasCustomModelConfig: plan.hasCustomModelConfig,
+      hasAssignments: plan.hasAssignments,
       trialDays: plan.trialDays,
       displayOrder: plan.displayOrder,
       isActive: plan.isActive,
@@ -218,6 +220,7 @@ export default function PlansPage() {
           {plan.hasWhatsApp && <Badge variant="secondary" className="text-xs">{t('features.whatsapp')}</Badge>}
           {plan.hasPrioritySupport && <Badge variant="secondary" className="text-xs">{t('features.priority')}</Badge>}
           {plan.hasCustomModelConfig && <Badge variant="secondary" className="text-xs">{t('features.customModel')}</Badge>}
+          {plan.hasAssignments && <Badge variant="secondary" className="text-xs">{t('features.assignments')}</Badge>}
         </div>
       ),
     },
@@ -435,6 +438,13 @@ export default function PlansPage() {
                   <Switch
                     checked={formData.hasCustomModelConfig}
                     onCheckedChange={(v) => updateField('hasCustomModelConfig', v)}
+                  />
+                </div>
+                <div className="flex items-center justify-between rounded-lg border p-3">
+                  <span className="text-sm font-medium">{t('features.assignments')}</span>
+                  <Switch
+                    checked={formData.hasAssignments}
+                    onCheckedChange={(v) => updateField('hasAssignments', v)}
                   />
                 </div>
               </div>

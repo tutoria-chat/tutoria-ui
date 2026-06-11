@@ -135,12 +135,28 @@ export default function CoursesPage() {
       key: 'studentsCount',
       label: t('columns.students'),
       sortable: true,
-      render: (value) => (
-        <div className="flex items-center space-x-1">
-          <GraduationCap className="h-3 w-3 text-muted-foreground" />
-          <span className="text-sm">{value || 0}</span>
-        </div>
-      )
+      render: (value) => {
+        const count = (value as number) || 0;
+        if (count === 0) {
+          // No roster = students cannot verify their matricula = widget is unusable
+          return (
+            <Link
+              href="/students"
+              className="flex items-center space-x-1 text-amber-600 dark:text-amber-400 hover:underline"
+              title={t('noStudentsTooltip')}
+            >
+              <AlertTriangle className="h-3 w-3" />
+              <span className="text-sm font-medium">{t('noStudentsWarning')}</span>
+            </Link>
+          );
+        }
+        return (
+          <div className="flex items-center space-x-1">
+            <GraduationCap className="h-3 w-3 text-muted-foreground" />
+            <span className="text-sm">{count}</span>
+          </div>
+        );
+      }
     },
     {
       key: 'createdAt',
