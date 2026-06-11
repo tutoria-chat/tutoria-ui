@@ -974,7 +974,9 @@
       "maxStudentsPlaceholder": "ex: 1000",
       "maxStudentsHelp": "Defina 0 para estudantes ilimitados",
       "hasAssignmentsLabel": "Funcionalidade de Atividades",
-      "hasAssignmentsHelp": "Permite que professores publiquem atividades com prazos e feedback de IA para os alunos"
+      "hasAssignmentsHelp": "Permite que professores publiquem atividades com prazos e feedback de IA para os alunos",
+      "hasAIQuizzesLabel": "Funcionalidade de Quizzes IA",
+      "hasAIQuizzesHelp": "Habilita quizzes de prática gerados por IA para os alunos no widget (sobrepõe o plano de assinatura)"
     },
     "appearance": {
       "title": "Aparência do Widget",

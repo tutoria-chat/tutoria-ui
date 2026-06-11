@@ -147,6 +147,7 @@ export interface University {
   // Plan limits & enterprise config
   isEnterprise?: boolean;
   hasAssignments?: boolean;
+  hasAIQuizzes?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;
@@ -185,6 +186,7 @@ export interface UniversityCreate {
   // Plan limits & enterprise config
   isEnterprise?: boolean;
   hasAssignments?: boolean;
+  hasAIQuizzes?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;
@@ -213,6 +215,7 @@ export interface UniversityUpdate {
   // Plan limits & enterprise config
   isEnterprise?: boolean;
   hasAssignments?: boolean;
+  hasAIQuizzes?: boolean;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;

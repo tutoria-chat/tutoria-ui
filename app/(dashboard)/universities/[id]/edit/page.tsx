@@ -54,6 +54,7 @@ export default function EditUniversityPage() {
   // Enterprise fields (super_admin only)
   const [isEnterprise, setIsEnterprise] = useState(false);
   const [hasAssignments, setHasAssignments] = useState(false);
+  const [hasAIQuizzes, setHasAIQuizzes] = useState(false);
   const [maxCourses, setMaxCourses] = useState<number>(0);
   const [maxModules, setMaxModules] = useState<number>(0);
   const [maxStudents, setMaxStudents] = useState<number>(0);
@@ -94,6 +95,7 @@ export default function EditUniversityPage() {
       // Populate enterprise/plan limits
       setIsEnterprise(data.isEnterprise || false);
       setHasAssignments(data.hasAssignments || false);
+      setHasAIQuizzes(data.hasAIQuizzes || false);
       setMaxCourses(data.maxCourses ?? 999);
       setMaxModules(data.maxModules ?? 9999);
       setMaxStudents(data.maxStudents ?? 0);
@@ -193,6 +195,7 @@ export default function EditUniversityPage() {
         // Plan limits & enterprise config
         isEnterprise,
         hasAssignments,
+        hasAIQuizzes,
         maxCourses: isEnterprise ? maxCourses : null,
         maxModules: isEnterprise ? maxModules : null,
         maxStudents: isEnterprise ? maxStudents : null,
@@ -380,6 +383,22 @@ export default function EditUniversityPage() {
                       id="hasAssignments"
                       checked={hasAssignments}
                       onCheckedChange={setHasAssignments}
+                    />
+                  </div>
+                  {/* AI Quizzes — university-level override of the plan feature */}
+                  <div className="flex items-center justify-between p-3 border rounded-md bg-background mt-3">
+                    <div>
+                      <label htmlFor="hasAIQuizzes" className="text-sm font-medium">
+                        {tTiers('hasAIQuizzesLabel')}
+                      </label>
+                      <p className="text-xs text-muted-foreground">
+                        {tTiers('hasAIQuizzesHelp')}
+                      </p>
+                    </div>
+                    <Switch
+                      id="hasAIQuizzes"
+                      checked={hasAIQuizzes}
+                      onCheckedChange={setHasAIQuizzes}
                     />
                   </div>
 

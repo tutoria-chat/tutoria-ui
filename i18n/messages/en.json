@@ -1032,7 +1032,9 @@
       "maxStudentsPlaceholder": "e.g., 1000",
       "maxStudentsHelp": "Set to 0 for unlimited students",
       "hasAssignmentsLabel": "Assignments Feature",
-      "hasAssignmentsHelp": "Allow professors to publish assignments with deadlines and AI-powered student feedback"
+      "hasAssignmentsHelp": "Allow professors to publish assignments with deadlines and AI-powered student feedback",
+      "hasAIQuizzesLabel": "AI Quizzes Feature",
+      "hasAIQuizzesHelp": "Enable AI-generated practice quizzes for students in the widget (overrides the subscription plan)"
     },
     "appearance": {
       "title": "Widget Appearance",
