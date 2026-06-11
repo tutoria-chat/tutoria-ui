@@ -27,6 +27,7 @@ const QuestionsPerModuleChart = lazy(() => import('@/components/analytics/questi
 const TopTopicsChart = lazy(() => import('@/components/analytics/top-topics-chart').then(m => ({ default: m.TopTopicsChart })));
 const QuizHeatmap = lazy(() => import('@/components/analytics/quiz-heatmap').then(m => ({ default: m.QuizHeatmap })));
 const QuizRadarChart = lazy(() => import('@/components/analytics/quiz-radar-chart').then(m => ({ default: m.QuizRadarChart })));
+const CriticalConcepts = lazy(() => import('@/components/analytics/critical-concepts').then(m => ({ default: m.CriticalConcepts })));
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -227,6 +228,29 @@ export default function AnalyticsPage() {
             <SectionErrorBoundary title="Failed to load top topics">
               <Suspense fallback={<div className="h-[350px] animate-pulse bg-muted rounded" />}>
                 <TopTopicsChart data={topTopics.topics} />
+              </Suspense>
+            </SectionErrorBoundary>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* What to reteach: concepts students are failing in quizzes */}
+      {quizPerformance && quizPerformance.concepts.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t('criticalConcepts')}</CardTitle>
+            <CardDescription>{t('criticalConceptsDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SectionErrorBoundary title="Failed to load critical concepts">
+              <Suspense fallback={<div className="h-[200px] animate-pulse bg-muted rounded" />}>
+                <CriticalConcepts
+                  data={quizPerformance.concepts}
+                  labels={{
+                    attempts: t('criticalConceptsAttempts'),
+                    allHealthy: t('criticalConceptsHealthy'),
+                  }}
+                />
               </Suspense>
             </SectionErrorBoundary>
           </CardContent>
