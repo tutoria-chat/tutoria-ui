@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🚨 Branching & Deployment — READ FIRST
+
+**tutoria-ui deploys from the `dev` branch (AWS Amplify).** This mirrors tutoria-widget, which also deploys from `dev`.
+
+- **Do ALL work on `dev`.** Commit and push to `dev`.
+- **NEVER commit or push to `main`** unless the user EXPLICITLY says "work on main" for this repo. `main` is not the deployment branch and must not receive feature work by default.
+- Before committing, confirm the checked-out branch is `dev` (`git rev-parse --abbrev-ref HEAD`).
+- For multi-repo git operations, use `git -C <path> …` (never parallel `cd …; git …` — parallel shells share one working directory and the `cd`s race, landing commits on the wrong repo/branch).
+
 ## Development Commands
 
 - **Start development server**: `npm run dev` (runs on http://localhost:3000)
