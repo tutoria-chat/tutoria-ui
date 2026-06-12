@@ -13,7 +13,7 @@ import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown } from 'lucide-react';
+import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, AlertTriangle, Brain, ChevronRight, ChevronDown, GraduationCap } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -26,6 +26,9 @@ import type {
   AtRiskStudentsDto,
   DailyAISummaryDto,
   RiskPredictionsDto,
+  CourseStatsResponseDto,
+  ModuleStatsResponseDto,
+  PedagogicalAlertsResponseDto,
   University,
 } from '@/lib/types';
 
@@ -59,6 +62,10 @@ export default function AnalyticsPage() {
   const [quizPerformance, setQuizPerformance] = useState<QuizPerformanceResponseDto | null>(null);
   const [atRisk, setAtRisk] = useState<AtRiskStudentsDto | null>(null);
   const [riskPredictions, setRiskPredictions] = useState<RiskPredictionsDto | null>(null);
+  const [courseStats, setCourseStats] = useState<CourseStatsResponseDto | null>(null);
+  const [pedagogicalAlerts, setPedagogicalAlerts] = useState<PedagogicalAlertsResponseDto | null>(null);
+  const [expandedCourse, setExpandedCourse] = useState<number | null>(null);
+  const [moduleStats, setModuleStats] = useState<Record<number, ModuleStatsResponseDto>>({});
   const [aiSummaries, setAiSummaries] = useState<DailyAISummaryDto[]>([]);
 
   const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
@@ -121,6 +128,8 @@ export default function AnalyticsPage() {
       apiClient.getAnalyticsAtRiskStudents(14, selectedUniversityId).then(setAtRisk).catch(() => {});
       apiClient.getAnalyticsRiskPredictions(14, selectedUniversityId).then(setRiskPredictions).catch(() => {});
       apiClient.getAnalyticsDailyAISummaries(1, selectedUniversityId).then(setAiSummaries).catch(() => {});
+      apiClient.getAnalyticsCourseStats(30, selectedUniversityId).then(setCourseStats).catch(() => {});
+      apiClient.getAnalyticsPedagogicalAlerts(14, selectedUniversityId).then(setPedagogicalAlerts).catch(() => {});
     } catch (error: any) {
       console.error('Error loading analytics:', error);
       toast.error(`${t('loadError')}: ${error?.message ?? 'Unknown error'}`);
@@ -131,9 +140,28 @@ export default function AnalyticsPage() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
+    setExpandedCourse(null);
+    setModuleStats({});
     await loadAnalytics();
     setRefreshing(false);
     toast.success(t('refreshSuccess'));
+  };
+
+  // Expand a course row and lazy-load its per-module (discipline) breakdown
+  const toggleCourse = async (courseId: number) => {
+    if (expandedCourse === courseId) {
+      setExpandedCourse(null);
+      return;
+    }
+    setExpandedCourse(courseId);
+    if (!moduleStats[courseId]) {
+      try {
+        const data = await apiClient.getAnalyticsCourseModuleStats(courseId, 30);
+        setModuleStats((prev) => ({ ...prev, [courseId]: data }));
+      } catch {
+        /* drilldown is best-effort */
+      }
+    }
   };
 
   // Download an array of rows as a CSV file (Excel-friendly: UTF-8 BOM + CRLF).
@@ -283,6 +311,7 @@ export default function AnalyticsPage() {
               </Badge>
             )}
           </TabsTrigger>
+          <TabsTrigger value="courses" className="flex-1">{t('tabs.courses')}</TabsTrigger>
           <TabsTrigger value="content" className="flex-1">{t('tabs.content')}</TabsTrigger>
           <TabsTrigger value="quizzes" className="flex-1">{t('tabs.quizzes')}</TabsTrigger>
         </TabsList>
@@ -348,6 +377,49 @@ export default function AnalyticsPage() {
 
         {/* ── Engagement & academic risk ── */}
         <TabsContent value="risk" className="space-y-6">
+          {pedagogicalAlerts && pedagogicalAlerts.alerts.length > 0 && (
+            <Card className="border-amber-300/50 dark:border-amber-800/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                  {t('pedagogicalAlertsTitle')}
+                </CardTitle>
+                <CardDescription>{t('pedagogicalAlertsDescription')}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {pedagogicalAlerts.alerts.map((alert, i) => (
+                    <div
+                      key={i}
+                      className={`flex items-start gap-3 rounded-md border p-3 ${
+                        alert.severity === 'high'
+                          ? 'border-red-300/60 bg-red-50/50 dark:border-red-900/50 dark:bg-red-950/20'
+                          : 'border-amber-300/50 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/10'
+                      }`}
+                    >
+                      <span className={`mt-0.5 shrink-0 ${alert.severity === 'high' ? 'text-red-500' : 'text-amber-500'}`}>
+                        {alert.type === 'evasion' ? <UserX className="h-4 w-4" /> : <Brain className="h-4 w-4" />}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm">
+                          {alert.type === 'evasion'
+                            ? t('alertEvasion', { pct: alert.metric, count: alert.count, course: alert.courseName })
+                            : t('alertConcept', { concept: alert.concept ?? '', rate: alert.metric, module: alert.moduleName ?? '' })}
+                        </p>
+                        {alert.type === 'concept' && (
+                          <p className="text-xs text-muted-foreground">{alert.courseName}</p>
+                        )}
+                      </div>
+                      <Badge variant={alert.severity === 'high' ? 'destructive' : 'secondary'} className="shrink-0">
+                        {t(`severity.${alert.severity}`)}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {riskPredictions && riskPredictions.students.length > 0 && (
             <Card>
               <CardHeader>
@@ -437,6 +509,83 @@ export default function AnalyticsPage() {
                     {t('atRiskMore', { count: atRisk.atRiskCount - 20 })}
                   </p>
                 )}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* ── Courses / classes / disciplines ── */}
+        <TabsContent value="courses" className="space-y-6">
+          {courseStats && courseStats.courses.length > 0 ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5 text-primary" />
+                  {t('courseStatsTitle')}
+                </CardTitle>
+                <CardDescription>{t('courseStatsDescription', { days: courseStats.windowDays })}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {/* Header row */}
+                <div className="hidden grid-cols-[2fr_repeat(5,1fr)] gap-2 border-b px-3 pb-2 text-xs font-medium text-muted-foreground md:grid">
+                  <span>{t('colCourse')}</span>
+                  <span className="text-right">{t('colEnrolled')}</span>
+                  <span className="text-right">{t('colActive')}</span>
+                  <span className="text-right">{t('colAtRisk')}</span>
+                  <span className="text-right">{t('colXp')}</span>
+                  <span className="text-right">{t('colAvgLevel')}</span>
+                </div>
+                <div className="divide-y">
+                  {courseStats.courses.map((course) => {
+                    const expanded = expandedCourse === course.courseId;
+                    const mods = moduleStats[course.courseId];
+                    return (
+                      <div key={course.courseId}>
+                        <button
+                          onClick={() => toggleCourse(course.courseId)}
+                          className="grid w-full grid-cols-2 items-center gap-2 px-3 py-3 text-left transition-colors hover:bg-muted/50 md:grid-cols-[2fr_repeat(5,1fr)]"
+                        >
+                          <span className="flex items-center gap-1.5 truncate font-medium">
+                            {expanded ? <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />}
+                            <span className="truncate">{course.courseName}</span>
+                          </span>
+                          <span className="text-right text-sm tabular-nums">{course.enrolled}</span>
+                          <span className="hidden text-right text-sm tabular-nums text-green-600 dark:text-green-400 md:block">{course.active}</span>
+                          <span className="hidden text-right text-sm tabular-nums text-amber-600 dark:text-amber-400 md:block">{course.atRisk}</span>
+                          <span className="hidden text-right text-sm tabular-nums md:block">{course.totalXp.toLocaleString()}</span>
+                          <span className="hidden text-right text-sm tabular-nums md:block">{course.avgLevel.toFixed(1)}</span>
+                        </button>
+                        {expanded && (
+                          <div className="bg-muted/30 px-3 py-2 pl-9">
+                            {!mods ? (
+                              <p className="py-2 text-xs text-muted-foreground">{t('loadingModules')}</p>
+                            ) : mods.modules.length === 0 ? (
+                              <p className="py-2 text-xs text-muted-foreground">{t('noModuleActivity')}</p>
+                            ) : (
+                              <div className="space-y-1.5 py-1">
+                                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t('byModule')}</p>
+                                {mods.modules.map((m) => (
+                                  <div key={m.moduleId} className="flex items-center justify-between gap-3 text-sm">
+                                    <span className="truncate">{m.moduleName}</span>
+                                    <span className="shrink-0 text-xs text-muted-foreground">
+                                      {t('moduleRow', { active: m.active, xp: m.totalXp.toLocaleString(), questions: m.questions, quizzes: m.quizzes })}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="py-12">
+                <p className="text-center text-sm text-muted-foreground">{t('noCourseStats')}</p>
               </CardContent>
             </Card>
           )}

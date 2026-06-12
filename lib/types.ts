@@ -1327,6 +1327,55 @@ export interface RiskPredictionsDto {
   students: RiskStudentDto[];
 }
 
+export interface CourseStatsDto {
+  courseId: number;
+  courseName: string;
+  enrolled: number;
+  active: number;
+  atRisk: number;
+  totalXp: number;
+  avgLevel: number;
+  questions: number;
+  quizzes: number;
+}
+
+export interface CourseStatsResponseDto {
+  windowDays: number;
+  courses: CourseStatsDto[];
+}
+
+export interface ModuleStatsDto {
+  moduleId: number;
+  moduleName: string;
+  active: number;
+  totalXp: number;
+  questions: number;
+  quizzes: number;
+}
+
+export interface ModuleStatsResponseDto {
+  courseId: number;
+  courseName: string;
+  windowDays: number;
+  modules: ModuleStatsDto[];
+}
+
+export interface PedagogicalAlertDto {
+  type: 'evasion' | 'concept';
+  severity: 'high' | 'medium';
+  courseId: number;
+  courseName: string;
+  moduleId?: number | null;
+  moduleName?: string | null;
+  concept?: string | null;
+  metric: number;
+  count: number;
+}
+
+export interface PedagogicalAlertsResponseDto {
+  alerts: PedagogicalAlertDto[];
+}
+
 export interface RiskStudentDto {
   studentId: number;
   name: string;

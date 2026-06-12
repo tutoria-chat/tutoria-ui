@@ -38,6 +38,9 @@ import type {
   CourseEventUpdate,
   AtRiskStudentsDto,
   RiskPredictionsDto,
+  CourseStatsResponseDto,
+  ModuleStatsResponseDto,
+  PedagogicalAlertsResponseDto,
   DailyAISummaryDto,
   ModuleAccessToken,
   ModuleAccessTokenCreate,
@@ -1405,6 +1408,18 @@ class TutoriaAPIClient {
 
   async getAnalyticsRiskPredictions(days = 14, universityId?: number): Promise<RiskPredictionsDto> {
     return this.get('/api/analytics/risk-predictions', { days, universityId });
+  }
+
+  async getAnalyticsCourseStats(days = 30, universityId?: number): Promise<CourseStatsResponseDto> {
+    return this.get('/api/analytics/course-stats', { days, universityId });
+  }
+
+  async getAnalyticsCourseModuleStats(courseId: number, days = 30): Promise<ModuleStatsResponseDto> {
+    return this.get(`/api/analytics/course-stats/${courseId}/modules`, { days });
+  }
+
+  async getAnalyticsPedagogicalAlerts(days = 14, universityId?: number): Promise<PedagogicalAlertsResponseDto> {
+    return this.get('/api/analytics/pedagogical-alerts', { days, universityId });
   }
 
   async getAnalyticsDailyAISummaries(count = 7, universityId?: number): Promise<DailyAISummaryDto[]> {
