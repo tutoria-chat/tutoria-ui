@@ -3742,6 +3742,11 @@
       "went_quiet": "Went quiet",
       "declining": "Declining"
     },
+    "exportCsv": "Export CSV ({count})",
+    "riskColSignal": "Signal",
+    "riskColRisk": "Risk level",
+    "riskColCurrent": "Messages (current window)",
+    "riskColPrevious": "Messages (previous window)",
     "atRiskTitle": "Students Going Quiet",
     "atRiskDescription": "Enrolled students with no tutor activity in the last {days} days — early evasion signal",
     "atRiskMore": "…and {count} more students. Export the full list from the students page.",

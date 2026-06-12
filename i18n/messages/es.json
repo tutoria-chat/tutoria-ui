@@ -4064,6 +4064,11 @@
       "went_quiet": "Dejó de usar",
       "declining": "En descenso"
     },
+    "exportCsv": "Exportar CSV ({count})",
+    "riskColSignal": "Señal",
+    "riskColRisk": "Nivel de riesgo",
+    "riskColCurrent": "Mensajes (período actual)",
+    "riskColPrevious": "Mensajes (período anterior)",
     "atRiskTitle": "Estudiantes Silenciosos",
     "atRiskDescription": "Estudiantes matriculados sin actividad en el tutor en los últimos {days} días — señal temprana de abandono",
     "atRiskMore": "…y {count} estudiantes más. Exporta la lista completa en la página de estudiantes.",

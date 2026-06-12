@@ -136,6 +136,43 @@ export default function AnalyticsPage() {
     toast.success(t('refreshSuccess'));
   };
 
+  // Download an array of rows as a CSV file (Excel-friendly: UTF-8 BOM + CRLF).
+  const downloadCsv = (filename: string, headers: string[], rows: (string | number)[][]) => {
+    const escape = (value: string | number) => {
+      const str = String(value ?? '');
+      return /[",\n;]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
+    };
+    const csv = [headers, ...rows].map((row) => row.map(escape).join(',')).join('\r\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportRiskPredictions = () => {
+    if (!riskPredictions?.students.length) return;
+    downloadCsv(
+      `risk-predictions-${format(new Date(), 'yyyy-MM-dd')}.csv`,
+      [t('export.studentName'), t('export.email'), t('riskColSignal'), t('riskColRisk'), t('riskColCurrent'), t('riskColPrevious'), t('export.activeCourses')],
+      riskPredictions.students.map((s) => [
+        s.name, s.email, t(`riskSignal.${s.signal}`), s.riskLevel,
+        s.messagesCurrentWindow, s.messagesPreviousWindow, s.courseNames.join('; '),
+      ])
+    );
+  };
+
+  const exportAtRisk = () => {
+    if (!atRisk?.students.length) return;
+    downloadCsv(
+      `silent-students-${format(new Date(), 'yyyy-MM-dd')}.csv`,
+      [t('export.studentName'), t('export.email'), t('export.activeCourses')],
+      atRisk.students.map((s) => [s.name, s.email, s.courseNames.join('; ')])
+    );
+  };
+
   const handleExportPDF = () => {
     exportAnalyticsToPDF({
       summary: { overview: { uniqueStudents, totalMessages: 0, activeModules: 0, activeCourses: 0, totalCostUSD: 0 } } as any,
@@ -314,13 +351,21 @@ export default function AnalyticsPage() {
           {riskPredictions && riskPredictions.students.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingDown className="h-5 w-5 text-red-500" />
-                  {t('riskPredictionsTitle')}
-                </CardTitle>
-                <CardDescription>
-                  {t('riskPredictionsDescription', { days: riskPredictions.windowDays })}
-                </CardDescription>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingDown className="h-5 w-5 text-red-500" />
+                      {t('riskPredictionsTitle')}
+                    </CardTitle>
+                    <CardDescription className="mt-1.5">
+                      {t('riskPredictionsDescription', { days: riskPredictions.windowDays })}
+                    </CardDescription>
+                  </div>
+                  <Button onClick={exportRiskPredictions} variant="outline" size="sm" className="shrink-0">
+                    <Download className="mr-2 h-4 w-4" />
+                    {t('exportCsv', { count: riskPredictions.students.length })}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -359,11 +404,19 @@ export default function AnalyticsPage() {
           {atRisk && atRisk.students.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <UserX className="h-5 w-5 text-amber-500" />
-                  {t('atRiskTitle')}
-                </CardTitle>
-                <CardDescription>{t('atRiskDescription', { days: atRisk.windowDays })}</CardDescription>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <UserX className="h-5 w-5 text-amber-500" />
+                      {t('atRiskTitle')}
+                    </CardTitle>
+                    <CardDescription className="mt-1.5">{t('atRiskDescription', { days: atRisk.windowDays })}</CardDescription>
+                  </div>
+                  <Button onClick={exportAtRisk} variant="outline" size="sm" className="shrink-0">
+                    <Download className="mr-2 h-4 w-4" />
+                    {t('exportCsv', { count: atRisk.students.length })}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-2 md:grid-cols-2">
