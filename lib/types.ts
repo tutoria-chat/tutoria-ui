@@ -234,6 +234,7 @@ export interface Course {
   universityId: number;
   universityName?: string;
   externalCourseId?: number | null;
+  titleTracks?: string | null;
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -247,6 +248,7 @@ export interface CourseCreate {
   description?: string;
   universityId: number;
   externalCourseId?: number | null;
+  titleTracks?: string | null;
 }
 
 export interface CourseUpdate {
@@ -254,6 +256,7 @@ export interface CourseUpdate {
   code?: string;
   description?: string;
   externalCourseId?: number | null;
+  titleTracks?: string | null;
 }
 
 // Grading Jobs

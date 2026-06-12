@@ -178,7 +178,19 @@
       "validationErrorDesc": "Please check the form fields and fix the errors before saving.",
       "externalCourseIdLabel": "Platform Course ID",
       "externalCourseIdPlaceholder": "e.g. 12345 or paste a URL",
-      "externalCourseIdHelp": "This ID must match your external platform's Course ID to enable automatic grading of written assessments."
+      "externalCourseIdHelp": "This ID must match your external platform's Course ID to enable automatic grading of written assessments.",
+      "titleTracksLabel": "Title Areas",
+      "titleTracksPlaceholder": "Select areas...",
+      "titleTracksHelp": "Students earn titles (Apprentice/Master/Legend) by accumulating XP in the areas this course counts toward. Leave empty to auto-detect the area from the course name.",
+      "tracks": {
+        "math": "Mathematics",
+        "programming": "Programming",
+        "science": "Sciences",
+        "health": "Health",
+        "business": "Business",
+        "language": "Languages",
+        "humanities": "Humanities"
+      }
     },
     "edit": {
       "title": "Edit Course",

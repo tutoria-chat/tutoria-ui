@@ -120,7 +120,19 @@
       "validationErrorDesc": "Por favor, verifique os campos do formulário e corrija os erros antes de salvar.",
       "externalCourseIdLabel": "ID da Disciplina na Plataforma",
       "externalCourseIdPlaceholder": "ex.: 12345 ou cole uma URL",
-      "externalCourseIdHelp": "Este ID deve corresponder ao ID da disciplina na sua plataforma externa para habilitar a correção automática de avaliações dissertativas."
+      "externalCourseIdHelp": "Este ID deve corresponder ao ID da disciplina na sua plataforma externa para habilitar a correção automática de avaliações dissertativas.",
+      "titleTracksLabel": "Áreas para Títulos",
+      "titleTracksPlaceholder": "Selecione as áreas...",
+      "titleTracksHelp": "Os alunos ganham títulos (Aprendiz/Mestre/Lenda) acumulando XP nas áreas que este curso conta. Se vazio, a área é detectada automaticamente pelo nome do curso.",
+      "tracks": {
+        "math": "Matemática",
+        "programming": "Programação",
+        "science": "Ciências",
+        "health": "Saúde",
+        "business": "Negócios",
+        "language": "Línguas",
+        "humanities": "Humanas"
+      }
     },
     "edit": {
       "title": "Editar Disciplina",

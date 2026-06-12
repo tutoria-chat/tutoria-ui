@@ -120,7 +120,19 @@
       "validationErrorDesc": "Por favor verifica los campos del formulario y corrige los errores antes de guardar.",
       "externalCourseIdLabel": "ID del Curso en la Plataforma",
       "externalCourseIdPlaceholder": "ej. 12345 o pega una URL",
-      "externalCourseIdHelp": "Este ID debe coincidir con el ID del curso en tu plataforma externa para habilitar la corrección automática de evaluaciones escritas."
+      "externalCourseIdHelp": "Este ID debe coincidir con el ID del curso en tu plataforma externa para habilitar la corrección automática de evaluaciones escritas.",
+      "titleTracksLabel": "Áreas para Títulos",
+      "titleTracksPlaceholder": "Selecciona las áreas...",
+      "titleTracksHelp": "Los estudiantes ganan títulos (Aprendiz/Maestro/Leyenda) acumulando XP en las áreas que este curso cuenta. Si está vacío, el área se detecta automáticamente por el nombre del curso.",
+      "tracks": {
+        "math": "Matemáticas",
+        "programming": "Programación",
+        "science": "Ciencias",
+        "health": "Salud",
+        "business": "Negocios",
+        "language": "Lenguas",
+        "humanities": "Humanidades"
+      }
     },
     "edit": {
       "title": "Editar Curso",

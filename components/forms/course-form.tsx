@@ -49,6 +49,9 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     universityId: course?.universityId || initialUniversityId || user?.universityId || '',
     externalCourseId: course?.externalCourseId?.toString() ?? '',
   });
+  const [titleTracks, setTitleTracks] = useState<string[]>(
+    course?.titleTracks ? course.titleTracks.split(',').map(s => s.trim()).filter(Boolean) : []
+  );
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
@@ -142,6 +145,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         description: formData.description.trim() || undefined,
         universityId: Number(formData.universityId),
         externalCourseId: formData.externalCourseId ? parseInt(formData.externalCourseId, 10) : null,
+        titleTracks: titleTracks.length > 0 ? titleTracks.join(',') : '',
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -274,6 +278,31 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
               </FormItem>
             </FormField>
           )}
+
+          {/* Discipline tracks this course counts toward for student titles */}
+          <FormField>
+            <FormItem>
+              <FormLabel htmlFor="titleTracks">
+                {t('titleTracksLabel')}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">({t('optional')})</span>
+              </FormLabel>
+              <MultiSelect
+                options={[
+                  { value: 'math', label: t('tracks.math') },
+                  { value: 'programming', label: t('tracks.programming') },
+                  { value: 'science', label: t('tracks.science') },
+                  { value: 'health', label: t('tracks.health') },
+                  { value: 'business', label: t('tracks.business') },
+                  { value: 'language', label: t('tracks.language') },
+                  { value: 'humanities', label: t('tracks.humanities') },
+                ]}
+                selected={titleTracks}
+                onChange={setTitleTracks}
+                placeholder={t('titleTracksPlaceholder')}
+              />
+              <p className="text-xs text-muted-foreground">{t('titleTracksHelp')}</p>
+            </FormItem>
+          </FormField>
 
           {/* Optional Professor Selection — create mode only, shown when university is set */}
           {isCreateMode && formData.universityId && (
