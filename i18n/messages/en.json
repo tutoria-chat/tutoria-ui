@@ -3728,6 +3728,20 @@
     },
     "aiSummaryTitle": "Daily AI Briefing",
     "aiSummaryDescription": "AI-written summary of {date} activity",
+    "tabs": {
+      "overview": "Overview",
+      "risk": "Engagement & Risk",
+      "content": "Content",
+      "quizzes": "Quizzes"
+    },
+    "riskPredictionsTitle": "Academic Risk Predictions",
+    "riskPredictionsDescription": "Signals from the last {days} days compared with the previous period: who vanished, who is fading and who never showed up",
+    "riskMessages": "{current} msgs now · {previous} before",
+    "riskSignal": {
+      "inactive": "Never active",
+      "went_quiet": "Went quiet",
+      "declining": "Declining"
+    },
     "atRiskTitle": "Students Going Quiet",
     "atRiskDescription": "Enrolled students with no tutor activity in the last {days} days — early evasion signal",
     "atRiskMore": "…and {count} more students. Export the full list from the students page.",

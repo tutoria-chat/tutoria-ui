@@ -1319,6 +1319,26 @@ export interface AtRiskStudentsDto {
   students: AtRiskStudentDto[];
 }
 
+export interface RiskPredictionsDto {
+  windowDays: number;
+  totalEnrolled: number;
+  highRiskCount: number;
+  mediumRiskCount: number;
+  students: RiskStudentDto[];
+}
+
+export interface RiskStudentDto {
+  studentId: number;
+  name: string;
+  email: string;
+  riskLevel: 'high' | 'medium';
+  signal: 'inactive' | 'went_quiet' | 'declining';
+  messagesCurrentWindow: number;
+  messagesPreviousWindow: number;
+  lastActivityAt?: string | null;
+  courseNames: string[];
+}
+
 export interface AtRiskStudentDto {
   studentId: number;
   name: string;

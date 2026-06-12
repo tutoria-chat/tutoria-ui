@@ -4050,6 +4050,20 @@
     },
     "aiSummaryTitle": "Briefing Diario de IA",
     "aiSummaryDescription": "Resumen escrito por IA de la actividad de {date}",
+    "tabs": {
+      "overview": "Visión General",
+      "risk": "Compromiso y Riesgo",
+      "content": "Contenido",
+      "quizzes": "Quizzes"
+    },
+    "riskPredictionsTitle": "Predicción de Riesgo Académico",
+    "riskPredictionsDescription": "Señales de los últimos {days} días comparadas con el período anterior: quién desapareció, quién se está apagando y quién nunca apareció",
+    "riskMessages": "{current} msgs ahora · {previous} antes",
+    "riskSignal": {
+      "inactive": "Nunca activo",
+      "went_quiet": "Dejó de usar",
+      "declining": "En descenso"
+    },
     "atRiskTitle": "Estudiantes Silenciosos",
     "atRiskDescription": "Estudiantes matriculados sin actividad en el tutor en los últimos {days} días — señal temprana de abandono",
     "atRiskMore": "…y {count} estudiantes más. Exporta la lista completa en la página de estudiantes.",
