@@ -41,6 +41,7 @@ import type {
   CourseStatsResponseDto,
   ModuleStatsResponseDto,
   PedagogicalAlertsResponseDto,
+  ExecutiveSummaryDto,
   DailyAISummaryDto,
   ModuleAccessToken,
   ModuleAccessTokenCreate,
@@ -1420,6 +1421,10 @@ class TutoriaAPIClient {
 
   async getAnalyticsPedagogicalAlerts(days = 14, universityId?: number): Promise<PedagogicalAlertsResponseDto> {
     return this.get('/api/analytics/pedagogical-alerts', { days, universityId });
+  }
+
+  async getAnalyticsExecutiveSummary(days = 30, universityId?: number): Promise<ExecutiveSummaryDto> {
+    return this.get('/api/analytics/executive-summary', { days, universityId });
   }
 
   async getAnalyticsDailyAISummaries(count = 7, universityId?: number): Promise<DailyAISummaryDto[]> {

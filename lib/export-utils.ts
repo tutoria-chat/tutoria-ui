@@ -7,7 +7,115 @@ import type {
   TodayCostDto,
   FrequentQuestionDto,
   StudentActivitySummaryDto,
+  ExecutiveSummaryDto,
 } from './types';
+
+export interface ExecutiveReportLabels {
+  title: string;
+  institution: string;
+  period: string;
+  generated: string;
+  days: string;
+  engagement: string;
+  courses: string;
+  enrolled: string;
+  active: string;
+  activeRate: string;
+  atRisk: string;
+  totalXp: string;
+  avgLevel: string;
+  questions: string;
+  quizzes: string;
+  topCourses: string;
+  worstConcepts: string;
+  successRate: string;
+  none: string;
+}
+
+/** Build a clean institution executive report PDF from the summary KPIs. */
+export function exportExecutiveSummaryToPDF(summary: ExecutiveSummaryDto, labels: ExecutiveReportLabels): void {
+  const doc = new jsPDF();
+  let y = 20;
+  const trunc = (s: string, n = 72) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+  const checkPage = () => { if (y > 272) { doc.addPage(); y = 20; } };
+
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(labels.title, 105, y, { align: 'center' });
+  y += 9;
+
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  if (summary.universityName) {
+    doc.text(`${labels.institution}: ${summary.universityName}`, 105, y, { align: 'center' });
+    y += 6;
+  }
+  doc.text(`${labels.period}: ${summary.windowDays} ${labels.days}`, 105, y, { align: 'center' });
+  y += 6;
+  doc.text(`${labels.generated}: ${new Date(summary.generatedAt).toLocaleString()}`, 105, y, { align: 'center' });
+  y += 13;
+
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(labels.engagement, 14, y);
+  y += 8;
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  const rows: [string, string][] = [
+    [labels.courses, String(summary.totalCourses)],
+    [labels.enrolled, String(summary.totalEnrolled)],
+    [`${labels.active} (${labels.activeRate})`, `${summary.totalActive} (${summary.activeRate}%)`],
+    [labels.atRisk, `${summary.atRisk} (${summary.atRiskRate}%)`],
+    [labels.totalXp, summary.totalXp.toLocaleString()],
+    [labels.avgLevel, String(summary.avgLevel)],
+    [labels.questions, String(summary.totalQuestions)],
+    [labels.quizzes, String(summary.totalQuizzes)],
+  ];
+  rows.forEach(([k, v]) => {
+    doc.text(`${k}:`, 16, y);
+    doc.text(v, 120, y);
+    y += 6;
+    checkPage();
+  });
+  y += 6;
+
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(labels.topCourses, 14, y);
+  y += 8;
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  if (summary.topCourses.length === 0) {
+    doc.text(labels.none, 16, y);
+    y += 6;
+  } else {
+    summary.topCourses.forEach((c) => {
+      doc.text(trunc(`• ${c.courseName} — ${c.active}/${c.enrolled} ${labels.active.toLowerCase()}`), 16, y);
+      y += 6;
+      checkPage();
+    });
+  }
+  y += 6;
+
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text(labels.worstConcepts, 14, y);
+  y += 8;
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  if (summary.worstConcepts.length === 0) {
+    doc.text(labels.none, 16, y);
+    y += 6;
+  } else {
+    summary.worstConcepts.forEach((c) => {
+      doc.text(trunc(`• ${c.concept} (${c.moduleName}) — ${c.successRate}% ${labels.successRate}`), 16, y);
+      y += 6;
+      checkPage();
+    });
+  }
+
+  doc.save(`executive-summary-${new Date().toISOString().slice(0, 10)}.pdf`);
+}
 
 // Extend jsPDF type to include autoTable properties
 interface jsPDFWithAutoTable extends jsPDF {

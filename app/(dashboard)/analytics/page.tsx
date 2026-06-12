@@ -17,7 +17,7 @@ import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, A
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
-import { exportAnalyticsToPDF } from '@/lib/export-utils';
+import { exportAnalyticsToPDF, exportExecutiveSummaryToPDF } from '@/lib/export-utils';
 import type {
   AnalyticsFilterDto,
   QuestionsPerModuleDto,
@@ -201,6 +201,36 @@ export default function AnalyticsPage() {
     );
   };
 
+  const handleExecutiveReport = async () => {
+    try {
+      const summary = await apiClient.getAnalyticsExecutiveSummary(30, selectedUniversityId);
+      exportExecutiveSummaryToPDF(summary, {
+        title: t('exec.title'),
+        institution: t('exec.institution'),
+        period: t('exec.period'),
+        generated: t('exec.generated'),
+        days: t('exec.days'),
+        engagement: t('exec.engagement'),
+        courses: t('exec.courses'),
+        enrolled: t('exec.enrolled'),
+        active: t('exec.active'),
+        activeRate: t('exec.activeRate'),
+        atRisk: t('exec.atRisk'),
+        totalXp: t('exec.totalXp'),
+        avgLevel: t('exec.avgLevel'),
+        questions: t('exec.questions'),
+        quizzes: t('exec.quizzes'),
+        topCourses: t('exec.topCourses'),
+        worstConcepts: t('exec.worstConcepts'),
+        successRate: t('exec.successRate'),
+        none: t('exec.none'),
+      });
+      toast.success(t('exec.success'));
+    } catch (error: any) {
+      toast.error(`${t('exec.error')}: ${error?.message ?? ''}`);
+    }
+  };
+
   const handleExportPDF = () => {
     exportAnalyticsToPDF({
       summary: { overview: { uniqueStudents, totalMessages: 0, activeModules: 0, activeCourses: 0, totalCostUSD: 0 } } as any,
@@ -290,6 +320,11 @@ export default function AnalyticsPage() {
           <Button onClick={handleExportPDF} variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
             PDF
+          </Button>
+
+          <Button onClick={handleExecutiveReport} variant="outline" size="sm">
+            <Download className="mr-2 h-4 w-4" />
+            {t('exec.button')}
           </Button>
 
           <Button onClick={handleRefresh} variant="outline" size="sm" disabled={refreshing}>

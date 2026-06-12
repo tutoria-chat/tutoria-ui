@@ -1376,6 +1376,24 @@ export interface PedagogicalAlertsResponseDto {
   alerts: PedagogicalAlertDto[];
 }
 
+export interface ExecutiveSummaryDto {
+  windowDays: number;
+  universityName?: string | null;
+  generatedAt: string;
+  totalCourses: number;
+  totalEnrolled: number;
+  totalActive: number;
+  activeRate: number;
+  atRisk: number;
+  atRiskRate: number;
+  totalXp: number;
+  avgLevel: number;
+  totalQuestions: number;
+  totalQuizzes: number;
+  topCourses: Array<{ courseName: string; enrolled: number; active: number }>;
+  worstConcepts: Array<{ concept: string; moduleName: string; successRate: number }>;
+}
+
 export interface RiskStudentDto {
   studentId: number;
   name: string;
