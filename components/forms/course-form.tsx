@@ -9,6 +9,7 @@ import { Combobox } from '@/components/ui/combobox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
@@ -52,6 +53,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   const [titleTracks, setTitleTracks] = useState<string[]>(
     course?.titleTracks ? course.titleTracks.split(',').map(s => s.trim()).filter(Boolean) : []
   );
+  const [enableEnem, setEnableEnem] = useState<boolean>(course?.enableEnem ?? false);
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
@@ -146,6 +148,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         universityId: Number(formData.universityId),
         externalCourseId: formData.externalCourseId ? parseInt(formData.externalCourseId, 10) : null,
         titleTracks: titleTracks.length > 0 ? titleTracks.join(',') : '',
+        enableEnem,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -301,6 +304,24 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
                 placeholder={t('titleTracksPlaceholder')}
               />
               <p className="text-xs text-muted-foreground">{t('titleTracksHelp')}</p>
+            </FormItem>
+          </FormField>
+
+          {/* ENEM/Vestibular toggle — off by default; only pre-vestibular courses enable it */}
+          <FormField>
+            <FormItem>
+              <div className="flex items-center justify-between gap-4 rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel htmlFor="enableEnem">{t('enableEnemLabel')}</FormLabel>
+                  <p className="text-xs text-muted-foreground">{t('enableEnemHelp')}</p>
+                </div>
+                <Switch
+                  id="enableEnem"
+                  checked={enableEnem}
+                  onCheckedChange={setEnableEnem}
+                  disabled={isLoading}
+                />
+              </div>
             </FormItem>
           </FormField>
 

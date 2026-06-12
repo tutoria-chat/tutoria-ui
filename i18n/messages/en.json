@@ -182,6 +182,8 @@
       "titleTracksLabel": "Title Areas",
       "titleTracksPlaceholder": "Select areas...",
       "titleTracksHelp": "Students earn titles (Apprentice/Master/Legend) by accumulating XP in the areas this course counts toward. Leave empty to auto-detect the area from the course name.",
+      "enableEnemLabel": "Enable ENEM / Vestibular prep",
+      "enableEnemHelp": "Shows the ENEM/Vestibular mock-exam tab to this course's students. Leave off for university and regular courses.",
       "tracks": {
         "math": "Mathematics",
         "programming": "Programming",

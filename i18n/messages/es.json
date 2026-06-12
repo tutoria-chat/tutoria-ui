@@ -124,6 +124,8 @@
       "titleTracksLabel": "Áreas para Títulos",
       "titleTracksPlaceholder": "Selecciona las áreas...",
       "titleTracksHelp": "Los estudiantes ganan títulos (Aprendiz/Maestro/Leyenda) acumulando XP en las áreas que este curso cuenta. Si está vacío, el área se detecta automáticamente por el nombre del curso.",
+      "enableEnemLabel": "Activar preparación ENEM / Vestibular",
+      "enableEnemHelp": "Muestra la pestaña de simulacros ENEM/Vestibular a los estudiantes de este curso. Déjalo desactivado para cursos universitarios y regulares.",
       "tracks": {
         "math": "Matemáticas",
         "programming": "Programación",
