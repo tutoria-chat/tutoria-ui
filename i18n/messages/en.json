@@ -184,6 +184,16 @@
       "titleTracksHelp": "Students earn titles (Apprentice/Master/Legend) by accumulating XP in the areas this course counts toward. Leave empty to auto-detect the area from the course name.",
       "enableEnemLabel": "Enable ENEM / Vestibular prep",
       "enableEnemHelp": "Shows the ENEM/Vestibular mock-exam tab to this course's students. Leave off for university and regular courses.",
+      "enemAreaLabel": "ENEM area",
+      "enemAreaPlaceholder": "Select the area...",
+      "enemAreaHelp": "Questions are auto-generated for this area — students never have to generate anything.",
+      "enemAreaRequired": "Select an ENEM area",
+      "enemAreas": {
+        "matematica": "Mathematics",
+        "linguagens": "Languages & Codes",
+        "natureza": "Natural Sciences",
+        "humanas": "Human Sciences"
+      },
       "tracks": {
         "math": "Mathematics",
         "programming": "Programming",

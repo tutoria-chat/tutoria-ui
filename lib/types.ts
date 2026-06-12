@@ -236,6 +236,7 @@ export interface Course {
   externalCourseId?: number | null;
   titleTracks?: string | null;
   enableEnem?: boolean;
+  enemArea?: string | null;
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -251,6 +252,7 @@ export interface CourseCreate {
   externalCourseId?: number | null;
   titleTracks?: string | null;
   enableEnem?: boolean;
+  enemArea?: string | null;
 }
 
 export interface CourseUpdate {
@@ -260,6 +262,7 @@ export interface CourseUpdate {
   externalCourseId?: number | null;
   titleTracks?: string | null;
   enableEnem?: boolean;
+  enemArea?: string | null;
 }
 
 // Grading Jobs

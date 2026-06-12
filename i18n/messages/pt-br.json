@@ -126,6 +126,16 @@
       "titleTracksHelp": "Os alunos ganham títulos (Aprendiz/Mestre/Lenda) acumulando XP nas áreas que este curso conta. Se vazio, a área é detectada automaticamente pelo nome do curso.",
       "enableEnemLabel": "Ativar preparação ENEM / Vestibular",
       "enableEnemHelp": "Mostra a aba de simulados ENEM/Vestibular para os alunos deste curso. Deixe desativado para cursos universitários e regulares.",
+      "enemAreaLabel": "Área do ENEM",
+      "enemAreaPlaceholder": "Selecione a área...",
+      "enemAreaHelp": "As questões são geradas automaticamente para esta área — os alunos nunca precisam gerar nada.",
+      "enemAreaRequired": "Selecione uma área do ENEM",
+      "enemAreas": {
+        "matematica": "Matemática",
+        "linguagens": "Linguagens e Códigos",
+        "natureza": "Ciências da Natureza",
+        "humanas": "Ciências Humanas"
+      },
       "tracks": {
         "math": "Matemática",
         "programming": "Programação",

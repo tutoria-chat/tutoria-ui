@@ -54,6 +54,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     course?.titleTracks ? course.titleTracks.split(',').map(s => s.trim()).filter(Boolean) : []
   );
   const [enableEnem, setEnableEnem] = useState<boolean>(course?.enableEnem ?? false);
+  const [enemArea, setEnemArea] = useState<string>(course?.enemArea ?? '');
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
@@ -126,6 +127,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     if (!formData.name.trim()) newErrors.name = t('nameRequired');
     if (!formData.code.trim()) newErrors.code = t('codeRequired');
     if (!formData.universityId) newErrors.universityId = t('universityRequired');
+    if (enableEnem && !enemArea) newErrors.enemArea = t('enemAreaRequired');
 
     setErrors(newErrors);
 
@@ -149,6 +151,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         externalCourseId: formData.externalCourseId ? parseInt(formData.externalCourseId, 10) : null,
         titleTracks: titleTracks.length > 0 ? titleTracks.join(',') : '',
         enableEnem,
+        enemArea: enableEnem ? (enemArea || null) : null,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -322,6 +325,24 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
                   disabled={isLoading}
                 />
               </div>
+              {enableEnem && (
+                <div className="mt-3">
+                  <FormLabel htmlFor="enemArea">{t('enemAreaLabel')}</FormLabel>
+                  <Combobox
+                    options={[
+                      { value: 'matematica', label: t('enemAreas.matematica') },
+                      { value: 'linguagens', label: t('enemAreas.linguagens') },
+                      { value: 'natureza', label: t('enemAreas.natureza') },
+                      { value: 'humanas', label: t('enemAreas.humanas') },
+                    ]}
+                    value={enemArea}
+                    onValueChange={setEnemArea}
+                    placeholder={t('enemAreaPlaceholder')}
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">{t('enemAreaHelp')}</p>
+                  {errors.enemArea && <FormMessage>{errors.enemArea}</FormMessage>}
+                </div>
+              )}
             </FormItem>
           </FormField>
 
