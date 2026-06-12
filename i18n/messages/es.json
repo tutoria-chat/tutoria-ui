@@ -1,4 +1,18 @@
 {
+  "titles": {
+    "hidden": "El Estudiante de la Luz",
+    "tiers": { "aprendiz": "Aprendiz", "mestre": "Maestro", "lenda": "Leyenda" },
+    "tracks": {
+      "math": "Matemáticas",
+      "programming": "Programación",
+      "science": "Ciencias",
+      "health": "Salud",
+      "business": "Negocios",
+      "language": "Lenguajes",
+      "humanities": "Humanidades"
+    },
+    "globals": { "veterano": "Veterano", "imortal": "Inmortal" }
+  },
   "pages": {
     "login": "Iniciar sesión"
   },

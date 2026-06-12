@@ -1,4 +1,18 @@
 {
+  "titles": {
+    "hidden": "The Student of Light",
+    "tiers": { "aprendiz": "Apprentice", "mestre": "Master", "lenda": "Legend" },
+    "tracks": {
+      "math": "Mathematics",
+      "programming": "Programming",
+      "science": "Sciences",
+      "health": "Health",
+      "business": "Business",
+      "language": "Languages",
+      "humanities": "Humanities"
+    },
+    "globals": { "veterano": "Veteran", "imortal": "Immortal" }
+  },
   "pages": {
     "login": "Login"
   },

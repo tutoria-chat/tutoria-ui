@@ -617,6 +617,14 @@ export interface StudentCourseEnrollment {
   enrolledAt: string;
 }
 
+/** The academic title a student chose to display (resolved from the gamification rollup). */
+export interface EquippedTitle {
+  key: string;
+  type: 'track' | 'global' | 'hidden';
+  track?: string | null;
+  tier?: string | null;
+}
+
 export interface Student {
   id: number;
   username: string;
@@ -628,6 +636,7 @@ export interface Student {
   universityId?: number;
   universityName?: string;
   enrolledCourses: StudentCourseEnrollment[];
+  equippedTitle?: EquippedTitle | null;
   lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
