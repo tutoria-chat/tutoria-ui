@@ -1,5 +1,6 @@
 import { PAGINATION } from './constants';
 import type {
+  EnemBankStatus,
   TokenResponse,
   User,
   UserResponse,
@@ -625,6 +626,15 @@ class TutoriaAPIClient {
   async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
     // This endpoint uses the Python API - must stay snake_case
     return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
+  }
+
+  // Official ENEM question bank (Python API). View is professor+, import is super-admin.
+  async getEnemBank(): Promise<EnemBankStatus> {
+    return this.get('/enem/bank', undefined, false, true);
+  }
+
+  async triggerEnemImport(years?: string[]): Promise<{ started: boolean; status: EnemBankStatus }> {
+    return this.post('/enem/import', { years: years ?? null }, { usePythonAPI: true });
   }
 
   async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ queued_count: number; total_files: number; message: string }> {

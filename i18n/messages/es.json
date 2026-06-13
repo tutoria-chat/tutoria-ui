@@ -1965,6 +1965,26 @@
       "loading": "Cargando..."
     }
   },
+  "enem": {
+    "title": "Banco de Preguntas ENEM",
+    "subtitle": "Preguntas oficiales de exámenes ENEM anteriores disponibles para los simulacros de tus estudiantes.",
+    "total": "{count} preguntas oficiales",
+    "byArea": "Por área",
+    "byYear": "Por año",
+    "areas": {
+      "linguagens": "Lenguajes",
+      "humanas": "Ciencias Humanas",
+      "natureza": "Ciencias de la Naturaleza",
+      "matematica": "Matemáticas"
+    },
+    "noneYet": "Aún no se han importado preguntas.",
+    "manageTitle": "Gestionar el banco",
+    "adminHint": "Las nuevas ediciones se importan automáticamente en cada despliegue. También puedes importar o actualizar un año manualmente aquí.",
+    "importAll": "Importar / actualizar todo",
+    "importStarted": "Importación iniciada — los números se actualizarán en breve.",
+    "importError": "No se pudo iniciar la importación.",
+    "loadError": "No se pudo cargar el banco de preguntas."
+  },
   "sidebar": {
     "dashboard": "Panel",
     "tutorials": "Tutoriales y Guías",
@@ -1972,6 +1992,7 @@
     "myUniversity": "Mi institución educativa",
     "moduleTokens": "Claves de Acceso",
     "students": "Estudiantes",
+    "enemBank": "Banco ENEM",
     "professors": "Profesores",
     "users": "Usuarios",
     "administration": "Administración",

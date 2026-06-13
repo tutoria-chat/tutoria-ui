@@ -1965,6 +1965,26 @@
       "loading": "Loading..."
     }
   },
+  "enem": {
+    "title": "ENEM Question Bank",
+    "subtitle": "Official past-ENEM questions available for your students' practice simulados.",
+    "total": "{count} official questions",
+    "byArea": "By area",
+    "byYear": "By year",
+    "areas": {
+      "linguagens": "Languages",
+      "humanas": "Human Sciences",
+      "natureza": "Natural Sciences",
+      "matematica": "Mathematics"
+    },
+    "noneYet": "No questions imported yet.",
+    "manageTitle": "Manage the bank",
+    "adminHint": "New editions import automatically on deploy. You can also import or refresh a year on demand here.",
+    "importAll": "Import / refresh all",
+    "importStarted": "Import started — counts will update shortly.",
+    "importError": "Could not start the import.",
+    "loadError": "Could not load the question bank."
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutorials & Guides",
@@ -1972,6 +1992,7 @@
     "myUniversity": "My Institution",
     "moduleTokens": "Access Keys",
     "students": "Students",
+    "enemBank": "ENEM Bank",
     "professors": "Professors",
     "users": "Users",
     "administration": "Administration",

@@ -25,6 +25,7 @@ import {
   Bot,
   CreditCard,
   Receipt,
+  Library,
   PanelLeftClose,
   PanelLeftOpen
 } from 'lucide-react';
@@ -105,6 +106,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       href: '/students',
       icon: GraduationCap,
       requiredPermission: 'students:read',
+    },
+    {
+      label: t('enemBank'),
+      href: '/enem',
+      icon: Library,
+      requiredPermission: 'courses:read',
     },
     {
       label: t('subscription'),
