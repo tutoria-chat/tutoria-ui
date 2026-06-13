@@ -620,9 +620,9 @@ export interface StudentCourseEnrollment {
 /** Official ENEM question-bank counts (global, shared across institutions). */
 export interface EnemBankStatus {
   total: number;
-  by_year: Record<string, number>;
-  by_area: Record<string, number>;
-  available_years: string[];
+  byYear: Record<string, number>;
+  byArea: Record<string, number>;
+  availableYears: string[];
 }
 
 /** The academic title a student chose to display (resolved from the gamification rollup). */

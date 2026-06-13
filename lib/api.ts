@@ -628,13 +628,14 @@ class TutoriaAPIClient {
     return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
   }
 
-  // Official ENEM question bank (Python API). View is professor+, import is super-admin.
+  // Official ENEM question bank (.NET management API). View is professor+, import
+  // is super-admin; .NET proxies the actual import to tutoria-api.
   async getEnemBank(): Promise<EnemBankStatus> {
-    return this.get('/enem/bank', undefined, false, true);
+    return this.get('/api/enem/bank');
   }
 
   async triggerEnemImport(years?: string[]): Promise<{ started: boolean; status: EnemBankStatus }> {
-    return this.post('/enem/import', { years: years ?? null }, { usePythonAPI: true });
+    return this.post('/api/enem/import', { years: years ?? null });
   }
 
   async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ queued_count: number; total_files: number; message: string }> {

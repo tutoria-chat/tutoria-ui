@@ -60,9 +60,9 @@ export default function EnemBankPage() {
   }
 
   const total = bank?.total ?? 0;
-  const byArea = bank?.by_area ?? {};
-  const byYear = bank?.by_year ?? {};
-  const availableYears = bank?.available_years ?? [];
+  const byArea = bank?.byArea ?? {};
+  const byYear = bank?.byYear ?? {};
+  const availableYears = bank?.availableYears ?? [];
 
   return (
     <div className="space-y-6">
