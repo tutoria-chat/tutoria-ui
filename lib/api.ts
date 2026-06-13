@@ -1406,6 +1406,10 @@ class TutoriaAPIClient {
     return this.request(`/api/analytics/rankings${query ? `?${query}` : ''}`);
   }
 
+  async recomputeQuizAnalytics(): Promise<{ status: string; modulesAggregated: number }> {
+    return this.post('/api/analytics/recompute-quiz');
+  }
+
   // Audit Logs
   async getAuditLogs(params?: AuditLogFilters): Promise<PaginatedResponse<AuditLog>> {
     return this.get('/api/audit-logs', params);

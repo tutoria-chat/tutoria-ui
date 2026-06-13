@@ -3840,6 +3840,12 @@
       "badges": "badges",
       "empty": "No ranking data yet for this period."
     },
+    "quizRecompute": {
+      "button": "Refresh quiz data",
+      "done": "Quiz data rebuilt ({count} modules).",
+      "failed": "Couldn't rebuild quiz data right now.",
+      "empty": "No quiz data yet. Once students take quizzes it appears here — or hit \"Refresh quiz data\" to rebuild now."
+    },
     "pedagogicalAlertsTitle": "Pedagogical Alerts",
     "pedagogicalAlertsDescription": "Signals that need action: courses emptying out and concepts students are failing",
     "alertEvasion": "{pct}% of {course} students are inactive ({count} students)",

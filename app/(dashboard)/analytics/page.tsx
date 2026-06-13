@@ -93,6 +93,7 @@ export default function AnalyticsPage() {
   const [moduleStats, setModuleStats] = useState<Record<number, ModuleStatsResponseDto>>({});
   const [aiSummaries, setAiSummaries] = useState<DailyAISummaryDto[]>([]);
   const [rankings, setRankings] = useState<RankingsResponseDto | null>(null);
+  const [recomputing, setRecomputing] = useState(false);
 
   const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
     if (!newDateRange?.from) {
@@ -172,6 +173,21 @@ export default function AnalyticsPage() {
     await loadAnalytics();
     setRefreshing(false);
     toast.success(t('refreshSuccess'));
+  };
+
+  // Quiz analytics are aggregated nightly; let staff rebuild them on demand.
+  const handleRecomputeQuiz = async () => {
+    setRecomputing(true);
+    try {
+      const res = await apiClient.recomputeQuizAnalytics();
+      toast.success(t('quizRecompute.done', { count: res?.modulesAggregated ?? 0 }));
+      const qp = await apiClient.getAnalyticsQuizPerformance(undefined, selectedUniversityId);
+      setQuizPerformance(qp);
+    } catch {
+      toast.error(t('quizRecompute.failed'));
+    } finally {
+      setRecomputing(false);
+    }
   };
 
   // Expand a course row and lazy-load its per-module (discipline) breakdown
@@ -691,7 +707,13 @@ export default function AnalyticsPage() {
 
         {/* ── Quiz performance ── */}
         <TabsContent value="quizzes" className="space-y-6">
-          {quizPerformance && quizPerformance.concepts.length > 0 && (
+          <div className="flex justify-end">
+            <Button variant="outline" size="sm" onClick={handleRecomputeQuiz} disabled={recomputing}>
+              <RefreshCw className={`mr-2 h-4 w-4 ${recomputing ? 'animate-spin' : ''}`} />
+              {t('quizRecompute.button')}
+            </Button>
+          </div>
+          {quizPerformance && quizPerformance.concepts.length > 0 ? (
             <>
               <Card>
                 <CardHeader>
@@ -742,6 +764,12 @@ export default function AnalyticsPage() {
                 </Card>
               </div>
             </>
+          ) : (
+            <Card>
+              <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                {t('quizRecompute.empty')}
+              </CardContent>
+            </Card>
           )}
         </TabsContent>
 

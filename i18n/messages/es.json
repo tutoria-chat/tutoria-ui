@@ -4162,6 +4162,12 @@
       "badges": "insignias",
       "empty": "Aún no hay datos de clasificación para este período."
     },
+    "quizRecompute": {
+      "button": "Actualizar datos de quiz",
+      "done": "Datos de quiz reconstruidos ({count} módulos).",
+      "failed": "No se pudieron reconstruir los datos de quiz ahora.",
+      "empty": "Aún no hay datos de quiz. Aparecerán cuando los estudiantes respondan quizzes, o pulsa \"Actualizar datos de quiz\" para reconstruir ahora."
+    },
     "pedagogicalAlertsTitle": "Alertas Pedagógicas",
     "pedagogicalAlertsDescription": "Señales que requieren acción: cursos vaciándose y conceptos con bajo rendimiento",
     "alertEvasion": "{pct}% de los estudiantes de {course} sin actividad ({count} estudiantes)",
