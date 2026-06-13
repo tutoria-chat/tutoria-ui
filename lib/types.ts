@@ -265,6 +265,32 @@ export interface CourseUpdate {
   enemArea?: string | null;
 }
 
+// Semesters (term ranges; drive the "The One" champion title)
+export interface Semester {
+  id: number;
+  universityId: number;
+  universityName?: string;
+  label: string;
+  startsAtUtc: string;
+  endsAtUtc: string;
+  championsAwarded: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SemesterCreate {
+  universityId: number;
+  label: string;
+  startsAtUtc: string;
+  endsAtUtc: string;
+}
+
+export interface SemesterUpdate {
+  label?: string;
+  startsAtUtc?: string;
+  endsAtUtc?: string;
+}
+
 // Grading Jobs
 export interface GradingJob {
   id: number;

@@ -26,6 +26,7 @@ import {
   CreditCard,
   Receipt,
   Library,
+  CalendarRange,
   PanelLeftClose,
   PanelLeftOpen
 } from 'lucide-react';
@@ -132,6 +133,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('aiModels'),
       href: '/models',
       icon: Bot,
+      requiredPermission: 'universities:read',
+    },
+    {
+      label: t('semesters'),
+      href: '/semesters',
+      icon: CalendarRange,
       requiredPermission: 'universities:read',
     },
     {

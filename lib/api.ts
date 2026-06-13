@@ -1,6 +1,9 @@
 import { PAGINATION } from './constants';
 import type {
   EnemBankStatus,
+  Semester,
+  SemesterCreate,
+  SemesterUpdate,
   TokenResponse,
   User,
   UserResponse,
@@ -574,6 +577,23 @@ class TutoriaAPIClient {
 
   async createCourse(data: CourseCreate): Promise<Course> {
     return this.post('/api/courses/', data);
+  }
+
+  // Semesters (term ranges) — drive the "The One" champion title
+  async getSemesters(universityId?: number): Promise<Semester[]> {
+    return this.get('/api/semesters', universityId ? { universityId } : undefined);
+  }
+
+  async createSemester(data: SemesterCreate): Promise<Semester> {
+    return this.post('/api/semesters', data);
+  }
+
+  async updateSemester(id: number, data: SemesterUpdate): Promise<Semester> {
+    return this.put(`/api/semesters/${id}`, data);
+  }
+
+  async deleteSemester(id: number): Promise<void> {
+    await this.delete(`/api/semesters/${id}`);
   }
 
   async getCourse(id: number): Promise<CourseWithDetails> {
