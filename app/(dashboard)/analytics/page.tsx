@@ -13,7 +13,7 @@ import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, AlertTriangle, Brain, ChevronRight, ChevronDown, GraduationCap } from 'lucide-react';
+import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, AlertTriangle, Brain, ChevronRight, ChevronDown, GraduationCap, Trophy, Flame, Zap, Medal, Award, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -29,6 +29,8 @@ import type {
   CourseStatsResponseDto,
   ModuleStatsResponseDto,
   PedagogicalAlertsResponseDto,
+  RankingsResponseDto,
+  RankingValueDto,
   University,
 } from '@/lib/types';
 
@@ -38,6 +40,29 @@ const TopTopicsChart = lazy(() => import('@/components/analytics/top-topics-char
 const QuizHeatmap = lazy(() => import('@/components/analytics/quiz-heatmap').then(m => ({ default: m.QuizHeatmap })));
 const QuizRadarChart = lazy(() => import('@/components/analytics/quiz-radar-chart').then(m => ({ default: m.QuizRadarChart })));
 const CriticalConcepts = lazy(() => import('@/components/analytics/critical-concepts').then(m => ({ default: m.CriticalConcepts })));
+
+// Tier → badge color (mirrors the widget's bronze→crystal ladder)
+const TIER_COLORS: Record<string, string> = {
+  bronze: 'bg-amber-700/15 text-amber-700 dark:text-amber-500',
+  silver: 'bg-slate-400/15 text-slate-500 dark:text-slate-300',
+  gold: 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-400',
+  platinum: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400',
+  diamond: 'bg-sky-500/15 text-sky-600 dark:text-sky-400',
+  crystal: 'bg-fuchsia-500/15 text-fuchsia-600 dark:text-fuchsia-400',
+};
+
+// Equipped-title catalog keys ("math_lenda", "veterano", "cursed_student",
+// "the_one:..") → a readable label. The widget owns localized names; staff just
+// need something legible, so we prettify the key.
+function prettyTitle(key?: string | null): string | null {
+  if (!key) return null;
+  if (key.startsWith('the_one')) return 'The One';
+  return key
+    .split(/[_:]/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
+}
 
 export default function AnalyticsPage() {
   const { user } = useAuth();
@@ -67,6 +92,7 @@ export default function AnalyticsPage() {
   const [expandedCourse, setExpandedCourse] = useState<number | null>(null);
   const [moduleStats, setModuleStats] = useState<Record<number, ModuleStatsResponseDto>>({});
   const [aiSummaries, setAiSummaries] = useState<DailyAISummaryDto[]>([]);
+  const [rankings, setRankings] = useState<RankingsResponseDto | null>(null);
 
   const handleDateRangeChange = (newDateRange: DateRange | undefined) => {
     if (!newDateRange?.from) {
@@ -130,6 +156,7 @@ export default function AnalyticsPage() {
       apiClient.getAnalyticsDailyAISummaries(1, selectedUniversityId).then(setAiSummaries).catch(() => {});
       apiClient.getAnalyticsCourseStats(30, selectedUniversityId).then(setCourseStats).catch(() => {});
       apiClient.getAnalyticsPedagogicalAlerts(14, selectedUniversityId).then(setPedagogicalAlerts).catch(() => {});
+      apiClient.getAnalyticsRankings(selectedUniversityId, filters.startDate, filters.endDate).then(setRankings).catch(() => {});
     } catch (error: any) {
       console.error('Error loading analytics:', error);
       toast.error(`${t('loadError')}: ${error?.message ?? 'Unknown error'}`);
@@ -349,6 +376,7 @@ export default function AnalyticsPage() {
           <TabsTrigger value="courses" className="flex-1">{t('tabs.courses')}</TabsTrigger>
           <TabsTrigger value="content" className="flex-1">{t('tabs.content')}</TabsTrigger>
           <TabsTrigger value="quizzes" className="flex-1">{t('tabs.quizzes')}</TabsTrigger>
+          <TabsTrigger value="rankings" className="flex-1">{t('tabs.rankings')}</TabsTrigger>
         </TabsList>
 
         {/* ── Overview ── */}
@@ -715,6 +743,159 @@ export default function AnalyticsPage() {
               </div>
             </>
           )}
+        </TabsContent>
+
+        {/* ── Rankings & positive highlights ── */}
+        <TabsContent value="rankings" className="space-y-6">
+          {(() => {
+            const valueList = (rows: RankingValueDto[], unit: string) => {
+              if (!rows || rows.length === 0) {
+                return <p className="text-sm text-muted-foreground py-2">{t('rankings.empty')}</p>;
+              }
+              return (
+                <ol className="space-y-2">
+                  {rows.map((r) => {
+                    const title = prettyTitle(r.displayedTitleKey);
+                    return (
+                      <li key={r.studentId} className="flex items-center gap-3">
+                        <span className="w-6 shrink-0 text-sm font-bold tabular-nums text-muted-foreground">
+                          {r.rank}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-sm">
+                          {r.name}
+                          {title && (
+                            <Badge variant="secondary" className="ml-2 align-middle text-[10px]">{title}</Badge>
+                          )}
+                        </span>
+                        <span className="shrink-0 text-sm font-semibold tabular-nums">
+                          {r.value.toLocaleString()} <span className="text-xs font-normal text-muted-foreground">{unit}</span>
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ol>
+              );
+            };
+
+            if (rankings && rankings.totalStudents === 0) {
+              return (
+                <Card>
+                  <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                    {t('rankings.empty')}
+                  </CardContent>
+                </Card>
+              );
+            }
+
+            return (
+              <>
+                {/* Engagement wins — quick counters over the selected period */}
+                {rankings && (
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      { icon: Users, label: t('rankings.activeStudents'), value: rankings.engagement.activeStudents },
+                      { icon: Brain, label: t('rankings.questions'), value: rankings.engagement.questions },
+                      { icon: Zap, label: t('rankings.quizzes'), value: rankings.engagement.quizzes },
+                      { icon: Sparkles, label: t('rankings.studyPlans'), value: rankings.engagement.studyPlans },
+                    ].map((s, i) => (
+                      <Card key={i}>
+                        <CardContent className="flex items-center gap-3 py-4">
+                          <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                            <s.icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="text-2xl font-bold tabular-nums">{s.value.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground">{s.label}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+
+                {/* Top performers — the headline leaderboard */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-yellow-500" />
+                      {t('rankings.topPerformers')}
+                    </CardTitle>
+                    <CardDescription>{t('rankings.topPerformersDesc')}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {rankings && rankings.topPerformers.length > 0 ? (
+                      <ol className="space-y-2">
+                        {rankings.topPerformers.map((r) => {
+                          const title = prettyTitle(r.displayedTitleKey);
+                          return (
+                            <li key={r.studentId} className="flex items-center gap-3">
+                              <span className="w-6 shrink-0 text-sm font-bold tabular-nums text-muted-foreground">{r.rank}</span>
+                              <span className="min-w-0 flex-1 truncate text-sm">
+                                {r.name}
+                                {title && <Badge variant="secondary" className="ml-2 align-middle text-[10px]">{title}</Badge>}
+                              </span>
+                              <Badge className={`shrink-0 capitalize ${TIER_COLORS[r.tier] ?? ''}`} variant="secondary">
+                                {t('rankings.level')} {r.level} · {r.tier}
+                              </Badge>
+                              <span className="w-20 shrink-0 text-right text-sm font-semibold tabular-nums">
+                                {r.totalXp.toLocaleString()} <span className="text-xs font-normal text-muted-foreground">XP</span>
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    ) : (
+                      <p className="text-sm text-muted-foreground py-2">{t('rankings.empty')}</p>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Most improved / streaks / activity / badges */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <TrendingUp className="h-4 w-4 text-emerald-500" />
+                        {t('rankings.mostImproved')}
+                      </CardTitle>
+                      <CardDescription>{t('rankings.mostImprovedDesc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>{valueList(rankings?.mostImproved ?? [], 'XP')}</CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Flame className="h-4 w-4 text-orange-500" />
+                        {t('rankings.longestStreaks')}
+                      </CardTitle>
+                      <CardDescription>{t('rankings.longestStreaksDesc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>{valueList(rankings?.longestStreaks ?? [], t('rankings.days'))}</CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Zap className="h-4 w-4 text-violet-500" />
+                        {t('rankings.mostActive')}
+                      </CardTitle>
+                      <CardDescription>{t('rankings.mostActiveDesc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>{valueList(rankings?.mostActive ?? [], t('rankings.activities'))}</CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Award className="h-4 w-4 text-sky-500" />
+                        {t('rankings.mostBadges')}
+                      </CardTitle>
+                      <CardDescription>{t('rankings.mostBadgesDesc')}</CardDescription>
+                    </CardHeader>
+                    <CardContent>{valueList(rankings?.mostBadges ?? [], t('rankings.badges'))}</CardContent>
+                  </Card>
+                </div>
+              </>
+            );
+          })()}
         </TabsContent>
       </Tabs>
     </div>

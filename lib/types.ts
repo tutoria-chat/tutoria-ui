@@ -1272,6 +1272,45 @@ export interface ConceptPerformanceDto {
   difficulty?: string;
 }
 
+// Rankings / positive highlights (staff-facing gamification leaderboards)
+export interface RankingPerformerDto {
+  rank: number;
+  studentId: number;
+  name: string;
+  totalXp: number;
+  level: number;
+  tier: string;
+  currentStreakDays: number;
+  longestStreakDays: number;
+  displayedTitleKey?: string | null;
+}
+
+export interface RankingValueDto {
+  rank: number;
+  studentId: number;
+  name: string;
+  value: number;
+  displayedTitleKey?: string | null;
+}
+
+export interface EngagementTotalsDto {
+  questions: number;
+  quizzes: number;
+  flashcards: number;
+  studyPlans: number;
+  activeStudents: number;
+}
+
+export interface RankingsResponseDto {
+  topPerformers: RankingPerformerDto[];
+  mostImproved: RankingValueDto[];
+  longestStreaks: RankingValueDto[];
+  mostActive: RankingValueDto[];
+  mostBadges: RankingValueDto[];
+  engagement: EngagementTotalsDto;
+  totalStudents: number;
+}
+
 // Unified dashboard response combining all dashboard data
 export interface UnifiedDashboardResponseDto {
   summary: DashboardSummaryDto;

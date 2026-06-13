@@ -107,6 +107,7 @@ import type {
   QuestionsPerModuleDto,
   TopTopicsResponseDto,
   QuizPerformanceResponseDto,
+  RankingsResponseDto,
   Assignment,
   AssignmentCreate,
   AssignmentUpdate,
@@ -1390,6 +1391,19 @@ class TutoriaAPIClient {
     if (universityId) params.append('universityId', universityId.toString());
     const query = params.toString();
     return this.request(`/api/analytics/quiz/performance${query ? `?${query}` : ''}`);
+  }
+
+  async getAnalyticsRankings(
+    universityId?: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<RankingsResponseDto> {
+    const params = new URLSearchParams();
+    if (universityId) params.append('universityId', universityId.toString());
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    const query = params.toString();
+    return this.request(`/api/analytics/rankings${query ? `?${query}` : ''}`);
   }
 
   // Audit Logs
