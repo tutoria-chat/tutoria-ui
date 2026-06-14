@@ -246,7 +246,10 @@
         "import": {
           "button": "Importar desde PDF",
           "dialogTitle": "Importar calendario desde un archivo",
-          "dialogDesc": "Sube un programa o cronograma (PDF, DOCX, XLSX, CSV) — la IA extrae las fechas, tú revisas y confirmas.",
+          "dialogDesc": "Trae eventos desde un archivo o un calendario externo — revisa y confirma antes de agregarlos.",
+          "fromFile": "Subir archivo",
+          "fromUrl": "Desde enlace de calendario",
+          "urlHint": "Pega la dirección iCal privada de tu calendario. En Google Calendar: Configuración → tu calendario → 'Dirección secreta en formato iCal'. En Outlook: Configuración → Calendario → Calendarios compartidos → Publicar → enlace ICS.",
           "pickFile": "Haz clic para elegir un archivo",
           "extract": "Extraer eventos",
           "extracting": "Leyendo el archivo…",

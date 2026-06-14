@@ -304,7 +304,10 @@
         "import": {
           "button": "Import from PDF",
           "dialogTitle": "Import calendar from a file",
-          "dialogDesc": "Upload a syllabus or schedule (PDF, DOCX, XLSX, CSV) — AI extracts the dates, you review and confirm.",
+          "dialogDesc": "Bring events in from a file or an external calendar — review and confirm before they're added.",
+          "fromFile": "Upload file",
+          "fromUrl": "From calendar link",
+          "urlHint": "Paste your calendar's private iCal address. In Google Calendar: Settings → your calendar → 'Secret address in iCal format'. In Outlook: Settings → Calendar → Shared calendars → Publish → ICS link.",
           "pickFile": "Click to choose a file",
           "extract": "Extract events",
           "extracting": "Reading the file…",

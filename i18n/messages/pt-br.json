@@ -246,7 +246,10 @@
         "import": {
           "button": "Importar de PDF",
           "dialogTitle": "Importar calendário de um arquivo",
-          "dialogDesc": "Envie um plano de ensino ou cronograma (PDF, DOCX, XLSX, CSV) — a IA extrai as datas, você revisa e confirma.",
+          "dialogDesc": "Traga eventos de um arquivo ou de um calendário externo — revise e confirme antes de adicionar.",
+          "fromFile": "Enviar arquivo",
+          "fromUrl": "De um link de calendário",
+          "urlHint": "Cole o endereço iCal privado do seu calendário. No Google Agenda: Configurações → seu calendário → 'Endereço secreto no formato iCal'. No Outlook: Configurações → Calendário → Calendários compartilhados → Publicar → link ICS.",
           "pickFile": "Clique para escolher um arquivo",
           "extract": "Extrair eventos",
           "extracting": "Lendo o arquivo…",

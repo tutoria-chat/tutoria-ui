@@ -1506,6 +1506,10 @@ class TutoriaAPIClient {
     return this.post('/api/calendar-import-jobs', fd, { isFormData: true });
   }
 
+  async createCalendarImportFromUrl(courseId: number, sourceUrl: string): Promise<CalendarImportJob> {
+    return this.post('/api/calendar-import-jobs/from-url', { courseId, sourceUrl });
+  }
+
   async getCalendarImportJob(id: number): Promise<CalendarImportJob> {
     return this.get(`/api/calendar-import-jobs/${id}`);
   }

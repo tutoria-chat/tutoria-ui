@@ -10,7 +10,7 @@
  */
 import React, { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { FileUp, Loader2, Plus, Trash2, Sparkles } from 'lucide-react';
+import { FileUp, Link as LinkIcon, Loader2, Plus, Trash2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -47,7 +47,9 @@ export function CalendarImportDialog({ courseId, open, onOpenChange, onImported 
   const t = useTranslations('courses.detail.calendarTab');
 
   const [phase, setPhase] = useState<'upload' | 'review'>('upload');
+  const [source, setSource] = useState<'file' | 'url'>('file');
   const [file, setFile] = useState<File | null>(null);
+  const [icsUrl, setIcsUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [rows, setRows] = useState<ReviewRow[]>([]);
   const [reminders, setReminders] = useState({ d7: false, d3: false, d2: false, h24: true });
@@ -56,7 +58,9 @@ export function CalendarImportDialog({ courseId, open, onOpenChange, onImported 
 
   const reset = () => {
     setPhase('upload');
+    setSource('file');
     setFile(null);
+    setIcsUrl('');
     setRows([]);
     setBusy(false);
     jobId.current = null;
@@ -67,11 +71,16 @@ export function CalendarImportDialog({ courseId, open, onOpenChange, onImported 
     onOpenChange(next);
   };
 
+  const canExtract = source === 'file' ? !!file : icsUrl.trim().length > 0;
+
   const handleExtract = async () => {
-    if (!file) return;
+    if (!canExtract) return;
     setBusy(true);
     try {
-      const job = await apiClient.createCalendarImportJob(courseId, file);
+      const job =
+        source === 'file'
+          ? await apiClient.createCalendarImportJob(courseId, file!)
+          : await apiClient.createCalendarImportFromUrl(courseId, icsUrl.trim());
       jobId.current = job.id;
       if (job.status === 'failed') {
         toast.error(job.errorMessage || t('import.failed'));
@@ -147,17 +156,51 @@ export function CalendarImportDialog({ courseId, open, onOpenChange, onImported 
 
         {phase === 'upload' ? (
           <div className="space-y-4 py-2">
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-8 text-center hover:bg-muted/40">
-              <FileUp className="h-8 w-8 text-muted-foreground" />
-              <span className="text-sm font-medium">{file ? file.name : t('import.pickFile')}</span>
-              <span className="text-xs text-muted-foreground">PDF, DOCX, XLSX, CSV, TXT — máx 10 MB</span>
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
-                className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              />
-            </label>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant={source === 'file' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSource('file')}
+              >
+                <FileUp className="mr-1 h-4 w-4" />
+                {t('import.fromFile')}
+              </Button>
+              <Button
+                type="button"
+                variant={source === 'url' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setSource('url')}
+              >
+                <LinkIcon className="mr-1 h-4 w-4" />
+                {t('import.fromUrl')}
+              </Button>
+            </div>
+
+            {source === 'file' ? (
+              <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border p-8 text-center hover:bg-muted/40">
+                <FileUp className="h-8 w-8 text-muted-foreground" />
+                <span className="text-sm font-medium">{file ? file.name : t('import.pickFile')}</span>
+                <span className="text-xs text-muted-foreground">PDF, DOCX, XLSX, CSV, TXT — máx 10 MB</span>
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.txt"
+                  className="hidden"
+                  onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                />
+              </label>
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  type="url"
+                  inputMode="url"
+                  placeholder="https://calendar.google.com/calendar/ical/.../basic.ics"
+                  value={icsUrl}
+                  onChange={(e) => setIcsUrl(e.target.value)}
+                />
+                <p className="text-xs text-muted-foreground">{t('import.urlHint')}</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-3 py-2">
@@ -226,7 +269,7 @@ export function CalendarImportDialog({ courseId, open, onOpenChange, onImported 
 
         <DialogFooter>
           {phase === 'upload' ? (
-            <Button onClick={handleExtract} disabled={!file || busy}>
+            <Button onClick={handleExtract} disabled={!canExtract || busy}>
               {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
               {busy ? t('import.extracting') : t('import.extract')}
             </Button>
