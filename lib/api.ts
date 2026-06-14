@@ -39,6 +39,7 @@ import type {
   StudentPaginatedResponse,
   CourseEvent,
   CourseEventCreate,
+  CalendarImportJob,
   CourseEventUpdate,
   AtRiskStudentsDto,
   RiskPredictionsDto,
@@ -1495,6 +1496,25 @@ class TutoriaAPIClient {
 
   async deleteCourseEvent(id: number): Promise<void> {
     return this.delete(`/api/course-events/${id}`);
+  }
+
+  // Calendar import from PDF (upload → AI extract → review → confirm)
+  async createCalendarImportJob(courseId: number, file: globalThis.File): Promise<CalendarImportJob> {
+    const fd = new FormData();
+    fd.append('courseId', String(courseId));
+    fd.append('file', file);
+    return this.post('/api/calendar-import-jobs', fd, { isFormData: true });
+  }
+
+  async getCalendarImportJob(id: number): Promise<CalendarImportJob> {
+    return this.get(`/api/calendar-import-jobs/${id}`);
+  }
+
+  async confirmCalendarImport(
+    id: number,
+    events: CourseEventCreate[],
+  ): Promise<{ status: string; created: number }> {
+    return this.post(`/api/calendar-import-jobs/${id}/confirm`, { events });
   }
 
   async getPlans(): Promise<Plan[]> {

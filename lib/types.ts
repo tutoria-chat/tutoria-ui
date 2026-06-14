@@ -1534,6 +1534,28 @@ export interface CourseEvent {
   isSynthesized: boolean;
 }
 
+export interface ExtractedCalendarEvent {
+  title: string;
+  eventType: CourseEventType;
+  date?: string | null;   // YYYY-MM-DD (São Paulo)
+  time?: string | null;   // HH:MM (São Paulo) or empty
+  description?: string | null;
+}
+
+export interface CalendarImportJob {
+  id: number;
+  courseId: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'confirmed';
+  extractedCount: number;
+  confirmedCount: number;
+  errorMessage?: string | null;
+  originalFilename?: string | null;
+  processedAt?: string | null;
+  confirmedAt?: string | null;
+  createdAt: string;
+  events: ExtractedCalendarEvent[];
+}
+
 export interface CourseEventCreate {
   courseId: number;
   moduleId?: number | null;

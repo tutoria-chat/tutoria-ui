@@ -300,6 +300,22 @@
           "remind2d": "2 days before",
           "remind24h": "24 hours before",
           "noRemindersHint": "No reminders selected — students will not be emailed about this event."
+        },
+        "import": {
+          "button": "Import from PDF",
+          "dialogTitle": "Import calendar from a file",
+          "dialogDesc": "Upload a syllabus or schedule (PDF, DOCX, XLSX, CSV) — AI extracts the dates, you review and confirm.",
+          "pickFile": "Click to choose a file",
+          "extract": "Extract events",
+          "extracting": "Reading the file…",
+          "noEvents": "No dated events were found in this file.",
+          "failed": "Could not read the file. Try another one.",
+          "reviewHint": "Review and fix the extracted events, then confirm to add them to the calendar.",
+          "applyReminders": "Email reminders to apply to all imported events:",
+          "confirm": "Confirm & add events",
+          "confirming": "Adding events…",
+          "confirmSuccess": "{count} events added to the calendar!",
+          "removeRow": "Remove"
         }
       },
       "modulesTab": {

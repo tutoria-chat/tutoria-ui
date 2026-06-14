@@ -242,6 +242,22 @@
           "remind2d": "2 dias antes",
           "remind24h": "24 horas antes",
           "noRemindersHint": "Nenhum lembrete selecionado — os alunos não receberão e-mails sobre este evento."
+        },
+        "import": {
+          "button": "Importar de PDF",
+          "dialogTitle": "Importar calendário de um arquivo",
+          "dialogDesc": "Envie um plano de ensino ou cronograma (PDF, DOCX, XLSX, CSV) — a IA extrai as datas, você revisa e confirma.",
+          "pickFile": "Clique para escolher um arquivo",
+          "extract": "Extrair eventos",
+          "extracting": "Lendo o arquivo…",
+          "noEvents": "Nenhum evento com data foi encontrado neste arquivo.",
+          "failed": "Não foi possível ler o arquivo. Tente outro.",
+          "reviewHint": "Revise e corrija os eventos extraídos, depois confirme para adicioná-los ao calendário.",
+          "applyReminders": "Lembretes por e-mail aplicados a todos os eventos importados:",
+          "confirm": "Confirmar e adicionar eventos",
+          "confirming": "Adicionando eventos…",
+          "confirmSuccess": "{count} eventos adicionados ao calendário!",
+          "removeRow": "Remover"
         }
       },
       "modulesTab": {
