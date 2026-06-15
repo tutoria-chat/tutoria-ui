@@ -2030,6 +2030,7 @@
   "sidebar": {
     "dashboard": "Panel",
     "tutorials": "Tutoriales y Guías",
+    "userGuide": "Guía del Usuario",
     "universities": "Instituciones Educativas",
     "myUniversity": "Mi institución educativa",
     "moduleTokens": "Claves de Acceso",
@@ -2329,6 +2330,12 @@
     "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo o vuelve a la página de inicio.",
     "tryAgain": "Intentar de nuevo",
     "homePage": "Página de inicio"
+  },
+  "userGuide": {
+    "title": "Guía del Usuario",
+    "subtitle": "La guía completa para operar TutorIA — léela aquí o descárgala en Word.",
+    "downloadLabel": "Descargar en Word:",
+    "unavailable": "No se pudo cargar la guía ahora. Inténtalo de nuevo."
   },
   "tutorials": {
     "title": "Tutoriales y Guías del Sistema",

@@ -91,6 +91,11 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       requiredPermission: 'courses:read',
     }] : []),
     {
+      label: t('userGuide'),
+      href: '/user-guide',
+      icon: Library,
+    },
+    {
       label: t('universities'),
       href: '/universities',
       icon: Building2,

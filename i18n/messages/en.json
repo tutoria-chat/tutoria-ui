@@ -2030,6 +2030,7 @@
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutorials & Guides",
+    "userGuide": "User Guide",
     "universities": "Institutions",
     "myUniversity": "My Institution",
     "moduleTokens": "Access Keys",
@@ -2329,6 +2330,12 @@
     "unexpectedError": "An unexpected error occurred. Please try again or go back to the home page.",
     "tryAgain": "Try Again",
     "homePage": "Home Page"
+  },
+  "userGuide": {
+    "title": "User Guide",
+    "subtitle": "The complete guide to running TutorIA — read it here or download it as Word.",
+    "downloadLabel": "Download as Word:",
+    "unavailable": "The guide couldn't be loaded right now. Please try again."
   },
   "tutorials": {
     "title": "System Tutorials & Guides",
