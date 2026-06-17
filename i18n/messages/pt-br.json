@@ -342,6 +342,13 @@
         "unenrollConfirm": "Desmatricular",
         "unenrollButton": "Desmatricular da disciplina",
         "unenrollSuccess": "Estudante desmatriculado com sucesso!",
+        "selectedCount": "{count} selecionado(s)",
+        "unenrollSelected": "Desmatricular selecionados",
+        "bulkUnenrollTitle": "Desmatricular estudantes selecionados",
+        "bulkUnenrollDescription": "Desmatricular {count} estudantes desta disciplina? Eles mantêm suas contas e podem ser rematriculados depois.",
+        "bulkUnenrollConfirm": "Desmatricular {count}",
+        "bulkUnenrollSuccess": "{count} estudantes desmatriculados.",
+        "bulkUnenrollPartial": "{ok} desmatriculados, {failed} falharam.",
         "unenrollError": "Erro ao desmatricular estudante"
       },
       "assignmentsTab": {

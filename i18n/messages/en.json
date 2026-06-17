@@ -400,7 +400,14 @@
         "unenrollConfirm": "Unenroll",
         "unenrollButton": "Unenroll from course",
         "unenrollSuccess": "Student unenrolled successfully!",
-        "unenrollError": "Error unenrolling student"
+        "unenrollError": "Error unenrolling student",
+        "selectedCount": "{count} selected",
+        "unenrollSelected": "Unenroll selected",
+        "bulkUnenrollTitle": "Unenroll selected students",
+        "bulkUnenrollDescription": "Unenroll {count} students from this course? They keep their accounts and can be re-enrolled later.",
+        "bulkUnenrollConfirm": "Unenroll {count}",
+        "bulkUnenrollSuccess": "{count} students unenrolled.",
+        "bulkUnenrollPartial": "{ok} unenrolled, {failed} failed."
       },
       "assignmentsTab": {
         "title": "Course Assignments",

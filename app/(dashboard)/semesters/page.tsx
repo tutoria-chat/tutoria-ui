@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Combobox } from '@/components/ui/combobox';
+import { DateTimePicker } from '@/components/ui/date-time-picker';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
@@ -142,11 +143,23 @@ export default function SemestersPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-muted-foreground">{t('startField')}</label>
-                <Input type="date" value={form.start} onChange={(e) => setForm((f) => ({ ...f, start: e.target.value }))} />
+                <DateTimePicker
+                  showTime={false}
+                  value={form.start}
+                  onChange={(v) => setForm((f) => ({ ...f, start: v }))}
+                  className="w-[180px]"
+                  placeholder={t('startField')}
+                />
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-muted-foreground">{t('endField')}</label>
-                <Input type="date" value={form.end} onChange={(e) => setForm((f) => ({ ...f, end: e.target.value }))} />
+                <DateTimePicker
+                  showTime={false}
+                  value={form.end}
+                  onChange={(v) => setForm((f) => ({ ...f, end: v }))}
+                  className="w-[180px]"
+                  placeholder={t('endField')}
+                />
               </div>
               <Button onClick={submit} disabled={saving}>
                 <Plus className="mr-2 h-4 w-4" />

@@ -947,7 +947,8 @@ export interface FormState<T> {
 // UI Types
 export interface TableColumn<T> {
   key: keyof T | string;
-  label: string;
+  /** Header content. Usually a string, but accepts a node (e.g. a select-all checkbox). */
+  label: string | React.ReactNode;
   sortable?: boolean;
   width?: string;
   render?: (value: any, item: T) => React.ReactNode;
