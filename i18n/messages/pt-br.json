@@ -1095,6 +1095,8 @@
       "secondaryColorHelp": "Usada para as bolhas de mensagem do agente",
       "defaultThemeLabel": "Tema Padrão",
       "defaultThemeHelp": "O esquema de cores inicial exibido aos estudantes quando o widget carrega",
+      "bubbleOpacityLabel": "Opacidade dos balões do chat",
+      "bubbleOpacityHelp": "O quão sólidos os balões de mensagem do chat aparecem. Valores menores deixam-nos mais transparentes.",
       "themeLight": "Claro",
       "themeDark": "Escuro",
       "themeAuto": "Auto (sistema)",

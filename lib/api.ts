@@ -568,7 +568,7 @@ class TutoriaAPIClient {
     return this.delete(`/api/universities/${id}`);
   }
 
-  async updateUniversityAppearance(id: number, data: { widgetPrimaryColor: string | null; widgetSecondaryColor: string | null; widgetDefaultTheme: string }): Promise<{ primaryColor: string | null; secondaryColor: string | null; defaultTheme: string }> {
+  async updateUniversityAppearance(id: number, data: { widgetPrimaryColor: string | null; widgetSecondaryColor: string | null; widgetDefaultTheme: string; widgetBubbleOpacity: number | null }): Promise<{ primaryColor: string | null; secondaryColor: string | null; defaultTheme: string; bubbleOpacity: number | null }> {
     return this.put(`/api/universities/${id}/personalization`, data);
   }
 

@@ -161,6 +161,7 @@ export interface University {
   widgetPrimaryColor?: string;
   widgetSecondaryColor?: string;
   widgetDefaultTheme?: string;
+  widgetBubbleOpacity?: number;
 }
 
 export interface UniversityCreate {

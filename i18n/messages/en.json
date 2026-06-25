@@ -1153,6 +1153,8 @@
       "secondaryColorHelp": "Used for agent message bubbles",
       "defaultThemeLabel": "Default Theme",
       "defaultThemeHelp": "The initial color scheme shown to students when the widget loads",
+      "bubbleOpacityLabel": "Chat bubble opacity",
+      "bubbleOpacityHelp": "How solid the chat message bubbles look. Lower values make them more transparent.",
       "themeLight": "Light",
       "themeDark": "Dark",
       "themeAuto": "Auto (system)",

@@ -150,6 +150,7 @@ export default function UniversitiesPage() {
     widgetPrimaryColor: string | null;
     widgetSecondaryColor: string | null;
     widgetDefaultTheme: string;
+    widgetBubbleOpacity: number | null;
   }) => {
     if (!selectedUniversityForAppearance) return;
     try {
@@ -263,6 +264,7 @@ export default function UniversitiesPage() {
         initialPrimaryColor={selectedUniversityForAppearance.widgetPrimaryColor}
         initialSecondaryColor={selectedUniversityForAppearance.widgetSecondaryColor}
         initialDefaultTheme={selectedUniversityForAppearance.widgetDefaultTheme}
+        initialBubbleOpacity={selectedUniversityForAppearance.widgetBubbleOpacity}
         onSave={handleAppearanceSave}
       />
     )}

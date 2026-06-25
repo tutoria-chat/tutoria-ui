@@ -24,10 +24,12 @@ export interface UniversityAppearanceModalProps {
   initialPrimaryColor?: string;
   initialSecondaryColor?: string;
   initialDefaultTheme?: string;
+  initialBubbleOpacity?: number;
   onSave: (data: {
     widgetPrimaryColor: string | null;
     widgetSecondaryColor: string | null;
     widgetDefaultTheme: string;
+    widgetBubbleOpacity: number | null;
   }) => Promise<void>;
 }
 
@@ -70,6 +72,17 @@ function isColorDark(hex: string): boolean {
 
 function isValidHex(value: string): boolean {
   return /^#[0-9A-Fa-f]{6}$/.test(value);
+}
+
+/** Convert a #RRGGBB hex + opacity percent (0–100) into an rgba() string. */
+function hexToRgba(hex: string, opacityPercent: number): string {
+  const clean = hex.replace('#', '');
+  if (clean.length !== 6) return hex;
+  const r = parseInt(clean.slice(0, 2), 16);
+  const g = parseInt(clean.slice(2, 4), 16);
+  const b = parseInt(clean.slice(4, 6), 16);
+  const a = Math.max(0, Math.min(100, opacityPercent)) / 100;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
 // ─── Color Picker Row ───────────────────────────────────────────────────────
@@ -166,9 +179,10 @@ interface WidgetPreviewProps {
   primaryColor: string;
   secondaryColor: string;
   theme: ThemeOption;
+  bubbleOpacity: number;
 }
 
-function WidgetPreview({ universityName, primaryColor, secondaryColor, theme }: WidgetPreviewProps) {
+function WidgetPreview({ universityName, primaryColor, secondaryColor, theme, bubbleOpacity }: WidgetPreviewProps) {
   // Resolve effective theme for the preview (auto → light)
   const effectiveTheme = theme === 'auto' ? 'light' : theme;
   const isDark = effectiveTheme === 'dark';
@@ -178,6 +192,10 @@ function WidgetPreview({ universityName, primaryColor, secondaryColor, theme }: 
 
   const primaryTextColor = isColorDark(validPrimary) ? '#FFFFFF' : '#111827';
   const secondaryTextColor = isColorDark(validSecondary) ? '#F9FAFB' : '#111827';
+
+  // Message-bubble backgrounds honor the configured opacity (text stays opaque).
+  const userBubbleBg = hexToRgba(validPrimary, bubbleOpacity);
+  const agentBubbleBg = hexToRgba(validSecondary, bubbleOpacity);
 
   // Theme tokens
   const bg = isDark ? '#111827' : '#FFFFFF';
@@ -230,7 +248,7 @@ function WidgetPreview({ universityName, primaryColor, secondaryColor, theme }: 
             </div>
             <div
               className="max-w-[75%] rounded-2xl rounded-bl-sm px-2.5 py-1.5 text-[11px] leading-snug"
-              style={{ backgroundColor: validSecondary, color: secondaryTextColor }}
+              style={{ backgroundColor: agentBubbleBg, color: secondaryTextColor }}
             >
               Hello! How can I help you today?
             </div>
@@ -240,7 +258,7 @@ function WidgetPreview({ universityName, primaryColor, secondaryColor, theme }: 
           <div className="flex items-end justify-end gap-1.5">
             <div
               className="max-w-[75%] rounded-2xl rounded-br-sm px-2.5 py-1.5 text-[11px] leading-snug"
-              style={{ backgroundColor: validPrimary, color: primaryTextColor }}
+              style={{ backgroundColor: userBubbleBg, color: primaryTextColor }}
             >
               What topics are on the exam?
             </div>
@@ -262,7 +280,7 @@ function WidgetPreview({ universityName, primaryColor, secondaryColor, theme }: 
             </div>
             <div
               className="max-w-[75%] rounded-2xl rounded-bl-sm px-2.5 py-1.5 text-[11px] leading-snug"
-              style={{ backgroundColor: validSecondary, color: secondaryTextColor }}
+              style={{ backgroundColor: agentBubbleBg, color: secondaryTextColor }}
             >
               Based on the course materials, chapters 3–5 are the key focus areas.
             </div>
@@ -310,6 +328,7 @@ export function UniversityAppearanceModal({
   initialPrimaryColor,
   initialSecondaryColor,
   initialDefaultTheme,
+  initialBubbleOpacity,
   onSave,
 }: UniversityAppearanceModalProps) {
   const t = useTranslations('universities');
@@ -319,6 +338,7 @@ export function UniversityAppearanceModal({
   const [selectedTheme, setSelectedTheme] = useState<ThemeOption>(
     (initialDefaultTheme as ThemeOption) || 'light'
   );
+  const [bubbleOpacity, setBubbleOpacity] = useState(initialBubbleOpacity ?? 100);
   const [saving, setSaving] = useState(false);
 
   // Reset local state when modal opens with new initialValues
@@ -327,12 +347,14 @@ export function UniversityAppearanceModal({
       setPrimaryColor(initialPrimaryColor || DEFAULT_PRIMARY);
       setSecondaryColor(initialSecondaryColor || DEFAULT_SECONDARY_LIGHT);
       setSelectedTheme((initialDefaultTheme as ThemeOption) || 'light');
+      setBubbleOpacity(initialBubbleOpacity ?? 100);
     }
-  }, [open, initialPrimaryColor, initialSecondaryColor, initialDefaultTheme]);
+  }, [open, initialPrimaryColor, initialSecondaryColor, initialDefaultTheme, initialBubbleOpacity]);
 
   const handleResetDefaults = useCallback(() => {
     setPrimaryColor(DEFAULT_PRIMARY);
     setSecondaryColor(DEFAULT_SECONDARY_LIGHT);
+    setBubbleOpacity(100);
   }, []);
 
   const handleSave = async () => {
@@ -342,6 +364,7 @@ export function UniversityAppearanceModal({
         widgetPrimaryColor: isValidHex(primaryColor) ? primaryColor : null,
         widgetSecondaryColor: isValidHex(secondaryColor) ? secondaryColor : null,
         widgetDefaultTheme: selectedTheme,
+        widgetBubbleOpacity: bubbleOpacity,
       });
       onClose();
     } finally {
@@ -412,6 +435,25 @@ export function UniversityAppearanceModal({
               </p>
             </div>
 
+            {/* Chat bubble opacity */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-sm font-medium">{t('appearance.bubbleOpacityLabel')}</Label>
+                <span className="text-sm font-medium tabular-nums text-muted-foreground">{bubbleOpacity}%</span>
+              </div>
+              <input
+                type="range"
+                min={20}
+                max={100}
+                step={5}
+                value={bubbleOpacity}
+                onChange={(e) => setBubbleOpacity(Number(e.target.value))}
+                className="w-full accent-primary"
+                aria-label={t('appearance.bubbleOpacityLabel')}
+              />
+              <p className="text-xs text-muted-foreground">{t('appearance.bubbleOpacityHelp')}</p>
+            </div>
+
             {/* Reset to defaults */}
             <Button
               type="button"
@@ -431,6 +473,7 @@ export function UniversityAppearanceModal({
             primaryColor={primaryColor}
             secondaryColor={secondaryColor}
             theme={selectedTheme}
+            bubbleOpacity={bubbleOpacity}
           />
         </div>
 
