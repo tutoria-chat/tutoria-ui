@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Plus, Edit, Trash2, Eye, Building2, Palette } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Building2, Palette, Link2 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { DataTable } from '@/components/shared/data-table';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import type { University, TableColumn, BreadcrumbItem, PaginatedResponse } from 
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 import { UniversityAppearanceModal } from '@/components/universities/UniversityAppearanceModal';
+import { TrustedOriginsModal } from '@/components/universities/TrustedOriginsModal';
 
 export default function UniversitiesPage() {
   const { user } = useAuth();
@@ -35,6 +36,8 @@ export default function UniversitiesPage() {
   const [limit, setLimit] = useState(10);
   const [appearanceModalOpen, setAppearanceModalOpen] = useState(false);
   const [selectedUniversityForAppearance, setSelectedUniversityForAppearance] = useState<University | null>(null);
+  const [originsModalOpen, setOriginsModalOpen] = useState(false);
+  const [selectedUniversityForOrigins, setSelectedUniversityForOrigins] = useState<University | null>(null);
   const [sortColumn, setSortColumn] = useState<string | null>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc' | null>('asc');
 
@@ -112,6 +115,18 @@ export default function UniversitiesPage() {
             }}
           >
             <Palette className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            title={t('trustedOrigins.buttonLabel')}
+            onClick={() => {
+              setSelectedUniversityForOrigins(university);
+              setOriginsModalOpen(true);
+            }}
+          >
+            <Link2 className="h-4 w-4" />
           </Button>
 
           <Button
@@ -266,6 +281,18 @@ export default function UniversitiesPage() {
         initialDefaultTheme={selectedUniversityForAppearance.widgetDefaultTheme}
         initialBubbleOpacity={selectedUniversityForAppearance.widgetBubbleOpacity}
         onSave={handleAppearanceSave}
+      />
+    )}
+
+    {selectedUniversityForOrigins && (
+      <TrustedOriginsModal
+        open={originsModalOpen}
+        onClose={() => {
+          setOriginsModalOpen(false);
+          setSelectedUniversityForOrigins(null);
+        }}
+        universityId={selectedUniversityForOrigins.id}
+        universityName={selectedUniversityForOrigins.name}
       />
     )}
     </SuperAdminOnly>

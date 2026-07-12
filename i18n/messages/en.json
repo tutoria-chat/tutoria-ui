@@ -1163,6 +1163,24 @@
       "saving": "Saving...",
       "saveSuccess": "Appearance saved successfully",
       "saveError": "Failed to save appearance settings"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Trusted web addresses",
+      "title": "Trusted web addresses",
+      "description": "Choose which of {name}'s own websites are allowed to connect to TutorIA.",
+      "whyExplainer": "Add this when the institution's own system — such as their virtual learning environment (Moodle) or student portal — needs to talk to TutorIA directly, for example to send answers over for automatic grading. Only the addresses you list here are allowed to connect, which keeps everyone else out.",
+      "inputLabel": "Add a web address",
+      "inputPlaceholder": "https://moodle.your-school.edu",
+      "inputHelp": "Paste the address staff see in the browser when they open the institution's platform. You can add as many as you need.",
+      "addButton": "Add",
+      "emptyState": "No web addresses added yet. The institution's systems won't be able to connect until you add one here.",
+      "removeLabel": "Remove this address",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "saveSuccess": "Trusted web addresses saved",
+      "saveError": "Couldn't save the web addresses. Please try again.",
+      "loadError": "Couldn't load the current web addresses."
     }
   },
   "professors": {

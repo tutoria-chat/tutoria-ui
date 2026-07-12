@@ -572,6 +572,18 @@ class TutoriaAPIClient {
     return this.put(`/api/universities/${id}/personalization`, data);
   }
 
+  // Trusted web addresses (CORS allowlist) — lets an institution's own systems
+  // (LMS/Moodle) call the API from a browser, e.g. for automatic grading.
+  async getTrustedOrigins(id: number): Promise<string[]> {
+    const res = await this.get<{ origins: string[] }>(`/api/universities/${id}/trusted-origins`);
+    return res?.origins ?? [];
+  }
+
+  async updateTrustedOrigins(id: number, origins: string[]): Promise<string[]> {
+    const res = await this.put<{ origins: string[] }>(`/api/universities/${id}/trusted-origins`, { origins });
+    return res?.origins ?? [];
+  }
+
   // Course endpoints
   async getCourses(params?: CourseFilters): Promise<PaginatedResponse<Course>> {
     return this.get('/api/courses/', params);

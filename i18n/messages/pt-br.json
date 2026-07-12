@@ -1105,6 +1105,24 @@
       "saving": "Salvando...",
       "saveSuccess": "Aparência salva com sucesso",
       "saveError": "Falha ao salvar configurações de aparência"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Endereços de site confiáveis",
+      "title": "Endereços de site confiáveis",
+      "description": "Escolha quais sites da própria {name} podem se conectar ao TutorIA.",
+      "whyExplainer": "Adicione aqui quando o sistema da própria instituição — como o ambiente virtual de aprendizagem (Moodle) ou o portal do aluno — precisar se comunicar diretamente com o TutorIA, por exemplo para enviar respostas para correção automática. Somente os endereços que você listar aqui poderão se conectar, o que mantém todos os outros de fora.",
+      "inputLabel": "Adicionar um endereço de site",
+      "inputPlaceholder": "https://moodle.sua-instituicao.edu.br",
+      "inputHelp": "Cole o endereço que a equipe vê no navegador ao abrir a plataforma da instituição. Você pode adicionar quantos precisar.",
+      "addButton": "Adicionar",
+      "emptyState": "Nenhum endereço de site adicionado ainda. Os sistemas da instituição não conseguirão se conectar até você adicionar um aqui.",
+      "removeLabel": "Remover este endereço",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "saving": "Salvando...",
+      "saveSuccess": "Endereços de site confiáveis salvos",
+      "saveError": "Não foi possível salvar os endereços. Tente novamente.",
+      "loadError": "Não foi possível carregar os endereços atuais."
     }
   },
   "professors": {

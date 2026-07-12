@@ -1105,6 +1105,24 @@
       "saving": "Guardando...",
       "saveSuccess": "Apariencia guardada con éxito",
       "saveError": "Error al guardar la configuración de apariencia"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Direcciones web de confianza",
+      "title": "Direcciones web de confianza",
+      "description": "Elige qué sitios web propios de {name} pueden conectarse a TutorIA.",
+      "whyExplainer": "Agrégalas cuando el propio sistema de la institución —como su entorno virtual de aprendizaje (Moodle) o el portal del estudiante— necesite comunicarse directamente con TutorIA, por ejemplo para enviar respuestas para la corrección automática. Solo las direcciones que indiques aquí podrán conectarse, lo que mantiene fuera a todos los demás.",
+      "inputLabel": "Agregar una dirección web",
+      "inputPlaceholder": "https://moodle.tu-institucion.edu",
+      "inputHelp": "Pega la dirección que el personal ve en el navegador al abrir la plataforma de la institución. Puedes agregar todas las que necesites.",
+      "addButton": "Agregar",
+      "emptyState": "Aún no se agregaron direcciones web. Los sistemas de la institución no podrán conectarse hasta que agregues una aquí.",
+      "removeLabel": "Quitar esta dirección",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "saveSuccess": "Direcciones web de confianza guardadas",
+      "saveError": "No se pudieron guardar las direcciones. Inténtalo de nuevo.",
+      "loadError": "No se pudieron cargar las direcciones actuales."
     }
   },
   "professors": {
