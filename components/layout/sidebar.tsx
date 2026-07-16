@@ -25,6 +25,8 @@ import {
   Bot,
   CreditCard,
   Receipt,
+  Library,
+  CalendarRange,
   PanelLeftClose,
   PanelLeftOpen
 } from 'lucide-react';
@@ -89,6 +91,11 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       requiredPermission: 'courses:read',
     }] : []),
     {
+      label: t('userGuide'),
+      href: '/user-guide',
+      icon: Library,
+    },
+    {
       label: t('universities'),
       href: '/universities',
       icon: Building2,
@@ -105,6 +112,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       href: '/students',
       icon: GraduationCap,
       requiredPermission: 'students:read',
+    },
+    {
+      label: t('enemBank'),
+      href: '/enem',
+      icon: Library,
+      requiredPermission: 'courses:read',
     },
     {
       label: t('subscription'),
@@ -125,6 +138,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('aiModels'),
       href: '/models',
       icon: Bot,
+      requiredPermission: 'universities:read',
+    },
+    {
+      label: t('semesters'),
+      href: '/semesters',
+      icon: CalendarRange,
       requiredPermission: 'universities:read',
     },
     {

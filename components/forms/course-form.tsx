@@ -9,6 +9,7 @@ import { Combobox } from '@/components/ui/combobox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { MultiSelect } from '@/components/ui/multi-select';
+import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
@@ -52,6 +53,8 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   const [titleTracks, setTitleTracks] = useState<string[]>(
     course?.titleTracks ? course.titleTracks.split(',').map(s => s.trim()).filter(Boolean) : []
   );
+  const [enableEnem, setEnableEnem] = useState<boolean>(course?.enableEnem ?? false);
+  const [enemArea, setEnemArea] = useState<string>(course?.enemArea ?? '');
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
@@ -124,6 +127,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     if (!formData.name.trim()) newErrors.name = t('nameRequired');
     if (!formData.code.trim()) newErrors.code = t('codeRequired');
     if (!formData.universityId) newErrors.universityId = t('universityRequired');
+    if (enableEnem && !enemArea) newErrors.enemArea = t('enemAreaRequired');
 
     setErrors(newErrors);
 
@@ -146,6 +150,8 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         universityId: Number(formData.universityId),
         externalCourseId: formData.externalCourseId ? parseInt(formData.externalCourseId, 10) : null,
         titleTracks: titleTracks.length > 0 ? titleTracks.join(',') : '',
+        enableEnem,
+        enemArea: enableEnem ? (enemArea || null) : null,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -301,6 +307,42 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
                 placeholder={t('titleTracksPlaceholder')}
               />
               <p className="text-xs text-muted-foreground">{t('titleTracksHelp')}</p>
+            </FormItem>
+          </FormField>
+
+          {/* ENEM/Vestibular toggle — off by default; only pre-vestibular courses enable it */}
+          <FormField>
+            <FormItem>
+              <div className="flex items-center justify-between gap-4 rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel htmlFor="enableEnem">{t('enableEnemLabel')}</FormLabel>
+                  <p className="text-xs text-muted-foreground">{t('enableEnemHelp')}</p>
+                </div>
+                <Switch
+                  id="enableEnem"
+                  checked={enableEnem}
+                  onCheckedChange={setEnableEnem}
+                  disabled={isLoading}
+                />
+              </div>
+              {enableEnem && (
+                <div className="mt-3">
+                  <FormLabel htmlFor="enemArea">{t('enemAreaLabel')}</FormLabel>
+                  <Combobox
+                    options={[
+                      { value: 'matematica', label: t('enemAreas.matematica') },
+                      { value: 'linguagens', label: t('enemAreas.linguagens') },
+                      { value: 'natureza', label: t('enemAreas.natureza') },
+                      { value: 'humanas', label: t('enemAreas.humanas') },
+                    ]}
+                    value={enemArea}
+                    onValueChange={setEnemArea}
+                    placeholder={t('enemAreaPlaceholder')}
+                  />
+                  <p className="mt-1 text-xs text-muted-foreground">{t('enemAreaHelp')}</p>
+                  {errors.enemArea && <FormMessage>{errors.enemArea}</FormMessage>}
+                </div>
+              )}
             </FormItem>
           </FormField>
 

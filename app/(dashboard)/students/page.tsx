@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { PageHeader } from '@/components/layout/page-header';
+import { TitleBadge } from '@/components/students/title-badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -229,7 +230,10 @@ export default function StudentsPage() {
             <GraduationCap className="h-5 w-5 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <div className="font-medium">{student.firstName} {student.lastName}</div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{student.firstName} {student.lastName}</span>
+              <TitleBadge title={student.equippedTitle} />
+            </div>
             <div className="text-sm text-muted-foreground">{student.username}</div>
           </div>
         </div>

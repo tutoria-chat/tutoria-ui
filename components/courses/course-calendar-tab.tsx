@@ -22,8 +22,10 @@ import {
   ClipboardList,
   Edit,
   Plus,
+  Sparkles,
   Trash2,
 } from 'lucide-react';
+import { CalendarImportDialog } from './calendar-import-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -118,6 +120,7 @@ export function CourseCalendarTab({ courseId, modules, canManage, onGoToAssignme
   const [linkingAssignment, setLinkingAssignment] = useState<CourseEvent | null>(null);
   const [form, setForm] = useState<EventForm>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
   const loadEvents = useCallback(async () => {
     try {
@@ -316,6 +319,12 @@ export function CourseCalendarTab({ courseId, modules, canManage, onGoToAssignme
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
+              {canManage && (
+                <Button variant="outline" size="sm" onClick={() => setImportOpen(true)}>
+                  <Sparkles className="mr-1 h-4 w-4" />
+                  {t('import.button')}
+                </Button>
+              )}
               {canManage && (
                 <Button size="sm" onClick={() => openCreate()}>
                   <Plus className="mr-1 h-4 w-4" />
@@ -602,6 +611,15 @@ export function CourseCalendarTab({ courseId, modules, canManage, onGoToAssignme
           )}
         </DialogContent>
       </Dialog>
+
+      {canManage && (
+        <CalendarImportDialog
+          courseId={courseId}
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          onImported={loadEvents}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,9 @@
 import { PAGINATION } from './constants';
 import type {
+  EnemBankStatus,
+  Semester,
+  SemesterCreate,
+  SemesterUpdate,
   TokenResponse,
   User,
   UserResponse,
@@ -35,6 +39,7 @@ import type {
   StudentPaginatedResponse,
   CourseEvent,
   CourseEventCreate,
+  CalendarImportJob,
   CourseEventUpdate,
   AtRiskStudentsDto,
   RiskPredictionsDto,
@@ -103,6 +108,7 @@ import type {
   QuestionsPerModuleDto,
   TopTopicsResponseDto,
   QuizPerformanceResponseDto,
+  RankingsResponseDto,
   Assignment,
   AssignmentCreate,
   AssignmentUpdate,
@@ -562,8 +568,20 @@ class TutoriaAPIClient {
     return this.delete(`/api/universities/${id}`);
   }
 
-  async updateUniversityAppearance(id: number, data: { widgetPrimaryColor: string | null; widgetSecondaryColor: string | null; widgetDefaultTheme: string }): Promise<{ primaryColor: string | null; secondaryColor: string | null; defaultTheme: string }> {
+  async updateUniversityAppearance(id: number, data: { widgetPrimaryColor: string | null; widgetSecondaryColor: string | null; widgetDefaultTheme: string; widgetBubbleOpacity: number | null }): Promise<{ primaryColor: string | null; secondaryColor: string | null; defaultTheme: string; bubbleOpacity: number | null }> {
     return this.put(`/api/universities/${id}/personalization`, data);
+  }
+
+  // Trusted web addresses (CORS allowlist) — lets an institution's own systems
+  // (LMS/Moodle) call the API from a browser, e.g. for automatic grading.
+  async getTrustedOrigins(id: number): Promise<string[]> {
+    const res = await this.get<{ origins: string[] }>(`/api/universities/${id}/trusted-origins`);
+    return res?.origins ?? [];
+  }
+
+  async updateTrustedOrigins(id: number, origins: string[]): Promise<string[]> {
+    const res = await this.put<{ origins: string[] }>(`/api/universities/${id}/trusted-origins`, { origins });
+    return res?.origins ?? [];
   }
 
   // Course endpoints
@@ -573,6 +591,23 @@ class TutoriaAPIClient {
 
   async createCourse(data: CourseCreate): Promise<Course> {
     return this.post('/api/courses/', data);
+  }
+
+  // Semesters (term ranges) — drive the "The One" champion title
+  async getSemesters(universityId?: number): Promise<Semester[]> {
+    return this.get('/api/semesters', universityId ? { universityId } : undefined);
+  }
+
+  async createSemester(data: SemesterCreate): Promise<Semester> {
+    return this.post('/api/semesters', data);
+  }
+
+  async updateSemester(id: number, data: SemesterUpdate): Promise<Semester> {
+    return this.put(`/api/semesters/${id}`, data);
+  }
+
+  async deleteSemester(id: number): Promise<void> {
+    await this.delete(`/api/semesters/${id}`);
   }
 
   async getCourse(id: number): Promise<CourseWithDetails> {
@@ -625,6 +660,16 @@ class TutoriaAPIClient {
   async improveSystemPrompt(moduleId: number, currentPrompt: string): Promise<{ improved_prompt: string; remaining_improvements: number }> {
     // This endpoint uses the Python API - must stay snake_case
     return this.post(`/modules/${moduleId}/improve-prompt`, { current_prompt: currentPrompt }, { usePythonAPI: true });
+  }
+
+  // Official ENEM question bank (.NET management API). View is professor+, import
+  // is super-admin; .NET proxies the actual import to tutoria-api.
+  async getEnemBank(): Promise<EnemBankStatus> {
+    return this.get('/api/enem/bank');
+  }
+
+  async triggerEnemImport(years?: string[]): Promise<{ started: boolean; status: EnemBankStatus }> {
+    return this.post('/api/enem/import', { years: years ?? null });
   }
 
   async extractModuleTexts(moduleId: number, force: boolean = true): Promise<{ queued_count: number; total_files: number; message: string }> {
@@ -1361,6 +1406,23 @@ class TutoriaAPIClient {
     return this.request(`/api/analytics/quiz/performance${query ? `?${query}` : ''}`);
   }
 
+  async getAnalyticsRankings(
+    universityId?: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<RankingsResponseDto> {
+    const params = new URLSearchParams();
+    if (universityId) params.append('universityId', universityId.toString());
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    const query = params.toString();
+    return this.request(`/api/analytics/rankings${query ? `?${query}` : ''}`);
+  }
+
+  async recomputeQuizAnalytics(): Promise<{ status: string; modulesAggregated: number }> {
+    return this.post('/api/analytics/recompute-quiz');
+  }
+
   // Audit Logs
   async getAuditLogs(params?: AuditLogFilters): Promise<PaginatedResponse<AuditLog>> {
     return this.get('/api/audit-logs', params);
@@ -1446,6 +1508,29 @@ class TutoriaAPIClient {
 
   async deleteCourseEvent(id: number): Promise<void> {
     return this.delete(`/api/course-events/${id}`);
+  }
+
+  // Calendar import from PDF (upload → AI extract → review → confirm)
+  async createCalendarImportJob(courseId: number, file: globalThis.File): Promise<CalendarImportJob> {
+    const fd = new FormData();
+    fd.append('courseId', String(courseId));
+    fd.append('file', file);
+    return this.post('/api/calendar-import-jobs', fd, { isFormData: true });
+  }
+
+  async createCalendarImportFromUrl(courseId: number, sourceUrl: string): Promise<CalendarImportJob> {
+    return this.post('/api/calendar-import-jobs/from-url', { courseId, sourceUrl });
+  }
+
+  async getCalendarImportJob(id: number): Promise<CalendarImportJob> {
+    return this.get(`/api/calendar-import-jobs/${id}`);
+  }
+
+  async confirmCalendarImport(
+    id: number,
+    events: CourseEventCreate[],
+  ): Promise<{ status: string; created: number }> {
+    return this.post(`/api/calendar-import-jobs/${id}/confirm`, { events });
   }
 
   async getPlans(): Promise<Plan[]> {

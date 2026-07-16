@@ -1,0 +1,725 @@
+{
+ "title": "Guia do Usuário",
+ "subtitle": "O guia completo para administradores, gestores e professores",
+ "updated": "Atualizado em junho de 2026",
+ "tocTitle": "Sumário",
+ "sections": [
+  {
+   "id": "introduction",
+   "heading": "1. Bem-vindo à TutorIA",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "A TutorIA é uma plataforma de tutoria com inteligência artificial que permite à sua instituição oferecer aos alunos ajuda 24 horas por dia, baseada no seu próprio material didático. Você envia o conteúdo (PDFs, slides, documentos, transcrições de vídeo); a TutorIA o lê e responde às perguntas dos alunos no contexto — como um monitor que leu cada página e nunca dorme."
+    },
+    {
+     "type": "p",
+     "text": "Este guia cobre tudo o que quem opera a TutorIA precisa: como configurar instituições, cursos e o tutor de IA, como carregar materiais e quizzes, como funciona a experiência do aluno e como ler as análises. Você não precisa ser técnico para acompanhá-lo."
+    },
+    {
+     "type": "h3",
+     "text": "As duas interfaces"
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Painel de gestão — onde administradores, gestores e professores fazem login para configurar tudo e ver análises. É o aplicativo em que você está lendo este guia.",
+      "Widget do aluno (“Erwin”) — um chat leve que os alunos abrem por um link ou incorporado ao seu portal. Os alunos nunca criam conta nem fazem login."
+     ]
+    },
+    {
+     "type": "tip",
+     "text": "Os alunos não fazem login. Eles acessam o tutor por um link do curso (uma “chave de acesso”). Você decide o que cada link pode fazer."
+    }
+   ]
+  },
+  {
+   "id": "roles",
+   "heading": "2. Perfis e níveis de acesso",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "O que você pode ver e fazer na TutorIA depende do seu perfil. São três perfis de equipe, além do aluno (sem login)."
+    },
+    {
+     "type": "h3",
+     "text": "Super administrador"
+    },
+    {
+     "type": "p",
+     "text": "Acesso a toda a plataforma. Gerencia todas as instituições, cria outros administradores e pode filtrar qualquer tela por qualquer instituição. Este perfil é para os donos da plataforma TutorIA."
+    },
+    {
+     "type": "h3",
+     "text": "Gestor (professor administrador)"
+    },
+    {
+     "type": "p",
+     "text": "Controle total de uma única instituição: seus cursos, módulos, professores, alunos, análises e cobrança. Tudo o que vê fica automaticamente limitado à sua instituição."
+    },
+    {
+     "type": "h3",
+     "text": "Professor"
+    },
+    {
+     "type": "p",
+     "text": "Atua nos cursos a que está vinculado: envia materiais, configura o tutor, cria quizzes, gerencia o calendário e vê análises dos seus cursos."
+    },
+    {
+     "type": "h3",
+     "text": "Aluno"
+    },
+    {
+     "type": "p",
+     "text": "Usa apenas o widget. Sem senha, sem painel. Identificado opcionalmente por uma matrícula, para que os professores vejam a atividade por aluno."
+    },
+    {
+     "type": "info",
+     "text": "Se algum item de menu ou botão descrito neste guia não aparecer para você, quase sempre é porque seu perfil não o inclui. Fale com um gestor ou super administrador."
+    }
+   ]
+  },
+  {
+   "id": "getting-started",
+   "heading": "3. Login e navegação",
+   "blocks": [
+    {
+     "type": "ol",
+     "items": [
+      "Abra o endereço do painel que sua instituição forneceu e entre com seu usuário e senha.",
+      "Se esqueceu a senha, use “Esqueci minha senha” na tela de login para receber um link de redefinição por e-mail.",
+      "Use a barra lateral esquerda para navegar. Os itens visíveis dependem do seu perfil.",
+      "Use o seletor de idioma para ler o painel em português, inglês ou espanhol. O idioma da interface é independente do idioma em que o tutor de IA responde."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "O Painel (início) mostra uma visão rápida: atividade recente, um resumo diário escrito por IA sobre o que os alunos perguntaram e atalhos para as áreas que você mais usa."
+    },
+    {
+     "type": "tip",
+     "text": "Por segurança, a sessão expira após 30 minutos de inatividade; basta entrar novamente. Você não perderá nenhum trabalho."
+    }
+   ]
+  },
+  {
+   "id": "institutions",
+   "heading": "4. Instituições de ensino",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Uma instituição de ensino é o contêiner de nível mais alto — uma universidade, escola ou empresa de treinamento. Super admins as criam e gerenciam; gestores veem apenas a sua."
+    },
+    {
+     "type": "h3",
+     "text": "Criando uma instituição (super admin)"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Vá em Instituições de Ensino na barra lateral e clique em Nova instituição.",
+      "Preencha o nome e o código.",
+      "Salve. Agora você pode criar cursos, professores e alunos dentro dela."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Ao abrir uma instituição, você vê seus cursos, sua equipe e um resumo de uso. A maior parte do trabalho do dia a dia acontece um nível abaixo, dentro de um curso."
+    }
+   ]
+  },
+  {
+   "id": "courses",
+   "heading": "5. Cursos",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Um curso é uma disciplina ou turma — por exemplo, “Cálculo I” ou “Química Orgânica”. Os cursos contêm módulos, alunos, um calendário e (opcionalmente) um banco de questões do ENEM."
+    },
+    {
+     "type": "h3",
+     "text": "Criando um curso"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Vá em Cursos e clique em Novo curso.",
+      "Dê um nome e (opcionalmente) uma descrição e a instituição a que pertence.",
+      "Opcionalmente, defina as trilhas de disciplina usadas para os títulos dos alunos (veja Títulos) — ex.: matemática, ciências, linguagens. Se deixar em branco, a TutorIA infere a partir do nome do curso.",
+      "Salve e abra o curso para adicionar módulos e matricular alunos."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Dentro de um curso há abas para Módulos, Alunos, Calendário e Atividades. Cada uma é detalhada nas seções abaixo."
+    }
+   ]
+  },
+  {
+   "id": "modules",
+   "heading": "6. Módulos e o tutor de IA",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Um módulo é uma unidade dentro de um curso (um capítulo, tópico ou aula). O tutor de IA é configurado por módulo, então cada um pode ter seus próprios materiais, personalidade e idioma."
+    },
+    {
+     "type": "h3",
+     "text": "Criando um módulo"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Abra um curso, vá na aba Módulos e clique em Novo módulo.",
+      "Dê um nome e escreva o prompt do sistema — as instruções que moldam o comportamento do tutor (tom, foco, o que evitar).",
+      "Escolha o idioma de resposta do tutor (português, inglês ou espanhol).",
+      "Selecione qual modelo de IA o alimenta (ou deixe o padrão da instituição).",
+      "Salve e então envie os materiais do módulo."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Como o tutor responde"
+    },
+    {
+     "type": "p",
+     "text": "Quando um aluno pergunta algo, a TutorIA busca nos materiais do módulo os trechos mais relevantes e os envia ao modelo de IA junto com o seu prompt do sistema. A resposta, portanto, é fundamentada no seu conteúdo, não no conhecimento geral do modelo."
+    },
+    {
+     "type": "p",
+     "text": "O tutor espelha automaticamente o aluno: responde no idioma em que o aluno escreve, recorrendo ao idioma configurado do módulo quando isso não está claro. Ele também adota um estilo de ensino adequado à disciplina (um tutor de matemática resolve passo a passo; um de história explica o contexto)."
+    },
+    {
+     "type": "tip",
+     "text": "Use “Melhorar prompt” para a IA reescrever seu prompt do sistema em uma versão mais clara e eficaz — depois ajuste."
+    },
+    {
+     "type": "warn",
+     "text": "Mantenha o prompt do sistema focado. “Responda apenas com base no material do curso; se não estiver coberto, diga isso” é muito mais confiável do que um prompt longo e vago."
+    }
+   ]
+  },
+  {
+   "id": "materials",
+   "heading": "7. Materiais e arquivos do curso",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Os materiais são a fonte da verdade para as respostas do tutor. Quanto mais completos os envios, melhor a ajuda que os alunos recebem."
+    },
+    {
+     "type": "h3",
+     "text": "Enviando arquivos"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Abra um módulo e envie arquivos (PDF, Word, PowerPoint, Excel, texto).",
+      "A TutorIA extrai o texto automaticamente em segundo plano — PDFs grandes podem levar um minuto.",
+      "Quando um arquivo aparece como pronto, seu conteúdo fica disponível para o tutor e para a geração de quizzes."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Transcrições de vídeo"
+    },
+    {
+     "type": "p",
+     "text": "Você pode adicionar vídeos do YouTube; a TutorIA obtém ou gera uma transcrição para que o tutor também responda sobre o conteúdo do vídeo."
+    },
+    {
+     "type": "info",
+     "text": "Tipos de arquivo aceitos: PDF, DOCX/DOC, PPTX, XLSX/XLS, CSV e TXT. Máximo de 10 MB por arquivo nos importadores de quiz/calendário."
+    }
+   ]
+  },
+  {
+   "id": "quizzes",
+   "heading": "8. Quizzes",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Os quizzes permitem que os alunos se testem. A TutorIA pode gerá-los automaticamente a partir dos seus materiais, ou você pode importar um banco de questões que já tenha."
+    },
+    {
+     "type": "h3",
+     "text": "Quizzes gerados automaticamente"
+    },
+    {
+     "type": "p",
+     "text": "Depois que os materiais de um módulo são processados, a TutorIA gera questões de múltipla escolha (com explicação para cada alternativa) a partir do conteúdo. Os alunos respondem no widget e recebem feedback imediato."
+    },
+    {
+     "type": "h3",
+     "text": "Importando questões de um arquivo"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "No módulo, escolha enviar um arquivo de quiz (PDF, Word, Excel, CSV).",
+      "A TutorIA o lê e extrai as questões, alternativas e respostas corretas.",
+      "Revise as questões extraídas, corrija o que estiver errado e confirme para publicá-las."
+     ]
+    },
+    {
+     "type": "warn",
+     "text": "Sempre revise as questões importadas antes de confirmar — a extração automática é boa, mas não perfeita, especialmente quanto à alternativa correta marcada."
+    }
+   ]
+  },
+  {
+   "id": "enem",
+   "heading": "9. Banco de questões do ENEM / Vestibular",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Para instituições brasileiras, a TutorIA inclui um banco de questões reais de provas anteriores do ENEM com explicações, além de prática por área de conhecimento. O ENEM é ativado por curso, então instituições que não precisam dele nunca o veem."
+    },
+    {
+     "type": "h3",
+     "text": "Ativando o ENEM em um curso"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Abra as configurações do curso e ative o módulo ENEM / Vestibular.",
+      "Escolha a(s) área(s) de conhecimento relevante(s) para o curso (Linguagens, Humanas, Natureza, Matemática).",
+      "As questões ficam disponíveis imediatamente para os alunos — eles não precisam gerar nada."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "O banco ENEM (equipe)"
+    },
+    {
+     "type": "p",
+     "text": "Gestores e professores podem navegar pelas questões disponíveis por ano e área na página Banco ENEM. Super admins podem importar anos adicionais de provas para o banco compartilhado."
+    },
+    {
+     "type": "p",
+     "text": "Os alunos praticam pela aba ENEM/Vestibular do widget como um simulado, com ou sem tempo, com explicações após cada resposta."
+    }
+   ]
+  },
+  {
+   "id": "calendar",
+   "heading": "10. Calendário do curso",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Todo curso tem um calendário de eventos com data — provas, prazos de atividades, feriados, visitas de campo e o que mais houver. Os eventos aparecem para os alunos no widget e podem disparar e-mails de lembrete."
+    },
+    {
+     "type": "h3",
+     "text": "Adicionando um evento"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Abra um curso e vá na aba Calendário; clique em Adicionar evento.",
+      "Escolha o tipo (prova, atividade, feriado, evento de campo, outro), o título, a data e a hora.",
+      "Escolha quais lembretes por e-mail enviar aos alunos: 7 dias, 3 dias, 2 dias e/ou 24 horas antes.",
+      "Salve. O evento aparece na grade do mês e na lista de próximos do aluno."
+     ]
+    },
+    {
+     "type": "info",
+     "text": "Todos os horários são inseridos e exibidos no horário de Brasília (America/São_Paulo) e armazenados de forma consistente, para que alunos e equipe vejam sempre o mesmo momento."
+    },
+    {
+     "type": "tip",
+     "text": "Atividades criadas na aba Atividades aparecem automaticamente no calendário na data de entrega — você só precisa adicionar eventos separados para coisas que não sejam atividades."
+    }
+   ]
+  },
+  {
+   "id": "calendar-import",
+   "heading": "11. Importando o calendário (PDF e calendários externos)",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Digitar cada data à mão é cansativo, então a TutorIA pode montar o calendário para você de duas formas. Ambas terminam igual: você revisa e edita os eventos sugeridos e confirma — nada é adicionado até você aprovar."
+    },
+    {
+     "type": "h3",
+     "text": "Importar de um PDF ou documento"
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Na aba Calendário, clique em Importar de PDF e mantenha a opção “Enviar arquivo”.",
+      "Envie seu plano de ensino ou cronograma (PDF, Word, Excel, CSV).",
+      "A IA lê o arquivo e extrai os eventos com data em uma tabela editável.",
+      "Ajuste títulos, tipos, datas e horários conforme necessário, escolha os lembretes padrão e clique em Confirmar para adicioná-los."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Importar do Google / Outlook / Apple Agenda"
+    },
+    {
+     "type": "p",
+     "text": "Você pode trazer eventos diretamente de uma agenda existente usando o link iCal privado dela — sem precisar conectar a conta."
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Clique em Importar de PDF e mude para a aba “De um link de calendário”.",
+      "Cole o endereço iCal secreto da sua agenda. No Google Agenda: Configurações → sua agenda → “Endereço secreto no formato iCal”. No Outlook: Configurações → Calendário → Calendários compartilhados → Publicar → copie o link ICS.",
+      "A TutorIA busca a agenda e lista os eventos na mesma tabela de revisão.",
+      "Revise, defina os lembretes e Confirme."
+     ]
+    },
+    {
+     "type": "warn",
+     "text": "Trate o endereço iCal secreto como uma senha — qualquer pessoa com ele pode ler aquela agenda. Cole apenas agendas que você possui ou administra."
+    }
+   ]
+  },
+  {
+   "id": "students",
+   "heading": "12. Alunos e acesso",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Alunos são registros usados para vincular a atividade a uma pessoa real e dar acesso ao tutor. Eles nunca fazem login."
+    },
+    {
+     "type": "h3",
+     "text": "Adicionando alunos"
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Importe uma planilha (CSV) de alunos — nome, e-mail e matrícula — para criar vários de uma vez.",
+      "Matricule os alunos nos cursos a que pertencem.",
+      "Remova alunos em massa pela visão geral de Alunos quando necessário."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Chaves de acesso (como os alunos acessam o tutor)"
+    },
+    {
+     "type": "p",
+     "text": "Uma chave de acesso é um link longo e único associado a um módulo. Compartilhe-o com os alunos (ou incorpore-o ao seu portal) e eles poderão conversar com o tutor. Para cada chave, você controla se os alunos podem conversar, baixar arquivos e se uma matrícula precisa ser verificada antes."
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Vá em Chaves de Acesso e crie uma chave para um módulo.",
+      "Defina suas permissões e, se quiser acompanhamento por aluno, exija uma matrícula.",
+      "Copie o link, ou copie o trecho de incorporação pronto para colocar o widget dentro de uma página da web existente."
+     ]
+    },
+    {
+     "type": "tip",
+     "text": "Adicione “&student_id=...” ao link da chave para atribuir aquela sessão a um aluno específico, de modo que as perguntas dele apareçam nas análises com o nome dele."
+    }
+   ]
+  },
+  {
+   "id": "widget",
+   "heading": "13. A experiência do aluno (widget Erwin)",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Tudo o que os alunos usam fica no widget. Ele é deliberadamente simples, funciona no celular e não precisa de instalação. Veja o que os alunos podem fazer, para você saber o que está habilitando."
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Conversar com o tutor — fazer perguntas e receber respostas fundamentadas no material do curso, com matemática e código bem formatados.",
+      "Conversas anteriores — retomar de onde pararam.",
+      "Planos de estudo — gerar um plano personalizado para um curso (um por curso por semana).",
+      "Flashcards — revisar conceitos-chave, com repetição espaçada que retoma os que têm mais dificuldade.",
+      "Quizzes e ENEM — praticar e receber feedback imediato e explicado.",
+      "Início e próximos — ver a próxima prova ou prazo num relance.",
+      "Progresso, rankings e títulos — acompanhar XP, nível e conquistas (veja as duas próximas seções)."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Personalizando o widget"
+    },
+    {
+     "type": "p",
+     "text": "O link de incorporação aceita opções de modo escuro, respostas em streaming e cores da marca (botão, balão do aluno, balão do tutor), para o widget combinar com a identidade da sua instituição."
+    },
+    {
+     "type": "info",
+     "text": "Algumas coisas são globais do aluno, não por curso: XP, nível, sequência e títulos são os mesmos em todos os lugares onde ele estuda. Quizzes, materiais e o tutor são por módulo."
+    }
+   ]
+  },
+  {
+   "id": "gamification",
+   "heading": "14. Gamificação: XP, níveis e medalhas",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "A TutorIA recompensa o estudo constante para manter os alunos engajados. É automático — você não precisa configurar nada — mas ajuda entender como funciona."
+    },
+    {
+     "type": "h3",
+     "text": "XP e níveis"
+    },
+    {
+     "type": "p",
+     "text": "Os alunos ganham XP (pontos de experiência) por estudar: fazer boas perguntas, completar quizzes, revisar flashcards, gerar planos de estudo e praticar ENEM. Limites diários evitam o acúmulo artificial de pontos. O XP se acumula em níveis, e os níveis em patamares: Bronze → Prata → Ouro → Platina → Diamante → Cristal."
+    },
+    {
+     "type": "info",
+     "text": "Nível, patamar, XP e sequência são GLOBAIS por aluno — um único total em todos os cursos em que está matriculado. O aluno não precisa subir um nível separado para cada disciplina."
+    },
+    {
+     "type": "h3",
+     "text": "Sequências (streaks)"
+    },
+    {
+     "type": "p",
+     "text": "Estudar em dias consecutivos cria uma sequência. As sequências são o sinal mais forte de um aluno comprometido e alimentam vários dos títulos abaixo. Um e-mail de lembrete cutuca os alunos cuja sequência está prestes a quebrar."
+    },
+    {
+     "type": "h3",
+     "text": "Medalhas e desafios semanais"
+    },
+    {
+     "type": "p",
+     "text": "Os alunos ganham medalhas pontuais por marcos (primeiros passos, 10/50 perguntas, um quiz perfeito, sequências de 7 e 30 dias, chegar ao nível 10, montar um plano de estudo). A cada semana há pequenos desafios (ex.: 10 perguntas, 3 quizzes) que dão XP bônus ao serem cumpridos."
+    }
+   ]
+  },
+  {
+   "id": "titles",
+   "heading": "15. Títulos e conquistas",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Títulos são honrarias colecionáveis e equipáveis que os alunos podem exibir. São uma grande parte do que faz os alunos voltarem — e sim, a equipe pode ver quais títulos os alunos conquistaram."
+    },
+    {
+     "type": "h3",
+     "text": "Títulos de trilha"
+    },
+    {
+     "type": "p",
+     "text": "Escadas por disciplina (Aprendiz → Mestre → Lenda) conquistadas acumulando XP em uma área como matemática, ciências ou linguagens."
+    },
+    {
+     "type": "h3",
+     "text": "Títulos globais"
+    },
+    {
+     "type": "p",
+     "text": "Títulos de prestígio por marcos gerais — sequências longas, níveis altos e muito XP total (ex.: Dedicado, Incansável, Veterano, Centurião, Erudito, Imortal)."
+    },
+    {
+     "type": "h3",
+     "text": "Títulos ocultos e secretos (easter eggs)"
+    },
+    {
+     "type": "p",
+     "text": "Alguns títulos são secretos, exibidos como “???” até serem desbloqueados, com dicas enigmáticas e divertidas. Há um título oculto de prestígio para maestria sustentada (uma sequência de 90 dias em um nível alto), além de títulos secretos temáticos que os alunos descobrem conversando sobre franquias populares — por exemplo, pedir ao tutor para explicar algo “estilo Naruto” ou mencionar Star Wars, JoJo, futebol ou academia faz o tutor responder naquele estilo por uma mensagem e desbloqueia um título."
+    },
+    {
+     "type": "h3",
+     "text": "O Escolhido — campeão do semestre"
+    },
+    {
+     "type": "p",
+     "text": "Ao fim de um semestre configurado, o aluno nº 1 em XP de cada curso é coroado com um troféu permanente “O Escolhido”, mostrando o curso e o período (ex.: “O Escolhido — Cálculo I 2026.1”). Veja Semestres para definir as datas do período."
+    },
+    {
+     "type": "h3",
+     "text": "Comemorações"
+    },
+    {
+     "type": "p",
+     "text": "Quando um aluno conquista um título, o widget exibe um aviso (toast) com som e uma explosão de confete. Os alunos podem escolher qual título conquistado exibir no perfil."
+    },
+    {
+     "type": "tip",
+     "text": "Valorize os títulos dos alunos nas suas aulas — eles aparecem ao lado dos nomes nas telas de Alunos e na aba Rankings das análises, e reconhecê-los publicamente aumenta o engajamento."
+    }
+   ]
+  },
+  {
+   "id": "analytics",
+   "heading": "16. Análises e relatórios",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "As análises transformam a atividade dos alunos em insights. Abra Análises na barra lateral; use o intervalo de datas e (para super admins) o filtro de instituição no topo. A página é organizada em abas."
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Visão Geral — um resumo diário escrito por IA, alunos ativos únicos, perguntas por módulo e tópicos mais perguntados.",
+      "Engajamento e Risco — alunos que ficaram em silêncio, além de previsões de risco por IA de quem pode estar ficando para trás (exportável em CSV).",
+      "Cursos — engajamento por curso e disciplina, com alertas pedagógicos (ex.: uma turma esvaziando, ou um conceito que a maioria erra).",
+      "Conteúdo — o que os alunos mais perguntam, útil para identificar lacunas no seu material.",
+      "Quizzes — taxas de acerto/erro por conceito, um mapa de calor de dificuldade e os conceitos mais difíceis. Se estiver vazio, use “Atualizar dados de quiz” (caso contrário, reconstrói durante a noite).",
+      "Rankings — placares dos alunos e destaques positivos (próxima seção)."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Exportações"
+    },
+    {
+     "type": "p",
+     "text": "Baixe as análises em PDF, ou gere um Relatório Executivo para um resumo de mais alto nível, adequado para compartilhar com a liderança."
+    },
+    {
+     "type": "info",
+     "text": "A maioria das análises é pré-calculada durante a noite por desempenho, então atividades muito recentes podem só aparecer no dia seguinte. Os dados de quiz têm um botão “Atualizar” para quando você precisar na hora."
+    }
+   ]
+  },
+  {
+   "id": "rankings",
+   "heading": "17. Rankings e destaques",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "A aba Rankings em Análises dá a professores e gestores uma visão positiva e motivadora dos seus alunos — a contraparte das listas de risco."
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Melhores estudantes — o placar por XP total, com nível, patamar e título equipado de cada aluno.",
+      "Maior evolução — os maiores ganhos de XP no período selecionado, celebrando o esforço, não apenas a posição.",
+      "Mais ativos — maiores sequências, alunos mais ativos e totais de perguntas feitas, quizzes feitos e planos de estudo criados.",
+      "Conquistas — quem ganhou mais medalhas e os títulos que os alunos estão usando."
+     ]
+    },
+    {
+     "type": "tip",
+     "text": "Use “Maior evolução” para reconhecer alunos que estão se esforçando mesmo sem estar no topo — costuma ser mais motivador do que o placar bruto."
+    }
+   ]
+  },
+  {
+   "id": "semesters",
+   "heading": "18. Semestres e o campeão do semestre",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "Os semestres permitem à sua instituição definir intervalos de datas do período letivo. Eles alimentam o título de campeão “O Escolhido”: quando um período termina, a TutorIA olha a atividade de cada curso naquela janela e coroa o melhor aluno."
+    },
+    {
+     "type": "ol",
+     "items": [
+      "Abra Semestres na barra lateral (gestores e acima).",
+      "Crie um semestre com um rótulo (ex.: “2026.1”) e suas datas de início e fim.",
+      "Quando a data de fim passa, os campeões são premiados automaticamente — sem mais nenhuma ação."
+     ]
+    },
+    {
+     "type": "info",
+     "text": "Se você não configurar semestres, o campeão simplesmente não é coroado; todo o resto continua funcionando."
+    }
+   ]
+  },
+  {
+   "id": "plans",
+   "heading": "19. Planos, assinaturas e modelos de IA",
+   "blocks": [
+    {
+     "type": "h3",
+     "text": "Planos e assinaturas"
+    },
+    {
+     "type": "p",
+     "text": "Os planos definem o que uma instituição pode fazer (limites e recursos, como atividades). As assinaturas ligam uma instituição a um plano e cuidam da cobrança. Super admins gerenciam o catálogo de planos; gestores veem a assinatura atual da sua instituição."
+    },
+    {
+     "type": "h3",
+     "text": "Modelos de IA"
+    },
+    {
+     "type": "p",
+     "text": "A TutorIA pode usar vários provedores de IA. Na tela Modelos de IA você gerencia quais modelos estão disponíveis e ativa funções especiais para cada um:"
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Usado para extração de arquivos — lê documentos para extrair o texto.",
+      "Usado para formatação — organiza as respostas do tutor em Markdown e matemática limpos.",
+      "Usado para classificação de tópicos — agrupa as perguntas dos alunos em tópicos para as análises."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "As instituições também podem fornecer suas próprias chaves de API de provedores, que são armazenadas de forma criptografada."
+    }
+   ]
+  },
+  {
+   "id": "admin",
+   "heading": "20. Permissões, registros de auditoria e privacidade (LGPD)",
+   "blocks": [
+    {
+     "type": "h3",
+     "text": "Permissões"
+    },
+    {
+     "type": "p",
+     "text": "Permissões granulares permitem conceder ou restringir habilidades específicas além dos perfis básicos. Gestores e super admins as gerenciam na tela Permissões."
+    },
+    {
+     "type": "h3",
+     "text": "Registros de auditoria"
+    },
+    {
+     "type": "p",
+     "text": "Toda alteração relevante (quem criou, editou ou excluiu o quê) é registrada nos Registros de Auditoria, filtráveis por usuário, ação e data e exportáveis em CSV — útil para prestação de contas e conformidade."
+    },
+    {
+     "type": "h3",
+     "text": "Privacidade / LGPD"
+    },
+    {
+     "type": "p",
+     "text": "A TutorIA foi feita pensando na proteção de dados brasileira. Os alunos podem dar consentimento, exportar seus dados e solicitar exclusão pelas opções de privacidade do widget. Os dados brutos de chat e quiz expiram automaticamente após 90 dias; apenas agregados anonimizados são mantidos a longo prazo para as análises."
+    }
+   ]
+  },
+  {
+   "id": "tips",
+   "heading": "21. Dicas, boas práticas e solução de problemas",
+   "blocks": [
+    {
+     "type": "h3",
+     "text": "Obtendo as melhores respostas"
+    },
+    {
+     "type": "ul",
+     "items": [
+      "Envie materiais completos e em texto. PDFs apenas com imagens digitalizadas extraem mal — prefira texto de verdade.",
+      "Escreva um prompt do sistema focado e diga ao tutor para se manter dentro do conteúdo do curso.",
+      "Adicione alguns quizzes e flashcards cedo; eles impulsionam o engajamento e geram sinal para as análises."
+     ]
+    },
+    {
+     "type": "h3",
+     "text": "Perguntas frequentes"
+    },
+    {
+     "type": "ul",
+     "items": [
+      "“Um aluno diz que o tutor não sabe algo.” Verifique se o arquivo relevante foi enviado e aparece como pronto, e se os materiais do módulo realmente cobrem aquilo.",
+      "“A aba Quizzes das análises está vazia.” Ou nenhum quiz foi respondido ainda, ou a agregação noturna não rodou — clique em Atualizar dados de quiz.",
+      "“Meu progresso / o progresso de um aluno não anda.” A atividade é recompensada com limites diários; garanta que o aluno está identificado (student_id no link) para ser atribuída a ele.",
+      "“Os lembretes não chegam.” Confirme que o evento tem as opções de lembrete ligadas e que o aluno tem um e-mail válido cadastrado."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Ainda com dúvidas? Fale com o administrador da TutorIA ou com a equipe da plataforma — e baixe a versão DOCX correspondente deste guia para ter uma cópia offline que você pode compartilhar."
+    }
+   ]
+  }
+ ]
+}

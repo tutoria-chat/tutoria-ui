@@ -1,4 +1,18 @@
 {
+  "titles": {
+    "hidden": "El Estudiante de la Luz",
+    "tiers": { "aprendiz": "Aprendiz", "mestre": "Maestro", "lenda": "Leyenda" },
+    "tracks": {
+      "math": "Matemáticas",
+      "programming": "Programación",
+      "science": "Ciencias",
+      "health": "Salud",
+      "business": "Negocios",
+      "language": "Lenguajes",
+      "humanities": "Humanidades"
+    },
+    "globals": { "veterano": "Veterano", "imortal": "Inmortal" }
+  },
   "pages": {
     "login": "Iniciar sesión"
   },
@@ -124,6 +138,18 @@
       "titleTracksLabel": "Áreas para Títulos",
       "titleTracksPlaceholder": "Selecciona las áreas...",
       "titleTracksHelp": "Los estudiantes ganan títulos (Aprendiz/Maestro/Leyenda) acumulando XP en las áreas que este curso cuenta. Si está vacío, el área se detecta automáticamente por el nombre del curso.",
+      "enableEnemLabel": "Activar preparación ENEM / Vestibular",
+      "enableEnemHelp": "Muestra la pestaña de simulacros ENEM/Vestibular a los estudiantes de este curso. Déjalo desactivado para cursos universitarios y regulares.",
+      "enemAreaLabel": "Área del ENEM",
+      "enemAreaPlaceholder": "Selecciona el área...",
+      "enemAreaHelp": "Las preguntas se generan automáticamente para esta área — los estudiantes nunca tienen que generar nada.",
+      "enemAreaRequired": "Selecciona un área del ENEM",
+      "enemAreas": {
+        "matematica": "Matemáticas",
+        "linguagens": "Lenguajes y Códigos",
+        "natureza": "Ciencias de la Naturaleza",
+        "humanas": "Ciencias Humanas"
+      },
       "tracks": {
         "math": "Matemáticas",
         "programming": "Programación",
@@ -216,6 +242,25 @@
           "remind2d": "2 días antes",
           "remind24h": "24 horas antes",
           "noRemindersHint": "Sin recordatorios seleccionados — los estudiantes no recibirán correos sobre este evento."
+        },
+        "import": {
+          "button": "Importar desde PDF",
+          "dialogTitle": "Importar calendario desde un archivo",
+          "dialogDesc": "Trae eventos desde un archivo o un calendario externo — revisa y confirma antes de agregarlos.",
+          "fromFile": "Subir archivo",
+          "fromUrl": "Desde enlace de calendario",
+          "urlHint": "Pega la dirección iCal privada de tu calendario. En Google Calendar: Configuración → tu calendario → 'Dirección secreta en formato iCal'. En Outlook: Configuración → Calendario → Calendarios compartidos → Publicar → enlace ICS.",
+          "pickFile": "Haz clic para elegir un archivo",
+          "extract": "Extraer eventos",
+          "extracting": "Leyendo el archivo…",
+          "noEvents": "No se encontraron eventos con fecha en este archivo.",
+          "failed": "No se pudo leer el archivo. Prueba con otro.",
+          "reviewHint": "Revisa y corrige los eventos extraídos, luego confirma para agregarlos al calendario.",
+          "applyReminders": "Recordatorios por correo aplicados a todos los eventos importados:",
+          "confirm": "Confirmar y agregar eventos",
+          "confirming": "Agregando eventos…",
+          "confirmSuccess": "¡{count} eventos agregados al calendario!",
+          "removeRow": "Quitar"
         }
       },
       "modulesTab": {
@@ -297,6 +342,13 @@
         "unenrollConfirm": "Desmatricular",
         "unenrollButton": "Desmatricular del curso",
         "unenrollSuccess": "¡Estudiante desmatriculado exitosamente!",
+        "selectedCount": "{count} seleccionado(s)",
+        "unenrollSelected": "Desmatricular seleccionados",
+        "bulkUnenrollTitle": "Desmatricular estudiantes seleccionados",
+        "bulkUnenrollDescription": "¿Desmatricular {count} estudiantes de este curso? Conservan sus cuentas y pueden volver a matricularse después.",
+        "bulkUnenrollConfirm": "Desmatricular {count}",
+        "bulkUnenrollSuccess": "{count} estudiantes desmatriculados.",
+        "bulkUnenrollPartial": "{ok} desmatriculados, {failed} fallaron.",
         "unenrollError": "Error al desmatricular estudiante"
       },
       "assignmentsTab": {
@@ -1043,6 +1095,8 @@
       "secondaryColorHelp": "Usado para las burbujas de mensaje del agente",
       "defaultThemeLabel": "Tema Predeterminado",
       "defaultThemeHelp": "El esquema de colores inicial que se muestra a los estudiantes cuando se carga el widget",
+      "bubbleOpacityLabel": "Opacidad de los globos del chat",
+      "bubbleOpacityHelp": "Qué tan sólidos se ven los globos de mensajes del chat. Valores más bajos los hacen más transparentes.",
       "themeLight": "Claro",
       "themeDark": "Oscuro",
       "themeAuto": "Auto (sistema)",
@@ -1051,6 +1105,24 @@
       "saving": "Guardando...",
       "saveSuccess": "Apariencia guardada con éxito",
       "saveError": "Error al guardar la configuración de apariencia"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Direcciones web de confianza",
+      "title": "Direcciones web de confianza",
+      "description": "Elige qué sitios web propios de {name} pueden conectarse a TutorIA.",
+      "whyExplainer": "Agrégalas cuando el propio sistema de la institución —como su entorno virtual de aprendizaje (Moodle) o el portal del estudiante— necesite comunicarse directamente con TutorIA, por ejemplo para enviar respuestas para la corrección automática. Solo las direcciones que indiques aquí podrán conectarse, lo que mantiene fuera a todos los demás.",
+      "inputLabel": "Agregar una dirección web",
+      "inputPlaceholder": "https://moodle.tu-institucion.edu",
+      "inputHelp": "Pega la dirección que el personal ve en el navegador al abrir la plataforma de la institución. Puedes agregar todas las que necesites.",
+      "addButton": "Agregar",
+      "emptyState": "Aún no se agregaron direcciones web. Los sistemas de la institución no podrán conectarse hasta que agregues una aquí.",
+      "removeLabel": "Quitar esta dirección",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "saveSuccess": "Direcciones web de confianza guardadas",
+      "saveError": "No se pudieron guardar las direcciones. Inténtalo de nuevo.",
+      "loadError": "No se pudieron cargar las direcciones actuales."
     }
   },
   "professors": {
@@ -1939,13 +2011,58 @@
       "loading": "Cargando..."
     }
   },
+  "enem": {
+    "title": "Banco de Preguntas ENEM",
+    "subtitle": "Preguntas oficiales de exámenes ENEM anteriores disponibles para los simulacros de tus estudiantes.",
+    "total": "{count} preguntas oficiales",
+    "byArea": "Por área",
+    "byYear": "Por año",
+    "areas": {
+      "linguagens": "Lenguajes",
+      "humanas": "Ciencias Humanas",
+      "natureza": "Ciencias de la Naturaleza",
+      "matematica": "Matemáticas"
+    },
+    "noneYet": "Aún no se han importado preguntas.",
+    "manageTitle": "Gestionar el banco",
+    "adminHint": "Las nuevas ediciones se importan automáticamente en cada despliegue. También puedes importar o actualizar un año manualmente aquí.",
+    "importAll": "Importar / actualizar todo",
+    "importStarted": "Importación iniciada — los números se actualizarán en breve.",
+    "importError": "No se pudo iniciar la importación.",
+    "loadError": "No se pudo cargar el banco de preguntas."
+  },
+  "semesters": {
+    "title": "Semestres",
+    "subtitle": "Define los rangos de los períodos de tu institución. Cuando termina un semestre, el estudiante n.º 1 de cada curso es coronado \"El Elegido\".",
+    "selectUniversity": "Selecciona una institución...",
+    "pickUniversityHint": "Elige una institución para gestionar sus semestres.",
+    "addTitle": "Agregar semestre",
+    "editTitle": "Editar semestre",
+    "labelField": "Etiqueta",
+    "startField": "Inicio",
+    "endField": "Fin",
+    "add": "Agregar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "crowned": "Campeones coronados",
+    "empty": "Aún no hay semestres.",
+    "created": "Semestre creado.",
+    "updated": "Semestre actualizado.",
+    "deleted": "Semestre eliminado.",
+    "confirmDelete": "¿Eliminar el semestre {label}?",
+    "validationError": "Completa la etiqueta y las fechas de inicio y fin.",
+    "loadError": "No se pudieron cargar los semestres.",
+    "saveError": "No se pudo guardar. Inténtalo de nuevo."
+  },
   "sidebar": {
     "dashboard": "Panel",
     "tutorials": "Tutoriales y Guías",
+    "userGuide": "Guía del Usuario",
     "universities": "Instituciones Educativas",
     "myUniversity": "Mi institución educativa",
     "moduleTokens": "Claves de Acceso",
     "students": "Estudiantes",
+    "enemBank": "Banco ENEM",
     "professors": "Profesores",
     "users": "Usuarios",
     "administration": "Administración",
@@ -1955,6 +2072,7 @@
     "superAdmins": "Super administradores",
     "globalSearch": "Búsqueda global",
     "aiModels": "Modelos de IA",
+    "semesters": "Semestres",
     "plans": "Planes",
     "permissions": "Permisos",
     "subscriptions": "Suscripciones",
@@ -2239,6 +2357,12 @@
     "unexpectedError": "Ocurrió un error inesperado. Por favor, intenta de nuevo o vuelve a la página de inicio.",
     "tryAgain": "Intentar de nuevo",
     "homePage": "Página de inicio"
+  },
+  "userGuide": {
+    "title": "Guía del Usuario",
+    "subtitle": "La guía completa para operar TutorIA — léela aquí o descárgala en Word.",
+    "downloadLabel": "Descargar en Word:",
+    "unavailable": "No se pudo cargar la guía ahora. Inténtalo de nuevo."
   },
   "tutorials": {
     "title": "Tutoriales y Guías del Sistema",
@@ -4067,7 +4191,35 @@
       "risk": "Compromiso y Riesgo",
       "courses": "Cursos",
       "content": "Contenido",
-      "quizzes": "Quizzes"
+      "quizzes": "Quizzes",
+      "rankings": "Clasificaciones"
+    },
+    "rankings": {
+      "topPerformers": "Mejores estudiantes",
+      "topPerformersDesc": "Mayor XP total en todos los cursos",
+      "mostImproved": "Mayor progreso",
+      "mostImprovedDesc": "Mayor ganancia de XP en el período seleccionado",
+      "longestStreaks": "Rachas más largas",
+      "longestStreaksDesc": "Más días consecutivos de estudio",
+      "mostActive": "Más activos",
+      "mostActiveDesc": "Mayor actividad registrada en el período",
+      "mostBadges": "Más insignias",
+      "mostBadgesDesc": "Más logros desbloqueados",
+      "activeStudents": "Estudiantes activos",
+      "questions": "Preguntas hechas",
+      "quizzes": "Quizzes realizados",
+      "studyPlans": "Planes de estudio",
+      "level": "Nvl",
+      "days": "días",
+      "activities": "acciones",
+      "badges": "insignias",
+      "empty": "Aún no hay datos de clasificación para este período."
+    },
+    "quizRecompute": {
+      "button": "Actualizar datos de quiz",
+      "done": "Datos de quiz reconstruidos ({count} módulos).",
+      "failed": "No se pudieron reconstruir los datos de quiz ahora.",
+      "empty": "Aún no hay datos de quiz. Aparecerán cuando los estudiantes respondan quizzes, o pulsa \"Actualizar datos de quiz\" para reconstruir ahora."
     },
     "pedagogicalAlertsTitle": "Alertas Pedagógicas",
     "pedagogicalAlertsDescription": "Señales que requieren acción: cursos vaciándose y conceptos con bajo rendimiento",

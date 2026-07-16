@@ -1,4 +1,18 @@
 {
+  "titles": {
+    "hidden": "The Student of Light",
+    "tiers": { "aprendiz": "Apprentice", "mestre": "Master", "lenda": "Legend" },
+    "tracks": {
+      "math": "Mathematics",
+      "programming": "Programming",
+      "science": "Sciences",
+      "health": "Health",
+      "business": "Business",
+      "language": "Languages",
+      "humanities": "Humanities"
+    },
+    "globals": { "veterano": "Veteran", "imortal": "Immortal" }
+  },
   "pages": {
     "login": "Login"
   },
@@ -182,6 +196,18 @@
       "titleTracksLabel": "Title Areas",
       "titleTracksPlaceholder": "Select areas...",
       "titleTracksHelp": "Students earn titles (Apprentice/Master/Legend) by accumulating XP in the areas this course counts toward. Leave empty to auto-detect the area from the course name.",
+      "enableEnemLabel": "Enable ENEM / Vestibular prep",
+      "enableEnemHelp": "Shows the ENEM/Vestibular mock-exam tab to this course's students. Leave off for university and regular courses.",
+      "enemAreaLabel": "ENEM area",
+      "enemAreaPlaceholder": "Select the area...",
+      "enemAreaHelp": "Questions are auto-generated for this area — students never have to generate anything.",
+      "enemAreaRequired": "Select an ENEM area",
+      "enemAreas": {
+        "matematica": "Mathematics",
+        "linguagens": "Languages & Codes",
+        "natureza": "Natural Sciences",
+        "humanas": "Human Sciences"
+      },
       "tracks": {
         "math": "Mathematics",
         "programming": "Programming",
@@ -274,6 +300,25 @@
           "remind2d": "2 days before",
           "remind24h": "24 hours before",
           "noRemindersHint": "No reminders selected — students will not be emailed about this event."
+        },
+        "import": {
+          "button": "Import from PDF",
+          "dialogTitle": "Import calendar from a file",
+          "dialogDesc": "Bring events in from a file or an external calendar — review and confirm before they're added.",
+          "fromFile": "Upload file",
+          "fromUrl": "From calendar link",
+          "urlHint": "Paste your calendar's private iCal address. In Google Calendar: Settings → your calendar → 'Secret address in iCal format'. In Outlook: Settings → Calendar → Shared calendars → Publish → ICS link.",
+          "pickFile": "Click to choose a file",
+          "extract": "Extract events",
+          "extracting": "Reading the file…",
+          "noEvents": "No dated events were found in this file.",
+          "failed": "Could not read the file. Try another one.",
+          "reviewHint": "Review and fix the extracted events, then confirm to add them to the calendar.",
+          "applyReminders": "Email reminders to apply to all imported events:",
+          "confirm": "Confirm & add events",
+          "confirming": "Adding events…",
+          "confirmSuccess": "{count} events added to the calendar!",
+          "removeRow": "Remove"
         }
       },
       "modulesTab": {
@@ -355,7 +400,14 @@
         "unenrollConfirm": "Unenroll",
         "unenrollButton": "Unenroll from course",
         "unenrollSuccess": "Student unenrolled successfully!",
-        "unenrollError": "Error unenrolling student"
+        "unenrollError": "Error unenrolling student",
+        "selectedCount": "{count} selected",
+        "unenrollSelected": "Unenroll selected",
+        "bulkUnenrollTitle": "Unenroll selected students",
+        "bulkUnenrollDescription": "Unenroll {count} students from this course? They keep their accounts and can be re-enrolled later.",
+        "bulkUnenrollConfirm": "Unenroll {count}",
+        "bulkUnenrollSuccess": "{count} students unenrolled.",
+        "bulkUnenrollPartial": "{ok} unenrolled, {failed} failed."
       },
       "assignmentsTab": {
         "title": "Course Assignments",
@@ -1101,6 +1153,8 @@
       "secondaryColorHelp": "Used for agent message bubbles",
       "defaultThemeLabel": "Default Theme",
       "defaultThemeHelp": "The initial color scheme shown to students when the widget loads",
+      "bubbleOpacityLabel": "Chat bubble opacity",
+      "bubbleOpacityHelp": "How solid the chat message bubbles look. Lower values make them more transparent.",
       "themeLight": "Light",
       "themeDark": "Dark",
       "themeAuto": "Auto (system)",
@@ -1109,6 +1163,24 @@
       "saving": "Saving...",
       "saveSuccess": "Appearance saved successfully",
       "saveError": "Failed to save appearance settings"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Trusted web addresses",
+      "title": "Trusted web addresses",
+      "description": "Choose which of {name}'s own websites are allowed to connect to TutorIA.",
+      "whyExplainer": "Add this when the institution's own system — such as their virtual learning environment (Moodle) or student portal — needs to talk to TutorIA directly, for example to send answers over for automatic grading. Only the addresses you list here are allowed to connect, which keeps everyone else out.",
+      "inputLabel": "Add a web address",
+      "inputPlaceholder": "https://moodle.your-school.edu",
+      "inputHelp": "Paste the address staff see in the browser when they open the institution's platform. You can add as many as you need.",
+      "addButton": "Add",
+      "emptyState": "No web addresses added yet. The institution's systems won't be able to connect until you add one here.",
+      "removeLabel": "Remove this address",
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "saveSuccess": "Trusted web addresses saved",
+      "saveError": "Couldn't save the web addresses. Please try again.",
+      "loadError": "Couldn't load the current web addresses."
     }
   },
   "professors": {
@@ -1939,13 +2011,58 @@
       "loading": "Loading..."
     }
   },
+  "enem": {
+    "title": "ENEM Question Bank",
+    "subtitle": "Official past-ENEM questions available for your students' practice simulados.",
+    "total": "{count} official questions",
+    "byArea": "By area",
+    "byYear": "By year",
+    "areas": {
+      "linguagens": "Languages",
+      "humanas": "Human Sciences",
+      "natureza": "Natural Sciences",
+      "matematica": "Mathematics"
+    },
+    "noneYet": "No questions imported yet.",
+    "manageTitle": "Manage the bank",
+    "adminHint": "New editions import automatically on deploy. You can also import or refresh a year on demand here.",
+    "importAll": "Import / refresh all",
+    "importStarted": "Import started — counts will update shortly.",
+    "importError": "Could not start the import.",
+    "loadError": "Could not load the question bank."
+  },
+  "semesters": {
+    "title": "Semesters",
+    "subtitle": "Set your institution's term ranges. When a semester ends, the #1 student of each course is crowned \"The One\".",
+    "selectUniversity": "Select an institution...",
+    "pickUniversityHint": "Pick an institution to manage its semesters.",
+    "addTitle": "Add a semester",
+    "editTitle": "Edit semester",
+    "labelField": "Label",
+    "startField": "Starts",
+    "endField": "Ends",
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "crowned": "Champions crowned",
+    "empty": "No semesters yet.",
+    "created": "Semester created.",
+    "updated": "Semester updated.",
+    "deleted": "Semester deleted.",
+    "confirmDelete": "Delete semester {label}?",
+    "validationError": "Fill in the label, start and end dates.",
+    "loadError": "Could not load semesters.",
+    "saveError": "Could not save. Please try again."
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutorials & Guides",
+    "userGuide": "User Guide",
     "universities": "Institutions",
     "myUniversity": "My Institution",
     "moduleTokens": "Access Keys",
     "students": "Students",
+    "enemBank": "ENEM Bank",
     "professors": "Professors",
     "users": "Users",
     "administration": "Administration",
@@ -1955,6 +2072,7 @@
     "superAdmins": "Super Administrators",
     "globalSearch": "Global Search",
     "aiModels": "AI Models",
+    "semesters": "Semesters",
     "plans": "Plans",
     "permissions": "Permissions",
     "subscriptions": "Subscriptions",
@@ -2239,6 +2357,12 @@
     "unexpectedError": "An unexpected error occurred. Please try again or go back to the home page.",
     "tryAgain": "Try Again",
     "homePage": "Home Page"
+  },
+  "userGuide": {
+    "title": "User Guide",
+    "subtitle": "The complete guide to running TutorIA — read it here or download it as Word.",
+    "downloadLabel": "Download as Word:",
+    "unavailable": "The guide couldn't be loaded right now. Please try again."
   },
   "tutorials": {
     "title": "System Tutorials & Guides",
@@ -3745,7 +3869,35 @@
       "risk": "Engagement & Risk",
       "courses": "Courses",
       "content": "Content",
-      "quizzes": "Quizzes"
+      "quizzes": "Quizzes",
+      "rankings": "Rankings"
+    },
+    "rankings": {
+      "topPerformers": "Top performers",
+      "topPerformersDesc": "Highest total XP across all courses",
+      "mostImproved": "Most improved",
+      "mostImprovedDesc": "Biggest XP gain in the selected period",
+      "longestStreaks": "Longest streaks",
+      "longestStreaksDesc": "Most consecutive days of study",
+      "mostActive": "Most active",
+      "mostActiveDesc": "Most logged activity in the period",
+      "mostBadges": "Most badges",
+      "mostBadgesDesc": "Most achievements unlocked",
+      "activeStudents": "Active students",
+      "questions": "Questions asked",
+      "quizzes": "Quizzes taken",
+      "studyPlans": "Study plans",
+      "level": "Lvl",
+      "days": "days",
+      "activities": "actions",
+      "badges": "badges",
+      "empty": "No ranking data yet for this period."
+    },
+    "quizRecompute": {
+      "button": "Refresh quiz data",
+      "done": "Quiz data rebuilt ({count} modules).",
+      "failed": "Couldn't rebuild quiz data right now.",
+      "empty": "No quiz data yet. Once students take quizzes it appears here — or hit \"Refresh quiz data\" to rebuild now."
     },
     "pedagogicalAlertsTitle": "Pedagogical Alerts",
     "pedagogicalAlertsDescription": "Signals that need action: courses emptying out and concepts students are failing",

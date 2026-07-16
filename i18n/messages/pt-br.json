@@ -1,4 +1,18 @@
 {
+  "titles": {
+    "hidden": "O Estudante da Luz",
+    "tiers": { "aprendiz": "Aprendiz", "mestre": "Mestre", "lenda": "Lenda" },
+    "tracks": {
+      "math": "Matemática",
+      "programming": "Programação",
+      "science": "Ciências",
+      "health": "Saúde",
+      "business": "Negócios",
+      "language": "Linguagens",
+      "humanities": "Humanas"
+    },
+    "globals": { "veterano": "Veterano", "imortal": "Imortal" }
+  },
   "pages": {
     "login": "Login"
   },
@@ -124,6 +138,18 @@
       "titleTracksLabel": "Áreas para Títulos",
       "titleTracksPlaceholder": "Selecione as áreas...",
       "titleTracksHelp": "Os alunos ganham títulos (Aprendiz/Mestre/Lenda) acumulando XP nas áreas que este curso conta. Se vazio, a área é detectada automaticamente pelo nome do curso.",
+      "enableEnemLabel": "Ativar preparação ENEM / Vestibular",
+      "enableEnemHelp": "Mostra a aba de simulados ENEM/Vestibular para os alunos deste curso. Deixe desativado para cursos universitários e regulares.",
+      "enemAreaLabel": "Área do ENEM",
+      "enemAreaPlaceholder": "Selecione a área...",
+      "enemAreaHelp": "As questões são geradas automaticamente para esta área — os alunos nunca precisam gerar nada.",
+      "enemAreaRequired": "Selecione uma área do ENEM",
+      "enemAreas": {
+        "matematica": "Matemática",
+        "linguagens": "Linguagens e Códigos",
+        "natureza": "Ciências da Natureza",
+        "humanas": "Ciências Humanas"
+      },
       "tracks": {
         "math": "Matemática",
         "programming": "Programação",
@@ -216,6 +242,25 @@
           "remind2d": "2 dias antes",
           "remind24h": "24 horas antes",
           "noRemindersHint": "Nenhum lembrete selecionado — os alunos não receberão e-mails sobre este evento."
+        },
+        "import": {
+          "button": "Importar de PDF",
+          "dialogTitle": "Importar calendário de um arquivo",
+          "dialogDesc": "Traga eventos de um arquivo ou de um calendário externo — revise e confirme antes de adicionar.",
+          "fromFile": "Enviar arquivo",
+          "fromUrl": "De um link de calendário",
+          "urlHint": "Cole o endereço iCal privado do seu calendário. No Google Agenda: Configurações → seu calendário → 'Endereço secreto no formato iCal'. No Outlook: Configurações → Calendário → Calendários compartilhados → Publicar → link ICS.",
+          "pickFile": "Clique para escolher um arquivo",
+          "extract": "Extrair eventos",
+          "extracting": "Lendo o arquivo…",
+          "noEvents": "Nenhum evento com data foi encontrado neste arquivo.",
+          "failed": "Não foi possível ler o arquivo. Tente outro.",
+          "reviewHint": "Revise e corrija os eventos extraídos, depois confirme para adicioná-los ao calendário.",
+          "applyReminders": "Lembretes por e-mail aplicados a todos os eventos importados:",
+          "confirm": "Confirmar e adicionar eventos",
+          "confirming": "Adicionando eventos…",
+          "confirmSuccess": "{count} eventos adicionados ao calendário!",
+          "removeRow": "Remover"
         }
       },
       "modulesTab": {
@@ -297,6 +342,13 @@
         "unenrollConfirm": "Desmatricular",
         "unenrollButton": "Desmatricular da disciplina",
         "unenrollSuccess": "Estudante desmatriculado com sucesso!",
+        "selectedCount": "{count} selecionado(s)",
+        "unenrollSelected": "Desmatricular selecionados",
+        "bulkUnenrollTitle": "Desmatricular estudantes selecionados",
+        "bulkUnenrollDescription": "Desmatricular {count} estudantes desta disciplina? Eles mantêm suas contas e podem ser rematriculados depois.",
+        "bulkUnenrollConfirm": "Desmatricular {count}",
+        "bulkUnenrollSuccess": "{count} estudantes desmatriculados.",
+        "bulkUnenrollPartial": "{ok} desmatriculados, {failed} falharam.",
         "unenrollError": "Erro ao desmatricular estudante"
       },
       "assignmentsTab": {
@@ -1043,6 +1095,8 @@
       "secondaryColorHelp": "Usada para as bolhas de mensagem do agente",
       "defaultThemeLabel": "Tema Padrão",
       "defaultThemeHelp": "O esquema de cores inicial exibido aos estudantes quando o widget carrega",
+      "bubbleOpacityLabel": "Opacidade dos balões do chat",
+      "bubbleOpacityHelp": "O quão sólidos os balões de mensagem do chat aparecem. Valores menores deixam-nos mais transparentes.",
       "themeLight": "Claro",
       "themeDark": "Escuro",
       "themeAuto": "Auto (sistema)",
@@ -1051,6 +1105,24 @@
       "saving": "Salvando...",
       "saveSuccess": "Aparência salva com sucesso",
       "saveError": "Falha ao salvar configurações de aparência"
+    },
+    "trustedOrigins": {
+      "buttonLabel": "Endereços de site confiáveis",
+      "title": "Endereços de site confiáveis",
+      "description": "Escolha quais sites da própria {name} podem se conectar ao TutorIA.",
+      "whyExplainer": "Adicione aqui quando o sistema da própria instituição — como o ambiente virtual de aprendizagem (Moodle) ou o portal do aluno — precisar se comunicar diretamente com o TutorIA, por exemplo para enviar respostas para correção automática. Somente os endereços que você listar aqui poderão se conectar, o que mantém todos os outros de fora.",
+      "inputLabel": "Adicionar um endereço de site",
+      "inputPlaceholder": "https://moodle.sua-instituicao.edu.br",
+      "inputHelp": "Cole o endereço que a equipe vê no navegador ao abrir a plataforma da instituição. Você pode adicionar quantos precisar.",
+      "addButton": "Adicionar",
+      "emptyState": "Nenhum endereço de site adicionado ainda. Os sistemas da instituição não conseguirão se conectar até você adicionar um aqui.",
+      "removeLabel": "Remover este endereço",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "saving": "Salvando...",
+      "saveSuccess": "Endereços de site confiáveis salvos",
+      "saveError": "Não foi possível salvar os endereços. Tente novamente.",
+      "loadError": "Não foi possível carregar os endereços atuais."
     }
   },
   "professors": {
@@ -1939,13 +2011,58 @@
       "loading": "Carregando..."
     }
   },
+  "enem": {
+    "title": "Banco de Questões ENEM",
+    "subtitle": "Questões oficiais de provas anteriores do ENEM disponíveis para os simulados dos seus alunos.",
+    "total": "{count} questões oficiais",
+    "byArea": "Por área",
+    "byYear": "Por ano",
+    "areas": {
+      "linguagens": "Linguagens",
+      "humanas": "Ciências Humanas",
+      "natureza": "Ciências da Natureza",
+      "matematica": "Matemática"
+    },
+    "noneYet": "Nenhuma questão importada ainda.",
+    "manageTitle": "Gerenciar o banco",
+    "adminHint": "Novas edições são importadas automaticamente a cada deploy. Você também pode importar ou atualizar um ano manualmente aqui.",
+    "importAll": "Importar / atualizar tudo",
+    "importStarted": "Importação iniciada — os números serão atualizados em instantes.",
+    "importError": "Não foi possível iniciar a importação.",
+    "loadError": "Não foi possível carregar o banco de questões."
+  },
+  "semesters": {
+    "title": "Semestres",
+    "subtitle": "Defina os períodos letivos da sua instituição. Quando um semestre termina, o aluno nº 1 de cada curso é coroado \"O Escolhido\".",
+    "selectUniversity": "Selecione uma instituição...",
+    "pickUniversityHint": "Escolha uma instituição para gerenciar seus semestres.",
+    "addTitle": "Adicionar semestre",
+    "editTitle": "Editar semestre",
+    "labelField": "Rótulo",
+    "startField": "Início",
+    "endField": "Fim",
+    "add": "Adicionar",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "crowned": "Campeões coroados",
+    "empty": "Nenhum semestre ainda.",
+    "created": "Semestre criado.",
+    "updated": "Semestre atualizado.",
+    "deleted": "Semestre excluído.",
+    "confirmDelete": "Excluir o semestre {label}?",
+    "validationError": "Preencha o rótulo e as datas de início e fim.",
+    "loadError": "Não foi possível carregar os semestres.",
+    "saveError": "Não foi possível salvar. Tente novamente."
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "tutorials": "Tutoriais e Guias",
+    "userGuide": "Guia do Usuário",
     "universities": "Instituições de Ensino",
     "myUniversity": "Minha Instituição de Ensino",
     "moduleTokens": "Chaves de Acesso",
     "students": "Alunos",
+    "enemBank": "Banco ENEM",
     "professors": "Professores",
     "users": "Usuários",
     "administration": "Administração",
@@ -1955,6 +2072,7 @@
     "superAdmins": "Super Administradores",
     "globalSearch": "Busca Global",
     "aiModels": "Modelos de IA",
+    "semesters": "Semestres",
     "plans": "Planos",
     "permissions": "Permissões",
     "subscriptions": "Assinaturas",
@@ -2239,6 +2357,12 @@
     "unexpectedError": "Ocorreu um erro inesperado. Tente novamente ou volte para a página inicial.",
     "tryAgain": "Tentar Novamente",
     "homePage": "Página Inicial"
+  },
+  "userGuide": {
+    "title": "Guia do Usuário",
+    "subtitle": "O guia completo para operar a TutorIA — leia aqui ou baixe em Word.",
+    "downloadLabel": "Baixar em Word:",
+    "unavailable": "Não foi possível carregar o guia agora. Tente novamente."
   },
   "tutorials": {
     "title": "Tutoriais e Guias do Sistema",
@@ -4777,7 +4901,35 @@
       "risk": "Engajamento & Risco",
       "courses": "Cursos",
       "content": "Conteúdo",
-      "quizzes": "Quizzes"
+      "quizzes": "Quizzes",
+      "rankings": "Rankings"
+    },
+    "rankings": {
+      "topPerformers": "Melhores estudantes",
+      "topPerformersDesc": "Maior XP total em todos os cursos",
+      "mostImproved": "Maior evolução",
+      "mostImprovedDesc": "Maior ganho de XP no período selecionado",
+      "longestStreaks": "Maiores sequências",
+      "longestStreaksDesc": "Mais dias seguidos de estudo",
+      "mostActive": "Mais ativos",
+      "mostActiveDesc": "Maior atividade registrada no período",
+      "mostBadges": "Mais conquistas",
+      "mostBadgesDesc": "Mais conquistas desbloqueadas",
+      "activeStudents": "Estudantes ativos",
+      "questions": "Perguntas feitas",
+      "quizzes": "Quizzes feitos",
+      "studyPlans": "Planos de estudo",
+      "level": "Nível",
+      "days": "dias",
+      "activities": "ações",
+      "badges": "conquistas",
+      "empty": "Ainda não há dados de ranking para este período."
+    },
+    "quizRecompute": {
+      "button": "Atualizar dados de quiz",
+      "done": "Dados de quiz reconstruídos ({count} módulos).",
+      "failed": "Não foi possível reconstruir os dados de quiz agora.",
+      "empty": "Ainda não há dados de quiz. Eles aparecem quando os estudantes respondem quizzes — ou clique em \"Atualizar dados de quiz\" para reconstruir agora."
     },
     "pedagogicalAlertsTitle": "Alertas Pedagógicos",
     "pedagogicalAlertsDescription": "Sinais que pedem ação: turmas esvaziando e conceitos com baixo desempenho",

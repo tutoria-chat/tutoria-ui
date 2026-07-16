@@ -30,11 +30,13 @@ import {
   BarChart3
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
+import { TitleBadge } from '@/components/students/title-badge';
 import { CourseCalendarTab } from '@/components/courses/course-calendar-tab';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Loading } from '@/components/ui/loading-spinner';
 import {
   Dialog,
@@ -90,6 +92,7 @@ export default function CourseDetailsPage() {
   const [studentsLoading, setStudentsLoading] = useState(false);
   const [students, setStudents] = useState<Student[]>([]);
   const [totalStudents, setTotalStudents] = useState(0);
+  const [selectedStudentIds, setSelectedStudentIds] = useState<Set<number>>(new Set());
 
   // Active students count (from backend, across all pages)
   const [activeStudentsCount, setActiveStudentsCount] = useState(0);
@@ -177,6 +180,7 @@ export default function CourseDetailsPage() {
   // Load students for this course
   const loadStudents = useCallback(async () => {
     setStudentsLoading(true);
+    setSelectedStudentIds(new Set());
     try {
       const response = await apiClient.getStudents({
         courseId: parseInt(courseId),
@@ -505,6 +509,47 @@ export default function CourseDetailsPage() {
     });
   };
 
+  // ── Multi-select unenroll ──────────────────────────────────────────────────
+  const toggleStudent = (id: number) =>
+    setSelectedStudentIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
+  const toggleAllOnPage = () =>
+    setSelectedStudentIds((prev) => {
+      const next = new Set(prev);
+      const allSelected = students.length > 0 && students.every((s) => next.has(s.id));
+      if (allSelected) students.forEach((s) => next.delete(s.id));
+      else students.forEach((s) => next.add(s.id));
+      return next;
+    });
+
+  const handleBulkUnenroll = () => {
+    const ids = Array.from(selectedStudentIds);
+    if (ids.length === 0) return;
+    confirm({
+      title: tStudents('bulkUnenrollTitle'),
+      description: tStudents('bulkUnenrollDescription', { count: ids.length }),
+      variant: 'destructive',
+      confirmText: tStudents('bulkUnenrollConfirm', { count: ids.length }),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        const cid = parseInt(courseId);
+        const results = await Promise.allSettled(ids.map((id) => apiClient.unenrollStudent(id, cid)));
+        const failed = results.filter((r) => r.status === 'rejected').length;
+        if (failed === 0) {
+          toast.success(tStudents('bulkUnenrollSuccess', { count: ids.length }));
+        } else {
+          toast.error(tStudents('bulkUnenrollPartial', { ok: ids.length - failed, failed }));
+        }
+        setSelectedStudentIds(new Set());
+        loadStudents();
+      },
+    });
+  };
+
   const moduleColumns: TableColumn<Module>[] = [
     {
       key: 'name',
@@ -657,7 +702,29 @@ export default function CourseDetailsPage() {
     }
   ];
 
+  const allOnPageSelected = students.length > 0 && students.every((s) => selectedStudentIds.has(s.id));
+  const someOnPageSelected = students.some((s) => selectedStudentIds.has(s.id));
+
   const studentColumns: TableColumn<Student>[] = [
+    ...(canManageStudents() ? [{
+      key: 'select',
+      label: (
+        <Checkbox
+          aria-label="select all"
+          checked={allOnPageSelected ? true : someOnPageSelected ? 'indeterminate' : false}
+          onCheckedChange={toggleAllOnPage}
+        />
+      ),
+      width: '40px',
+      render: (_: unknown, student: Student) => (
+        <Checkbox
+          aria-label="select row"
+          checked={selectedStudentIds.has(student.id)}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          onCheckedChange={() => toggleStudent(student.id)}
+        />
+      ),
+    } as TableColumn<Student>] : []),
     {
       key: 'firstName',
       label: tStudents('columns.name'),
@@ -668,7 +735,10 @@ export default function CourseDetailsPage() {
             <GraduationCap className="h-5 w-5 text-purple-600 dark:text-purple-400" />
           </div>
           <div>
-            <div className="font-medium">{student.firstName} {student.lastName}</div>
+            <div className="flex items-center gap-2">
+              <span className="font-medium">{student.firstName} {student.lastName}</span>
+              <TitleBadge title={student.equippedTitle} />
+            </div>
             <div className="text-sm text-muted-foreground">{student.username}</div>
           </div>
         </div>
@@ -1103,6 +1173,17 @@ export default function CourseDetailsPage() {
                   data={students}
                   columns={studentColumns}
                   loading={studentsLoading}
+                  actions={canManageStudents() && selectedStudentIds.size > 0 ? (
+                    <div className="flex items-center gap-3 rounded-md bg-muted/50 px-3 py-1.5">
+                      <span className="text-sm text-muted-foreground">
+                        {tStudents('selectedCount', { count: selectedStudentIds.size })}
+                      </span>
+                      <Button variant="destructive" size="sm" onClick={handleBulkUnenroll}>
+                        <UserMinus className="mr-2 h-4 w-4" />
+                        {tStudents('unenrollSelected')}
+                      </Button>
+                    </div>
+                  ) : undefined}
                   search={{
                     value: studentSearch,
                     placeholder: tStudents('searchPlaceholder'),

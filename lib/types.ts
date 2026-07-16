@@ -161,6 +161,7 @@ export interface University {
   widgetPrimaryColor?: string;
   widgetSecondaryColor?: string;
   widgetDefaultTheme?: string;
+  widgetBubbleOpacity?: number;
 }
 
 export interface UniversityCreate {
@@ -235,6 +236,8 @@ export interface Course {
   universityName?: string;
   externalCourseId?: number | null;
   titleTracks?: string | null;
+  enableEnem?: boolean;
+  enemArea?: string | null;
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -249,6 +252,8 @@ export interface CourseCreate {
   universityId: number;
   externalCourseId?: number | null;
   titleTracks?: string | null;
+  enableEnem?: boolean;
+  enemArea?: string | null;
 }
 
 export interface CourseUpdate {
@@ -257,6 +262,34 @@ export interface CourseUpdate {
   description?: string;
   externalCourseId?: number | null;
   titleTracks?: string | null;
+  enableEnem?: boolean;
+  enemArea?: string | null;
+}
+
+// Semesters (term ranges; drive the "The One" champion title)
+export interface Semester {
+  id: number;
+  universityId: number;
+  universityName?: string;
+  label: string;
+  startsAtUtc: string;
+  endsAtUtc: string;
+  championsAwarded: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface SemesterCreate {
+  universityId: number;
+  label: string;
+  startsAtUtc: string;
+  endsAtUtc: string;
+}
+
+export interface SemesterUpdate {
+  label?: string;
+  startsAtUtc?: string;
+  endsAtUtc?: string;
 }
 
 // Grading Jobs
@@ -611,6 +644,22 @@ export interface StudentCourseEnrollment {
   enrolledAt: string;
 }
 
+/** Official ENEM question-bank counts (global, shared across institutions). */
+export interface EnemBankStatus {
+  total: number;
+  byYear: Record<string, number>;
+  byArea: Record<string, number>;
+  availableYears: string[];
+}
+
+/** The academic title a student chose to display (resolved from the gamification rollup). */
+export interface EquippedTitle {
+  key: string;
+  type: 'track' | 'global' | 'hidden';
+  track?: string | null;
+  tier?: string | null;
+}
+
 export interface Student {
   id: number;
   username: string;
@@ -622,6 +671,7 @@ export interface Student {
   universityId?: number;
   universityName?: string;
   enrolledCourses: StudentCourseEnrollment[];
+  equippedTitle?: EquippedTitle | null;
   lastLoginAt?: string;
   createdAt: string;
   updatedAt: string;
@@ -898,7 +948,8 @@ export interface FormState<T> {
 // UI Types
 export interface TableColumn<T> {
   key: keyof T | string;
-  label: string;
+  /** Header content. Usually a string, but accepts a node (e.g. a select-all checkbox). */
+  label: string | React.ReactNode;
   sortable?: boolean;
   width?: string;
   render?: (value: any, item: T) => React.ReactNode;
@@ -1223,6 +1274,45 @@ export interface ConceptPerformanceDto {
   difficulty?: string;
 }
 
+// Rankings / positive highlights (staff-facing gamification leaderboards)
+export interface RankingPerformerDto {
+  rank: number;
+  studentId: number;
+  name: string;
+  totalXp: number;
+  level: number;
+  tier: string;
+  currentStreakDays: number;
+  longestStreakDays: number;
+  displayedTitleKey?: string | null;
+}
+
+export interface RankingValueDto {
+  rank: number;
+  studentId: number;
+  name: string;
+  value: number;
+  displayedTitleKey?: string | null;
+}
+
+export interface EngagementTotalsDto {
+  questions: number;
+  quizzes: number;
+  flashcards: number;
+  studyPlans: number;
+  activeStudents: number;
+}
+
+export interface RankingsResponseDto {
+  topPerformers: RankingPerformerDto[];
+  mostImproved: RankingValueDto[];
+  longestStreaks: RankingValueDto[];
+  mostActive: RankingValueDto[];
+  mostBadges: RankingValueDto[];
+  engagement: EngagementTotalsDto;
+  totalStudents: number;
+}
+
 // Unified dashboard response combining all dashboard data
 export interface UnifiedDashboardResponseDto {
   summary: DashboardSummaryDto;
@@ -1444,6 +1534,28 @@ export interface CourseEvent {
   remind2Days: boolean;
   remind24Hours: boolean;
   isSynthesized: boolean;
+}
+
+export interface ExtractedCalendarEvent {
+  title: string;
+  eventType: CourseEventType;
+  date?: string | null;   // YYYY-MM-DD (São Paulo)
+  time?: string | null;   // HH:MM (São Paulo) or empty
+  description?: string | null;
+}
+
+export interface CalendarImportJob {
+  id: number;
+  courseId: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'confirmed';
+  extractedCount: number;
+  confirmedCount: number;
+  errorMessage?: string | null;
+  originalFilename?: string | null;
+  processedAt?: string | null;
+  confirmedAt?: string | null;
+  createdAt: string;
+  events: ExtractedCalendarEvent[];
 }
 
 export interface CourseEventCreate {
