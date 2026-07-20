@@ -119,11 +119,23 @@ import type {
 export class ApiError extends Error {
   status: number;
   validationErrors?: Record<string, string[]>;
-  constructor(message: string, status: number, validationErrors?: Record<string, string[]>) {
+  /** Stable machine-readable error code from the backend (e.g. "MISSING_EMAIL_COLUMN"). */
+  code?: string;
+  /** Structured context for localizing the message (e.g. found headers, limits). */
+  context?: Record<string, unknown>;
+  constructor(
+    message: string,
+    status: number,
+    validationErrors?: Record<string, string[]>,
+    code?: string,
+    context?: Record<string, unknown>,
+  ) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
     this.validationErrors = validationErrors;
+    this.code = code;
+    this.context = context;
   }
 
   get isPlanLimitError(): boolean {
@@ -351,7 +363,11 @@ class TutoriaAPIClient {
         const errorMessage = errorData.detail || errorData.message || errorData.title || `HTTP error! status: ${response.status}`;
         // ASP.NET Core ModelState validation returns { errors: { FieldName: ["error1", "error2"] } }
         const validationErrors = errorData.errors as Record<string, string[]> | undefined;
-        throw new ApiError(errorMessage, response.status, validationErrors);
+        // Some endpoints (e.g. student import) return a stable { code, context } so
+        // the frontend can localize the message instead of showing raw English.
+        const code = typeof errorData.code === 'string' ? errorData.code : undefined;
+        const context = errorData.context as Record<string, unknown> | undefined;
+        throw new ApiError(errorMessage, response.status, validationErrors, code, context);
       }
 
       return await response.json();

@@ -1693,7 +1693,10 @@ export interface StudentImportError {
   row: number;
   matricula: string;
   email: string;
+  /** Human-readable fallback message (English, from the backend). */
   reason: string;
+  /** Stable code the frontend localizes (see students.import.errors.*). Optional. */
+  reasonCode?: string;
 }
 
 export interface StudentMassUnenrollResult {

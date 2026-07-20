@@ -22,6 +22,7 @@ import { Upload, Loader2, CheckCircle2, XCircle, AlertCircle, FileSpreadsheet, C
 import { ProfessorOnly, SuperAdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
+import { ACCEPTED_IMPORT_ACCEPT, isAcceptedImportFile, translateImportError } from '@/lib/student-import-errors';
 import { useFetch } from '@/lib/hooks';
 import type { Course, Student, StudentImportResult, StudentMassUnenrollResult, StudentImportJob, University, PaginatedResponse, TableColumn, UniversityLimits } from '@/lib/types';
 import { toast } from 'sonner';
@@ -130,11 +131,10 @@ export default function StudentsPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const ext = file.name.toLowerCase();
-      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+      if (isAcceptedImportFile(file.name)) {
         setSelectedFile(file);
       } else {
-        toast.error('Please select a .csv or .xlsx file');
+        toast.error(tImport('invalidFileType'));
       }
     }
   };
@@ -154,6 +154,9 @@ export default function StudentsPage() {
         toast.error(error.message, {
           action: { label: tAlerts('upgrade'), onClick: () => window.location.href = '/subscription' },
         });
+      } else if (error instanceof ApiError) {
+        // Localize known import error codes; fall back to the backend message.
+        toast.error(translateImportError(tImport, error.code, error.context, error.message));
       } else {
         toast.error(error instanceof Error ? error.message : tImport('importError'));
       }
@@ -176,11 +179,10 @@ export default function StudentsPage() {
   const handleUnenrollFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const ext = file.name.toLowerCase();
-      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+      if (isAcceptedImportFile(file.name)) {
         setUnenrollFile(file);
       } else {
-        toast.error('Please select a .csv or .xlsx file');
+        toast.error(tImport('invalidFileType'));
       }
     }
   };
@@ -202,7 +204,11 @@ export default function StudentsPage() {
       toast.success(tUnenroll('success', { count: result.unenrolledStudents }));
     } catch (error) {
       console.error('Mass unenroll failed:', error);
-      toast.error(error instanceof Error ? error.message : tUnenroll('error'));
+      if (error instanceof ApiError) {
+        toast.error(translateImportError(tImport, error.code, error.context, error.message));
+      } else {
+        toast.error(error instanceof Error ? error.message : tUnenroll('error'));
+      }
     } finally {
       setIsUnenrolling(false);
     }
@@ -502,14 +508,14 @@ export default function StudentsPage() {
                     <div>
                       <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground">{tImport('dropzone')}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{tImport('acceptedFormats')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tImport('importFormats')}</p>
                     </div>
                   )}
                 </div>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".csv,.xlsx"
+                  accept={ACCEPTED_IMPORT_ACCEPT}
                   onChange={handleFileSelect}
                   className="hidden"
                 />
@@ -551,7 +557,7 @@ export default function StudentsPage() {
                         {importResult.errors.map((err, i) => (
                           <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
                             <span className="font-medium">{tImport('row')} {err.row}:</span>{' '}
-                            {err.reason}
+                            {translateImportError(tImport, err.reasonCode, undefined, err.reason)}
                             {err.email && <span className="text-muted-foreground"> ({err.email})</span>}
                           </div>
                         ))}
@@ -633,14 +639,14 @@ export default function StudentsPage() {
                     <div>
                       <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground">{tUnenroll('dropzone')}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{tImport('acceptedFormats')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tImport('importFormats')}</p>
                     </div>
                   )}
                 </div>
                 <input
                   ref={unenrollFileRef}
                   type="file"
-                  accept=".csv,.xlsx"
+                  accept={ACCEPTED_IMPORT_ACCEPT}
                   onChange={handleUnenrollFileSelect}
                   className="hidden"
                 />
@@ -694,7 +700,7 @@ export default function StudentsPage() {
                         {unenrollResult.errors.map((err, i) => (
                           <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
                             <span className="font-medium">{tImport('row')} {err.row}:</span>{' '}
-                            {err.reason}
+                            {translateImportError(tImport, err.reasonCode, undefined, err.reason)}
                             {(err.email || err.matricula) && (
                               <span className="text-muted-foreground"> ({err.email || err.matricula})</span>
                             )}
