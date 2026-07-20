@@ -239,19 +239,23 @@ export default function DashboardPage() {
                   />
                 </Suspense>
 
-                <Suspense fallback={<LoadingSpinner />}>
-                  <StatsCard
-                    title={tAnalytics('summary.totalCost')}
-                    value={`$${(summary?.totalCostUSD ?? 0).toFixed(2)}`}
-                    description={tAnalytics('dashboard.last30Days')}
-                    icon={DollarSign}
-                    trend={summary?.comparedToPrevious ? {
-                      value: summary.comparedToPrevious.costPercentChange,
-                      label: tAnalytics('summary.vsPrevious'),
-                      isPositive: summary.comparedToPrevious.costPercentChange <= 0
-                    } : undefined}
-                  />
-                </Suspense>
+                {/* Cost is internal-only — shown to super admins (us), never to
+                    customers (managers, tutors, coordinators, admin professors). */}
+                {isSuperAdmin && (
+                  <Suspense fallback={<LoadingSpinner />}>
+                    <StatsCard
+                      title={tAnalytics('summary.totalCost')}
+                      value={`$${(summary?.totalCostUSD ?? 0).toFixed(2)}`}
+                      description={tAnalytics('dashboard.last30Days')}
+                      icon={DollarSign}
+                      trend={summary?.comparedToPrevious ? {
+                        value: summary.comparedToPrevious.costPercentChange,
+                        label: tAnalytics('summary.vsPrevious'),
+                        isPositive: summary.comparedToPrevious.costPercentChange <= 0
+                      } : undefined}
+                    />
+                  </Suspense>
+                )}
 
                 <Suspense fallback={<LoadingSpinner />}>
                   <StatsCard

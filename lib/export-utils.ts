@@ -331,7 +331,7 @@ export function exportAnalyticsToPDF(data: {
           [t.uniqueStudents, (summary.overview.uniqueStudents ?? 0).toLocaleString()],
           [t.activeModules, (summary.overview.activeModules ?? 0).toString()],
           [t.activeCourses, (summary.overview.activeCourses ?? 0).toString()],
-          [t.estimatedCost + ' (USD)', `$${(summary.overview.totalCostUSD ?? 0).toFixed(2)}`],
+          // Cost is internal-only and intentionally omitted from customer reports.
         ],
         theme: 'striped',
         headStyles: { fillColor: [59, 130, 246] },
@@ -355,7 +355,6 @@ export function exportAnalyticsToPDF(data: {
           [t.students, (todayUsage.uniqueStudents ?? 0).toString()],
           [t.conversations, (todayUsage.uniqueConversations ?? 0).toString()],
           [t.avgResponseTime, `${((todayUsage.averageResponseTime ?? 0) / 1000).toFixed(2)}s`],
-          [t.totalCost, `$${(todayCost.estimatedCostUSD ?? 0).toFixed(2)}`],
           [t.totalTokens, (todayCost.totalTokens ?? 0).toLocaleString()],
         ],
         theme: 'striped',
@@ -413,12 +412,11 @@ export function exportAnalyticsToPDF(data: {
 
       autoTable(doc, {
         startY: yPosition,
-        head: [[t.studentName, t.messages, t.conversations, t.cost]],
+        head: [[t.studentName, t.messages, t.conversations]],
         body: topStudents.map((student) => [
           student.studentName || student.studentEmail || `Student #${student.studentId}`,
           (student.messageCount ?? 0).toString(),
           (student.conversationCount ?? 0).toString(),
-          `$${(student.estimatedCostUSD ?? 0).toFixed(2)}`,
         ]),
         theme: 'striped',
         headStyles: { fillColor: [59, 130, 246] },

@@ -50,6 +50,7 @@ import { AdminProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient, ApiError } from '@/lib/api';
+import { ACCEPTED_IMPORT_ACCEPT, isAcceptedImportFile, translateImportError } from '@/lib/student-import-errors';
 import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -67,6 +68,7 @@ export default function CourseDetailsPage() {
   const tCommon = useTranslations('common');
   const tModules = useTranslations('modules');
   const tStudents = useTranslations('courses.detail.studentsTab');
+  const tImport = useTranslations('students.import');
   const tProfTab = useTranslations('courses.detail.professorsTab');
 
   const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'calendar' | 'assignments' | 'grading'>('modules');
@@ -375,11 +377,10 @@ export default function CourseDetailsPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const ext = file.name.toLowerCase();
-      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+      if (isAcceptedImportFile(file.name)) {
         setSelectedFile(file);
       } else {
-        toast.error('Please select a .csv or .xlsx file');
+        toast.error(tImport('invalidFileType'));
       }
     }
   };
@@ -399,6 +400,8 @@ export default function CourseDetailsPage() {
       console.error('Import failed:', error);
       if (error instanceof ApiError && error.isPlanLimitError) {
         toast.error(error.message);
+      } else if (error instanceof ApiError) {
+        toast.error(translateImportError(tImport, error.code, error.context, error.message));
       } else {
         toast.error(error instanceof Error ? error.message : tStudents('importError'));
       }
@@ -1551,14 +1554,14 @@ export default function CourseDetailsPage() {
                     <p className="text-sm text-muted-foreground">
                       {tCommon('buttons.upload') || 'Drop your file here or click to browse'}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-1">.csv, .xlsx</p>
+                    <p className="text-xs text-muted-foreground mt-1">{tImport('importFormats')}</p>
                   </div>
                 )}
               </div>
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv,.xlsx"
+                accept={ACCEPTED_IMPORT_ACCEPT}
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -1599,8 +1602,8 @@ export default function CourseDetailsPage() {
                     <div className="max-h-32 overflow-y-auto space-y-1">
                       {importResult.errors.map((err, i) => (
                         <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
-                          <span className="font-medium">Row {err.row}:</span>{' '}
-                          {err.reason}
+                          <span className="font-medium">{tImport('row')} {err.row}:</span>{' '}
+                          {translateImportError(tImport, err.reasonCode, undefined, err.reason)}
                           {err.email && <span className="text-muted-foreground"> ({err.email})</span>}
                         </div>
                       ))}
