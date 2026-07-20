@@ -179,11 +179,10 @@ export default function StudentsPage() {
   const handleUnenrollFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const ext = file.name.toLowerCase();
-      if (ext.endsWith('.csv') || ext.endsWith('.xlsx')) {
+      if (isAcceptedImportFile(file.name)) {
         setUnenrollFile(file);
       } else {
-        toast.error('Please select a .csv or .xlsx file');
+        toast.error(tImport('invalidFileType'));
       }
     }
   };
@@ -205,7 +204,11 @@ export default function StudentsPage() {
       toast.success(tUnenroll('success', { count: result.unenrolledStudents }));
     } catch (error) {
       console.error('Mass unenroll failed:', error);
-      toast.error(error instanceof Error ? error.message : tUnenroll('error'));
+      if (error instanceof ApiError) {
+        toast.error(translateImportError(tImport, error.code, error.context, error.message));
+      } else {
+        toast.error(error instanceof Error ? error.message : tUnenroll('error'));
+      }
     } finally {
       setIsUnenrolling(false);
     }
@@ -636,14 +639,14 @@ export default function StudentsPage() {
                     <div>
                       <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
                       <p className="text-sm text-muted-foreground">{tUnenroll('dropzone')}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{tImport('acceptedFormats')}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{tImport('importFormats')}</p>
                     </div>
                   )}
                 </div>
                 <input
                   ref={unenrollFileRef}
                   type="file"
-                  accept=".csv,.xlsx"
+                  accept={ACCEPTED_IMPORT_ACCEPT}
                   onChange={handleUnenrollFileSelect}
                   className="hidden"
                 />
@@ -697,7 +700,7 @@ export default function StudentsPage() {
                         {unenrollResult.errors.map((err, i) => (
                           <div key={i} className="text-xs bg-red-50 dark:bg-red-950/20 rounded px-2 py-1">
                             <span className="font-medium">{tImport('row')} {err.row}:</span>{' '}
-                            {err.reason}
+                            {translateImportError(tImport, err.reasonCode, undefined, err.reason)}
                             {(err.email || err.matricula) && (
                               <span className="text-muted-foreground"> ({err.email || err.matricula})</span>
                             )}
