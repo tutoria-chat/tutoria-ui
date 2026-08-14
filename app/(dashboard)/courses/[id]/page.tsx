@@ -26,12 +26,13 @@ import {
   UserPlus,
   Lock,
   Download,
-  ClipboardList,
-  BarChart3
+  BarChart3,
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { TitleBadge } from '@/components/students/title-badge';
 import { CourseCalendarTab } from '@/components/courses/course-calendar-tab';
+import { CourseAssignmentsTab } from '@/components/courses/course-assignments-tab';
+import { CourseQuizBankTab } from '@/components/courses/course-quiz-bank-tab';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -55,7 +56,7 @@ import { formatDateShort, hasBeenUpdated } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits, Assignment, GradingJob } from '@/lib/types';
+import type { CourseWithDetails, Module, Professor, Student, StudentImportResult, StudentUpdate, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits, GradingJob } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
@@ -71,9 +72,8 @@ export default function CourseDetailsPage() {
   const tImport = useTranslations('students.import');
   const tProfTab = useTranslations('courses.detail.professorsTab');
 
-  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'calendar' | 'assignments' | 'grading'>('modules');
+  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'calendar' | 'assignments' | 'quiz-bank' | 'grading'>('modules');
   const tGrading = useTranslations('courses.detail.gradingTab');
-  const tAssignments = useTranslations('courses.detail.assignmentsTab');
 
   // Fetch course basic info
   const { data: course, loading: courseLoading, error: courseError } = useFetch<CourseWithDetails>(`/api/courses/${courseId}`);
@@ -150,9 +150,10 @@ export default function CourseDetailsPage() {
   const [professorSearch, setProfessorSearch] = useState('');
   const [assigningId, setAssigningId] = useState<number | null>(null);
 
-  // Assignments tab state
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
+  // Assignments tab: the shared CourseAssignmentsTab owns the data; the page
+  // only tracks the count for the tab badge.
+  const [assignmentsCount, setAssignmentsCount] = useState(0);
+  const [quizBankCount, setQuizBankCount] = useState(0);
 
   // Grading tab state
   const [gradingJobs, setGradingJobs] = useState<GradingJob[]>([]);
@@ -216,25 +217,6 @@ export default function CourseDetailsPage() {
       loadStudents();
     }
   }, [activeTab, loadStudents]);
-
-  // Load assignments when tab becomes active
-  const loadAssignments = useCallback(async () => {
-    setAssignmentsLoading(true);
-    try {
-      const response = await apiClient.getAssignments({ courseId: parseInt(courseId) });
-      setAssignments(response.items.filter(a => a.isPublished));
-    } catch {
-      setAssignments([]);
-    } finally {
-      setAssignmentsLoading(false);
-    }
-  }, [courseId]);
-
-  useEffect(() => {
-    if (activeTab === 'assignments') {
-      loadAssignments();
-    }
-  }, [activeTab, loadAssignments]);
 
   // Load grading jobs
   const loadGradingJobs = useCallback(async () => {
@@ -989,6 +971,20 @@ export default function CourseDetailsPage() {
             {t('tabs.calendar')}
           </button>
 
+          <button
+            onClick={() => setActiveTab('quiz-bank')}
+            className={`py-2 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'quiz-bank'
+                ? 'border-primary text-primary'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+            }`}
+          >
+            {t('tabs.quizBank')}
+            {quizBankCount > 0 && (
+              <Badge variant="secondary" className="ml-2">{quizBankCount}</Badge>
+            )}
+          </button>
+
           {course.university?.hasAssignments && (
             <>
               <button
@@ -1000,6 +996,9 @@ export default function CourseDetailsPage() {
                 }`}
               >
                 {t('tabs.assignments')}
+                {assignmentsCount > 0 && (
+                  <Badge variant="secondary" className="ml-2">{assignmentsCount}</Badge>
+                )}
               </button>
 
               <button
@@ -1235,56 +1234,21 @@ export default function CourseDetailsPage() {
             </Card>
           )}
         </AdminOnly>
-        {/* Assignments Tab */}
+        {/* Assignments Tab — assignments belong to the course */}
         {activeTab === 'assignments' && (
-          <Card>
-            <CardHeader>
-              <CardTitle>{tAssignments('title')}</CardTitle>
-              <CardDescription>{tAssignments('description')}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {assignmentsLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                </div>
-              ) : assignments.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <ClipboardList className="h-10 w-10 text-muted-foreground mb-3" />
-                  <p className="text-muted-foreground">{tAssignments('empty')}</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {assignments.map(assignment => (
-                    <div key={assignment.id} className="flex items-center justify-between rounded-lg border p-4">
-                      <div className="flex items-start gap-3">
-                        <FileText className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
-                        <div>
-                          <p className="font-medium">{assignment.title}</p>
-                          {assignment.description && (
-                            <p className="text-sm text-muted-foreground line-clamp-1">{assignment.description}</p>
-                          )}
-                          <div className="flex items-center gap-2 mt-1">
-                            {assignment.moduleName && (
-                              <Badge variant="secondary" className="text-xs">{assignment.moduleName}</Badge>
-                            )}
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
-                              <Calendar className="h-3 w-3" />
-                              {formatDateShort(assignment.dueDate)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/modules/${assignment.moduleId}`}>
-                          {tAssignments('openModule')}
-                        </Link>
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <CourseAssignmentsTab
+            courseId={parseInt(courseId)}
+            onCountChange={setAssignmentsCount}
+          />
+        )}
+
+        {/* Question Bank Tab — one bank shared by every module in the course */}
+        {activeTab === 'quiz-bank' && (
+          <CourseQuizBankTab
+            courseId={parseInt(courseId)}
+            canGenerateWithAI={user?.role === 'super_admin' || !!limits?.hasAIQuizzes}
+            onCountChange={setQuizBankCount}
+          />
         )}
 
         {/* Grading Tab */}

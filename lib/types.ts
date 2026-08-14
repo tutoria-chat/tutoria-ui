@@ -312,7 +312,7 @@ export interface GradingJob {
 // Quiz Upload Jobs
 export interface QuizUploadJob {
   id: number;
-  moduleId: number;
+  courseId: number;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   extractedCount: number;
   errorMessage?: string;
@@ -886,7 +886,9 @@ export interface PermissionDefinition {
 // Quiz question from the database (Python backend response format via to_dict())
 export interface QuizQuestion {
   id: number;
-  module_id: number;
+  course_id: number;
+  /** Provenance: which module's material this question was generated from (null for uploads). */
+  module_id: number | null;
   question_number: number;
   question_text: string;
   difficulty: 'easy' | 'medium' | 'hard';
@@ -1737,8 +1739,8 @@ export interface AssignmentContextFile {
 
 export interface Assignment {
   id: number;
-  moduleId: number;
-  moduleName?: string;
+  courseId: number;
+  courseName?: string;
   title: string;
   description?: string;
   dueDate: string;
@@ -1759,7 +1761,7 @@ export interface Assignment {
 }
 
 export interface AssignmentCreate {
-  moduleId: number;
+  courseId: number;
   title: string;
   description?: string;
   dueDate: string;
