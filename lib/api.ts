@@ -114,6 +114,10 @@ import type {
   AssignmentUpdate,
   GradingJob,
   QuizUploadJob,
+  LtiSetupInfo,
+  LtiRegistration,
+  LtiRegistrationCreate,
+  LtiContextMapping,
 } from './types';
 
 export class ApiError extends Error {
@@ -1733,6 +1737,47 @@ class TutoriaAPIClient {
       throw new Error(error.message || 'Failed to accept invitation');
     }
     return response.json();
+  }
+
+  // ==========================================================================
+  // LTI 1.3 registrations
+  // ==========================================================================
+
+  /** The URLs to paste into the LMS when registering Tutoria. */
+  async getLtiSetupInfo(): Promise<LtiSetupInfo> {
+    return this.get('/api/lti/registrations/setup-info');
+  }
+
+  async getLtiRegistrations(): Promise<LtiRegistration[]> {
+    return this.get('/api/lti/registrations');
+  }
+
+  async createLtiRegistration(data: LtiRegistrationCreate): Promise<LtiRegistration> {
+    return this.post('/api/lti/registrations', data);
+  }
+
+  async updateLtiRegistration(
+    id: number,
+    data: Partial<Pick<LtiRegistration, 'name' | 'authLoginUrl' | 'authTokenUrl' | 'keySetUrl' | 'isActive'>>,
+  ): Promise<LtiRegistration> {
+    return this.put(`/api/lti/registrations/${id}`, data);
+  }
+
+  async deleteLtiRegistration(id: number): Promise<void> {
+    return this.delete(`/api/lti/registrations/${id}`);
+  }
+
+  async getLtiContexts(registrationId: number): Promise<LtiContextMapping[]> {
+    return this.get(`/api/lti/registrations/${registrationId}/contexts`);
+  }
+
+  /** Links an LMS course to a Tutoria course; pass null to unlink. */
+  async setLtiContextCourse(
+    registrationId: number,
+    mappingId: number,
+    courseId: number | null,
+  ): Promise<LtiContextMapping> {
+    return this.put(`/api/lti/registrations/${registrationId}/contexts/${mappingId}`, { courseId });
   }
 }
 

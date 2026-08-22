@@ -28,7 +28,8 @@ import {
   Library,
   CalendarRange,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Plug
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -105,6 +106,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('moduleTokens'),
       href: '/tokens',
       icon: Key,
+      requiredPermission: 'tokens:read',
+    },
+    {
+      label: t('integrations'),
+      href: '/integrations',
+      icon: Plug,
       requiredPermission: 'tokens:read',
     },
     {
