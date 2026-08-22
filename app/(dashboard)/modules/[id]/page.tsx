@@ -47,7 +47,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
+import { ProfessorOnly } from '@/components/auth/role-guard';
 import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
@@ -919,7 +919,7 @@ export default function ModuleDetailsPage() {
                   <FileText className="h-8 w-8 text-blue-500" />
                 </div>
 
-                <AdminOnly>
+                <ProfessorOnly>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-bold">{tokens?.length || 0}</p>
@@ -927,7 +927,7 @@ export default function ModuleDetailsPage() {
                     </div>
                     <BookOpen className="h-8 w-8 text-purple-500" />
                   </div>
-                </AdminOnly>
+                </ProfessorOnly>
               </CardContent>
             </Card>
           </div>
@@ -990,8 +990,8 @@ export default function ModuleDetailsPage() {
             </CardContent>
           </Card>
 
-          {/* Module Tokens */}
-          <AdminOnly>
+          {/* Module Tokens — professors manage their own module's keys here */}
+          <ProfessorOnly>
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -1030,7 +1030,7 @@ export default function ModuleDetailsPage() {
                 />
               </CardContent>
             </Card>
-          </AdminOnly>
+          </ProfessorOnly>
         </TabsContent>
 
         <TabsContent value="quiz-bank" className="space-y-6">
