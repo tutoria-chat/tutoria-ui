@@ -659,7 +659,22 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
             {tCommon('cancel')}
           </Button>
 
-          {currentStep < steps.length - 1 ? (
+          {/*
+            Save is available on every step, not just the last one. handleSubmit
+            already validates all steps and jumps to the first invalid one, so
+            saving early is safe — it just spares the user clicking Next through
+            steps they did not want to change.
+          */}
+          <Button
+            type="button"
+            variant={currentStep < steps.length - 1 ? 'secondary' : 'default'}
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? (module ? t('updating') : t('creating')) : (module ? t('update') : t('create'))}
+          </Button>
+
+          {currentStep < steps.length - 1 && (
             <Button
               type="button"
               onClick={handleNext}
@@ -667,14 +682,6 @@ export function ModuleFormStepped({ module, courseId, onSubmit, onCancel, isLoad
             >
               {tCommon('next')}
               <ChevronRight className="ml-2 h-4 w-4" />
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? (module ? t('updating') : t('creating')) : (module ? t('update') : t('create'))}
             </Button>
           )}
         </div>

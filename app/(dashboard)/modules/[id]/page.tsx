@@ -25,8 +25,7 @@ import {
   Plus,
   RefreshCw,
   ClipboardList,
-  Sparkles,
-} from 'lucide-react';
+  Sparkles, Search } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { CourseAssignmentsTab } from '@/components/courses/course-assignments-tab';
 import { CourseQuizBankTab } from '@/components/courses/course-quiz-bank-tab';
@@ -49,7 +48,7 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
-import { TokenModal } from '@/components/tokens/token-modal';
+import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
@@ -77,6 +76,8 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
+  const [tokenModalMode, setTokenModalMode] = useState<TokenModalMode>('create');
+  const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
   const [fileViewerOpen, setFileViewerOpen] = useState(false);
   const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
   const [viewingFileName, setViewingFileName] = useState<string>('');
@@ -579,6 +580,18 @@ export default function ModuleDetailsPage() {
     }
   ];
 
+  const openTokenModal = (mode: TokenModalMode, token?: ModuleAccessToken) => {
+    setTokenModalMode(mode);
+    setSelectedToken(token);
+    setTokenModalOpen(true);
+  };
+
+  const closeTokenModal = () => {
+    setTokenModalOpen(false);
+    setSelectedToken(undefined);
+    setTokenModalMode('create');
+  };
+
   const tokenColumns: TableColumn<ModuleAccessToken>[] = [
     {
       key: 'name',
@@ -656,7 +669,7 @@ export default function ModuleDetailsPage() {
     {
       key: 'actions',
       label: t('columns.actions'),
-      width: '140px',
+      width: '220px',
       render: (_, token) => {
         const jwtToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null;
         // shareUrl: no auth_token — safe to share with students
@@ -703,6 +716,25 @@ export default function ModuleDetailsPage() {
               title={tTokens('actionButtons.openWidget')}
             >
               <ExternalLink className="h-4 w-4" />
+            </Button>
+
+            {/* Details / edit, so a key can be managed without leaving the module */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openTokenModal('view', token)}
+              title={tTokens('actionButtons.view')}
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openTokenModal('edit', token)}
+              title={tTokens('actionButtons.edit')}
+            >
+              <Edit className="h-4 w-4" />
             </Button>
           </div>
         );
@@ -969,7 +1001,7 @@ export default function ModuleDetailsPage() {
                       {t('tokensGenerated')}
                     </CardDescription>
                   </div>
-                  <Button onClick={() => setTokenModalOpen(true)}>
+                  <Button onClick={() => openTokenModal('create')}>
                     <Key className="mr-2 h-4 w-4" />
                     {t('createToken')}
                   </Button>
@@ -1077,14 +1109,19 @@ export default function ModuleDetailsPage() {
 
       {/* Token Creation Modal */}
       <TokenModal
-        mode="create"
+        mode={tokenModalMode}
         open={tokenModalOpen}
-        onClose={() => setTokenModalOpen(false)}
+        onClose={closeTokenModal}
         onSuccess={() => {
-          setTokenModalOpen(false);
+          closeTokenModal();
           refetchTokens?.();
-          toast.success(t('tokenCreatedSuccess'));
+          // Only the create flow has a dedicated success message; edit/revoke
+          // surface their own feedback from inside the modal.
+          if (tokenModalMode === 'create') {
+            toast.success(t('tokenCreatedSuccess'));
+          }
         }}
+        token={selectedToken}
         preselectedModuleId={moduleId}
       />
 
