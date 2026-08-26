@@ -34,11 +34,13 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
   const [firstName, setFirstName] = useState(user?.firstName || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
-  // Readonly fields from external system (no setters needed)
+  // Readonly field from external system (no setter needed)
   const governmentId = user?.governmentId || '';
-  const externalId = user?.externalId || '';
-  // Editable field
+  // Editable fields
+  // Matricula: staff set/edit this so they can log into the student widget to test it.
+  const [externalId, setExternalId] = useState(user?.externalId || '');
   const [birthdate, setBirthdate] = useState(user?.birthdate || '');
+  const canEditMatricula = !!user && user.role !== 'student';
 
   // Preferences state
   const [themePreference, setThemePreference] = useState(user?.themePreference || 'system');
@@ -54,6 +56,7 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
         lastName: lastName,
         email: email,
         birthdate: birthdate,
+        ...(canEditMatricula ? { externalId: externalId.trim() } : {}),
       });
 
       // Update user in localStorage
@@ -65,7 +68,8 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
           userData.lastName = lastName;
           userData.email = email;
           userData.birthdate = birthdate;
-          // governmentId and externalId remain unchanged (from external system)
+          if (canEditMatricula) userData.externalId = externalId.trim();
+          // governmentId remains unchanged (from external system)
           localStorage.setItem('tutoria_user', JSON.stringify(userData));
         }
       }
@@ -246,17 +250,17 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
                 </div>
               )}
 
-              {externalId && user.role !== 'super_admin' && (
+              {canEditMatricula && (
                 <div>
                   <Label htmlFor="externalId">{t('externalIdLabel')}</Label>
                   <Input
                     id="externalId"
                     value={externalId}
-                    disabled
-                    className="bg-muted"
+                    onChange={(e) => setExternalId(e.target.value)}
+                    placeholder={t('externalIdPlaceholder')}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    {t('externalIdReadonly')}
+                    {t('externalIdHint')}
                   </p>
                 </div>
               )}

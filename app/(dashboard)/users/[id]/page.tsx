@@ -70,6 +70,7 @@ export default function UserDetailPage() {
     email: '',
     username: '',
     userType: '',
+    externalId: '',
   });
   const [editErrors, setEditErrors] = useState<Record<string, string>>({});
 
@@ -102,6 +103,7 @@ export default function UserDetailPage() {
         email: data.email,
         username: data.username,
         userType: data.userType,
+        externalId: data.externalId ?? '',
       });
     } catch (err) {
       console.error('Failed to load user:', err);
@@ -214,13 +216,16 @@ export default function UserDetailPage() {
         email: editForm.email,
         username: editForm.username,
         ...(editForm.userType !== user?.userType ? { userType: editForm.userType } : {}),
+        ...(editForm.externalId.trim() !== (user?.externalId ?? '') ? { externalId: editForm.externalId.trim() } : {}),
       });
       toast.success(t('updateSuccess'));
       setIsEditing(false);
       loadUser();
     } catch (err: any) {
       console.error('Failed to update user:', err);
-      if (err.message?.includes('username')) {
+      if (err.message?.toLowerCase().includes('matricula')) {
+        setEditErrors({ externalId: t('matriculaExists') });
+      } else if (err.message?.includes('username')) {
         setEditErrors({ username: t('usernameExists') });
       } else if (err.message?.includes('email')) {
         setEditErrors({ email: t('emailExists') });
@@ -461,6 +466,23 @@ export default function UserDetailPage() {
                     </SelectContent>
                   </Select>
                 </div>
+                {editForm.userType !== 'student' && (
+                  <div className="space-y-2">
+                    <Label htmlFor="externalId">{t('matriculaLabel')}</Label>
+                    <Input
+                      id="externalId"
+                      value={editForm.externalId}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, externalId: e.target.value }))}
+                      placeholder={t('matriculaPlaceholder')}
+                      disabled={isUpdating}
+                    />
+                    {editErrors.externalId ? (
+                      <p className="text-sm text-destructive">{editErrors.externalId}</p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">{t('matriculaHint')}</p>
+                    )}
+                  </div>
+                )}
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setIsEditing(false)} disabled={isUpdating}>
                     {t('cancel')}

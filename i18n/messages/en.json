@@ -1523,7 +1523,11 @@
       "confirmRemoveUniversityDescription": "Are you sure you want to remove {name} from {university}? They will lose access to all data in this institution.",
       "confirmRemove": "Remove",
       "removeSuccess": "User removed from institution successfully.",
-      "removeError": "Failed to remove user from institution."
+      "removeError": "Failed to remove user from institution.",
+      "matriculaLabel": "Matricula",
+      "matriculaPlaceholder": "e.g. 20231234",
+      "matriculaHint": "Lets this person log into the student widget to test it. Unique in the institution; leave blank to remove.",
+      "matriculaExists": "This matricula is already in use at the institution."
     }
   },
   "students": {
@@ -2105,7 +2109,7 @@
     "governmentIdLabel": "Government ID/SSN",
     "governmentIdPlaceholder": "Ex: 000-00-0000",
     "externalIdLabel": "External ID/Registration",
-    "externalIdPlaceholder": "Ex: STU20231234",
+    "externalIdPlaceholder": "e.g. 20231234",
     "birthdateLabel": "Birthdate",
     "governmentIdReadonly": "This field is imported from the external system and cannot be changed",
     "externalIdReadonly": "This field is imported from the external system and cannot be changed",
@@ -2146,7 +2150,8 @@
     "profileUpdateSuccess": "Profile updated successfully!",
     "profileUpdateError": "Error updating profile",
     "languageChangeInfo": "The page will reload to apply the new language",
-    "saveError": "Error saving settings"
+    "saveError": "Error saving settings",
+    "externalIdHint": "Add your matricula to log into the student widget and test it (your activity won’t count toward statistics). Must be unique in the institution."
   },
   "dateRangePicker": {
     "placeholder": "Pick a date range",
@@ -4681,7 +4686,8 @@
       "usernameAlreadyExists": "This username is already taken. Please choose another.",
       "submit": "Create Account",
       "submitting": "Creating account..."
-    }
+    },
+    "matriculaReminder": "After creating your institution, add your matricula in your profile so you can test the student widget."
   },
   "subscription": {
     "title": "Subscription",
@@ -4926,8 +4932,12 @@
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must be at least 8 characters",
       "usernameTaken": "This username is already taken",
-      "generic": "Something went wrong. Please try again."
-    }
+      "generic": "Something went wrong. Please try again.",
+      "matriculaTaken": "This matricula is already in use at your institution."
+    },
+    "matricula": "Matricula (optional)",
+    "matriculaPlaceholder": "Your matricula",
+    "matriculaHint": "Enter your matricula if you’ll test the student widget. You can also add it later in your profile."
   },
   "assignments": {
     "title": "Assignments",

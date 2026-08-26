@@ -536,6 +536,7 @@ class TutoriaAPIClient {
     themePreference?: string;
     languagePreference?: string;
     birthdate?: string;
+    externalId?: string; // matricula — lets staff log into the student widget to test it
   }): Promise<UserResponse> {
     return this.put('/api/auth/me', data);
   }
@@ -563,7 +564,7 @@ class TutoriaAPIClient {
     return this.get(`/api/users/${userId}`, undefined, false); // Management API
   }
 
-  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string; userType?: string; isAdmin?: boolean }): Promise<UserResponse> {
+  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string; userType?: string; isAdmin?: boolean; externalId?: string }): Promise<UserResponse> {
     return this.put(`/api/users/${userId}`, data, false); // Management API
   }
 
@@ -1725,7 +1726,7 @@ class TutoriaAPIClient {
   }
 
   // Accept invitation (public, no auth)
-  async acceptInvitation(data: { token: string; username: string; firstName: string; lastName: string; password: string }): Promise<{ userId: number; email: string; message: string }> {
+  async acceptInvitation(data: { token: string; username: string; firstName: string; lastName: string; password: string; externalId?: string }): Promise<{ userId: number; email: string; message: string }> {
     const baseUrl = this.baseURL;
     const response = await fetch(`${baseUrl}/api/auth/accept-invitation`, {
       method: 'POST',

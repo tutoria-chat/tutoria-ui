@@ -1465,7 +1465,11 @@
       "confirmRemoveUniversityDescription": "Tem certeza de que deseja remover {name} de {university}? O usuário perderá acesso a todos os dados desta instituição de ensino.",
       "confirmRemove": "Remover",
       "removeSuccess": "Usuário removido da instituição de ensino com sucesso.",
-      "removeError": "Falha ao remover usuário da instituição de ensino."
+      "removeError": "Falha ao remover usuário da instituição de ensino.",
+      "matriculaLabel": "Matrícula",
+      "matriculaPlaceholder": "Ex.: 20231234",
+      "matriculaHint": "Permite que esta pessoa entre no widget do aluno para testá-lo. Única na instituição; deixe em branco para remover.",
+      "matriculaExists": "Esta matrícula já está em uso na instituição."
     }
   },
   "students": {
@@ -2105,7 +2109,7 @@
     "governmentIdLabel": "CPF/Documento",
     "governmentIdPlaceholder": "Ex: 000.000.000-00",
     "externalIdLabel": "Matrícula/ID Externo",
-    "externalIdPlaceholder": "Ex: 20231234567",
+    "externalIdPlaceholder": "Ex.: 20231234",
     "birthdateLabel": "Data de Nascimento",
     "governmentIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
     "externalIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
@@ -2146,7 +2150,8 @@
     "profileUpdateSuccess": "Perfil atualizado com sucesso!",
     "profileUpdateError": "Erro ao atualizar perfil",
     "languageChangeInfo": "A página será recarregada para aplicar o novo idioma",
-    "saveError": "Erro ao salvar configurações"
+    "saveError": "Erro ao salvar configurações",
+    "externalIdHint": "Adicione sua matrícula para entrar no widget do aluno e testá-lo (sua atividade não conta nas estatísticas). Deve ser única na instituição."
   },
   "dateRangePicker": {
     "placeholder": "Escolha um intervalo de datas",
@@ -5628,7 +5633,8 @@
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Escolha outro.",
       "submit": "Criar Conta",
       "submitting": "Criando conta..."
-    }
+    },
+    "matriculaReminder": "Depois de criar sua instituição, adicione sua matrícula no seu perfil para poder testar o widget do aluno."
   },
   "subscription": {
     "title": "Assinatura",
@@ -5873,8 +5879,12 @@
       "passwordRequired": "A senha é obrigatória",
       "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
       "usernameTaken": "Este nome de usuário já está em uso",
-      "generic": "Algo deu errado. Por favor, tente novamente."
-    }
+      "generic": "Algo deu errado. Por favor, tente novamente.",
+      "matriculaTaken": "Esta matrícula já está em uso na sua instituição."
+    },
+    "matricula": "Matrícula (opcional)",
+    "matriculaPlaceholder": "Sua matrícula",
+    "matriculaHint": "Informe sua matrícula se for testar o widget do aluno. Você também pode adicioná-la depois no seu perfil."
   },
   "assignments": {
     "title": "Atividades",

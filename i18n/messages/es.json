@@ -1465,7 +1465,11 @@
       "confirmRemoveUniversityDescription": "¿Está seguro de que desea eliminar a {name} de {university}? Perderá el acceso a todos los datos de esta institución educativa.",
       "confirmRemove": "Eliminar",
       "removeSuccess": "Usuario eliminado de la institución educativa con éxito.",
-      "removeError": "Error al eliminar al usuario de la institución educativa."
+      "removeError": "Error al eliminar al usuario de la institución educativa.",
+      "matriculaLabel": "Matrícula",
+      "matriculaPlaceholder": "Ej.: 20231234",
+      "matriculaHint": "Permite que esta persona entre en el widget del estudiante para probarlo. Única en la institución; deja en blanco para quitarla.",
+      "matriculaExists": "Esta matrícula ya está en uso en la institución."
     }
   },
   "students": {
@@ -2105,7 +2109,7 @@
     "governmentIdLabel": "Documento de identidad",
     "governmentIdPlaceholder": "Ej: 00.000.000-0",
     "externalIdLabel": "Matrícula/ID Externo",
-    "externalIdPlaceholder": "Ej: EST20231234",
+    "externalIdPlaceholder": "Ej.: 20231234",
     "birthdateLabel": "Fecha de nacimiento",
     "governmentIdReadonly": "Este campo se importa del sistema externo y no se puede cambiar",
     "externalIdReadonly": "Este campo se importa del sistema externo y no se puede cambiar",
@@ -2146,7 +2150,8 @@
     "profileUpdateSuccess": "¡Perfil actualizado exitosamente!",
     "profileUpdateError": "Error al actualizar el perfil",
     "languageChangeInfo": "La página se recargará para aplicar el nuevo idioma",
-    "saveError": "Error al guardar la configuración"
+    "saveError": "Error al guardar la configuración",
+    "externalIdHint": "Añade tu matrícula para entrar en el widget del estudiante y probarlo (tu actividad no cuenta en las estadísticas). Debe ser única en la institución."
   },
   "dateRangePicker": {
     "placeholder": "Selecciona un rango de fechas",
@@ -4918,7 +4923,8 @@
       "usernameAlreadyExists": "Este nombre de usuario ya está en uso. Elija otro.",
       "submit": "Crear Cuenta",
       "submitting": "Creando cuenta..."
-    }
+    },
+    "matriculaReminder": "Después de crear tu institución, añade tu matrícula en tu perfil para poder probar el widget del estudiante."
   },
   "subscription": {
     "title": "Suscripción",
@@ -5163,8 +5169,12 @@
       "passwordRequired": "La contraseña es obligatoria",
       "passwordMinLength": "La contraseña debe tener al menos 8 caracteres",
       "usernameTaken": "Este nombre de usuario ya está en uso",
-      "generic": "Algo salió mal. Por favor, inténtalo de nuevo."
-    }
+      "generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+      "matriculaTaken": "Esta matrícula ya está en uso en tu institución."
+    },
+    "matricula": "Matrícula (opcional)",
+    "matriculaPlaceholder": "Tu matrícula",
+    "matriculaHint": "Ingresa tu matrícula si vas a probar el widget del estudiante. También puedes añadirla luego en tu perfil."
   },
   "assignments": {
     "title": "Actividades",
