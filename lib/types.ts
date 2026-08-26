@@ -312,7 +312,7 @@ export interface GradingJob {
 // Quiz Upload Jobs
 export interface QuizUploadJob {
   id: number;
-  moduleId: number;
+  courseId: number;
   status: 'pending' | 'processing' | 'completed' | 'failed';
   extractedCount: number;
   errorMessage?: string;
@@ -886,7 +886,9 @@ export interface PermissionDefinition {
 // Quiz question from the database (Python backend response format via to_dict())
 export interface QuizQuestion {
   id: number;
-  module_id: number;
+  course_id: number;
+  /** Provenance: which module's material this question was generated from (null for uploads). */
+  module_id: number | null;
   question_number: number;
   question_text: string;
   difficulty: 'easy' | 'medium' | 'hard';
@@ -1737,8 +1739,8 @@ export interface AssignmentContextFile {
 
 export interface Assignment {
   id: number;
-  moduleId: number;
-  moduleName?: string;
+  courseId: number;
+  courseName?: string;
   title: string;
   description?: string;
   dueDate: string;
@@ -1759,7 +1761,7 @@ export interface Assignment {
 }
 
 export interface AssignmentCreate {
-  moduleId: number;
+  courseId: number;
   title: string;
   description?: string;
   dueDate: string;
@@ -1776,4 +1778,63 @@ export interface AssignmentUpdate {
   dueDate: string;
   keywords?: string[];
   gradingCriteria?: string;
+}
+
+// ============================================================================
+// LTI 1.3 — connecting an LMS (Moodle, Canvas, ...) to Tutoria
+// ============================================================================
+
+/** The URLs an LMS administrator pastes into their platform. */
+export interface LtiSetupInfo {
+  loginUrl: string;
+  launchUrl: string;
+  jwksUrl: string;
+  enabled: boolean;
+}
+
+export interface LtiDeployment {
+  id: number;
+  deploymentId: string;
+  isActive: boolean;
+}
+
+export interface LtiRegistration {
+  id: number;
+  issuer: string;
+  clientId: string;
+  authLoginUrl: string;
+  authTokenUrl: string;
+  keySetUrl: string;
+  name?: string | null;
+  universityId: number;
+  universityName?: string | null;
+  isActive: boolean;
+  deployments: LtiDeployment[];
+  createdAt?: string | null;
+}
+
+export interface LtiRegistrationCreate {
+  issuer: string;
+  clientId: string;
+  deploymentId: string;
+  authLoginUrl: string;
+  authTokenUrl: string;
+  keySetUrl: string;
+  name?: string;
+  universityId: number;
+}
+
+/**
+ * An LMS course seen on a launch. `courseId` is null until an admin links it —
+ * Tutoria never guesses, so unmapped courses surface in the UI instead.
+ */
+export interface LtiContextMapping {
+  id: number;
+  contextId: string;
+  contextTitle?: string | null;
+  contextLabel?: string | null;
+  courseId?: number | null;
+  courseName?: string | null;
+  lastSeenAt?: string | null;
+  isMapped: boolean;
 }

@@ -1,7 +1,11 @@
 {
   "titles": {
     "hidden": "O Estudante da Luz",
-    "tiers": { "aprendiz": "Aprendiz", "mestre": "Mestre", "lenda": "Lenda" },
+    "tiers": {
+      "aprendiz": "Aprendiz",
+      "mestre": "Mestre",
+      "lenda": "Lenda"
+    },
     "tracks": {
       "math": "Matemática",
       "programming": "Programação",
@@ -11,7 +15,10 @@
       "language": "Linguagens",
       "humanities": "Humanas"
     },
-    "globals": { "veterano": "Veterano", "imortal": "Imortal" }
+    "globals": {
+      "veterano": "Veterano",
+      "imortal": "Imortal"
+    }
   },
   "pages": {
     "login": "Login"
@@ -200,7 +207,8 @@
         "students": "Estudantes",
         "calendar": "Calendário",
         "assignments": "Atividades",
-        "grading": "Correção de Provas"
+        "grading": "Correção de Provas",
+        "quizBank": "Banco de Questões"
       },
       "calendarTab": {
         "addEvent": "Adicionar evento",
@@ -350,12 +358,6 @@
         "bulkUnenrollSuccess": "{count} estudantes desmatriculados.",
         "bulkUnenrollPartial": "{ok} desmatriculados, {failed} falharam.",
         "unenrollError": "Erro ao desmatricular estudante"
-      },
-      "assignmentsTab": {
-        "title": "Atividades do Curso",
-        "description": "Atividades publicadas de todos os módulos desta disciplina. Somente leitura.",
-        "openModule": "Abrir Módulo",
-        "empty": "Nenhuma atividade publicada nesta disciplina ainda."
       },
       "gradingTab": {
         "title": "Correção de Provas",
@@ -681,61 +683,7 @@
       "updateAIConfigErrorDesc": "Não foi possível extrair os textos. Tente novamente.",
       "extractionResult": "{count} arquivo(s) extraído(s)",
       "assignmentsTab": "Atividades",
-      "assignments": {
-        "title": "Atividades",
-        "description": "Publique atividades para os alunos com prazos e feedback com IA.",
-        "newButton": "Nova Atividade",
-        "emptyTitle": "Nenhuma atividade criada.",
-        "emptyDescription": "Crie sua primeira atividade para publicar aos alunos.",
-        "badgePublished": "Publicado",
-        "badgeDraft": "Rascunho",
-        "dueLabel": "Prazo:",
-        "pastDue": "(Prazo encerrado)",
-        "switchPublishTitle": "Publicar",
-        "switchUnpublishTitle": "Despublicar",
-        "rubricIndicator": "Com Rubrica",
-        "keywordsLabel": "Palavras-chave",
-        "formCreateTitle": "Nova Atividade",
-        "formEditTitle": "Editar Atividade",
-        "fieldTitle": "Título",
-        "fieldTitlePlaceholder": "Título da atividade",
-        "fieldInstructions": "Instruções (opcional)",
-        "fieldInstructionsPlaceholder": "Descreva os requisitos da atividade...",
-        "fieldDueDate": "Data de Entrega",
-        "fieldKeywords": "Palavras-chave (opcional)",
-        "fieldKeywordsPlaceholder": "Digite e pressione vírgula, ponto e vírgula, ponto ou Enter para adicionar...",
-        "fieldKeywordsHelp": "A IA irá focar nestes aspectos ao avaliar o trabalho do aluno.",
-        "fieldGradingCriteria": "Critérios de Avaliação",
-        "fieldGradingCriteriaPlaceholder": "ex.: Avalie a clareza da argumentação, o uso correto dos conceitos e a estrutura...",
-        "fieldGradingCriteriaHelp": "A IA usará esses critérios para orientar o feedback e a correção das respostas dos alunos.",
-        "fieldFile": "Arquivo da Atividade (PDF ou DOCX, máx. 30 MB)",
-        "fieldRubric": "Rubrica de Avaliação (opcional, PDF ou DOCX, máx. 30 MB)",
-        "fieldRubricHelp": "Critérios de avaliação que a IA usará para dar feedback estruturado.",
-        "fieldContextFiles": "Arquivos de Contexto (opcional, PDF ou DOCX, múltiplos permitidos)",
-        "fieldContextFilesHelp": "Documentos de referência que a IA pode usar ao avaliar as entregas dos alunos.",
-        "contextFilesCount": "{count, plural, one {# arquivo de contexto} other {# arquivos de contexto}}",
-        "cancelButton": "Cancelar",
-        "saveButton": "Salvar Alterações",
-        "createButton": "Criar Atividade",
-        "deleteTitle": "Excluir Atividade",
-        "deleteDescription": "Isto irá ocultar a atividade dos alunos. Tem certeza?",
-        "deleteCancel": "Cancelar",
-        "deleteConfirm": "Excluir",
-        "toastCreated": "Atividade criada com sucesso",
-        "toastUpdated": "Atividade atualizada",
-        "toastDeleted": "Atividade excluída",
-        "toastPublished": "Atividade publicada",
-        "toastUnpublished": "Atividade despublicada",
-        "toastFileRequired": "Selecione um arquivo para a atividade",
-        "toastSaveError": "Erro ao salvar atividade",
-        "toastDeleteError": "Erro ao excluir atividade",
-        "toastPublishError": "Erro ao alterar publicação",
-        "fieldDueDatePlaceholder": "Escolha data e hora",
-        "courseAssignmentsTitle": "Outras Atividades do Curso",
-        "courseAssignmentsDescription": "Atividades publicadas de outros módulos neste curso. Somente leitura — gerenciadas pelos respectivos módulos.",
-        "courseAssignmentsEmpty": "Nenhuma atividade publicada de outros módulos neste curso.",
-        "moduleLabel": "Módulo:"
-      }
+      "widgetUrlOpenTabWarning": "Atenção: Abrir em nova aba testa apenas o chat — o tutor responde com os arquivos do módulo, mas não recebe o contexto de atividades, quizzes nem o progresso do aluno, porque não há sessão de estudante. Para testar a experiência completa, use Copiar link e abra o link copiado em uma nova aba."
     },
     "edit": {
       "title": "Editar Módulo",
@@ -1517,7 +1465,11 @@
       "confirmRemoveUniversityDescription": "Tem certeza de que deseja remover {name} de {university}? O usuário perderá acesso a todos os dados desta instituição de ensino.",
       "confirmRemove": "Remover",
       "removeSuccess": "Usuário removido da instituição de ensino com sucesso.",
-      "removeError": "Falha ao remover usuário da instituição de ensino."
+      "removeError": "Falha ao remover usuário da instituição de ensino.",
+      "matriculaLabel": "Matrícula",
+      "matriculaPlaceholder": "Ex.: 20231234",
+      "matriculaHint": "Permite que esta pessoa entre no widget do aluno para testá-lo. Única na instituição; deixe em branco para remover.",
+      "matriculaExists": "Esta matrícula já está em uso na instituição."
     }
   },
   "students": {
@@ -1590,19 +1542,19 @@
       "selectFile": "Selecionar Arquivo",
       "dropzone": "Arraste seu arquivo aqui ou clique para buscar",
       "acceptedFormats": "Formatos aceitos: .csv, .xlsx",
-    "importFormats": "Formatos aceitos: .csv, .xlsx, .xls",
-    "invalidFileType": "Selecione um arquivo .csv, .xlsx ou .xls.",
-    "errorCodes": {
-      "missingEmailColumn": "Não encontramos a coluna de e-mail na sua planilha. Colunas encontradas: {headers}. Verifique se há uma coluna de e-mail (ex.: \"email\" ou \"e-mail\") e tente novamente.",
-      "emailRequired": "E-mail em branco — cada estudante precisa de um e-mail.",
-      "matriculaRequired": "Matrícula em branco — cada estudante precisa de uma matrícula.",
-      "emailBelongsToNonStudent": "Este e-mail já pertence a uma conta que não é de estudante (professor ou administrador) e não pode ser matriculado como estudante.",
-      "noDataRows": "O arquivo não tem nenhuma linha de dados. Preencha ao menos um estudante e tente novamente.",
-      "emptyFile": "O arquivo está vazio ou não tem cabeçalho. Inclua uma linha de cabeçalho com os nomes das colunas.",
-      "unsupportedFormat": "Formato de arquivo não suportado. Envie um arquivo .csv, .xlsx ou .xls.",
-      "fileRequired": "Selecione um arquivo para importar.",
-      "studentLimitExceeded": "O limite de estudantes do seu plano seria excedido. Atuais: {current}, novos neste arquivo: {newEnrollments}, limite: {limit}."
-    },
+      "importFormats": "Formatos aceitos: .csv, .xlsx, .xls",
+      "invalidFileType": "Selecione um arquivo .csv, .xlsx ou .xls.",
+      "errorCodes": {
+        "missingEmailColumn": "Não encontramos a coluna de e-mail na sua planilha. Colunas encontradas: {headers}. Verifique se há uma coluna de e-mail (ex.: \"email\" ou \"e-mail\") e tente novamente.",
+        "emailRequired": "E-mail em branco — cada estudante precisa de um e-mail.",
+        "matriculaRequired": "Matrícula em branco — cada estudante precisa de uma matrícula.",
+        "emailBelongsToNonStudent": "Este e-mail já pertence a uma conta que não é de estudante (professor ou administrador) e não pode ser matriculado como estudante.",
+        "noDataRows": "O arquivo não tem nenhuma linha de dados. Preencha ao menos um estudante e tente novamente.",
+        "emptyFile": "O arquivo está vazio ou não tem cabeçalho. Inclua uma linha de cabeçalho com os nomes das colunas.",
+        "unsupportedFormat": "Formato de arquivo não suportado. Envie um arquivo .csv, .xlsx ou .xls.",
+        "fileRequired": "Selecione um arquivo para importar.",
+        "studentLimitExceeded": "O limite de estudantes do seu plano seria excedido. Atuais: {current}, novos neste arquivo: {newEnrollments}, limite: {limit}."
+      },
       "uploading": "Importando estudantes...",
       "upload": "Importar",
       "cancel": "Cancelar",
@@ -2095,7 +2047,8 @@
     "allCourses": "Todas as Disciplinas",
     "allModules": "Todos os Módulos",
     "collapse": "Recolher",
-    "expand": "Expandir menu"
+    "expand": "Expandir menu",
+    "integrations": "Integrações"
   },
   "header": {
     "profile": "Perfil",
@@ -2156,7 +2109,7 @@
     "governmentIdLabel": "CPF/Documento",
     "governmentIdPlaceholder": "Ex: 000.000.000-00",
     "externalIdLabel": "Matrícula/ID Externo",
-    "externalIdPlaceholder": "Ex: 20231234567",
+    "externalIdPlaceholder": "Ex.: 20231234",
     "birthdateLabel": "Data de Nascimento",
     "governmentIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
     "externalIdReadonly": "Este campo é importado do sistema externo e não pode ser alterado",
@@ -2197,7 +2150,8 @@
     "profileUpdateSuccess": "Perfil atualizado com sucesso!",
     "profileUpdateError": "Erro ao atualizar perfil",
     "languageChangeInfo": "A página será recarregada para aplicar o novo idioma",
-    "saveError": "Erro ao salvar configurações"
+    "saveError": "Erro ao salvar configurações",
+    "externalIdHint": "Adicione sua matrícula para entrar no widget do aluno e testá-lo (sua atividade não conta nas estatísticas). Deve ser única na instituição."
   },
   "dateRangePicker": {
     "placeholder": "Escolha um intervalo de datas",
@@ -4948,7 +4902,10 @@
     "pedagogicalAlertsDescription": "Sinais que pedem ação: turmas esvaziando e conceitos com baixo desempenho",
     "alertEvasion": "{pct}% dos alunos de {course} sem atividade ({count} alunos)",
     "alertConcept": "Conceito \"{concept}\" com apenas {rate}% de acerto em {module}",
-    "severity": { "high": "Alto", "medium": "Médio" },
+    "severity": {
+      "high": "Alto",
+      "medium": "Médio"
+    },
     "courseStatsTitle": "Estatísticas por Curso",
     "courseStatsDescription": "Engajamento por curso nos últimos {days} dias — clique para ver as disciplinas",
     "colCourse": "Curso",
@@ -5278,7 +5235,8 @@
       "updateError": "Erro ao atualizar chave de acesso",
       "active": "Ativo",
       "inactive": "Inativo"
-    }
+    },
+    "widgetUrlOpenTabWarning": "Atenção: Abrir em nova aba testa apenas o chat — o tutor responde com os arquivos do módulo, mas não recebe o contexto de atividades, quizzes nem o progresso do aluno, porque não há sessão de estudante. Para testar a experiência completa, use Copiar link e abra o link copiado em uma nova aba."
   },
   "auditLogs": {
     "title": "Registros de Auditoria",
@@ -5675,7 +5633,8 @@
       "usernameAlreadyExists": "Este nome de usuário já está em uso. Escolha outro.",
       "submit": "Criar Conta",
       "submitting": "Criando conta..."
-    }
+    },
+    "matriculaReminder": "Depois de criar sua instituição, adicione sua matrícula no seu perfil para poder testar o widget do aluno."
   },
   "subscription": {
     "title": "Assinatura",
@@ -5758,7 +5717,7 @@
     "contentTab": "Conteúdo",
     "tabLabel": "Banco de Questões",
     "title": "Banco de Questões",
-    "description": "Gerencie as questões do quiz deste módulo",
+    "description": "Gerencie as questões do quiz desta disciplina",
     "uploadButton": "Enviar arquivo de questões",
     "generateButton": "Gerar com IA",
     "generatePremiumOnly": "Disponível nos planos Professional e Business",
@@ -5774,7 +5733,8 @@
       "question": "Questão",
       "difficulty": "Dificuldade",
       "answer": "Resposta",
-      "source": "Origem"
+      "source": "Origem",
+      "actions": "Ações"
     },
     "difficulty": {
       "easy": "Fácil",
@@ -5831,7 +5791,15 @@
     "statusCompleted": "Concluído",
     "statusFailed": "Falhou",
     "reviewButton": "Revisar e Importar",
-    "importedLabel": "Importado"
+    "importedLabel": "Importado",
+    "moduleScopeHint": "Questões geradas a partir do material deste módulo. O banco completo pertence à disciplina.",
+    "emptyMessageModule": "Nenhuma questão gerada a partir deste módulo ainda.",
+    "fileUpload": {
+      "clickToSelect": "Clique para selecionar ou arraste o arquivo aqui",
+      "supportedFormats": "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
+      "maxSize": "Tamanho máximo: {maxSizeMB}MB"
+    },
+    "manageOnCourse": "Gerenciar banco de questões na disciplina"
   },
   "privacyPolicy": {
     "title": "Política de Privacidade",
@@ -5911,7 +5879,113 @@
       "passwordRequired": "A senha é obrigatória",
       "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
       "usernameTaken": "Este nome de usuário já está em uso",
-      "generic": "Algo deu errado. Por favor, tente novamente."
-    }
+      "generic": "Algo deu errado. Por favor, tente novamente.",
+      "matriculaTaken": "Esta matrícula já está em uso na sua instituição."
+    },
+    "matricula": "Matrícula (opcional)",
+    "matriculaPlaceholder": "Sua matrícula",
+    "matriculaHint": "Informe sua matrícula se for testar o widget do aluno. Você também pode adicioná-la depois no seu perfil."
+  },
+  "assignments": {
+    "title": "Atividades",
+    "description": "Publique atividades da disciplina para os alunos, com prazos e feedback com IA.",
+    "newButton": "Nova Atividade",
+    "emptyTitle": "Nenhuma atividade criada.",
+    "emptyDescription": "Crie sua primeira atividade para publicar aos alunos.",
+    "badgePublished": "Publicado",
+    "badgeDraft": "Rascunho",
+    "dueLabel": "Prazo:",
+    "pastDue": "(Prazo encerrado)",
+    "switchPublishTitle": "Publicar",
+    "switchUnpublishTitle": "Despublicar",
+    "rubricIndicator": "Com Rubrica",
+    "keywordsLabel": "Palavras-chave",
+    "formCreateTitle": "Nova Atividade",
+    "formEditTitle": "Editar Atividade",
+    "fieldTitle": "Título",
+    "fieldTitlePlaceholder": "Título da atividade",
+    "fieldInstructions": "Instruções (opcional)",
+    "fieldInstructionsPlaceholder": "Descreva os requisitos da atividade...",
+    "fieldDueDate": "Data de Entrega",
+    "fieldKeywords": "Palavras-chave (opcional)",
+    "fieldKeywordsPlaceholder": "Digite e pressione vírgula, ponto e vírgula, ponto ou Enter para adicionar...",
+    "fieldKeywordsHelp": "A IA irá focar nestes aspectos ao avaliar o trabalho do aluno.",
+    "fieldGradingCriteria": "Critérios de Avaliação",
+    "fieldGradingCriteriaPlaceholder": "ex.: Avalie a clareza da argumentação, o uso correto dos conceitos e a estrutura...",
+    "fieldGradingCriteriaHelp": "A IA usará esses critérios para orientar o feedback e a correção das respostas dos alunos.",
+    "fieldFile": "Arquivo da Atividade (PDF ou DOCX, máx. 30 MB)",
+    "fieldRubric": "Rubrica de Avaliação (opcional, PDF ou DOCX, máx. 30 MB)",
+    "fieldRubricHelp": "Critérios de avaliação que a IA usará para dar feedback estruturado.",
+    "fieldContextFiles": "Arquivos de Contexto (opcional, PDF ou DOCX, múltiplos permitidos)",
+    "fieldContextFilesHelp": "Documentos de referência que a IA pode usar ao avaliar as entregas dos alunos.",
+    "contextFilesCount": "{count, plural, one {# arquivo de contexto} other {# arquivos de contexto}}",
+    "cancelButton": "Cancelar",
+    "saveButton": "Salvar Alterações",
+    "createButton": "Criar Atividade",
+    "deleteTitle": "Excluir Atividade",
+    "deleteDescription": "Isto irá ocultar a atividade dos alunos. Tem certeza?",
+    "deleteCancel": "Cancelar",
+    "deleteConfirm": "Excluir",
+    "toastCreated": "Atividade criada com sucesso",
+    "toastUpdated": "Atividade atualizada",
+    "toastDeleted": "Atividade excluída",
+    "toastPublished": "Atividade publicada",
+    "toastUnpublished": "Atividade despublicada",
+    "toastFileRequired": "Selecione um arquivo para a atividade",
+    "toastSaveError": "Erro ao salvar atividade",
+    "toastDeleteError": "Erro ao excluir atividade",
+    "toastPublishError": "Erro ao alterar publicação",
+    "fieldDueDatePlaceholder": "Escolha data e hora",
+    "courseAssignmentsTitle": "Atividades da Disciplina",
+    "courseAssignmentsDescription": "Atividades publicadas desta disciplina. Somente leitura — gerenciadas na página da disciplina.",
+    "courseAssignmentsEmpty": "Nenhuma atividade publicada nesta disciplina.",
+    "manageOnCourse": "Gerenciar atividades na disciplina"
+  },
+  "lti": {
+    "title": "Integrações (LTI)",
+    "description": "Conecte o AVA da sua instituição à Tutoria. Sem plugin: o professor adiciona uma Ferramenta Externa e escolhe o módulo.",
+    "connect": "Conectar AVA",
+    "connectDescription": "Depois de cadastrar a Tutoria no seu AVA, ele gera estes valores. Cole-os aqui para concluir a conexão.",
+    "step1Title": "Passo 1 — Configure no seu AVA",
+    "step1Description": "No Moodle: Administração do site → Plugins → Módulos de atividades → Ferramenta externa → Gerenciar ferramentas → Configurar manualmente. Use LTI 1.3 e tipo de chave pública \"URL do conjunto de chaves\".",
+    "step2Title": "Passo 2 — AVAs conectados",
+    "step2Description": "Plataformas que podem abrir a Tutoria. Expanda para vincular cada disciplina do AVA a um curso da Tutoria.",
+    "loginUrl": "URL de início de login",
+    "launchUrl": "URL de redirecionamento (Tool URL)",
+    "jwksUrl": "URL do conjunto de chaves públicas",
+    "fieldName": "Nome (apelido interno)",
+    "fieldIssuer": "Platform ID (URL do AVA)",
+    "fieldClientId": "Client ID",
+    "fieldDeploymentId": "Deployment ID",
+    "fieldAuthLoginUrl": "URL de autenticação",
+    "fieldAuthTokenUrl": "URL de token de acesso",
+    "fieldKeySetUrl": "URL do conjunto de chaves do AVA",
+    "emptyTitle": "Nenhum AVA conectado",
+    "emptyDescription": "Clique em \"Conectar AVA\" depois de configurar a Tutoria no seu Moodle.",
+    "coursesTitle": "Disciplinas do AVA",
+    "noContexts": "Nenhuma disciplina ainda. Elas aparecem aqui automaticamente no primeiro acesso pelo AVA.",
+    "selectCourse": "Selecione um curso",
+    "notLinked": "Não vinculado",
+    "unmappedCount": "{count} sem vínculo",
+    "disabled": "A integração LTI está desativada nesta instalação.",
+    "created": "AVA conectado com sucesso.",
+    "deleted": "Conexão removida.",
+    "mapped": "Vínculo atualizado.",
+    "deleteTitle": "Remover conexão",
+    "deleteDescription": "Remover a conexão com {name}? Os acessos vindos deste AVA deixarão de funcionar.",
+    "loadError": "Não foi possível carregar as integrações.",
+    "createError": "Não foi possível conectar o AVA.",
+    "deleteError": "Não foi possível remover a conexão.",
+    "mapError": "Não foi possível salvar o vínculo.",
+    "contextsLoadError": "Não foi possível carregar as disciplinas.",
+    "coursesLoadError": "Não foi possível carregar os cursos.",
+    "noUniversity": "Seu usuário não está vinculado a uma instituição.",
+    "loading": "Carregando...",
+    "saving": "Salvando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "active": "Ativo",
+    "inactive": "Inativo"
   }
 }

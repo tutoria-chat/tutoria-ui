@@ -6,12 +6,11 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
 import {
+  AlertTriangle,
   Edit,
   Upload,
   Trash2,
-  Download,
   FileText,
-  Calendar,
   BookOpen,
   Bot,
   Loader2,
@@ -25,16 +24,11 @@ import {
   Lightbulb,
   Plus,
   RefreshCw,
-  Brain,
   ClipboardList,
-  Sparkles,
-  HelpCircle,
-  X,
-  Tag,
-  FileCheck2,
-  CheckCircle2
-} from 'lucide-react';
+  Sparkles, Search } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
+import { CourseAssignmentsTab } from '@/components/courses/course-assignments-tab';
+import { CourseQuizBankTab } from '@/components/courses/course-quiz-bank-tab';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -53,19 +47,14 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ProfessorOnly, AdminOnly } from '@/components/auth/role-guard';
-import { TokenModal } from '@/components/tokens/token-modal';
+import { ProfessorOnly } from '@/components/auth/role-guard';
+import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
-import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, QuizQuestion, ExtractedQuestion, UniversityLimits, Assignment, QuizUploadJob } from '@/lib/types';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { DateTimePicker } from '@/components/ui/date-time-picker';
+import type { Module, File as FileType, ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse, UniversityLimits } from '@/lib/types';
 
 export default function ModuleDetailsPage() {
   const params = useParams();
@@ -75,7 +64,6 @@ export default function ModuleDetailsPage() {
   const t = useTranslations('modules.detail');
   const tCommon = useTranslations('common');
   const tTokens = useTranslations('tokens.columns');
-  const tA = useTranslations('modules.detail.assignments');
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
   const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/api/modules/${moduleId}`);
@@ -88,6 +76,8 @@ export default function ModuleDetailsPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [tokenModalOpen, setTokenModalOpen] = useState(false);
+  const [tokenModalMode, setTokenModalMode] = useState<TokenModalMode>('create');
+  const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
   const [fileViewerOpen, setFileViewerOpen] = useState(false);
   const [viewingFileUrl, setViewingFileUrl] = useState<string | null>(null);
   const [viewingFileName, setViewingFileName] = useState<string>('');
@@ -107,47 +97,20 @@ export default function ModuleDetailsPage() {
   // AI Config update state
   const [isUpdatingAIConfig, setIsUpdatingAIConfig] = useState(false);
 
-  // Quiz Bank state
+  // Quiz Bank state — the bank itself belongs to the course and is owned by
+  // <CourseQuizBankTab>; only AI generation is module-scoped and stays here.
   const tQuiz = useTranslations('quizBank');
-  const [quizzes, setQuizzes] = useState<QuizQuestion[]>([]);
-  const [quizzesLoading, setQuizzesLoading] = useState(false);
-  const [quizUploadModalOpen, setQuizUploadModalOpen] = useState(false);
-  const [quizSelectedFile, setQuizSelectedFile] = useState<File[]>([]);
-  const [isExtractingQuiz, setIsExtractingQuiz] = useState(false);
-  const [extractedQuestions, setExtractedQuestions] = useState<ExtractedQuestion[]>([]);
-  const [reviewDialogOpen, setReviewDialogOpen] = useState(false);
-  const [isConfirmingQuizzes, setIsConfirmingQuizzes] = useState(false);
+  const tAssign = useTranslations('assignments');
   const [isGeneratingQuizzes, setIsGeneratingQuizzes] = useState(false);
-  const [viewQuizDialogOpen, setViewQuizDialogOpen] = useState(false);
-  const [viewingQuiz, setViewingQuiz] = useState<QuizQuestion | null>(null);
-  const [deleteQuizConfirmOpen, setDeleteQuizConfirmOpen] = useState(false);
-  const [quizToDelete, setQuizToDelete] = useState<number | null>(null);
+  const [quizBankReloadKey, setQuizBankReloadKey] = useState(0);
+  const [quizBankCount, setQuizBankCount] = useState(0);
   const [universityLimits, setUniversityLimits] = useState<UniversityLimits | null>(null);
-  const [quizUploadJobs, setQuizUploadJobs] = useState<QuizUploadJob[]>([]);
-  const [quizUploadJobsLoading, setQuizUploadJobsLoading] = useState(false);
-  const [reviewingJobId, setReviewingJobId] = useState<number | null>(null);
-  const [activeReviewJobId, setActiveReviewJobId] = useState<number | null>(null);
-  const [importedJobIds, setImportedJobIds] = useState<Set<number>>(new Set());
 
-  // Assignments state
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [courseAssignments, setCourseAssignments] = useState<Assignment[]>([]);
-  const [assignmentsLoading, setAssignmentsLoading] = useState(false);
-  const [assignmentFormOpen, setAssignmentFormOpen] = useState(false);
-  const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
-  const [assignmentTitle, setAssignmentTitle] = useState('');
-  const [assignmentDescription, setAssignmentDescription] = useState('');
-  const [assignmentGradingCriteria, setAssignmentGradingCriteria] = useState('');
-  const [assignmentDueDate, setAssignmentDueDate] = useState('');
-  const [assignmentKeywords, setAssignmentKeywords] = useState<string[]>([]);
-  const [assignmentKeywordInput, setAssignmentKeywordInput] = useState('');
-  const [assignmentFiles, setAssignmentFiles] = useState<globalThis.File[]>([]);
-  const [assignmentFile, setAssignmentFile] = useState<globalThis.File | null>(null);
-  const [assignmentRubricFile, setAssignmentRubricFile] = useState<globalThis.File | null>(null);
-  const [isSavingAssignment, setIsSavingAssignment] = useState(false);
-  const [deleteAssignmentConfirmOpen, setDeleteAssignmentConfirmOpen] = useState(false);
-  const [assignmentToDelete, setAssignmentToDelete] = useState<number | null>(null);
-  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState<boolean | null>(null);
+  // Assignments are course-wide; this page only shows them read-only.
+  const [assignmentsCount, setAssignmentsCount] = useState(0);
+  // Optimistic: the tab is shown until <CourseAssignmentsTab> (which only mounts
+  // once the tab is opened) reports that the university/plan has no assignments.
+  const [assignmentsFeatureEnabled, setAssignmentsFeatureEnabled] = useState<boolean | null>(true);
 
   const breadcrumbs: BreadcrumbItem[] = module?.courseId ? [
     { label: tCommon('breadcrumbs.courses'), href: '/courses' },
@@ -417,31 +380,6 @@ export default function ModuleDetailsPage() {
     return file.contentType || file.fileType || t('fileTypeUnknown');
   };
 
-  // Quiz Bank functions
-  const loadQuizzes = useCallback(async () => {
-    setQuizzesLoading(true);
-    try {
-      const data = await apiClient.getModuleQuizzes(moduleId);
-      setQuizzes(data);
-    } catch (err) {
-      console.error('Failed to load quizzes:', err);
-    } finally {
-      setQuizzesLoading(false);
-    }
-  }, [moduleId]);
-
-  const loadQuizUploadJobs = useCallback(async () => {
-    setQuizUploadJobsLoading(true);
-    try {
-      const data = await apiClient.getQuizUploadJobs(moduleId);
-      setQuizUploadJobs(data);
-    } catch (err) {
-      console.error('Failed to load quiz upload jobs:', err);
-    } finally {
-      setQuizUploadJobsLoading(false);
-    }
-  }, [moduleId]);
-
   const loadUniversityLimits = useCallback(async () => {
     if (user?.role === 'super_admin') return; // super_admin has no university
     try {
@@ -452,255 +390,25 @@ export default function ModuleDetailsPage() {
     }
   }, [user?.role]);
 
-  const loadAssignments = useCallback(async () => {
-    setAssignmentsLoading(true);
-    try {
-      const data = await apiClient.getAssignments(moduleId);
-      setAssignments(data.items);
-      setAssignmentsFeatureEnabled(true);
-
-      // Also load published assignments from the rest of the course (read-only context)
-      if (module?.courseId) {
-        try {
-          const courseData = await apiClient.getAssignments({ courseId: module.courseId });
-          // Filter out assignments that belong to this module (already shown above)
-          setCourseAssignments(courseData.items.filter(a => a.moduleId !== moduleId));
-        } catch {
-          // Course-level fetch is best-effort — don't break the tab
-        }
-      }
-    } catch (err: unknown) {
-      const status = (err as { status?: number })?.status;
-      if (status === 400 || status === 403) {
-        // Feature explicitly disabled for this university or access denied
-        setAssignmentsFeatureEnabled(false);
-      } else {
-        // Transient error (500, network, etc.) — don't hide the tab permanently
-        console.error('Failed to load assignments:', err);
-        setAssignmentsFeatureEnabled(true);
-      }
-    } finally {
-      setAssignmentsLoading(false);
-    }
-  }, [moduleId, module?.courseId]);
-
   useEffect(() => {
-    loadQuizzes();
-    loadQuizUploadJobs();
     loadUniversityLimits();
-    loadAssignments();
-  }, [loadQuizzes, loadQuizUploadJobs, loadUniversityLimits, loadAssignments]);
-
-  // Poll quiz upload jobs every 10s while any is pending/processing
-  useEffect(() => {
-    const hasPending = quizUploadJobs.some(j => j.status === 'pending' || j.status === 'processing');
-    if (!hasPending) return;
-    const interval = setInterval(() => loadQuizUploadJobs(), 10000);
-    return () => clearInterval(interval);
-  }, [quizUploadJobs, loadQuizUploadJobs]);
-
-  const openCreateAssignment = () => {
-    setEditingAssignment(null);
-    setAssignmentTitle('');
-    setAssignmentDescription('');
-    setAssignmentGradingCriteria('');
-    setAssignmentDueDate('');
-    setAssignmentKeywords([]);
-    setAssignmentKeywordInput('');
-    setAssignmentFile(null);
-    setAssignmentRubricFile(null);
-    setAssignmentFiles([]);
-    setAssignmentFormOpen(true);
-  };
-
-  const openEditAssignment = (a: Assignment) => {
-    setEditingAssignment(a);
-    setAssignmentTitle(a.title);
-    setAssignmentDescription(a.description || '');
-    setAssignmentGradingCriteria(a.gradingCriteria || '');
-    setAssignmentDueDate(a.dueDate ? a.dueDate.slice(0, 16) : '');
-    setAssignmentKeywords(a.keywords || []);
-    setAssignmentKeywordInput('');
-    setAssignmentFile(null);
-    setAssignmentRubricFile(null);
-    setAssignmentFiles([]);
-    setAssignmentFormOpen(true);
-  };
-
-  const addKeyword = (raw: string) => {
-    const kw = raw.trim().replace(/[,;.]+$/, '').trim();
-    if (kw && !assignmentKeywords.includes(kw)) {
-      setAssignmentKeywords(prev => [...prev, kw]);
-    }
-    setAssignmentKeywordInput('');
-  };
-
-  const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ',' || e.key === ';' || e.key === '.' || e.key === 'Enter') {
-      e.preventDefault();
-      addKeyword(assignmentKeywordInput);
-    } else if (e.key === 'Backspace' && assignmentKeywordInput === '' && assignmentKeywords.length > 0) {
-      setAssignmentKeywords(prev => prev.slice(0, -1));
-    }
-  };
-
-  const removeKeyword = (kw: string) => {
-    setAssignmentKeywords(prev => prev.filter(k => k !== kw));
-  };
-
-  const handleSaveAssignment = async () => {
-    if (!assignmentTitle.trim() || !assignmentDueDate) return;
-    setIsSavingAssignment(true);
-    try {
-      if (editingAssignment) {
-        await apiClient.updateAssignment(editingAssignment.id, {
-          title: assignmentTitle,
-          description: assignmentDescription || undefined,
-          dueDate: assignmentDueDate,
-          keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
-          gradingCriteria: assignmentGradingCriteria || undefined,
-        });
-        toast.success(tA('toastUpdated'));
-      } else {
-        if (!assignmentFile) { toast.error(tA('toastFileRequired')); return; }
-        await apiClient.createAssignment({
-          moduleId,
-          title: assignmentTitle,
-          description: assignmentDescription || undefined,
-          dueDate: assignmentDueDate,
-          keywords: assignmentKeywords.length ? assignmentKeywords : undefined,
-          gradingCriteria: assignmentGradingCriteria || undefined,
-          file: assignmentFile,
-          rubricFile: assignmentRubricFile || undefined,
-          contextFiles: assignmentFiles.length ? assignmentFiles : undefined,
-        });
-        toast.success(tA('toastCreated'));
-      }
-      setAssignmentFormOpen(false);
-      loadAssignments();
-    } catch (err) {
-      console.error('Failed to save assignment:', err);
-      toast.error(tA('toastSaveError'));
-    } finally {
-      setIsSavingAssignment(false);
-    }
-  };
-
-  const handleTogglePublishAssignment = async (id: number) => {
-    const current = assignments.find(a => a.id === id);
-    try {
-      await apiClient.togglePublishAssignment(id);
-      toast.success(current?.isPublished ? tA('toastUnpublished') : tA('toastPublished'));
-      loadAssignments();
-    } catch (err) {
-      console.error('Failed to toggle publish:', err);
-      toast.error(tA('toastPublishError'));
-    }
-  };
-
-  const handleDeleteAssignment = async () => {
-    if (!assignmentToDelete) return;
-    try {
-      await apiClient.deleteAssignment(assignmentToDelete);
-      toast.success(tA('toastDeleted'));
-      setDeleteAssignmentConfirmOpen(false);
-      loadAssignments();
-    } catch (err) {
-      console.error('Failed to delete assignment:', err);
-      toast.error(tA('toastDeleteError'));
-    }
-  };
-
-  const handleQuizFileUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (quizSelectedFile.length === 0) return;
-
-    setIsExtractingQuiz(true);
-    try {
-      await apiClient.uploadQuizFile(moduleId, quizSelectedFile[0]);
-      setQuizUploadModalOpen(false);
-      setQuizSelectedFile([]);
-      toast.success(tQuiz('uploadQueued'));
-      loadQuizUploadJobs();
-    } catch (err) {
-      console.error('Failed to upload quiz file:', err);
-      toast.error(tQuiz('uploadError'));
-    } finally {
-      setIsExtractingQuiz(false);
-    }
-  };
-
-  const handleReviewQuizJob = async (jobId: number) => {
-    setReviewingJobId(jobId);
-    try {
-      const result = await apiClient.getQuizUploadJobQuestions(moduleId, jobId);
-      if (result.questions && result.questions.length > 0) {
-        const questions = result.questions.map((q: ExtractedQuestion) => ({ ...q, selected: true }));
-        setExtractedQuestions(questions);
-        setActiveReviewJobId(jobId);
-        setReviewDialogOpen(true);
-      } else {
-        toast.error(tQuiz('review.noQuestionsExtracted'));
-      }
-    } catch (err) {
-      console.error('Failed to load quiz job questions:', err);
-      toast.error(tQuiz('uploadError'));
-    } finally {
-      setReviewingJobId(null);
-    }
-  };
-
-  const handleConfirmQuizzes = async () => {
-    const selected = extractedQuestions.filter(q => q.selected !== false);
-    if (selected.length === 0) return;
-
-    setIsConfirmingQuizzes(true);
-    try {
-      await apiClient.confirmExtractedQuizzes(moduleId, selected);
-      toast.success(tQuiz('uploadSuccess'));
-      if (activeReviewJobId !== null) {
-        setImportedJobIds(prev => new Set(prev).add(activeReviewJobId));
-      }
-      setReviewDialogOpen(false);
-      setExtractedQuestions([]);
-      setActiveReviewJobId(null);
-      loadQuizzes();
-    } catch (err) {
-      console.error('Failed to confirm quizzes:', err);
-      toast.error(tQuiz('uploadError'));
-    } finally {
-      setIsConfirmingQuizzes(false);
-    }
-  };
+  }, [loadUniversityLimits]);
 
   const handleGenerateQuizzes = async () => {
     setIsGeneratingQuizzes(true);
     try {
       await apiClient.generateModuleQuizzes(moduleId, true, 50);
       toast.success(tQuiz('generateQueued'));
-      // Poll for quizzes after a delay since generation happens asynchronously via SQS
-      setTimeout(() => loadQuizzes(), 30000);
-      setTimeout(() => loadQuizzes(), 60000);
-      setTimeout(() => loadQuizzes(), 120000);
+      // Poll the course bank after a delay — generation runs asynchronously via SQS
+      const bump = () => setQuizBankReloadKey(k => k + 1);
+      setTimeout(bump, 30000);
+      setTimeout(bump, 60000);
+      setTimeout(bump, 120000);
     } catch (err) {
       console.error('Failed to generate quizzes:', err);
       toast.error(tQuiz('generateError'));
     } finally {
       setIsGeneratingQuizzes(false);
-    }
-  };
-
-  const confirmDeleteQuiz = async () => {
-    if (!quizToDelete) return;
-    try {
-      await apiClient.deleteQuiz(moduleId, quizToDelete);
-      toast.success(tQuiz('deleteSuccess'));
-      setDeleteQuizConfirmOpen(false);
-      setQuizToDelete(null);
-      loadQuizzes();
-    } catch (err) {
-      console.error('Failed to delete quiz:', err);
-      toast.error(tQuiz('deleteError'));
     }
   };
 
@@ -872,6 +580,18 @@ export default function ModuleDetailsPage() {
     }
   ];
 
+  const openTokenModal = (mode: TokenModalMode, token?: ModuleAccessToken) => {
+    setTokenModalMode(mode);
+    setSelectedToken(token);
+    setTokenModalOpen(true);
+  };
+
+  const closeTokenModal = () => {
+    setTokenModalOpen(false);
+    setSelectedToken(undefined);
+    setTokenModalMode('create');
+  };
+
   const tokenColumns: TableColumn<ModuleAccessToken>[] = [
     {
       key: 'name',
@@ -949,7 +669,7 @@ export default function ModuleDetailsPage() {
     {
       key: 'actions',
       label: t('columns.actions'),
-      width: '140px',
+      width: '220px',
       render: (_, token) => {
         const jwtToken = typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null;
         // shareUrl: no auth_token — safe to share with students
@@ -997,77 +717,29 @@ export default function ModuleDetailsPage() {
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
+
+            {/* Details / edit, so a key can be managed without leaving the module */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openTokenModal('view', token)}
+              title={tTokens('actionButtons.view')}
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => openTokenModal('edit', token)}
+              title={tTokens('actionButtons.edit')}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
           </div>
         );
       }
     }
-  ];
-
-  const quizColumns: TableColumn<QuizQuestion>[] = [
-    {
-      key: 'question_number',
-      label: tQuiz('columns.number'),
-      sortable: true,
-      width: '60px',
-      render: (value) => <span className="font-mono text-sm">{value as number}</span>,
-    },
-    {
-      key: 'question_text',
-      label: tQuiz('columns.question'),
-      sortable: false,
-      render: (_, quiz) => (
-        <div className="max-w-[300px] truncate text-sm" title={quiz.question_text}>
-          {quiz.question_text}
-        </div>
-      ),
-    },
-    {
-      key: 'difficulty',
-      label: tQuiz('columns.difficulty'),
-      sortable: true,
-      width: '100px',
-      render: (value) => {
-        const diff = value as string;
-        const variant = diff === 'easy' ? 'bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400' :
-                        diff === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400' :
-                        'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400';
-        return <Badge className={variant}>{tQuiz(`difficulty.${diff}`)}</Badge>;
-      },
-    },
-    {
-      key: 'correct_answer',
-      label: tQuiz('columns.answer'),
-      sortable: false,
-      width: '80px',
-      render: (value) => <Badge variant="outline" className="font-mono">{value as string}</Badge>,
-    },
-    {
-      key: 'source',
-      label: tQuiz('columns.source'),
-      sortable: true,
-      width: '120px',
-      render: (_, quiz) => {
-        const src = quiz.source || 'ai_generated';
-        return <Badge variant="secondary">{tQuiz(`source.${src}`)}</Badge>;
-      },
-    },
-    {
-      key: 'actions',
-      label: t('columns.actions'),
-      width: '100px',
-      render: (_, quiz) => (
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="sm" onClick={() => { setViewingQuiz(quiz); setViewQuizDialogOpen(true); }}>
-            <Eye className="h-4 w-4" />
-          </Button>
-          <ProfessorOnly>
-            <Button variant="ghost" size="sm" onClick={() => { setQuizToDelete(quiz.id); setDeleteQuizConfirmOpen(true); }}>
-              <Trash2 className="h-4 w-4 text-destructive" />
-            </Button>
-          </ProfessorOnly>
-        </div>
-      ),
-    },
   ];
 
   if (moduleLoading) {
@@ -1170,16 +842,16 @@ export default function ModuleDetailsPage() {
           <TabsTrigger value="quiz-bank" className="gap-2">
             <ClipboardList className="h-4 w-4" />
             {tQuiz('tabLabel')}
-            {quizzes.length > 0 && (
-              <Badge variant="secondary" className="ml-1 text-xs">{quizzes.length}</Badge>
+            {quizBankCount > 0 && (
+              <Badge variant="secondary" className="ml-1 text-xs">{quizBankCount}</Badge>
             )}
           </TabsTrigger>
-          {assignmentsFeatureEnabled === true && (
+          {assignmentsFeatureEnabled !== false && (
             <TabsTrigger value="assignments" className="gap-2">
               <ClipboardList className="h-4 w-4" />
               {t('assignmentsTab')}
-              {assignments.length > 0 && (
-                <Badge variant="secondary" className="ml-1 text-xs">{assignments.length}</Badge>
+              {assignmentsCount > 0 && (
+                <Badge variant="secondary" className="ml-1 text-xs">{assignmentsCount}</Badge>
               )}
             </TabsTrigger>
           )}
@@ -1247,7 +919,7 @@ export default function ModuleDetailsPage() {
                   <FileText className="h-8 w-8 text-blue-500" />
                 </div>
 
-                <AdminOnly>
+                <ProfessorOnly>
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-bold">{tokens?.length || 0}</p>
@@ -1255,7 +927,7 @@ export default function ModuleDetailsPage() {
                     </div>
                     <BookOpen className="h-8 w-8 text-purple-500" />
                   </div>
-                </AdminOnly>
+                </ProfessorOnly>
               </CardContent>
             </Card>
           </div>
@@ -1318,8 +990,8 @@ export default function ModuleDetailsPage() {
             </CardContent>
           </Card>
 
-          {/* Module Tokens */}
-          <AdminOnly>
+          {/* Module Tokens — professors manage their own module's keys here */}
+          <ProfessorOnly>
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
@@ -1329,7 +1001,7 @@ export default function ModuleDetailsPage() {
                       {t('tokensGenerated')}
                     </CardDescription>
                   </div>
-                  <Button onClick={() => setTokenModalOpen(true)}>
+                  <Button onClick={() => openTokenModal('create')}>
                     <Key className="mr-2 h-4 w-4" />
                     {t('createToken')}
                   </Button>
@@ -1342,6 +1014,14 @@ export default function ModuleDetailsPage() {
                     {t('widgetUrlShareNote')}
                   </AlertDescription>
                 </Alert>
+                {/* Open-in-new-tab carries the professor's auth_token but no student
+                    session, so the tutor runs without assignment/quiz/progress context. */}
+                <Alert className="border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+                  <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+                  <AlertDescription className="text-amber-900 dark:text-amber-200">
+                    {t('widgetUrlOpenTabWarning')}
+                  </AlertDescription>
+                </Alert>
                 <DataTable
                   data={tokens || []}
                   columns={tokenColumns}
@@ -1350,514 +1030,98 @@ export default function ModuleDetailsPage() {
                 />
               </CardContent>
             </Card>
-          </AdminOnly>
+          </ProfessorOnly>
         </TabsContent>
 
         <TabsContent value="quiz-bank" className="space-y-6">
-          {/* Stats bar */}
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="text-sm font-medium">
-              {tQuiz('totalQuestions', { count: quizzes.length })}
-            </div>
-            {quizzes.length > 0 && (
-              <div className="flex gap-1.5">
-                <Badge variant="outline" className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-400">
-                  {tQuiz('difficulty.easy')}: {quizzes.filter(q => q.difficulty === 'easy').length}
-                </Badge>
-                <Badge variant="outline" className="bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400">
-                  {tQuiz('difficulty.medium')}: {quizzes.filter(q => q.difficulty === 'medium').length}
-                </Badge>
-                <Badge variant="outline" className="bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-400">
-                  {tQuiz('difficulty.hard')}: {quizzes.filter(q => q.difficulty === 'hard').length}
-                </Badge>
-              </div>
-            )}
-          </div>
-
-          {/* Action buttons */}
-          <ProfessorOnly>
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setQuizUploadModalOpen(true)}>
-                <Upload className="mr-2 h-4 w-4" />
-                {tQuiz('uploadButton')}
-              </Button>
-
-              {canGenerateWithAI ? (
-                <Button
-                  variant="outline"
-                  onClick={handleGenerateQuizzes}
-                  disabled={isGeneratingQuizzes}
-                >
-                  {isGeneratingQuizzes ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Sparkles className="mr-2 h-4 w-4" />
-                  )}
-                  {isGeneratingQuizzes ? tQuiz('generating') : tQuiz('generateButton')}
-                </Button>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" disabled>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    {tQuiz('generateButton')}
+          {/* The bank belongs to the course — this module can browse the questions
+              its own material produced and trigger a new generation run. */}
+          {module.courseId ? (
+            <CourseQuizBankTab
+              courseId={module.courseId}
+              moduleId={moduleId}
+              readOnly
+              reloadKey={quizBankReloadKey}
+              onCountChange={setQuizBankCount}
+              actions={
+                canGenerateWithAI ? (
+                  <Button
+                    variant="outline"
+                    onClick={handleGenerateQuizzes}
+                    disabled={isGeneratingQuizzes}
+                  >
+                    {isGeneratingQuizzes ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="mr-2 h-4 w-4" />
+                    )}
+                    {isGeneratingQuizzes ? tQuiz('generating') : tQuiz('generateButton')}
                   </Button>
-                  <span className="text-xs text-muted-foreground">
-                    {tQuiz('generatePremiumOnly')} —{' '}
-                    <Link href="/subscription" className="underline text-primary">
-                      {tQuiz('upgradeLink')}
-                    </Link>
-                  </span>
-                </div>
-              )}
-            </div>
-          </ProfessorOnly>
-
-          {/* Quiz DataTable */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <ClipboardList className="h-5 w-5" />
-                {tQuiz('title')}
-              </CardTitle>
-              <CardDescription>{tQuiz('description')}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <DataTable
-                data={quizzes}
-                columns={quizColumns}
-                loading={quizzesLoading}
-                emptyMessage={canGenerateWithAI ? tQuiz('emptyMessage') : tQuiz('emptyMessageStarterPlan')}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Upload Jobs History */}
-          <ProfessorOnly>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">{tQuiz('uploadJobsTitle')}</CardTitle>
-                <CardDescription>{tQuiz('uploadJobsDescription')}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {quizUploadJobsLoading && quizUploadJobs.length === 0 ? (
-                  <div className="flex items-center justify-center py-6">
-                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                  </div>
-                ) : quizUploadJobs.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-6">{tQuiz('uploadJobsEmpty')}</p>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colFile')}</th>
-                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colStatus')}</th>
-                          <th className="text-left py-2 pr-4 font-medium text-muted-foreground">{tQuiz('colExtracted')}</th>
-                          <th className="text-left py-2 font-medium text-muted-foreground">{tQuiz('colActions')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {quizUploadJobs.map(job => (
-                          <tr key={job.id} className="border-b last:border-0">
-                            <td className="py-2 pr-4 text-muted-foreground max-w-[200px] truncate">{job.originalFilename || '-'}</td>
-                            <td className="py-2 pr-4">
-                              {job.status === 'pending' && (
-                                <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-400 border-0">{tQuiz('statusPending')}</Badge>
-                              )}
-                              {job.status === 'processing' && (
-                                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-400 border-0">
-                                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />{tQuiz('statusProcessing')}
-                                </Badge>
-                              )}
-                              {job.status === 'completed' && (
-                                <Badge className="bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-400 border-0">{tQuiz('statusCompleted')}</Badge>
-                              )}
-                              {job.status === 'failed' && (
-                                <Badge className="bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-400 border-0">{tQuiz('statusFailed')}</Badge>
-                              )}
-                            </td>
-                            <td className="py-2 pr-4">{job.status === 'completed' ? job.extractedCount : '-'}</td>
-                            <td className="py-2">
-                              {job.status === 'completed' && job.extractedCount > 0 && (
-                                importedJobIds.has(job.id) ? (
-                                  <span className="inline-flex items-center gap-1 text-sm text-green-600 dark:text-green-400 font-medium">
-                                    <CheckCircle2 className="h-4 w-4" />
-                                    {tQuiz('importedLabel')}
-                                  </span>
-                                ) : (
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    disabled={reviewingJobId === job.id}
-                                    onClick={() => handleReviewQuizJob(job.id)}
-                                  >
-                                    {reviewingJobId === job.id ? (
-                                      <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                                    ) : (
-                                      <Eye className="mr-1 h-3 w-3" />
-                                    )}
-                                    {tQuiz('reviewButton')}
-                                  </Button>
-                                )
-                              )}
-                              {job.status === 'failed' && job.errorMessage && (
-                                <span className="text-xs text-red-600 dark:text-red-400">{job.errorMessage}</span>
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" disabled>
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      {tQuiz('generateButton')}
+                    </Button>
+                    <span className="text-xs text-muted-foreground">
+                      {tQuiz('generatePremiumOnly')} —{' '}
+                      <Link href="/subscription" className="underline text-primary">
+                        {tQuiz('upgradeLink')}
+                      </Link>
+                    </span>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </ProfessorOnly>
+                )
+              }
+            />
+          ) : null}
+
+          {module.courseId && (
+            <Button variant="link" className="px-0" asChild>
+              <Link href={`/courses/${module.courseId}`}>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                {tQuiz('manageOnCourse')}
+              </Link>
+            </Button>
+          )}
         </TabsContent>
 
         {/* Assignments Tab */}
         <TabsContent value="assignments" className="space-y-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>{tA('title')}</CardTitle>
-                <CardDescription>{tA('description')}</CardDescription>
-              </div>
-              <Button size="sm" onClick={openCreateAssignment}>
-                <Plus className="mr-2 h-4 w-4" />
-                {tA('newButton')}
+          {/* Read-only: assignments are created and published on the course page. */}
+          {module.courseId && (
+            <>
+              <CourseAssignmentsTab
+                courseId={module.courseId}
+                readOnly
+                onCountChange={setAssignmentsCount}
+                onFeatureAvailabilityChange={setAssignmentsFeatureEnabled}
+              />
+              <Button variant="link" className="px-0" asChild>
+                <Link href={`/courses/${module.courseId}`}>
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  {tAssign('manageOnCourse')}
+                </Link>
               </Button>
-            </CardHeader>
-            <CardContent>
-              {assignmentsLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                </div>
-              ) : assignments.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <ClipboardList className="h-10 w-10 mx-auto mb-2 opacity-40" />
-                  <p className="text-sm font-medium">{tA('emptyTitle')}</p>
-                  <p className="text-xs mt-1">{tA('emptyDescription')}</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {assignments.map((a) => {
-                    const isPastDue = new Date(a.dueDate) < new Date();
-                    return (
-                      <div key={a.id} className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-muted/30 transition-colors">
-                        <div className="space-y-1.5 flex-1 min-w-0 mr-4">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-medium truncate">{a.title}</span>
-                            {a.isPublished ? (
-                              <Badge variant="default" className="text-xs shrink-0">{tA('badgePublished')}</Badge>
-                            ) : (
-                              <Badge variant="secondary" className="text-xs shrink-0">{tA('badgeDraft')}</Badge>
-                            )}
-                            {a.rubricOriginalFileName && (
-                              <Badge variant="outline" className="text-xs shrink-0 gap-1">
-                                <FileCheck2 className="h-3 w-3" />
-                                {tA('rubricIndicator')}
-                              </Badge>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3 shrink-0" />
-                            <span className={isPastDue ? 'text-destructive font-medium' : ''}>
-                              {tA('dueLabel')} {formatDateTimeShort(a.dueDate)}
-                              {isPastDue && ` ${tA('pastDue')}`}
-                            </span>
-                            <span>·</span>
-                            <span className="truncate">{a.originalFileName}</span>
-                          </div>
-                          {a.keywords?.length > 0 && (
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <Tag className="h-3 w-3 text-muted-foreground shrink-0" />
-                              {a.keywords.map(kw => (
-                                <span key={kw} className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs">{kw}</span>
-                              ))}
-                            </div>
-                          )}
-                          {a.contextFiles?.length > 0 && (
-                            <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground">
-                              <FileText className="h-3 w-3 shrink-0" />
-                              <span>{tA('contextFilesCount', { count: a.contextFiles.length })}</span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <Switch
-                            checked={a.isPublished}
-                            onCheckedChange={() => handleTogglePublishAssignment(a.id)}
-                            title={a.isPublished ? tA('switchUnpublishTitle') : tA('switchPublishTitle')}
-                          />
-                          <Button variant="ghost" size="sm" onClick={() => openEditAssignment(a)}>
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive"
-                            onClick={() => { setAssignmentToDelete(a.id); setDeleteAssignmentConfirmOpen(true); }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Read-only: published assignments from other modules in this course */}
-          {module?.courseId && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">{tA('courseAssignmentsTitle')}</CardTitle>
-                <CardDescription>{tA('courseAssignmentsDescription')}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {assignmentsLoading ? (
-                  <div className="flex items-center justify-center py-6">
-                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                  </div>
-                ) : courseAssignments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">{tA('courseAssignmentsEmpty')}</p>
-                ) : (
-                  <div className="space-y-3">
-                    {courseAssignments.map((a) => {
-                      const isPastDue = new Date(a.dueDate) < new Date();
-                      return (
-                        <div key={a.id} className="flex items-start gap-3 p-4 border rounded-lg bg-muted/20">
-                          <div className="space-y-1.5 flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="font-medium truncate">{a.title}</span>
-                              <Badge variant="outline" className="text-xs shrink-0">{tA('badgePublished')}</Badge>
-                              {a.rubricOriginalFileName && (
-                                <Badge variant="outline" className="text-xs shrink-0 gap-1">
-                                  <FileCheck2 className="h-3 w-3" />
-                                  {tA('rubricIndicator')}
-                                </Badge>
-                              )}
-                            </div>
-                            {a.moduleName && (
-                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                                <BookOpen className="h-3 w-3 shrink-0" />
-                                <span>{tA('moduleLabel')} {a.moduleName}</span>
-                              </div>
-                            )}
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <Calendar className="h-3 w-3 shrink-0" />
-                              <span className={isPastDue ? 'text-destructive font-medium' : ''}>
-                                {tA('dueLabel')} {formatDateTimeShort(a.dueDate)}
-                                {isPastDue && ` ${tA('pastDue')}`}
-                              </span>
-                            </div>
-                            {a.keywords?.length > 0 && (
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <Tag className="h-3 w-3 text-muted-foreground shrink-0" />
-                                {a.keywords.map(kw => (
-                                  <span key={kw} className="inline-flex items-center px-1.5 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs">{kw}</span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            </>
           )}
         </TabsContent>
       </Tabs>
 
-      {/* Assignment Form Dialog */}
-      <Dialog open={assignmentFormOpen} onOpenChange={setAssignmentFormOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editingAssignment ? tA('formEditTitle') : tA('formCreateTitle')}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-5 pt-2">
-            {/* Title */}
-            <div>
-              <label className="block text-sm font-medium mb-1">{tA('fieldTitle')}</label>
-              <Input
-                value={assignmentTitle}
-                onChange={(e) => setAssignmentTitle(e.target.value)}
-                placeholder={tA('fieldTitlePlaceholder')}
-              />
-            </div>
-
-            {/* Instructions */}
-            <div>
-              <label className="block text-sm font-medium mb-1">{tA('fieldInstructions')}</label>
-              <Textarea
-                value={assignmentDescription}
-                onChange={(e) => setAssignmentDescription(e.target.value)}
-                placeholder={tA('fieldInstructionsPlaceholder')}
-                rows={4}
-              />
-            </div>
-
-            {/* Grading Criteria */}
-            <div>
-              <label className="block text-sm font-medium mb-1">
-                {tA('fieldGradingCriteria')}
-                <span className="ml-1 text-xs font-normal text-muted-foreground">({tCommon('optional')})</span>
-              </label>
-              <Textarea
-                value={assignmentGradingCriteria}
-                onChange={(e) => setAssignmentGradingCriteria(e.target.value)}
-                placeholder={tA('fieldGradingCriteriaPlaceholder')}
-                rows={3}
-                maxLength={2000}
-              />
-              <p className="text-xs text-muted-foreground mt-1">{tA('fieldGradingCriteriaHelp')}</p>
-            </div>
-
-            {/* Due Date */}
-            <div>
-              <label className="block text-sm font-medium mb-1">{tA('fieldDueDate')}</label>
-              <DateTimePicker
-                value={assignmentDueDate}
-                onChange={setAssignmentDueDate}
-                placeholder={tA('fieldDueDatePlaceholder')}
-                fromDate={new Date()}
-              />
-            </div>
-
-            {/* Keywords chip input */}
-            <div>
-              <label className="block text-sm font-medium mb-1">{tA('fieldKeywords')}</label>
-              <div className="flex flex-wrap gap-1.5 p-2 border rounded-md min-h-[42px] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-0 bg-background">
-                {assignmentKeywords.map(kw => (
-                  <span
-                    key={kw}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-xs font-medium"
-                  >
-                    {kw}
-                    <button
-                      type="button"
-                      onClick={() => removeKeyword(kw)}
-                      className="hover:opacity-70 transition-opacity"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
-                ))}
-                <input
-                  type="text"
-                  value={assignmentKeywordInput}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v.endsWith(',') || v.endsWith(';') || v.endsWith('.')) { addKeyword(v); }
-                    else { setAssignmentKeywordInput(v); }
-                  }}
-                  onKeyDown={handleKeywordKeyDown}
-                  onBlur={() => { if (assignmentKeywordInput.trim()) addKeyword(assignmentKeywordInput); }}
-                  placeholder={assignmentKeywords.length === 0 ? tA('fieldKeywordsPlaceholder') : ''}
-                  className="flex-1 min-w-[140px] bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">{tA('fieldKeywordsHelp')}</p>
-            </div>
-
-            {/* Files — only on create */}
-            {!editingAssignment && (
-              <>
-                <div>
-                  <label className="block text-sm font-medium mb-1">{tA('fieldFile')}</label>
-                  <input
-                    type="file"
-                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
-                    onChange={(e) => setAssignmentFile(e.target.files?.[0] || null)}
-                  />
-                  {assignmentFile && (
-                    <p className="text-xs text-muted-foreground mt-1">{assignmentFile.name}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">{tA('fieldRubric')}</label>
-                  <input
-                    type="file"
-                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
-                    onChange={(e) => setAssignmentRubricFile(e.target.files?.[0] || null)}
-                  />
-                  {assignmentRubricFile ? (
-                    <p className="text-xs text-muted-foreground mt-1">{assignmentRubricFile.name}</p>
-                  ) : (
-                    <p className="text-xs text-muted-foreground mt-1">{tA('fieldRubricHelp')}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">{tA('fieldContextFiles')}</label>
-                  <input
-                    type="file"
-                    multiple
-                    accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    className="block w-full text-sm text-muted-foreground file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-secondary-foreground hover:file:bg-secondary/80 cursor-pointer"
-                    onChange={(e) => setAssignmentFiles(e.target.files ? Array.from(e.target.files) : [])}
-                  />
-                  {assignmentFiles.length > 0 ? (
-                    <ul className="mt-1 space-y-0.5">
-                      {assignmentFiles.map((f, i) => (
-                        <li key={i} className="text-xs text-muted-foreground">• {f.name}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-xs text-muted-foreground mt-1">{tA('fieldContextFilesHelp')}</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            <div className="flex justify-end gap-2 pt-2 border-t">
-              <Button variant="outline" onClick={() => setAssignmentFormOpen(false)}>
-                {tA('cancelButton')}
-              </Button>
-              <Button
-                onClick={handleSaveAssignment}
-                disabled={isSavingAssignment || !assignmentTitle.trim() || !assignmentDueDate}
-              >
-                {isSavingAssignment && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {editingAssignment ? tA('saveButton') : tA('createButton')}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Assignment Confirm */}
-      <AlertDialog open={deleteAssignmentConfirmOpen} onOpenChange={setDeleteAssignmentConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{tA('deleteTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>{tA('deleteDescription')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{tA('deleteCancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAssignment} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{tA('deleteConfirm')}</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
       {/* Token Creation Modal */}
       <TokenModal
-        mode="create"
+        mode={tokenModalMode}
         open={tokenModalOpen}
-        onClose={() => setTokenModalOpen(false)}
+        onClose={closeTokenModal}
         onSuccess={() => {
-          setTokenModalOpen(false);
+          closeTokenModal();
           refetchTokens?.();
-          toast.success(t('tokenCreatedSuccess'));
+          // Only the create flow has a dedicated success message; edit/revoke
+          // surface their own feedback from inside the modal.
+          if (tokenModalMode === 'create') {
+            toast.success(t('tokenCreatedSuccess'));
+          }
         }}
+        token={selectedToken}
         preselectedModuleId={moduleId}
       />
 
@@ -2135,198 +1399,6 @@ export default function ModuleDetailsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Quiz File Upload Dialog */}
-      <Dialog open={quizUploadModalOpen} onOpenChange={setQuizUploadModalOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>{tQuiz('uploadButton')}</DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleQuizFileUpload} className="space-y-4">
-            <FileUpload
-              onFileSelect={setQuizSelectedFile}
-              accept=".pdf,.docx,.doc,.xlsx,.xls,.csv,.txt"
-              multiple={false}
-              maxSizeMB={10}
-              selectedFiles={quizSelectedFile}
-              translations={{
-                clickToSelect: t('fileUpload.clickToSelect'),
-                supportedFormats: 'PDF, DOCX, XLSX, CSV, TXT',
-                maxSize: t('fileUpload.maxSize', { maxSizeMB: 10 }),
-                filesSelected: `${quizSelectedFile.length} file(s) selected`
-              }}
-            />
-            <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setQuizUploadModalOpen(false)}>
-                {tCommon('buttons.cancel')}
-              </Button>
-              <Button type="submit" disabled={quizSelectedFile.length === 0 || isExtractingQuiz}>
-                {isExtractingQuiz ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {tQuiz('uploading')}
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    {tQuiz('uploadButton')}
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Review Extracted Questions Dialog */}
-      <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{tQuiz('review.title')}</DialogTitle>
-            <p className="text-sm text-muted-foreground">{tQuiz('review.description')}</p>
-          </DialogHeader>
-
-          <div className="flex items-center justify-between py-2">
-            <span className="text-sm font-medium">
-              {tQuiz('review.selected', {
-                selected: extractedQuestions.filter(q => q.selected !== false).length,
-                total: extractedQuestions.length
-              })}
-            </span>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setExtractedQuestions(prev => prev.map(q => ({ ...q, selected: true })))}>
-                {tQuiz('review.selectAll')}
-              </Button>
-              <Button variant="ghost" size="sm" onClick={() => setExtractedQuestions(prev => prev.map(q => ({ ...q, selected: false })))}>
-                {tQuiz('review.deselectAll')}
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-4 max-h-[50vh] overflow-y-auto">
-            {extractedQuestions.map((q, idx) => (
-              <div key={idx} className={`border rounded-lg p-4 space-y-2 ${q.selected === false ? 'opacity-50' : ''}`}>
-                <div className="flex items-start gap-3">
-                  <Checkbox
-                    checked={q.selected !== false}
-                    onCheckedChange={(checked) => {
-                      setExtractedQuestions(prev => prev.map((item, i) => i === idx ? { ...item, selected: checked === true } : item));
-                    }}
-                  />
-                  <div className="flex-1 space-y-2">
-                    <p className="text-sm font-medium">{idx + 1}. {q.question}</p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                      {Object.entries(q.options || {}).map(([key, opt]) => {
-                        const isCorrect = key === q.correct_answer;
-                        const text = typeof opt === 'object' ? (opt as { text: string }).text : String(opt);
-                        return (
-                          <div key={key} className={`text-xs px-2 py-1 rounded ${isCorrect ? 'bg-green-100 dark:bg-green-950 font-medium' : 'bg-muted'}`}>
-                            <span className="font-semibold">{key})</span> {text}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {tQuiz(`difficulty.${q.difficulty || 'medium'}`)}
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={() => setReviewDialogOpen(false)}>
-              {tQuiz('review.cancel')}
-            </Button>
-            <Button
-              onClick={handleConfirmQuizzes}
-              disabled={isConfirmingQuizzes || extractedQuestions.filter(q => q.selected !== false).length === 0}
-            >
-              {isConfirmingQuizzes && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {tQuiz('review.confirm')}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* View Quiz Detail Dialog */}
-      <Dialog open={viewQuizDialogOpen} onOpenChange={setViewQuizDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{tQuiz('view.title')}</DialogTitle>
-          </DialogHeader>
-          {viewingQuiz && (
-            <div className="space-y-4">
-              <p className="text-sm font-medium">{viewingQuiz.question_text}</p>
-
-              <div className="space-y-2">
-                {(['A', 'B', 'C', 'D', 'E'] as const).map((key) => {
-                  const optionText = viewingQuiz.options[key];
-                  if (!optionText) return null;
-                  const isCorrect = key === viewingQuiz.correct_answer;
-                  const explanation = viewingQuiz.explanations[key];
-                  return (
-                    <div key={key} className={`border rounded-lg p-3 ${isCorrect ? 'border-green-500 bg-green-50 dark:bg-green-950/50' : ''}`}>
-                      <div className="flex items-center gap-2">
-                        <Badge variant={isCorrect ? 'default' : 'outline'} className={isCorrect ? 'bg-green-600' : ''}>
-                          {key}
-                        </Badge>
-                        <span className="text-sm">{optionText}</span>
-                        {isCorrect && <Badge className="bg-green-600 ml-auto">{tQuiz('view.correctAnswer')}</Badge>}
-                      </div>
-                      {explanation && (
-                        <p className="text-xs text-muted-foreground mt-2 ml-8">
-                          <span className="font-medium">{tQuiz('view.explanation')}:</span> {explanation}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {viewingQuiz.concepts_covered && viewingQuiz.concepts_covered.length > 0 && (
-                <div>
-                  <p className="text-xs font-medium text-muted-foreground mb-1">{tQuiz('view.concepts')}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {viewingQuiz.concepts_covered.map((concept, i) => (
-                      <Badge key={i} variant="secondary" className="text-xs">{concept}</Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-2">
-                <Badge variant="outline">
-                  {tQuiz(`difficulty.${viewingQuiz.difficulty}`)}
-                </Badge>
-                {viewingQuiz.source && (
-                  <Badge variant="secondary">
-                    {tQuiz(`source.${viewingQuiz.source}`)}
-                  </Badge>
-                )}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Quiz Confirmation */}
-      <AlertDialog open={deleteQuizConfirmOpen} onOpenChange={setDeleteQuizConfirmOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{tQuiz('deleteConfirm')}</AlertDialogTitle>
-            <AlertDialogDescription>{tQuiz('deleteConfirmDesc')}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{tCommon('buttons.cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteQuiz} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              {tCommon('buttons.delete')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

@@ -114,6 +114,10 @@ import type {
   AssignmentUpdate,
   GradingJob,
   QuizUploadJob,
+  LtiSetupInfo,
+  LtiRegistration,
+  LtiRegistrationCreate,
+  LtiContextMapping,
 } from './types';
 
 export class ApiError extends Error {
@@ -532,6 +536,7 @@ class TutoriaAPIClient {
     themePreference?: string;
     languagePreference?: string;
     birthdate?: string;
+    externalId?: string; // matricula — lets staff log into the student widget to test it
   }): Promise<UserResponse> {
     return this.put('/api/auth/me', data);
   }
@@ -559,7 +564,7 @@ class TutoriaAPIClient {
     return this.get(`/api/users/${userId}`, undefined, false); // Management API
   }
 
-  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string; userType?: string; isAdmin?: boolean }): Promise<UserResponse> {
+  async updateUser(userId: number, data: { firstName?: string; lastName?: string; email?: string; username?: string; birthdate?: string; userType?: string; isAdmin?: boolean; externalId?: string }): Promise<UserResponse> {
     return this.put(`/api/users/${userId}`, data, false); // Management API
   }
 
@@ -696,46 +701,46 @@ class TutoriaAPIClient {
     return this.post(`/api/modules/${moduleId}/generate-quizzes?count=${count}`, {});
   }
 
-  async getModuleQuizzes(moduleId: number, difficulty?: string, source?: string): Promise<QuizQuestion[]> {
+  /**
+   * The question bank is course-wide. `moduleId` optionally narrows the list to
+   * questions generated from that module's material (provenance filter only).
+   */
+  async getCourseQuizzes(courseId: number, difficulty?: string, source?: string, moduleId?: number): Promise<QuizQuestion[]> {
     const params: Record<string, string> = {};
     if (difficulty) params.difficulty = difficulty;
     if (source) params.source = source;
-    const response = await this.get<{ quizzes: QuizQuestion[]; total: number; module_id: number }>(
-      `/modules/${moduleId}/quizzes`, params, false, true
+    if (moduleId) params.module_id = String(moduleId);
+    const response = await this.get<{ quizzes: QuizQuestion[]; total: number; course_id: number }>(
+      `/courses/${courseId}/quizzes`, params, false, true
     );
-    // Backend returns { quizzes: [...], total, module_id } — unwrap to array
+    // Backend returns { quizzes: [...], total, course_id } — unwrap to array
     return Array.isArray(response) ? response : (response?.quizzes ?? []);
   }
 
-  async uploadQuizFile(moduleId: number, file: globalThis.File): Promise<QuizUploadJob> {
+  async uploadQuizFile(courseId: number, file: globalThis.File): Promise<QuizUploadJob> {
     const formData = new FormData();
-    formData.append('moduleId', String(moduleId));
+    formData.append('courseId', String(courseId));
     formData.append('file', file);
     return this.post('/api/quiz-upload-jobs', formData, { isFormData: true });
   }
 
-  async confirmExtractedQuizzes(moduleId: number, questions: ExtractedQuestion[], uploadedFileId?: number): Promise<{ status: string; message: string; saved_count: number; module_id: number }> {
+  async confirmExtractedQuizzes(courseId: number, questions: ExtractedQuestion[], uploadedFileId?: number): Promise<{ status: string; message: string; saved_count: number; course_id: number }> {
     const body: Record<string, unknown> = { questions };
     if (uploadedFileId !== undefined) body.uploaded_file_id = uploadedFileId;
-    return this.post(`/modules/${moduleId}/confirm-extracted-quizzes`, body, { usePythonAPI: true });
+    return this.post(`/courses/${courseId}/confirm-extracted-quizzes`, body, { usePythonAPI: true });
   }
 
-  async deleteQuiz(moduleId: number, quizId: number): Promise<void> {
-    return this.delete(`/modules/${moduleId}/quizzes/${quizId}`, false, true);
+  async deleteQuiz(courseId: number, quizId: number): Promise<void> {
+    return this.delete(`/courses/${courseId}/quizzes/${quizId}`, false, true);
   }
 
-  // Assignment endpoints
-  async getAssignments(moduleId: number, page?: number, size?: number): Promise<PaginatedResponse<Assignment>>;
-  async getAssignments(params: { courseId: number }): Promise<PaginatedResponse<Assignment>>;
+  // Assignment endpoints — assignments belong to the course, not a module.
+  // `publishedOnly` is what read-only consumers (the module page) ask for.
   async getAssignments(
-    moduleIdOrParams: number | { courseId: number },
-    page = 1,
-    size = 20,
+    courseId: number,
+    { page = 1, size = 20, publishedOnly = false }: { page?: number; size?: number; publishedOnly?: boolean } = {},
   ): Promise<PaginatedResponse<Assignment>> {
-    if (typeof moduleIdOrParams === 'object') {
-      return this.get('/api/assignments', { courseId: moduleIdOrParams.courseId });
-    }
-    return this.get('/api/assignments', { moduleId: moduleIdOrParams, page, size });
+    return this.get('/api/assignments', { courseId, page, size, publishedOnly });
   }
 
   async getAssignment(id: number): Promise<Assignment> {
@@ -744,7 +749,7 @@ class TutoriaAPIClient {
 
   async createAssignment(data: AssignmentCreate): Promise<Assignment> {
     const formData = new FormData();
-    formData.append('ModuleId', data.moduleId.toString());
+    formData.append('CourseId', data.courseId.toString());
     formData.append('Title', data.title);
     if (data.description) formData.append('Description', data.description);
     formData.append('DueDate', data.dueDate);
@@ -794,11 +799,11 @@ class TutoriaAPIClient {
   }
 
   // Quiz upload job endpoints (.NET API)
-  async getQuizUploadJobs(moduleId: number): Promise<QuizUploadJob[]> {
-    return this.get('/api/quiz-upload-jobs', { moduleId });
+  async getQuizUploadJobs(courseId: number): Promise<QuizUploadJob[]> {
+    return this.get('/api/quiz-upload-jobs', { courseId });
   }
 
-  async getQuizUploadJobQuestions(moduleId: number, jobId: number): Promise<{ jobId: number; moduleId: number; status: string; extractedCount: number; questions: ExtractedQuestion[] }> {
+  async getQuizUploadJobQuestions(jobId: number): Promise<{ jobId: number; courseId: number; status: string; extractedCount: number; questions: ExtractedQuestion[] }> {
     return this.get(`/api/quiz-upload-jobs/${jobId}/questions`);
   }
 
@@ -1721,7 +1726,7 @@ class TutoriaAPIClient {
   }
 
   // Accept invitation (public, no auth)
-  async acceptInvitation(data: { token: string; username: string; firstName: string; lastName: string; password: string }): Promise<{ userId: number; email: string; message: string }> {
+  async acceptInvitation(data: { token: string; username: string; firstName: string; lastName: string; password: string; externalId?: string }): Promise<{ userId: number; email: string; message: string }> {
     const baseUrl = this.baseURL;
     const response = await fetch(`${baseUrl}/api/auth/accept-invitation`, {
       method: 'POST',
@@ -1733,6 +1738,47 @@ class TutoriaAPIClient {
       throw new Error(error.message || 'Failed to accept invitation');
     }
     return response.json();
+  }
+
+  // ==========================================================================
+  // LTI 1.3 registrations
+  // ==========================================================================
+
+  /** The URLs to paste into the LMS when registering Tutoria. */
+  async getLtiSetupInfo(): Promise<LtiSetupInfo> {
+    return this.get('/api/lti/registrations/setup-info');
+  }
+
+  async getLtiRegistrations(): Promise<LtiRegistration[]> {
+    return this.get('/api/lti/registrations');
+  }
+
+  async createLtiRegistration(data: LtiRegistrationCreate): Promise<LtiRegistration> {
+    return this.post('/api/lti/registrations', data);
+  }
+
+  async updateLtiRegistration(
+    id: number,
+    data: Partial<Pick<LtiRegistration, 'name' | 'authLoginUrl' | 'authTokenUrl' | 'keySetUrl' | 'isActive'>>,
+  ): Promise<LtiRegistration> {
+    return this.put(`/api/lti/registrations/${id}`, data);
+  }
+
+  async deleteLtiRegistration(id: number): Promise<void> {
+    return this.delete(`/api/lti/registrations/${id}`);
+  }
+
+  async getLtiContexts(registrationId: number): Promise<LtiContextMapping[]> {
+    return this.get(`/api/lti/registrations/${registrationId}/contexts`);
+  }
+
+  /** Links an LMS course to a Tutoria course; pass null to unlink. */
+  async setLtiContextCourse(
+    registrationId: number,
+    mappingId: number,
+    courseId: number | null,
+  ): Promise<LtiContextMapping> {
+    return this.put(`/api/lti/registrations/${registrationId}/contexts/${mappingId}`, { courseId });
   }
 }
 

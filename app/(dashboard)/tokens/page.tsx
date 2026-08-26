@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/shared/data-table';
-import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info, CheckCircle2, XCircle, Code2 } from 'lucide-react';
+import { Key, Plus, Activity, Shield, Clock, Eye, Edit, Trash2, Copy, ExternalLink, Link, Info, AlertTriangle, CheckCircle2, XCircle, Code2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProfessorOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
@@ -384,6 +384,15 @@ export default function TokensPage() {
           <Info className="h-4 w-4" />
           <AlertDescription>
             {t('widgetUrlShareNote')}
+          </AlertDescription>
+        </Alert>
+
+        {/* Open-in-new-tab carries the professor's auth_token but no student
+            session, so the tutor runs without assignment/quiz/progress context. */}
+        <Alert className="border-amber-500/50 bg-amber-50 dark:bg-amber-950/20">
+          <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
+          <AlertDescription className="text-amber-900 dark:text-amber-200">
+            {t('widgetUrlOpenTabWarning')}
           </AlertDescription>
         </Alert>
 

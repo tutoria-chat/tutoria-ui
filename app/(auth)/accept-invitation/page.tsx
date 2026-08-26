@@ -36,6 +36,7 @@ export default function AcceptInvitationPage() {
     firstName: '',
     lastName: '',
     password: '',
+    externalId: '', // matricula — optional; lets staff test the student widget
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -105,12 +106,15 @@ export default function AcceptInvitationPage() {
         firstName: formData.firstName,
         lastName: formData.lastName,
         password: formData.password,
+        externalId: formData.externalId.trim() || undefined,
       });
       toast.success(t('successMessage'));
       router.push('/login');
     } catch (error: any) {
       const msg = error.message || '';
-      if (msg.toLowerCase().includes('username')) {
+      if (msg.toLowerCase().includes('matricula')) {
+        setErrors({ externalId: t('errors.matriculaTaken') });
+      } else if (msg.toLowerCase().includes('username')) {
         setErrors({ username: t('errors.usernameTaken') });
       } else if (msg.toLowerCase().includes('expired')) {
         setFetchError(t('expired'));
@@ -294,6 +298,27 @@ export default function AcceptInvitationPage() {
                 </FormItem>
               </FormField>
             </div>
+
+            {/* Matricula (optional) — lets staff test the student widget */}
+            <FormField>
+              <FormItem>
+                <FormLabel htmlFor="externalId">{t('matricula')}</FormLabel>
+                <Input
+                  id="externalId"
+                  type="text"
+                  value={formData.externalId}
+                  onChange={(e) => handleChange('externalId', e.target.value)}
+                  placeholder={t('matriculaPlaceholder')}
+                  className={errors.externalId ? 'border-destructive' : ''}
+                  disabled={isSubmitting}
+                />
+                {errors.externalId ? (
+                  <FormMessage>{errors.externalId}</FormMessage>
+                ) : (
+                  <p className="text-xs text-muted-foreground">{t('matriculaHint')}</p>
+                )}
+              </FormItem>
+            </FormField>
 
             {/* Password */}
             <FormField>

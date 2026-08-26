@@ -202,6 +202,9 @@ export default function SignupPage() {
         window.location.href = result.checkoutUrl;
       } else {
         toast.success(t('registrationSuccess'));
+        // Founders aren't imported like students, so they have no matricula yet.
+        // Nudge them to add one in their profile so they can test the widget.
+        toast.info(t('matriculaReminder'), { duration: 12000 });
         router.push('/login');
       }
     } catch (err) {

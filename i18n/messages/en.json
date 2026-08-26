@@ -1,7 +1,11 @@
 {
   "titles": {
     "hidden": "The Student of Light",
-    "tiers": { "aprendiz": "Apprentice", "mestre": "Master", "lenda": "Legend" },
+    "tiers": {
+      "aprendiz": "Apprentice",
+      "mestre": "Master",
+      "lenda": "Legend"
+    },
     "tracks": {
       "math": "Mathematics",
       "programming": "Programming",
@@ -11,7 +15,10 @@
       "language": "Languages",
       "humanities": "Humanities"
     },
-    "globals": { "veterano": "Veteran", "imortal": "Immortal" }
+    "globals": {
+      "veterano": "Veteran",
+      "imortal": "Immortal"
+    }
   },
   "pages": {
     "login": "Login"
@@ -258,7 +265,8 @@
         "students": "Students",
         "calendar": "Calendar",
         "assignments": "Assignments",
-        "grading": "Test Grading"
+        "grading": "Test Grading",
+        "quizBank": "Question Bank"
       },
       "calendarTab": {
         "addEvent": "Add event",
@@ -408,12 +416,6 @@
         "bulkUnenrollConfirm": "Unenroll {count}",
         "bulkUnenrollSuccess": "{count} students unenrolled.",
         "bulkUnenrollPartial": "{ok} unenrolled, {failed} failed."
-      },
-      "assignmentsTab": {
-        "title": "Course Assignments",
-        "description": "Published assignments from all modules in this course. Read-only.",
-        "openModule": "Open Module",
-        "empty": "No published assignments in this course yet."
       },
       "gradingTab": {
         "title": "Test Grading",
@@ -739,61 +741,7 @@
       "updateAIConfigErrorDesc": "Could not extract file texts. Please try again.",
       "extractionResult": "{count} file(s) extracted",
       "assignmentsTab": "Assignments",
-      "assignments": {
-        "title": "Assignments",
-        "description": "Publish assignments for students with deadlines and AI-powered feedback.",
-        "newButton": "New Assignment",
-        "emptyTitle": "No assignments yet.",
-        "emptyDescription": "Create your first assignment to publish to students.",
-        "badgePublished": "Published",
-        "badgeDraft": "Draft",
-        "dueLabel": "Due:",
-        "pastDue": "(Past due)",
-        "switchPublishTitle": "Publish",
-        "switchUnpublishTitle": "Unpublish",
-        "rubricIndicator": "Has Rubric",
-        "keywordsLabel": "Keywords",
-        "formCreateTitle": "New Assignment",
-        "formEditTitle": "Edit Assignment",
-        "fieldTitle": "Title",
-        "fieldTitlePlaceholder": "Assignment title",
-        "fieldInstructions": "Instructions (optional)",
-        "fieldInstructionsPlaceholder": "Describe the assignment requirements...",
-        "fieldDueDate": "Due Date",
-        "fieldKeywords": "Keywords (optional)",
-        "fieldKeywordsPlaceholder": "Type and press comma, semicolon, period, or Enter to add...",
-        "fieldKeywordsHelp": "The AI will focus on these aspects when evaluating the student's work.",
-        "fieldGradingCriteria": "Grading Criteria",
-        "fieldGradingCriteriaPlaceholder": "e.g. Evaluate clarity of argumentation, correct use of concepts, and structure...",
-        "fieldGradingCriteriaHelp": "The AI will use this criteria to guide feedback and grading of student answers.",
-        "fieldFile": "Assignment File (PDF or DOCX, max 30 MB)",
-        "fieldRubric": "Evaluation Rubric (optional, PDF or DOCX, max 30 MB)",
-        "fieldRubricHelp": "Grading criteria the AI will use to provide structured feedback.",
-        "fieldContextFiles": "Context Files (optional, PDF or DOCX, multiple allowed)",
-        "fieldContextFilesHelp": "Supplementary reference documents the AI can use when grading student submissions.",
-        "contextFilesCount": "{count, plural, one {# context file} other {# context files}}",
-        "cancelButton": "Cancel",
-        "saveButton": "Save Changes",
-        "createButton": "Create Assignment",
-        "deleteTitle": "Delete Assignment",
-        "deleteDescription": "This will hide the assignment from students. Are you sure?",
-        "deleteCancel": "Cancel",
-        "deleteConfirm": "Delete",
-        "toastCreated": "Assignment created successfully",
-        "toastUpdated": "Assignment updated",
-        "toastDeleted": "Assignment deleted",
-        "toastPublished": "Assignment published",
-        "toastUnpublished": "Assignment unpublished",
-        "toastFileRequired": "Please select a file for the assignment",
-        "toastSaveError": "Failed to save assignment",
-        "toastDeleteError": "Failed to delete assignment",
-        "toastPublishError": "Failed to update publish status",
-        "fieldDueDatePlaceholder": "Pick a date and time",
-        "courseAssignmentsTitle": "Other Course Assignments",
-        "courseAssignmentsDescription": "Published assignments from other modules in this course. Read-only — managed by their respective modules.",
-        "courseAssignmentsEmpty": "No published assignments from other modules in this course.",
-        "moduleLabel": "Module:"
-      }
+      "widgetUrlOpenTabWarning": "Heads up: Open in new tab tests the chat only — the tutor answers from the module's files, but gets no assignment or quiz context and no student progress, because there is no student session. To test the full experience, use Copy link and open the copied link in a new tab."
     },
     "edit": {
       "title": "Edit Module",
@@ -1575,7 +1523,11 @@
       "confirmRemoveUniversityDescription": "Are you sure you want to remove {name} from {university}? They will lose access to all data in this institution.",
       "confirmRemove": "Remove",
       "removeSuccess": "User removed from institution successfully.",
-      "removeError": "Failed to remove user from institution."
+      "removeError": "Failed to remove user from institution.",
+      "matriculaLabel": "Matricula",
+      "matriculaPlaceholder": "e.g. 20231234",
+      "matriculaHint": "Lets this person log into the student widget to test it. Unique in the institution; leave blank to remove.",
+      "matriculaExists": "This matricula is already in use at the institution."
     }
   },
   "students": {
@@ -1648,19 +1600,19 @@
       "selectFile": "Select File",
       "dropzone": "Drop your file here or click to browse",
       "acceptedFormats": "Accepted formats: .csv, .xlsx",
-    "importFormats": "Accepted formats: .csv, .xlsx, .xls",
-    "invalidFileType": "Please select a .csv, .xlsx or .xls file.",
-    "errorCodes": {
-      "missingEmailColumn": "We couldn't find the email column in your file. Columns found: {headers}. Please make sure there is an email column (e.g. \"email\" or \"e-mail\") and try again.",
-      "emailRequired": "Email is blank — every student needs an email.",
-      "matriculaRequired": "Student ID (matricula) is blank — every student needs one.",
-      "emailBelongsToNonStudent": "This email already belongs to a non-student account (professor or admin) and can't be enrolled as a student.",
-      "noDataRows": "The file has no data rows. Add at least one student and try again.",
-      "emptyFile": "The file is empty or has no header row. Include a header row with the column names.",
-      "unsupportedFormat": "Unsupported file format. Please upload a .csv, .xlsx or .xls file.",
-      "fileRequired": "Please select a file to import.",
-      "studentLimitExceeded": "Your plan's student limit would be exceeded. Current: {current}, new in this file: {newEnrollments}, limit: {limit}."
-    },
+      "importFormats": "Accepted formats: .csv, .xlsx, .xls",
+      "invalidFileType": "Please select a .csv, .xlsx or .xls file.",
+      "errorCodes": {
+        "missingEmailColumn": "We couldn't find the email column in your file. Columns found: {headers}. Please make sure there is an email column (e.g. \"email\" or \"e-mail\") and try again.",
+        "emailRequired": "Email is blank — every student needs an email.",
+        "matriculaRequired": "Student ID (matricula) is blank — every student needs one.",
+        "emailBelongsToNonStudent": "This email already belongs to a non-student account (professor or admin) and can't be enrolled as a student.",
+        "noDataRows": "The file has no data rows. Add at least one student and try again.",
+        "emptyFile": "The file is empty or has no header row. Include a header row with the column names.",
+        "unsupportedFormat": "Unsupported file format. Please upload a .csv, .xlsx or .xls file.",
+        "fileRequired": "Please select a file to import.",
+        "studentLimitExceeded": "Your plan's student limit would be exceeded. Current: {current}, new in this file: {newEnrollments}, limit: {limit}."
+      },
       "uploading": "Importing students...",
       "upload": "Import",
       "cancel": "Cancel",
@@ -2095,7 +2047,8 @@
     "allCourses": "All Courses",
     "allModules": "All Modules",
     "collapse": "Collapse",
-    "expand": "Expand sidebar"
+    "expand": "Expand sidebar",
+    "integrations": "Integrations"
   },
   "header": {
     "profile": "Profile",
@@ -2156,7 +2109,7 @@
     "governmentIdLabel": "Government ID/SSN",
     "governmentIdPlaceholder": "Ex: 000-00-0000",
     "externalIdLabel": "External ID/Registration",
-    "externalIdPlaceholder": "Ex: STU20231234",
+    "externalIdPlaceholder": "e.g. 20231234",
     "birthdateLabel": "Birthdate",
     "governmentIdReadonly": "This field is imported from the external system and cannot be changed",
     "externalIdReadonly": "This field is imported from the external system and cannot be changed",
@@ -2197,7 +2150,8 @@
     "profileUpdateSuccess": "Profile updated successfully!",
     "profileUpdateError": "Error updating profile",
     "languageChangeInfo": "The page will reload to apply the new language",
-    "saveError": "Error saving settings"
+    "saveError": "Error saving settings",
+    "externalIdHint": "Add your matricula to log into the student widget and test it (your activity won’t count toward statistics). Must be unique in the institution."
   },
   "dateRangePicker": {
     "placeholder": "Pick a date range",
@@ -3916,7 +3870,10 @@
     "pedagogicalAlertsDescription": "Signals that need action: courses emptying out and concepts students are failing",
     "alertEvasion": "{pct}% of {course} students are inactive ({count} students)",
     "alertConcept": "Concept \"{concept}\" at only {rate}% success in {module}",
-    "severity": { "high": "High", "medium": "Medium" },
+    "severity": {
+      "high": "High",
+      "medium": "Medium"
+    },
     "courseStatsTitle": "Course Statistics",
     "courseStatsDescription": "Engagement per course over the last {days} days — click to see disciplines",
     "colCourse": "Course",
@@ -4246,7 +4203,8 @@
       "updateError": "Failed to update access key",
       "active": "Active",
       "inactive": "Inactive"
-    }
+    },
+    "widgetUrlOpenTabWarning": "Heads up: Open in new tab tests the chat only — the tutor answers from the module's files, but gets no assignment or quiz context and no student progress, because there is no student session. To test the full experience, use Copy link and open the copied link in a new tab."
   },
   "tokens": {
     "title": "Module Access Key Management",
@@ -4728,7 +4686,8 @@
       "usernameAlreadyExists": "This username is already taken. Please choose another.",
       "submit": "Create Account",
       "submitting": "Creating account..."
-    }
+    },
+    "matriculaReminder": "After creating your institution, add your matricula in your profile so you can test the student widget."
   },
   "subscription": {
     "title": "Subscription",
@@ -4811,7 +4770,7 @@
     "contentTab": "Content",
     "tabLabel": "Quiz Bank",
     "title": "Question Bank",
-    "description": "Manage quiz questions for this module",
+    "description": "Manage this course's quiz questions",
     "uploadButton": "Upload question file",
     "generateButton": "Generate with AI",
     "generatePremiumOnly": "Available on Professional and Business plans",
@@ -4827,7 +4786,8 @@
       "question": "Question",
       "difficulty": "Difficulty",
       "answer": "Answer",
-      "source": "Source"
+      "source": "Source",
+      "actions": "Actions"
     },
     "difficulty": {
       "easy": "Easy",
@@ -4884,7 +4844,15 @@
     "statusCompleted": "Completed",
     "statusFailed": "Failed",
     "reviewButton": "Review & Import",
-    "importedLabel": "Imported"
+    "importedLabel": "Imported",
+    "moduleScopeHint": "Questions generated from this module's material. The full bank belongs to the course.",
+    "emptyMessageModule": "No questions generated from this module yet.",
+    "fileUpload": {
+      "clickToSelect": "Click to select or drag the file here",
+      "supportedFormats": "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
+      "maxSize": "Maximum size: {maxSizeMB}MB"
+    },
+    "manageOnCourse": "Manage the question bank on the course"
   },
   "privacyPolicy": {
     "title": "Privacy Policy",
@@ -4964,7 +4932,113 @@
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must be at least 8 characters",
       "usernameTaken": "This username is already taken",
-      "generic": "Something went wrong. Please try again."
-    }
+      "generic": "Something went wrong. Please try again.",
+      "matriculaTaken": "This matricula is already in use at your institution."
+    },
+    "matricula": "Matricula (optional)",
+    "matriculaPlaceholder": "Your matricula",
+    "matriculaHint": "Enter your matricula if you’ll test the student widget. You can also add it later in your profile."
+  },
+  "assignments": {
+    "title": "Assignments",
+    "description": "Publish course assignments for students, with deadlines and AI-powered feedback.",
+    "newButton": "New Assignment",
+    "emptyTitle": "No assignments yet.",
+    "emptyDescription": "Create your first assignment to publish to students.",
+    "badgePublished": "Published",
+    "badgeDraft": "Draft",
+    "dueLabel": "Due:",
+    "pastDue": "(Past due)",
+    "switchPublishTitle": "Publish",
+    "switchUnpublishTitle": "Unpublish",
+    "rubricIndicator": "Has Rubric",
+    "keywordsLabel": "Keywords",
+    "formCreateTitle": "New Assignment",
+    "formEditTitle": "Edit Assignment",
+    "fieldTitle": "Title",
+    "fieldTitlePlaceholder": "Assignment title",
+    "fieldInstructions": "Instructions (optional)",
+    "fieldInstructionsPlaceholder": "Describe the assignment requirements...",
+    "fieldDueDate": "Due Date",
+    "fieldKeywords": "Keywords (optional)",
+    "fieldKeywordsPlaceholder": "Type and press comma, semicolon, period, or Enter to add...",
+    "fieldKeywordsHelp": "The AI will focus on these aspects when evaluating the student's work.",
+    "fieldGradingCriteria": "Grading Criteria",
+    "fieldGradingCriteriaPlaceholder": "e.g. Evaluate clarity of argumentation, correct use of concepts, and structure...",
+    "fieldGradingCriteriaHelp": "The AI will use this criteria to guide feedback and grading of student answers.",
+    "fieldFile": "Assignment File (PDF or DOCX, max 30 MB)",
+    "fieldRubric": "Evaluation Rubric (optional, PDF or DOCX, max 30 MB)",
+    "fieldRubricHelp": "Grading criteria the AI will use to provide structured feedback.",
+    "fieldContextFiles": "Context Files (optional, PDF or DOCX, multiple allowed)",
+    "fieldContextFilesHelp": "Supplementary reference documents the AI can use when grading student submissions.",
+    "contextFilesCount": "{count, plural, one {# context file} other {# context files}}",
+    "cancelButton": "Cancel",
+    "saveButton": "Save Changes",
+    "createButton": "Create Assignment",
+    "deleteTitle": "Delete Assignment",
+    "deleteDescription": "This will hide the assignment from students. Are you sure?",
+    "deleteCancel": "Cancel",
+    "deleteConfirm": "Delete",
+    "toastCreated": "Assignment created successfully",
+    "toastUpdated": "Assignment updated",
+    "toastDeleted": "Assignment deleted",
+    "toastPublished": "Assignment published",
+    "toastUnpublished": "Assignment unpublished",
+    "toastFileRequired": "Please select a file for the assignment",
+    "toastSaveError": "Failed to save assignment",
+    "toastDeleteError": "Failed to delete assignment",
+    "toastPublishError": "Failed to update publish status",
+    "fieldDueDatePlaceholder": "Pick a date and time",
+    "courseAssignmentsTitle": "Course Assignments",
+    "courseAssignmentsDescription": "Published assignments for this course. Read-only — managed on the course page.",
+    "courseAssignmentsEmpty": "No published assignments in this course.",
+    "manageOnCourse": "Manage assignments on the course"
+  },
+  "lti": {
+    "title": "Integrations (LTI)",
+    "description": "Connect your institution's LMS to Tutoria. No plugin: teachers add an External Tool and pick the module.",
+    "connect": "Connect LMS",
+    "connectDescription": "After registering Tutoria in your LMS, it generates these values. Paste them here to finish the connection.",
+    "step1Title": "Step 1 — Configure in your LMS",
+    "step1Description": "In Moodle: Site administration → Plugins → Activity modules → External tool → Manage tools → Configure a tool manually. Use LTI 1.3 and public key type \"Keyset URL\".",
+    "step2Title": "Step 2 — Connected LMS platforms",
+    "step2Description": "Platforms allowed to launch Tutoria. Expand one to link each LMS course to a Tutoria course.",
+    "loginUrl": "Initiate login URL",
+    "launchUrl": "Redirection URI (Tool URL)",
+    "jwksUrl": "Public keyset URL",
+    "fieldName": "Name (internal label)",
+    "fieldIssuer": "Platform ID (LMS URL)",
+    "fieldClientId": "Client ID",
+    "fieldDeploymentId": "Deployment ID",
+    "fieldAuthLoginUrl": "Authentication request URL",
+    "fieldAuthTokenUrl": "Access token URL",
+    "fieldKeySetUrl": "LMS public keyset URL",
+    "emptyTitle": "No LMS connected",
+    "emptyDescription": "Click \"Connect LMS\" once you have configured Tutoria in your Moodle.",
+    "coursesTitle": "LMS courses",
+    "noContexts": "No courses yet. They appear here automatically on the first launch from the LMS.",
+    "selectCourse": "Select a course",
+    "notLinked": "Not linked",
+    "unmappedCount": "{count} unlinked",
+    "disabled": "The LTI integration is disabled on this installation.",
+    "created": "LMS connected successfully.",
+    "deleted": "Connection removed.",
+    "mapped": "Link updated.",
+    "deleteTitle": "Remove connection",
+    "deleteDescription": "Remove the connection to {name}? Launches from this LMS will stop working.",
+    "loadError": "Could not load integrations.",
+    "createError": "Could not connect the LMS.",
+    "deleteError": "Could not remove the connection.",
+    "mapError": "Could not save the link.",
+    "contextsLoadError": "Could not load courses.",
+    "coursesLoadError": "Could not load Tutoria courses.",
+    "noUniversity": "Your user is not linked to an institution.",
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "active": "Active",
+    "inactive": "Inactive"
   }
 }
