@@ -223,7 +223,12 @@
         "business": "Business",
         "language": "Languages",
         "humanities": "Humanities"
-      }
+      },
+      "majorsLabel": "Majors / Degree programs",
+      "majorsPlaceholder": "Select majors...",
+      "majorsSearch": "Search major...",
+      "majorsEmpty": "No majors found. Add them on the institution page.",
+      "majorsHelp": "Majors this course belongs to. The tutor uses this to answer which major/degree the course is part of."
     },
     "edit": {
       "title": "Edit Course",
@@ -972,7 +977,8 @@
         "contactPerson": "Contact Person",
         "website": "Website",
         "address": "Address",
-        "taxId": "Tax ID / CNPJ"
+        "taxId": "Tax ID / CNPJ",
+        "id": "Institution ID"
       },
       "courseColumns": {
         "name": "Course",
@@ -1007,7 +1013,22 @@
         "emptyMessage": "No professors registered yet."
       },
       "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
-      "deleteError": "Error deleting course. Please try again."
+      "deleteError": "Error deleting course. Please try again.",
+      "majors": {
+        "title": "Majors",
+        "description": "Degree programs the institution offers. Courses are tagged with these majors.",
+        "add": "Add",
+        "addDefaults": "Add defaults",
+        "placeholder": "New major (e.g. Civil Engineering)",
+        "empty": "No majors yet. Add one above or use the standard list.",
+        "deleteConfirm": "Remove \"{name}\"?",
+        "deleteDescription": "This removes the major and untags it from courses.",
+        "deleteAria": "Remove {name}",
+        "addError": "Could not add the major.",
+        "deleteError": "Could not remove the major.",
+        "seedSuccess": "Standard majors added.",
+        "seedError": "Could not add the standard majors."
+      }
     },
     "form": {
       "breadcrumb": "Institutions",

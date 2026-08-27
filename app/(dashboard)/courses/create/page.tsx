@@ -37,6 +37,7 @@ export default function CreateCoursePage() {
         code: data.code || '',
         description: data.description,
         universityId: 'universityId' in data ? data.universityId : user?.universityId || 1,
+        majorIds: 'majorIds' in data ? data.majorIds : undefined,
       };
 
       const newCourse = await apiClient.createCourse(courseData);

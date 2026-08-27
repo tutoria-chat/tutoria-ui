@@ -13,7 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
-import type { Course, CourseCreate, CourseUpdate, Professor, University } from '@/lib/types';
+import type { Course, CourseCreate, CourseUpdate, Major, Professor, University } from '@/lib/types';
 
 /** Extract an integer course ID from a plain number string or a URL that contains it. */
 export function parseExternalCourseId(raw: string): string {
@@ -59,6 +59,10 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
   const [loadingProfessors, setLoadingProfessors] = useState(false);
+  const [majors, setMajors] = useState<Major[]>([]);
+  const [selectedMajorIds, setSelectedMajorIds] = useState<string[]>(
+    course?.majors?.map(m => String(m.id)) ?? []
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loadingUniversities, setLoadingUniversities] = useState(false);
 
@@ -115,6 +119,24 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     load();
   }, [formData.universityId, isCreateMode]);
 
+  // Load the university's Majors (degree programs) so they can be picked here.
+  useEffect(() => {
+    if (!formData.universityId) {
+      setMajors([]);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await apiClient.getUniversityMajors(Number(formData.universityId));
+        if (!cancelled) setMajors(list);
+      } catch {
+        // Non-critical: majors are optional
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [formData.universityId]);
+
   const handleProfessorsChange = (ids: string[]) => {
     setSelectedProfessorIds(ids);
     onProfessorsChange?.(ids.map(Number));
@@ -152,6 +174,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         titleTracks: titleTracks.length > 0 ? titleTracks.join(',') : '',
         enableEnem,
         enemArea: enableEnem ? (enemArea || null) : null,
+        majorIds: selectedMajorIds.map(Number),
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -307,6 +330,26 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
                 placeholder={t('titleTracksPlaceholder')}
               />
               <p className="text-xs text-muted-foreground">{t('titleTracksHelp')}</p>
+            </FormItem>
+          </FormField>
+
+          {/* Majors (degree programs / graduações) this course belongs to */}
+          <FormField>
+            <FormItem>
+              <FormLabel>
+                {t('majorsLabel')}
+                <span className="ml-1 text-xs font-normal text-muted-foreground">({t('optional')})</span>
+              </FormLabel>
+              <MultiSelect
+                options={majors.map(m => ({ value: String(m.id), label: m.name }))}
+                selected={selectedMajorIds}
+                onChange={setSelectedMajorIds}
+                placeholder={t('majorsPlaceholder')}
+                searchPlaceholder={t('majorsSearch')}
+                emptyMessage={t('majorsEmpty')}
+                disabled={isLoading || !formData.universityId}
+              />
+              <p className="text-xs text-muted-foreground">{t('majorsHelp')}</p>
             </FormItem>
           </FormField>
 
