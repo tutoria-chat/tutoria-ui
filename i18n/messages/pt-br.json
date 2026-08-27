@@ -165,7 +165,12 @@
         "business": "Negócios",
         "language": "Línguas",
         "humanities": "Humanas"
-      }
+      },
+      "majorsLabel": "Graduações / Cursos",
+      "majorsPlaceholder": "Selecione as graduações...",
+      "majorsSearch": "Buscar graduação...",
+      "majorsEmpty": "Nenhuma graduação encontrada. Cadastre-as na página da instituição.",
+      "majorsHelp": "Graduações a que esta disciplina pertence. O tutor usa isso para responder a que curso/graduação a disciplina se refere."
     },
     "edit": {
       "title": "Editar Disciplina",
@@ -914,7 +919,8 @@
         "contactPerson": "Pessoa de Contato",
         "website": "Website",
         "address": "Endereço",
-        "taxId": "CNPJ / Identificação Fiscal"
+        "taxId": "CNPJ / Identificação Fiscal",
+        "id": "ID da Instituição"
       },
       "courseColumns": {
         "name": "Disciplina",
@@ -949,7 +955,22 @@
         "emptyMessage": "Nenhum professor cadastrado ainda."
       },
       "deleteConfirm": "Tem certeza que deseja deletar esta disciplina? Esta ação não pode ser desfeita.",
-      "deleteError": "Erro ao deletar disciplina. Tente novamente."
+      "deleteError": "Erro ao deletar disciplina. Tente novamente.",
+      "majors": {
+        "title": "Graduações",
+        "description": "Cursos/graduações oferecidos pela instituição. As disciplinas são associadas a estas graduações.",
+        "add": "Adicionar",
+        "addDefaults": "Adicionar padrões",
+        "placeholder": "Nova graduação (ex.: Engenharia Civil)",
+        "empty": "Nenhuma graduação cadastrada ainda. Adicione uma acima ou use a lista padrão.",
+        "deleteConfirm": "Remover \"{name}\"?",
+        "deleteDescription": "Isso remove a graduação e desassocia as disciplinas dela.",
+        "deleteAria": "Remover {name}",
+        "addError": "Não foi possível adicionar a graduação.",
+        "deleteError": "Não foi possível remover a graduação.",
+        "seedSuccess": "Graduações padrão adicionadas.",
+        "seedError": "Não foi possível adicionar as graduações padrão."
+      }
     },
     "form": {
       "breadcrumb": "Instituições de Ensino",

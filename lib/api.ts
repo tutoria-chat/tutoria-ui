@@ -12,6 +12,7 @@ import type {
   UniversityUpdate,
   UniversityWithCourses,
   Course,
+  Major,
   CourseCreate,
   CourseUpdate,
   CourseWithDetails,
@@ -654,6 +655,24 @@ class TutoriaAPIClient {
 
   async unassignProfessorFromCourse(courseId: number, professorId: number): Promise<void> {
     return this.delete(`/api/courses/${courseId}/professors/${professorId}`);
+  }
+
+  // Majors (degree programs / graduações) — managed per university
+  async getUniversityMajors(universityId: number): Promise<Major[]> {
+    return this.get(`/api/universities/${universityId}/majors`);
+  }
+
+  async createUniversityMajor(universityId: number, name: string): Promise<Major> {
+    return this.post(`/api/universities/${universityId}/majors`, { name });
+  }
+
+  async deleteUniversityMajor(universityId: number, majorId: number): Promise<void> {
+    return this.delete(`/api/universities/${universityId}/majors/${majorId}`);
+  }
+
+  /** Add the standard majors list (any not already present) and return the full list. */
+  async seedUniversityMajors(universityId: number): Promise<Major[]> {
+    return this.post(`/api/universities/${universityId}/majors/seed-defaults`);
   }
 
   // Module endpoints

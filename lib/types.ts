@@ -224,6 +224,15 @@ export interface UniversityUpdate {
 
 export interface UniversityWithCourses extends University {
   courses: Course[];
+  majors?: Major[];
+}
+
+// Major (degree program / graduação) Types
+export interface Major {
+  id: number;
+  universityId: number;
+  name: string;
+  createdAt?: string;
 }
 
 // Course Types
@@ -238,6 +247,7 @@ export interface Course {
   titleTracks?: string | null;
   enableEnem?: boolean;
   enemArea?: string | null;
+  majors?: Major[];
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -254,6 +264,7 @@ export interface CourseCreate {
   titleTracks?: string | null;
   enableEnem?: boolean;
   enemArea?: string | null;
+  majorIds?: number[];
 }
 
 export interface CourseUpdate {
@@ -264,6 +275,7 @@ export interface CourseUpdate {
   titleTracks?: string | null;
   enableEnem?: boolean;
   enemArea?: string | null;
+  majorIds?: number[];
 }
 
 // Semesters (term ranges; drive the "The One" champion title)

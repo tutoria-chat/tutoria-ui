@@ -19,19 +19,22 @@ import {
   UserCircle,
   Globe,
   MapPin,
-  FileText
+  FileText,
+  Hash,
+  Loader2
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/shared/data-table';
 import { Loading } from '@/components/ui/loading-spinner';
 import { AdminOnly, ProfessorOnly, SuperAdminOnly } from '@/components/auth/role-guard';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
-import type { UniversityWithCourses, Course, Professor, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
+import type { UniversityWithCourses, Course, Professor, Major, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 import {
@@ -85,6 +88,65 @@ export default function UniversityDetailsPage() {
 
   // Fetch university details
   const { data: university, loading: universityLoading } = useFetch<UniversityWithCourses>(`/api/universities/${universityId}`);
+
+  // Majors (degree programs / graduações) — managed locally so add/remove is instant
+  const [majors, setMajors] = useState<Major[]>([]);
+  const [newMajorName, setNewMajorName] = useState('');
+  const [majorBusy, setMajorBusy] = useState(false);
+
+  React.useEffect(() => {
+    if (university?.majors) setMajors(university.majors);
+  }, [university?.majors]);
+
+  const handleAddMajor = async () => {
+    const name = newMajorName.trim();
+    if (!name || majorBusy) return;
+    setMajorBusy(true);
+    try {
+      const { apiClient } = await import('@/lib/api');
+      const created = await apiClient.createUniversityMajor(Number(universityId), name);
+      setMajors(prev => [...prev, created].sort((a, b) => a.name.localeCompare(b.name)));
+      setNewMajorName('');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t('majors.addError'));
+    } finally {
+      setMajorBusy(false);
+    }
+  };
+
+  const handleDeleteMajor = (major: Major) => {
+    confirm({
+      title: t('majors.deleteConfirm', { name: major.name }),
+      description: t('majors.deleteDescription'),
+      variant: 'destructive',
+      confirmText: tCommon('buttons.delete'),
+      cancelText: tCommon('buttons.cancel'),
+      onConfirm: async () => {
+        try {
+          const { apiClient } = await import('@/lib/api');
+          await apiClient.deleteUniversityMajor(Number(universityId), major.id);
+          setMajors(prev => prev.filter(m => m.id !== major.id));
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : t('majors.deleteError'));
+        }
+      }
+    });
+  };
+
+  const handleSeedMajors = async () => {
+    if (majorBusy) return;
+    setMajorBusy(true);
+    try {
+      const { apiClient } = await import('@/lib/api');
+      const list = await apiClient.seedUniversityMajors(Number(universityId));
+      setMajors(list);
+      toast.success(t('majors.seedSuccess'));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t('majors.seedError'));
+    } finally {
+      setMajorBusy(false);
+    }
+  };
 
   // Build courses API URL with pagination params and filters
   // Backend now handles role-based filtering:
@@ -375,6 +437,14 @@ export default function UniversityDetailsPage() {
                   </div>
                 </div>
 
+                <div className="flex items-start space-x-3">
+                  <Hash className="h-5 w-5 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-muted-foreground">{t('info.id')}</p>
+                    <p className="text-base font-mono">{university.id}</p>
+                  </div>
+                </div>
+
                 {university.contactEmail && (
                   <div className="flex items-start space-x-3">
                     <Mail className="h-5 w-5 text-muted-foreground mt-0.5" />
@@ -543,6 +613,61 @@ export default function UniversityDetailsPage() {
           </Card>
         </AdminOnly>
       </div>
+
+      {/* Majors (degree programs / graduações) */}
+      <AdminOnly>
+        <Card>
+          <CardHeader>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5" />
+                  {t('majors.title')}
+                </CardTitle>
+                <CardDescription>{t('majors.description')}</CardDescription>
+              </div>
+              <Button variant="outline" size="sm" onClick={handleSeedMajors} disabled={majorBusy}>
+                {majorBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                <span className="ml-1">{t('majors.addDefaults')}</span>
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <Input
+                value={newMajorName}
+                onChange={(e) => setNewMajorName(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddMajor(); } }}
+                placeholder={t('majors.placeholder')}
+                disabled={majorBusy}
+              />
+              <Button onClick={handleAddMajor} disabled={majorBusy || !newMajorName.trim()}>
+                {t('majors.add')}
+              </Button>
+            </div>
+
+            {majors.length === 0 ? (
+              <p className="text-sm text-muted-foreground">{t('majors.empty')}</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {majors.map((major) => (
+                  <Badge key={major.id} variant="secondary" className="flex items-center gap-1 py-1 pl-3 pr-1">
+                    <span>{major.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteMajor(major)}
+                      className="rounded-full p-0.5 hover:bg-destructive/20 hover:text-destructive transition-colors"
+                      aria-label={t('majors.deleteAria', { name: major.name })}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </AdminOnly>
 
       {/* Tabs */}
       <div className="flex space-x-2 border-b">

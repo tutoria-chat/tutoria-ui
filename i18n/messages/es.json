@@ -165,7 +165,12 @@
         "business": "Negocios",
         "language": "Lenguas",
         "humanities": "Humanidades"
-      }
+      },
+      "majorsLabel": "Carreras / Programas",
+      "majorsPlaceholder": "Selecciona las carreras...",
+      "majorsSearch": "Buscar carrera...",
+      "majorsEmpty": "No se encontraron carreras. Agrégalas en la página de la institución.",
+      "majorsHelp": "Carreras a las que pertenece este curso. El tutor lo usa para responder a qué carrera pertenece el curso."
     },
     "edit": {
       "title": "Editar Curso",
@@ -914,7 +919,8 @@
         "contactPerson": "Persona de Contacto",
         "website": "Sitio Web",
         "address": "Dirección",
-        "taxId": "NIF / Identificación Fiscal"
+        "taxId": "NIF / Identificación Fiscal",
+        "id": "ID de la Institución"
       },
       "courseColumns": {
         "name": "Curso",
@@ -949,7 +955,22 @@
         "emptyMessage": "Aún no hay profesores registrados."
       },
       "deleteConfirm": "¿Estás seguro de que deseas eliminar este curso? Esta acción no se puede deshacer.",
-      "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo."
+      "deleteError": "Error al eliminar el curso. Por favor, intenta de nuevo.",
+      "majors": {
+        "title": "Carreras",
+        "description": "Programas/carreras que ofrece la institución. Los cursos se asocian a estas carreras.",
+        "add": "Agregar",
+        "addDefaults": "Agregar predeterminadas",
+        "placeholder": "Nueva carrera (ej.: Ingeniería Civil)",
+        "empty": "Aún no hay carreras. Agrega una arriba o usa la lista estándar.",
+        "deleteConfirm": "¿Quitar \"{name}\"?",
+        "deleteDescription": "Esto elimina la carrera y la desvincula de los cursos.",
+        "deleteAria": "Quitar {name}",
+        "addError": "No se pudo agregar la carrera.",
+        "deleteError": "No se pudo quitar la carrera.",
+        "seedSuccess": "Carreras estándar agregadas.",
+        "seedError": "No se pudieron agregar las carreras estándar."
+      }
     },
     "form": {
       "breadcrumb": "Instituciones Educativas",

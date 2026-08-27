@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MultiSelect } from '@/components/ui/multi-select';
+import { FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { PageHeader } from '@/components/layout/page-header';
 import { AdminProfessorOnly } from '@/components/auth/role-guard';
 import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import type { Course, CourseUpdate, BreadcrumbItem, University } from '@/lib/types';
+import type { Course, CourseUpdate, BreadcrumbItem, University, Major } from '@/lib/types';
 import { parseExternalCourseId } from '@/components/forms/course-form';
 
 export default function EditCoursePage() {
@@ -39,14 +41,21 @@ export default function EditCoursePage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [majors, setMajors] = useState<Major[]>([]);
+  const [selectedMajorIds, setSelectedMajorIds] = useState<string[]>([]);
+  const [originalMajorIds, setOriginalMajorIds] = useState<string[]>([]);
 
   // Check if form has changes
   const hasChanges = () => {
+    const majorsChanged =
+      selectedMajorIds.length !== originalMajorIds.length ||
+      selectedMajorIds.some(id => !originalMajorIds.includes(id));
     return (
       formData.name !== originalFormData.name ||
       formData.code !== originalFormData.code ||
       formData.description !== originalFormData.description ||
-      formData.externalCourseId !== originalFormData.externalCourseId
+      formData.externalCourseId !== originalFormData.externalCourseId ||
+      majorsChanged
     );
   };
 
@@ -63,13 +72,23 @@ export default function EditCoursePage() {
       };
       setFormData(initialData);
       setOriginalFormData(initialData);
-      // Load university to check hasAssignments
+      // Pre-select the course's current majors
+      const currentMajorIds = (data.majors ?? []).map(m => String(m.id));
+      setSelectedMajorIds(currentMajorIds);
+      setOriginalMajorIds(currentMajorIds);
+      // Load university (to check hasAssignments) and its majors list
       if (data.universityId) {
         try {
           const uni = await apiClient.getUniversity(data.universityId);
           setUniversity(uni);
         } catch {
           // Non-critical
+        }
+        try {
+          const list = await apiClient.getUniversityMajors(data.universityId);
+          setMajors(list);
+        } catch {
+          // Non-critical: majors are optional
         }
       }
     } catch (error) {
@@ -121,7 +140,7 @@ export default function EditCoursePage() {
 
     setIsLoading(true);
     try {
-      await apiClient.updateCourse(courseId, formData);
+      await apiClient.updateCourse(courseId, { ...formData, majorIds: selectedMajorIds.map(Number) });
       router.push(`/courses/${courseId}`);
     } catch (error) {
       console.error('Failed to update course:', error);
@@ -259,6 +278,26 @@ export default function EditCoursePage() {
                   <p className="text-xs text-muted-foreground mt-1">{tForm('externalCourseIdHelp')}</p>
                 </div>
               )}
+
+              {/* Majors (degree programs / graduações) this course belongs to */}
+              <FormField>
+                <FormItem>
+                  <FormLabel>
+                    {tForm('majorsLabel')}
+                    <span className="ml-1 text-xs font-normal text-muted-foreground">({tForm('optional')})</span>
+                  </FormLabel>
+                  <MultiSelect
+                    options={majors.map(m => ({ value: String(m.id), label: m.name }))}
+                    selected={selectedMajorIds}
+                    onChange={setSelectedMajorIds}
+                    placeholder={tForm('majorsPlaceholder')}
+                    searchPlaceholder={tForm('majorsSearch')}
+                    emptyMessage={tForm('majorsEmpty')}
+                    disabled={isLoading}
+                  />
+                  <p className="text-xs text-muted-foreground">{tForm('majorsHelp')}</p>
+                </FormItem>
+              </FormField>
 
               {errors.submit && (
                 <p className="text-sm text-destructive">{errors.submit}</p>
