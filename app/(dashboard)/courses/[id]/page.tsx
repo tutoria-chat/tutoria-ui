@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
   AlertTriangle,
+  Info,
   Edit,
   Plus,
   Users,
@@ -1254,6 +1255,15 @@ export default function CourseDetailsPage() {
         {/* Grading Tab */}
         {activeTab === 'grading' && (
           <div className="space-y-4">
+            {/* Compliance notice (CNE Guidelines): the AI does not grade. */}
+            <Card className="border-blue-500/40 bg-blue-50 dark:bg-blue-950/20">
+              <CardContent className="py-3 px-5">
+                <div className="flex items-start gap-3">
+                  <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                  <p className="text-sm text-muted-foreground">{tGrading('complianceNotice')}</p>
+                </div>
+              </CardContent>
+            </Card>
             {/* Upload Section */}
             <Card>
               <CardHeader>

@@ -212,7 +212,7 @@
         "students": "Estudantes",
         "calendar": "Calendário",
         "assignments": "Atividades",
-        "grading": "Correção de Provas",
+        "grading": "Correção assistida",
         "quizBank": "Banco de Questões"
       },
       "calendarTab": {
@@ -365,16 +365,16 @@
         "unenrollError": "Erro ao desmatricular estudante"
       },
       "gradingTab": {
-        "title": "Correção de Provas",
-        "description": "Envie um arquivo JSON com as respostas dos estudantes para corrigi-las automaticamente com IA.",
+        "title": "Assistente de Correção",
+        "description": "Envie um arquivo com as respostas dos estudantes. O assistente prepara rascunhos de feedback formativo para agilizar a sua correção — ele não atribui notas.",
         "uploadTitle": "Enviar Respostas",
         "uploadAccept": "Arquivo JSON, máx. 10 MB",
-        "uploadButton": "Corrigir Respostas",
-        "criteriaLabel": "Critérios de Avaliação",
-        "criteriaPlaceholder": "ex.: Avalie o uso correto dos conceitos-chave, a argumentação lógica e a completude da resposta...",
-        "criteriaHelp": "Opcional. A IA usará isso para orientar a correção. Deixe em branco para corrigir somente com base no conteúdo do curso.",
-        "processing": "Processando em segundo plano — volte mais tarde para baixar os resultados.",
-        "historyTitle": "Histórico de Correções",
+        "uploadButton": "Analisar Respostas",
+        "criteriaLabel": "Critérios / Rubrica",
+        "criteriaPlaceholder": "ex.: Critério 1 — uso correto dos conceitos-chave; Critério 2 — argumentação lógica; Critério 3 — completude da resposta...",
+        "criteriaHelp": "Opcional. O assistente verifica o atendimento de cada critério e escreve rascunhos de feedback. Ele não atribui nota — a avaliação e a nota são suas.",
+        "processing": "Processando em segundo plano — volte mais tarde para baixar o feedback.",
+        "historyTitle": "Histórico de Análises",
         "downloadJson": "Baixar Template JSON",
         "downloadCsv": "Baixar Template CSV",
         "colCreated": "Criado em",
@@ -384,16 +384,17 @@
         "colStatus": "Status",
         "colProgress": "Progresso",
         "colActions": "Ações",
-        "downloadCsvButton": "Baixar CSV",
+        "downloadCsvButton": "Baixar Feedback (CSV)",
         "statusPending": "Pendente",
         "statusProcessing": "Processando",
         "statusCompleted": "Concluído",
         "statusFailed": "Falhou",
-        "emptyHistory": "Nenhuma correção realizada ainda.",
+        "emptyHistory": "Nenhuma análise realizada ainda.",
         "templateNote": "O JSON deve conter um array de submissões de estudantes com perguntas e respostas. Baixe o template para ver o formato esperado.",
-        "uploadSuccess": "Correção criada! Processando em segundo plano.",
+        "uploadSuccess": "Análise criada! Processando em segundo plano.",
         "uploadError": "Falha ao enviar o arquivo de correção.",
-        "downloadError": "Falha ao obter o link de download."
+        "downloadError": "Falha ao obter o link de download.",
+        "complianceNotice": "Conforme as Diretrizes do CNE para IA na Educação, a IA não corrige nem atribui notas em avaliações dissertativas. Este assistente apenas prepara rascunhos de feedback formativo — a avaliação e a nota são de responsabilidade do professor."
       }
     }
   },

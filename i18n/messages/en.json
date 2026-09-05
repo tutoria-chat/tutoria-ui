@@ -270,7 +270,7 @@
         "students": "Students",
         "calendar": "Calendar",
         "assignments": "Assignments",
-        "grading": "Test Grading",
+        "grading": "Assisted correction",
         "quizBank": "Question Bank"
       },
       "calendarTab": {
@@ -423,16 +423,16 @@
         "bulkUnenrollPartial": "{ok} unenrolled, {failed} failed."
       },
       "gradingTab": {
-        "title": "Test Grading",
-        "description": "Upload a JSON file with student answers to grade them automatically using AI.",
+        "title": "Correction assistant",
+        "description": "Upload a file with student answers. The assistant prepares formative feedback drafts to speed up your correction — it does not assign grades.",
         "uploadTitle": "Upload Answers",
         "uploadAccept": "JSON file, max 10 MB",
-        "uploadButton": "Grade Answers",
-        "criteriaLabel": "Grading Criteria",
-        "criteriaPlaceholder": "e.g. Evaluate correct use of key concepts, logical argumentation, and completeness of the answer...",
-        "criteriaHelp": "Optional. The AI will use this to guide grading. Leave blank to grade based on course content alone.",
-        "processing": "Processing in the background — come back later to download your results.",
-        "historyTitle": "Grading History",
+        "uploadButton": "Analyse answers",
+        "criteriaLabel": "Criteria / rubric",
+        "criteriaPlaceholder": "e.g. Criterion 1 — correct use of key concepts; Criterion 2 — logical argument; Criterion 3 — completeness of the answer...",
+        "criteriaHelp": "Optional. The assistant checks whether each criterion was met and drafts feedback. It does not assign a grade — the assessment and grade are yours.",
+        "processing": "Processing in the background — come back later to download the feedback.",
+        "historyTitle": "Analysis history",
         "downloadJson": "Download JSON Template",
         "downloadCsv": "Download CSV Template",
         "colCreated": "Created",
@@ -442,16 +442,17 @@
         "colStatus": "Status",
         "colProgress": "Progress",
         "colActions": "Actions",
-        "downloadCsvButton": "Download CSV",
+        "downloadCsvButton": "Download feedback (CSV)",
         "statusPending": "Pending",
         "statusProcessing": "Processing",
         "statusCompleted": "Completed",
         "statusFailed": "Failed",
-        "emptyHistory": "No grading jobs yet.",
+        "emptyHistory": "No analysis yet.",
         "templateNote": "The JSON must contain an array of student submissions with questions and answers. Download the template to see the expected format.",
-        "uploadSuccess": "Grading job created! Processing in the background.",
+        "uploadSuccess": "Analysis created! Processing in the background.",
         "uploadError": "Failed to upload grading file.",
-        "downloadError": "Failed to get download URL."
+        "downloadError": "Failed to get download URL.",
+        "complianceNotice": "Under the CNE Guidelines for AI in Education, AI does not correct or assign grades on essay assessments. This assistant only prepares formative feedback drafts — the assessment and the grade are the teacher’s responsibility."
       }
     }
   },
