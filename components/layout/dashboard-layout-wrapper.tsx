@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Header } from '@/components/layout/header';
 import { Sidebar } from '@/components/layout/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -11,6 +12,7 @@ export function DashboardLayoutWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations('common');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -42,6 +44,13 @@ export function DashboardLayoutWrapper({
 
   return (
     <TooltipProvider delayDuration={200}>
+      {/* Keyboard users can jump straight past the sidebar/header to the page. */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        {t('skipToContent')}
+      </a>
       <div className="flex h-screen bg-background">
         {/* Sidebar */}
         <Sidebar
@@ -71,7 +80,7 @@ export function DashboardLayoutWrapper({
           />
 
           {/* Page content */}
-          <main className="flex-1 overflow-y-auto">
+          <main id="main-content" tabIndex={-1} className="flex-1 overflow-y-auto focus:outline-none">
             <div className="container mx-auto py-6 px-4 sm:px-6 lg:px-8 max-w-[1920px] 2xl:max-w-[2200px]">
               <div className="max-w-[1600px] mx-auto">
                 {children}

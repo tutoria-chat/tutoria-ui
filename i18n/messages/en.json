@@ -2076,6 +2076,9 @@
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "userMenu": "User menu",
     "universitySwitcher": {
       "label": "Your Institutions",
       "select": "Select institution",
@@ -2204,8 +2207,17 @@
     },
     "pagination": {
       "rowsPerPage": "Rows per page:",
-      "showing": "Showing {from} to {to} of {total} records"
+      "showing": "Showing {from} to {to} of {total} records",
+      "firstPage": "First page",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "lastPage": "Last page",
+      "goToPage": "Go to page {page}"
     },
+    "searchLabel": "Search",
+    "skipToContent": "Skip to main content",
+    "mainNavigation": "Main navigation",
+    "adminNavigation": "Admin navigation",
     "errorBoundary": {
       "title": "Something went wrong",
       "description": "An unexpected error occurred. Please try again or go back to the dashboard.",

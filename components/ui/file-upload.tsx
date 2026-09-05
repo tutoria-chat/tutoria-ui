@@ -16,6 +16,8 @@ interface FileUploadProps {
     supportedFormats?: string;
     maxSize?: string;
     filesSelected?: string;
+    clearAll?: string;
+    removeFile?: string;
   };
 }
 
@@ -29,7 +31,10 @@ export function FileUpload({
   translations,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const inputId = React.useId();
   const [isDragging, setIsDragging] = useState(false);
+  const isEmpty = selectedFiles.length === 0;
+  const promptLabel = translations?.clickToSelect || 'Clique para selecionar ou arraste o arquivo aqui';
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -97,9 +102,22 @@ export function FileUpload({
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+      // In the empty state the whole zone acts as the upload control; once files
+      // are picked it becomes a plain container (its buttons handle interaction),
+      // and the sr-only <input> below keeps the keyboard path open in every state.
+      role={isEmpty ? 'button' : undefined}
+      tabIndex={isEmpty && !disabled ? 0 : undefined}
+      aria-label={isEmpty ? promptLabel : undefined}
+      aria-disabled={disabled || undefined}
+      onKeyDown={(e) => {
+        if (isEmpty && !disabled && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
       className={cn(
         'relative border-2 border-dashed rounded-lg p-8 transition-all cursor-pointer',
-        'hover:border-primary hover:bg-primary/5',
+        'hover:border-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         isDragging && 'border-primary bg-primary/10',
         disabled && 'opacity-50 cursor-not-allowed hover:border-border hover:bg-transparent',
         selectedFiles.length > 0 ? 'border-green-500 bg-green-50 dark:bg-green-950' : 'border-border'
@@ -107,22 +125,27 @@ export function FileUpload({
     >
       <input
         ref={fileInputRef}
+        id={inputId}
         type="file"
         accept={accept}
         multiple={multiple}
         onChange={handleFileChange}
         disabled={disabled}
-        className="hidden"
+        aria-label={promptLabel}
+        // Focus lands on the visible drop zone (role=button) instead of this
+        // invisible input, which can't show a focus ring.
+        tabIndex={-1}
+        className="sr-only"
       />
 
       {selectedFiles.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center space-y-3">
           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-            <Upload className="h-6 w-6 text-primary" />
+            <Upload aria-hidden="true" className="h-6 w-6 text-primary" />
           </div>
           <div>
             <p className="text-sm font-medium">
-              {translations?.clickToSelect || 'Clique para selecionar ou arraste o arquivo aqui'}
+              {promptLabel}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {translations?.supportedFormats || 'Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX'}
@@ -144,7 +167,7 @@ export function FileUpload({
               disabled={disabled}
               className="text-xs text-destructive hover:underline"
             >
-              Clear all
+              {translations?.clearAll || 'Clear all'}
             </button>
           </div>
 
@@ -153,7 +176,7 @@ export function FileUpload({
               <div key={`${file.name}-${index}`} className="flex items-center justify-between bg-white dark:bg-gray-800 p-2 rounded-lg border border-green-200 dark:border-green-800 overflow-hidden">
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
                   <div className="h-8 w-8 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center flex-shrink-0">
-                    <File className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    <File aria-hidden="true" className="h-4 w-4 text-green-600 dark:text-green-400" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{file.name}</p>
@@ -166,9 +189,10 @@ export function FileUpload({
                   type="button"
                   onClick={(e) => handleRemoveFile(e, index)}
                   disabled={disabled}
+                  aria-label={`${translations?.removeFile || 'Remove'}: ${file.name}`}
                   className="ml-2 h-7 w-7 rounded-full hover:bg-destructive/10 flex items-center justify-center transition-colors flex-shrink-0"
                 >
-                  <X className="h-3 w-3 text-destructive" />
+                  <X aria-hidden="true" className="h-3 w-3 text-destructive" />
                 </button>
               </div>
             ))}

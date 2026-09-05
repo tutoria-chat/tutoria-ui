@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -34,6 +34,16 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
     setShowSettingsModal(true);
   };
 
+  // Close the user menu on Escape while it's open.
+  useEffect(() => {
+    if (!showUserMenu) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowUserMenu(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [showUserMenu]);
+
   if (!user) return null;
 
   return (
@@ -45,12 +55,14 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
           variant="ghost"
           size="sm"
           onClick={onMenuToggle}
+          aria-label={isSidebarOpen ? t('closeMenu') : t('openMenu')}
+          aria-expanded={isSidebarOpen}
           className="mr-3 px-2 lg:hidden"
         >
           {isSidebarOpen ? (
-            <X className="h-5 w-5" />
+            <X aria-hidden="true" className="h-5 w-5" />
           ) : (
-            <Menu className="h-5 w-5" />
+            <Menu aria-hidden="true" className="h-5 w-5" />
           )}
         </Button>
 
@@ -80,9 +92,12 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
               variant="ghost"
               className="flex items-center space-x-2 px-2"
               onClick={() => setShowUserMenu(!showUserMenu)}
+              aria-label={`${user.firstName} ${user.lastName} — ${t('userMenu')}`}
+              aria-haspopup="menu"
+              aria-expanded={showUserMenu}
             >
               <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                <User className="h-4 w-4" />
+                <User aria-hidden="true" className="h-4 w-4" />
               </div>
               <div className="hidden sm:block text-left">
                 <div className="text-sm font-medium">
@@ -96,7 +111,7 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
 
             {/* User menu dropdown */}
             {showUserMenu && (
-              <div className="absolute right-0 top-full mt-2 w-56 rounded-md border bg-popover p-1 shadow-md z-50">
+              <div role="menu" aria-label={t('userMenu')} className="absolute right-0 top-full mt-2 w-56 rounded-md border bg-popover p-1 shadow-md z-50">
                 <div className="px-2 py-1.5 text-sm text-muted-foreground">
                   {user.email}
                 </div>
@@ -105,10 +120,11 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                 <Button
                   variant="ghost"
                   size="sm"
+                  role="menuitem"
                   className="w-full justify-start"
                   onClick={handleSettingsClick}
                 >
-                  <Settings className="mr-2 h-4 w-4" />
+                  <Settings aria-hidden="true" className="mr-2 h-4 w-4" />
                   {t('settings')}
                 </Button>
 
@@ -117,10 +133,11 @@ export function Header({ onMenuToggle, isSidebarOpen = false }: HeaderProps) {
                 <Button
                   variant="ghost"
                   size="sm"
+                  role="menuitem"
                   className="w-full justify-start text-destructive hover:text-destructive"
                   onClick={handleLogout}
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut aria-hidden="true" className="mr-2 h-4 w-4" />
                   {t('logout')}
                 </Button>
               </div>

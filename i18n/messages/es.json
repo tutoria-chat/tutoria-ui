@@ -2076,6 +2076,9 @@
     "profile": "Perfil",
     "settings": "Configuración",
     "logout": "Cerrar sesión",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "userMenu": "Menú de usuario",
     "universitySwitcher": {
       "label": "Sus Instituciones Educativas",
       "select": "Seleccionar institución educativa",
@@ -2204,8 +2207,17 @@
     },
     "pagination": {
       "rowsPerPage": "Filas por página:",
-      "showing": "Mostrando {from} a {to} de {total} registros"
+      "showing": "Mostrando {from} a {to} de {total} registros",
+      "firstPage": "Primera página",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "lastPage": "Última página",
+      "goToPage": "Ir a la página {page}"
     },
+    "searchLabel": "Buscar",
+    "skipToContent": "Saltar al contenido principal",
+    "mainNavigation": "Navegación principal",
+    "adminNavigation": "Navegación de administración",
     "errorBoundary": {
       "title": "Algo salió mal",
       "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo o vuelve al panel.",
