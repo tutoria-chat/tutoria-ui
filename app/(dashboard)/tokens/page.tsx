@@ -113,7 +113,8 @@ export default function TokensPage() {
   const handleCopyEmbedCode = async (token: string) => {
     try {
       const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
-      const embedCode = `<iframe\n  src="${widgetUrl}"\n  width="100%"\n  height="700"\n  style="border: 0; border-radius: 12px;"\n  allow="clipboard-write"\n  title="TutorIA"\n></iframe>`;
+      // microphone allows the widget's voice dictation (speech-to-text) inside the iframe.
+      const embedCode = `<iframe\n  src="${widgetUrl}"\n  width="100%"\n  height="700"\n  style="border: 0; border-radius: 12px;"\n  allow="clipboard-write; microphone"\n  title="TutorIA"\n></iframe>`;
       await navigator.clipboard.writeText(embedCode);
       toast.success(t('copyEmbedSuccess'));
     } catch (error) {
