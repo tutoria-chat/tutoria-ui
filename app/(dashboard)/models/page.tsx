@@ -292,11 +292,11 @@ function AIModelsTab() {
             onCheckedChange={() => handleToggleActive(model)}
             className="scale-75"
           />
-          <Button variant="ghost" size="sm" onClick={() => openEdit(model)}>
-            <Edit className="h-4 w-4" />
+          <Button variant="ghost" size="sm" onClick={() => openEdit(model)} aria-label={tCommon('buttons.edit')}>
+            <Edit aria-hidden="true" className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => handleDelete(model)}>
-            <Trash2 className="h-4 w-4 text-destructive" />
+          <Button variant="ghost" size="sm" onClick={() => handleDelete(model)} aria-label={tCommon('buttons.delete')}>
+            <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
           </Button>
         </div>
       ),
@@ -624,8 +624,9 @@ function APIKeysTab() {
           variant="ghost"
           size="sm"
           onClick={() => handleDeleteKey(key.id)}
+          aria-label={tCommon('buttons.delete')}
         >
-          <Trash2 className="h-4 w-4 text-destructive" />
+          <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
         </Button>
       )
     },
@@ -879,8 +880,8 @@ function CourseTypeConfigTab() {
       label: t('columns.actions'),
       width: '80px',
       render: (_, item) => (
-        <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}>
-          <Trash2 className="h-4 w-4 text-destructive" />
+        <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)} aria-label={tCommon('buttons.delete')}>
+          <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
         </Button>
       )
     },

@@ -21,23 +21,24 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
         href="/dashboard"
         className="flex items-center hover:text-foreground transition-colors"
       >
-        <Home className="h-4 w-4" />
+        <Home aria-hidden="true" className="h-4 w-4" />
         <span className="sr-only">Dashboard</span>
       </Link>
-      
+
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          <ChevronRight className="h-4 w-4" />
-          
+          <ChevronRight aria-hidden="true" className="h-4 w-4" />
+
           {item.href && !item.isCurrentPage ? (
-            <Link 
+            <Link
               href={item.href}
               className="hover:text-foreground transition-colors"
             >
               {item.label}
             </Link>
           ) : (
-            <span 
+            <span
+              aria-current={item.isCurrentPage ? 'page' : undefined}
               className={cn(
                 item.isCurrentPage && "text-foreground font-medium"
               )}

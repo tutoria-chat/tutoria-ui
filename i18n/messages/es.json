@@ -2218,6 +2218,10 @@
     "skipToContent": "Saltar al contenido principal",
     "mainNavigation": "Navegación principal",
     "adminNavigation": "Navegación de administración",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "showToken": "Mostrar token",
+    "hideToken": "Ocultar token",
     "errorBoundary": {
       "title": "Algo salió mal",
       "description": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo o vuelve al panel.",

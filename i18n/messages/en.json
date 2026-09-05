@@ -2218,6 +2218,10 @@
     "skipToContent": "Skip to main content",
     "mainNavigation": "Main navigation",
     "adminNavigation": "Admin navigation",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "showToken": "Show token",
+    "hideToken": "Hide token",
     "errorBoundary": {
       "title": "Something went wrong",
       "description": "An unexpected error occurred. Please try again or go back to the dashboard.",

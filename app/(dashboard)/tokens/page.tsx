@@ -174,8 +174,9 @@ export default function TokensPage() {
             variant="ghost"
             size="sm"
             onClick={() => handleCopyToken(value as string)}
+            aria-label={t('modal.copyToken')}
           >
-            <Copy className="h-3 w-3" />
+            <Copy aria-hidden="true" className="h-3 w-3" />
           </Button>
         </div>
       )
@@ -238,8 +239,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleOpenModal('view', token)}
             title={t('actions.view')}
+            aria-label={t('actions.view')}
           >
-            <Eye className="h-4 w-4" />
+            <Eye aria-hidden="true" className="h-4 w-4" />
           </Button>
 
           <Button
@@ -247,8 +249,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleOpenModal('edit', token)}
             title={t('actions.edit')}
+            aria-label={t('actions.edit')}
           >
-            <Edit className="h-4 w-4" />
+            <Edit aria-hidden="true" className="h-4 w-4" />
           </Button>
 
           <Button
@@ -256,8 +259,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleOpenWidget(token.token)}
             title={t('actions.openWidget')}
+            aria-label={t('actions.openWidget')}
           >
-            <ExternalLink className="h-4 w-4 text-blue-500" />
+            <ExternalLink aria-hidden="true" className="h-4 w-4 text-blue-500" />
           </Button>
 
           <Button
@@ -265,8 +269,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleCopyWidgetUrl(token.token)}
             title={t('actions.copyWidgetUrl')}
+            aria-label={t('actions.copyWidgetUrl')}
           >
-            <Link className="h-4 w-4 text-green-500" />
+            <Link aria-hidden="true" className="h-4 w-4 text-green-500" />
           </Button>
 
           <Button
@@ -274,8 +279,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleCopyEmbedCode(token.token)}
             title={t('actions.copyEmbedCode')}
+            aria-label={t('actions.copyEmbedCode')}
           >
-            <Code2 className="h-4 w-4 text-purple-500" />
+            <Code2 aria-hidden="true" className="h-4 w-4 text-purple-500" />
           </Button>
 
           <Button
@@ -283,8 +289,9 @@ export default function TokensPage() {
             size="sm"
             onClick={() => handleDelete(token.id)}
             title={t('actions.delete')}
+            aria-label={t('actions.delete')}
           >
-            <Trash2 className="h-4 w-4 text-destructive" />
+            <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
           </Button>
         </div>
       )

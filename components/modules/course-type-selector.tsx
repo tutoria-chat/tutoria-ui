@@ -74,7 +74,9 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }
             return (
               <button
                 key={courseType.id}
+                type="button"
                 onClick={() => handleSelectType(courseType.id)}
+                aria-pressed={isSelected}
                 className={cn(
                   "relative p-4 rounded-lg border-2 text-left transition-all flex flex-col",
                   "hover:border-primary hover:shadow-md",
@@ -83,7 +85,7 @@ export function CourseTypeSelector({ open, onClose, selectedType, onSelectType }
               >
                 {isSelected && (
                   <div className="absolute top-3 right-3">
-                    <Check className="h-4 w-4 text-primary" />
+                    <Check aria-hidden="true" className="h-4 w-4 text-primary" />
                   </div>
                 )}
 
