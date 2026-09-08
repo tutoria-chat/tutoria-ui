@@ -2070,7 +2070,8 @@
     "allModules": "Todos los Módulos",
     "collapse": "Contraer",
     "expand": "Expandir menú",
-    "integrations": "Integraciones"
+    "integrations": "Integraciones",
+    "avaConfig": "Configuración del AVA"
   },
   "header": {
     "profile": "Perfil",
@@ -4457,6 +4458,41 @@
     "successRate": "Tasa de Éxito",
     "totalAttempts": "Total de Intentos",
     "noPrecomputedData": "Los datos analíticos se están procesando. Vuelve mañana."
+  },
+  "ava": {
+    "title": "Configuración del AVA",
+    "description": "Coloca el tutor de Tutoria dentro de tu LMS (Moodle). Elige un método y sigue los pasos.",
+    "chooseMethod": "Elige cómo insertar",
+    "recommended": "Recomendado",
+    "stepsTitle": "Paso a paso",
+    "pluginNote": "El plugin renderiza el tutor del lado del servidor, así que funciona incluso en cursos que quitan iframes de los bloques HTML.",
+    "block": {
+      "name": "Bloque (plugin)",
+      "tagline": "Un bloque en la barra lateral, o un globo de chat flotante en la esquina.",
+      "steps": [
+        "Descarga el plugin del bloque (ZIP) abajo.",
+        "En Moodle: Administración del sitio → Plugins → Instalar plugins → sube el ZIP y completa la actualización.",
+        "En el curso, activa la edición → Agregar un bloque → Tutoria.",
+        "Pega la clave de acceso del módulo, elige Incorporado o Globo flotante y guarda."
+      ]
+    },
+    "iframe": {
+      "name": "Insertar (iframe)",
+      "tagline": "Pegar un código HTML en el curso, sin instalar plugin.",
+      "steps": [
+        "En Claves de Acceso, genera o elige la clave del módulo.",
+        "Haz clic en Insertar (</>) para copiar el código ya rellenado con la clave.",
+        "En Moodle, agrega un bloque de Texto (HTML) → Herramientas → Código fuente.",
+        "Pega el código y guarda."
+      ],
+      "note": "Algunos cursos quitan HTML por seguridad y eliminan el iframe. Si aparece en blanco, usa el plugin del bloque — no depende del editor HTML.",
+      "goToKeys": "Ir a Claves de Acceso"
+    },
+    "download": {
+      "title": "Descargar {name}",
+      "updated": "Actualizado {date}",
+      "button": "Descargar ZIP"
+    }
   },
   "accessKeys": {
     "title": "Claves de Acceso",

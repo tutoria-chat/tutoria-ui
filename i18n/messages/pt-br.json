@@ -2070,7 +2070,8 @@
     "allModules": "Todos os Módulos",
     "collapse": "Recolher",
     "expand": "Expandir menu",
-    "integrations": "Integrações"
+    "integrations": "Integrações",
+    "avaConfig": "Configuração do AVA"
   },
   "header": {
     "profile": "Perfil",
@@ -5167,6 +5168,41 @@
     "successRate": "Taxa de Acerto",
     "totalAttempts": "Total de Tentativas",
     "noPrecomputedData": "Dados analíticos estão sendo processados. Volte amanhã."
+  },
+  "ava": {
+    "title": "Configuração do AVA",
+    "description": "Coloque o tutor da Tutoria dentro do seu AVA (Moodle). Escolha um método e siga os passos.",
+    "chooseMethod": "Escolha como incorporar",
+    "recommended": "Recomendado",
+    "stepsTitle": "Passo a passo",
+    "pluginNote": "O plugin renderiza o tutor pelo servidor do Moodle, então funciona mesmo em cursos que removem iframes de blocos HTML.",
+    "block": {
+      "name": "Bloco (plugin)",
+      "tagline": "Um bloco na barra lateral, ou um balão de chat flutuante no canto.",
+      "steps": [
+        "Baixe o plugin do bloco (ZIP) abaixo.",
+        "No Moodle: Administração do site → Plugins → Instalar plugins → envie o ZIP e conclua a atualização.",
+        "No curso, ative a edição → Adicionar um bloco → Tutoria.",
+        "Cole a chave de acesso do módulo, escolha Incorporado ou Balão flutuante e salve."
+      ]
+    },
+    "iframe": {
+      "name": "Incorporar (iframe)",
+      "tagline": "Colar um código HTML no curso, sem instalar plugin.",
+      "steps": [
+        "Em Chaves de Acesso, gere ou escolha a chave do módulo.",
+        "Clique em Incorporar (</>) para copiar o código já preenchido com a chave.",
+        "No Moodle, adicione um bloco de Texto (HTML) → Ferramentas → Código-fonte.",
+        "Cole o código e salve."
+      ],
+      "note": "Alguns cursos removem HTML por segurança e apagam o iframe. Se ficar em branco, use o plugin do bloco — ele não depende do editor de HTML.",
+      "goToKeys": "Ir para Chaves de Acesso"
+    },
+    "download": {
+      "title": "Baixar {name}",
+      "updated": "Atualizado em {date}",
+      "button": "Baixar ZIP"
+    }
   },
   "accessKeys": {
     "title": "Chaves de Acesso",

@@ -2070,7 +2070,8 @@
     "allModules": "All Modules",
     "collapse": "Collapse",
     "expand": "Expand sidebar",
-    "integrations": "Integrations"
+    "integrations": "Integrations",
+    "avaConfig": "LMS Setup"
   },
   "header": {
     "profile": "Profile",
@@ -4135,6 +4136,41 @@
     "successRate": "Success Rate",
     "totalAttempts": "Total Attempts",
     "noPrecomputedData": "Analytics data is being processed. Check back tomorrow."
+  },
+  "ava": {
+    "title": "LMS / Moodle setup",
+    "description": "Put the Tutoria tutor inside your LMS (Moodle). Pick a method and follow the steps.",
+    "chooseMethod": "Choose how to embed",
+    "recommended": "Recommended",
+    "stepsTitle": "Steps",
+    "pluginNote": "The plugin renders the tutor server-side, so it works even in courses that strip iframes from HTML blocks.",
+    "block": {
+      "name": "Block (plugin)",
+      "tagline": "A block in the sidebar, or a floating chat bubble in the corner.",
+      "steps": [
+        "Download the block plugin (ZIP) below.",
+        "In Moodle: Site administration → Plugins → Install plugins → upload the ZIP and finish the upgrade.",
+        "In the course, turn editing on → Add a block → Tutoria.",
+        "Paste the module access key, choose Embedded or Floating bubble, and save."
+      ]
+    },
+    "iframe": {
+      "name": "Embed (iframe)",
+      "tagline": "Paste an HTML snippet into the course — no plugin to install.",
+      "steps": [
+        "In Access Keys, generate or pick the module's key.",
+        "Click Embed (</>) to copy the snippet, pre-filled with the key.",
+        "In Moodle, add a Text (HTML) block → Tools → Source code.",
+        "Paste the snippet and save."
+      ],
+      "note": "Some courses strip HTML for security and remove the iframe. If it shows blank, use the block plugin instead — it doesn't depend on the HTML editor.",
+      "goToKeys": "Go to Access Keys"
+    },
+    "download": {
+      "title": "Download {name}",
+      "updated": "Updated {date}",
+      "button": "Download ZIP"
+    }
   },
   "accessKeys": {
     "title": "Access Keys",

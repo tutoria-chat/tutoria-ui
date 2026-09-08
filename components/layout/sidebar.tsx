@@ -29,7 +29,8 @@ import {
   CalendarRange,
   PanelLeftClose,
   PanelLeftOpen,
-  Plug
+  Plug,
+  School
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -113,6 +114,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('integrations'),
       href: '/integrations',
       icon: Plug,
+      requiredPermission: 'tokens:read',
+    },
+    {
+      label: t('avaConfig'),
+      href: '/ava',
+      icon: School,
       requiredPermission: 'tokens:read',
     },
     {
