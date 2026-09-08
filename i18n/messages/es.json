@@ -4472,6 +4472,21 @@
     "copyError": "Error al copiar la clave de acceso",
     "copyWidgetUrlSuccess": "URL del widget copiada al portapapeles",
     "copyEmbedSuccess": "Código de inserción copiado al portapapeles",
+    "embed": {
+      "buttonLabel": "Insertar en el LMS",
+      "title": "Insertar el tutor",
+      "intro": "Pega este código en un bloque HTML de tu LMS (p. ej. Moodle) para mostrar el tutor dentro del curso. La clave ya está incluida.",
+      "moodleStepsTitle": "En Moodle",
+      "step1": "En el curso, activa el modo de edición.",
+      "step2": "Agrega un bloque de Texto (HTML) o edita un recurso de tipo Página.",
+      "step3": "En la barra del editor, haz clic en el botón de código fuente (</>) — o abre Herramientas → Código fuente.",
+      "step4": "Pega el código de abajo y guarda.",
+      "codeLabel": "Código para pegar",
+      "copy": "Copiar código",
+      "copied": "¡Copiado!",
+      "copyError": "No se pudo copiar el código",
+      "note": "El código ya incluye la clave, permite el micrófono (dictado por voz) y no permite pantalla completa."
+    },
     "columns": {
       "tokenName": "Nombre de Clave",
       "module": "Módulo",

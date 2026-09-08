@@ -25,8 +25,10 @@ import {
   Plus,
   RefreshCw,
   ClipboardList,
+  Code2,
   Sparkles, Search } from 'lucide-react';
 import { PageHeader } from '@/components/layout/page-header';
+import { EmbedDialog } from '@/components/tokens/embed-dialog';
 import { CourseAssignmentsTab } from '@/components/courses/course-assignments-tab';
 import { CourseQuizBankTab } from '@/components/courses/course-quiz-bank-tab';
 import { Button } from '@/components/ui/button';
@@ -64,6 +66,7 @@ export default function ModuleDetailsPage() {
   const t = useTranslations('modules.detail');
   const tCommon = useTranslations('common');
   const tTokens = useTranslations('tokens.columns');
+  const tEmbed = useTranslations('accessKeys.embed');
 
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
   const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/api/modules/${moduleId}`);
@@ -85,6 +88,7 @@ export default function ModuleDetailsPage() {
   const [fileToDelete, setFileToDelete] = useState<number | null>(null);
   const [urlDialogOpen, setUrlDialogOpen] = useState(false);
   const [selectedTokenUrl, setSelectedTokenUrl] = useState<string>('');
+  const [embedToken, setEmbedToken] = useState<string | null>(null);
   // Upload modal states
   const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
   const [youtubeUploadModalOpen, setYoutubeUploadModalOpen] = useState(false);
@@ -708,6 +712,17 @@ export default function ModuleDetailsPage() {
               <Eye className="h-4 w-4" />
             </Button>
 
+            {/* Embed — ready-to-paste iframe + Moodle instructions */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setEmbedToken(token.token)}
+              title={tEmbed('buttonLabel')}
+              aria-label={tEmbed('buttonLabel')}
+            >
+              <Code2 className="h-4 w-4 text-purple-500" />
+            </Button>
+
             {/* Open in new tab — includes auth_token for admin testing */}
             <Button
               variant="ghost"
@@ -1220,6 +1235,9 @@ export default function ModuleDetailsPage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Embed (iframe + Moodle steps) */}
+      <EmbedDialog token={embedToken} onClose={() => setEmbedToken(null)} />
 
       {/* File Upload Dialog */}
       <Dialog open={fileUploadModalOpen} onOpenChange={setFileUploadModalOpen}>

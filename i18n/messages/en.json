@@ -4150,6 +4150,21 @@
     "copyError": "Failed to copy access key",
     "copyWidgetUrlSuccess": "Widget URL copied to clipboard",
     "copyEmbedSuccess": "Embed code copied to clipboard",
+    "embed": {
+      "buttonLabel": "Embed in your LMS",
+      "title": "Embed the tutor",
+      "intro": "Paste this code into an HTML block in your LMS (e.g. Moodle) to show the tutor inside the course. The access key is already filled in.",
+      "moodleStepsTitle": "In Moodle",
+      "step1": "In the course, turn editing on.",
+      "step2": "Add a Text (HTML) block, or edit a Page resource.",
+      "step3": "In the editor toolbar, click the source-code button (</>) — or open Tools → Source code.",
+      "step4": "Paste the code below and save.",
+      "codeLabel": "Code to paste",
+      "copy": "Copy code",
+      "copied": "Copied!",
+      "copyError": "Couldn't copy the code",
+      "note": "The code comes with the key filled in, allows the microphone (voice dictation), and does not allow fullscreen."
+    },
     "columns": {
       "tokenName": "Key Name",
       "module": "Module",

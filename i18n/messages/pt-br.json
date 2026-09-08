@@ -5182,6 +5182,21 @@
     "copyError": "Erro ao copiar chave de acesso",
     "copyWidgetUrlSuccess": "URL do widget copiada para a área de transferência",
     "copyEmbedSuccess": "Código de incorporação copiado para a área de transferência",
+    "embed": {
+      "buttonLabel": "Incorporar no AVA",
+      "title": "Incorporar o tutor",
+      "intro": "Cole este código em um bloco HTML do seu AVA (ex.: Moodle) para mostrar o tutor dentro do curso. A chave já vem preenchida.",
+      "moodleStepsTitle": "No Moodle",
+      "step1": "No curso, ative o modo de edição.",
+      "step2": "Adicione um bloco de Texto (HTML) ou edite um recurso do tipo Página.",
+      "step3": "Na barra do editor, clique no botão de código-fonte (</>) — ou abra Ferramentas → Código-fonte.",
+      "step4": "Cole o código abaixo e salve.",
+      "codeLabel": "Código para colar",
+      "copy": "Copiar código",
+      "copied": "Copiado!",
+      "copyError": "Não foi possível copiar o código",
+      "note": "O código já vem com a chave preenchida, libera o microfone (ditado por voz) e não permite tela cheia."
+    },
     "columns": {
       "tokenName": "Nome da Chave",
       "module": "Módulo",

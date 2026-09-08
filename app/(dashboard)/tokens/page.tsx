@@ -14,6 +14,7 @@ import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
 import { formatDateShort } from '@/lib/utils';
 import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
+import { EmbedDialog } from '@/components/tokens/embed-dialog';
 import type { ModuleAccessToken, TableColumn, BreadcrumbItem, PaginatedResponse } from '@/lib/types';
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
@@ -45,6 +46,7 @@ export default function TokensPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<TokenModalMode>('create');
   const [selectedToken, setSelectedToken] = useState<ModuleAccessToken | undefined>(undefined);
+  const [embedToken, setEmbedToken] = useState<string | null>(null);
 
   // Confirm dialog
   const { confirm, dialog } = useConfirmDialog();
@@ -106,19 +108,6 @@ export default function TokensPage() {
       toast.success(t('copyWidgetUrlSuccess'));
     } catch (error) {
       console.error('Erro ao copiar URL do widget:', error);
-      toast.error(t('copyError'));
-    }
-  };
-
-  const handleCopyEmbedCode = async (token: string) => {
-    try {
-      const widgetUrl = `${APP_CONFIG.widgetUrl}/?module_token=${token}`;
-      // microphone allows the widget's voice dictation (speech-to-text) inside the iframe.
-      const embedCode = `<iframe\n  src="${widgetUrl}"\n  width="100%"\n  height="700"\n  style="border: 0; border-radius: 12px;"\n  allow="clipboard-write; microphone"\n  title="TutorIA"\n></iframe>`;
-      await navigator.clipboard.writeText(embedCode);
-      toast.success(t('copyEmbedSuccess'));
-    } catch (error) {
-      console.error('Erro ao copiar código de incorporação:', error);
       toast.error(t('copyError'));
     }
   };
@@ -278,9 +267,9 @@ export default function TokensPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleCopyEmbedCode(token.token)}
-            title={t('actions.copyEmbedCode')}
-            aria-label={t('actions.copyEmbedCode')}
+            onClick={() => setEmbedToken(token.token)}
+            title={t('embed.buttonLabel')}
+            aria-label={t('embed.buttonLabel')}
           >
             <Code2 aria-hidden="true" className="h-4 w-4 text-purple-500" />
           </Button>
@@ -435,6 +424,7 @@ export default function TokensPage() {
           onSuccess={handleModalSuccess}
           token={selectedToken}
         />
+        <EmbedDialog token={embedToken} onClose={() => setEmbedToken(null)} />
         {dialog}
       </div>
     </ProfessorOnly>
