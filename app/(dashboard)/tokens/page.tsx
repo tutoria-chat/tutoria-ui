@@ -424,7 +424,11 @@ export default function TokensPage() {
           onSuccess={handleModalSuccess}
           token={selectedToken}
         />
-        <EmbedDialog token={embedToken} onClose={() => setEmbedToken(null)} />
+        <EmbedDialog
+          token={embedToken}
+          onClose={() => setEmbedToken(null)}
+          previewAuthToken={typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null}
+        />
         {dialog}
       </div>
     </ProfessorOnly>

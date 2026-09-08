@@ -4163,7 +4163,11 @@
       "copy": "Copy code",
       "copied": "Copied!",
       "copyError": "Couldn't copy the code",
-      "note": "The code comes with the key filled in, allows the microphone (voice dictation), and does not allow fullscreen."
+      "note": "The code comes with the key filled in, allows the microphone (voice dictation), and does not allow fullscreen.",
+      "previewLabel": "Preview",
+      "previewHint": "This is how the tutor appears inside the course.",
+      "troubleshootTitle": "Not showing in Moodle?",
+      "troubleshootNote": "Some courses strip HTML for security and remove the iframe. If the preview above works but Moodle shows nothing, the site is blocking iframes — use the Tutoria plugin for Moodle, which embeds the tutor without relying on the HTML editor."
     },
     "columns": {
       "tokenName": "Key Name",

@@ -18,6 +18,12 @@ interface EmbedDialogProps {
   /** The module access key (module_token). Dialog is open while non-null. */
   token: string | null;
   onClose: () => void;
+  /**
+   * Optional admin JWT — used ONLY in the live preview iframe (so the admin
+   * sees the working chat, past the student verification gate). It is never
+   * placed in the copyable embed code, which stays student-safe.
+   */
+  previewAuthToken?: string | null;
 }
 
 /**
@@ -26,11 +32,17 @@ interface EmbedDialogProps {
  * clipboard, and intentionally omits allowfullscreen so the embed can't go
  * fullscreen. Also shows the step-by-step Moodle instructions.
  */
-export function EmbedDialog({ token, onClose }: EmbedDialogProps) {
+export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogProps) {
   const t = useTranslations('accessKeys.embed');
   const [copied, setCopied] = useState(false);
 
   const widgetUrl = token ? `${APP_CONFIG.widgetUrl}/?module_token=${token}` : '';
+  // Preview may carry the admin token so the chat shows past the gate; the
+  // copyable code below never does.
+  const previewUrl =
+    token && previewAuthToken
+      ? `${widgetUrl}&auth_token=${encodeURIComponent(previewAuthToken)}`
+      : widgetUrl;
   const code = token
     ? `<iframe
   src="${widgetUrl}"
@@ -57,13 +69,28 @@ export function EmbedDialog({ token, onClose }: EmbedDialogProps) {
 
   return (
     <Dialog open={!!token} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[88vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>{t('intro')}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5">
+          {/* Live preview — the real widget, mirroring the embed's iframe attrs. */}
+          {token && (
+            <div>
+              <p className="mb-2 text-sm font-semibold">{t('previewLabel')}</p>
+              <div className="h-[440px] overflow-hidden rounded-lg border bg-muted/30">
+                <iframe
+                  src={previewUrl}
+                  title={t('previewLabel')}
+                  className="h-full w-full border-0"
+                  allow="clipboard-write; microphone"
+                />
+              </div>
+              <p className="mt-1.5 text-xs text-muted-foreground">{t('previewHint')}</p>
+            </div>
+          )}
           {/* Moodle steps */}
           <div>
             <p className="mb-2 text-sm font-semibold">{t('moodleStepsTitle')}</p>
@@ -101,6 +128,12 @@ export function EmbedDialog({ token, onClose }: EmbedDialogProps) {
           </div>
 
           <p className="text-xs text-muted-foreground">{t('note')}</p>
+
+          {/* Moodle "protected"/sanitized courses often strip the iframe. */}
+          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
+            <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">{t('troubleshootTitle')}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{t('troubleshootNote')}</p>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -5195,7 +5195,11 @@
       "copy": "Copiar código",
       "copied": "Copiado!",
       "copyError": "Não foi possível copiar o código",
-      "note": "O código já vem com a chave preenchida, libera o microfone (ditado por voz) e não permite tela cheia."
+      "note": "O código já vem com a chave preenchida, libera o microfone (ditado por voz) e não permite tela cheia.",
+      "previewLabel": "Prévia",
+      "previewHint": "É assim que o tutor aparece dentro do curso.",
+      "troubleshootTitle": "Não aparece no Moodle?",
+      "troubleshootNote": "Alguns cursos removem HTML por segurança e apagam o iframe. Se a prévia acima funciona mas o Moodle não mostra nada, o site está bloqueando iframes — use o plugin Tutoria para Moodle, que incorpora o tutor sem depender do editor de HTML."
     },
     "columns": {
       "tokenName": "Nome da Chave",

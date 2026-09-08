@@ -1237,7 +1237,11 @@ export default function ModuleDetailsPage() {
       </Dialog>
 
       {/* Embed (iframe + Moodle steps) */}
-      <EmbedDialog token={embedToken} onClose={() => setEmbedToken(null)} />
+      <EmbedDialog
+        token={embedToken}
+        onClose={() => setEmbedToken(null)}
+        previewAuthToken={typeof window !== 'undefined' ? localStorage.getItem('tutoria_token') : null}
+      />
 
       {/* File Upload Dialog */}
       <Dialog open={fileUploadModalOpen} onOpenChange={setFileUploadModalOpen}>

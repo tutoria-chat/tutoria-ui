@@ -4485,7 +4485,11 @@
       "copy": "Copiar código",
       "copied": "¡Copiado!",
       "copyError": "No se pudo copiar el código",
-      "note": "El código ya incluye la clave, permite el micrófono (dictado por voz) y no permite pantalla completa."
+      "note": "El código ya incluye la clave, permite el micrófono (dictado por voz) y no permite pantalla completa.",
+      "previewLabel": "Vista previa",
+      "previewHint": "Así se ve el tutor dentro del curso.",
+      "troubleshootTitle": "¿No aparece en Moodle?",
+      "troubleshootNote": "Algunos cursos eliminan HTML por seguridad y quitan el iframe. Si la vista previa de arriba funciona pero Moodle no muestra nada, el sitio está bloqueando iframes — usa el plugin de Tutoria para Moodle, que inserta el tutor sin depender del editor HTML."
     },
     "columns": {
       "tokenName": "Nombre de Clave",
