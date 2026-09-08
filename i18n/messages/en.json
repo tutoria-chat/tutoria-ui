@@ -4151,7 +4151,8 @@
         "Download the block plugin (ZIP) below.",
         "In Moodle: Site administration → Plugins → Install plugins → upload the ZIP and finish the upgrade.",
         "In the course, turn editing on → Add a block → Tutoria.",
-        "Paste the module access key, choose Embedded or Floating bubble, and save."
+        "Paste the module access key, choose Embedded or Floating bubble, and save.",
+        "(Optional) In Floating bubble mode, personalize the button under the \"Chat bubble\" section: upload an image or paste an avatar URL."
       ]
     },
     "iframe": {

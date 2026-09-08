@@ -4473,7 +4473,8 @@
         "Descarga el plugin del bloque (ZIP) abajo.",
         "En Moodle: Administración del sitio → Plugins → Instalar plugins → sube el ZIP y completa la actualización.",
         "En el curso, activa la edición → Agregar un bloque → Tutoria.",
-        "Pega la clave de acceso del módulo, elige Incorporado o Globo flotante y guarda."
+        "Pega la clave de acceso del módulo, elige Incorporado o Globo flotante y guarda.",
+        "(Opcional) En modo Globo flotante, personaliza el botón en la sección \"Globo de chat\": sube una imagen o pega la URL de un avatar."
       ]
     },
     "iframe": {

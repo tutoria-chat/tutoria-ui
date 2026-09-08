@@ -5183,7 +5183,8 @@
         "Baixe o plugin do bloco (ZIP) abaixo.",
         "No Moodle: Administração do site → Plugins → Instalar plugins → envie o ZIP e conclua a atualização.",
         "No curso, ative a edição → Adicionar um bloco → Tutoria.",
-        "Cole a chave de acesso do módulo, escolha Incorporado ou Balão flutuante e salve."
+        "Cole a chave de acesso do módulo, escolha Incorporado ou Balão flutuante e salve.",
+        "(Opcional) No modo Balão flutuante, personalize o botão na seção \"Balão de chat\": envie uma imagem ou cole a URL de um avatar."
       ]
     },
     "iframe": {
