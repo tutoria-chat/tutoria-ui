@@ -5171,7 +5171,7 @@
   },
   "ava": {
     "title": "Configuração do AVA",
-    "description": "Coloque o tutor da Tutoria dentro do seu AVA (Moodle). Escolha um método e siga os passos.",
+    "description": "Coloque a Central de apoio ao aprendizado da Tutoria dentro do seu AVA (Moodle). Escolha um método e siga os passos.",
     "chooseMethod": "Escolha como incorporar",
     "recommended": "Recomendado",
     "stepsTitle": "Passo a passo",

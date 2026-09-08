@@ -25,7 +25,7 @@ export const AVA_PLUGINS: Record<'activity' | 'block', AvaPlugin> = {
   },
   block: {
     file: '/downloads/tutoria-block.zip',
-    version: '1.0.1',
+    version: '1.0.2',
     updatedAt: '2026-09-08',
     size: '16 KB',
   },

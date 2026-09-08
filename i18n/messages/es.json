@@ -4461,7 +4461,7 @@
   },
   "ava": {
     "title": "Configuración del AVA",
-    "description": "Coloca el tutor de Tutoria dentro de tu LMS (Moodle). Elige un método y sigue los pasos.",
+    "description": "Coloca el Centro de apoyo al aprendizaje de Tutoria dentro de tu LMS (Moodle). Elige un método y sigue los pasos.",
     "chooseMethod": "Elige cómo insertar",
     "recommended": "Recomendado",
     "stepsTitle": "Paso a paso",

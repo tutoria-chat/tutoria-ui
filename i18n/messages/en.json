@@ -4139,7 +4139,7 @@
   },
   "ava": {
     "title": "LMS / Moodle setup",
-    "description": "Put the Tutoria tutor inside your LMS (Moodle). Pick a method and follow the steps.",
+    "description": "Put the Tutoria Learning Support Center inside your LMS (Moodle). Pick a method and follow the steps.",
     "chooseMethod": "Choose how to embed",
     "recommended": "Recommended",
     "stepsTitle": "Steps",
