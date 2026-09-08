@@ -5199,7 +5199,9 @@
       "previewLabel": "Prévia",
       "previewHint": "É assim que o tutor aparece dentro do curso.",
       "troubleshootTitle": "Não aparece no Moodle?",
-      "troubleshootNote": "Alguns cursos removem HTML por segurança e apagam o iframe. Se a prévia acima funciona mas o Moodle não mostra nada, o site está bloqueando iframes — use o plugin Tutoria para Moodle, que incorpora o tutor sem depender do editor de HTML."
+      "troubleshootNote": "Alguns cursos removem HTML por segurança e apagam o iframe. Se a prévia acima funciona mas o Moodle não mostra nada, o site está bloqueando iframes — use o plugin Tutoria para Moodle, que incorpora o tutor sem depender do editor de HTML.",
+      "diagnosticLabel": "Teste no console",
+      "diagnosticHint": "Na página do Moodle onde você incorporou o tutor, aperte F12 → Console, cole isto e pressione Enter."
     },
     "columns": {
       "tokenName": "Nome da Chave",

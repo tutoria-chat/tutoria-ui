@@ -32,9 +32,15 @@ interface EmbedDialogProps {
  * clipboard, and intentionally omits allowfullscreen so the embed can't go
  * fullscreen. Also shows the step-by-step Moodle instructions.
  */
+// One-liner the customer pastes into their Moodle page's console (F12) to see
+// whether the iframe survived Moodle's HTML sanitizer.
+const DIAGNOSTIC =
+  "(function(){var f=[].slice.call(document.querySelectorAll('iframe')).filter(function(i){return /tutoria/.test(i.src||'')});console.log(f.length?('\\u2705 Tutoria: '+f.length+' iframe(s) na p\\u00e1gina'):'\\u274c Tutoria: iframe removido pelo Moodle \\u2014 use o plugin Tutoria para Moodle');f.forEach(function(i){console.log('\\u2192',i.src)});if(f.length)console.log('Se ficar em branco, veja erros vermelhos de CSP/frame-src acima.');})();";
+
 export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogProps) {
   const t = useTranslations('accessKeys.embed');
   const [copied, setCopied] = useState(false);
+  const [copiedDiag, setCopiedDiag] = useState(false);
 
   const widgetUrl = token ? `${APP_CONFIG.widgetUrl}/?module_token=${token}` : '';
   // Preview may carry the admin token so the chat shows past the gate; the
@@ -60,6 +66,17 @@ export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogPro
       setCopied(true);
       toast.success(t('copied'));
       setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error(t('copyError'));
+    }
+  };
+
+  const handleCopyDiagnostic = async () => {
+    try {
+      await navigator.clipboard.writeText(DIAGNOSTIC);
+      setCopiedDiag(true);
+      toast.success(t('copied'));
+      setTimeout(() => setCopiedDiag(false), 2000);
     } catch {
       toast.error(t('copyError'));
     }
@@ -133,6 +150,24 @@ export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogPro
           <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
             <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">{t('troubleshootTitle')}</p>
             <p className="mt-1 text-xs text-muted-foreground">{t('troubleshootNote')}</p>
+
+            <div className="mt-3">
+              <div className="mb-1.5 flex items-center justify-between gap-2">
+                <p className="text-xs font-medium">{t('diagnosticLabel')}</p>
+                <Button size="sm" variant="outline" onClick={handleCopyDiagnostic} className="h-7">
+                  {copiedDiag ? (
+                    <Check aria-hidden="true" className="mr-1.5 h-3.5 w-3.5 text-green-500" />
+                  ) : (
+                    <Copy aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" />
+                  )}
+                  {copiedDiag ? t('copied') : t('copy')}
+                </Button>
+              </div>
+              <p className="mb-1.5 text-xs text-muted-foreground">{t('diagnosticHint')}</p>
+              <pre className="overflow-x-auto rounded-md border bg-background/60 p-2 text-[11px] leading-snug">
+                <code>{DIAGNOSTIC}</code>
+              </pre>
+            </div>
           </div>
         </div>
       </DialogContent>
