@@ -172,12 +172,15 @@ export default function UsersPage() {
             <Input
               placeholder={t('searchPlaceholder')}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1); // a new search resets to the first page (offset was stale → empty results)
+              }}
               className="pl-10"
             />
           </div>
         </div>
-        <Select value={userTypeFilter} onValueChange={setUserTypeFilter}>
+        <Select value={userTypeFilter} onValueChange={(v) => { setUserTypeFilter(v); setPage(1); }}>
           <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder={t('filters.userType')} />
           </SelectTrigger>
@@ -191,7 +194,7 @@ export default function UsersPage() {
             <SelectItem value="student">{tCommon('roles.student')}</SelectItem>
           </SelectContent>
         </Select>
-        <Select value={isActiveFilter} onValueChange={setIsActiveFilter}>
+        <Select value={isActiveFilter} onValueChange={(v) => { setIsActiveFilter(v); setPage(1); }}>
           <SelectTrigger className="w-full sm:w-[160px]">
             <SelectValue placeholder={t('filters.status')} />
           </SelectTrigger>
