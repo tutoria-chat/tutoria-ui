@@ -400,8 +400,8 @@
   },
   "modules": {
     "title": "Módulos",
-    "description": "Gestiona módulos de aprendizaje y configuración del tutor de IA. {total} módulos en {courses} cursos con {aiConfigured} tutores de IA configurados",
-    "descriptionSimple": "Gestiona módulos de aprendizaje y configuración del tutor de IA",
+    "description": "Gestiona módulos de aprendizaje y configuración del Centro de apoyo al aprendizaje. {total} módulos en {courses} cursos con {aiConfigured} tutores de IA configurados",
+    "descriptionSimple": "Gestiona módulos de aprendizaje y configuración del Centro de apoyo al aprendizaje",
     "createButton": "Crear módulo",
     "limitReached": "Limite de módulos alcanzado. Actualiza tu plan para crear mas módulos.",
     "overLimitBanner": "Tienes {excess} módulo(s) por encima del límite de tu plan. Estos módulos están desactivados — elimínalos o actualiza tu plan.",
@@ -424,7 +424,7 @@
       "semester": "Semestre",
       "year": "Año",
       "code": "Código",
-      "aiTutor": "Tutor de IA",
+      "aiTutor": "Centro de apoyo al aprendizaje",
       "configured": "Configurado",
       "notConfigured": "No configurado",
       "createdAt": "Creado el",
@@ -480,15 +480,15 @@
       "descriptionPlaceholder": "Describe los objetivos de aprendizaje del módulo, resumen del contenido y conceptos clave...",
       "descriptionTooLong": "La descripción no puede exceder 500 caracteres",
       "descriptionCharCount": "{count}/500 caracteres",
-      "aiConfig": "Configuración del tutor de IA",
+      "aiConfig": "Configuración del Centro de apoyo al aprendizaje",
       "quickTemplates": "Plantillas rápidas",
       "useTemplate": "Usar plantilla",
       "systemPromptLabel": "Configuración del prompt del sistema",
       "improveWithAI": "Mejorar con IA",
       "improving": "Mejorando...",
-      "promptExplanation": "¿Qué es esto? Piensa en esto como las \"instrucciones de personalidad\" para el tutor de IA. Por ejemplo: \"Eres un profesor de programación paciente que usa ejemplos cotidianos\" o \"Eres un tutor de matemáticas que siempre resuelve paso a paso\". Esto define cómo el tutor responderá a las preguntas de los estudiantes en este módulo específico.",
+      "promptExplanation": "¿Qué es esto? Piensa en esto como las \"instrucciones de personalidad\" para el Centro de apoyo al aprendizaje. Por ejemplo: \"Eres un profesor de programación paciente que usa ejemplos cotidianos\" o \"Eres un tutor de matemáticas que siempre resuelve paso a paso\". Esto define cómo el tutor responderá a las preguntas de los estudiantes en este módulo específico.",
       "promptImprovementHint": "💡 ¿No te gusta tu prompt? ¡Después de crear este módulo, puedes mejorarlo varias veces usando IA!",
-      "systemPromptPlaceholder": "Define cómo debe comportarse el tutor de IA, su nivel de experiencia, estilo de enseñanza y directrices de interacción...",
+      "systemPromptPlaceholder": "Define cómo debe comportarse el Centro de apoyo al aprendizaje, su nivel de experiencia, estilo de enseñanza y directrices de interacción...",
       "charactersCount": "{count} caracteres",
       "configured": "✓ Configurado",
       "remainingImprovements": "Mejoras restantes: {count}/3 (72h)",
@@ -498,8 +498,8 @@
       "promptTip3": "• Incluye directrices para diferentes tipos de preguntas",
       "promptTip4": "• Establece expectativas para el formato y tono de respuesta",
       "promptTip5": "• Considera el público objetivo y su nivel",
-      "tutorLanguageLabel": "Idioma del Tutor IA",
-      "tutorLanguageHint": "Importante: Selecciona en qué idioma el tutor IA debe responder a las preguntas de los estudiantes. Esto define el idioma de las respuestas, independientemente del idioma de la pregunta.",
+      "tutorLanguageLabel": "Idioma del Centro de apoyo al aprendizaje",
+      "tutorLanguageHint": "Importante: Selecciona en qué idioma el Centro de apoyo al aprendizaje debe responder a las preguntas de los estudiantes. Esto define el idioma de las respuestas, independientemente del idioma de la pregunta.",
       "courseTypeLabel": "Tipo de Curso",
       "selectCourseType": "Seleccionar Tipo",
       "changeCourseType": "Cambiar Tipo",
@@ -561,8 +561,8 @@
       "semester": "Semestre",
       "year": "Año",
       "createdAt": "Creado el",
-      "aiTutorConfigured": "Tutor de IA configurado",
-      "aiTutorNotConfigured": "Tutor de IA no configurado",
+      "aiTutorConfigured": "Centro de apoyo al aprendizaje configurado",
+      "aiTutorNotConfigured": "Centro de apoyo al aprendizaje no configurado",
       "stats": "Estadísticas",
       "files": "Archivos",
       "accessTokens": "Claves de acceso",
@@ -708,7 +708,7 @@
       "courseCannotChange": "El curso no se puede cambiar después de la creación del módulo",
       "descriptionLabel": "Descripción",
       "descriptionPlaceholder": "Descripción del módulo (opcional)",
-      "systemPromptLabel": "Prompt del sistema (Tutor de IA)",
+      "systemPromptLabel": "Prompt del sistema (Centro de apoyo al aprendizaje)",
       "systemPromptPlaceholder": "Ej: Eres un tutor especializado en Python que explica conceptos usando analogías del mundo real...",
       "saveChanges": "Guardar cambios",
       "cancel": "Cancelar",
@@ -1740,7 +1740,7 @@
       "expiresHint": "Deja vacío para una clave sin expiración",
       "permissions": "Permisos",
       "allowChat": "Permitir chat",
-      "allowChatDesc": "Permite a los usuarios hacer preguntas al tutor de IA",
+      "allowChatDesc": "Permite a los usuarios hacer preguntas al Centro de apoyo al aprendizaje",
       "allowFileAccess": "Permitir acceso a archivos",
       "allowFileAccessDesc": "Permite a los usuarios descargar archivos del módulo",
       "close": "Cerrar",
@@ -2257,7 +2257,7 @@
         "tutor": "Puede crear cursos, módulos y tokens",
         "platform_coordinator": "Ver cursos/módulos y generar tokens de acceso",
         "professor": "Gestionar cursos y módulos asignados",
-        "student": "Acceder a materiales del curso y tutor IA"
+        "student": "Acceder a materiales del curso y Centro de apoyo al aprendizaje"
       }
     },
     "loading": "Cargando...",
@@ -2506,7 +2506,7 @@
             "Crear profesores regulares y asignarlos a cursos",
             "Generar y gestionar tokens de acceso a módulos",
             "Subir archivos a módulos",
-            "Configurar prompts del sistema del tutor IA"
+            "Configurar prompts del sistema del Centro de apoyo al aprendizaje"
           ]
         }
       },
@@ -2595,7 +2595,7 @@
           },
           {
             "number": "4",
-            "title": "Configurar el Tutor IA",
+            "title": "Configurar el Centro de apoyo al aprendizaje",
             "desc": "Dile a la IA CÓMO debe comportarse. Es como dar 'instrucciones de personalidad' a un tutor. Ejemplo: 'Eres un profesor paciente de matemáticas que explica paso a paso'."
           },
           {
@@ -2606,7 +2606,7 @@
           {
             "number": "6",
             "title": "Crear Tokens (Llaves para Estudiantes)",
-            "desc": "Crea 'LLAVES' (tokens) que los estudiantes usarán para ACCEDER al tutor IA. Piensa en esto como crear contraseñas que darás a los estudiantes."
+            "desc": "Crea 'LLAVES' (tokens) que los estudiantes usarán para ACCEDER al Centro de apoyo al aprendizaje. Piensa en esto como crear contraseñas que darás a los estudiantes."
           },
           {
             "number": "7",
@@ -2626,7 +2626,7 @@
           {
             "number": "10",
             "title": "Monitorear y Actualizar",
-            "desc": "¡Vigila cómo los estudiantes lo están usando! Puedes agregar más archivos, mejorar el tutor IA, crear más tokens, etc."
+            "desc": "¡Vigila cómo los estudiantes lo están usando! Puedes agregar más archivos, mejorar el Centro de apoyo al aprendizaje, crear más tokens, etc."
           }
         ],
         "tip": "💡 CONSEJO: ¡No intentes hacer todo de una vez! Ve paso a paso. Crea 1 disciplina primero, luego 1 módulo, configura la IA, sube 1 archivo, crea 1 token, y PRUEBA todo antes de crear más!"
@@ -2744,9 +2744,9 @@
         ]
       },
       "creatingModules": {
-        "title": "CÓMO CREAR MÓDULOS - TUTORIAL COMPLETO CON TUTOR IA",
+        "title": "CÓMO CREAR MÓDULOS - TUTORIAL COMPLETO CON CENTRO DE APOYO AL APRENDIZAJE",
         "whatIs": "Un MÓDULO es como un CAPÍTULO o UNIDAD dentro de un curso. Por ejemplo: si tienes un curso llamado 'Introducción a la Programación', puedes tener: Módulo 1: 'Variables y Tipos de Datos', Módulo 2: 'Bucles y Condiciones', Módulo 3: 'Funciones', etc. ¡Cada módulo es una PARTE ESPECÍFICA del contenido!",
-        "why": "¡Los módulos son donde los ESTUDIANTES interactuarán con el TUTOR IA! Cada módulo tiene: 1) Archivos (PDFs, presentaciones, etc.), 2) Un Tutor IA configurado para ayudar a los estudiantes con ESTE tema específico, 3) Tokens (llaves) que los estudiantes usan para acceder al contenido.",
+        "why": "¡Los módulos son donde los ESTUDIANTES interactuarán con el CENTRO DE APOYO AL APRENDIZAJE! Cada módulo tiene: 1) Archivos (PDFs, presentaciones, etc.), 2) Un Centro de apoyo al aprendizaje configurado para ayudar a los estudiantes con ESTE tema específico, 3) Tokens (llaves) que los estudiantes usan para acceder al contenido.",
         "steps": [
           {
             "number": "1",
@@ -2780,8 +2780,8 @@
           },
           {
             "number": "7",
-            "title": "¡AHORA VIENE LA PARTE IMPORTANTE: CONFIGURA EL TUTOR IA!",
-            "desc": "Desplázate un poco hacia abajo. Verás una sección llamada 'Configuración del Tutor IA' o 'Configuración del Prompt del Sistema'. ¡AQUÍ ES DONDE OCURRE LA MAGIA! ¡Aquí es donde le dirás a la IA CÓMO debe comportarse al ayudar a los estudiantes!"
+            "title": "¡AHORA VIENE LA PARTE IMPORTANTE: CONFIGURA EL CENTRO DE APOYO AL APRENDIZAJE!",
+            "desc": "Desplázate un poco hacia abajo. Verás una sección llamada 'Configuración del Centro de apoyo al aprendizaje' o 'Configuración del Prompt del Sistema'. ¡AQUÍ ES DONDE OCURRE LA MAGIA! ¡Aquí es donde le dirás a la IA CÓMO debe comportarse al ayudar a los estudiantes!"
           },
           {
             "number": "8",
@@ -2800,8 +2800,8 @@
           },
           {
             "number": "11",
-            "title": "SELECCIONA el IDIOMA DEL TUTOR IA",
-            "desc": "Debajo del prompt, hay un DESPLEGABLE llamado 'Idioma del Tutor IA' o similar. Esto define en qué IDIOMA responderá la IA. Por ejemplo, si seleccionas 'Portugués', ¡la IA SIEMPRE responderá en portugués, incluso si el estudiante pregunta en inglés! ¡Selecciona el idioma que hablan tus ESTUDIANTES!"
+            "title": "SELECCIONA el IDIOMA DEL CENTRO DE APOYO AL APRENDIZAJE",
+            "desc": "Debajo del prompt, hay un DESPLEGABLE llamado 'Idioma del Centro de apoyo al aprendizaje' o similar. Esto define en qué IDIOMA responderá la IA. Por ejemplo, si seleccionas 'Portugués', ¡la IA SIEMPRE responderá en portugués, incluso si el estudiante pregunta en inglés! ¡Selecciona el idioma que hablan tus ESTUDIANTES!"
           },
           {
             "number": "12",
@@ -2827,7 +2827,7 @@
           },
           {
             "mistake": "Dejé el Prompt del Sistema vacío - ¿es un problema?",
-            "solution": "¡NO es obligatorio, pero ALTAMENTE RECOMENDADO! Si lo dejas vacío, el Tutor IA no tendrá instrucciones específicas. ¡Es como contratar un profesor y no decirle qué enseñar! Complétalo con algo simple, o usa una de las PLANTILLAS RÁPIDAS!"
+            "solution": "¡NO es obligatorio, pero ALTAMENTE RECOMENDADO! Si lo dejas vacío, el Centro de apoyo al aprendizaje no tendrá instrucciones específicas. ¡Es como contratar un profesor y no decirle qué enseñar! Complétalo con algo simple, o usa una de las PLANTILLAS RÁPIDAS!"
           },
           {
             "mistake": "¡No sé qué escribir en el Prompt del Sistema!",
@@ -2846,8 +2846,8 @@
             "solution": "¡Eso es NORMAL! ¡Acabas de crear un módulo VACÍO! Ahora necesitas: 1) SUBIR ARCHIVOS (siguiente sección), 2) CREAR TOKENS (sección después de esa), 3) PREPARAR el módulo, 4) Compartir tokens con estudiantes. ¡Sigue el flujo de trabajo completo!"
           },
           {
-            "mistake": "¡Seleccioné el Idioma del Tutor IA equivocado!",
-            "solution": "¡No hay problema! Haz clic en 'EDITAR MÓDULO' (botón en la página del módulo), desplázate hasta 'Idioma del Tutor IA', cámbialo y haz clic en 'GUARDAR CAMBIOS'. ¡Fácil!"
+            "mistake": "¡Seleccioné el Idioma del Centro de apoyo al aprendizaje equivocado!",
+            "solution": "¡No hay problema! Haz clic en 'EDITAR MÓDULO' (botón en la página del módulo), desplázate hasta 'Idioma del Centro de apoyo al aprendizaje', cámbialo y haz clic en 'GUARDAR CAMBIOS'. ¡Fácil!"
           },
           {
             "mistake": "Quiero usar la función 'Mejorar con IA' pero el botón no aparece!",
@@ -2876,14 +2876,14 @@
             "solution": "Piensa en esto como INSTRUCCIONES que le das a un tutor privado. Ejemplo: Contratas un tutor y le dices: 'Estás enseñando Cálculo a estudiantes universitarios de primer año. Sé paciente, explica paso a paso y usa ejemplos del mundo real.' ¡Eso es básicamente lo que es el Prompt del Sistema - instrucciones para la IA sobre CÓMO enseñar!"
           },
           {
-            "problem": "¿Puedo crear un módulo sin configurar el Tutor IA?",
+            "problem": "¿Puedo crear un módulo sin configurar el Centro de apoyo al aprendizaje?",
             "solution": "¡SÍ! Es opcional. Pero si no lo configuras, la IA no tendrá instrucciones específicas. Seguirá funcionando, pero no tendrá la PERSONALIDAD o ESTILO DE ENSEÑANZA que quieres. ¡RECOMENDAMOS FUERTEMENTE configurarlo!"
           }
         ],
         "tips": [
           "💡 ¡COMIENZA CON UNA PLANTILLA! No intentes escribir el Prompt del Sistema perfecto desde cero. ¡Usa una Plantilla Rápida y EDÍTALA para que coincida con tu estilo!",
           "💡 ¡Sé ESPECÍFICO en tu Prompt del Sistema! En lugar de 'Ayuda a los estudiantes', escribe 'Eres un tutor paciente que explica paso a paso y hace preguntas guía.'",
-          "💡 ¡PRUEBA tu Tutor IA! Después de crear el módulo, subir archivos y prepararlo, prueba haciendo preguntas como lo harían los estudiantes. ¡Ve si la IA responde como quieres!",
+          "💡 ¡PRUEBA tu Centro de apoyo al aprendizaje! Después de crear el módulo, subir archivos y prepararlo, prueba haciendo preguntas como lo harían los estudiantes. ¡Ve si la IA responde como quieres!",
           "💡 ¡Usa la función 'MEJORAR CON IA'! Después de guardar tu módulo, edítalo y haz clic en 'Mejorar con IA'. ¡El sistema a menudo hace tu prompt mucho mejor!",
           "💡 ¡ORGANIZA tus módulos! Usa códigos como 'CS101-S1' (Semana 1), 'CS101-S2' (Semana 2). ¡Esto facilita encontrar y ordenar después!",
           "💡 ¡No crees TODOS los módulos de una vez! Crea 1 módulo, sube archivos, prueba con estudiantes, VE CÓMO VA, luego crea más. ¡De esta manera aprendes qué funciona mejor!",
@@ -2892,7 +2892,7 @@
       },
       "uploadingFiles": {
         "title": "CÓMO SUBIR ARCHIVOS A MÓDULOS - Tutorial Completo",
-        "whatIs": "¡Subir ARCHIVOS es como poner LIBROS, NOTAS y MATERIALES en una BIBLIOTECA para que la IA los lea! Los archivos que subes (PDFs, PowerPoints, documentos Word, etc.) son lo que el TUTOR IA usará para RESPONDER preguntas de los estudiantes! Piensa en esto así: la IA es un bibliotecario súper inteligente, ¡y los archivos son los libros que puede consultar!",
+        "whatIs": "¡Subir ARCHIVOS es como poner LIBROS, NOTAS y MATERIALES en una BIBLIOTECA para que la IA los lea! Los archivos que subes (PDFs, PowerPoints, documentos Word, etc.) son lo que el CENTRO DE APOYO AL APRENDIZAJE usará para RESPONDER preguntas de los estudiantes! Piensa en esto así: la IA es un bibliotecario súper inteligente, ¡y los archivos son los libros que puede consultar!",
         "why": "¿POR QUÉ subir archivos? ¡Porque la IA necesita CONTENIDO con el que trabajar! Si no subes archivos, la IA solo tendrá su conocimiento general. ¡Pero si subes TUS diapositivas de clase, TUS notas, TUS PDFs, la IA puede responder preguntas ESPECÍFICAMENTE sobre el contenido de TU curso!",
         "supportedFormats": "TIPOS DE ARCHIVO SOPORTADOS: 📄 PDF (.pdf), 📝 Documentos Word (.doc, .docx), 📃 Archivos de Texto (.txt), 📊 Presentaciones PowerPoint (.ppt, .pptx). Tamaño máximo de archivo: 10MB por archivo.",
         "steps": [
@@ -2987,8 +2987,8 @@
       },
       "creatingTokens": {
         "title": "CÓMO CREAR TOKENS (Llaves de Acceso para Estudiantes) - TUTORIAL COMPLETO",
-        "whatIs": "Un TOKEN es como una LLAVE ESPECIAL o CONTRASEÑA que los estudiantes usan para ACCEDER al tutor IA! Piensa en esto así: Tienes una HABITACIÓN (el módulo) con un tutor IA adentro. ¡El TOKEN es la LLAVE que abre la puerta a esa habitación! Cada módulo puede tener MÚLTIPLES tokens (múltiples llaves) que das a diferentes grupos de estudiantes.",
-        "why": "¿POR QUÉ crear tokens? ¡Porque necesitas una forma de CONTROLAR quién puede acceder a tu módulo! No quieres que todo internet use tu tutor IA - ¡solo quieres a TUS estudiantes! Los tokens también te permiten: 1) Controlar qué pueden hacer los estudiantes (¿solo chatear? ¿o también descargar archivos?), 2) Establecer fechas de expiración (para que el token deje de funcionar después de que termine el semestre), 3) Rastrear uso (ver cuántas veces se usó el token).",
+        "whatIs": "Un TOKEN es como una LLAVE ESPECIAL o CONTRASEÑA que los estudiantes usan para ACCEDER al Centro de apoyo al aprendizaje! Piensa en esto así: Tienes una HABITACIÓN (el módulo) con un Centro de apoyo al aprendizaje adentro. ¡El TOKEN es la LLAVE que abre la puerta a esa habitación! Cada módulo puede tener MÚLTIPLES tokens (múltiples llaves) que das a diferentes grupos de estudiantes.",
+        "why": "¿POR QUÉ crear tokens? ¡Porque necesitas una forma de CONTROLAR quién puede acceder a tu módulo! No quieres que todo internet use tu Centro de apoyo al aprendizaje - ¡solo quieres a TUS estudiantes! Los tokens también te permiten: 1) Controlar qué pueden hacer los estudiantes (¿solo chatear? ¿o también descargar archivos?), 2) Establecer fechas de expiración (para que el token deje de funcionar después de que termine el semestre), 3) Rastrear uso (ver cuántas veces se usó el token).",
         "steps": [
           {
             "number": "1",
@@ -3023,7 +3023,7 @@
           {
             "number": "7",
             "title": "CONFIGURA PERMISOS - ¿Permitir Chat?",
-            "desc": "Verás una CASILLA DE VERIFICACIÓN o INTERRUPTOR que dice 'Permitir Chat' o 'Permiso de Chat'. Si MARCAS ESTO (lo activas), los estudiantes pueden HACER PREGUNTAS al tutor IA. Si lo DESMARCAS (lo desactivas), los estudiantes solo pueden acceder a archivos pero no pueden chatear. ¡LA MAYORÍA DEL TIEMPO quieres esto ACTIVADO!"
+            "desc": "Verás una CASILLA DE VERIFICACIÓN o INTERRUPTOR que dice 'Permitir Chat' o 'Permiso de Chat'. Si MARCAS ESTO (lo activas), los estudiantes pueden HACER PREGUNTAS al Centro de apoyo al aprendizaje. Si lo DESMARCAS (lo desactivas), los estudiantes solo pueden acceder a archivos pero no pueden chatear. ¡LA MAYORÍA DEL TIEMPO quieres esto ACTIVADO!"
           },
           {
             "number": "8",
@@ -3051,11 +3051,11 @@
             },
             {
               "method": "📧 CORREO ELECTRÓNICO",
-              "desc": "Envía un correo a todos los estudiantes con: 'Haz clic en este enlace para acceder al tutor IA: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes hacen clic en el enlace y el widget se abre en su navegador!"
+              "desc": "Envía un correo a todos los estudiantes con: 'Haz clic en este enlace para acceder al Centro de apoyo al aprendizaje: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes hacen clic en el enlace y el widget se abre en su navegador!"
             },
             {
               "method": "📱 WHATSAPP / TELEGRAM",
-              "desc": "Publica el enlace del widget en tu grupo de WhatsApp/Telegram de clase: 'Enlace del Tutor IA: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes pueden guardarlo y acceder en cualquier momento!"
+              "desc": "Publica el enlace del widget en tu grupo de WhatsApp/Telegram de clase: 'Enlace del Centro de apoyo al aprendizaje: https://widget.tutoria.ai/?module_token=TU_TOKEN_AQUÍ'. ¡Los estudiantes pueden guardarlo y acceder en cualquier momento!"
             },
             {
               "method": "🌐 GOOGLE CLASSROOM",
@@ -3127,7 +3127,7 @@
       },
       "preparingModules": {
         "title": "CÓMO PREPARAR MÓDULOS - ¡Haciendo que Todo esté LISTO para Estudiantes!",
-        "whatIs": "¡PREPARAR UN MÓDULO es el PASO FINAL antes de que los estudiantes puedan usar tu tutor IA! Piensa en esto así: Ya 1) Creaste la habitación (módulo), 2) Pusiste libros adentro (subiste archivos), 3) Hiciste llaves (tokens)... ¡pero el tutor IA aún no ha LEÍDO los libros! 'Preparar' = Enviar TODOS tus archivos al sistema de OpenAI y crear el ASISTENTE IA REAL que chateará con los estudiantes!",
+        "whatIs": "¡PREPARAR UN MÓDULO es el PASO FINAL antes de que los estudiantes puedan usar tu Centro de apoyo al aprendizaje! Piensa en esto así: Ya 1) Creaste la habitación (módulo), 2) Pusiste libros adentro (subiste archivos), 3) Hiciste llaves (tokens)... ¡pero el Centro de apoyo al aprendizaje aún no ha LEÍDO los libros! 'Preparar' = Enviar TODOS tus archivos al sistema de OpenAI y crear el ASISTENTE IA REAL que chateará con los estudiantes!",
         "why": "¿POR QUÉ es esto necesario? ¡Porque subir archivos a Tutoria NO es lo mismo que hacerlos disponibles para la IA! Cuando 'Preparas', el sistema: 1) Envía todos tus archivos a OpenAI, 2) Crea un asistente IA especializado con tu Prompt del Sistema, 3) Vincula todo para que los estudiantes puedan usarlo. ¡Sin preparar, la IA no tiene NADA con qué trabajar!",
         "prerequisites": {
           "title": "ANTES DE PREPARAR - Lista de verificación",
@@ -3182,7 +3182,7 @@
             },
             {
               "number": "4",
-              "desc": "Presiona ENTER. ¡El widget del tutor IA debería ABRIRSE!"
+              "desc": "Presiona ENTER. ¡El widget del Centro de apoyo al aprendizaje debería ABRIRSE!"
             },
             {
               "number": "5",
@@ -3246,7 +3246,7 @@
           "💡 ¡PREPARA TEMPRANO! ¡No esperes hasta el día antes de que comiencen las clases! Prepara con una semana de anticipación y PRUEBA a fondo para que tengas tiempo de arreglar problemas!",
           "💡 ¡RE-PREPARA después de CUALQUIER cambio! ¿Cambiaste el Prompt del Sistema? Re-prepara. ¿Agregaste archivos? Re-prepara. ¡Esto asegura que los estudiantes siempre tengan la última versión!",
           "💡 ¡PRUEBA TÚ MISMO antes de compartir con estudiantes! Después de preparar, ¡usa el widget tú mismo! Haz preguntas, descarga archivos, ¡asegúrate de que todo funcione!",
-          "💡 Si estás actualizando archivos a mitad de semestre, ¡DILE A LOS ESTUDIANTES! Envía un mensaje como '¡Actualicé los materiales de estudio - el tutor IA ahora tiene la última versión!' para que sepan hacer preguntas sobre el nuevo contenido!",
+          "💡 Si estás actualizando archivos a mitad de semestre, ¡DILE A LOS ESTUDIANTES! Envía un mensaje como '¡Actualicé los materiales de estudio - el Centro de apoyo al aprendizaje ahora tiene la última versión!' para que sepan hacer preguntas sobre el nuevo contenido!",
           "💡 ¡Mantén un REGISTRO DE PREPARACIÓN! Anota cuándo preparaste cada módulo (como 'CS101-S1: Preparado el 15 de enero de 2024 con 5 PDFs'). ¡Esto ayuda a rastrear qué está actualizado!",
           "💡 ¡No SOBRE-PREPARES! ¡No necesitas preparar cada hora! Solo re-prepara cuando hagas cambios reales. ¡Preparar 50 veces en un día no lo hace mejor!",
           "💡 Si tienes 10 módulos, ¡necesitas preparar cada uno POR SEPARADO! Preparar el Módulo 1 no prepara automáticamente los Módulos 2-10. ¡Hazlos uno por uno!"
@@ -3261,7 +3261,7 @@
             "✅ ¿Módulo PREPARADO (hiciste clic en el botón Preparar y viste éxito)?",
             "✅ ¿PROBASTE el widget tú mismo (hiciste preguntas, descargaste archivos)?",
             "✅ ¿Enlace del widget compartido con estudiantes (Moodle, correo, WhatsApp, etc.)?",
-            "✅ ¿Los estudiantes saben CÓMO usar el tutor IA (quizás proporcionar instrucciones)?",
+            "✅ ¿Los estudiantes saben CÓMO usar el Centro de apoyo al aprendizaje (quizás proporcionar instrucciones)?",
             "✅ ¿Estás monitoreando el uso (revisando estadísticas de tokens ocasionalmente)?",
             "✅ ¿Tienes un plan para actualizar contenido y re-preparar según sea necesario?"
           ]
@@ -3306,7 +3306,7 @@
     },
     "modules": {
       "title": "Gestión de módulos",
-      "description": "Los módulos son unidades de aprendizaje dentro de los cursos. Cada módulo puede tener su propio tutor IA, archivos y tokens de acceso.",
+      "description": "Los módulos son unidades de aprendizaje dentro de los cursos. Cada módulo puede tener su propio Centro de apoyo al aprendizaje, archivos y tokens de acceso.",
       "creating": {
         "title": "Crear un módulo",
         "steps": [
@@ -3315,14 +3315,14 @@
           "Completa el nombre y código del módulo",
           "Agrega semestre y año (opcional)",
           "Escribe una descripción del módulo",
-          "Configura el tutor IA usando plantillas o prompts personalizados",
+          "Configura el Centro de apoyo al aprendizaje usando plantillas o prompts personalizados",
           "Selecciona el idioma del tutor",
           "Haz clic en 'Crear Módulo'"
         ]
       },
       "aiTutor": {
-        "title": "Configuración del Tutor IA",
-        "description": "El tutor IA es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y los objetivos del curso.",
+        "title": "Configuración del Centro de apoyo al aprendizaje",
+        "description": "El Centro de apoyo al aprendizaje es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y los objetivos del curso.",
         "templates": {
           "title": "Uso de plantillas",
           "list": [
@@ -3349,7 +3349,7 @@
       },
       "uploadingFiles": {
         "title": "Subir archivos",
-        "description": "Sube materiales del curso que el tutor IA puede consultar al ayudar a los estudiantes.",
+        "description": "Sube materiales del curso que el Centro de apoyo al aprendizaje puede consultar al ayudar a los estudiantes.",
         "steps": [
           "Navega a la página de detalles del módulo",
           "Haz clic en 'Subir Archivo'",
@@ -3371,7 +3371,7 @@
         "description": "Antes de que los estudiantes puedan usar tu módulo, debes 'prepararlo'. Este proceso sube tus archivos a OpenAI y crea el asistente IA.",
         "prerequisites": [
           "Al menos un token de acceso al módulo activo con permiso de chat",
-          "Prompt del sistema del tutor IA configurado (recomendado)",
+          "Prompt del sistema del Centro de apoyo al aprendizaje configurado (recomendado)",
           "Archivos subidos (opcional pero recomendado)"
         ],
         "steps": [
@@ -3380,14 +3380,14 @@
           "Haz clic en el botón 'Preparar Módulo'",
           "Espera a que se complete la preparación",
           "Verás un mensaje de éxito cuando esté listo",
-          "El tutor IA ahora está listo para los estudiantes"
+          "El Centro de apoyo al aprendizaje ahora está listo para los estudiantes"
         ],
-        "note": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el tutor IA con el nuevo contenido."
+        "note": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el Centro de apoyo al aprendizaje con el nuevo contenido."
       }
     },
     "tokens": {
       "title": "Tokens de acceso a módulos",
-      "description": "Los tokens proporcionan acceso seguro a tu widget de tutor IA. Crea tokens para compartir tus módulos con los estudiantes.",
+      "description": "Los tokens proporcionan acceso seguro a tu widget de Centro de apoyo al aprendizaje. Crea tokens para compartir tus módulos con los estudiantes.",
       "creating": {
         "title": "Crear un token",
         "steps": [
@@ -3407,7 +3407,7 @@
       },
       "using": {
         "title": "Uso de tokens en tu LMS",
-        "description": "Incrusta el widget del tutor IA en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
+        "description": "Incrusta el widget del Centro de apoyo al aprendizaje en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
         "example": "URL del widget: https://widget.tutoria.ai/?module_token=TU_TOKEN",
         "security": "Mantén los tokens seguros y no los compartas públicamente."
       },
@@ -3468,9 +3468,9 @@
       "description": "Sigue este flujo de trabajo para cada módulo que crees:",
       "steps": [
         "1. Crear el módulo con información básica",
-        "2. Escribir o seleccionar un prompt del sistema del tutor IA",
+        "2. Escribir o seleccionar un prompt del sistema del Centro de apoyo al aprendizaje",
         "3. Subir tus materiales del curso (diapositivas, notas, lecturas)",
-        "4. Revisar y mejorar el prompt del tutor IA si es necesario",
+        "4. Revisar y mejorar el prompt del Centro de apoyo al aprendizaje si es necesario",
         "5. Crear un token de acceso al módulo para tus estudiantes",
         "6. Preparar el módulo (sube archivos a IA y crea el asistente)",
         "7. Probar el widget con tu token para asegurarte de que funciona",
@@ -3487,7 +3487,7 @@
         "Sube archivos de calidad y actualízalos regularmente",
         "Prueba a fondo los módulos antes de compartirlos con los estudiantes",
         "Monitorea el uso de tokens y el compromiso de los estudiantes",
-        "Recopila retroalimentación de los estudiantes sobre el tutor IA",
+        "Recopila retroalimentación de los estudiantes sobre el Centro de apoyo al aprendizaje",
         "Itera y mejora los prompts basándote en las interacciones de los estudiantes",
         "Mantén copias de seguridad de tus prompts y configuraciones",
         "Documenta tu flujo de trabajo para referencia futura",
@@ -3503,7 +3503,7 @@
         "keyResponsibilities": "Responsabilidades clave",
         "responsibilities": [
           "Crear y gestionar módulos para cursos asignados",
-          "Configurar prompts del sistema del tutor IA",
+          "Configurar prompts del sistema del Centro de apoyo al aprendizaje",
           "Subir contenido educativo y archivos",
           "Generar y gestionar tokens de acceso a módulos",
           "Preparar módulos para uso de estudiantes",
@@ -3558,16 +3558,16 @@
             "  • Selecciona tu curso del menú desplegable",
             "  • Semestre y Año (opcional pero recomendado)",
             "  • Descripción (opcional pero útil para los estudiantes)",
-            "Configura el Tutor IA:",
+            "Configura el Centro de apoyo al aprendizaje:",
             "  • Elige una plantilla rápida O escribe un prompt personalizado",
-            "  • Define cómo el tutor IA debe interactuar con los estudiantes",
+            "  • Define cómo el Centro de apoyo al aprendizaje debe interactuar con los estudiantes",
             "  • Selecciona el idioma de respuesta del tutor",
             "Haz clic en 'Crear Módulo' para guardar"
           ]
         },
         "aiTutor": {
-          "title": "Configurar el Tutor IA",
-          "description": "El tutor IA es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y los objetivos del curso.",
+          "title": "Configurar el Centro de apoyo al aprendizaje",
+          "description": "El Centro de apoyo al aprendizaje es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y los objetivos del curso.",
           "templates": {
             "title": "Uso de plantillas",
             "description": "Las plantillas rápidas proporcionan prompts pre-escritos para escenarios de enseñanza comunes:",
@@ -3580,7 +3580,7 @@
           },
           "customPrompts": {
             "title": "Escribir prompts personalizados",
-            "description": "Crea una personalidad de enseñanza única para tu tutor IA:",
+            "description": "Crea una personalidad de enseñanza única para tu Centro de apoyo al aprendizaje:",
             "tips": [
               "Comienza con: 'Eres un tutor [tipo] para [materia]...'",
               "Describe el enfoque de enseñanza (ej. 'paciente', 'socrático', 'paso a paso')",
@@ -3594,7 +3594,7 @@
             "title": "Mejora de prompts",
             "steps": [
               "Después de guardar tu módulo, haz clic en 'Editar Módulo'",
-              "Desplázate a la sección de Configuración del Tutor IA",
+              "Desplázate a la sección de Configuración del Centro de apoyo al aprendizaje",
               "Haz clic en 'Mejorar con IA' para optimizar tu prompt",
               "La IA reescribirá tu prompt para hacerlo más efectivo",
               "Puedes mejorar hasta 3 veces por módulo cada 72 horas",
@@ -3603,12 +3603,12 @@
           },
           "language": {
             "title": "Configuración del idioma del tutor",
-            "description": "Selecciona el idioma que tu tutor IA debe usar al responder a los estudiantes. Esto es independiente del idioma de la pregunta del estudiante: el tutor responderá en el idioma seleccionado independientemente de cómo se haga la pregunta."
+            "description": "Selecciona el idioma que tu Centro de apoyo al aprendizaje debe usar al responder a los estudiantes. Esto es independiente del idioma de la pregunta del estudiante: el tutor responderá en el idioma seleccionado independientemente de cómo se haga la pregunta."
           }
         },
         "files": {
           "title": "Gestión de archivos del módulo",
-          "description": "Sube materiales del curso que el tutor IA puede consultar al ayudar a los estudiantes.",
+          "description": "Sube materiales del curso que el Centro de apoyo al aprendizaje puede consultar al ayudar a los estudiantes.",
           "uploading": {
             "title": "Subir archivos",
             "steps": [
@@ -3618,7 +3618,7 @@
               "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
               "Tamaño máximo: 10MB por archivo",
               "Haz clic en 'Subir Archivo' para agregarlo",
-              "El archivo será indexado y estará disponible para el tutor IA"
+              "El archivo será indexado y estará disponible para el Centro de apoyo al aprendizaje"
             ]
           },
           "bestPractices": {
@@ -3648,7 +3648,7 @@
             "title": "Requisitos previos",
             "list": [
               "Al menos un token de acceso al módulo activo con permiso de chat",
-              "Prompt del sistema del tutor IA configurado (recomendado)",
+              "Prompt del sistema del Centro de apoyo al aprendizaje configurado (recomendado)",
               "Archivos subidos (opcional pero recomendado)"
             ]
           },
@@ -3660,19 +3660,19 @@
               "Haz clic en el botón 'Preparar Módulo'",
               "Espera a que se complete la preparación (generalmente unos segundos)",
               "Verás un mensaje de éxito cuando esté listo",
-              "El tutor IA ahora está listo para los estudiantes"
+              "El Centro de apoyo al aprendizaje ahora está listo para los estudiantes"
             ]
           },
           "updating": {
             "title": "Actualizar un módulo preparado",
-            "description": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el tutor IA con el nuevo contenido."
+            "description": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el Centro de apoyo al aprendizaje con el nuevo contenido."
           }
         },
         "editing": {
           "title": "Editar módulos",
           "steps": [
             "Desde la lista de Módulos o la página de detalles del módulo, haz clic en 'Editar'",
-            "Actualiza la información del módulo, el prompt del tutor IA o la configuración",
+            "Actualiza la información del módulo, el prompt del Centro de apoyo al aprendizaje o la configuración",
             "No puedes cambiar el curso después de la creación",
             "Haz clic en 'Guardar Cambios' para actualizar"
           ]
@@ -3689,7 +3689,7 @@
       },
       "tokens": {
         "title": "Tokens de acceso a módulos",
-        "description": "Los tokens proporcionan acceso seguro a tu widget de tutor IA. Crea tokens para compartir tus módulos con los estudiantes.",
+        "description": "Los tokens proporcionan acceso seguro a tu widget de Centro de apoyo al aprendizaje. Crea tokens para compartir tus módulos con los estudiantes.",
         "creating": {
           "title": "Crear un token",
           "steps": [
@@ -3711,7 +3711,7 @@
           "title": "Entender los permisos",
           "chat": {
             "title": "Permitir Chat",
-            "description": "Cuando está habilitado, los estudiantes pueden hacer preguntas al tutor IA. Deshabilita esto si solo quieres compartir archivos sin interacción con IA."
+            "description": "Cuando está habilitado, los estudiantes pueden hacer preguntas al Centro de apoyo al aprendizaje. Deshabilita esto si solo quieres compartir archivos sin interacción con IA."
           },
           "fileAccess": {
             "title": "Permitir Acceso a Archivos",
@@ -3720,12 +3720,12 @@
         },
         "using": {
           "title": "Uso de tokens en tu LMS",
-          "description": "Incrusta el widget del tutor IA en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
+          "description": "Incrusta el widget del Centro de apoyo al aprendizaje en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
           "steps": [
             "Copia tu token de módulo",
             "Usa la URL del widget: https://widget.tutoria.ai/?module_token=TU_TOKEN",
             "Agrega esta URL como herramienta externa o iframe en tu LMS",
-            "Los estudiantes ahora pueden interactuar con tu tutor IA a través del LMS"
+            "Los estudiantes ahora pueden interactuar con tu Centro de apoyo al aprendizaje a través del LMS"
           ]
         },
         "managing": {
@@ -3769,9 +3769,9 @@
         "description": "Sigue este flujo de trabajo para cada módulo que crees:",
         "steps": [
           "1. Crear el módulo con información básica",
-          "2. Escribir o seleccionar un prompt del sistema del tutor IA",
+          "2. Escribir o seleccionar un prompt del sistema del Centro de apoyo al aprendizaje",
           "3. Subir tus materiales del curso (diapositivas, notas, lecturas)",
-          "4. Revisar y mejorar el prompt del tutor IA si es necesario",
+          "4. Revisar y mejorar el prompt del Centro de apoyo al aprendizaje si es necesario",
           "5. Crear un token de acceso al módulo para tus estudiantes",
           "6. Preparar el módulo (sube archivos a IA y crea el asistente)",
           "7. Probar el widget con tu token para asegurarte de que funciona",
@@ -3812,13 +3812,13 @@
         "list": [
           "Usa la función 'Mejorar con IA' para refinar tus prompts de tutor - a menudo produce mejores resultados",
           "Sube archivos en un orden lógico (ej. Semana 1, Semana 2) para una mejor organización de IA",
-          "Prueba tu tutor IA haciendo preguntas que los estudiantes podrían hacer",
+          "Prueba tu Centro de apoyo al aprendizaje haciendo preguntas que los estudiantes podrían hacer",
           "Incluye documentos de políticas del curso y preguntas frecuentes para que la IA los consulte",
           "Actualiza tu prompt del tutor a mitad de semestre si notas áreas de mejora",
           "Crea múltiples tokens para pruebas A/B de diferentes configuraciones de IA",
           "Usa semestre/año en nombres de módulos para fácil identificación entre períodos",
           "Monitorea qué temas generan más preguntas de estudiantes",
-          "Comparte prompts exitosos del tutor IA con tus colegas",
+          "Comparte prompts exitosos del Centro de apoyo al aprendizaje con tus colegas",
           "Mantén una copia de seguridad de tus prompts del sistema para reutilizar en futuros semestres"
         ]
       }
@@ -3833,7 +3833,7 @@
       "keyResponsibilities": "Responsabilidades Clave",
       "responsibilities": [
         "Crear y gestionar módulos para cursos asignados",
-        "Configurar los prompts del sistema del tutor de IA",
+        "Configurar los prompts del sistema del Centro de apoyo al aprendizaje",
         "Subir contenido educativo y archivos",
         "Generar y gestionar tokens de acceso a módulos",
         "Preparar módulos para uso de estudiantes",
@@ -3888,16 +3888,16 @@
           "  • Selecciona tu curso del menú desplegable",
           "  • Semestre y Año (opcional pero recomendado)",
           "  • Descripción (opcional pero útil para estudiantes)",
-          "Configura el Tutor de IA:",
+          "Configura el Centro de apoyo al aprendizaje:",
           "  • Elige una plantilla rápida O escribe un prompt personalizado",
-          "  • Define cómo el tutor de IA debe interactuar con los estudiantes",
+          "  • Define cómo el Centro de apoyo al aprendizaje debe interactuar con los estudiantes",
           "  • Selecciona el idioma de respuesta del tutor",
           "Haz clic en 'Crear Módulo' para guardar"
         ]
       },
       "aiTutor": {
-        "title": "Configurando el Tutor de IA",
-        "description": "El tutor de IA es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y objetivos del curso.",
+        "title": "Configurando el Centro de apoyo al aprendizaje",
+        "description": "El Centro de apoyo al aprendizaje es tu asistente de enseñanza virtual. Configúralo para que coincida con tu estilo de enseñanza y objetivos del curso.",
         "templates": {
           "title": "Usando Plantillas",
           "description": "Las plantillas rápidas proporcionan prompts pre-escritos para escenarios comunes de enseñanza:",
@@ -3910,7 +3910,7 @@
         },
         "customPrompts": {
           "title": "Escribiendo Prompts Personalizados",
-          "description": "Crea una personalidad de enseñanza única para tu tutor de IA:",
+          "description": "Crea una personalidad de enseñanza única para tu Centro de apoyo al aprendizaje:",
           "tips": [
             "Comienza con: 'Eres un tutor de [tipo] para [materia]...'",
             "Describe el enfoque de enseñanza (ej., 'paciente', 'socrático', 'paso a paso')",
@@ -3924,7 +3924,7 @@
           "title": "Mejorando Prompts",
           "steps": [
             "Después de guardar tu módulo, haz clic en 'Editar Módulo'",
-            "Desplázate a la sección de Configuración del Tutor de IA",
+            "Desplázate a la sección de Configuración del Centro de apoyo al aprendizaje",
             "Haz clic en 'Mejorar con IA' para mejorar tu prompt",
             "La IA reescribirá tu prompt para hacerlo más efectivo",
             "Puedes mejorar hasta 3 veces por módulo cada 72 horas",
@@ -3933,12 +3933,12 @@
         },
         "language": {
           "title": "Configuración de Idioma del Tutor",
-          "description": "Selecciona el idioma que tu tutor de IA debe usar al responder a los estudiantes. Este es independiente del idioma de la pregunta del estudiante - el tutor responderá en el idioma seleccionado sin importar cómo se haga la pregunta."
+          "description": "Selecciona el idioma que tu Centro de apoyo al aprendizaje debe usar al responder a los estudiantes. Este es independiente del idioma de la pregunta del estudiante - el tutor responderá en el idioma seleccionado sin importar cómo se haga la pregunta."
         }
       },
       "files": {
         "title": "Gestionando Archivos del Módulo",
-        "description": "Sube materiales del curso que el tutor de IA pueda referenciar al ayudar a los estudiantes.",
+        "description": "Sube materiales del curso que el Centro de apoyo al aprendizaje pueda referenciar al ayudar a los estudiantes.",
         "uploading": {
           "title": "Subiendo Archivos",
           "steps": [
@@ -3948,7 +3948,7 @@
             "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
             "Tamaño máximo: 10MB por archivo",
             "Haz clic en 'Subir Archivo' para agregarlo",
-            "El archivo será indexado y estará disponible para el tutor de IA"
+            "El archivo será indexado y estará disponible para el Centro de apoyo al aprendizaje"
           ]
         },
         "bestPractices": {
@@ -3978,7 +3978,7 @@
           "title": "Requisitos Previos",
           "list": [
             "Al menos un token de acceso al módulo activo con permiso de chat",
-            "Prompt del sistema del tutor de IA configurado (recomendado)",
+            "Prompt del sistema del Centro de apoyo al aprendizaje configurado (recomendado)",
             "Archivos subidos (opcional pero recomendado)"
           ]
         },
@@ -3990,19 +3990,19 @@
             "Haz clic en el botón 'Preparar Módulo'",
             "Espera a que se complete la preparación (usualmente unos segundos)",
             "Verás un mensaje de éxito cuando esté listo",
-            "El tutor de IA ahora está listo para los estudiantes"
+            "El Centro de apoyo al aprendizaje ahora está listo para los estudiantes"
           ]
         },
         "updating": {
           "title": "Actualizando un Módulo Preparado",
-          "description": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el tutor de IA con el nuevo contenido."
+          "description": "Puedes agregar o eliminar archivos en cualquier momento. Después de hacer cambios, haz clic en 'Preparar Módulo' nuevamente para actualizar el Centro de apoyo al aprendizaje con el nuevo contenido."
         }
       },
       "editing": {
         "title": "Editando Módulos",
         "steps": [
           "Desde la lista de Módulos o la página de detalles del módulo, haz clic en 'Editar'",
-          "Actualiza la información del módulo, el prompt del tutor de IA o la configuración",
+          "Actualiza la información del módulo, el prompt del Centro de apoyo al aprendizaje o la configuración",
           "No puedes cambiar el curso después de la creación",
           "Haz clic en 'Guardar Cambios' para actualizar"
         ]
@@ -4019,7 +4019,7 @@
     },
     "tokens": {
       "title": "Tokens de Acceso a Módulos",
-      "description": "Los tokens proporcionan acceso seguro a tu widget del tutor de IA. Crea tokens para compartir tus módulos con estudiantes.",
+      "description": "Los tokens proporcionan acceso seguro a tu widget del Centro de apoyo al aprendizaje. Crea tokens para compartir tus módulos con estudiantes.",
       "creating": {
         "title": "Creando un Token",
         "steps": [
@@ -4041,7 +4041,7 @@
         "title": "Entendiendo Permisos",
         "chat": {
           "title": "Permitir Chat",
-          "description": "Cuando está habilitado, los estudiantes pueden hacer preguntas al tutor de IA. Deshabilita esto si solo quieres compartir archivos sin interacción de IA."
+          "description": "Cuando está habilitado, los estudiantes pueden hacer preguntas al Centro de apoyo al aprendizaje. Deshabilita esto si solo quieres compartir archivos sin interacción de IA."
         },
         "fileAccess": {
           "title": "Permitir Acceso a Archivos",
@@ -4050,12 +4050,12 @@
       },
       "using": {
         "title": "Usando Tokens en tu LMS",
-        "description": "Integra el widget del tutor de IA en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
+        "description": "Integra el widget del Centro de apoyo al aprendizaje en tu Sistema de Gestión de Aprendizaje (Moodle, Canvas, Blackboard, etc.):",
         "steps": [
           "Copia tu token de módulo",
           "Usa la URL del widget: https://widget.tutoria.ai/?module_token=TU_TOKEN",
           "Agrega esta URL como una herramienta externa o iframe en tu LMS",
-          "Los estudiantes ahora pueden interactuar con tu tutor de IA a través del LMS"
+          "Los estudiantes ahora pueden interactuar con tu Centro de apoyo al aprendizaje a través del LMS"
         ]
       },
       "managing": {
@@ -4099,9 +4099,9 @@
       "description": "Sigue este flujo de trabajo para cada módulo que crees:",
       "steps": [
         "1. Crea el módulo con información básica",
-        "2. Escribe o selecciona un prompt del sistema del tutor de IA",
+        "2. Escribe o selecciona un prompt del sistema del Centro de apoyo al aprendizaje",
         "3. Sube tus materiales del curso (diapositivas, notas, lecturas)",
-        "4. Revisa y mejora el prompt del tutor de IA si es necesario",
+        "4. Revisa y mejora el prompt del Centro de apoyo al aprendizaje si es necesario",
         "5. Crea un token de acceso al módulo para tus estudiantes",
         "6. Prepara el módulo (sube archivos a la IA y crea el asistente)",
         "7. Prueba el widget con tu token para asegurar que funciona",
@@ -4142,13 +4142,13 @@
       "list": [
         "Usa la función 'Mejorar con IA' para refinar tus prompts de tutor - a menudo produce mejores resultados",
         "Sube archivos en orden lógico (ej., Semana 1, Semana 2) para mejor organización de la IA",
-        "Prueba tu tutor de IA haciéndole preguntas que los estudiantes podrían hacer",
+        "Prueba tu Centro de apoyo al aprendizaje haciéndole preguntas que los estudiantes podrían hacer",
         "Incluye documentos de políticas del curso y preguntas frecuentes para que la IA los referencie",
         "Actualiza tu prompt del tutor a mitad de semestre si notas áreas de mejora",
         "Crea múltiples tokens para pruebas A/B de diferentes configuraciones de IA",
         "Usa semestre/año en nombres de módulos para fácil identificación a través de períodos",
         "Monitorea qué temas generan más preguntas de estudiantes",
-        "Comparte prompts exitosos del tutor de IA con tus colegas",
+        "Comparte prompts exitosos del Centro de apoyo al aprendizaje con tus colegas",
         "Mantén un respaldo de tus prompts del sistema para reutilizarlos en semestres futuros"
       ]
     }

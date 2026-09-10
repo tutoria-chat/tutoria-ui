@@ -458,8 +458,8 @@
   },
   "modules": {
     "title": "Modules",
-    "description": "Manage learning modules and AI tutor configuration. {total} modules across {courses} courses with {aiConfigured} configured AI tutors",
-    "descriptionSimple": "Manage learning modules and AI tutor configuration",
+    "description": "Manage learning modules and Learning Support Center configuration. {total} modules across {courses} courses with {aiConfigured} configured Learning Support Centers",
+    "descriptionSimple": "Manage learning modules and Learning Support Center configuration",
     "createButton": "Create Module",
     "limitReached": "Module limit reached. Upgrade your plan to create more modules.",
     "overLimitBanner": "You have {excess} module(s) over your plan limit. These modules are disabled — please delete them or upgrade your plan.",
@@ -482,7 +482,7 @@
       "semester": "Semester",
       "year": "Year",
       "code": "Code",
-      "aiTutor": "AI Tutor",
+      "aiTutor": "Learning Support Center",
       "configured": "Configured",
       "notConfigured": "Not Configured",
       "createdAt": "Created at",
@@ -492,7 +492,7 @@
     },
     "stats": {
       "totalModules": "Total Modules",
-      "aiTutors": "AI Tutors",
+      "aiTutors": "Learning Support Centers",
       "courses": "Courses"
     },
     "deleteTitle": "Delete Module",
@@ -538,15 +538,15 @@
       "descriptionPlaceholder": "Describe the module's learning objectives, content overview, and key concepts...",
       "descriptionTooLong": "Description cannot exceed 500 characters",
       "descriptionCharCount": "{count}/500 characters",
-      "aiConfig": "AI Tutor Configuration",
+      "aiConfig": "Learning Support Center Configuration",
       "quickTemplates": "Quick Templates",
       "useTemplate": "Use Template",
       "systemPromptLabel": "System Prompt Configuration",
       "improveWithAI": "Improve with AI",
       "improving": "Improving...",
-      "promptExplanation": "What is this? Think of this as the \"personality instructions\" for the AI tutor. For example: \"You are a patient programming teacher who uses everyday examples\" or \"You are a math tutor who always solves step by step\". This defines how the tutor will respond to students' questions in this specific module.",
+      "promptExplanation": "What is this? Think of this as the \"personality instructions\" for the Learning Support Center. For example: \"You are a patient programming teacher who uses everyday examples\" or \"You are a math tutor who always solves step by step\". This defines how the tutor will respond to students' questions in this specific module.",
       "promptImprovementHint": "💡 Don't like your prompt? After creating this module, you can improve it a few times using AI!",
-      "systemPromptPlaceholder": "Define how the AI tutor should behave, its expertise level, teaching style, and interaction guidelines...",
+      "systemPromptPlaceholder": "Define how the Learning Support Center should behave, its expertise level, teaching style, and interaction guidelines...",
       "charactersCount": "{count} characters",
       "configured": "✓ Configured",
       "remainingImprovements": "Remaining improvements: {count}/3 (72h)",
@@ -556,8 +556,8 @@
       "promptTip3": "• Include guidelines for different question types",
       "promptTip4": "• Set expectations for response format and tone",
       "promptTip5": "• Consider target audience and their level",
-      "tutorLanguageLabel": "AI Tutor Language",
-      "tutorLanguageHint": "Important: Select which language the AI tutor should respond to student questions in. This defines the response language, regardless of the question language.",
+      "tutorLanguageLabel": "Learning Support Center Language",
+      "tutorLanguageHint": "Important: Select which language the Learning Support Center should respond to student questions in. This defines the response language, regardless of the question language.",
       "courseTypeLabel": "Course Type",
       "selectCourseType": "Select Type",
       "changeCourseType": "Change Type",
@@ -619,8 +619,8 @@
       "semester": "Semester",
       "year": "Year",
       "createdAt": "Created at",
-      "aiTutorConfigured": "AI Tutor Configured",
-      "aiTutorNotConfigured": "AI Tutor Not Configured",
+      "aiTutorConfigured": "Learning Support Center Configured",
+      "aiTutorNotConfigured": "Learning Support Center Not Configured",
       "stats": "Statistics",
       "files": "Files",
       "accessTokens": "Access Keys",
@@ -766,7 +766,7 @@
       "courseCannotChange": "The course cannot be changed after module creation",
       "descriptionLabel": "Description",
       "descriptionPlaceholder": "Module description (optional)",
-      "systemPromptLabel": "System Prompt (AI Tutor)",
+      "systemPromptLabel": "System Prompt (Learning Support Center)",
       "systemPromptPlaceholder": "Ex: You are a specialized Python tutor who explains concepts using real-world analogies...",
       "saveChanges": "Save Changes",
       "cancel": "Cancel",
@@ -1093,7 +1093,7 @@
       "tierStarter": "Starter",
       "tierProfessional": "Professional",
       "tierBusiness": "Business",
-      "tierStarterDesc": "Essential AI tutoring features",
+      "tierStarterDesc": "Essential Learning Support Centering features",
       "tierProfessionalDesc": "Advanced AI models and analytics",
       "tierBusinessDesc": "Full access to all AI models and features",
       "tierHelpText": "The subscription tier controls which AI models this institution can access",
@@ -1664,7 +1664,7 @@
   },
   "keys": {
     "title": "Module Access Key Management",
-    "description": "Create and manage access keys for AI tutoring widgets",
+    "description": "Create and manage access keys for Learning Support Centering widgets",
     "createButton": "Generate Key",
     "searchPlaceholder": "Search keys, modules or descriptions...",
     "emptyMessage": "No keys found. Create your first key to get started.",
@@ -1721,7 +1721,7 @@
       "createTitle": "Create Module Access Key",
       "editTitle": "Edit Module Access Key",
       "viewTitle": "Key Details",
-      "createDescription": "Generate a new access key for AI tutoring widgets",
+      "createDescription": "Generate a new access key for Learning Support Centering widgets",
       "editDescription": "Update access key settings",
       "viewDescription": "View information and available actions for this key",
       "moduleLabel": "Module *",
@@ -1740,7 +1740,7 @@
       "expiresHint": "Leave empty for a key with no expiration",
       "permissions": "Permissions",
       "allowChat": "Allow Chat",
-      "allowChatDesc": "Allows users to ask questions to the AI tutor",
+      "allowChatDesc": "Allows users to ask questions to the Learning Support Center",
       "allowFileAccess": "Allow File Access",
       "allowFileAccessDesc": "Allows users to download module files",
       "close": "Close",
@@ -2257,7 +2257,7 @@
         "tutor": "Can create courses, modules, and tokens",
         "platform_coordinator": "View courses/modules and generate access tokens",
         "professor": "Manage assigned courses and modules",
-        "student": "Access course materials and AI tutor"
+        "student": "Access course materials and Learning Support Center"
       }
     },
     "loading": "Loading...",
@@ -2506,7 +2506,7 @@
             "Create regular professors and assign them to courses",
             "Generate and manage module access keys",
             "Upload files to modules",
-            "Configure AI tutor system prompts"
+            "Configure Learning Support Center system prompts"
           ]
         }
       },
@@ -2534,7 +2534,7 @@
       },
       "moduleTokens": {
         "title": "Module Access Keys Overview",
-        "description": "Module access keys provide access to AI tutoring widgets. Super admins can view keys across all institutions.",
+        "description": "Module access keys provide access to Learning Support Centering widgets. Super admins can view keys across all institutions.",
         "viewing": {
           "title": "Viewing Module Access Keys",
           "steps": [
@@ -2571,7 +2571,7 @@
           "📚 Create and manage YOUR institution's COURSES - For example: 'Mathematics 1', 'Python Programming', etc.",
           "📖 Create and manage MODULES within courses - Modules are like 'chapters' or 'units' of a course",
           "👨‍🏫 Create REGULAR PROFESSOR accounts - Other professors who will help you teach and manage modules",
-          "🤖 Configure AI TUTORS - The 'brain' that will chat with students and help them study"
+          "🤖 Configure LEARNING SUPPORT CENTERS - The 'brain' that will chat with students and help them study"
         ]
       },
       "workflow": {
@@ -2595,7 +2595,7 @@
           },
           {
             "number": "4",
-            "title": "Configure the AI Tutor",
+            "title": "Configure the Learning Support Center",
             "desc": "Tell the AI HOW it should behave. It's like giving 'personality instructions' to a tutor. Example: 'You are a patient math teacher who explains step by step'."
           },
           {
@@ -2606,7 +2606,7 @@
           {
             "number": "6",
             "title": "CREATE KEYs (Keys for Students)",
-            "desc": "Create 'KEYS' (keys) that students will use to ACCESS the AI tutor. Think of it like creating passwords that you will give to students."
+            "desc": "Create 'KEYS' (keys) that students will use to ACCESS the Learning Support Center. Think of it like creating passwords that you will give to students."
           },
           {
             "number": "7",
@@ -2626,7 +2626,7 @@
           {
             "number": "10",
             "title": "Monitor and Update",
-            "desc": "Keep an eye on how students are using it! You can add more files, improve the AI tutor, create more keys, etc."
+            "desc": "Keep an eye on how students are using it! You can add more files, improve the Learning Support Center, create more keys, etc."
           }
         ],
         "tip": "💡 TIP: Don't try to do everything at once! Go step by step. Create 1 discipline first, then 1 module, configure the AI, upload 1 file, create 1 key, and TEST everything before creating more!"
@@ -2744,9 +2744,9 @@
         ]
       },
       "creatingModules": {
-        "title": "HOW TO CREATE MODULES - COMPLETE TUTORIAL WITH AI TUTOR",
+        "title": "HOW TO CREATE MODULES - COMPLETE TUTORIAL WITH LEARNING SUPPORT CENTER",
         "whatIs": "A MODULE is like a CHAPTER or UNIT within a course. For example: if you have a course called 'Introduction to Programming', you can have: Module 1: 'Variables and Data Types', Module 2: 'Loops and Conditions', Module 3: 'Functions', etc. Each module is a SPECIFIC PART of the content!",
-        "why": "Modules are where STUDENTS will interact with the AI TUTOR! Each module has: 1) Files (PDFs, slides, etc.), 2) An AI Tutor configured to help students with THIS specific topic, 3) keys (keys) that students use to access the content.",
+        "why": "Modules are where STUDENTS will interact with the LEARNING SUPPORT CENTER! Each module has: 1) Files (PDFs, slides, etc.), 2) An Learning Support Center configured to help students with THIS specific topic, 3) keys (keys) that students use to access the content.",
         "steps": [
           {
             "number": "1",
@@ -2780,8 +2780,8 @@
           },
           {
             "number": "7",
-            "title": "NOW COMES THE IMPORTANT PART: CONFIGURE THE AI TUTOR!",
-            "desc": "Scroll down a bit. You will see a section called 'AI Tutor Configuration' or 'System Prompt Configuration'. THIS IS WHERE THE MAGIC HAPPENS! This is where you will tell the AI HOW it should behave when helping students!"
+            "title": "NOW COMES THE IMPORTANT PART: CONFIGURE THE LEARNING SUPPORT CENTER!",
+            "desc": "Scroll down a bit. You will see a section called 'Learning Support Center Configuration' or 'System Prompt Configuration'. THIS IS WHERE THE MAGIC HAPPENS! This is where you will tell the AI HOW it should behave when helping students!"
           },
           {
             "number": "8",
@@ -2800,8 +2800,8 @@
           },
           {
             "number": "11",
-            "title": "SELECT the AI TUTOR LANGUAGE",
-            "desc": "Below the prompt, there is a DROPDOWN called 'AI Tutor Language' or similar. This defines which LANGUAGE the AI will RESPOND in. For example, if you select 'Portuguese', the AI will ALWAYS respond in Portuguese, even if the student asks in English! Select the language your STUDENTS speak!"
+            "title": "SELECT the LEARNING SUPPORT CENTER LANGUAGE",
+            "desc": "Below the prompt, there is a DROPDOWN called 'Learning Support Center Language' or similar. This defines which LANGUAGE the AI will RESPOND in. For example, if you select 'Portuguese', the AI will ALWAYS respond in Portuguese, even if the student asks in English! Select the language your STUDENTS speak!"
           },
           {
             "number": "12",
@@ -2827,7 +2827,7 @@
           },
           {
             "mistake": "I left the System Prompt empty - is that a problem?",
-            "solution": "It's NOT mandatory, but HIGHLY RECOMMENDED! If you leave it empty, the AI Tutor won't have specific instructions. It's like hiring a teacher and not telling them what to teach! Fill it in with something simple, or use one of the QUICK TEMPLATES!"
+            "solution": "It's NOT mandatory, but HIGHLY RECOMMENDED! If you leave it empty, the Learning Support Center won't have specific instructions. It's like hiring a teacher and not telling them what to teach! Fill it in with something simple, or use one of the QUICK TEMPLATES!"
           },
           {
             "mistake": "I don't know what to write in the System Prompt!",
@@ -2846,8 +2846,8 @@
             "solution": "That's NORMAL! You just created an EMPTY module! Now you need to: 1) UPLOAD FILES (next section), 2) CREATE KEYS (section after that), 3) PREPARE the module, 4) Share keys with students. Follow the complete workflow!"
           },
           {
-            "mistake": "I selected the wrong AI Tutor Language!",
-            "solution": "No problem! Click 'EDIT MODULE' (button on the module page), scroll down to 'AI Tutor Language', change it, and click 'SAVE CHANGES'. Easy!"
+            "mistake": "I selected the wrong Learning Support Center Language!",
+            "solution": "No problem! Click 'EDIT MODULE' (button on the module page), scroll down to 'Learning Support Center Language', change it, and click 'SAVE CHANGES'. Easy!"
           },
           {
             "mistake": "I want to use the 'Improve with AI' feature but the button doesn't appear!",
@@ -2876,14 +2876,14 @@
             "solution": "Think of it as INSTRUCTIONS you give to a private tutor. Example: You hire a tutor and say: 'You're teaching Calculus to college freshmen. Be patient, explain step-by-step, and use real-world examples.' That's basically what the System Prompt is - instructions for the AI on HOW to teach!"
           },
           {
-            "problem": "Can I create a module without configuring the AI Tutor?",
+            "problem": "Can I create a module without configuring the Learning Support Center?",
             "solution": "YES! It's optional. But if you don't configure it, the AI won't have specific instructions. It will still work, but won't have the PERSONALITY or TEACHING STYLE you want. We STRONGLY RECOMMEND configuring it!"
           }
         ],
         "tips": [
           "💡 START WITH A TEMPLATE! Don't try to write the perfect System Prompt from scratch. Use a Quick Template and EDIT it to match your style!",
           "💡 Be SPECIFIC in your System Prompt! Instead of 'Help students', write 'You are a patient tutor who explains step by step and asks guiding questions.'",
-          "💡 TEST your AI Tutor! After creating the module, uploading files, and preparing it, test by asking questions like students would. See if the AI responds the way you want!",
+          "💡 TEST your Learning Support Center! After creating the module, uploading files, and preparing it, test by asking questions like students would. See if the AI responds the way you want!",
           "💡 Use the 'IMPROVE WITH AI' feature! After saving your module, edit it and click 'Improve with AI'. The system often makes your prompt much better!",
           "💡 ORGANIZE your modules! Use codes like 'CS101-W1' (Week 1), 'CS101-W2' (Week 2). This makes it easy to find and sort later!",
           "💡 Don't create ALL modules at once! Create 1 module, upload files to it, test with students, SEE HOW IT GOES, then create more. This way you learn what works best!",
@@ -2892,7 +2892,7 @@
       },
       "uploadingFiles": {
         "title": "HOW TO UPLOAD FILES TO MODULES - Complete Tutorial",
-        "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the AI TUTOR will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
+        "whatIs": "Uploading FILES is like putting BOOKS, NOTES, and MATERIALS into a LIBRARY for the AI to read! The files you upload (PDFs, PowerPoints, Word documents, etc.) are what the LEARNING SUPPORT CENTER will use to ANSWER student questions! Think of it like this: the AI is a super smart librarian, and the files are the books it can consult!",
         "why": "WHY upload files? Because the AI needs CONTENT to work with! If you don't upload files, the AI will only have its general knowledge. But if you upload YOUR lecture slides, YOUR notes, YOUR PDFs, the AI can answer questions SPECIFICALLY about YOUR course content!",
         "supportedFormats": "SUPPORTED FILE TYPES: 📄 PDF (.pdf), 📝 Word Documents (.doc, .docx), 📃 Text Files (.txt), 📊 PowerPoint Presentations (.ppt, .pptx). Maximum file size: 10MB per file.",
         "steps": [
@@ -2987,8 +2987,8 @@
       },
       "creatingTokens": {
         "title": "HOW TO CREATE KEYS (Access Keys for Students) - COMPLETE TUTORIAL",
-        "whatIs": "A key is like a SPECIAL KEY or PASSWORD that students use to ACCESS the AI tutor! Think of it like this: You have a ROOM (the module) with an AI tutor inside. The key is the KEY that opens the door to that room! Each module can have MULTIPLE keys (multiple keys) that you give to different groups of students.",
-        "why": "WHY CREATE KEYs? Because you need a way to CONTROL who can access your module! You don't want the whole internet using your AI tutor - you only want YOUR students! keys also let you: 1) Control what students can do (chat only? or also download files?), 2) Set expiration dates (so the key stops working after the semester ends), 3) Track usage (see how many times the key was used).",
+        "whatIs": "A key is like a SPECIAL KEY or PASSWORD that students use to ACCESS the Learning Support Center! Think of it like this: You have a ROOM (the module) with a Learning Support Center inside. The key is the KEY that opens the door to that room! Each module can have MULTIPLE keys (multiple keys) that you give to different groups of students.",
+        "why": "WHY CREATE KEYs? Because you need a way to CONTROL who can access your module! You don't want the whole internet using your Learning Support Center - you only want YOUR students! keys also let you: 1) Control what students can do (chat only? or also download files?), 2) Set expiration dates (so the key stops working after the semester ends), 3) Track usage (see how many times the key was used).",
         "steps": [
           {
             "number": "1",
@@ -3023,7 +3023,7 @@
           {
             "number": "7",
             "title": "CONFIGURE PERMISSIONS - Allow Chat?",
-            "desc": "You'll see a CHECKBOX or TOGGLE that says 'Allow Chat' or 'Chat Permission'. If you CHECK THIS (turn it ON), students can ASK QUESTIONS to the AI tutor. If you UNCHECK IT (turn it OFF), students can only access files but can't chat. MOST OF THE TIME you want this ON!"
+            "desc": "You'll see a CHECKBOX or TOGGLE that says 'Allow Chat' or 'Chat Permission'. If you CHECK THIS (turn it ON), students can ASK QUESTIONS to the Learning Support Center. If you UNCHECK IT (turn it OFF), students can only access files but can't chat. MOST OF THE TIME you want this ON!"
           },
           {
             "number": "8",
@@ -3051,11 +3051,11 @@
             },
             {
               "method": "📧 EMAIL",
-              "desc": "Send an email to all students with: 'Click this link to access the AI tutor: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students click the link and the widget opens in their browser!"
+              "desc": "Send an email to all students with: 'Click this link to access the Learning Support Center: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students click the link and the widget opens in their browser!"
             },
             {
               "method": "📱 WHATSAPP / TELEGRAM",
-              "desc": "Post the widget link in your class WhatsApp/Telegram group: 'AI Tutor link: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students can save it and access anytime!"
+              "desc": "Post the widget link in your class WhatsApp/Telegram group: 'Learning Support Center link: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE'. Students can save it and access anytime!"
             },
             {
               "method": "🌐 GOOGLE CLASSROOM",
@@ -3127,7 +3127,7 @@
       },
       "preparingModules": {
         "title": "HOW TO PREPARE MODULES - Making Everything READY for Students!",
-        "whatIs": "PREPARING A MODULE is the FINAL STEP before students can use your AI tutor! Think of it like this: You've 1) Created the room (module), 2) Put books inside (uploaded files), 3) Made keys (keys)... but the AI tutor hasn't READ the books yet! 'Preparing' = Sending ALL your files to OpenAI's system and creating the ACTUAL AI assistant that will chat with students!",
+        "whatIs": "PREPARING A MODULE is the FINAL STEP before students can use your Learning Support Center! Think of it like this: You've 1) Created the room (module), 2) Put books inside (uploaded files), 3) Made keys (keys)... but the Learning Support Center hasn't READ the books yet! 'Preparing' = Sending ALL your files to OpenAI's system and creating the ACTUAL AI assistant that will chat with students!",
         "why": "WHY is this necessary? Because uploading files to Tutoria is NOT the same as making them available to the AI! When you 'Prepare', the system: 1) Sends all your files to OpenAI, 2) Creates a specialized AI assistant with your System Prompt, 3) Links everything together so students can use it. Without preparing, the AI has NOTHING to work with!",
         "prerequisites": {
           "title": "BEFORE YOU PREPARE - Checklist",
@@ -3182,7 +3182,7 @@
             },
             {
               "number": "4",
-              "desc": "Press ENTER. The AI tutor widget should OPEN!"
+              "desc": "Press ENTER. The Learning Support Center widget should OPEN!"
             },
             {
               "number": "5",
@@ -3246,7 +3246,7 @@
           "💡 PREPARE EARLY! Don't wait until the day before class starts! Prepare a week early and TEST thoroughly so you have time to fix issues!",
           "💡 RE-PREPARE after ANY changes! Changed the System Prompt? Re-prepare. Added files? Re-prepare. This ensures students always have the latest version!",
           "💡 TEST YOURSELF before sharing with students! After preparing, use the widget yourself! Ask questions, download files, make sure everything works!",
-          "💡 If you're updating files mid-semester, TELL STUDENTS! Send a message like 'I updated the study materials - the AI tutor now has the latest version!' so they know to ask questions about the new content!",
+          "💡 If you're updating files mid-semester, TELL STUDENTS! Send a message like 'I updated the study materials - the Learning Support Center now has the latest version!' so they know to ask questions about the new content!",
           "💡 Keep a PREPARATION LOG! Write down when you prepared each module (like 'CS101-W1: Prepared on Jan 15, 2024 with 5 PDFs'). This helps track what's current!",
           "💡 Don't OVER-PREPARE! You don't need to prepare every hour! Only re-prepare when you make actual changes. Preparing 50 times in a day doesn't make it better!",
           "💡 If you have 10 modules, you need to prepare each one SEPARATELY! Preparing Module 1 doesn't automatically prepare Modules 2-10. Do them one by one!"
@@ -3261,7 +3261,7 @@
             "✅ Module PREPARED (clicked the Prepare button and saw success)?",
             "✅ TESTED the widget yourself (asked questions, downloaded files)?",
             "✅ Widget link shared with students (Moodle, email, WhatsApp, etc.)?",
-            "✅ Students know HOW to use the AI tutor (maybe provide instructions)?",
+            "✅ Students know HOW to use the Learning Support Center (maybe provide instructions)?",
             "✅ You're monitoring usage (checking key stats occasionally)?",
             "✅ You have a plan to update content and re-prepare as needed?"
           ]
@@ -3270,7 +3270,7 @@
       "regularProfessor": {
         "title": "Guide for Regular Professors",
         "subtitle": "Super detailed guide for regular professors. This guide is VERY similar to the Admin Professor guide, but you will have some access differences!",
-        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all institution courses (you only see yours). For creating modules, uploading files, configuring AI tutors, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
+        "note": "NOTE: As a Regular Professor, you can do ALMOST EVERYTHING an Admin Professor does, EXCEPT: Create other professors, View all institution courses (you only see yours). For creating modules, uploading files, configuring Learning Support Centers, creating keys, preparing modules - IT'S ALL THE SAME! Follow the same tutorials from the 'Admin Professor' section above."
       },
       "viewing": {
         "title": "Viewing Course Details",
@@ -3306,7 +3306,7 @@
     },
     "modules": {
       "title": "Managing Modules",
-      "description": "Modules are individual learning units within a course. Each module can have files, an AI tutor, and Access Keys.",
+      "description": "Modules are individual learning units within a course. Each module can have files, a Learning Support Center, and Access Keys.",
       "creating": {
         "title": "Creating a Module",
         "steps": [
@@ -3317,17 +3317,17 @@
           "  • Course (select from your courses)",
           "  • Semester and Year (optional)",
           "  • Description (optional but recommended)",
-          "Configure the AI Tutor (optional):",
+          "Configure the Learning Support Center (optional):",
           "  • Choose a template or write a custom system prompt",
-          "  • The system prompt defines how the AI tutor behaves",
-          "  • Select the AI tutor language",
+          "  • The system prompt defines how the Learning Support Center behaves",
+          "  • Select the Learning Support Center language",
           "  • You can improve the prompt up to 3 times in 72 hours",
           "Click 'Create Module' to save"
         ]
       },
       "aiTutor": {
-        "title": "Configuring the AI Tutor",
-        "description": "The AI tutor system prompt defines how the AI assistant responds to student questions.",
+        "title": "Configuring the Learning Support Center",
+        "description": "The Learning Support Center system prompt defines how the AI assistant responds to student questions.",
         "templates": {
           "title": "Quick Templates",
           "list": [
@@ -3355,7 +3355,7 @@
       },
       "uploadingFiles": {
         "title": "Uploading Files to Modules",
-        "description": "Upload educational materials that students can access through the AI tutor widget.",
+        "description": "Upload educational materials that students can access through the Learning Support Center widget.",
         "steps": [
           "Navigate to the module detail page (/modules/{id})",
           "Click 'Upload File' button",
@@ -3363,7 +3363,7 @@
           "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
           "Maximum file size: 10MB",
           "Click 'Upload File' to add it to the module",
-          "Files are automatically indexed for the AI tutor"
+          "Files are automatically indexed for the Learning Support Center"
         ],
         "managing": {
           "title": "Managing Files",
@@ -3375,24 +3375,24 @@
       },
       "preparingModule": {
         "title": "Preparing a Module",
-        "description": "Before students can use the AI tutor, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
+        "description": "Before students can use the Learning Support Center, you need to 'prepare' the module. This uploads all files to OpenAI and creates the AI assistant.",
         "prerequisites": [
           "The module must have at least one active key with chat permission",
-          "The module should have an AI tutor system prompt configured",
+          "The module should have a Learning Support Center system prompt configured",
           "Files should be uploaded (optional but recommended)"
         ],
         "steps": [
           "Navigate to the module detail page",
           "Click 'Prepare Module' button",
           "Wait for the preparation process to complete",
-          "Once prepared, the AI tutor is ready for students"
+          "Once prepared, the Learning Support Center is ready for students"
         ],
         "note": "Note: You can update files and re-prepare the module at any time."
       }
     },
     "keys": {
       "title": "Managing module access keys",
-      "description": "module access keys provide secure access to AI tutoring widgets. Each key controls what students can do (chat, access files, etc.).",
+      "description": "module access keys provide secure access to Learning Support Centering widgets. Each key controls what students can do (chat, access files, etc.).",
       "creating": {
         "title": "Creating a key",
         "steps": [
@@ -3404,7 +3404,7 @@
           "  • Description (optional)",
           "  • Expiration (optional, in days)",
           "Configure permissions:",
-          "  • Allow Chat: Students can ask questions to the AI tutor",
+          "  • Allow Chat: Students can ask questions to the Learning Support Center",
           "  • Allow File Access: Students can download module files",
           "Click 'CREATE KEY'",
           "Copy the generated key - you'll need it for the widget"
@@ -3412,7 +3412,7 @@
       },
       "using": {
         "title": "Using keys",
-        "description": "keys are used to embed the AI tutor widget in your LMS or website.",
+        "description": "keys are used to embed the Learning Support Center widget in your LMS or website.",
         "example": "Widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN_HERE",
         "security": "Keep keys secure and only share them through official channels."
       },
@@ -3478,7 +3478,7 @@
       "steps": [
         "1. Create the course with name, code, and description",
         "2. Create modules for the course (one per topic/unit)",
-        "3. Configure AI tutor prompts for each module",
+        "3. Configure Learning Support Center prompts for each module",
         "4. Upload educational files to modules",
         "5. Create regular professors and assign them to the course",
         "6. Generate module Access Keys",
@@ -3490,7 +3490,7 @@
       "title": "Best Practices",
       "list": [
         "Use clear, descriptive names for courses and modules",
-        "Write detailed AI tutor prompts that match your teaching style",
+        "Write detailed Learning Support Center prompts that match your teaching style",
         "Upload comprehensive materials before preparing modules",
         "Create separate keys for different student groups or LMS courses",
         "Regularly review and update module content",
@@ -3507,11 +3507,11 @@
     "subtitle": "Complete guide for course instructors",
     "overview": {
       "title": "Role Overview",
-      "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure AI tutors, upload files, and generate Access Keys for your students.",
+      "description": "As a Professor, you can manage modules for courses you've been assigned to. You can create modules, configure Learning Support Centers, upload files, and generate Access Keys for your students.",
       "keyResponsibilities": "Key Responsibilities",
       "responsibilities": [
         "Creating and managing modules for assigned courses",
-        "Configuring AI tutor system prompts",
+        "Configuring Learning Support Center system prompts",
         "Uploading educational content and files",
         "Generating and managing module Access Keys",
         "Preparing modules for student use",
@@ -3566,16 +3566,16 @@
           "  • Select your course from the dropdown",
           "  • Semester and Year (optional but recommended)",
           "  • Description (optional but helpful for students)",
-          "Configure the AI Tutor:",
+          "Configure the Learning Support Center:",
           "  • Choose a quick template OR write a custom prompt",
-          "  • Define how the AI tutor should interact with students",
+          "  • Define how the Learning Support Center should interact with students",
           "  • Select the tutor's response language",
           "Click 'Create Module' to save"
         ]
       },
       "aiTutor": {
-        "title": "Configuring the AI Tutor",
-        "description": "The AI tutor is your virtual teaching assistant. Configure it to match your teaching style and course objectives.",
+        "title": "Configuring the Learning Support Center",
+        "description": "The Learning Support Center is your virtual teaching assistant. Configure it to match your teaching style and course objectives.",
         "templates": {
           "title": "Using Templates",
           "description": "Quick templates provide pre-written prompts for common teaching scenarios:",
@@ -3588,7 +3588,7 @@
         },
         "customPrompts": {
           "title": "Writing Custom Prompts",
-          "description": "Create a unique teaching personality for your AI tutor:",
+          "description": "Create a unique teaching personality for your Learning Support Center:",
           "tips": [
             "Start with: 'You are a [type] tutor for [subject]...'",
             "Describe the teaching approach (e.g., 'patient', 'socratic', 'step-by-step')",
@@ -3602,7 +3602,7 @@
           "title": "Improving Prompts",
           "steps": [
             "After saving your module, click 'Edit Module'",
-            "Scroll to the AI Tutor Configuration section",
+            "Scroll to the Learning Support Center Configuration section",
             "Click 'Improve with AI' to enhance your prompt",
             "The AI will rewrite your prompt to be more effective",
             "You can improve up to 3 times per module every 72 hours",
@@ -3611,12 +3611,12 @@
         },
         "language": {
           "title": "Tutor Language Settings",
-          "description": "Select the language your AI tutor should use when responding to students. This is independent of the student's question language - the tutor will respond in the selected language regardless of how the question is asked."
+          "description": "Select the language your Learning Support Center should use when responding to students. This is independent of the student's question language - the tutor will respond in the selected language regardless of how the question is asked."
         }
       },
       "files": {
         "title": "Managing Module Files",
-        "description": "Upload course materials that the AI tutor can reference when helping students.",
+        "description": "Upload course materials that the Learning Support Center can reference when helping students.",
         "uploading": {
           "title": "Uploading Files",
           "steps": [
@@ -3626,7 +3626,7 @@
             "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
             "Maximum size: 10MB per file",
             "Click 'Upload File' to add it",
-            "The file will be indexed and available to the AI tutor"
+            "The file will be indexed and available to the Learning Support Center"
           ]
         },
         "bestPractices": {
@@ -3656,7 +3656,7 @@
           "title": "Prerequisites",
           "list": [
             "At least one active module access key with chat permission",
-            "AI tutor system prompt configured (recommended)",
+            "Learning Support Center system prompt configured (recommended)",
             "Files uploaded (optional but recommended)"
           ]
         },
@@ -3668,19 +3668,19 @@
             "Click 'Prepare Module' button",
             "Wait for the preparation to complete (usually a few seconds)",
             "You'll see a success message when ready",
-            "The AI tutor is now ready for students"
+            "The Learning Support Center is now ready for students"
           ]
         },
         "updating": {
           "title": "Updating a Prepared Module",
-          "description": "You can add or remove files at any time. After making changes, click 'Prepare Module' again to update the AI tutor with the new content."
+          "description": "You can add or remove files at any time. After making changes, click 'Prepare Module' again to update the Learning Support Center with the new content."
         }
       },
       "editing": {
         "title": "Editing Modules",
         "steps": [
           "From the Modules list or module detail page, click 'Edit'",
-          "Update module information, AI tutor prompt, or settings",
+          "Update module information, Learning Support Center prompt, or settings",
           "You cannot change the course after creation",
           "Click 'Save Changes' to update"
         ]
@@ -3697,7 +3697,7 @@
     },
     "keys": {
       "title": "Module Access Keys",
-      "description": "keys provide secure access to your AI tutor widget. CREATE KEYs to share your modules with students.",
+      "description": "keys provide secure access to your Learning Support Center widget. CREATE KEYs to share your modules with students.",
       "creating": {
         "title": "Creating a key",
         "steps": [
@@ -3719,7 +3719,7 @@
         "title": "Understanding Permissions",
         "chat": {
           "title": "Allow Chat",
-          "description": "When enabled, students can ask questions to the AI tutor. Disable this if you only want to share files without AI interaction."
+          "description": "When enabled, students can ask questions to the Learning Support Center. Disable this if you only want to share files without AI interaction."
         },
         "fileAccess": {
           "title": "Allow File Access",
@@ -3728,12 +3728,12 @@
       },
       "using": {
         "title": "Using keys in Your LMS",
-        "description": "Embed the AI tutor widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
+        "description": "Embed the Learning Support Center widget in your Learning Management System (Moodle, Canvas, Blackboard, etc.):",
         "steps": [
           "Copy your module access key",
           "Use the widget URL: https://widget.tutoria.ai/?module_token=YOUR_TOKEN",
           "Add this URL as an external tool or iframe in your LMS",
-          "Students can now interact with your AI tutor through the LMS"
+          "Students can now interact with your Learning Support Center through the LMS"
         ]
       },
       "managing": {
@@ -3777,9 +3777,9 @@
       "description": "Follow this workflow for each module you create:",
       "steps": [
         "1. Create the module with basic information",
-        "2. Write or select an AI tutor system prompt",
+        "2. Write or select a Learning Support Center system prompt",
         "3. Upload your course materials (slides, notes, readings)",
-        "4. Review and improve the AI tutor prompt if needed",
+        "4. Review and improve the Learning Support Center prompt if needed",
         "5. Create a module access key for your students",
         "6. Prepare the module (uploads files to AI and creates assistant)",
         "7. Test the widget with your key to ensure it works",
@@ -3820,13 +3820,13 @@
       "list": [
         "Use the 'Improve with AI' feature to refine your tutor prompts - it often produces better results",
         "Upload files in a logical order (e.g., Week 1, Week 2) for better AI organization",
-        "Test your AI tutor by asking it questions students might ask",
+        "Test your Learning Support Center by asking it questions students might ask",
         "Include course policies and FAQ documents for the AI to reference",
         "Update your tutor prompt mid-semester if you notice areas for improvement",
         "Create multiple keys for A/B testing different AI configurations",
         "Use semester/year in module names for easy identification across terms",
         "Monitor which topics generate the most student questions",
-        "Share successful AI tutor prompts with your colleagues",
+        "Share successful Learning Support Center prompts with your colleagues",
         "Keep a backup of your system prompts for reuse in future semesters"
       ]
     }
@@ -4304,7 +4304,7 @@
   },
   "tokens": {
     "title": "Module Access Key Management",
-    "description": "Create and manage access keys for AI tutoring widgets",
+    "description": "Create and manage access keys for Learning Support Centering widgets",
     "createButton": "Generate Key",
     "searchPlaceholder": "Search keys, modules or descriptions...",
     "emptyMessage": "No keys found. Create your first key to get started.",
@@ -4361,7 +4361,7 @@
       "createTitle": "Create Module Access Key",
       "editTitle": "Edit Module Access Key",
       "viewTitle": "Key Details",
-      "createDescription": "Generate a new access key for AI tutoring widgets",
+      "createDescription": "Generate a new access key for Learning Support Centering widgets",
       "editDescription": "Update access key settings",
       "nameLabel": "Key Name",
       "namePlaceholder": "e.g., Moodle Integration, Fall 2024",
@@ -4800,7 +4800,7 @@
     "modulesUsed": "Modules",
     "includedFeatures": "Included Features",
     "features": {
-      "aiTutoring": "AI Tutoring",
+      "aiTutoring": "Learning Support Centering",
       "fileUpload": "File Upload & RAG",
       "courses": "Up to {count} courses",
       "modules": "Up to {count} modules",
