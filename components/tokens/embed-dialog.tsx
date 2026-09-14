@@ -86,18 +86,20 @@ export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogPro
 
   return (
     <Dialog open={!!token} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[88vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto overflow-x-hidden">
         <DialogHeader>
           <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription>{t('intro')}</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5">
-          {/* Live preview — the real widget, mirroring the embed's iframe attrs. */}
+        {/* Two columns on desktop (preview | steps + code) so the modal stays
+            short; everything wraps so it never scrolls sideways. */}
+        <div className="grid gap-5 md:grid-cols-2">
+          {/* Left: live preview */}
           {token && (
-            <div>
+            <div className="min-w-0">
               <p className="mb-2 text-sm font-semibold">{t('previewLabel')}</p>
-              <div className="h-[440px] overflow-hidden rounded-lg border bg-muted/30">
+              <div className="h-[320px] overflow-hidden rounded-lg border bg-muted/30 md:h-[380px]">
                 <iframe
                   src={previewUrl}
                   title={t('previewLabel')}
@@ -108,68 +110,70 @@ export function EmbedDialog({ token, onClose, previewAuthToken }: EmbedDialogPro
               <p className="mt-1.5 text-xs text-muted-foreground">{t('previewHint')}</p>
             </div>
           )}
-          {/* Moodle steps */}
-          <div>
-            <p className="mb-2 text-sm font-semibold">{t('moodleStepsTitle')}</p>
-            <ol className="space-y-2">
-              {steps.map((step, i) => (
-                <li key={i} className="flex gap-3 text-sm text-muted-foreground">
-                  <span
-                    aria-hidden="true"
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="pt-0.5">{step}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
 
-          {/* Code to paste */}
-          <div>
-            <div className="mb-2 flex items-center justify-between gap-2">
-              <p className="text-sm font-semibold">{t('codeLabel')}</p>
-              <Button size="sm" variant="outline" onClick={handleCopy} className="h-8">
-                {copied ? (
-                  <Check aria-hidden="true" className="mr-1.5 h-3.5 w-3.5 text-green-500" />
-                ) : (
-                  <Copy aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" />
-                )}
-                {copied ? t('copied') : t('copy')}
-              </Button>
+          {/* Right: steps + code */}
+          <div className="min-w-0 space-y-4">
+            <div>
+              <p className="mb-2 text-sm font-semibold">{t('moodleStepsTitle')}</p>
+              <ol className="space-y-2">
+                {steps.map((step, i) => (
+                  <li key={i} className="flex gap-2.5 text-sm text-muted-foreground">
+                    <span
+                      aria-hidden="true"
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
+                    >
+                      {i + 1}
+                    </span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
             </div>
-            <pre className="max-h-56 overflow-auto rounded-lg border bg-muted/50 p-3 text-xs leading-relaxed">
-              <code>{code}</code>
-            </pre>
-          </div>
 
-          <p className="text-xs text-muted-foreground">{t('note')}</p>
-
-          {/* Moodle "protected"/sanitized courses often strip the iframe. */}
-          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
-            <p className="text-xs font-semibold text-amber-700 dark:text-amber-400">{t('troubleshootTitle')}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{t('troubleshootNote')}</p>
-
-            <div className="mt-3">
-              <div className="mb-1.5 flex items-center justify-between gap-2">
-                <p className="text-xs font-medium">{t('diagnosticLabel')}</p>
-                <Button size="sm" variant="outline" onClick={handleCopyDiagnostic} className="h-7">
-                  {copiedDiag ? (
+            <div className="min-w-0">
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="text-sm font-semibold">{t('codeLabel')}</p>
+                <Button size="sm" variant="outline" onClick={handleCopy} className="h-8 shrink-0">
+                  {copied ? (
                     <Check aria-hidden="true" className="mr-1.5 h-3.5 w-3.5 text-green-500" />
                   ) : (
                     <Copy aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" />
                   )}
-                  {copiedDiag ? t('copied') : t('copy')}
+                  {copied ? t('copied') : t('copy')}
                 </Button>
               </div>
-              <p className="mb-1.5 text-xs text-muted-foreground">{t('diagnosticHint')}</p>
-              <pre className="overflow-x-auto rounded-md border bg-background/60 p-2 text-[11px] leading-snug">
-                <code>{DIAGNOSTIC}</code>
+              <pre className="whitespace-pre-wrap break-all rounded-lg border bg-muted/50 p-3 text-xs leading-relaxed">
+                <code>{code}</code>
               </pre>
+              <p className="mt-2 text-xs text-muted-foreground">{t('note')}</p>
             </div>
           </div>
         </div>
+
+        {/* Troubleshooting — collapsed so it never makes the modal tall. */}
+        <details className="mt-1 rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2.5">
+          <summary className="cursor-pointer list-none text-xs font-semibold text-amber-700 dark:text-amber-400">
+            {t('troubleshootTitle')}
+          </summary>
+          <div className="mt-2 space-y-2">
+            <p className="text-xs text-muted-foreground">{t('troubleshootNote')}</p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-xs font-medium">{t('diagnosticLabel')}</p>
+              <Button size="sm" variant="outline" onClick={handleCopyDiagnostic} className="h-7 shrink-0">
+                {copiedDiag ? (
+                  <Check aria-hidden="true" className="mr-1.5 h-3.5 w-3.5 text-green-500" />
+                ) : (
+                  <Copy aria-hidden="true" className="mr-1.5 h-3.5 w-3.5" />
+                )}
+                {copiedDiag ? t('copied') : t('copy')}
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">{t('diagnosticHint')}</p>
+            <pre className="whitespace-pre-wrap break-all rounded-md border bg-background/60 p-2 text-[11px] leading-snug">
+              <code>{DIAGNOSTIC}</code>
+            </pre>
+          </div>
+        </details>
       </DialogContent>
     </Dialog>
   );
