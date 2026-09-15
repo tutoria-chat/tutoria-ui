@@ -30,10 +30,19 @@ interface DateTimePickerProps {
   showTime?: boolean
 }
 
-function parseValue(value?: string): Date | undefined {
+function parseValue(value?: string, dateOnly = false): Date | undefined {
   if (!value) return undefined
   const d = new Date(value)
-  return isValid(d) ? d : undefined
+  if (!isValid(d)) return undefined
+  if (dateOnly) {
+    // A date-only value ("2000-01-15" or a midnight-UTC "2000-01-15T00:00:00Z"
+    // from the API) is a plain calendar date. `new Date(...)` parses it as a UTC
+    // instant, which renders as the previous day in negative-offset timezones
+    // (e.g. UTC-3 Brazil). Rebuild it at local midnight from the UTC calendar
+    // parts so the same day always shows, regardless of the viewer's timezone.
+    return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
+  }
+  return d
 }
 
 function toDatetimeLocal(d: Date): string {
@@ -59,7 +68,7 @@ export function DateTimePicker({
   showTime = true,
 }: DateTimePickerProps) {
   const [open, setOpen] = React.useState(false)
-  const selected = parseValue(value)
+  const selected = parseValue(value, !showTime)
 
   const defaultPlaceholder = showTime ? "Pick a date & time" : "Pick a date"
 
