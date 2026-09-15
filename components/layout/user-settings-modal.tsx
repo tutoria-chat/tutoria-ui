@@ -55,7 +55,9 @@ export function UserSettingsModal({ open, onClose }: UserSettingsModalProps) {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        birthdate: birthdate,
+        // Only send birthdate when set — an empty string can't bind to a date
+        // server-side and would fail the whole update (e.g. saving matricula).
+        ...(birthdate ? { birthdate } : {}),
         ...(canEditMatricula ? { externalId: externalId.trim() } : {}),
       });
 
