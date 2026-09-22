@@ -32,6 +32,12 @@ interface MultiSelectProps {
   searchPlaceholder?: string
   disabled?: boolean
   className?: string
+  /** Associates a <label htmlFor> with the trigger. */
+  id?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
+  /** Optional translated verb prefixed to each chip's remove label (e.g. "Remove"). */
+  removeItemLabel?: string
 }
 
 export function MultiSelect({
@@ -43,6 +49,10 @@ export function MultiSelect({
   searchPlaceholder = "Search...",
   disabled = false,
   className,
+  id,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
+  removeItemLabel,
 }: MultiSelectProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -66,9 +76,12 @@ export function MultiSelect({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
           className={cn(
             "w-full justify-between min-h-[40px] h-auto",
             !selected.length && "text-muted-foreground",
@@ -93,6 +106,8 @@ export function MultiSelect({
                   >
                     {option.label}
                     <button
+                      type="button"
+                      aria-label={removeItemLabel ? `${removeItemLabel}: ${option.label}` : option.label}
                       className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
@@ -109,7 +124,7 @@ export function MultiSelect({
                         handleUnselect(value)
                       }}
                     >
-                      <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                      <X aria-hidden="true" className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                     </button>
                   </Badge>
                 )
@@ -118,7 +133,7 @@ export function MultiSelect({
               placeholder
             )}
           </div>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown aria-hidden="true" className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
@@ -134,6 +149,7 @@ export function MultiSelect({
                   onSelect={() => handleSelect(option.value)}
                 >
                   <Check
+                    aria-hidden="true"
                     className={cn(
                       "mr-2 h-4 w-4",
                       isSelected ? "opacity-100" : "opacity-0"

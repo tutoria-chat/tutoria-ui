@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { PageHeader } from '@/components/layout/page-header';
 import { apiClient } from '@/lib/api';
 import type { ProfessorAgent, ProfessorAgentToken, ProfessorAgentFile } from '@/lib/types';
 import { ExternalLink, Plus, Copy, Check, Bot, Key, Info, Upload, Trash2, FileText } from 'lucide-react';
@@ -181,6 +182,9 @@ export default function ProfessorAgentPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
+
+        {/* Page heading — this page had no <h1>; PageHeader supplies it. */}
+        <PageHeader title={t('title')} description={t('description')} />
 
         {/* Agent Info */}
         <Card>

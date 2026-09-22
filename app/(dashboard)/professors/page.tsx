@@ -364,8 +364,9 @@ export default function ProfessorsPage() {
               size="sm"
               onClick={() => router.push(`/professors/${professor.id}/edit`)}
               title={tCommon('buttons.edit') || 'Edit'}
+              aria-label={tCommon('buttons.edit')}
             >
-              <Edit className="h-4 w-4 text-blue-600" />
+              <Edit aria-hidden="true" className="h-4 w-4 text-blue-600" />
             </Button>
             {canManageActivation && (
               professor.isActive ? (
@@ -374,8 +375,9 @@ export default function ProfessorsPage() {
                   size="sm"
                   onClick={() => handleDeactivate(professor.id)}
                   title={t('deactivate') || 'Deactivate'}
+                  aria-label={t('deactivate')}
                 >
-                  <Ban className="h-4 w-4 text-amber-600" />
+                  <Ban aria-hidden="true" className="h-4 w-4 text-amber-600" />
                 </Button>
               ) : (
                 <Button
@@ -383,8 +385,9 @@ export default function ProfessorsPage() {
                   size="sm"
                   onClick={() => handleActivate(professor.id)}
                   title={t('activate') || 'Activate'}
+                  aria-label={t('activate')}
                 >
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle aria-hidden="true" className="h-4 w-4 text-green-600" />
                 </Button>
               )
             )}
@@ -395,8 +398,9 @@ export default function ProfessorsPage() {
                   size="sm"
                   onClick={() => handleDeactivateAgent(agentStatus.agentId!)}
                   title={t('agentDeactivate') || 'Deactivate Agent'}
+                  aria-label={t('agentDeactivate')}
                 >
-                  <Bot className="h-4 w-4 text-amber-600" />
+                  <Bot aria-hidden="true" className="h-4 w-4 text-amber-600" />
                 </Button>
               ) : (
                 <Button
@@ -404,8 +408,9 @@ export default function ProfessorsPage() {
                   size="sm"
                   onClick={() => handleActivateAgent(agentStatus.agentId!)}
                   title={t('agentActivate') || 'Activate Agent'}
+                  aria-label={t('agentActivate')}
                 >
-                  <Bot className="h-4 w-4 text-green-600" />
+                  <Bot aria-hidden="true" className="h-4 w-4 text-green-600" />
                 </Button>
               )
             )}
@@ -415,8 +420,9 @@ export default function ProfessorsPage() {
                 size="sm"
                 onClick={() => handleManageAgent(professor)}
                 title={t('agentDialog.manageAgent') || 'Create Agent'}
+                aria-label={t('agentDialog.manageAgent')}
               >
-                <Bot className="h-4 w-4 text-purple-600" />
+                <Bot aria-hidden="true" className="h-4 w-4 text-purple-600" />
               </Button>
             )}
             {currentUser?.userType === 'super_admin' && (
@@ -425,8 +431,9 @@ export default function ProfessorsPage() {
                 size="sm"
                 onClick={() => handleDelete(professor.id)}
                 title={t('delete') || 'Delete'}
+                aria-label={t('delete')}
               >
-                <Trash2 className="h-4 w-4 text-destructive" />
+                <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
               </Button>
             )}
           </div>

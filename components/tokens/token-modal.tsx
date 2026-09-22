@@ -274,16 +274,18 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                         variant="ghost"
                         size="sm"
                         onClick={() => setShowFullToken(!showFullToken)}
+                        aria-label={showFullToken ? tCommon('hideToken') : tCommon('showToken')}
                       >
-                        {showFullToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showFullToken ? <EyeOff aria-hidden="true" className="h-4 w-4" /> : <Eye aria-hidden="true" className="h-4 w-4" />}
                       </Button>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={handleCopyToken}
+                        aria-label={t('copyToken')}
                       >
-                        <Copy className="h-4 w-4" />
+                        <Copy aria-hidden="true" className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
@@ -407,6 +409,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                     <Popover open={moduleComboboxOpen} onOpenChange={setModuleComboboxOpen}>
                       <PopoverTrigger asChild>
                         <Button
+                          id="moduleId"
                           variant="outline"
                           role="combobox"
                           aria-expanded={moduleComboboxOpen}
@@ -416,7 +419,7 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                           {formData.moduleId && formData.moduleId !== 0
                             ? modules.find((m) => m.id === formData.moduleId)?.name || t('selectModule')
                             : loadingModules ? t('loadingModules') : t('selectModule')}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          <ChevronsUpDown aria-hidden="true" className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[400px] p-0">

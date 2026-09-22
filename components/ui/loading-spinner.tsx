@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils';
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
+  /** Visually-hidden status text for screen readers. Pass a translated string. */
+  label?: string;
 }
 
 const sizeClasses = {
@@ -13,7 +15,7 @@ const sizeClasses = {
   xl: 'h-16 w-16 border-4',
 };
 
-export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 'md', className, label = 'Loading...' }: LoadingSpinnerProps) {
   return (
     <div
       className={cn(
@@ -24,7 +26,7 @@ export function LoadingSpinner({ size = 'md', className }: LoadingSpinnerProps) 
       role="status"
     >
       <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-        Loading...
+        {label}
       </span>
     </div>
   );

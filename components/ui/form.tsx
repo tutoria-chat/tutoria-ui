@@ -37,10 +37,11 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   if (!children) return null
-  
+
   return (
     <p
       ref={ref}
+      role="alert"
       className={cn("text-sm text-destructive", className)}
       {...props}
     >

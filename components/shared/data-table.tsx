@@ -81,13 +81,13 @@ export function DataTable<T>({
 
   const renderSortIcon = (columnKey: string) => {
     if (!sorting || sorting.column !== columnKey) {
-      return <ArrowUpDown className="ml-1 h-3 w-3 opacity-50" />;
+      return <ArrowUpDown aria-hidden="true" className="ml-1 h-3 w-3 opacity-50" />;
     }
-    
+
     return sorting.direction === 'asc' ? (
-      <ArrowUp className="ml-1 h-3 w-3" />
+      <ArrowUp aria-hidden="true" className="ml-1 h-3 w-3" />
     ) : (
-      <ArrowDown className="ml-1 h-3 w-3" />
+      <ArrowDown aria-hidden="true" className="ml-1 h-3 w-3" />
     );
   };
 
@@ -132,9 +132,11 @@ export function DataTable<T>({
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           {search && (
             <div className="relative w-full sm:max-w-sm lg:max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder={search.placeholder || "Search..."}
+                type="search"
+                placeholder={search.placeholder || t('searchLabel')}
+                aria-label={search.placeholder || t('searchLabel')}
                 value={search.value}
                 onChange={(e) => search.onSearchChange(e.target.value)}
                 className="pl-9 h-10 text-sm sm:text-base"
@@ -155,25 +157,37 @@ export function DataTable<T>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => (
-                <TableHead 
-                  key={String(column.key)}
-                  className={cn(
-                    column.width && `w-[${column.width}]`,
-                    column.sortable && "cursor-pointer select-none hover:bg-muted/50"
-                  )}
-                  onClick={() => {
-                    if (column.sortable && sorting) {
-                      sorting.onSortChange(String(column.key));
-                    }
-                  }}
-                >
-                  <div className="flex items-center">
-                    {column.label}
-                    {column.sortable && renderSortIcon(String(column.key))}
-                  </div>
-                </TableHead>
-              ))}
+              {columns.map((column) => {
+                const key = String(column.key);
+                const isSorted = sorting?.column === key;
+                const ariaSort = column.sortable
+                  ? isSorted
+                    ? sorting?.direction === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                  : undefined;
+                return (
+                  <TableHead
+                    key={key}
+                    aria-sort={ariaSort}
+                    className={cn(column.width && `w-[${column.width}]`)}
+                  >
+                    {column.sortable && sorting ? (
+                      <button
+                        type="button"
+                        onClick={() => sorting.onSortChange(key)}
+                        className="flex items-center select-none rounded-sm hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        {column.label}
+                        {renderSortIcon(key)}
+                      </button>
+                    ) : (
+                      <div className="flex items-center">{column.label}</div>
+                    )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           </TableHeader>
           
@@ -184,8 +198,8 @@ export function DataTable<T>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  <div role="status" className="flex items-center justify-center">
+                    <div aria-hidden="true" className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
                     <span className="ml-2 text-muted-foreground">{t('loading')}</span>
                   </div>
                 </TableCell>
@@ -208,8 +222,20 @@ export function DataTable<T>({
                     hoveredRow === index && "bg-muted/50",
                     rowClassName?.(item, index)
                   )}
+                  role={onRowClick ? 'button' : undefined}
+                  tabIndex={onRowClick ? 0 : undefined}
                   onMouseEnter={() => setHoveredRow(index)}
                   onMouseLeave={() => setHoveredRow(null)}
+                  onKeyDown={(e) => {
+                    if (!onRowClick) return;
+                    // Enter/Space activate the row, unless focus is on a control inside it.
+                    const target = e.target as HTMLElement;
+                    if (target.closest('button') || target.closest('a')) return;
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onRowClick(item, index);
+                    }
+                  }}
                   onClick={(e) => {
                     // Only trigger row click if not clicking on action buttons
                     const target = e.target as HTMLElement;
@@ -240,7 +266,7 @@ export function DataTable<T>({
               value={String(pagination.limit)}
               onValueChange={(value) => pagination.onLimitChange(Number(value))}
             >
-              <SelectTrigger className="w-[70px]">
+              <SelectTrigger className="w-[70px]" aria-label={t('pagination.rowsPerPage')}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -267,20 +293,22 @@ export function DataTable<T>({
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                aria-label={t('pagination.firstPage')}
                 onClick={() => pagination.onPageChange(1)}
                 disabled={pagination.page === 1}
               >
-                <ChevronsLeft className="h-4 w-4" />
+                <ChevronsLeft aria-hidden="true" className="h-4 w-4" />
               </Button>
 
               <Button
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                aria-label={t('pagination.previousPage')}
                 onClick={() => pagination.onPageChange(pagination.page - 1)}
                 disabled={pagination.page === 1}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft aria-hidden="true" className="h-4 w-4" />
               </Button>
 
               {/* Page numbers: hide individual numbers on very small screens, show on sm+ */}
@@ -288,12 +316,14 @@ export function DataTable<T>({
                 {getPaginationRange().map((pageNum, index) => (
                   <React.Fragment key={index}>
                     {pageNum === '...' ? (
-                      <span className="px-1.5 text-sm text-muted-foreground">…</span>
+                      <span className="px-1.5 text-sm text-muted-foreground" aria-hidden="true">…</span>
                     ) : (
                       <Button
                         variant={pageNum === pagination.page ? "default" : "outline"}
                         size="icon"
                         className="h-8 w-8 text-sm"
+                        aria-label={t('pagination.goToPage', { page: pageNum })}
+                        aria-current={pageNum === pagination.page ? 'page' : undefined}
                         onClick={() => pagination.onPageChange(Number(pageNum))}
                       >
                         {pageNum}
@@ -312,20 +342,22 @@ export function DataTable<T>({
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                aria-label={t('pagination.nextPage')}
                 onClick={() => pagination.onPageChange(pagination.page + 1)}
                 disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)}
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight aria-hidden="true" className="h-4 w-4" />
               </Button>
 
               <Button
                 variant="outline"
                 size="icon"
                 className="h-8 w-8"
+                aria-label={t('pagination.lastPage')}
                 onClick={() => pagination.onPageChange(Math.ceil(pagination.total / pagination.limit))}
                 disabled={pagination.page >= Math.ceil(pagination.total / pagination.limit)}
               >
-                <ChevronsRight className="h-4 w-4" />
+                <ChevronsRight aria-hidden="true" className="h-4 w-4" />
               </Button>
             </div>
           </div>

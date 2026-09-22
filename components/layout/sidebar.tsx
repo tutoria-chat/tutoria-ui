@@ -29,7 +29,8 @@ import {
   CalendarRange,
   PanelLeftClose,
   PanelLeftOpen,
-  Plug
+  Plug,
+  School
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -57,6 +58,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
   const pathname = usePathname();
   const { user } = useAuth();
   const t = useTranslations('sidebar');
+  const tCommon = useTranslations('common');
   const navContext = useNavigationContext();
   const [isUniversityExpanded, setIsUniversityExpanded] = useState(true);
 
@@ -112,6 +114,12 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       label: t('integrations'),
       href: '/integrations',
       icon: Plug,
+      requiredPermission: 'tokens:read',
+    },
+    {
+      label: t('avaConfig'),
+      href: '/ava',
+      icon: School,
       requiredPermission: 'tokens:read',
     },
     {
@@ -348,7 +356,7 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
 
           {/* Navigation */}
           <div className="flex-1 overflow-y-auto overflow-x-hidden py-4">
-            <nav className={cn("space-y-1", collapsed ? "px-2" : "px-3")}>
+            <nav aria-label={tCommon('mainNavigation')} className={cn("space-y-1", collapsed ? "px-2" : "px-3")}>
               {navigationItems
                 .filter(shouldShowItem)
                 .map(renderNavItem)}

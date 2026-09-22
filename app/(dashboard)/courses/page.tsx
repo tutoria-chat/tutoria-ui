@@ -181,8 +181,9 @@ export default function CoursesPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDelete(course.id)}
+                  aria-label={tCommon('buttons.delete')}
                 >
-                  <Trash2 className="h-4 w-4 text-destructive" />
+                  <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
                 </Button>
               </AdminOnly>
             </div>
@@ -194,9 +195,10 @@ export default function CoursesPage() {
               variant="ghost"
               size="sm"
               asChild
+              aria-label={tCommon('buttons.view')}
             >
               <Link href={`/courses/${course.id}`}>
-                <Eye className="h-4 w-4" />
+                <Eye aria-hidden="true" className="h-4 w-4" />
               </Link>
             </Button>
 
@@ -204,9 +206,10 @@ export default function CoursesPage() {
               variant="ghost"
               size="sm"
               asChild
+              aria-label={tCommon('buttons.edit')}
             >
               <Link href={`/courses/${course.id}/edit`}>
-                <Edit className="h-4 w-4" />
+                <Edit aria-hidden="true" className="h-4 w-4" />
               </Link>
             </Button>
 
@@ -215,8 +218,9 @@ export default function CoursesPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => handleDelete(course.id)}
+                aria-label={tCommon('buttons.delete')}
               >
-                <Trash2 className="h-4 w-4 text-destructive" />
+                <Trash2 aria-hidden="true" className="h-4 w-4 text-destructive" />
               </Button>
             </AdminOnly>
           </div>

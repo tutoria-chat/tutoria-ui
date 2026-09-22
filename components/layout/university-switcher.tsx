@@ -73,33 +73,41 @@ export function UniversitySwitcher() {
         size="sm"
         onClick={() => setOpen(!open)}
         disabled={switching}
+        aria-label={t('select')}
+        aria-haspopup="menu"
+        aria-expanded={open}
         className="flex items-center gap-2 max-w-[200px] sm:max-w-[280px]"
       >
         {switching ? (
           <LoadingSpinner size="sm" />
         ) : (
-          <Building2 className="h-4 w-4 shrink-0" />
+          <Building2 aria-hidden="true" className="h-4 w-4 shrink-0" />
         )}
         <span className="truncate text-xs sm:text-sm">
           {switching ? t('switching') : (activeUniversity?.name || t('select'))}
         </span>
-        <ChevronsUpDown className="h-3 w-3 shrink-0 opacity-50" />
+        <ChevronsUpDown aria-hidden="true" className="h-3 w-3 shrink-0 opacity-50" />
       </Button>
 
       {open && !switching && (
-        <div className="absolute left-0 top-full mt-2 w-64 rounded-md border bg-popover p-1 shadow-md z-50">
+        <div role="menu" aria-label={t('label')} className="absolute left-0 top-full mt-2 w-64 rounded-md border bg-popover p-1 shadow-md z-50">
           <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
             {t('label')}
           </div>
-          {user.universities.map((university) => (
+          {user.universities.map((university) => {
+            const isCurrent = university.id === user.universityId;
+            return (
             <button
               key={university.id}
               onClick={() => handleSwitch(university.id)}
+              role="menuitemradio"
+              aria-checked={isCurrent}
               className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
             >
               <Check
+                aria-hidden="true"
                 className={`h-4 w-4 shrink-0 ${
-                  university.id === user.universityId ? 'opacity-100' : 'opacity-0'
+                  isCurrent ? 'opacity-100' : 'opacity-0'
                 }`}
               />
               <div className="flex flex-col items-start min-w-0">
@@ -107,7 +115,8 @@ export function UniversitySwitcher() {
                 <span className="text-xs text-muted-foreground">{university.code}</span>
               </div>
             </button>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

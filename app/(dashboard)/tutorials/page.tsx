@@ -413,7 +413,7 @@ export default function TutorialsPage() {
               <div key="aiTutorConfig" className="space-y-4">
                 <h3 className="text-xl font-bold mt-8 mb-4 flex items-center">
                   <GraduationCap className="h-6 w-6 mr-2 text-indigo-600" />
-                  {t(`${sectionKey}.aiTutorConfigTitle`) || 'AI Tutor Configuration'}
+                  {t(`${sectionKey}.aiTutorConfigTitle`) || 'Learning Support Center Configuration'}
                 </h3>
                 <div className="bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800 rounded-lg p-6 space-y-4">
                   <p className="text-base leading-relaxed whitespace-pre-line">{aiConfig.whatIs}</p>

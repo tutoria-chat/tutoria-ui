@@ -32,6 +32,10 @@ interface ComboboxProps {
   emptyMessage?: string;
   disabled?: boolean;
   className?: string;
+  /** Associates a <label htmlFor> with the trigger. */
+  id?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 export function Combobox({
@@ -43,6 +47,9 @@ export function Combobox({
   emptyMessage = 'No option found.',
   disabled = false,
   className,
+  id,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -52,14 +59,17 @@ export function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
           className={cn('w-full justify-between', className)}
           disabled={disabled}
         >
           {selectedOption ? selectedOption.label : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown aria-hidden="true" className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">
@@ -79,6 +89,7 @@ export function Combobox({
                   }}
                 >
                   <Check
+                    aria-hidden="true"
                     className={cn(
                       'mr-2 h-4 w-4',
                       value === option.value ? 'opacity-100' : 'opacity-0'
