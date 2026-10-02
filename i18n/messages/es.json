@@ -2353,7 +2353,11 @@
         "rowsPerPage": "Filas por página: Cambia cuántos elementos se muestran",
         "actions": "Acciones: Botones rápidos para operaciones de Ver, Editar, Eliminar"
       }
-    }
+    },
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "copyError": "No se pudo copiar.",
+    "copyLabel": "Copiar {label}"
   },
   "errors": {
     "pageNotFound": "Página no encontrada",
@@ -4461,11 +4465,15 @@
   },
   "ava": {
     "title": "Configuración del AVA",
-    "description": "Coloca el Centro de apoyo al aprendizaje de Tutoria dentro de tu LMS (Moodle). Elige un método y sigue los pasos.",
+    "description": "Lleva Tutoria a tu LMS (Moodle): el Centro de apoyo al aprendizaje para los estudiantes y el Asistente de corrección para los profesores.",
+    "tabs": {
+      "widget": "Centro de apoyo en el LMS",
+      "grading": "Asistente de corrección"
+    },
     "chooseMethod": "Elige cómo insertar",
     "recommended": "Recomendado",
     "stepsTitle": "Paso a paso",
-    "pluginNote": "El plugin renderiza el tutor del lado del servidor, así que funciona incluso en cursos que quitan iframes de los bloques HTML.",
+    "pluginNote": "El plugin renderiza el Centro de apoyo al aprendizaje del lado del servidor, así que funciona incluso en cursos que quitan iframes de los bloques HTML.",
     "block": {
       "name": "Bloque (plugin)",
       "tagline": "Un bloque en la barra lateral, o un globo de chat flotante en la esquina.",
@@ -4493,6 +4501,109 @@
       "title": "Descargar {name}",
       "updated": "Actualizado {date}",
       "button": "Descargar ZIP"
+    },
+    "grading": {
+      "intro": {
+        "title": "Asistente de corrección en Moodle",
+        "body": "Un plugin que aparece dentro de los cuestionarios de Moodle (pestaña Resultados). Organiza las respuestas de desarrollo y prepara un borrador de retroalimentación para cada una. La nota es siempre del profesor: la IA nunca sugiere ni aplica una nota, según las Directrices del CNE."
+      },
+      "status": {
+        "enabled": "Corrección con IA habilitada para {name}.",
+        "disabled": "La corrección con IA aún no está habilitada para {name}. Habla con el equipo de Tutoria para activarla — mientras tanto ya puedes instalar el plugin."
+      },
+      "setup": {
+        "title": "1. Configurar en Moodle (una vez)",
+        "description": "Lo hace el administrador de Moodle, una sola vez para todo el sitio. No hay nada que configurar por curso ni por cuestionario."
+      },
+      "download": {
+        "title": "Plugin Asistente de corrección (Moodle)"
+      },
+      "values": {
+        "title": "Datos para pegar en la configuración del plugin",
+        "description": "En Moodle: Administración del sitio → Extensiones → Módulos de actividad → Cuestionario → Grading assistant (Tutoria). El plugin aún no tiene traducción al español, por eso sus textos aparecen en inglés.",
+        "url": "URL base de la API",
+        "urlHint": "Pégala en el campo “API base URL”.",
+        "institutionId": "ID de la institución",
+        "institutionIdHint": "Pégalo en el campo “Institution ID”.",
+        "key": "Clave de la API",
+        "noInstitution": "Selecciona una institución en el selector de la parte superior para ver su ID y generar la clave."
+      },
+      "keys": {
+        "askManager": "La clave la genera el gestor de la institución en esta misma página. Pídele que genere una y la envíe al administrador de Moodle.",
+        "intro": "Cada clave funciona solo para tu institución. Genera una, cópiala y pégala en el campo “API key” del plugin.",
+        "nameLabel": "Nombre de la clave (para recordar dónde se usa)",
+        "namePlaceholder": "Ej.: Moodle producción",
+        "defaultName": "Moodle",
+        "generate": "Generar clave",
+        "generating": "Generando…",
+        "newTitle": "Tu nueva clave — cópiala ahora",
+        "newWarning": "Por seguridad no se volverá a mostrar. Si la pierdes, revócala y genera otra.",
+        "done": "Ya la copié",
+        "listTitle": "Claves de la institución",
+        "empty": "Aún no se generó ninguna clave.",
+        "loadError": "No se pudieron cargar las claves.",
+        "createError": "No se pudo generar la clave.",
+        "active": "Activa",
+        "revokedBadge": "Revocada",
+        "created": "Creada el {date}",
+        "lastUsed": "Último uso el {date}",
+        "neverUsed": "Aún sin usar",
+        "revoke": "Revocar",
+        "revokeAria": "Revocar la clave {name}",
+        "cancel": "Cancelar",
+        "revokeTitle": "¿Revocar esta clave?",
+        "revokeDescription": "La clave “{name}” ({prefix}…) deja de funcionar de inmediato. El Moodle que la usa deja de corregir hasta recibir una nueva clave.",
+        "revoked": "Clave revocada.",
+        "revokeError": "No se pudo revocar la clave."
+      },
+      "install": {
+        "title": "Pasos de instalación",
+        "steps": [
+          "Descarga el plugin de arriba (archivo quiz-tutoria.zip).",
+          "En Moodle, entra como administrador y abre Administración del sitio → Extensiones → Instalar extensiones.",
+          "Sube el .zip, confirma la instalación y termina actualizando la base de datos de Moodle.",
+          "Abre Administración del sitio → Extensiones → Módulos de actividad → Cuestionario → Grading assistant (Tutoria).",
+          "Pega la URL base de la API, el ID de la institución y la clave (los datos de arriba) y guarda los cambios.",
+          "Listo: todo cuestionario con preguntas de desarrollo tendrá la pestaña “Grading assistant” en Resultados."
+        ]
+      },
+      "usage": {
+        "title": "2. Guía rápida de uso (profesor)",
+        "description": "Cómo corregir las preguntas de desarrollo de un cuestionario con el asistente.",
+        "steps": [
+          "Abre el cuestionario y haz clic en Resultados → Grading assistant.",
+          "(Opcional) En “Correction criteria / rubric”, describe lo que debe contener una buena respuesta — por ejemplo, “tesis clara, dos argumentos y una fuente”. No escribas instrucciones de nota.",
+          "Haz clic en “Analyse with AI” y espera mientras aparece “Grading in progress… X of Y”.",
+          "Revisa cada fila: ajusta el borrador de retroalimentación si quieres y escribe la nota en el campo vacío — la IA nunca sugiere una nota.",
+          "Haz clic en “Save grades & feedback” y confirma. Las notas y los comentarios van al cuestionario y al libro de calificaciones, y el estudiante los ve como cualquier corrección de Moodle."
+        ],
+        "audit": "Queda registrado quién pidió los borradores de retroalimentación y quién confirmó las notas, con fecha y hora (Informes → Registros de Moodle)."
+      },
+      "troubleshooting": {
+        "title": "¿Algún error? Qué hacer",
+        "items": [
+          {
+            "problem": "La pestaña “Grading assistant” no aparece",
+            "fix": "El cuestionario necesita preguntas de desarrollo y el plugin debe estar instalado. Comprueba que estás en Resultados."
+          },
+          {
+            "problem": "“The API key was rejected” (401)",
+            "fix": "La clave se pegó incompleta o fue revocada. Genera una nueva clave arriba y pégala en el plugin."
+          },
+          {
+            "problem": "“Not allowed” (403)",
+            "fix": "La corrección aún no está habilitada para la institución, o la clave es de otra institución — revisa el ID de la institución."
+          },
+          {
+            "problem": "“Course or institution not found” (404)",
+            "fix": "Revisa la URL base de la API y el ID de la institución en la configuración del plugin."
+          },
+          {
+            "problem": "“There are no finished attempts with essay answers to grade”",
+            "fix": "Ningún estudiante ha enviado el cuestionario todavía. Espera al menos un intento finalizado."
+          }
+        ]
+      }
     }
   },
   "accessKeys": {

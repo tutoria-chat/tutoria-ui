@@ -16,7 +16,7 @@ export interface AvaPlugin {
   size: string;
 }
 
-export const AVA_PLUGINS: Record<'activity' | 'block', AvaPlugin> = {
+export const AVA_PLUGINS: Record<'activity' | 'block' | 'grading', AvaPlugin> = {
   activity: {
     file: '/downloads/tutoria-plugin.zip',
     version: '1.0.0',
@@ -28,5 +28,13 @@ export const AVA_PLUGINS: Record<'activity' | 'block', AvaPlugin> = {
     version: '1.0.2',
     updatedAt: '2026-09-08',
     size: '16 KB',
+  },
+  // Assistente de Correção — Moodle quiz report plugin (quiz_tutoria). The ZIP's
+  // root folder is `tutoria/`; Moodle installs it to mod/quiz/report/tutoria.
+  grading: {
+    file: '/downloads/quiz-tutoria.zip',
+    version: '1.2.0',
+    updatedAt: '2026-10-02',
+    size: '34 KB',
   },
 };

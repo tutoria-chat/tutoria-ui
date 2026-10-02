@@ -1804,6 +1804,31 @@ export interface LtiSetupInfo {
   enabled: boolean;
 }
 
+// Per-institution keys for the Moodle grading assistant plugin (quiz_tutoria).
+// Mirrors TutoriaApi DTOs/UniversityApiKeyDtos.cs.
+export interface UniversityApiKeySetupInfo {
+  universityId: number;
+  universityName: string;
+  /** Whether the grading feature is enabled for the institution. */
+  enabled: boolean;
+}
+
+export interface UniversityApiKey {
+  id: number;
+  name: string;
+  /** First characters of the key, e.g. "tgk_3f9a1c" — the full key is never returned again. */
+  keyPrefix: string;
+  createdAt: string | null;
+  lastUsedAt: string | null;
+  revokedAt: string | null;
+  isActive: boolean;
+}
+
+/** Returned once, on creation — the only time the full key is visible. */
+export interface CreatedUniversityApiKey extends UniversityApiKey {
+  key: string;
+}
+
 export interface LtiDeployment {
   id: number;
   deploymentId: string;

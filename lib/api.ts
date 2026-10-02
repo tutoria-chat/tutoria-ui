@@ -116,6 +116,9 @@ import type {
   GradingJob,
   QuizUploadJob,
   LtiSetupInfo,
+  UniversityApiKeySetupInfo,
+  UniversityApiKey,
+  CreatedUniversityApiKey,
   LtiRegistration,
   LtiRegistrationCreate,
   LtiContextMapping,
@@ -375,7 +378,13 @@ class TutoriaAPIClient {
         throw new ApiError(errorMessage, response.status, validationErrors, code, context);
       }
 
-      return await response.json();
+      // 204 No Content (DELETEs, revokes…) has no body — response.json() would
+      // throw and turn a successful request into an error.
+      if (response.status === 204) {
+        return undefined as T;
+      }
+      const text = await response.text();
+      return (text ? JSON.parse(text) : undefined) as T;
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') {
         throw new Error('Request timeout');
@@ -1757,6 +1766,27 @@ class TutoriaAPIClient {
       throw new Error(error.message || 'Failed to accept invitation');
     }
     return response.json();
+  }
+
+  // ==========================================================================
+  // Institution API keys (Moodle grading assistant plugin)
+  // ==========================================================================
+
+  async getApiKeySetupInfo(universityId: number): Promise<UniversityApiKeySetupInfo> {
+    return this.get(`/api/universities/${universityId}/api-keys/setup-info`);
+  }
+
+  async getUniversityApiKeys(universityId: number): Promise<UniversityApiKey[]> {
+    return this.get(`/api/universities/${universityId}/api-keys`);
+  }
+
+  /** The response carries the full key — the only time it is ever shown. */
+  async createUniversityApiKey(universityId: number, name: string): Promise<CreatedUniversityApiKey> {
+    return this.post(`/api/universities/${universityId}/api-keys`, { name });
+  }
+
+  async revokeUniversityApiKey(universityId: number, keyId: number): Promise<void> {
+    return this.delete(`/api/universities/${universityId}/api-keys/${keyId}`);
   }
 
   // ==========================================================================
