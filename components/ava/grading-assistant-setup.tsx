@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
+  BookOpen,
   CheckCircle2,
   Download,
   KeyRound,
@@ -58,6 +59,25 @@ export function GradingAssistantSetup() {
           <p className="mt-1 text-sm text-muted-foreground">{t('intro.body')}</p>
         </div>
       </div>
+
+      {/* The full illustrated guide — the same steps, to forward to the Moodle admin and teachers */}
+      {plugin.guide && (
+        <div className="flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            <BookOpen aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+            <div className="min-w-0">
+              <p className="font-semibold">{t('guide.button')}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t('guide.note')}</p>
+            </div>
+          </div>
+          <Button asChild variant="outline" className="shrink-0">
+            <a href={plugin.guide} target="_blank" rel="noopener noreferrer">
+              <Download aria-hidden="true" className="mr-2 h-4 w-4" />
+              {t('guide.open')}
+            </a>
+          </Button>
+        </div>
+      )}
 
       {/* 1. One-time setup */}
       <Card>
@@ -147,6 +167,8 @@ export function GradingAssistantSetup() {
         </CardHeader>
         <CardContent className="space-y-5">
           <Steps steps={usageSteps} />
+
+          <p className="text-sm text-muted-foreground">{t('usage.inMoodle')}</p>
 
           <div className="flex items-start gap-2 rounded-lg bg-primary/5 p-3 text-xs text-muted-foreground">
             <CheckCircle2 aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

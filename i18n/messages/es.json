@@ -4507,6 +4507,11 @@
         "title": "Asistente de corrección en Moodle",
         "body": "Un plugin que aparece dentro de los cuestionarios de Moodle (pestaña Resultados). Organiza las respuestas de desarrollo y prepara un borrador de retroalimentación para cada una. La nota es siempre del profesor: la IA nunca sugiere ni aplica una nota, según las Directrices del CNE."
       },
+      "guide": {
+        "button": "Guía completa con imágenes (PDF, en portugués)",
+        "note": "Paso a paso desde cero: instalar, generar la clave, probar, corregir y verificar. Útil para enviar al administrador de Moodle y a los profesores.",
+        "open": "Abrir PDF"
+      },
       "status": {
         "enabled": "Corrección con IA habilitada para {name}.",
         "disabled": "La corrección con IA aún no está habilitada para {name}. Habla con el equipo de Tutoria para activarla — mientras tanto ya puedes instalar el plugin."
@@ -4574,10 +4579,11 @@
           "Abre el cuestionario y haz clic en Resultados → Grading assistant.",
           "(Opcional) En “Correction criteria / rubric”, describe lo que debe contener una buena respuesta — por ejemplo, “tesis clara, dos argumentos y una fuente”. No escribas instrucciones de nota.",
           "Haz clic en “Analyse with AI” y espera mientras aparece “Grading in progress… X of Y”.",
-          "Revisa cada fila: ajusta el borrador de retroalimentación si quieres y escribe la nota en el campo vacío — la IA nunca sugiere una nota.",
+          "Revisa cada fila: haz clic en “View answer” para leer lo que escribió el estudiante, ajusta el borrador de retroalimentación si quieres y escribe la nota en el campo vacío — la IA nunca sugiere una nota. Las filas sin nota no se guardan.",
           "Haz clic en “Save grades & feedback” y confirma. Las notas y los comentarios van al cuestionario y al libro de calificaciones, y el estudiante los ve como cualquier corrección de Moodle."
         ],
-        "audit": "Queda registrado quién pidió los borradores de retroalimentación y quién confirmó las notas, con fecha y hora (Informes → Registros de Moodle)."
+        "audit": "Queda registrado quién pidió los borradores de retroalimentación y quién confirmó las notas, con fecha y hora (Informes → Registros de Moodle).",
+        "inMoodle": "La pantalla del asistente en Moodle también incluye este paso a paso, en el panel “How to use this assistant — step by step”."
       },
       "troubleshooting": {
         "title": "¿Algún error? Qué hacer",
@@ -4601,6 +4607,10 @@
           {
             "problem": "“There are no finished attempts with essay answers to grade”",
             "fix": "Ningún estudiante ha enviado el cuestionario todavía. Espera al menos un intento finalizado."
+          },
+          {
+            "problem": "Una fila quedó en rojo después de guardar",
+            "fix": "La nota de esa fila no se guardó — el motivo aparece debajo (por ejemplo, supera el valor de la pregunta). Las demás ya se guardaron: corrígela y haz clic en “Save grades & feedback” de nuevo."
           }
         ]
       }

@@ -14,6 +14,8 @@ export interface AvaPlugin {
   updatedAt: string;
   /** Approx download size, shown next to the button. */
   size: string;
+  /** Optional illustrated step-by-step guide (PDF), also served from public/. */
+  guide?: string;
 }
 
 export const AVA_PLUGINS: Record<'activity' | 'block' | 'grading', AvaPlugin> = {
@@ -33,8 +35,11 @@ export const AVA_PLUGINS: Record<'activity' | 'block' | 'grading', AvaPlugin> = 
   // root folder is `tutoria/`; Moodle installs it to mod/quiz/report/tutoria.
   grading: {
     file: '/downloads/quiz-tutoria.zip',
-    version: '1.2.0',
+    version: '1.3.0',
     updatedAt: '2026-10-02',
-    size: '34 KB',
+    size: '39 KB',
+    // pt-BR only. The plugin's in-page help links here too
+    // (quiz_tutoria report.php GUIDE_URL) — keep the path stable.
+    guide: '/downloads/guia-assistente-de-correcao.pdf',
   },
 };
