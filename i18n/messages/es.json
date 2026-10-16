@@ -170,7 +170,10 @@
       "majorsPlaceholder": "Selecciona las carreras...",
       "majorsSearch": "Buscar carrera...",
       "majorsEmpty": "No se encontraron carreras. Agrégalas en la página de la institución.",
-      "majorsHelp": "Carreras a las que pertenece este curso. El tutor lo usa para responder a qué carrera pertenece el curso."
+      "majorsHelp": "Carreras a las que pertenece este curso. El tutor lo usa para responder a qué carrera pertenece el curso.",
+      "durationLabel": "Duración del curso",
+      "durationHelp": "El plazo empieza cuando se registra el primer estudiante. Al terminar, los profesores reciben un aviso y, 7 días después, los estudiantes salen del curso (sus cuentas se mantienen). Puedes pausarlo o aplazarlo en la página del curso.",
+      "durationRequired": "Elige la duración del curso"
     },
     "edit": {
       "title": "Editar Curso",
@@ -396,6 +399,65 @@
         "downloadError": "Error al obtener el enlace de descarga.",
         "complianceNotice": "Conforme a las Directrices del CNE para IA en la Educación, la IA no corrige ni asigna notas en evaluaciones abiertas. Este asistente solo prepara borradores de retroalimentación formativa — la evaluación y la nota son responsabilidad del profesor."
       }
+    },
+    "inactiveBadge": "Inactivo",
+    "duration": {
+      "placeholder": "Selecciona la duración",
+      "option": "{count, plural, one {# mes} other {# meses}}",
+      "optionSemester": "{count} meses (1 semestre)",
+      "optionYear": "{count} meses (1 año)"
+    },
+    "lifecycle": {
+      "title": "Plazo del curso",
+      "duration": "{count, plural, one {Duración: # mes} other {Duración: # meses}}",
+      "status": {
+        "no_duration": "Sin plazo",
+        "waiting_students": "Esperando estudiantes",
+        "running": "En curso",
+        "removal_scheduled": "Retiro programado",
+        "paused": "Retiro en pausa",
+        "inactive": "Sin uso"
+      },
+      "summary": {
+        "noDuration": "Este curso no tiene duración, así que los estudiantes nunca se retiran automáticamente. Puedes definirla en Editar curso.",
+        "waitingStudents": "{count, plural, one {El plazo de # mes} other {El plazo de # meses}} empieza cuando se registre el primer estudiante.",
+        "running": "Cuando termine el plazo, los profesores reciben un aviso. Los estudiantes saldrán del curso el {date} (sus cuentas se mantienen).",
+        "removalScheduled": "{count, plural, one {# estudiante saldrá} other {# estudiantes saldrán}} de este curso el {date}. Sus cuentas y otros cursos se mantienen.",
+        "paused": "El retiro automático está en pausa. Los estudiantes siguen en el curso hasta que alguien lo reanude.",
+        "inactive": "Marcado como “sin uso” el {date}. Los estudiantes no acceden a este curso y los avisos están apagados."
+      },
+      "timeline": {
+        "started": "Empezó el {date}",
+        "ends": "Termina el {date}",
+        "removal": "Retiro el {date}",
+        "held": "Aplazado +{days} días"
+      },
+      "unusedNote": "Ningún estudiante registrado hace más de 3 días aunque existe una clave de acceso — los profesores del curso reciben un aviso diario. Si no se está usando, haz clic en “Curso sin uso”.",
+      "actions": {
+        "extend": "Aplazar 7 días",
+        "pause": "Pausar retiro automático",
+        "resume": "Reanudar retiro automático",
+        "deactivate": "Curso sin uso",
+        "reactivate": "Reactivar curso",
+        "remove": "Quitar de la lista"
+      },
+      "deactivateConfirm": {
+        "title": "¿Marcar el curso como sin uso?",
+        "description": "Los estudiantes pierden el acceso a este curso, los avisos por correo se detienen y el retiro automático queda parado. Sigue en la lista (en gris) y se puede reactivar en cualquier momento."
+      },
+      "removeConfirm": {
+        "title": "¿Quitar el curso de la lista?",
+        "description": "Desaparece de la lista de cursos. Los datos se conservan — para recuperarlo, habla con el equipo de Tutoria."
+      },
+      "toasts": {
+        "extended": "Retiro aplazado 7 días más",
+        "paused": "Retiro automático en pausa",
+        "resumed": "Retiro automático reanudado — el aviso sale al menos 7 días antes",
+        "deactivated": "Curso marcado como sin uso",
+        "reactivated": "Curso reactivado",
+        "removed": "Curso quitado de la lista"
+      },
+      "actionError": "No se pudo completar. Inténtalo de nuevo."
     }
   },
   "modules": {

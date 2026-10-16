@@ -170,7 +170,10 @@
       "majorsPlaceholder": "Selecione as graduações...",
       "majorsSearch": "Buscar graduação...",
       "majorsEmpty": "Nenhuma graduação encontrada. Cadastre-as na página da instituição.",
-      "majorsHelp": "Graduações a que esta disciplina pertence. O tutor usa isso para responder a que curso/graduação a disciplina se refere."
+      "majorsHelp": "Graduações a que esta disciplina pertence. O tutor usa isso para responder a que curso/graduação a disciplina se refere.",
+      "durationLabel": "Duração da disciplina",
+      "durationHelp": "O prazo começa quando o primeiro estudante é cadastrado. Quando termina, os professores recebem um aviso e, 7 dias depois, os estudantes são removidos da disciplina (as contas deles continuam). Dá para pausar ou adiar na página da disciplina.",
+      "durationRequired": "Escolha a duração da disciplina"
     },
     "edit": {
       "title": "Editar Disciplina",
@@ -396,6 +399,65 @@
         "downloadError": "Falha ao obter o link de download.",
         "complianceNotice": "Conforme as Diretrizes do CNE para IA na Educação, a IA não corrige nem atribui notas em avaliações dissertativas. Este assistente apenas prepara rascunhos de feedback formativo — a avaliação e a nota são de responsabilidade do professor."
       }
+    },
+    "inactiveBadge": "Inativa",
+    "duration": {
+      "placeholder": "Selecione a duração",
+      "option": "{count, plural, one {# mês} other {# meses}}",
+      "optionSemester": "{count} meses (1 semestre)",
+      "optionYear": "{count} meses (1 ano)"
+    },
+    "lifecycle": {
+      "title": "Prazo da disciplina",
+      "duration": "{count, plural, one {Duração: # mês} other {Duração: # meses}}",
+      "status": {
+        "no_duration": "Sem prazo",
+        "waiting_students": "Aguardando estudantes",
+        "running": "Em andamento",
+        "removal_scheduled": "Remoção agendada",
+        "paused": "Remoção pausada",
+        "inactive": "Não está em uso"
+      },
+      "summary": {
+        "noDuration": "Esta disciplina não tem duração definida, então os estudantes não são removidos automaticamente. A duração pode ser definida em Editar disciplina.",
+        "waitingStudents": "{count, plural, one {O prazo de # mês} other {O prazo de # meses}} começa quando o primeiro estudante for cadastrado.",
+        "running": "Quando o prazo terminar, os professores recebem um aviso. Os estudantes serão removidos da disciplina em {date} (as contas deles continuam).",
+        "removalScheduled": "{count, plural, one {# estudante será removido} other {# estudantes serão removidos}} desta disciplina em {date}. As contas e as outras disciplinas deles continuam.",
+        "paused": "A remoção automática está pausada. Os estudantes continuam na disciplina até alguém retomar.",
+        "inactive": "Marcada como “não está em uso” em {date}. Os estudantes não acessam esta disciplina e os avisos estão desligados."
+      },
+      "timeline": {
+        "started": "Começou em {date}",
+        "ends": "Termina em {date}",
+        "removal": "Remoção em {date}",
+        "held": "Adiada +{days} dias"
+      },
+      "unusedNote": "Nenhum estudante cadastrado há mais de 3 dias, mesmo com a chave de acesso criada — os professores da disciplina recebem um aviso por dia. Se ela não está sendo usada, clique em “Disciplina não está em uso”.",
+      "actions": {
+        "extend": "Adiar 7 dias",
+        "pause": "Pausar remoção automática",
+        "resume": "Retomar remoção automática",
+        "deactivate": "Disciplina não está em uso",
+        "reactivate": "Reativar disciplina",
+        "remove": "Remover da lista"
+      },
+      "deactivateConfirm": {
+        "title": "Marcar a disciplina como não está em uso?",
+        "description": "Os estudantes deixam de acessar esta disciplina, os avisos por e-mail param e a remoção automática fica parada. Ela continua na lista (em cinza) e pode ser reativada a qualquer momento."
+      },
+      "removeConfirm": {
+        "title": "Remover a disciplina da lista?",
+        "description": "Ela some da lista de disciplinas. Os dados continuam guardados — para recuperar, fale com a equipe Tutoria."
+      },
+      "toasts": {
+        "extended": "Remoção adiada por mais 7 dias",
+        "paused": "Remoção automática pausada",
+        "resumed": "Remoção automática retomada — o aviso sai pelo menos 7 dias antes",
+        "deactivated": "Disciplina marcada como não está em uso",
+        "reactivated": "Disciplina reativada",
+        "removed": "Disciplina removida da lista"
+      },
+      "actionError": "Não foi possível concluir. Tente de novo."
     }
   },
   "modules": {

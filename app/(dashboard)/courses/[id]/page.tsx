@@ -34,6 +34,7 @@ import { TitleBadge } from '@/components/students/title-badge';
 import { CourseCalendarTab } from '@/components/courses/course-calendar-tab';
 import { CourseAssignmentsTab } from '@/components/courses/course-assignments-tab';
 import { CourseQuizBankTab } from '@/components/courses/course-quiz-bank-tab';
+import { CourseLifecycleCard } from '@/components/courses/course-lifecycle-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -912,6 +913,9 @@ export default function CourseDetailsPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Duration timer, auto-removal and "not in use" */}
+        <CourseLifecycleCard courseId={Number(courseId)} refreshKey={totalStudents} />
       </div>
 
       {/* Tabs */}

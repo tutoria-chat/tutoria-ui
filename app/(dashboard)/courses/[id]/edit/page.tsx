@@ -15,6 +15,7 @@ import { apiClient } from '@/lib/api';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import type { Course, CourseUpdate, BreadcrumbItem, University, Major } from '@/lib/types';
 import { parseExternalCourseId } from '@/components/forms/course-form';
+import { CourseDurationSelect } from '@/components/courses/course-duration-select';
 
 export default function EditCoursePage() {
   const router = useRouter();
@@ -64,11 +65,15 @@ export default function EditCoursePage() {
     try {
       const data = await apiClient.getCourse(courseId);
       setCourse(data);
-      const initialData = {
+      const initialData: CourseUpdate = {
         name: data.name,
         code: data.code,
         description: data.description || '',
         externalCourseId: data.externalCourseId ?? null,
+        // Round-tripped unchanged: the API reads a missing enableEnem as "off".
+        enableEnem: data.enableEnem ?? false,
+        enemArea: data.enemArea ?? null,
+        durationMonths: data.durationMonths ?? null,
       };
       setFormData(initialData);
       setOriginalFormData(initialData);
@@ -278,6 +283,19 @@ export default function EditCoursePage() {
                   <p className="text-xs text-muted-foreground mt-1">{tForm('externalCourseIdHelp')}</p>
                 </div>
               )}
+
+              {/* Duration — students are removed when it ends (+7-day leeway) */}
+              <FormField>
+                <FormItem>
+                  <FormLabel htmlFor="durationMonths">{tForm('durationLabel')}</FormLabel>
+                  <CourseDurationSelect
+                    value={formData.durationMonths ?? null}
+                    onChange={(months) => setFormData(prev => ({ ...prev, durationMonths: months }))}
+                    disabled={isLoading}
+                  />
+                  <p className="text-xs text-muted-foreground">{tForm('durationHelp')}</p>
+                </FormItem>
+              </FormField>
 
               {/* Majors (degree programs / graduações) this course belongs to */}
               <FormField>

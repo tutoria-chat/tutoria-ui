@@ -16,6 +16,8 @@ import type {
   CourseCreate,
   CourseUpdate,
   CourseWithDetails,
+  CourseLifecycle,
+  CourseLifecycleAction,
   Module,
   ModuleCreate,
   ModuleUpdate,
@@ -656,6 +658,20 @@ class TutoriaAPIClient {
   async getCoursesByUniversity(universityId: number): Promise<Course[]> {
     const response = await this.get<PaginatedResponse<Course>>(`/api/courses/`, { universityId, size: PAGINATION.MAX_PAGE_SIZE });
     return response.items;
+  }
+
+  // Course lifecycle (duration timer, auto-removal, "not in use")
+  async getCourseLifecycle(courseId: number): Promise<CourseLifecycle> {
+    return this.get(`/api/courses/${courseId}/lifecycle`);
+  }
+
+  async updateCourseLifecycle(courseId: number, action: CourseLifecycleAction): Promise<CourseLifecycle> {
+    return this.post(`/api/courses/${courseId}/lifecycle/${action}`);
+  }
+
+  /** Remove an inactive course from the list (soft delete). */
+  async removeCourseFromList(courseId: number): Promise<void> {
+    return this.post(`/api/courses/${courseId}/lifecycle/delete`);
   }
 
   async assignProfessorToCourse(courseId: number, professorId: number): Promise<void> {

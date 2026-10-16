@@ -38,6 +38,12 @@ export default function CreateCoursePage() {
         description: data.description,
         universityId: 'universityId' in data ? data.universityId : user?.universityId || 1,
         majorIds: 'majorIds' in data ? data.majorIds : undefined,
+        // These used to be dropped here, so they never reached the API on create.
+        externalCourseId: data.externalCourseId,
+        titleTracks: data.titleTracks,
+        enableEnem: data.enableEnem,
+        enemArea: data.enemArea,
+        durationMonths: data.durationMonths,
       };
 
       const newCourse = await apiClient.createCourse(courseData);

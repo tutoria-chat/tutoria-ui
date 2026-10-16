@@ -228,7 +228,10 @@
       "majorsPlaceholder": "Select majors...",
       "majorsSearch": "Search major...",
       "majorsEmpty": "No majors found. Add them on the institution page.",
-      "majorsHelp": "Majors this course belongs to. The tutor uses this to answer which major/degree the course is part of."
+      "majorsHelp": "Majors this course belongs to. The tutor uses this to answer which major/degree the course is part of.",
+      "durationLabel": "Course duration",
+      "durationHelp": "The clock starts when the first student is registered. When it ends, professors get a notice and, 7 days later, students are removed from the course (their accounts stay). You can pause or hold it on the course page.",
+      "durationRequired": "Choose the course duration"
     },
     "edit": {
       "title": "Edit Course",
@@ -454,6 +457,65 @@
         "downloadError": "Failed to get download URL.",
         "complianceNotice": "Under the CNE Guidelines for AI in Education, AI does not correct or assign grades on essay assessments. This assistant only prepares formative feedback drafts — the assessment and the grade are the teacher’s responsibility."
       }
+    },
+    "inactiveBadge": "Inactive",
+    "duration": {
+      "placeholder": "Select the duration",
+      "option": "{count, plural, one {# month} other {# months}}",
+      "optionSemester": "{count} months (1 semester)",
+      "optionYear": "{count} months (1 year)"
+    },
+    "lifecycle": {
+      "title": "Course timeline",
+      "duration": "{count, plural, one {Duration: # month} other {Duration: # months}}",
+      "status": {
+        "no_duration": "No duration",
+        "waiting_students": "Waiting for students",
+        "running": "Running",
+        "removal_scheduled": "Removal scheduled",
+        "paused": "Removal paused",
+        "inactive": "Not in use"
+      },
+      "summary": {
+        "noDuration": "This course has no duration, so students are never removed automatically. You can set one in Edit course.",
+        "waitingStudents": "{count, plural, one {The # month clock} other {The # months clock}} starts when the first student is registered.",
+        "running": "When the time is up, professors get a notice. Students will be removed from the course on {date} (their accounts stay).",
+        "removalScheduled": "{count, plural, one {# student will be removed} other {# students will be removed}} from this course on {date}. Their accounts and other courses stay.",
+        "paused": "Auto-removal is paused. Students stay in the course until someone resumes it.",
+        "inactive": "Marked “not in use” on {date}. Students can’t access this course and alerts are off."
+      },
+      "timeline": {
+        "started": "Started {date}",
+        "ends": "Ends {date}",
+        "removal": "Removal {date}",
+        "held": "Held +{days} days"
+      },
+      "unusedNote": "No students registered for more than 3 days even though an access key exists — the course’s professors get a daily alert. If it isn’t being used, click “Course not in use”.",
+      "actions": {
+        "extend": "Hold 7 more days",
+        "pause": "Pause auto-removal",
+        "resume": "Resume auto-removal",
+        "deactivate": "Course not in use",
+        "reactivate": "Reactivate course",
+        "remove": "Remove from list"
+      },
+      "deactivateConfirm": {
+        "title": "Mark this course as not in use?",
+        "description": "Students lose access to this course, email alerts stop and auto-removal is stopped. It stays in the list (greyed out) and can be reactivated at any time."
+      },
+      "removeConfirm": {
+        "title": "Remove the course from the list?",
+        "description": "It disappears from the course list. The data is kept — to recover it, contact the Tutoria team."
+      },
+      "toasts": {
+        "extended": "Removal held for 7 more days",
+        "paused": "Auto-removal paused",
+        "resumed": "Auto-removal resumed — the notice goes out at least 7 days before",
+        "deactivated": "Course marked as not in use",
+        "reactivated": "Course reactivated",
+        "removed": "Course removed from the list"
+      },
+      "actionError": "Couldn’t complete that. Please try again."
     }
   },
   "modules": {
