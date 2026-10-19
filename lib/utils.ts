@@ -5,10 +5,23 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Parse a date value for display. A bare "YYYY-MM-DD" is a calendar date, not an
+ * instant: `new Date()` reads it as UTC midnight, which shows the previous day in
+ * UTC-3 (Brazil). Build those in local time; everything else parses as usual.
+ */
+function toDisplayDate(date: string | Date): Date {
+  if (typeof date === 'string') {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  }
+  return new Date(date);
+}
+
 export function formatDate(date: string | Date | null | undefined): string {
   if (!date) return 'N/A';
 
-  const dateObj = new Date(date);
+  const dateObj = toDisplayDate(date);
 
   // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
   if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {
@@ -25,7 +38,7 @@ export function formatDate(date: string | Date | null | undefined): string {
 export function formatDateShort(date: string | Date | null | undefined): string {
   if (!date) return 'N/A';
 
-  const dateObj = new Date(date);
+  const dateObj = toDisplayDate(date);
 
   // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
   if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {
@@ -43,7 +56,7 @@ export function formatDateShort(date: string | Date | null | undefined): string 
 export function formatDateTimeShort(date: string | Date | null | undefined): string {
   if (!date) return 'N/A';
 
-  const dateObj = new Date(date);
+  const dateObj = toDisplayDate(date);
 
   // Check for invalid dates or dates before 1970 (likely 0/null timestamps)
   if (isNaN(dateObj.getTime()) || dateObj.getFullYear() < 1970) {

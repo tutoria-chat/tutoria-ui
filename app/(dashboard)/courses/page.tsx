@@ -89,7 +89,10 @@ export default function CoursesPage() {
             <BookOpen className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <div className="font-medium">{course.name}</div>
+            <div className="flex flex-wrap items-center gap-2 font-medium">
+              {course.name}
+              {course.deactivatedAt && <Badge variant="outline">{t('inactiveBadge')}</Badge>}
+            </div>
             {course.description && (
               <div className="text-sm text-muted-foreground line-clamp-1 max-w-xs">
                 {course.description}
@@ -367,7 +370,11 @@ export default function CoursesPage() {
           }
         }}
         rowClassName={(course) =>
-          overLimitCourseIds.has(course.id) ? 'opacity-50 bg-muted/30 cursor-not-allowed' : undefined
+          overLimitCourseIds.has(course.id)
+            ? 'opacity-50 bg-muted/30 cursor-not-allowed'
+            : course.deactivatedAt
+              ? 'opacity-60 bg-muted/20' // "not in use": still listed and openable, greyed out
+              : undefined
         }
       />
       {dialog}

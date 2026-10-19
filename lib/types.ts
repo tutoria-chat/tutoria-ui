@@ -248,6 +248,10 @@ export interface Course {
   enableEnem?: boolean;
   enemArea?: string | null;
   majors?: Major[];
+  /** Months each class keeps the course (null = no auto-removal). */
+  durationMonths?: number | null;
+  /** Set when the course was marked "not in use" (greyed out, closed to students). */
+  deactivatedAt?: string | null;
   createdAt: string;
   updatedAt: string;
   modulesCount?: number;
@@ -265,6 +269,7 @@ export interface CourseCreate {
   enableEnem?: boolean;
   enemArea?: string | null;
   majorIds?: number[];
+  durationMonths?: number | null;
 }
 
 export interface CourseUpdate {
@@ -276,7 +281,38 @@ export interface CourseUpdate {
   enableEnem?: boolean;
   enemArea?: string | null;
   majorIds?: number[];
+  durationMonths?: number | null;
 }
+
+/** Course lifecycle: duration timer, auto-removal of students, "not in use". */
+export type CourseLifecycleStatus =
+  | 'no_duration'
+  | 'waiting_students'
+  | 'running'
+  | 'removal_scheduled'
+  | 'paused'
+  | 'inactive';
+
+export interface CourseLifecycle {
+  courseId: number;
+  status: CourseLifecycleStatus;
+  durationMonths: number | null;
+  startedAt: string | null;
+  expiresAt: string | null;
+  /** When the students will actually be removed (leeway, holds and notice included). */
+  removalAt: string | null;
+  warningSentAt: string | null;
+  extensionDays: number;
+  paused: boolean;
+  deactivatedAt: string | null;
+  studentsCount: number;
+  hasActiveKey: boolean;
+  unusedAlertActive: boolean;
+  /** Assigned professor or a higher role. */
+  canManage: boolean;
+}
+
+export type CourseLifecycleAction = 'pause' | 'resume' | 'extend' | 'deactivate' | 'reactivate';
 
 // Semesters (term ranges; drive the "The One" champion title)
 export interface Semester {
@@ -1802,6 +1838,31 @@ export interface LtiSetupInfo {
   launchUrl: string;
   jwksUrl: string;
   enabled: boolean;
+}
+
+// Per-institution keys for the Moodle grading assistant plugin (quiz_tutoria).
+// Mirrors TutoriaApi DTOs/UniversityApiKeyDtos.cs.
+export interface UniversityApiKeySetupInfo {
+  universityId: number;
+  universityName: string;
+  /** Whether the grading feature is enabled for the institution. */
+  enabled: boolean;
+}
+
+export interface UniversityApiKey {
+  id: number;
+  name: string;
+  /** First characters of the key, e.g. "tgk_3f9a1c" — the full key is never returned again. */
+  keyPrefix: string;
+  createdAt: string | null;
+  lastUsedAt: string | null;
+  revokedAt: string | null;
+  isActive: boolean;
+}
+
+/** Returned once, on creation — the only time the full key is visible. */
+export interface CreatedUniversityApiKey extends UniversityApiKey {
+  key: string;
 }
 
 export interface LtiDeployment {

@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { Switch } from '@/components/ui/switch';
+import { CourseDurationSelect } from '@/components/courses/course-duration-select';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient, ApiError } from '@/lib/api';
 import { toast } from 'sonner';
@@ -55,6 +56,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
   );
   const [enableEnem, setEnableEnem] = useState<boolean>(course?.enableEnem ?? false);
   const [enemArea, setEnemArea] = useState<string>(course?.enemArea ?? '');
+  const [durationMonths, setDurationMonths] = useState<number | null>(course?.durationMonths ?? null);
   const [universities, setUniversities] = useState<University[]>([]);
   const [professors, setProfessors] = useState<Professor[]>([]);
   const [selectedProfessorIds, setSelectedProfessorIds] = useState<string[]>([]);
@@ -150,6 +152,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
     if (!formData.code.trim()) newErrors.code = t('codeRequired');
     if (!formData.universityId) newErrors.universityId = t('universityRequired');
     if (enableEnem && !enemArea) newErrors.enemArea = t('enemAreaRequired');
+    if (isCreateMode && !durationMonths) newErrors.durationMonths = t('durationRequired');
 
     setErrors(newErrors);
 
@@ -175,6 +178,7 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
         enableEnem,
         enemArea: enableEnem ? (enemArea || null) : null,
         majorIds: selectedMajorIds.map(Number),
+        durationMonths,
       });
     } catch (error) {
       console.error('Form submission error:', error);
@@ -282,6 +286,26 @@ export function CourseForm({ course, onSubmit, onCancel, isLoading = false, init
                 rows={4}
               />
               {errors.description && <FormMessage>{errors.description}</FormMessage>}
+            </FormItem>
+          </FormField>
+
+          {/* Duration — students are removed when it ends (+7-day leeway) */}
+          <FormField>
+            <FormItem>
+              <FormLabel htmlFor="durationMonths">
+                {t('durationLabel')}{isCreateMode && <span className="text-destructive"> *</span>}
+              </FormLabel>
+              <CourseDurationSelect
+                value={durationMonths}
+                onChange={(months) => {
+                  setDurationMonths(months);
+                  if (errors.durationMonths) setErrors(prev => ({ ...prev, durationMonths: '' }));
+                }}
+                disabled={isLoading}
+                invalid={!!errors.durationMonths}
+              />
+              <p className="text-xs text-muted-foreground">{t('durationHelp')}</p>
+              {errors.durationMonths && <FormMessage>{errors.durationMonths}</FormMessage>}
             </FormItem>
           </FormField>
 

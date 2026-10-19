@@ -16,43 +16,17 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import {
-  Check, ChevronDown, ChevronRight, Copy, Link2, Plug, Plus, RefreshCw, Trash2, TriangleAlert,
+  ChevronDown, ChevronRight, Link2, Plug, Plus, RefreshCw, Trash2, TriangleAlert,
 } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
+import { CopyField } from '@/components/ui/copy-field';
 import { apiClient } from '@/lib/api';
 import { formatDateShort } from '@/lib/utils';
 import type {
   BreadcrumbItem, Course, LtiContextMapping, LtiRegistration, LtiSetupInfo,
 } from '@/lib/types';
 import { toast } from 'sonner';
-
-/** A read-only field with a copy button — used for the URLs pasted into the LMS. */
-function CopyField({ label, value }: { label: string; value: string }) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } catch {
-      toast.error('Não foi possível copiar.');
-    }
-  };
-
-  return (
-    <div className="space-y-1.5">
-      <Label className="text-xs text-muted-foreground">{label}</Label>
-      <div className="flex items-center gap-2">
-        <code className="flex-1 truncate rounded-md border bg-muted/40 px-3 py-2 text-xs">{value}</code>
-        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label={`Copiar ${label}`}>
-          {copied ? <Check className="h-4 w-4 text-green-600" /> : <Copy className="h-4 w-4" />}
-        </Button>
-      </div>
-    </div>
-  );
-}
 
 const EMPTY_FORM = {
   name: '',

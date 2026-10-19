@@ -170,7 +170,10 @@
       "majorsPlaceholder": "Selecione as graduações...",
       "majorsSearch": "Buscar graduação...",
       "majorsEmpty": "Nenhuma graduação encontrada. Cadastre-as na página da instituição.",
-      "majorsHelp": "Graduações a que esta disciplina pertence. O tutor usa isso para responder a que curso/graduação a disciplina se refere."
+      "majorsHelp": "Graduações a que esta disciplina pertence. O tutor usa isso para responder a que curso/graduação a disciplina se refere.",
+      "durationLabel": "Duração da disciplina",
+      "durationHelp": "O prazo começa quando o primeiro estudante é cadastrado. Quando termina, os professores recebem um aviso e, 7 dias depois, os estudantes são removidos da disciplina (as contas deles continuam). Dá para pausar ou adiar na página da disciplina.",
+      "durationRequired": "Escolha a duração da disciplina"
     },
     "edit": {
       "title": "Editar Disciplina",
@@ -396,6 +399,65 @@
         "downloadError": "Falha ao obter o link de download.",
         "complianceNotice": "Conforme as Diretrizes do CNE para IA na Educação, a IA não corrige nem atribui notas em avaliações dissertativas. Este assistente apenas prepara rascunhos de feedback formativo — a avaliação e a nota são de responsabilidade do professor."
       }
+    },
+    "inactiveBadge": "Inativa",
+    "duration": {
+      "placeholder": "Selecione a duração",
+      "option": "{count, plural, one {# mês} other {# meses}}",
+      "optionSemester": "{count} meses (1 semestre)",
+      "optionYear": "{count} meses (1 ano)"
+    },
+    "lifecycle": {
+      "title": "Prazo da disciplina",
+      "duration": "{count, plural, one {Duração: # mês} other {Duração: # meses}}",
+      "status": {
+        "no_duration": "Sem prazo",
+        "waiting_students": "Aguardando estudantes",
+        "running": "Em andamento",
+        "removal_scheduled": "Remoção agendada",
+        "paused": "Remoção pausada",
+        "inactive": "Não está em uso"
+      },
+      "summary": {
+        "noDuration": "Esta disciplina não tem duração definida, então os estudantes não são removidos automaticamente. A duração pode ser definida em Editar disciplina.",
+        "waitingStudents": "{count, plural, one {O prazo de # mês} other {O prazo de # meses}} começa quando o primeiro estudante for cadastrado.",
+        "running": "Quando o prazo terminar, os professores recebem um aviso. Os estudantes serão removidos da disciplina em {date} (as contas deles continuam).",
+        "removalScheduled": "{count, plural, one {# estudante será removido} other {# estudantes serão removidos}} desta disciplina em {date}. As contas e as outras disciplinas deles continuam.",
+        "paused": "A remoção automática está pausada. Os estudantes continuam na disciplina até alguém retomar.",
+        "inactive": "Marcada como “não está em uso” em {date}. Os estudantes não acessam esta disciplina e os avisos estão desligados."
+      },
+      "timeline": {
+        "started": "Começou em {date}",
+        "ends": "Termina em {date}",
+        "removal": "Remoção em {date}",
+        "held": "Adiada +{days} dias"
+      },
+      "unusedNote": "Nenhum estudante cadastrado há mais de 3 dias, mesmo com a chave de acesso criada — os professores da disciplina recebem um aviso por dia. Se ela não está sendo usada, clique em “Disciplina não está em uso”.",
+      "actions": {
+        "extend": "Adiar 7 dias",
+        "pause": "Pausar remoção automática",
+        "resume": "Retomar remoção automática",
+        "deactivate": "Disciplina não está em uso",
+        "reactivate": "Reativar disciplina",
+        "remove": "Remover da lista"
+      },
+      "deactivateConfirm": {
+        "title": "Marcar a disciplina como não está em uso?",
+        "description": "Os estudantes deixam de acessar esta disciplina, os avisos por e-mail param e a remoção automática fica parada. Ela continua na lista (em cinza) e pode ser reativada a qualquer momento."
+      },
+      "removeConfirm": {
+        "title": "Remover a disciplina da lista?",
+        "description": "Ela some da lista de disciplinas. Os dados continuam guardados — para recuperar, fale com a equipe Tutoria."
+      },
+      "toasts": {
+        "extended": "Remoção adiada por mais 7 dias",
+        "paused": "Remoção automática pausada",
+        "resumed": "Remoção automática retomada — o aviso sai pelo menos 7 dias antes",
+        "deactivated": "Disciplina marcada como não está em uso",
+        "reactivated": "Disciplina reativada",
+        "removed": "Disciplina removida da lista"
+      },
+      "actionError": "Não foi possível concluir. Tente de novo."
     }
   },
   "modules": {
@@ -2353,7 +2415,11 @@
         "rowsPerPage": "Rows per page: Change how many items are displayed",
         "actions": "Actions: Quick buttons for View, Edit, Delete operations"
       }
-    }
+    },
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "copyError": "Não foi possível copiar.",
+    "copyLabel": "Copiar {label}"
   },
   "errors": {
     "pageNotFound": "Página não encontrada",
@@ -5171,11 +5237,15 @@
   },
   "ava": {
     "title": "Configuração do AVA",
-    "description": "Coloque a Central de apoio ao aprendizado da Tutoria dentro do seu AVA (Moodle). Escolha um método e siga os passos.",
+    "description": "Leve a Tutoria para o seu AVA (Moodle): a Central de apoio ao aprendizado para os alunos e o Assistente de Correção para os professores.",
+    "tabs": {
+      "widget": "Central de apoio no AVA",
+      "grading": "Assistente de Correção"
+    },
     "chooseMethod": "Escolha como incorporar",
     "recommended": "Recomendado",
     "stepsTitle": "Passo a passo",
-    "pluginNote": "O plugin renderiza o tutor pelo servidor do Moodle, então funciona mesmo em cursos que removem iframes de blocos HTML.",
+    "pluginNote": "O plugin renderiza a Central de apoio ao aprendizado pelo servidor do Moodle, então funciona mesmo em cursos que removem iframes de blocos HTML.",
     "block": {
       "name": "Bloco (plugin)",
       "tagline": "Um bloco na barra lateral, ou um balão de chat flutuante no canto.",
@@ -5203,6 +5273,119 @@
       "title": "Baixar {name}",
       "updated": "Atualizado em {date}",
       "button": "Baixar ZIP"
+    },
+    "grading": {
+      "intro": {
+        "title": "Assistente de Correção no Moodle",
+        "body": "Um plugin que aparece dentro dos questionários do Moodle (aba Resultados). Ele organiza as respostas dissertativas e prepara um rascunho de feedback para cada uma. A nota é sempre do professor: a IA nunca sugere nem lança nota, conforme as Diretrizes do CNE."
+      },
+      "guide": {
+        "button": "Guia completo com imagens (PDF)",
+        "note": "Passo a passo do zero: instalar, gerar a chave, testar, corrigir e conferir. Bom para enviar ao administrador do Moodle e aos professores.",
+        "open": "Abrir PDF"
+      },
+      "status": {
+        "enabled": "Correção com IA habilitada para {name}.",
+        "disabled": "A correção com IA ainda não está habilitada para {name}. Fale com a equipe Tutoria para liberar — você já pode instalar o plugin enquanto isso."
+      },
+      "setup": {
+        "title": "1. Configurar no Moodle (uma vez)",
+        "description": "Feito pelo administrador do Moodle, uma única vez para o site inteiro. Não há nada a configurar por curso ou por questionário."
+      },
+      "download": {
+        "title": "Plugin Assistente de Correção (Moodle)"
+      },
+      "values": {
+        "title": "Dados para colar nas configurações do plugin",
+        "description": "No Moodle: Administração do site → Plugins → Módulos de atividade → Questionário → Assistente de Correção (Tutoria).",
+        "url": "URL base da API",
+        "urlHint": "Cole no campo “URL base da API”.",
+        "institutionId": "ID da instituição",
+        "institutionIdHint": "Cole no campo “ID da instituição”.",
+        "key": "Chave da API",
+        "noInstitution": "Selecione uma instituição no seletor do topo da página para ver o ID e gerar a chave."
+      },
+      "keys": {
+        "askManager": "A chave é gerada pelo gestor da instituição nesta mesma página. Peça para ele gerar uma e enviá-la ao administrador do Moodle.",
+        "intro": "Cada chave funciona apenas para a sua instituição. Gere uma, copie e cole no campo “Chave da API” do plugin.",
+        "nameLabel": "Nome da chave (para você lembrar onde ela é usada)",
+        "namePlaceholder": "Ex.: Moodle produção",
+        "defaultName": "Moodle",
+        "generate": "Gerar chave",
+        "generating": "Gerando…",
+        "newTitle": "Sua nova chave — copie agora",
+        "newWarning": "Por segurança, ela não será mostrada de novo. Se perder, revogue esta e gere outra.",
+        "done": "Já copiei",
+        "listTitle": "Chaves da instituição",
+        "empty": "Nenhuma chave gerada ainda.",
+        "loadError": "Não foi possível carregar as chaves.",
+        "createError": "Não foi possível gerar a chave.",
+        "active": "Ativa",
+        "revokedBadge": "Revogada",
+        "created": "Criada em {date}",
+        "lastUsed": "Último uso em {date}",
+        "neverUsed": "Ainda não usada",
+        "revoke": "Revogar",
+        "revokeAria": "Revogar a chave {name}",
+        "cancel": "Cancelar",
+        "revokeTitle": "Revogar esta chave?",
+        "revokeDescription": "A chave “{name}” ({prefix}…) deixa de funcionar imediatamente. O Moodle que a usa para de corrigir até receber uma nova chave.",
+        "revoked": "Chave revogada.",
+        "revokeError": "Não foi possível revogar a chave."
+      },
+      "install": {
+        "title": "Passo a passo de instalação",
+        "steps": [
+          "Baixe o plugin acima (arquivo quiz-tutoria.zip).",
+          "No Moodle, entre como administrador e abra Administração do site → Plugins → Instalar plugins.",
+          "Envie o arquivo .zip, confirme a instalação e conclua a atualização do banco de dados do Moodle.",
+          "Abra Administração do site → Plugins → Módulos de atividade → Questionário → Assistente de Correção (Tutoria).",
+          "Cole a URL base da API, o ID da instituição e a chave (os dados acima) e clique em “Salvar mudanças”.",
+          "Pronto: todo questionário com questões dissertativas passa a ter a aba “Assistente de Correção” em Resultados."
+        ]
+      },
+      "usage": {
+        "title": "2. Guia rápido de uso (professor)",
+        "description": "Como corrigir as questões dissertativas de um questionário com o assistente.",
+        "steps": [
+          "Abra o questionário e clique em Resultados → Assistente de Correção.",
+          "(Opcional) Em “Critérios de correção / rubrica”, descreva o que uma boa resposta deve conter — por exemplo, “tese clara, dois argumentos e uma fonte”. Não escreva instruções de nota.",
+          "Clique em “Analisar com IA” e aguarde enquanto aparece “Correção em andamento… X de Y”.",
+          "Revise cada linha: clique em “Ver resposta” para ler o que o aluno escreveu, ajuste o rascunho de feedback se quiser e digite a nota no campo em branco — a IA nunca sugere nota. Linhas sem nota não são lançadas.",
+          "Clique em “Lançar notas e feedback” e confirme. Notas e comentários entram no questionário e no diário de notas, e o aluno vê como em qualquer correção do Moodle."
+        ],
+        "audit": "Fica registrado quem pediu os rascunhos de feedback e quem confirmou as notas, com data e hora (Relatórios → Logs do Moodle).",
+        "inMoodle": "A tela do assistente no Moodle também traz este passo a passo, no quadro “Como usar este assistente — passo a passo”."
+      },
+      "troubleshooting": {
+        "title": "Deu algum erro? Veja o que fazer",
+        "items": [
+          {
+            "problem": "A aba “Assistente de Correção” não aparece",
+            "fix": "O questionário precisa ter questões dissertativas e o plugin precisa estar instalado. Confira se você está em Resultados."
+          },
+          {
+            "problem": "“A chave da API foi rejeitada” (401)",
+            "fix": "A chave foi colada incompleta ou foi revogada. Gere uma nova chave acima e cole no plugin."
+          },
+          {
+            "problem": "“Acesso negado” (403)",
+            "fix": "A correção ainda não foi habilitada para a instituição, ou a chave é de outra instituição — confira o ID da instituição."
+          },
+          {
+            "problem": "“Curso ou instituição não encontrados” (404)",
+            "fix": "Confira a URL base da API e o ID da instituição nas configurações do plugin."
+          },
+          {
+            "problem": "“Não há tentativas finalizadas com respostas dissertativas”",
+            "fix": "Nenhum aluno enviou o questionário ainda. Espere ao menos uma tentativa finalizada."
+          },
+          {
+            "problem": "Uma linha ficou vermelha depois de lançar",
+            "fix": "A nota dessa linha não foi salva — o motivo aparece embaixo dela (por exemplo, passou do valor da questão). As outras já foram salvas: corrija e clique em “Lançar notas e feedback” de novo."
+          }
+        ]
+      }
     }
   },
   "accessKeys": {

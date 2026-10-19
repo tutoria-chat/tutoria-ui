@@ -228,7 +228,10 @@
       "majorsPlaceholder": "Select majors...",
       "majorsSearch": "Search major...",
       "majorsEmpty": "No majors found. Add them on the institution page.",
-      "majorsHelp": "Majors this course belongs to. The tutor uses this to answer which major/degree the course is part of."
+      "majorsHelp": "Majors this course belongs to. The tutor uses this to answer which major/degree the course is part of.",
+      "durationLabel": "Course duration",
+      "durationHelp": "The clock starts when the first student is registered. When it ends, professors get a notice and, 7 days later, students are removed from the course (their accounts stay). You can pause or hold it on the course page.",
+      "durationRequired": "Choose the course duration"
     },
     "edit": {
       "title": "Edit Course",
@@ -454,6 +457,65 @@
         "downloadError": "Failed to get download URL.",
         "complianceNotice": "Under the CNE Guidelines for AI in Education, AI does not correct or assign grades on essay assessments. This assistant only prepares formative feedback drafts — the assessment and the grade are the teacher’s responsibility."
       }
+    },
+    "inactiveBadge": "Inactive",
+    "duration": {
+      "placeholder": "Select the duration",
+      "option": "{count, plural, one {# month} other {# months}}",
+      "optionSemester": "{count} months (1 semester)",
+      "optionYear": "{count} months (1 year)"
+    },
+    "lifecycle": {
+      "title": "Course timeline",
+      "duration": "{count, plural, one {Duration: # month} other {Duration: # months}}",
+      "status": {
+        "no_duration": "No duration",
+        "waiting_students": "Waiting for students",
+        "running": "Running",
+        "removal_scheduled": "Removal scheduled",
+        "paused": "Removal paused",
+        "inactive": "Not in use"
+      },
+      "summary": {
+        "noDuration": "This course has no duration, so students are never removed automatically. You can set one in Edit course.",
+        "waitingStudents": "{count, plural, one {The # month clock} other {The # months clock}} starts when the first student is registered.",
+        "running": "When the time is up, professors get a notice. Students will be removed from the course on {date} (their accounts stay).",
+        "removalScheduled": "{count, plural, one {# student will be removed} other {# students will be removed}} from this course on {date}. Their accounts and other courses stay.",
+        "paused": "Auto-removal is paused. Students stay in the course until someone resumes it.",
+        "inactive": "Marked “not in use” on {date}. Students can’t access this course and alerts are off."
+      },
+      "timeline": {
+        "started": "Started {date}",
+        "ends": "Ends {date}",
+        "removal": "Removal {date}",
+        "held": "Held +{days} days"
+      },
+      "unusedNote": "No students registered for more than 3 days even though an access key exists — the course’s professors get a daily alert. If it isn’t being used, click “Course not in use”.",
+      "actions": {
+        "extend": "Hold 7 more days",
+        "pause": "Pause auto-removal",
+        "resume": "Resume auto-removal",
+        "deactivate": "Course not in use",
+        "reactivate": "Reactivate course",
+        "remove": "Remove from list"
+      },
+      "deactivateConfirm": {
+        "title": "Mark this course as not in use?",
+        "description": "Students lose access to this course, email alerts stop and auto-removal is stopped. It stays in the list (greyed out) and can be reactivated at any time."
+      },
+      "removeConfirm": {
+        "title": "Remove the course from the list?",
+        "description": "It disappears from the course list. The data is kept — to recover it, contact the Tutoria team."
+      },
+      "toasts": {
+        "extended": "Removal held for 7 more days",
+        "paused": "Auto-removal paused",
+        "resumed": "Auto-removal resumed — the notice goes out at least 7 days before",
+        "deactivated": "Course marked as not in use",
+        "reactivated": "Course reactivated",
+        "removed": "Course removed from the list"
+      },
+      "actionError": "Couldn’t complete that. Please try again."
     }
   },
   "modules": {
@@ -2353,7 +2415,11 @@
         "rowsPerPage": "Rows per page: Change how many items are displayed",
         "actions": "Actions: Quick buttons for View, Edit, Delete operations"
       }
-    }
+    },
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyError": "Couldn't copy.",
+    "copyLabel": "Copy {label}"
   },
   "errors": {
     "pageNotFound": "Page not found",
@@ -4139,11 +4205,15 @@
   },
   "ava": {
     "title": "LMS / Moodle setup",
-    "description": "Put the Tutoria Learning Support Center inside your LMS (Moodle). Pick a method and follow the steps.",
+    "description": "Bring Tutoria into your LMS (Moodle): the Learning Support Center for students and the Grading assistant for teachers.",
+    "tabs": {
+      "widget": "Learning Support Center in the LMS",
+      "grading": "Grading assistant"
+    },
     "chooseMethod": "Choose how to embed",
     "recommended": "Recommended",
     "stepsTitle": "Steps",
-    "pluginNote": "The plugin renders the tutor server-side, so it works even in courses that strip iframes from HTML blocks.",
+    "pluginNote": "The plugin renders the Learning Support Center server-side, so it works even in courses that strip iframes from HTML blocks.",
     "block": {
       "name": "Block (plugin)",
       "tagline": "A block in the sidebar, or a floating chat bubble in the corner.",
@@ -4171,6 +4241,119 @@
       "title": "Download {name}",
       "updated": "Updated {date}",
       "button": "Download ZIP"
+    },
+    "grading": {
+      "intro": {
+        "title": "Grading assistant in Moodle",
+        "body": "A plugin that appears inside Moodle quizzes (Results tab). It organises essay answers and drafts formative feedback for each one. The grade is always the teacher's: the AI never suggests or applies a grade, as required by the CNE Guidelines."
+      },
+      "guide": {
+        "button": "Full illustrated guide (PDF, Portuguese)",
+        "note": "Step by step from scratch: install, generate the key, test, grade and check. Handy to send to your Moodle administrator and teachers.",
+        "open": "Open PDF"
+      },
+      "status": {
+        "enabled": "AI grading is enabled for {name}.",
+        "disabled": "AI grading isn't enabled for {name} yet. Ask the Tutoria team to turn it on — you can install the plugin in the meantime."
+      },
+      "setup": {
+        "title": "1. Set up in Moodle (once)",
+        "description": "Done by the Moodle administrator, once for the whole site. There's nothing to configure per course or per quiz."
+      },
+      "download": {
+        "title": "Grading assistant plugin (Moodle)"
+      },
+      "values": {
+        "title": "Values to paste into the plugin settings",
+        "description": "In Moodle: Site administration → Plugins → Activity modules → Quiz → Grading assistant (Tutoria).",
+        "url": "API base URL",
+        "urlHint": "Paste into the “API base URL” field.",
+        "institutionId": "Institution ID",
+        "institutionIdHint": "Paste into the “Institution ID” field.",
+        "key": "API key",
+        "noInstitution": "Select an institution in the switcher at the top of the page to see its ID and generate a key."
+      },
+      "keys": {
+        "askManager": "The key is generated by your institution's manager on this same page. Ask them to create one and send it to the Moodle administrator.",
+        "intro": "Each key works only for your institution. Generate one, copy it and paste it into the plugin's “API key” field.",
+        "nameLabel": "Key name (to remember where it's used)",
+        "namePlaceholder": "E.g. Production Moodle",
+        "defaultName": "Moodle",
+        "generate": "Generate key",
+        "generating": "Generating…",
+        "newTitle": "Your new key — copy it now",
+        "newWarning": "For security it won't be shown again. If you lose it, revoke it and generate another.",
+        "done": "I've copied it",
+        "listTitle": "Institution keys",
+        "empty": "No keys generated yet.",
+        "loadError": "Couldn't load the keys.",
+        "createError": "Couldn't generate the key.",
+        "active": "Active",
+        "revokedBadge": "Revoked",
+        "created": "Created {date}",
+        "lastUsed": "Last used {date}",
+        "neverUsed": "Not used yet",
+        "revoke": "Revoke",
+        "revokeAria": "Revoke key {name}",
+        "cancel": "Cancel",
+        "revokeTitle": "Revoke this key?",
+        "revokeDescription": "The key “{name}” ({prefix}…) stops working immediately. The Moodle using it stops grading until it gets a new key.",
+        "revoked": "Key revoked.",
+        "revokeError": "Couldn't revoke the key."
+      },
+      "install": {
+        "title": "Installation steps",
+        "steps": [
+          "Download the plugin above (quiz-tutoria.zip).",
+          "In Moodle, sign in as an administrator and open Site administration → Plugins → Install plugins.",
+          "Upload the .zip, click “Install plugin from the ZIP file” and finish with “Upgrade Moodle database now”.",
+          "Open Site administration → Plugins → Activity modules → Quiz → Grading assistant (Tutoria).",
+          "Paste the API base URL, the Institution ID and the key (the values above) and click “Save changes”.",
+          "Done: every quiz with essay questions now has a “Grading assistant” tab under Results."
+        ]
+      },
+      "usage": {
+        "title": "2. Quick usage guide (teacher)",
+        "description": "How to grade a quiz's essay questions with the assistant.",
+        "steps": [
+          "Open the quiz and click Results → Grading assistant.",
+          "(Optional) In “Correction criteria / rubric”, describe what a good answer should contain — e.g. “a clear thesis, two arguments and a source”. Don't write grading instructions.",
+          "Click “Analyse with AI” and wait while “Grading in progress… X of Y” is shown.",
+          "Review each row: click “View answer” to read what the student wrote, edit the feedback draft if you like and type the grade in the empty field — the AI never suggests a grade. Rows without a grade are not saved.",
+          "Click “Save grades & feedback” and confirm. Grades and comments land in the quiz and the gradebook, and students see them like any Moodle grading."
+        ],
+        "audit": "Who requested the feedback drafts and who confirmed the grades is logged, with date and time (Moodle Reports → Logs).",
+        "inMoodle": "The assistant’s screen in Moodle carries this step-by-step too, in the “How to use this assistant — step by step” panel."
+      },
+      "troubleshooting": {
+        "title": "Got an error? Here's what to do",
+        "items": [
+          {
+            "problem": "The “Grading assistant” tab doesn't appear",
+            "fix": "The quiz needs essay questions and the plugin must be installed. Make sure you're under Results."
+          },
+          {
+            "problem": "“The API key was rejected” (401)",
+            "fix": "The key was pasted incompletely or has been revoked. Generate a new key above and paste it into the plugin."
+          },
+          {
+            "problem": "“Not allowed” (403)",
+            "fix": "Grading isn't enabled for the institution yet, or the key belongs to another institution — check the Institution ID."
+          },
+          {
+            "problem": "“Course or institution not found” (404)",
+            "fix": "Check the API base URL and the Institution ID in the plugin settings."
+          },
+          {
+            "problem": "“There are no finished attempts with essay answers to grade”",
+            "fix": "No student has submitted the quiz yet. Wait for at least one finished attempt."
+          },
+          {
+            "problem": "A row turned red after saving",
+            "fix": "That row’s grade was not saved — the reason is shown under it (e.g. above the question’s maximum). The others were saved: fix it and click “Save grades & feedback” again."
+          }
+        ]
+      }
     }
   },
   "accessKeys": {
