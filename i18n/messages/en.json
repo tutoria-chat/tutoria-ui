@@ -4201,7 +4201,8 @@
     "quizRadarDescription": "Positive and negative quiz results by concept",
     "successRate": "Success Rate",
     "totalAttempts": "Total Attempts",
-    "noPrecomputedData": "Analytics data is being processed. Check back tomorrow."
+    "noPrecomputedData": "Analytics data is being processed. Check back tomorrow.",
+    "scopedToYourCourses": "You are seeing only the courses you teach."
   },
   "ava": {
     "title": "LMS / Moodle setup",

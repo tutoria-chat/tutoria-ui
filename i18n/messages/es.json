@@ -4523,7 +4523,8 @@
     "quizRadarDescription": "Resultados positivos y negativos del quiz por concepto",
     "successRate": "Tasa de Éxito",
     "totalAttempts": "Total de Intentos",
-    "noPrecomputedData": "Los datos analíticos se están procesando. Vuelve mañana."
+    "noPrecomputedData": "Los datos analíticos se están procesando. Vuelve mañana.",
+    "scopedToYourCourses": "Estás viendo solo los cursos que impartes."
   },
   "ava": {
     "title": "Configuración del AVA",

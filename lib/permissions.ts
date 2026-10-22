@@ -277,6 +277,10 @@ export function canAccessPage(
       '/subscription': ['subscription:manage'],
     };
 
+    // Professors get the analytics page without analytics:read — the API limits
+    // every panel to the courses they're assigned to.
+    if (pagePath === '/analytics' && user.role === 'professor') return true;
+
     const requiredPerms = pagePermissions[pagePath];
     if (!requiredPerms) return true; // No specific requirements
 
@@ -288,7 +292,7 @@ export function canAccessPage(
     '/admin': (u) => u.role === 'super_admin',
     '/universities': (u) => u.role === 'super_admin',
     '/universities/create': (u) => u.role === 'super_admin',
-    '/analytics': (u) => ['super_admin', 'manager'].includes(u.role),
+    '/analytics': (u) => ['super_admin', 'manager', 'professor'].includes(u.role),
     '/courses': (u) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(u.role),
     '/courses/create': (u) => ['super_admin', 'manager', 'tutor'].includes(u.role) || (u.role === 'professor' && u.isAdmin === true),
     '/modules': (u) => ['super_admin', 'manager', 'tutor', 'platform_coordinator', 'professor'].includes(u.role),
