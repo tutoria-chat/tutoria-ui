@@ -458,6 +458,17 @@
         "removed": "Curso quitado de la lista"
       },
       "actionError": "No se pudo completar. Inténtalo de nuevo."
+    },
+    "rosterWarning": {
+      "openCourse": "Abrir curso",
+      "emptyTitle": "Este curso todavía no tiene estudiantes",
+      "empty": "Sin estudiantes registrados, nadie puede entrar al widget: no se encuentra su matrícula. Registra o importa el grupo en la página del curso.",
+      "endedTitle": "El grupo de este curso terminó",
+      "ended": "Los estudiantes salieron el {date}, cuando terminó el plazo. Registra el nuevo grupo para que puedan entrar al widget.",
+      "endingTitle": "El plazo de este grupo terminó",
+      "ending": "{count, plural, one {# estudiante saldrá} other {# estudiantes saldrán}} el {date}. Puedes aplazarlo o pausarlo en la página del curso.",
+      "inactiveTitle": "Curso marcado como “sin uso”",
+      "inactive": "Los estudiantes no pueden abrir este módulo en el widget. Reactiva el curso para restablecer el acceso."
     }
   },
   "modules": {

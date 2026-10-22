@@ -305,6 +305,8 @@ export interface CourseLifecycle {
   extensionDays: number;
   paused: boolean;
   deactivatedAt: string | null;
+  /** When the last class was removed because its time ended. */
+  studentsRemovedAt: string | null;
   studentsCount: number;
   hasActiveKey: boolean;
   unusedAlertActive: boolean;
