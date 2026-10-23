@@ -416,13 +416,15 @@ export function TokenModal({ mode, open, onClose, onSuccess, token, preselectedM
                           className="w-full justify-between"
                           disabled={isLoading || loadingModules}
                         >
-                          {formData.moduleId && formData.moduleId !== 0
-                            ? modules.find((m) => m.id === formData.moduleId)?.name || t('selectModule')
-                            : loadingModules ? t('loadingModules') : t('selectModule')}
+                          <span className="min-w-0 truncate">
+                            {formData.moduleId && formData.moduleId !== 0
+                              ? modules.find((m) => m.id === formData.moduleId)?.name || t('selectModule')
+                              : loadingModules ? t('loadingModules') : t('selectModule')}
+                          </span>
                           <ChevronsUpDown aria-hidden="true" className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[400px] p-0">
+                      <PopoverContent className="w-(--radix-popover-trigger-width) min-w-[min(400px,var(--radix-popover-content-available-width))] max-w-(--radix-popover-content-available-width) p-0" align="start">
                         <Command shouldFilter={false}>
                           <CommandInput
                             placeholder={t('searchModule')}
