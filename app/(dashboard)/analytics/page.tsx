@@ -13,7 +13,7 @@ import { DateRangePicker } from '@/components/ui/date-range-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, AlertTriangle, Brain, ChevronRight, ChevronDown, GraduationCap, Trophy, Flame, Zap, Medal, Award, TrendingUp } from 'lucide-react';
+import { Users, RefreshCw, Download, Sparkles, UserX, Building2, TrendingDown, AlertTriangle, Brain, ChevronRight, ChevronDown, GraduationCap, Trophy, Flame, Zap, Medal, Award, TrendingUp, Lock } from 'lucide-react';
 import { useAuth } from '@/components/auth/auth-provider';
 import { apiClient } from '@/lib/api';
 import { toast } from 'sonner';
@@ -78,6 +78,10 @@ export default function AnalyticsPage() {
   });
 
   const isSuperAdmin = user?.role === 'super_admin';
+  // Regular professors see only their assigned courses (enforced by the API);
+  // admin-only panels (daily AI summary, quiz recompute) need analytics:read.
+  const isCourseScoped = user?.role === 'professor' && !user?.isAdmin;
+  const canSeeAdminAnalytics = isSuperAdmin || (user?.permissions?.includes('analytics:read') ?? false);
   const [universities, setUniversities] = useState<University[]>([]);
   const [selectedUniversityId, setSelectedUniversityId] = useState<number | undefined>(undefined);
 
@@ -154,7 +158,9 @@ export default function AnalyticsPage() {
       apiClient.getAnalyticsQuizPerformance(undefined, selectedUniversityId).then(setQuizPerformance).catch(() => {});
       apiClient.getAnalyticsAtRiskStudents(14, selectedUniversityId).then(setAtRisk).catch(() => {});
       apiClient.getAnalyticsRiskPredictions(14, selectedUniversityId).then(setRiskPredictions).catch(() => {});
-      apiClient.getAnalyticsDailyAISummaries(1, selectedUniversityId).then(setAiSummaries).catch(() => {});
+      if (canSeeAdminAnalytics) {
+        apiClient.getAnalyticsDailyAISummaries(1, selectedUniversityId).then(setAiSummaries).catch(() => {});
+      }
       apiClient.getAnalyticsCourseStats(30, selectedUniversityId).then(setCourseStats).catch(() => {});
       apiClient.getAnalyticsPedagogicalAlerts(14, selectedUniversityId).then(setPedagogicalAlerts).catch(() => {});
       apiClient.getAnalyticsRankings(selectedUniversityId, filters.startDate, filters.endDate).then(setRankings).catch(() => {});
@@ -336,6 +342,13 @@ export default function AnalyticsPage() {
           title={t('title')}
           description={t('description')}
         />
+
+        {isCourseScoped && (
+          <p className="mt-3 inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-muted-foreground">
+            <Lock className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+            {t('scopedToYourCourses')}
+          </p>
+        )}
 
         <div className="flex flex-wrap items-center gap-4 mt-6">
           <DateRangePicker date={dateRange} onDateChange={handleDateRangeChange} />
@@ -707,12 +720,14 @@ export default function AnalyticsPage() {
 
         {/* ── Quiz performance ── */}
         <TabsContent value="quizzes" className="space-y-6">
-          <div className="flex justify-end">
-            <Button variant="outline" size="sm" onClick={handleRecomputeQuiz} disabled={recomputing}>
-              <RefreshCw className={`mr-2 h-4 w-4 ${recomputing ? 'animate-spin' : ''}`} />
-              {t('quizRecompute.button')}
-            </Button>
-          </div>
+          {canSeeAdminAnalytics && (
+            <div className="flex justify-end">
+              <Button variant="outline" size="sm" onClick={handleRecomputeQuiz} disabled={recomputing}>
+                <RefreshCw className={`mr-2 h-4 w-4 ${recomputing ? 'animate-spin' : ''}`} />
+                {t('quizRecompute.button')}
+              </Button>
+            </div>
+          )}
           {quizPerformance && quizPerformance.concepts.length > 0 ? (
             <>
               <Card>

@@ -458,6 +458,17 @@
         "removed": "Disciplina removida da lista"
       },
       "actionError": "Não foi possível concluir. Tente de novo."
+    },
+    "rosterWarning": {
+      "openCourse": "Abrir disciplina",
+      "emptyTitle": "Esta disciplina ainda não tem estudantes",
+      "empty": "Sem estudantes cadastrados, ninguém consegue entrar no widget: a matrícula não é encontrada. Cadastre ou importe a turma na página da disciplina.",
+      "endedTitle": "A turma desta disciplina foi encerrada",
+      "ended": "Os estudantes foram removidos em {date}, quando o prazo terminou. Cadastre a nova turma para que eles consigam entrar no widget.",
+      "endingTitle": "O prazo desta turma terminou",
+      "ending": "{count, plural, one {# estudante será removido} other {# estudantes serão removidos}} em {date}. Dá para adiar ou pausar na página da disciplina.",
+      "inactiveTitle": "Disciplina marcada como “não está em uso”",
+      "inactive": "Os estudantes não conseguem acessar este módulo pelo widget. Reative a disciplina para liberar o acesso."
     }
   },
   "modules": {
@@ -5233,7 +5244,8 @@
     "quizRadarDescription": "Resultados positivos e negativos do quiz por conceito",
     "successRate": "Taxa de Acerto",
     "totalAttempts": "Total de Tentativas",
-    "noPrecomputedData": "Dados analíticos estão sendo processados. Volte amanhã."
+    "noPrecomputedData": "Dados analíticos estão sendo processados. Volte amanhã.",
+    "scopedToYourCourses": "Você está vendo apenas as disciplinas em que leciona."
   },
   "ava": {
     "title": "Configuração do AVA",

@@ -128,6 +128,13 @@ export function Sidebar({ isOpen = true, onClose, isCollapsed = false, onToggleC
       icon: GraduationCap,
       requiredPermission: 'students:read',
     },
+    // Professors: analytics of their own courses (admins get it in the admin section).
+    ...(user.role === 'professor' && !(user.permissions?.includes('staff:create') ?? false) ? [{
+      label: t('analytics'),
+      href: '/analytics',
+      icon: BarChart3,
+      roles: ['professor'] as UserRole[],
+    }] : []),
     {
       label: t('enemBank'),
       href: '/enem',

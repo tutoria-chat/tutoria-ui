@@ -53,6 +53,7 @@ import { ProfessorOnly } from '@/components/auth/role-guard';
 import { TokenModal, type TokenModalMode } from '@/components/tokens/token-modal';
 import { useAuth } from '@/components/auth/auth-provider';
 import { useFetch } from '@/lib/hooks';
+import { useCourseRosterWarning } from '@/components/courses/use-course-roster-warning';
 import { apiClient } from '@/lib/api';
 import { formatDateShort, formatDateTimeShort, isValidYouTubeUrl } from '@/lib/utils';
 import { APP_CONFIG } from '@/lib/constants';
@@ -71,6 +72,8 @@ export default function ModuleDetailsPage() {
   // OPTIMIZED: Module endpoint returns files, so no separate call needed
   const { data: module, loading: moduleLoading, error: moduleError, refetch: refetchModule } = useFetch<Module & { files?: FileType[] }>(`/api/modules/${moduleId}`);
   const { data: tokensResponse, loading: tokensLoading, refetch: refetchTokens } = useFetch<PaginatedResponse<ModuleAccessToken>>(`/api/moduleaccesstokens/?moduleId=${moduleId}`);
+  // Toast when this module's course has no usable roster (students can't log in to the widget).
+  useCourseRosterWarning(module?.courseId);
 
   const files = module?.files || [];
   const tokens = tokensResponse?.items || [];

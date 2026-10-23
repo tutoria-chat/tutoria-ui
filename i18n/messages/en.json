@@ -516,6 +516,17 @@
         "removed": "Course removed from the list"
       },
       "actionError": "Couldn’t complete that. Please try again."
+    },
+    "rosterWarning": {
+      "openCourse": "Open course",
+      "emptyTitle": "This course has no students yet",
+      "empty": "With no students registered, nobody can get into the widget: their student ID isn’t found. Add or import the class on the course page.",
+      "endedTitle": "This course’s class has ended",
+      "ended": "Students were removed on {date}, when the time ran out. Register the new class so they can get into the widget.",
+      "endingTitle": "This class’s time is up",
+      "ending": "{count, plural, one {# student will be removed} other {# students will be removed}} on {date}. You can hold or pause it on the course page.",
+      "inactiveTitle": "Course marked “not in use”",
+      "inactive": "Students can’t open this module in the widget. Reactivate the course to restore access."
     }
   },
   "modules": {
@@ -4201,7 +4212,8 @@
     "quizRadarDescription": "Positive and negative quiz results by concept",
     "successRate": "Success Rate",
     "totalAttempts": "Total Attempts",
-    "noPrecomputedData": "Analytics data is being processed. Check back tomorrow."
+    "noPrecomputedData": "Analytics data is being processed. Check back tomorrow.",
+    "scopedToYourCourses": "You are seeing only the courses you teach."
   },
   "ava": {
     "title": "LMS / Moodle setup",
