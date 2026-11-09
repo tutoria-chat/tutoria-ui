@@ -123,6 +123,20 @@ export interface BulkInviteResult {
 }
 
 // University Types
+/** "university" = under MEC/CNE; "corporate" = internal company training outside MEC. */
+export type InstitutionType = 'university' | 'corporate';
+/** "feedback" = AI never suggests a grade (required for MEC/CNE); "score" = corporate only. */
+export type GradingMode = 'feedback' | 'score';
+
+export interface GradingModeSettings {
+  universityId: number;
+  institutionType: InstitutionType;
+  gradingMode: GradingMode;
+  changedAt?: string | null;
+  changedByUserId?: number | null;
+  contractRef?: string | null;
+}
+
 export interface University {
   id: number;
   name: string;
@@ -148,6 +162,9 @@ export interface University {
   isEnterprise?: boolean;
   hasAssignments?: boolean;
   hasAIQuizzes?: boolean;
+  // Grading assistant mode (read-only here; changed via the grading-mode endpoint, super_admin).
+  institutionType?: InstitutionType;
+  gradingMode?: GradingMode;
   maxCourses?: number | null;
   maxModules?: number | null;
   maxStudents?: number | null;

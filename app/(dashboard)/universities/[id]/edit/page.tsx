@@ -13,6 +13,7 @@ import { PageHeader } from '@/components/layout/page-header';
 import { SuperAdminOnly } from '@/components/auth/role-guard';
 import { Loading } from '@/components/ui/loading-spinner';
 import { apiClient } from '@/lib/api';
+import { GradingModeCard } from '@/components/universities/GradingModeCard';
 import { formatCNPJ, formatBrazilianPhone, formatCEP, fetchViaCEP } from '@/lib/utils';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import type { University, UniversityUpdate, BreadcrumbItem } from '@/lib/types';
@@ -664,6 +665,7 @@ export default function EditUniversityPage() {
             </form>
           </CardContent>
         </Card>
+        <GradingModeCard universityId={Number(universityId)} />
         </div>
       </div>
     </SuperAdminOnly>

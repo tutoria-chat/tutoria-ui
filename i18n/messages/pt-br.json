@@ -1166,6 +1166,30 @@
       "saveSuccess": "Endereços de site confiáveis salvos",
       "saveError": "Não foi possível salvar os endereços. Tente novamente.",
       "loadError": "Não foi possível carregar os endereços atuais."
+    },
+    "gradingMode": {
+      "title": "Assistente de Correção — modo de nota",
+      "description": "Define se a IA só escreve feedback ou também sugere notas no plugin do Moodle. Só a equipe Tutoria altera.",
+      "institutionTypeLabel": "Tipo de instituição",
+      "institutionUniversity": "Instituição de ensino (sob o MEC)",
+      "institutionCorporate": "Empresa — treinamento interno (fora do MEC)",
+      "modeLabel": "Modo de correção",
+      "modeFeedback": "Só feedback — a IA nunca sugere nota",
+      "modeScore": "Nota sugerida — uma pessoa confirma",
+      "modeHelpUniversity": "Instituições de ensino ficam sempre no modo de feedback: as Diretrizes do CNE proíbem a IA de sugerir nota em avaliações dissertativas.",
+      "modeHelpCorporate": "A nota sugerida só vale para chamadas com a chave da própria instituição (tgk_), nunca com a chave antiga compartilhada.",
+      "contractLabel": "Contrato que autoriza a nota sugerida",
+      "contractPlaceholder": "Ex.: Contrato 2026-11 — Empresa X",
+      "contractHelp": "Obrigatório. Fica no registro de auditoria junto com quem fez a alteração.",
+      "lastChanged": "Última alteração: {date}",
+      "save": "Salvar modo de correção",
+      "saved": "Modo de correção salvo.",
+      "saveError": "Não foi possível salvar o modo de correção.",
+      "loadError": "Não foi possível carregar o modo de correção.",
+      "confirmTitle": "Ativar nota sugerida?",
+      "confirmDescription": "A IA passará a sugerir notas para esta instituição. Confirme que ela é uma empresa fora do sistema MEC e que o contrato informado autoriza isso.",
+      "confirmButton": "Ativar",
+      "cancel": "Cancelar"
     }
   },
   "professors": {
