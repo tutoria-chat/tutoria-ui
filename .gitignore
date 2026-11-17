@@ -49,3 +49,6 @@ nul
 *.claude_code_pwd
 .claude_*
 tmpclaude-*
+
+# Deploy targets and public build settings (not secrets): the workflow reads them.
+!deploy/*.env
