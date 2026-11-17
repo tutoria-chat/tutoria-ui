@@ -1166,6 +1166,30 @@
       "saveSuccess": "Direcciones web de confianza guardadas",
       "saveError": "No se pudieron guardar las direcciones. Inténtalo de nuevo.",
       "loadError": "No se pudieron cargar las direcciones actuales."
+    },
+    "gradingMode": {
+      "title": "Asistente de corrección — modo de nota",
+      "description": "Define si la IA solo escribe retroalimentación o también sugiere notas en el plugin de Moodle. Solo el equipo de Tutoria puede cambiarlo.",
+      "institutionTypeLabel": "Tipo de institución",
+      "institutionUniversity": "Institución educativa (bajo el MEC)",
+      "institutionCorporate": "Empresa — capacitación interna (fuera del MEC)",
+      "modeLabel": "Modo de corrección",
+      "modeFeedback": "Solo retroalimentación — la IA nunca sugiere nota",
+      "modeScore": "Nota sugerida — una persona confirma",
+      "modeHelpUniversity": "Las instituciones educativas siempre quedan en modo de retroalimentación: las Directrices del CNE prohíben que la IA sugiera notas en evaluaciones de desarrollo.",
+      "modeHelpCorporate": "La nota sugerida solo vale para llamadas con la clave de la propia institución (tgk_), nunca con la clave compartida antigua.",
+      "contractLabel": "Contrato que autoriza la nota sugerida",
+      "contractPlaceholder": "Ej.: Contrato 2026-11 — Empresa X",
+      "contractHelp": "Obligatorio. Queda en el registro de auditoría junto con quién hizo el cambio.",
+      "lastChanged": "Último cambio: {date}",
+      "save": "Guardar modo de corrección",
+      "saved": "Modo de corrección guardado.",
+      "saveError": "No se pudo guardar el modo de corrección.",
+      "loadError": "No se pudo cargar el modo de corrección.",
+      "confirmTitle": "¿Activar la nota sugerida?",
+      "confirmDescription": "La IA empezará a sugerir notas para esta institución. Confirma que es una empresa fuera del sistema MEC y que el contrato indicado lo autoriza.",
+      "confirmButton": "Activar",
+      "cancel": "Cancelar"
     }
   },
   "professors": {

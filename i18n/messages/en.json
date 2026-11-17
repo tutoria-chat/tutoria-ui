@@ -1224,6 +1224,30 @@
       "saveSuccess": "Trusted web addresses saved",
       "saveError": "Couldn't save the web addresses. Please try again.",
       "loadError": "Couldn't load the current web addresses."
+    },
+    "gradingMode": {
+      "title": "Grading assistant — grade mode",
+      "description": "Sets whether the AI only writes feedback or also suggests grades in the Moodle plugin. Only the Tutoria team can change it.",
+      "institutionTypeLabel": "Institution type",
+      "institutionUniversity": "Educational institution (under MEC)",
+      "institutionCorporate": "Company — internal training (outside MEC)",
+      "modeLabel": "Grading mode",
+      "modeFeedback": "Feedback only — the AI never suggests a grade",
+      "modeScore": "Suggested grade — a person confirms",
+      "modeHelpUniversity": "Educational institutions always stay in feedback mode: the CNE Guidelines forbid AI-suggested grades on essay assessments.",
+      "modeHelpCorporate": "Suggested grades only apply to calls made with the institution's own key (tgk_), never the old shared key.",
+      "contractLabel": "Contract that allows suggested grades",
+      "contractPlaceholder": "E.g. Contract 2026-11 — Company X",
+      "contractHelp": "Required. Stored in the audit log together with who made the change.",
+      "lastChanged": "Last changed: {date}",
+      "save": "Save grading mode",
+      "saved": "Grading mode saved.",
+      "saveError": "Could not save the grading mode.",
+      "loadError": "Could not load the grading mode.",
+      "confirmTitle": "Turn on suggested grades?",
+      "confirmDescription": "The AI will start suggesting grades for this institution. Confirm it is a company outside the MEC system and that the contract above allows it.",
+      "confirmButton": "Turn on",
+      "cancel": "Cancel"
     }
   },
   "professors": {

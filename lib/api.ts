@@ -8,6 +8,9 @@ import type {
   User,
   UserResponse,
   University,
+  GradingMode,
+  GradingModeSettings,
+  InstitutionType,
   UniversityCreate,
   UniversityUpdate,
   UniversityWithCourses,
@@ -615,6 +618,16 @@ class TutoriaAPIClient {
   async updateTrustedOrigins(id: number, origins: string[]): Promise<string[]> {
     const res = await this.put<{ origins: string[] }>(`/api/universities/${id}/trusted-origins`, { origins });
     return res?.origins ?? [];
+  }
+
+  // Grading assistant mode (super_admin). Score mode (AI-suggested grades) is only
+  // accepted for corporate institutions outside MEC — the API refuses it otherwise.
+  async getGradingMode(id: number): Promise<GradingModeSettings> {
+    return this.get(`/api/universities/${id}/grading-mode`);
+  }
+
+  async updateGradingMode(id: number, data: { institutionType: InstitutionType; gradingMode: GradingMode; contractRef?: string | null }): Promise<GradingModeSettings> {
+    return this.put(`/api/universities/${id}/grading-mode`, data);
   }
 
   // Course endpoints

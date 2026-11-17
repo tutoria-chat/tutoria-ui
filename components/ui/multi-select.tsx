@@ -89,7 +89,7 @@ export function MultiSelect({
           )}
           disabled={disabled}
         >
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex min-w-0 flex-1 flex-wrap gap-1">
             {selected.length > 0 ? (
               selected.map((value) => {
                 const option = options.find((opt) => opt.value === value)
@@ -98,13 +98,13 @@ export function MultiSelect({
                   <Badge
                     variant="secondary"
                     key={value}
-                    className="mr-1 mb-1"
+                    className="mr-1 mb-1 max-w-full"
                     onClick={(e) => {
                       e.stopPropagation()
                       handleUnselect(value)
                     }}
                   >
-                    {option.label}
+                    <span className="truncate" title={option.label}>{option.label}</span>
                     <button
                       type="button"
                       aria-label={removeItemLabel ? `${removeItemLabel}: ${option.label}` : option.label}
@@ -130,13 +130,13 @@ export function MultiSelect({
                 )
               })
             ) : (
-              placeholder
+              <span className="truncate">{placeholder}</span>
             )}
           </div>
           <ChevronsUpDown aria-hidden="true" className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
+      <PopoverContent className="w-(--radix-popover-trigger-width) min-w-48 max-w-(--radix-popover-content-available-width) p-0" align="start">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
           <CommandEmpty>{emptyMessage}</CommandEmpty>
