@@ -791,6 +791,19 @@ class TutoriaAPIClient {
     return this.delete(`/courses/${courseId}/quizzes/${quizId}`, false, true);
   }
 
+  /** Switch a bank question on/off: off = stays in the bank, students never get it. */
+  async setQuizActive(courseId: number, quizId: number, isActive: boolean): Promise<{ quiz: QuizQuestion }> {
+    return this.patch(`/courses/${courseId}/quizzes/${quizId}`, { is_active: isActive }, false, true);
+  }
+
+  async bulkQuizAction(
+    courseId: number,
+    quizIds: number[],
+    action: 'enable' | 'disable' | 'delete'
+  ): Promise<{ affected: number }> {
+    return this.post(`/courses/${courseId}/quizzes/bulk`, { quiz_ids: quizIds, action }, { usePythonAPI: true });
+  }
+
   // Assignment endpoints — assignments belong to the course, not a module.
   // `publishedOnly` is what read-only consumers (the module page) ask for.
   async getAssignments(

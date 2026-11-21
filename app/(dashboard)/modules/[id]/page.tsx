@@ -1062,7 +1062,15 @@ export default function ModuleDetailsPage() {
               reloadKey={quizBankReloadKey}
               onCountChange={setQuizBankCount}
               actions={
-                canGenerateWithAI ? (
+                <>
+                {/* First, so it's obvious where uploads and the whole course bank live. */}
+                <Button asChild>
+                  <Link href={`/courses/${module.courseId}?tab=quiz-bank`}>
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    {tQuiz('manageOnCourse')}
+                  </Link>
+                </Button>
+                {canGenerateWithAI ? (
                   <Button
                     variant="outline"
                     onClick={handleGenerateQuizzes}
@@ -1088,19 +1096,11 @@ export default function ModuleDetailsPage() {
                       </Link>
                     </span>
                   </div>
-                )
+                )}
+                </>
               }
             />
           ) : null}
-
-          {module.courseId && (
-            <Button variant="link" className="px-0" asChild>
-              <Link href={`/courses/${module.courseId}`}>
-                <ExternalLink className="mr-2 h-4 w-4" />
-                {tQuiz('manageOnCourse')}
-              </Link>
-            </Button>
-          )}
         </TabsContent>
 
         {/* Assignments Tab */}
@@ -1108,18 +1108,20 @@ export default function ModuleDetailsPage() {
           {/* Read-only: assignments are created and published on the course page. */}
           {module.courseId && (
             <>
+              <div>
+                <Button asChild>
+                  <Link href={`/courses/${module.courseId}?tab=assignments`}>
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    {tAssign('manageOnCourse')}
+                  </Link>
+                </Button>
+              </div>
               <CourseAssignmentsTab
                 courseId={module.courseId}
                 readOnly
                 onCountChange={setAssignmentsCount}
                 onFeatureAvailabilityChange={setAssignmentsFeatureEnabled}
               />
-              <Button variant="link" className="px-0" asChild>
-                <Link href={`/courses/${module.courseId}`}>
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  {tAssign('manageOnCourse')}
-                </Link>
-              </Button>
             </>
           )}
         </TabsContent>

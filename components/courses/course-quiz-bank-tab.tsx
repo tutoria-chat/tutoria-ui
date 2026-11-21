@@ -8,6 +8,10 @@
  * per module (it reads that module's files), so the module page renders this
  * component with `readOnly` plus its own generate button in `actions`, and can
  * narrow the list to questions that came from its own material via `moduleId`.
+ *
+ * Both views can manage the questions they list: switch one off (it stays in the
+ * bank but students never get it), back on, or delete it, one by one or for a
+ * selection. `readOnly` only hides uploading, which belongs to the course page.
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -16,6 +20,7 @@ import {
   CheckCircle2,
   ClipboardList,
   Eye,
+  EyeOff,
   Loader2,
   Trash2,
   Upload,
@@ -24,6 +29,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import { DataTable } from '@/components/shared/data-table';
 import { FileUpload } from '@/components/ui/file-upload';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -43,7 +49,7 @@ import type { QuizQuestion, ExtractedQuestion, QuizUploadJob, TableColumn } from
 
 interface CourseQuizBankTabProps {
   courseId: number;
-  /** Module page view: browse the bank, no upload/delete/import. */
+  /** Module page view: no uploading/importing (managing questions still works). */
   readOnly?: boolean;
   /** Narrow the list to questions generated from this module's material. */
   moduleId?: number;
@@ -79,7 +85,11 @@ export function CourseQuizBankTab({
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [viewingQuiz, setViewingQuiz] = useState<QuizQuestion | null>(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [quizToDelete, setQuizToDelete] = useState<number | null>(null);
+  const [idsToDelete, setIdsToDelete] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [isBulkWorking, setIsBulkWorking] = useState(false);
+  const [togglingIds, setTogglingIds] = useState<Set<number>>(new Set());
   const [uploadJobs, setUploadJobs] = useState<QuizUploadJob[]>([]);
   const [uploadJobsLoading, setUploadJobsLoading] = useState(false);
   const [reviewingJobId, setReviewingJobId] = useState<number | null>(null);
@@ -92,6 +102,8 @@ export function CourseQuizBankTab({
     try {
       const data = await apiClient.getCourseQuizzes(courseId, undefined, undefined, moduleId);
       setQuizzes(data);
+      // Drop selections of questions that are gone (deleted elsewhere).
+      setSelectedIds(prev => new Set([...prev].filter(id => data.some(q => q.id === id))));
       onCountChange?.(data.length);
     } catch (err) {
       console.error('Failed to load quizzes:', err);
@@ -187,12 +199,18 @@ export function CourseQuizBankTab({
   };
 
   const confirmDeleteQuiz = async () => {
-    if (!quizToDelete) return;
+    if (idsToDelete.length === 0) return;
     try {
-      await apiClient.deleteQuiz(courseId, quizToDelete);
-      toast.success(t('deleteSuccess'));
+      if (idsToDelete.length === 1) {
+        await apiClient.deleteQuiz(courseId, idsToDelete[0]);
+        toast.success(t('deleteSuccess'));
+      } else {
+        const { affected } = await apiClient.bulkQuizAction(courseId, idsToDelete, 'delete');
+        toast.success(t('manage.deletedMany', { count: affected }));
+      }
       setDeleteConfirmOpen(false);
-      setQuizToDelete(null);
+      setIdsToDelete([]);
+      setSelectedIds(new Set());
       loadQuizzes();
     } catch (err) {
       console.error('Failed to delete quiz:', err);
@@ -200,7 +218,92 @@ export function CourseQuizBankTab({
     }
   };
 
+  const isActive = (quiz: QuizQuestion) => quiz.is_active !== false;
+  const activeCount = quizzes.filter(isActive).length;
+  const visibleQuizzes = quizzes.filter(q =>
+    statusFilter === 'all' ? true : statusFilter === 'active' ? isActive(q) : !isActive(q)
+  );
+  const allVisibleSelected = visibleQuizzes.length > 0 && visibleQuizzes.every(q => selectedIds.has(q.id));
+  const someVisibleSelected = visibleQuizzes.some(q => selectedIds.has(q.id));
+
+  const toggleSelected = (id: number) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleAllVisible = () => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (allVisibleSelected) visibleQuizzes.forEach(q => next.delete(q.id));
+      else visibleQuizzes.forEach(q => next.add(q.id));
+      return next;
+    });
+  };
+
+  const handleToggleActive = async (quiz: QuizQuestion, active: boolean) => {
+    setTogglingIds(prev => new Set(prev).add(quiz.id));
+    // Optimistic: flip it now, put it back if the call fails.
+    setQuizzes(prev => prev.map(q => (q.id === quiz.id ? { ...q, is_active: active } : q)));
+    try {
+      await apiClient.setQuizActive(courseId, quiz.id, active);
+      toast.success(active ? t('manage.enabledOne') : t('manage.disabledOne'));
+    } catch (err) {
+      console.error('Failed to switch quiz question:', err);
+      setQuizzes(prev => prev.map(q => (q.id === quiz.id ? { ...q, is_active: !active } : q)));
+      toast.error(t('manage.error'));
+    } finally {
+      setTogglingIds(prev => {
+        const next = new Set(prev);
+        next.delete(quiz.id);
+        return next;
+      });
+    }
+  };
+
+  const handleBulkActive = async (active: boolean) => {
+    const ids = [...selectedIds];
+    if (ids.length === 0) return;
+    setIsBulkWorking(true);
+    try {
+      const { affected } = await apiClient.bulkQuizAction(courseId, ids, active ? 'enable' : 'disable');
+      toast.success(active ? t('manage.enabledMany', { count: affected }) : t('manage.disabledMany', { count: affected }));
+      setSelectedIds(new Set());
+      loadQuizzes();
+    } catch (err) {
+      console.error('Failed to update quiz questions:', err);
+      toast.error(t('manage.error'));
+    } finally {
+      setIsBulkWorking(false);
+    }
+  };
+
   const quizColumns: TableColumn<QuizQuestion>[] = [
+    {
+      key: 'select',
+      label: (
+        <ProfessorOnly>
+          <Checkbox
+            aria-label={t('manage.selectAll')}
+            checked={allVisibleSelected ? true : someVisibleSelected ? 'indeterminate' : false}
+            onCheckedChange={toggleAllVisible}
+          />
+        </ProfessorOnly>
+      ),
+      width: '40px',
+      render: (_, quiz) => (
+        <ProfessorOnly>
+          <Checkbox
+            aria-label={t('manage.selectRow', { number: quiz.question_number })}
+            checked={selectedIds.has(quiz.id)}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            onCheckedChange={() => toggleSelected(quiz.id)}
+          />
+        </ProfessorOnly>
+      ),
+    },
     {
       key: 'question_number',
       label: t('columns.number'),
@@ -249,6 +352,26 @@ export function CourseQuizBankTab({
       },
     },
     {
+      key: 'is_active',
+      label: t('columns.status'),
+      width: '130px',
+      render: (_, quiz) => (
+        <div className="flex items-center gap-2">
+          <ProfessorOnly>
+            <Switch
+              checked={isActive(quiz)}
+              disabled={togglingIds.has(quiz.id)}
+              onCheckedChange={(checked) => handleToggleActive(quiz, checked)}
+              aria-label={isActive(quiz) ? t('manage.disableOne') : t('manage.enableOne')}
+            />
+          </ProfessorOnly>
+          <span className={`text-xs ${isActive(quiz) ? 'text-muted-foreground' : 'text-amber-700 dark:text-amber-400 font-medium'}`}>
+            {isActive(quiz) ? t('manage.statusActive') : t('manage.statusInactive')}
+          </span>
+        </div>
+      ),
+    },
+    {
       key: 'actions',
       label: t('columns.actions'),
       width: '100px',
@@ -257,13 +380,16 @@ export function CourseQuizBankTab({
           <Button variant="ghost" size="sm" onClick={() => { setViewingQuiz(quiz); setViewDialogOpen(true); }}>
             <Eye className="h-4 w-4" />
           </Button>
-          {!readOnly && (
-            <ProfessorOnly>
-              <Button variant="ghost" size="sm" onClick={() => { setQuizToDelete(quiz.id); setDeleteConfirmOpen(true); }}>
-                <Trash2 className="h-4 w-4 text-destructive" />
-              </Button>
-            </ProfessorOnly>
-          )}
+          <ProfessorOnly>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label={t('manage.deleteOne')}
+              onClick={() => { setIdsToDelete([quiz.id]); setDeleteConfirmOpen(true); }}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </ProfessorOnly>
         </div>
       ),
     },
@@ -275,6 +401,11 @@ export function CourseQuizBankTab({
       <div className="flex flex-wrap items-center gap-4">
         <div className="text-sm font-medium">
           {t('totalQuestions', { count: quizzes.length })}
+          {quizzes.length > 0 && activeCount < quizzes.length && (
+            <span className="ml-1 font-normal text-muted-foreground">
+              · {t('manage.activeOfTotal', { active: activeCount })}
+            </span>
+          )}
         </div>
         {quizzes.length > 0 && (
           <div className="flex gap-1.5">
@@ -315,15 +446,64 @@ export function CourseQuizBankTab({
             {readOnly ? t('moduleScopeHint') : t('description')}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {quizzes.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex rounded-md border p-0.5" role="group" aria-label={t('manage.filterLabel')}>
+                {(['all', 'active', 'inactive'] as const).map(value => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={statusFilter === value ? 'secondary' : 'ghost'}
+                    className="h-7 px-3"
+                    aria-pressed={statusFilter === value}
+                    onClick={() => setStatusFilter(value)}
+                  >
+                    {t(`manage.filter.${value}`)}
+                  </Button>
+                ))}
+              </div>
+              <ProfessorOnly>
+                {selectedIds.size > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 rounded-md bg-muted px-3 py-1.5">
+                    <span className="text-sm font-medium">{t('manage.selected', { count: selectedIds.size })}</span>
+                    <Button size="sm" variant="outline" className="h-7" disabled={isBulkWorking} onClick={() => handleBulkActive(true)}>
+                      <Eye className="mr-1.5 h-3.5 w-3.5" />
+                      {t('manage.enableSelected')}
+                    </Button>
+                    <Button size="sm" variant="outline" className="h-7" disabled={isBulkWorking} onClick={() => handleBulkActive(false)}>
+                      <EyeOff className="mr-1.5 h-3.5 w-3.5" />
+                      {t('manage.disableSelected')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 text-destructive"
+                      disabled={isBulkWorking}
+                      onClick={() => { setIdsToDelete([...selectedIds]); setDeleteConfirmOpen(true); }}
+                    >
+                      <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+                      {t('manage.deleteSelected')}
+                    </Button>
+                    <Button size="sm" variant="ghost" className="h-7" onClick={() => setSelectedIds(new Set())}>
+                      {t('manage.clearSelection')}
+                    </Button>
+                  </div>
+                )}
+              </ProfessorOnly>
+            </div>
+          )}
           <DataTable
-            data={quizzes}
+            data={visibleQuizzes}
             columns={quizColumns}
             loading={quizzesLoading}
+            rowClassName={(quiz) => (isActive(quiz) ? undefined : 'opacity-60')}
             emptyMessage={
-              readOnly
-                ? t('emptyMessageModule')
-                : canGenerateWithAI ? t('emptyMessage') : t('emptyMessageStarterPlan')
+              quizzes.length > 0
+                ? t('manage.emptyFiltered')
+                : readOnly
+                  ? t('emptyMessageModule')
+                  : canGenerateWithAI ? t('emptyMessage') : t('emptyMessageStarterPlan')
             }
           />
         </CardContent>
@@ -589,8 +769,10 @@ export function CourseQuizBankTab({
       <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('deleteConfirm')}</AlertDialogTitle>
-            <AlertDialogDescription>{t('deleteConfirmDesc')}</AlertDialogDescription>
+            <AlertDialogTitle>
+              {idsToDelete.length > 1 ? t('manage.deleteManyConfirm', { count: idsToDelete.length }) : t('deleteConfirm')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{t('manage.deleteConfirmDesc')}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{tCommon('buttons.cancel')}</AlertDialogCancel>

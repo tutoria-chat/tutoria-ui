@@ -62,6 +62,9 @@ import type { CourseWithDetails, Module, Professor, Student, StudentImportResult
 import { toast } from 'sonner';
 import { useConfirmDialog } from '@/components/ui/confirm-dialog';
 
+const COURSE_TABS = ['modules', 'professors', 'students', 'calendar', 'assignments', 'quiz-bank', 'grading'] as const;
+type CourseTab = (typeof COURSE_TABS)[number];
+
 export default function CourseDetailsPage() {
   const params = useParams();
   const router = useRouter();
@@ -74,7 +77,22 @@ export default function CourseDetailsPage() {
   const tImport = useTranslations('students.import');
   const tProfTab = useTranslations('courses.detail.professorsTab');
 
-  const [activeTab, setActiveTab] = useState<'modules' | 'professors' | 'students' | 'calendar' | 'assignments' | 'quiz-bank' | 'grading'>('modules');
+  const [activeTab, setActiveTab] = useState<CourseTab>('modules');
+
+  // ?tab= opens a tab directly (the module page links to ?tab=quiz-bank and
+  // ?tab=assignments), and the URL follows the tab so reload/back keep it.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    if (requested && (COURSE_TABS as readonly string[]).includes(requested)) {
+      setActiveTab(requested as CourseTab);
+    }
+  }, []);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (activeTab === 'modules') url.searchParams.delete('tab');
+    else url.searchParams.set('tab', activeTab);
+    if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url);
+  }, [activeTab]);
   const tGrading = useTranslations('courses.detail.gradingTab');
 
   // Fetch course basic info

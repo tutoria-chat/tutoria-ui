@@ -5102,7 +5102,8 @@
       "difficulty": "Difficulty",
       "answer": "Answer",
       "source": "Source",
-      "actions": "Actions"
+      "actions": "Actions",
+      "status": "Status"
     },
     "difficulty": {
       "easy": "Easy",
@@ -5167,7 +5168,37 @@
       "supportedFormats": "Supported formats: PDF, DOC, DOCX, TXT, PPT, PPTX",
       "maxSize": "Maximum size: {maxSizeMB}MB"
     },
-    "manageOnCourse": "Manage the question bank on the course"
+    "manageOnCourse": "Manage the question bank on the course",
+    "manage": {
+      "statusActive": "Active",
+      "statusInactive": "Off",
+      "enableOne": "Turn question on",
+      "disableOne": "Turn question off",
+      "deleteOne": "Delete question",
+      "enabledOne": "Question turned on",
+      "disabledOne": "Question turned off: students won't get it anymore",
+      "enabledMany": "{count, plural, one {# question turned on} other {# questions turned on}}",
+      "disabledMany": "{count, plural, one {# question turned off} other {# questions turned off}}",
+      "deletedMany": "{count, plural, one {# question deleted} other {# questions deleted}}",
+      "error": "Couldn't update the questions",
+      "selectAll": "Select all",
+      "selectRow": "Select question {number}",
+      "selected": "{count} selected",
+      "enableSelected": "Turn on",
+      "disableSelected": "Turn off",
+      "deleteSelected": "Delete",
+      "clearSelection": "Clear selection",
+      "filterLabel": "Filter by status",
+      "filter": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Off"
+      },
+      "activeOfTotal": "{active} active",
+      "emptyFiltered": "No questions match this filter.",
+      "deleteManyConfirm": "Delete {count} questions?",
+      "deleteConfirmDesc": "This can't be undone. To only keep a question away from students, turn it off instead."
+    }
   },
   "privacyPolicy": {
     "title": "Privacy Policy",

@@ -5339,7 +5339,8 @@
       "difficulty": "Dificultad",
       "answer": "Respuesta",
       "source": "Origen",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "status": "Estado"
     },
     "difficulty": {
       "easy": "Fácil",
@@ -5404,7 +5405,37 @@
       "supportedFormats": "Formatos soportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
       "maxSize": "Tamaño máximo: {maxSizeMB}MB"
     },
-    "manageOnCourse": "Gestionar el banco de preguntas en el curso"
+    "manageOnCourse": "Gestionar el banco de preguntas en el curso",
+    "manage": {
+      "statusActive": "Activa",
+      "statusInactive": "Desactivada",
+      "enableOne": "Activar pregunta",
+      "disableOne": "Desactivar pregunta",
+      "deleteOne": "Eliminar pregunta",
+      "enabledOne": "Pregunta activada",
+      "disabledOne": "Pregunta desactivada: los estudiantes ya no la reciben",
+      "enabledMany": "{count, plural, one {# pregunta activada} other {# preguntas activadas}}",
+      "disabledMany": "{count, plural, one {# pregunta desactivada} other {# preguntas desactivadas}}",
+      "deletedMany": "{count, plural, one {# pregunta eliminada} other {# preguntas eliminadas}}",
+      "error": "No se pudieron actualizar las preguntas",
+      "selectAll": "Seleccionar todas",
+      "selectRow": "Seleccionar pregunta {number}",
+      "selected": "{count, plural, one {# seleccionada} other {# seleccionadas}}",
+      "enableSelected": "Activar",
+      "disableSelected": "Desactivar",
+      "deleteSelected": "Eliminar",
+      "clearSelection": "Limpiar selección",
+      "filterLabel": "Filtrar por estado",
+      "filter": {
+        "all": "Todas",
+        "active": "Activas",
+        "inactive": "Desactivadas"
+      },
+      "activeOfTotal": "{active} activas",
+      "emptyFiltered": "Ninguna pregunta con este filtro.",
+      "deleteManyConfirm": "¿Eliminar {count} preguntas?",
+      "deleteConfirmDesc": "Esta acción no se puede deshacer. Para solo quitar una pregunta a los estudiantes, desactívala."
+    }
   },
   "privacyPolicy": {
     "title": "Política de Privacidad",

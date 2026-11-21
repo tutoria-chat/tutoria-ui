@@ -976,6 +976,8 @@ export interface QuizQuestion {
   };
   concepts_covered: string[];
   source?: string;
+  /** false = switched off by a professor: stays in the bank, students never get it. */
+  is_active?: boolean;
 }
 
 // Extracted question from AI (before professor review)

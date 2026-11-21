@@ -6049,7 +6049,8 @@
       "difficulty": "Dificuldade",
       "answer": "Resposta",
       "source": "Origem",
-      "actions": "Ações"
+      "actions": "Ações",
+      "status": "Status"
     },
     "difficulty": {
       "easy": "Fácil",
@@ -6114,7 +6115,37 @@
       "supportedFormats": "Formatos suportados: PDF, DOC, DOCX, TXT, PPT, PPTX",
       "maxSize": "Tamanho máximo: {maxSizeMB}MB"
     },
-    "manageOnCourse": "Gerenciar banco de questões na disciplina"
+    "manageOnCourse": "Gerenciar banco de questões na disciplina",
+    "manage": {
+      "statusActive": "Ativa",
+      "statusInactive": "Desativada",
+      "enableOne": "Ativar questão",
+      "disableOne": "Desativar questão",
+      "deleteOne": "Excluir questão",
+      "enabledOne": "Questão ativada",
+      "disabledOne": "Questão desativada: os estudantes não a recebem mais",
+      "enabledMany": "{count, plural, one {# questão ativada} other {# questões ativadas}}",
+      "disabledMany": "{count, plural, one {# questão desativada} other {# questões desativadas}}",
+      "deletedMany": "{count, plural, one {# questão excluída} other {# questões excluídas}}",
+      "error": "Não foi possível atualizar as questões",
+      "selectAll": "Selecionar todas",
+      "selectRow": "Selecionar questão {number}",
+      "selected": "{count, plural, one {# selecionada} other {# selecionadas}}",
+      "enableSelected": "Ativar",
+      "disableSelected": "Desativar",
+      "deleteSelected": "Excluir",
+      "clearSelection": "Limpar seleção",
+      "filterLabel": "Filtrar por status",
+      "filter": {
+        "all": "Todas",
+        "active": "Ativas",
+        "inactive": "Desativadas"
+      },
+      "activeOfTotal": "{active} ativas",
+      "emptyFiltered": "Nenhuma questão com este filtro.",
+      "deleteManyConfirm": "Excluir {count} questões?",
+      "deleteConfirmDesc": "Esta ação não pode ser desfeita. Para só tirar uma questão dos estudantes, desative-a."
+    }
   },
   "privacyPolicy": {
     "title": "Política de Privacidade",
